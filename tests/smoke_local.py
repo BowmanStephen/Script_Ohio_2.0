@@ -103,7 +103,11 @@ def test_load_fastai_model():
 def test_end_to_end_predict():
     """Test one end-to-end predict call with stubbed data"""
     try:
-        from agents.model_execution_engine import ModelExecutionEngine
+        try:
+            from agents.model_execution_engine import ModelExecutionEngine
+        except ImportError:
+            # Fallback to src path
+            from src.models.execution.engine import ModelExecutionEngine
         
         # Create agent
         agent = ModelExecutionEngine("smoke_test_agent")

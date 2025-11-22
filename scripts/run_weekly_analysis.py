@@ -18,13 +18,19 @@ logs_dir = Path(__file__).parent.parent / "logs"
 logs_dir.mkdir(exist_ok=True)
 
 log_file = logs_dir / "weekly_analysis.log"
+log_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+# Create handlers
+file_handler = logging.FileHandler(log_file, encoding='utf-8')
+file_handler.setFormatter(log_format)
+
+console_handler = logging.StreamHandler()
+console_handler.setFormatter(log_format)
+
+# Configure logging with formatted handlers
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(log_file, encoding='utf-8'),
-        logging.StreamHandler()
-    ]
+    handlers=[file_handler, console_handler]
 )
 
 logger = logging.getLogger(__name__)

@@ -22,15 +22,29 @@ pip install -r requirements-dev.txt    # Development dependencies
 # 4. Set up environment variables
 export CFBD_API_KEY="your-api-key-here"
 export CFBD_GRAPHQL_DISABLED=true      # Disable GraphQL for CFBD integration
+export PYTHONPATH="${PYTHONPATH}:$(pwd)" # Set Python path
 
-# 5. Verify agent system (RECOMMENDED FIRST)
+# 5. Quick system health checks
 python -c "from agents.analytics_orchestrator import AnalyticsOrchestrator; print('✅ Agent system OK')"
+python -c "from agents.model_execution_engine import ModelExecutionEngine; print('✅ Model engine OK')"
 
 # 6. Complete system demonstration
 python project_management/core_tools/demo_agent_system.py
 
 # 7. Run comprehensive tests
 python -m pytest tests/ -v
+```
+
+### Happy Path for Weekly Analysis (Primary Workflow)
+
+```bash
+# Single command for complete weekly pipeline
+python3 scripts/run_weekly_analysis.py --week 13
+
+# Step-by-step alternative:
+# 1. Data pull: python3 scripts/cfbd_pull.py --season 2025 --week 13
+# 2. Analysis: python3 scripts/run_weekly_analysis.py --week 13
+# 3. Agent API test: python -c "from agents.model_execution_engine import ModelExecutionEngine; print(ModelExecutionEngine('me')._execute_action('predict_game_outcome', {'team1':'Ohio State','team2':'Michigan'}, {}))"
 ```
 
 ### Essential Commands
@@ -41,23 +55,39 @@ python project_management/core_tools/test_agents.py                    # Quick v
 python -c "from agents.analytics_orchestrator import AnalyticsOrchestrator; print('✅ Agent system OK')"
 python -c "from agents.model_execution_engine import ModelExecutionEngine; print('✅ Model engine OK')"
 
+# Agent system testing and validation
+python3 agents/test_agent_system.py                                     # Agent system smoke tests
+python3 agents/demo_agent_system.py                                    # Complete system demonstration
+python3 scripts/verify_weekly_agents.py                                # Verify weekly agents
+python -m pytest agents/tests -q                                       # Agent-specific tests
+
 # Development and testing
 python -m pytest tests/ -v --cov=agents --cov=model_pack              # Full test suite
 python -m pytest tests/test_agent_system.py -v                       # Agent system tests
 find . -name "*.py" -exec python3 -m py_compile {} \;                 # Syntax validation
 
-# Code quality
+# Code quality and security
 black --check agents/ tests/          # Code formatting
 flake8 agents/ tests/                # Style checking
 mypy agents/                         # Type checking
+pip-audit                            # Security vulnerability scan
 
-# Model operations
+# Model operations and workflows
 python model_pack/model_training_agent.py              # Model validation
 python project_management/core_tools/data_workflows.py train-fastai --epochs 300
+python project_management/config/retrain_fixed_models.py # Retrain with new data
+python model_pack/2025_data_acquisition.py            # Acquire latest data
+
+# Weekly analysis and production
+python3 scripts/run_weekly_analysis.py --week 13     # Complete weekly pipeline
+python3 scripts/cfbd_pull.py --season 2025 --week 13 # Data pull only
 
 # Educational content
 cd starter_pack && jupyter lab        # Educational notebooks (start: 00_data_dictionary.ipynb)
 cd model_pack && jupyter lab          # ML modeling notebooks
+
+# TOON plan validation (required before plan creation/modification)
+python3 scripts/smoke_test_toon.py   # TOON CLI and plan system validation
 ```
 
 ## 🏗️ Platform Architecture Overview
@@ -251,6 +281,17 @@ print(f"Agent has {len(capabilities)} capabilities")
 - **Classes**: `{Domain}Agent` (e.g., `LearningNavigatorAgent`)
 - **Types**: `{domain}_agent` (e.g., `"learning_navigator"`)
 - **IDs**: `{domain}_{identifier}` (e.g., `"learning_001"`)
+
+### Development Workflow (Micro-Slice Approach)
+
+```bash
+# Work in small slices (30-60 minutes)
+# 1. Pick one task
+# 2. Complete the task
+# 3. Immediately run the happy path: python3 scripts/run_weekly_analysis.py --week 13
+# 4. If it breaks, fix or revert before adding new work
+# 5. Log progress in SESSION_LOG.md
+```
 
 ## 🌐 CFBD API Integration (Verified Official Standards)
 
@@ -450,6 +491,8 @@ pytest --cov=agents --cov-report=term-missing
 
 ## 📁 Project Structure & File Organization
 
+### Directory Organization
+
 ```
 Script_Ohio_2.0/
 ├── agents/                           # Multi-agent system
@@ -457,25 +500,39 @@ Script_Ohio_2.0/
 │   │   ├── agent_framework.py       # BaseAgent class and factory
 │   │   ├── context_manager.py       # Role-based optimization
 │   │   └── tool_loader.py          # Dynamic tool management
-│   ├── system/                      # System-level components
+│   ├── tests/                       # Agent-specific tests
 │   ├── analytics_orchestrator.py    # Main coordination hub
 │   ├── model_execution_engine.py    # ML model integration
-│   ├── learning_navigator_agent.py  # Educational guidance
-│   ├── insight_generator_agent.py   # Advanced analysis
-│   └── workflow_automator_agent.py  # Process orchestration
-├── starter_pack/                     # Educational notebooks (12+)
+│   └── [specialized_agents].py     # Domain-specific agents
+├── starter_pack/                     # Educational notebooks (13 total)
 │   ├── data/                        # Historical datasets (read-only)
 │   └── *.ipynb                     # Learning progression notebooks
 ├── model_pack/                       # ML modeling notebooks (7+) + models
 │   ├── *_model_2025.*              # Pre-trained models
-│   └── updated_training_data.csv   # Training dataset (86 features)
+│   └── updated_training_data.csv   # Training dataset (86 features, 4,989 games)
 ├── tests/                           # Comprehensive test suite
+├── scripts/                         # Utility scripts (62+ tools)
+├── data/                           # Canonical data paths
+│   ├── weekly/week{XX}/enhanced/   # Weekly enhanced features
+│   ├── training/weekly/            # Weekly training files
+│   └── metadata/                   # Data headers and definitions
+├── predictions/week{XX}/           # Prediction outputs
+├── logs/                          # Centralized logging (cfbd_pull.log, weekly_analysis.log)
 ├── project_management/              # Project tools and documentation
 │   ├── core_tools/                 # Core working scripts
 │   ├── quality_assurance/          # Testing and validation
 │   └── config/                     # Configuration files
-└── documentation/                   # Technical documentation
+├── reports/                       # Analysis outputs and performance comparisons
+└── .cursor/plans/                 # TOON-optimized workflow plans
 ```
+
+### Canonical Paths (Primary Data Locations)
+
+- **Enhanced Features**: `data/weekly/week{XX}/enhanced/`
+- **Training Data**: `data/training/weekly/training_data_2025_week*.csv` (canonical)
+- **Predictions**: `predictions/week{XX}/predictions.csv` and `predictions/week{XX}/summary.md`
+- **Master Training Data**: `model_pack/updated_training_data.csv`
+- **System Logs**: `logs/cfbd_pull.log` and `logs/weekly_analysis.log`
 
 ### File Naming Conventions
 
@@ -483,6 +540,7 @@ Script_Ohio_2.0/
 - **Core Files**: `{component}.py` (e.g., `agent_framework.py`)
 - **Tests**: `test_{component}.py` (e.g., `test_agent_system.py`)
 - **Models**: `{model_type}_model_2025.{ext}` (e.g., `ridge_model_2025.joblib`)
+- **Plans**: `{plan_name}.plan.md` in `.cursor/plans/` (TOON format compatible)
 
 ## 🔧 Development Workflows & Patterns
 
@@ -494,8 +552,9 @@ touch agents/your_new_agent.py
 
 # Step 2: Implement BaseAgent inheritance (use template from .cursorrules)
 
-# Step 3: Test your agent
+# Step 3: Test your agent thoroughly
 python -m pytest tests/test_your_new_agent.py -v
+find . -name "*.py" -exec python3 -m py_compile {} \;  # Syntax validation
 
 # Step 4: Register with factory
 python -c "
@@ -503,7 +562,14 @@ from agents.core.agent_framework import AgentFactory
 from agents.your_new_agent import YourNewAgent
 factory = AgentFactory()
 factory.register_agent_class(YourNewAgent, 'your_agent_name')
-print('Agent registered successfully')
+print('✅ Agent registered successfully')
+"
+
+# Step 5: Verify integration
+python -c "
+from agents.analytics_orchestrator import AnalyticsOrchestrator
+orchestrator = AnalyticsOrchestrator()
+print('✅ System integration verified')
 "
 ```
 
@@ -515,7 +581,7 @@ For long-running sessions, manage context efficiently:
 # Clear context between major phases
 /clear  # Clear Claude's context window
 
-# Use focused queries
+# Use focused queries (recommended approach)
 # Good: "What are the top 5 most efficient offenses in 2025 by EPA/play?"
 # Bad: "Analyze everything about the 2025 season"
 
@@ -542,6 +608,36 @@ start_time = time.time()
 response = orchestrator.process_analytics_request(request)
 print(f'Response time: {time.time() - start_time:.2f}s (target: <2s)')
 ```
+
+### Pull Request Requirements
+
+Before submitting a pull request:
+
+```bash
+# Required validation checks
+python3 -m pytest agents/tests -q                    # Agent tests
+python3 agents/test_agent_system.py                   # Smoke tests
+find . -name "*.py" -exec python3 -m py_compile {} \; # Syntax validation
+python3 scripts/smoke_test_toon.py                   # TOON system validation (if plans modified)
+
+# Security and quality checks
+pip-audit                                            # Security scan
+black --check agents/ tests/                         # Code formatting
+mypy agents/                                         # Type checking
+```
+
+**Security Checklist**:
+- [ ] No hardcoded secrets or API keys
+- [ ] All environment variables documented
+- [ ] Dependencies scanned for vulnerabilities
+- [ ] Input validation implemented for new features
+- [ ] Error messages don't expose system internals
+
+**Code Quality Checklist**:
+- [ ] Type hints added to public APIs
+- [ ] Code passes linting and formatting checks
+- [ ] Test coverage maintained or improved
+- [ ] Documentation updated for new features
 
 ## 🚨 Important Notes & Security
 

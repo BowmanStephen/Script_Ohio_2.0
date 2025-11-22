@@ -15,6 +15,8 @@ from agents.weekly_model_validation_agent import WeeklyModelValidationAgent
 from agents.weekly_prediction_generation_agent import WeeklyPredictionGenerationAgent
 from agents.report_generator_agent import ReportGeneratorAgent
 
+logger = logging.getLogger(__name__)
+
 # Import feature validation utilities
 try:
     from config.model_features import validate_features, RIDGE_FEATURES, XGB_FEATURES, get_model_features
@@ -27,8 +29,6 @@ except ImportError:
         RIDGE_FEATURES = []
         XGB_FEATURES = []
         get_model_features = None
-
-logger = logging.getLogger(__name__)
 
 
 class WeeklyAnalysisOrchestrator(BaseAgent):

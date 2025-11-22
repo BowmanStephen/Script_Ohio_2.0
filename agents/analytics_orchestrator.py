@@ -165,7 +165,11 @@ class AnalyticsOrchestrator:
         try:
             # Import and register agent classes
             # Core agents for happy path (keep these)
-            from agents.model_execution_engine import ModelExecutionEngine
+            try:
+                from agents.model_execution_engine import ModelExecutionEngine
+            except ImportError:
+                # Fallback to src path
+                from src.models.execution.engine import ModelExecutionEngine
             from agents.insight_generator_agent import InsightGeneratorAgent
             
             # Register core agents

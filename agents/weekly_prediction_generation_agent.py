@@ -1265,7 +1265,8 @@ class WeeklyPredictionGenerationAgent(BaseAgent):
             if comprehensive_predictions:
                 # Convert predictions list to DataFrame
                 predictions_df = pd.DataFrame(comprehensive_predictions)
-                # Select key columns for CSV output
+                
+                # Select key columns for CSV output (prioritize these)
                 key_columns = [
                     'home_team', 'away_team', 'predicted_winner', 'predicted_margin',
                     'confidence_score', 'ridge_prediction', 'xgb_prediction',
@@ -1273,12 +1274,21 @@ class WeeklyPredictionGenerationAgent(BaseAgent):
                 ]
                 # Only include columns that exist
                 available_columns = [col for col in key_columns if col in predictions_df.columns]
-                # Add any other columns that might be useful
-                other_columns = [col for col in predictions_df.columns if col not in key_columns and col not in ['metadata', 'insights']]
+                # Add any other columns that might be useful (exclude nested objects)
+                other_columns = [
+                    col for col in predictions_df.columns 
+                    if col not in key_columns 
+                    and col not in ['metadata', 'insights']
+                    and not isinstance(predictions_df[col].iloc[0] if len(predictions_df) > 0 else None, (dict, list))
+                ]
                 final_columns = available_columns + other_columns
                 
+                # Ensure we have at least some columns
+                if not final_columns:
+                    final_columns = list(predictions_df.columns)
+                
                 predictions_df[final_columns].to_csv(csv_path, index=False)
-                self.log_info(f"Saved {len(comprehensive_predictions)} predictions to {csv_path}")
+                self.log_info(f"Saved {len(comprehensive_predictions)} predictions to {csv_path} ({len(final_columns)} columns)")
             else:
                 self.log_warning("No predictions to save to CSV")
         except Exception as e:
