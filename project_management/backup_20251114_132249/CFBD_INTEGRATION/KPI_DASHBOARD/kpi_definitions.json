@@ -1,0 +1,147 @@
+{
+  "project_kpis": {
+    "ingestion_latency": {
+      "name": "Ingestion Latency",
+      "description": "Time from CFBD data availability to ingestion completion",
+      "unit": "minutes",
+      "target": 10,
+      "current": 0,
+      "status": "on_track",
+      "calculation_method": "P95 percentile of dataset ingestion times",
+      "data_source": "telemetry_agent",
+      "alert_threshold": 15,
+      "trend_direction": "decreasing"
+    },
+    "api_error_rate": {
+      "name": "API Error Rate",
+      "description": "Percentage of CFBD calls returning non-2xx after retries",
+      "unit": "percent",
+      "target": 0.5,
+      "current": 0,
+      "status": "on_track",
+      "calculation_method": "(error_count / total_requests) * 100",
+      "data_source": "rate_limiting_agent",
+      "alert_threshold": 1.0,
+      "trend_direction": "decreasing"
+    },
+    "rate_limit_breaches": {
+      "name": "Rate Limit Breaches",
+      "description": "Count of 429 responses per day",
+      "unit": "count",
+      "target": 0,
+      "current": 0,
+      "status": "on_track",
+      "calculation_method": "Daily sum of 429 responses",
+      "data_source": "rate_limiting_agent",
+      "alert_threshold": 5,
+      "trend_direction": "decreasing"
+    },
+    "dataset_coverage": {
+      "name": "Dataset Coverage",
+      "description": "Number of CFBD datasets actively ingested",
+      "unit": "datasets",
+      "target": 12,
+      "current": 8,
+      "status": "on_track",
+      "calculation_method": "Count of active ingestion pipelines",
+      "data_source": "dataset_expansion_agent",
+      "alert_threshold": 10,
+      "trend_direction": "increasing"
+    },
+    "agent_compliance": {
+      "name": "Agent Compliance",
+      "description": "Percentage of agents using unified CFBD client",
+      "unit": "percent",
+      "target": 100,
+      "current": 0,
+      "status": "at_risk",
+      "calculation_method": "(compliant_agents / total_agents) * 100",
+      "data_source": "client_unification_agent",
+      "alert_threshold": 90,
+      "trend_direction": "increasing"
+    },
+    "data_freshness": {
+      "name": "Data Freshness",
+      "description": "Age of latest record per dataset during season",
+      "unit": "days",
+      "target": 1,
+      "current": 0,
+      "status": "on_track",
+      "calculation_method": "Average age of latest records across datasets",
+      "data_source": "telemetry_agent",
+      "alert_threshold": 2,
+      "trend_direction": "decreasing"
+    },
+    "incident_mttr": {
+      "name": "Incident MTTR",
+      "description": "Mean time to resolve CFBD-related incidents",
+      "unit": "minutes",
+      "target": 60,
+      "current": 0,
+      "status": "on_track",
+      "calculation_method": "Average resolution time for CFBD incidents",
+      "data_source": "operations_agent",
+      "alert_threshold": 90,
+      "trend_direction": "decreasing"
+    },
+    "documentation_freshness": {
+      "name": "Documentation Freshness",
+      "description": "Days since last update to run-book/governance docs",
+      "unit": "days",
+      "target": 30,
+      "current": 0,
+      "status": "on_track",
+      "calculation_method": "Average age of documentation files",
+      "data_source": "operations_agent",
+      "alert_threshold": 45,
+      "trend_direction": "decreasing"
+    }
+  },
+  "phase_specific_kpis": {
+    "phase_0": [
+      "agent_compliance",
+      "rate_limit_breaches",
+      "api_error_rate"
+    ],
+    "phase_1": [
+      "dataset_coverage",
+      "data_freshness",
+      "documentation_freshness",
+      "incident_mttr"
+    ],
+    "phase_2": [
+      "ingestion_latency",
+      "agent_compliance",
+      "incident_mttr"
+    ]
+  },
+  "kpi_status_definitions": {
+    "on_track": {
+      "description": "KPI is meeting or exceeding target",
+      "color": "#28a745",
+      "threshold_factor": 1.0
+    },
+    "at_risk": {
+      "description": "KPI is approaching concerning levels",
+      "color": "#ffc107",
+      "threshold_factor": 1.2
+    },
+    "critical": {
+      "description": "KPI requires immediate attention",
+      "color": "#dc3545",
+      "threshold_factor": 1.5
+    }
+  },
+  "dashboard_configuration": {
+    "refresh_interval": 300,
+    "retention_days": 90,
+    "alert_channels": ["slack", "email"],
+    "report_schedule": "daily",
+    " stakeholders": [
+      "project_manager",
+      "tech_lead",
+      "data_engineering_team",
+      "operations_team"
+    ]
+  }
+}

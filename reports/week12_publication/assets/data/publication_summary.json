@@ -1,0 +1,21 @@
+{
+  "report_metadata": {
+    "title": "Week 12 College Football Predictions",
+    "week": 12,
+    "season": 2025,
+    "generated_at": "2025-11-14 08:38:40",
+    "total_games": 15,
+    "models_used": [
+      "ridge_model_2025",
+      "xgb_home_win_model_2025"
+    ],
+    "prediction_methodology": "Ensemble of Ridge regression and XGBoost with opponent-adjusted features"
+  },
+  "key_insights": {
+    "high_confidence_picks": 12,
+    "potential_upsets": 1,
+    "close_games": 0,
+    "average_confidence": 0.8985366124062091,
+    "home_team_advantage": 13
+  }
+}

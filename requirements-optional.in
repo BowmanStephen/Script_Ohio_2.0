@@ -1,0 +1,15 @@
+# Script Ohio 2.0 - Optional Dependencies
+# Optional features that enhance functionality but are not required
+# Source file for pip-compile - edit this file, then run: pip-compile requirements-optional.in
+# Generated locked file: requirements-optional.txt
+
+# Include base requirements constraints (ensures compatibility)
+-c requirements.txt
+
+# CFBD API Client (for live college football data)
+cfbd>=1.0.0
+
+# GraphQL API Support (requires Patreon Tier 3+ subscription)
+# Enables GraphQL capabilities for SP+/FPI ratings and scoreboard data
+gql[all]>=3.4.0
+

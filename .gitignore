@@ -1,0 +1,96 @@
+# === Python byte-compiled / cache files ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# === Distribution / packaging ===
+build/
+dist/
+*.egg-info/
+
+# === Virtual environments ===
+venv/
+env/
+ENV/
+.venv/
+
+# === Testing & Coverage ===
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# === Type Checking ===
+.mypy_cache/
+.dmypy.json
+dmypy.json
+*.mypy_cache/
+
+# === Environment & Secrets ===
+.env
+.env.*
+!.env.example
+*.env
+
+# === Logs ===
+*.log
+logs/
+*.log.*
+
+# === Database Files ===
+*.db
+*.sqlite
+*.sqlite3
+
+# === IDE/editor and OS files ===
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# === Data Files (large generated files) ===
+# Uncomment if you have large data dumps that shouldn't be committed
+# data/raw/
+# data/processed/
+
+# Python
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+.installed.cfg
+*.egg
+# Virtual environments
+# IDE
+*~
+# OS
+# Project specific
+outputs/
+temp/
+exports/
+model_pack/*.pkl
+starter_pack/data/*.csv
+# Documentation builds
+_build/
+*.md.html
+
+# === Model Pack Backup Files ===
+model_pack/*.backup
+model_pack/*.backup_*
+model_pack/*_BACKUP_*
+model_pack/*backup_*
+model_pack/backups/daily/
+model_pack/backups/weekly/
+# Keep critical backups versioned
+!model_pack/backups/critical/

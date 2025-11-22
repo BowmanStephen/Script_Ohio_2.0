@@ -1,0 +1,231 @@
+{
+  "total_features": 88,
+  "expected_features": 88,
+  "predictive_features": 81,
+  "metadata_columns": 7,
+  "feature_completeness": 100.0,
+  "readiness_score": 100.0,
+  "data_quality_score": 100.0,
+  "compatibility_score": 90,
+  "model_issues": [
+    "Margin outliers: 1"
+  ],
+  "categories": {
+    "Base Metrics": {
+      "expected": 5,
+      "actual": 5,
+      "complete_features": [
+        "season",
+        "week",
+        "home_team",
+        "away_team",
+        "neutral_site"
+      ],
+      "missing_features": []
+    },
+    "Team Strength": {
+      "expected": 4,
+      "actual": 4,
+      "complete_features": [
+        "home_elo",
+        "away_elo",
+        "home_talent",
+        "away_talent"
+      ],
+      "missing_features": []
+    },
+    "Scoring": {
+      "expected": 4,
+      "actual": 4,
+      "complete_features": [
+        "home_points",
+        "away_points",
+        "margin",
+        "spread"
+      ],
+      "missing_features": []
+    },
+    "EPA Metrics": {
+      "expected": 4,
+      "actual": 4,
+      "complete_features": [
+        "home_adjusted_epa",
+        "home_adjusted_epa_allowed",
+        "away_adjusted_epa",
+        "away_adjusted_epa_allowed"
+      ],
+      "missing_features": []
+    },
+    "Rushing EPA": {
+      "expected": 4,
+      "actual": 4,
+      "complete_features": [
+        "home_adjusted_rushing_epa",
+        "home_adjusted_rushing_epa_allowed",
+        "away_adjusted_rushing_epa",
+        "away_adjusted_rushing_epa_allowed"
+      ],
+      "missing_features": []
+    },
+    "Passing EPA": {
+      "expected": 4,
+      "actual": 4,
+      "complete_features": [
+        "home_adjusted_passing_epa",
+        "home_adjusted_passing_epa_allowed",
+        "away_adjusted_passing_epa",
+        "away_adjusted_passing_epa_allowed"
+      ],
+      "missing_features": []
+    },
+    "Success Rates": {
+      "expected": 4,
+      "actual": 4,
+      "complete_features": [
+        "home_adjusted_success",
+        "home_adjusted_success_allowed",
+        "away_adjusted_success",
+        "away_adjusted_success_allowed"
+      ],
+      "missing_features": []
+    },
+    "Standard Downs": {
+      "expected": 4,
+      "actual": 4,
+      "complete_features": [
+        "home_adjusted_standard_down_success",
+        "home_adjusted_standard_down_success_allowed",
+        "away_adjusted_standard_down_success",
+        "away_adjusted_standard_down_success_allowed"
+      ],
+      "missing_features": []
+    },
+    "Passing Downs": {
+      "expected": 4,
+      "actual": 4,
+      "complete_features": [
+        "home_adjusted_passing_down_success",
+        "home_adjusted_passing_down_success_allowed",
+        "away_adjusted_passing_down_success",
+        "away_adjusted_passing_down_success_allowed"
+      ],
+      "missing_features": []
+    },
+    "Line Yards": {
+      "expected": 4,
+      "actual": 4,
+      "complete_features": [
+        "home_adjusted_line_yards",
+        "home_adjusted_line_yards_allowed",
+        "away_adjusted_line_yards",
+        "away_adjusted_line_yards_allowed"
+      ],
+      "missing_features": []
+    },
+    "Second Level": {
+      "expected": 4,
+      "actual": 4,
+      "complete_features": [
+        "home_adjusted_second_level_yards",
+        "home_adjusted_second_level_yards_allowed",
+        "away_adjusted_second_level_yards",
+        "away_adjusted_second_level_yards_allowed"
+      ],
+      "missing_features": []
+    },
+    "Open Field": {
+      "expected": 4,
+      "actual": 4,
+      "complete_features": [
+        "home_adjusted_open_field_yards",
+        "home_adjusted_open_field_yards_allowed",
+        "away_adjusted_open_field_yards",
+        "away_adjusted_open_field_yards_allowed"
+      ],
+      "missing_features": []
+    },
+    "Explosiveness": {
+      "expected": 4,
+      "actual": 4,
+      "complete_features": [
+        "home_adjusted_explosiveness",
+        "home_adjusted_explosiveness_allowed",
+        "away_adjusted_explosiveness",
+        "away_adjusted_explosiveness_allowed"
+      ],
+      "missing_features": []
+    },
+    "Rush Explosiveness": {
+      "expected": 4,
+      "actual": 4,
+      "complete_features": [
+        "home_adjusted_rush_explosiveness",
+        "home_adjusted_rush_explosiveness_allowed",
+        "away_adjusted_rush_explosiveness",
+        "away_adjusted_rush_explosiveness_allowed"
+      ],
+      "missing_features": []
+    },
+    "Pass Explosiveness": {
+      "expected": 4,
+      "actual": 4,
+      "complete_features": [
+        "home_adjusted_pass_explosiveness",
+        "home_adjusted_pass_explosiveness_allowed",
+        "away_adjusted_pass_explosiveness",
+        "away_adjusted_pass_explosiveness_allowed"
+      ],
+      "missing_features": []
+    },
+    "Havoc Rates": {
+      "expected": 12,
+      "actual": 12,
+      "complete_features": [
+        "home_total_havoc_offense",
+        "home_front_seven_havoc_offense",
+        "home_db_havoc_offense",
+        "away_total_havoc_offense",
+        "away_front_seven_havoc_offense",
+        "away_db_havoc_offense",
+        "home_total_havoc_defense",
+        "home_front_seven_havoc_defense",
+        "home_db_havoc_defense",
+        "away_total_havoc_defense",
+        "away_front_seven_havoc_defense",
+        "away_db_havoc_defense"
+      ],
+      "missing_features": []
+    },
+    "Scoring Efficiency": {
+      "expected": 4,
+      "actual": 4,
+      "complete_features": [
+        "home_points_per_opportunity_offense",
+        "away_points_per_opportunity_offense",
+        "home_points_per_opportunity_defense",
+        "away_points_per_opportunity_defense"
+      ],
+      "missing_features": []
+    },
+    "Field Position": {
+      "expected": 4,
+      "actual": 4,
+      "complete_features": [
+        "home_avg_start_offense",
+        "home_avg_start_defense",
+        "away_avg_start_offense",
+        "away_avg_start_defense"
+      ],
+      "missing_features": []
+    },
+    "Metadata": {
+      "expected": 2,
+      "actual": 2,
+      "complete_features": [
+        "game_key",
+        "conference_game"
+      ],
+      "missing_features": []
+    }
+  }
+}

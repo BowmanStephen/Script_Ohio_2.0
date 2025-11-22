@@ -1,0 +1,65 @@
+game_id,home_team,away_team,ensemble_winner,ensemble_confidence,supporting_models
+0,Northern Illinois,Western Michigan,Northern Illinois,0.458223906362637,1
+1,Ohio,Massachusetts,Massachusetts,0.20481760175672725,1
+2,Bowling Green,Akron,Bowling Green,0.30041108655647086,1
+3,Kent State,Central Michigan,Central Michigan,0.1581497972035375,1
+4,Buffalo,Miami (OH),Buffalo,0.20321140229619683,1
+5,Arkansas State,Louisiana,Arkansas State,0.49276492713653886,1
+6,NC State,Florida State,NC State,0.0448338018832517,1
+7,UNLV,Hawai'i,Hawai'i,0.4242231298827034,1
+8,Texas A&M,Samford,Texas A&M,0.86210471485863,1
+9,Northwestern,Minnesota,Northwestern,0.07982992179633275,1
+10,Wake Forest,Delaware,Delaware,0.5435485623327041,1
+11,Virginia Tech,Miami,Miami,0.3371383694869944,1
+12,Ohio State,Rutgers,Ohio State,0.6360798969978332,1
+13,Army,Tulsa,Army,0.23727251129296079,1
+14,Oklahoma,Missouri,Oklahoma,0.4085323704307504,1
+15,Iowa State,Kansas,Iowa State,0.4530558802252169,1
+16,SMU,Louisville,Louisville,0.37393455690967325,1
+17,Georgia,Charlotte,Charlotte,0.6053009107097524,1
+18,James Madison,Washington State,James Madison,0.2150564913040316,1
+19,Arizona,Baylor,Baylor,0.45479567131058685,1
+20,Georgia Southern,Old Dominion,Old Dominion,0.08468702340773737,1
+21,Toledo,Ball State,Toledo,0.9035447302850761,1
+22,Alabama,Eastern Illinois,Alabama,0.11139209735965161,1
+23,Auburn,Mercer,Auburn,0.012326748455877778,1
+24,Kennesaw State,Missouri State,Missouri State,0.4674576246402934,1
+25,Wyoming,Nevada,Wyoming,0.012546593664131578,1
+26,App State,Marshall,Marshall,0.7865808494245384,1
+27,Florida Atlantic,UConn,Florida Atlantic,0.41991632860332295,1
+28,Middle Tennessee,Sam Houston,Middle Tennessee,0.08612134973500862,1
+29,Louisiana Tech,Liberty,Liberty,0.19788719053375303,1
+30,UAB,South Florida,UAB,0.23934354533523594,1
+31,UTEP,New Mexico State,UTEP,0.11452131144531874,1
+32,North Carolina,Duke,North Carolina,0.11109441418483823,1
+33,Oregon,USC,Oregon,0.2547664758467605,1
+34,Notre Dame,Syracuse,Syracuse,0.14675557389139815,1
+35,Florida International,Jacksonville State,Florida International,0.5687683628811855,1
+36,UTSA,East Carolina,East Carolina,0.5097003210009318,1
+37,Vanderbilt,Kentucky,Vanderbilt,0.5352482026601588,1
+38,South Alabama,Southern Miss,Southern Miss,0.23561066992020152,1
+39,Iowa,Michigan State,Michigan State,0.6273020507081601,1
+40,Texas,Arkansas,Texas,0.46662717180379176,1
+41,Temple,Tulane,Tulane,0.3758089335107858,1
+42,Utah,Kansas State,Kansas State,0.4706822208208641,1
+43,Houston,TCU,TCU,0.37155821703291114,1
+44,Troy,Georgia State,Georgia State,0.28392834607739736,1
+45,Maryland,Michigan,Maryland,0.22044985308782405,1
+46,UCF,Oklahoma State,UCF,0.7606797007224646,1
+47,South Carolina,Coastal Carolina,Coastal Carolina,0.49461345093728404,1
+48,Clemson,Furman,Furman,0.5085930759437892,1
+49,Texas State,UL Monroe,UL Monroe,0.02265481551503168,1
+50,Boise State,Colorado State,Colorado State,0.03977083015499938,1
+51,Penn State,Nebraska,Nebraska,0.1705450884077203,1
+52,Georgia Tech,Pittsburgh,Pittsburgh,0.2676757024677183,1
+53,Air Force,New Mexico,Air Force,0.10693953277941448,1
+54,Stanford,California,Stanford,0.23945892956911918,1
+55,Rice,North Texas,Rice,0.049447723573519564,1
+56,Florida,Tennessee,Tennessee,0.17780355100727707,1
+57,Wisconsin,Illinois,Illinois,0.2898492158292454,1
+58,LSU,Western Kentucky,LSU,0.6199528540856774,1
+59,Colorado,Arizona State,Arizona State,0.7169923267340195,1
+60,Cincinnati,BYU,Cincinnati,0.5717282639895391,1
+61,San Diego State,San José State,San Diego State,0.1548323540893719,1
+62,UCLA,Washington,Washington,0.1472069274866663,1
+63,Fresno State,Utah State,Fresno State,0.7618178026853599,1

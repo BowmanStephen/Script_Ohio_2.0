@@ -1,0 +1,1211 @@
+================================================================================
+MISSING GAMES ANALYSIS REPORT
+================================================================================
+
+SUMMARY:
+  Expected Total: 5,279 games
+  Actual Total: 5,142 games
+  Missing Total: 5,279 games
+  Coverage: 0.0%
+
+BY SEASON:
+  2016: Expected 544, Actual 539, Missing 544
+  2017: Expected 548, Actual 560, Missing 548
+  2018: Expected 551, Actual 525, Missing 551
+  2019: Expected 563, Actual 585, Missing 563
+  2021: Expected 538, Actual 565, Missing 538
+  2022: Expected 540, Actual 566, Missing 540
+  2023: Expected 547, Actual 576, Missing 547
+  2024: Expected 569, Actual 604, Missing 569
+  2025: Expected 879, Actual 622, Missing 879
+
+================================================================================
+MISSING GAMES DETAIL:
+================================================================================
+
+
+2016:
+  Week 5: 62 missing games
+    - ID: 400869527, Houston vs UConn
+    - ID: 400869598, Texas Tech vs Kansas
+    - ID: 400869124, Washington vs Stanford
+    - ID: 400868926, BYU vs Toledo
+    - ID: 400868879, Iowa State vs Baylor
+    - ID: 400869011, Arkansas vs Alcorn State
+    - ID: 400869635, Ohio State vs Rutgers
+    - ID: 400869017, Vanderbilt vs Florida
+    - ID: 400869818, App State vs Georgia State
+    - ID: 400869530, Temple vs SMU
+    ... and 52 more
+  Week 6: 54 missing games
+    - ID: 400869822, Arkansas State vs Georgia Southern
+    - ID: 400869531, Memphis vs Temple
+    - ID: 400869379, Louisiana Tech vs Western Kentucky
+    - ID: 400869457, Boston College vs Clemson
+    - ID: 400868962, Old Dominion vs Massachusetts
+    - ID: 400869533, Tulsa vs SMU
+    - ID: 400869214, New Mexico vs Boise State
+    - ID: 400869534, UConn vs Cincinnati
+    - ID: 400869535, South Florida vs East Carolina
+    - ID: 400869668, Minnesota vs Iowa
+    ... and 44 more
+  Week 7: 54 missing games
+    - ID: 400869825, Louisiana vs App State
+    - ID: 400869461, Louisville vs Duke
+    - ID: 400869538, Tulane vs Memphis
+    - ID: 400869221, Fresno State vs San Diego State
+    - ID: 400868928, BYU vs Mississippi State
+    - ID: 400869627, Texas Tech vs West Virginia
+    - ID: 400869026, Georgia vs Vanderbilt
+    - ID: 400869608, Oklahoma vs Kansas State
+    - ID: 400869462, Clemson vs NC State
+    - ID: 400868915, Army vs Lafayette
+    ... and 44 more
+  Week 8: 57 missing games
+    - ID: 400869467, Virginia Tech vs Miami
+    - ID: 400869830, South Alabama vs Troy
+    - ID: 400869224, Boise State vs BYU
+    - ID: 400869542, Temple vs South Florida
+    - ID: 400869230, San Diego State vs San José State
+    - ID: 400869140, California vs Oregon
+    - ID: 400869678, Northwestern vs Indiana
+    - ID: 400869313, Toledo vs Central Michigan
+    - ID: 400869674, Iowa vs Wisconsin
+    - ID: 400869316, Bowling Green vs Miami (OH)
+    ... and 47 more
+  Week 9: 54 missing games
+    - ID: 400869471, Pittsburgh vs Virginia Tech
+    - ID: 400869318, Toledo vs Ohio
+    - ID: 400869835, Georgia Southern vs App State
+    - ID: 400869317, Buffalo vs Akron
+    - ID: 400869145, USC vs California
+    - ID: 400869548, South Florida vs Navy
+    - ID: 400869234, Utah State vs San Diego State
+    - ID: 400869231, Fresno State vs Air Force
+    - ID: 400869474, Georgia Tech vs Duke
+    - ID: 400869319, Central Michigan vs Kent State
+    ... and 44 more
+  Week 10: 61 missing games
+    - ID: 400869320, Northern Illinois vs Bowling Green
+    - ID: 400869321, Ball State vs Western Michigan
+    - ID: 400869322, Akron vs Toledo
+    - ID: 400869323, Ohio vs Buffalo
+    - ID: 400869838, Georgia State vs Arkansas State
+    - ID: 400869593, Iowa State vs Oklahoma
+    - ID: 400869150, Colorado vs UCLA
+    - ID: 400869324, Miami (OH) vs Central Michigan
+    - ID: 400869554, UConn vs Temple
+    - ID: 400869236, Boise State vs San José State
+    ... and 51 more
+  Week 11: 59 missing games
+    - ID: 400869325, Ball State vs Eastern Michigan
+    - ID: 400869326, Kent State vs Western Michigan
+    - ID: 400869327, Akron vs Bowling Green
+    - ID: 400869328, Northern Illinois vs Toledo
+    - ID: 400869844, Georgia Southern vs Louisiana
+    - ID: 400869483, Duke vs North Carolina
+    - ID: 400869155, Arizona State vs Utah
+    - ID: 400869484, Florida State vs Boston College
+    - ID: 400869692, Purdue vs Northwestern
+    - ID: 400869594, Kansas vs Iowa State
+    ... and 49 more
+  Week 12: 65 missing games
+    - ID: 400869331, Central Michigan vs Ohio
+    - ID: 400869330, Bowling Green vs Kent State
+    - ID: 400869332, Toledo vs Ball State
+    - ID: 400869333, Eastern Michigan vs Northern Illinois
+    - ID: 400869562, Houston vs Louisville
+    - ID: 400869847, Troy vs Arkansas State
+    - ID: 400869563, Cincinnati vs Memphis
+    - ID: 400869246, Boise State vs UNLV
+    - ID: 400868920, Army vs Morgan State
+    - ID: 400869649, Michigan State vs Ohio State
+    ... and 55 more
+  Week 13: 61 missing games
+    - ID: 400869337, Eastern Michigan vs Central Michigan
+    - ID: 400869336, Miami (OH) vs Ball State
+    - ID: 400869335, Ohio vs Akron
+    - ID: 400869067, Texas A&M vs LSU
+    - ID: 400869568, Memphis vs Houston
+    - ID: 400869339, Kent State vs Northern Illinois
+    - ID: 400869497, North Carolina vs NC State
+    - ID: 400869338, Bowling Green vs Buffalo
+    - ID: 400869073, Missouri vs Arkansas
+    - ID: 400869699, Iowa vs Nebraska
+    ... and 51 more
+  Week 14: 16 missing games
+    - ID: 400926941, Ohio vs Western Michigan
+    - ID: 400926942, Washington vs Colorado
+    - ID: 400926947, Navy vs Temple
+    - ID: 400869856, Georgia Southern vs Troy
+    - ID: 400926948, Western Kentucky vs Louisiana Tech
+    - ID: 400869611, TCU vs Kansas State
+    - ID: 400869618, Oklahoma vs Oklahoma State
+    - ID: 400869859, South Alabama vs New Mexico State
+    - ID: 400869858, UL Monroe vs Louisiana
+    - ID: 400868886, West Virginia vs Baylor
+    ... and 6 more
+  Week 15: 1 missing games
+    - ID: 400868921, Army vs Navy
+
+2017:
+  Week 5: 54 missing games
+    - ID: 400934521, Iowa State vs Texas
+    - ID: 400937479, Duke vs Miami
+    - ID: 400935365, Illinois vs Nebraska
+    - ID: 400945262, Utah State vs BYU
+    - ID: 400935284, Washington State vs USC
+    - ID: 400933873, Arkansas vs New Mexico State
+    - ID: 400941811, Temple vs Houston
+    - ID: 400933875, Florida vs Vanderbilt
+    - ID: 400937486, Pittsburgh vs Rice
+    - ID: 400935367, Minnesota vs Maryland
+    ... and 44 more
+  Week 6: 58 missing games
+    - ID: 400944846, Georgia Southern vs Arkansas State
+    - ID: 400937487, NC State vs Louisville
+    - ID: 400941814, UConn vs Memphis
+    - ID: 400945267, BYU vs Boise State
+    - ID: 400941819, Tulane vs Tulsa
+    - ID: 400935374, Northwestern vs Penn State
+    - ID: 400941817, East Carolina vs Temple
+    - ID: 400933885, Vanderbilt vs Georgia
+    - ID: 400933880, Auburn vs Ole Miss
+    - ID: 400934525, Kansas vs Texas Tech
+    ... and 48 more
+  Week 7: 59 missing games
+    - ID: 400944851, Troy vs South Alabama
+    - ID: 400944852, Louisiana vs Texas State
+    - ID: 400937493, Syracuse vs Clemson
+    - ID: 400935294, California vs Washington State
+    - ID: 400934529, West Virginia vs Texas Tech
+    - ID: 400935378, Illinois vs Rutgers
+    - ID: 400934567, Army vs Eastern Michigan
+    - ID: 400934527, Iowa State vs Kansas
+    - ID: 400937495, Duke vs Florida State
+    - ID: 400933892, Tennessee vs South Carolina
+    ... and 49 more
+  Week 8: 56 missing games
+    - ID: 400944857, Arkansas State vs Louisiana
+    - ID: 400941824, Houston vs Memphis
+    - ID: 400938641, Old Dominion vs Western Kentucky
+    - ID: 400938674, Middle Tennessee vs Marshall
+    - ID: 400945278, Nevada vs Air Force
+    - ID: 400945280, New Mexico vs Colorado State
+    - ID: 400944999, Toledo vs Akron
+    - ID: 400937500, Florida State vs Louisville
+    - ID: 400934535, Texas vs Oklahoma State
+    - ID: 400935388, Wisconsin vs Maryland
+    ... and 46 more
+  Week 9: 56 missing games
+    - ID: 400945005, Northern Illinois vs Eastern Michigan
+    - ID: 400945006, Ball State vs Toledo
+    - ID: 400944861, Georgia State vs South Alabama
+    - ID: 400935304, Oregon State vs Stanford
+    - ID: 400941830, Memphis vs Tulane
+    - ID: 400937504, Boston College vs Florida State
+    - ID: 400941831, SMU vs Tulsa
+    - ID: 400945007, Akron vs Buffalo
+    - ID: 400934538, Baylor vs Texas
+    - ID: 400935390, Illinois vs Wisconsin
+    ... and 46 more
+  Week 10: 61 missing games
+    - ID: 400945008, Kent State vs Bowling Green
+    - ID: 400945009, Ohio vs Miami (OH)
+    - ID: 400945010, Western Michigan vs Central Michigan
+    - ID: 400945011, Eastern Michigan vs Ball State
+    - ID: 400945012, Toledo vs Northern Illinois
+    - ID: 400941834, Temple vs Navy
+    - ID: 400944866, Troy vs Idaho
+    - ID: 400938675, Florida Atlantic vs Marshall
+    - ID: 400941835, Tulsa vs Memphis
+    - ID: 400935310, Utah vs UCLA
+    ... and 51 more
+  Week 11: 60 missing games
+    - ID: 400945013, Miami (OH) vs Akron
+    - ID: 400945014, Buffalo vs Bowling Green
+    - ID: 400945017, Ohio vs Toledo
+    - ID: 400945016, Western Michigan vs Kent State
+    - ID: 400945015, Central Michigan vs Eastern Michigan
+    - ID: 400945018, Northern Illinois vs Ball State
+    - ID: 400944871, App State vs Georgia Southern
+    - ID: 400937514, Pittsburgh vs North Carolina
+    - ID: 400941840, Cincinnati vs Temple
+    - ID: 400945299, UNLV vs BYU
+    ... and 50 more
+  Week 12: 65 missing games
+    - ID: 400945020, Akron vs Ohio
+    - ID: 400945019, Kent State vs Central Michigan
+    - ID: 400945023, Northern Illinois vs Western Michigan
+    - ID: 400945021, Miami (OH) vs Eastern Michigan
+    - ID: 400945022, Bowling Green vs Toledo
+    - ID: 400945024, Ball State vs Buffalo
+    - ID: 400941848, South Florida vs Tulsa
+    - ID: 400938665, Western Kentucky vs Middle Tennessee
+    - ID: 400945302, New Mexico vs UNLV
+    - ID: 400933923, Auburn vs UL Monroe
+    ... and 55 more
+  Week 13: 62 missing games
+    - ID: 400945026, Akron vs Kent State
+    - ID: 400945027, Ball State vs Miami (OH)
+    - ID: 400945025, Eastern Michigan vs Bowling Green
+    - ID: 400933930, Mississippi State vs Ole Miss
+    - ID: 400945030, Toledo vs Western Michigan
+    - ID: 400934556, TCU vs Baylor
+    - ID: 400945028, Central Michigan vs Northern Illinois
+    - ID: 400937529, Pittsburgh vs Miami
+    - ID: 400941850, Houston vs Navy
+    - ID: 400945029, Buffalo vs Ohio
+    ... and 52 more
+  Week 14: 16 missing games
+    - ID: 400955149, USC vs Stanford
+    - ID: 400955150, Toledo vs Akron
+    - ID: 400955152, Florida Atlantic vs North Texas
+    - ID: 400985387, Florida International vs Massachusetts
+    - ID: 401000149, Florida State vs UL Monroe
+    - ID: 400955151, UCF vs Memphis
+    - ID: 400955157, Oklahoma vs TCU
+    - ID: 400944886, Coastal Carolina vs Georgia Southern
+    - ID: 400944887, Georgia State vs Idaho
+    - ID: 400944884, App State vs Louisiana
+    ... and 6 more
+  Week 15: 1 missing games
+    - ID: 400934572, Navy vs Army
+
+2018:
+  Week 5: 58 missing games
+    - ID: 401013466, Miami vs North Carolina
+    - ID: 401019496, Tulane vs Memphis
+    - ID: 401012752, Colorado vs UCLA
+    - ID: 401012293, Texas A&M vs Arkansas
+    - ID: 401012292, Alabama vs Louisiana
+    - ID: 401013369, Buffalo vs Army
+    - ID: 401013130, Boston College vs Temple
+    - ID: 401013050, Kansas vs Oklahoma State
+    - ID: 401012824, Rutgers vs Indiana
+    - ID: 401012881, Michigan State vs Central Michigan
+    ... and 48 more
+  Week 6: 56 missing games
+    - ID: 401021669, Troy vs Georgia State
+    - ID: 401019499, Houston vs Tulsa
+    - ID: 401013138, Louisville vs Georgia Tech
+    - ID: 401015010, Marshall vs Middle Tennessee
+    - ID: 401016407, BYU vs Utah State
+    - ID: 401012876, Michigan vs Maryland
+    - ID: 401012305, South Carolina vs Missouri
+    - ID: 401019503, Temple vs East Carolina
+    - ID: 401013051, West Virginia vs Kansas
+    - ID: 401012808, Rutgers vs Illinois
+    ... and 46 more
+  Week 7: 55 missing games
+    - ID: 401021672, Arkansas State vs App State
+    - ID: 401013076, TCU vs Texas Tech
+    - ID: 401021673, Texas State vs Georgia Southern
+    - ID: 401019505, Tulsa vs South Florida
+    - ID: 401022533, San Diego State vs Air Force
+    - ID: 401012764, Utah vs Arizona
+    - ID: 401020756, Buffalo vs Akron
+    - ID: 401012312, Vanderbilt vs Florida
+    - ID: 401013340, Northwestern vs Nebraska
+    - ID: 401012825, Maryland vs Rutgers
+    ... and 45 more
+  Week 8: 55 missing games
+    - ID: 401021676, Arkansas State vs Georgia State
+    - ID: 401012768, Arizona State vs Stanford
+    - ID: 401022538, Boise State vs Colorado State
+    - ID: 401022539, UNLV vs Air Force
+    - ID: 401012316, Ole Miss vs Auburn
+    - ID: 401013068, TCU vs Oklahoma
+    - ID: 401012867, Iowa vs Maryland
+    - ID: 401012313, Arkansas vs Tulsa
+    - ID: 401020763, Toledo vs Buffalo
+    - ID: 401012884, Michigan State vs Michigan
+    ... and 45 more
+  Week 9: 56 missing games
+    - ID: 401021679, South Alabama vs Troy
+    - ID: 401013033, West Virginia vs Baylor
+    - ID: 401020766, Ohio vs Ball State
+    - ID: 401020767, Western Michigan vs Toledo
+    - ID: 401021680, Georgia Southern vs App State
+    - ID: 401013153, Virginia Tech vs Georgia Tech
+    - ID: 401015028, Florida Atlantic vs Louisiana Tech
+    - ID: 401013154, Boston College vs Miami
+    - ID: 401012858, Minnesota vs Indiana
+    - ID: 401022546, Colorado State vs Wyoming
+    ... and 46 more
+  Week 10: 62 missing games
+    - ID: 401020770, Buffalo vs Miami (OH)
+    - ID: 401020769, Bowling Green vs Kent State
+    - ID: 401020771, Toledo vs Ball State
+    - ID: 401020772, Akron vs Northern Illinois
+    - ID: 401020773, Western Michigan vs Ohio
+    - ID: 401019517, UCF vs Temple
+    - ID: 401013160, Virginia vs Pittsburgh
+    - ID: 401015034, Middle Tennessee vs Western Kentucky
+    - ID: 401012780, Arizona vs Colorado
+    - ID: 401013373, Army vs Air Force
+    ... and 52 more
+  Week 11: 62 missing games
+    - ID: 401020775, Buffalo vs Kent State
+    - ID: 401020776, Miami (OH) vs Ohio
+    - ID: 401020777, Northern Illinois vs Toledo
+    - ID: 401013167, NC State vs Wake Forest
+    - ID: 401013168, Syracuse vs Louisville
+    - ID: 401022556, Boise State vs Fresno State
+    - ID: 401012333, Florida vs South Carolina
+    - ID: 401012337, Texas A&M vs Ole Miss
+    - ID: 401012335, Missouri vs Vanderbilt
+    - ID: 401019525, UConn vs SMU
+    ... and 52 more
+  Week 12: 66 missing games
+    - ID: 401020780, Ball State vs Western Michigan
+    - ID: 401020781, Ohio vs Buffalo
+    - ID: 401020782, Northern Illinois vs Miami (OH)
+    - ID: 401020783, Kent State vs Toledo
+    - ID: 401019529, Houston vs Tulane
+    - ID: 401015045, North Texas vs Florida Atlantic
+    - ID: 401022560, New Mexico vs Boise State
+    - ID: 401019530, SMU vs Memphis
+    - ID: 401013334, Minnesota vs Northwestern
+    - ID: 401012878, Maryland vs Ohio State
+    ... and 56 more
+  Week 13: 64 missing games
+    - ID: 401020785, Miami (OH) vs Ball State
+    - ID: 401020786, Western Michigan vs Northern Illinois
+    - ID: 401022565, Air Force vs Colorado State
+    - ID: 401012349, Ole Miss vs Mississippi State
+    - ID: 401019537, Memphis vs Houston
+    - ID: 401020790, Kent State vs Eastern Michigan
+    - ID: 401013056, Kansas vs Texas
+    - ID: 401020788, Bowling Green vs Buffalo
+    - ID: 401012871, Iowa vs Nebraska
+    - ID: 401020787, Ohio vs Akron
+    ... and 54 more
+  Week 14: 16 missing games
+    - ID: 401056696, Buffalo vs Northern Illinois
+    - ID: 401056704, Washington vs Utah
+    - ID: 401056701, App State vs Louisiana
+    - ID: 401098253, South Carolina vs Akron
+    - ID: 401082044, Iowa State vs Drake
+    - ID: 401100159, Virginia Tech vs Marshall
+    - ID: 401088766, NC State vs East Carolina
+    - ID: 401056698, Oklahoma vs Texas
+    - ID: 401056703, Middle Tennessee vs UAB
+    - ID: 401081953, Liberty vs Norfolk State
+    ... and 6 more
+  Week 15: 1 missing games
+    - ID: 401013376, Army vs Navy
+
+2019:
+  Week 5: 55 missing games
+    - ID: 401117871, Memphis vs Navy
+    - ID: 401112465, Virginia Tech vs Duke
+    - ID: 401112204, Maryland vs Penn State
+    - ID: 401117512, Air Force vs San José State
+    - ID: 401114156, California vs Arizona State
+    - ID: 401110807, Arkansas vs Texas A&M
+    - ID: 401112247, Wisconsin vs Northwestern
+    - ID: 401112471, Syracuse vs Holy Cross
+    - ID: 401117213, Toledo vs BYU
+    - ID: 401112225, Michigan vs Rutgers
+    ... and 45 more
+  Week 6: 48 missing games
+    - ID: 401121948, South Alabama vs Georgia Southern
+    - ID: 401117874, East Carolina vs Temple
+    - ID: 401117875, Cincinnati vs UCF
+    - ID: 401117519, San José State vs New Mexico
+    - ID: 401112260, Penn State vs Purdue
+    - ID: 401114328, Army vs Tulane
+    - ID: 401117876, UConn vs South Florida
+    - ID: 401112126, Texas Tech vs Oklahoma State
+    - ID: 401112205, Rutgers vs Maryland
+    - ID: 401112269, Wisconsin vs Kent State
+    ... and 38 more
+  Week 7: 53 missing games
+    - ID: 401121950, Louisiana vs App State
+    - ID: 401112477, NC State vs Syracuse
+    - ID: 401121951, Texas State vs UL Monroe
+    - ID: 401117522, New Mexico vs Colorado State
+    - ID: 401112478, Miami vs Virginia
+    - ID: 401114186, Oregon vs Colorado
+    - ID: 401119278, Western Michigan vs Miami (OH)
+    - ID: 401112150, Illinois vs Michigan
+    - ID: 401112118, Texas vs Oklahoma
+    - ID: 401110817, Georgia vs South Carolina
+    ... and 43 more
+  Week 8: 62 missing games
+    - ID: 401121953, Troy vs South Alabama
+    - ID: 401121954, Arkansas State vs Louisiana
+    - ID: 401114210, Stanford vs UCLA
+    - ID: 401114288, Florida Atlantic vs Marshall
+    - ID: 401112483, Syracuse vs Pittsburgh
+    - ID: 401112248, Northwestern vs Ohio State
+    - ID: 401117528, Fresno State vs UNLV
+    - ID: 401119283, Ohio vs Kent State
+    - ID: 401112151, Illinois vs Wisconsin
+    - ID: 401112485, Louisville vs Clemson
+    ... and 52 more
+  Week 9: 55 missing games
+    - ID: 401117889, Houston vs SMU
+    - ID: 401114188, Colorado vs USC
+    - ID: 401112494, Pittsburgh vs Miami
+    - ID: 401110835, Texas A&M vs Mississippi State
+    - ID: 401112152, Purdue vs Illinois
+    - ID: 401112266, Rutgers vs Liberty
+    - ID: 401112197, Northwestern vs Iowa
+    - ID: 401112254, Ohio State vs Wisconsin
+    - ID: 401121957, South Alabama vs App State
+    - ID: 401112110, Kansas State vs Oklahoma
+    ... and 45 more
+  Week 10: 48 missing games
+    - ID: 401112080, Baylor vs West Virginia
+    - ID: 401121960, App State vs Georgia Southern
+    - ID: 401117894, UConn vs Navy
+    - ID: 401112495, Syracuse vs Boston College
+    - ID: 401112243, Purdue vs Nebraska
+    - ID: 401110841, Texas A&M vs UTSA
+    - ID: 401119295, Central Michigan vs Northern Illinois
+    - ID: 401112208, Maryland vs Michigan
+    - ID: 401117895, UCF vs Houston
+    - ID: 401114300, Florida International vs Old Dominion
+    ... and 38 more
+  Week 11: 48 missing games
+    - ID: 401119297, Toledo vs Kent State
+    - ID: 401119296, Western Michigan vs Ball State
+    - ID: 401119298, Ohio vs Miami (OH)
+    - ID: 401121964, Coastal Carolina vs Louisiana
+    - ID: 401117899, South Florida vs Temple
+    - ID: 401117900, Tulsa vs UCF
+    - ID: 401114205, Oregon State vs Washington
+    - ID: 401112502, Boston College vs Florida State
+    - ID: 401112209, Ohio State vs Maryland
+    - ID: 401114332, Army vs Massachusetts
+    ... and 38 more
+  Week 12: 55 missing games
+    - ID: 401119299, Akron vs Eastern Michigan
+    - ID: 401119300, Ohio vs Western Michigan
+    - ID: 401119302, Toledo vs Northern Illinois
+    - ID: 401119301, Miami (OH) vs Bowling Green
+    - ID: 401119303, Kent State vs Buffalo
+    - ID: 401112507, Pittsburgh vs North Carolina
+    - ID: 401114309, Marshall vs Louisiana Tech
+    - ID: 401117547, San Diego State vs Fresno State
+    - ID: 401112510, Florida State vs Alabama State
+    - ID: 401112105, Oklahoma State vs Kansas
+    ... and 45 more
+  Week 13: 64 missing games
+    - ID: 401119306, Bowling Green vs Ohio
+    - ID: 401119305, Northern Illinois vs Eastern Michigan
+    - ID: 401119308, Buffalo vs Toledo
+    - ID: 401119307, Miami (OH) vs Akron
+    - ID: 401112513, Georgia Tech vs NC State
+    - ID: 401117550, Wyoming vs Colorado State
+    - ID: 401110856, Auburn vs Samford
+    - ID: 401119309, Kent State vs Ball State
+    - ID: 401112256, Ohio State vs Penn State
+    - ID: 401110855, Alabama vs Western Carolina
+    ... and 54 more
+  Week 14: 64 missing games
+    - ID: 401119310, Akron vs Ohio
+    - ID: 401119311, Northern Illinois vs Western Michigan
+    - ID: 401110863, Mississippi State vs Ole Miss
+    - ID: 401119312, Buffalo vs Bowling Green
+    - ID: 401119313, Eastern Michigan vs Kent State
+    - ID: 401112521, Virginia vs Virginia Tech
+    - ID: 401119314, Ball State vs Miami (OH)
+    - ID: 401112138, Texas vs Texas Tech
+    - ID: 401119315, Central Michigan vs Toledo
+    - ID: 401110864, Arkansas vs Missouri
+    ... and 54 more
+  Week 15: 11 missing games
+    - ID: 401132973, Oregon vs Utah
+    - ID: 401132974, Oklahoma vs Baylor
+    - ID: 401132984, App State vs Louisiana
+    - ID: 401132982, Central Michigan vs Miami (OH)
+    - ID: 401132980, Florida Atlantic vs UAB
+    - ID: 401132976, Memphis vs Cincinnati
+    - ID: 401132979, Boise State vs Hawai'i
+    - ID: 401132981, LSU vs Georgia
+    - ID: 401132975, Clemson vs Virginia
+    - ID: 401132983, Wisconsin vs Ohio State
+    ... and 1 more
+
+2021:
+  Week 5: 61 missing games
+    - ID: 401282646, Miami vs Virginia
+    - ID: 401301012, Tulsa vs Houston
+    - ID: 401282759, Maryland vs Iowa
+    - ID: 401309912, Utah State vs BYU
+    - ID: 401282219, Illinois vs Charlotte
+    - ID: 401282793, Purdue vs Minnesota
+    - ID: 401282093, Missouri vs Tennessee
+    - ID: 401309561, Buffalo vs Western Michigan
+    - ID: 401287915, TCU vs Texas
+    - ID: 401301015, Temple vs Memphis
+    ... and 51 more
+  Week 6: 51 missing games
+    - ID: 401309616, Arkansas State vs Coastal Carolina
+    - ID: 401301017, Tulane vs Houston
+    - ID: 401282224, Florida International vs Charlotte
+    - ID: 401301018, Cincinnati vs Temple
+    - ID: 401309868, Arizona State vs Stanford
+    - ID: 401282102, Tennessee vs South Carolina
+    - ID: 401309564, Toledo vs Northern Illinois
+    - ID: 401287918, Texas vs Oklahoma
+    - ID: 401282100, Ole Miss vs Arkansas
+    - ID: 401309566, Bowling Green vs Akron
+    ... and 41 more
+  Week 7: 52 missing games
+    - ID: 401309620, Louisiana vs App State
+    - ID: 401301022, Memphis vs Navy
+    - ID: 401309621, South Alabama vs Georgia Southern
+    - ID: 401282657, Syracuse vs Clemson
+    - ID: 401282231, North Texas vs Marshall
+    - ID: 401309872, Oregon vs California
+    - ID: 401310723, San José State vs San Diego State
+    - ID: 401287924, Texas vs Oklahoma State
+    - ID: 401282796, Minnesota vs Nebraska
+    - ID: 401282104, Arkansas vs Auburn
+    ... and 42 more
+  Week 8: 54 missing games
+    - ID: 401309623, App State vs Coastal Carolina
+    - ID: 401309624, Arkansas State vs Louisiana
+    - ID: 401282235, Charlotte vs Florida Atlantic
+    - ID: 401301025, SMU vs Tulane
+    - ID: 401310729, UNLV vs San José State
+    - ID: 401282239, UConn vs Middle Tennessee
+    - ID: 401301026, UCF vs Memphis
+    - ID: 401310725, Utah State vs Colorado State
+    - ID: 401309877, Arizona vs Washington
+    - ID: 401282112, Arkansas vs Arkansas-Pine Bluff
+    ... and 44 more
+  Week 9: 53 missing games
+    - ID: 401309627, Coastal Carolina vs Troy
+    - ID: 401301033, East Carolina vs South Florida
+    - ID: 401301030, Tulsa vs Navy
+    - ID: 401310734, Nevada vs UNLV
+    - ID: 401309631, Louisiana vs Texas State
+    - ID: 401287929, Baylor vs Texas
+    - ID: 401309578, Buffalo vs Bowling Green
+    - ID: 401301031, Temple vs UCF
+    - ID: 401301032, Tulane vs Cincinnati
+    - ID: 401282674, Pittsburgh vs Miami
+    ... and 43 more
+  Week 10: 61 missing games
+    - ID: 401309579, Akron vs Ball State
+    - ID: 401309580, Toledo vs Eastern Michigan
+    - ID: 401308839, Ohio vs Miami (OH)
+    - ID: 401309581, Western Michigan vs Central Michigan
+    - ID: 401309582, Kent State vs Northern Illinois
+    - ID: 401309632, Louisiana vs Georgia State
+    - ID: 401282677, Boston College vs Virginia Tech
+    - ID: 401309888, Stanford vs Utah
+    - ID: 401310253, Air Force vs Army
+    - ID: 401287935, Kansas vs Kansas State
+    ... and 51 more
+  Week 11: 63 missing games
+    - ID: 401308840, Miami (OH) vs Buffalo
+    - ID: 401309584, Western Michigan vs Akron
+    - ID: 401309583, Eastern Michigan vs Ohio
+    - ID: 401309587, Northern Illinois vs Ball State
+    - ID: 401309585, Bowling Green vs Toledo
+    - ID: 401309586, Central Michigan vs Kent State
+    - ID: 401282683, Pittsburgh vs North Carolina
+    - ID: 401301040, South Florida vs Cincinnati
+    - ID: 401310742, Boise State vs Wyoming
+    - ID: 401282128, Auburn vs Mississippi State
+    ... and 53 more
+  Week 12: 66 missing games
+    - ID: 401309589, Ohio vs Toledo
+    - ID: 401309588, Eastern Michigan vs Western Michigan
+    - ID: 401308841, Miami (OH) vs Bowling Green
+    - ID: 401309591, Ball State vs Central Michigan
+    - ID: 401309590, Buffalo vs Northern Illinois
+    - ID: 401282691, Duke vs Louisville
+    - ID: 401282264, Louisiana Tech vs Southern Miss
+    - ID: 401301045, Houston vs Memphis
+    - ID: 401309899, Washington State vs Arizona
+    - ID: 401310747, Nevada vs Air Force
+    ... and 56 more
+  Week 13: 65 missing games
+    - ID: 401309593, Ball State vs Buffalo
+    - ID: 401309594, Northern Illinois vs Western Michigan
+    - ID: 401310757, San José State vs Fresno State
+    - ID: 401282151, Mississippi State vs Ole Miss
+    - ID: 401287952, Texas vs Kansas State
+    - ID: 401309595, Central Michigan vs Eastern Michigan
+    - ID: 401310753, San Diego State vs Boise State
+    - ID: 401309596, Bowling Green vs Ohio
+    - ID: 401310755, New Mexico vs Utah State
+    - ID: 401282761, Nebraska vs Iowa
+    ... and 55 more
+  Week 14: 11 missing games
+    - ID: 401282156, UTSA vs Western Kentucky
+    - ID: 401331159, Utah vs Oregon
+    - ID: 401287953, Oklahoma State vs Baylor
+    - ID: 401331160, Northern Illinois vs Kent State
+    - ID: 401310676, San Diego State vs Utah State
+    - ID: 401331161, Louisiana vs App State
+    - ID: 401331162, Cincinnati vs Houston
+    - ID: 401282154, Alabama vs Georgia
+    - ID: 401331163, Wake Forest vs Pittsburgh
+    - ID: 401331447, Iowa vs Michigan
+    ... and 1 more
+  Week 15: 1 missing games
+    - ID: 401301056, Army vs Navy
+
+2022:
+  Week 5: 63 missing games
+    - ID: 401403908, South Carolina vs South Carolina State
+    - ID: 401415226, BYU vs Utah State
+    - ID: 401415625, Houston vs Tulane
+    - ID: 401426576, Middle Tennessee vs UTSA
+    - ID: 401415228, Boise State vs San Diego State
+    - ID: 401404007, UCLA vs Washington
+    - ID: 401415229, UNLV vs New Mexico
+    - ID: 401411124, Boston College vs Louisville
+    - ID: 401405101, Minnesota vs Purdue
+    - ID: 401404086, TCU vs Oklahoma
+    ... and 53 more
+  Week 6: 57 missing games
+    - ID: 401415629, UCF vs SMU
+    - ID: 401405111, Rutgers vs Nebraska
+    - ID: 401415630, Memphis vs Houston
+    - ID: 401415233, Nevada vs Colorado State
+    - ID: 401415236, San José State vs UNLV
+    - ID: 401416614, Western Michigan vs Eastern Michigan
+    - ID: 401411136, Virginia vs Louisville
+    - ID: 401405109, Maryland vs Purdue
+    - ID: 401405108, Indiana vs Michigan
+    - ID: 401404089, Kansas vs TCU
+    ... and 47 more
+  Week 7: 53 missing games
+    - ID: 401426347, Marshall vs Louisiana
+    - ID: 401404092, West Virginia vs Baylor
+    - ID: 401415634, UCF vs Temple
+    - ID: 401415635, SMU vs Navy
+    - ID: 401426584, Florida International vs UTSA
+    - ID: 401405115, Michigan vs Penn State
+    - ID: 401416622, Bowling Green vs Miami (OH)
+    - ID: 401404094, Oklahoma vs Kansas
+    - ID: 401426348, Coastal Carolina vs Old Dominion
+    - ID: 401416619, Akron vs Central Michigan
+    ... and 43 more
+  Week 8: 53 missing games
+    - ID: 401426353, App State vs Georgia State
+    - ID: 401426354, South Alabama vs Troy
+    - ID: 401411141, Georgia Tech vs Virginia
+    - ID: 401415638, Temple vs Tulsa
+    - ID: 401426592, Western Kentucky vs UAB
+    - ID: 401416628, Kent State vs Akron
+    - ID: 401403926, Tennessee vs UT Martin
+    - ID: 401415640, Navy vs Houston
+    - ID: 401405121, Rutgers vs Indiana
+    - ID: 401415641, SMU vs Cincinnati
+    ... and 43 more
+  Week 9: 48 missing games
+    - ID: 401426359, Southern Miss vs Louisiana
+    - ID: 401411146, NC State vs Virginia Tech
+    - ID: 401404026, Washington State vs Utah
+    - ID: 401426594, Florida International vs Louisiana Tech
+    - ID: 401415645, BYU vs East Carolina
+    - ID: 401404103, West Virginia vs TCU
+    - ID: 401403927, Auburn vs Arkansas
+    - ID: 401416630, Eastern Michigan vs Toledo
+    - ID: 401404129, Syracuse vs Notre Dame
+    - ID: 401415643, Houston vs South Florida
+    ... and 38 more
+  Week 10: 60 missing games
+    - ID: 401416632, Kent State vs Ball State
+    - ID: 401416633, Ohio vs Buffalo
+    - ID: 401416635, Bowling Green vs Western Michigan
+    - ID: 401416634, Northern Illinois vs Central Michigan
+    - ID: 401426601, Rice vs UTEP
+    - ID: 401426364, Coastal Carolina vs App State
+    - ID: 401411151, Boston College vs Duke
+    - ID: 401404155, UConn vs Massachusetts
+    - ID: 401404031, Washington vs Oregon State
+    - ID: 401404141, Army vs Air Force
+    ... and 50 more
+  Week 11: 65 missing games
+    - ID: 401416637, Akron vs Eastern Michigan
+    - ID: 401416638, Miami (OH) vs Ohio
+    - ID: 401416636, Toledo vs Ball State
+    - ID: 401416639, Western Michigan vs Northern Illinois
+    - ID: 401416640, Central Michigan vs Buffalo
+    - ID: 401416641, Bowling Green vs Kent State
+    - ID: 401426370, Louisiana vs Georgia Southern
+    - ID: 401415653, Memphis vs Tulsa
+    - ID: 401415654, Cincinnati vs East Carolina
+    - ID: 401404033, USC vs Colorado
+    ... and 55 more
+  Week 12: 65 missing games
+    - ID: 401416643, Ball State vs Ohio
+    - ID: 401416642, Toledo vs Bowling Green
+    - ID: 401416644, Kent State vs Eastern Michigan
+    - ID: 401416646, Northern Illinois vs Miami (OH)
+    - ID: 401416645, Central Michigan vs Western Michigan
+    - ID: 401415658, Tulane vs SMU
+    - ID: 401415659, Tulsa vs South Florida
+    - ID: 401415264, New Mexico vs San Diego State
+    - ID: 401415661, UCF vs Navy
+    - ID: 401405142, Nebraska vs Wisconsin
+    ... and 55 more
+  Week 13: 63 missing games
+    - ID: 401416648, Miami (OH) vs Ball State
+    - ID: 401416649, Ohio vs Bowling Green
+    - ID: 401403956, Ole Miss vs Mississippi State
+    - ID: 401416650, Eastern Michigan vs Central Michigan
+    - ID: 401416651, Western Michigan vs Toledo
+    - ID: 401415665, Cincinnati vs Tulane
+    - ID: 401415269, Boise State vs Utah State
+    - ID: 401404119, Texas vs Baylor
+    - ID: 401404045, Arizona vs Arizona State
+    - ID: 401411172, North Carolina vs NC State
+    ... and 53 more
+  Week 14: 12 missing games
+    - ID: 401506450, Buffalo vs Akron
+    - ID: 401437032, UTSA vs North Texas
+    - ID: 401437035, USC vs Utah
+    - ID: 401437033, Ohio vs Toledo
+    - ID: 401437030, TCU vs Kansas State
+    - ID: 401507088, New Mexico State vs Valparaiso
+    - ID: 401437037, Troy vs Coastal Carolina
+    - ID: 401437008, Tulane vs UCF
+    - ID: 401437034, Boise State vs Fresno State
+    - ID: 401437036, Georgia vs LSU
+    ... and 2 more
+  Week 15: 1 missing games
+    - ID: 401404145, Army vs Navy
+
+2023:
+  Week 5: 59 missing games
+    - ID: 401520277, Western Kentucky vs Middle Tennessee
+    - ID: 401531339, Tulsa vs Temple
+    - ID: 401520276, Sam Houston vs Jacksonville State
+    - ID: 401525512, NC State vs Louisville
+    - ID: 401520278, UTEP vs Louisiana Tech
+    - ID: 401524020, Oregon State vs Utah
+    - ID: 401525851, BYU vs Cincinnati
+    - ID: 401520287, Northwestern vs Penn State
+    - ID: 401524023, Colorado vs USC
+    - ID: 401525514, Syracuse vs Clemson
+    ... and 49 more
+  Week 6: 51 missing games
+    - ID: 401520294, Middle Tennessee vs Jacksonville State
+    - ID: 401520297, New Mexico State vs Florida International
+    - ID: 401520296, Liberty vs Sam Houston
+    - ID: 401520295, Louisiana Tech vs Western Kentucky
+    - ID: 401525857, Oklahoma State vs Kansas State
+    - ID: 401520301, Illinois vs Nebraska
+    - ID: 401525522, Virginia vs William & Mary
+    - ID: 401520307, Ohio State vs Maryland
+    - ID: 401520304, Mississippi State vs Western Michigan
+    - ID: 401526837, Massachusetts vs Toledo
+    ... and 41 more
+  Week 7: 55 missing games
+    - ID: 401520313, Middle Tennessee vs Louisiana Tech
+    - ID: 401531888, App State vs Coastal Carolina
+    - ID: 401520312, Jacksonville State vs Liberty
+    - ID: 401520314, Florida International vs UTEP
+    - ID: 401520315, New Mexico State vs Sam Houston
+    - ID: 401525862, Houston vs West Virginia
+    - ID: 401531415, East Carolina vs SMU
+    - ID: 401531371, Memphis vs Tulane
+    - ID: 401532594, Utah State vs Fresno State
+    - ID: 401524029, Colorado vs Stanford
+    ... and 45 more
+  Week 8: 54 missing games
+    - ID: 401520330, Liberty vs Middle Tennessee
+    - ID: 401531892, South Alabama vs Southern Miss
+    - ID: 401520329, Jacksonville State vs Western Kentucky
+    - ID: 401520331, Sam Houston vs Florida International
+    - ID: 401520332, UTEP vs New Mexico State
+    - ID: 401531341, Tulsa vs Rice
+    - ID: 401531893, Marshall vs James Madison
+    - ID: 401531391, Temple vs SMU
+    - ID: 401525528, Georgia Tech vs Boston College
+    - ID: 401525868, Cincinnati vs Baylor
+    ... and 44 more
+  Week 9: 54 missing games
+    - ID: 401520345, Louisiana Tech vs New Mexico State
+    - ID: 401520346, Western Kentucky vs Liberty
+    - ID: 401520347, Florida International vs Jacksonville State
+    - ID: 401520348, Sam Houston vs UTEP
+    - ID: 401525533, Virginia Tech vs Syracuse
+    - ID: 401531929, Georgia Southern vs Georgia State
+    - ID: 401531407, Charlotte vs Florida Atlantic
+    - ID: 401520356, Northwestern vs Maryland
+    - ID: 401531342, SMU vs Tulsa
+    - ID: 401520358, Penn State vs Indiana
+    ... and 44 more
+  Week 10: 65 missing games
+    - ID: 401532433, Central Michigan vs Northern Illinois
+    - ID: 401532434, Toledo vs Buffalo
+    - ID: 401532435, Bowling Green vs Ball State
+    - ID: 401532436, Akron vs Kent State
+    - ID: 401525879, Texas Tech vs TCU
+    - ID: 401525539, Duke vs Wake Forest
+    - ID: 401531904, Troy vs South Alabama
+    - ID: 401525540, Syracuse vs Boston College
+    - ID: 401532609, Wyoming vs Colorado State
+    - ID: 401525441, Clemson vs Notre Dame
+    ... and 55 more
+  Week 11: 65 missing games
+    - ID: 401532437, Northern Illinois vs Ball State
+    - ID: 401532438, Western Michigan vs Central Michigan
+    - ID: 401532439, Buffalo vs Ohio
+    - ID: 401532441, Miami (OH) vs Akron
+    - ID: 401532442, Kent State vs Bowling Green
+    - ID: 401532440, Toledo vs Eastern Michigan
+    - ID: 401531911, Louisiana vs Southern Miss
+    - ID: 401525546, Louisville vs Virginia
+    - ID: 401531437, SMU vs North Texas
+    - ID: 401532618, UNLV vs Wyoming
+    ... and 55 more
+  Week 12: 68 missing games
+    - ID: 401532443, Bowling Green vs Toledo
+    - ID: 401532444, Northern Illinois vs Western Michigan
+    - ID: 401532445, Eastern Michigan vs Akron
+    - ID: 401532447, Miami (OH) vs Buffalo
+    - ID: 401532446, Ohio vs Central Michigan
+    - ID: 401525553, Pittsburgh vs Boston College
+    - ID: 401531401, UTSA vs South Florida
+    - ID: 401524057, Washington State vs Colorado
+    - ID: 401531417, Navy vs East Carolina
+    - ID: 401531431, Memphis vs SMU
+    ... and 58 more
+  Week 13: 65 missing games
+    - ID: 401532450, Western Michigan vs Bowling Green
+    - ID: 401532449, Buffalo vs Eastern Michigan
+    - ID: 401520424, Mississippi State vs Ole Miss
+    - ID: 401532452, Akron vs Ohio
+    - ID: 401520425, Nebraska vs Iowa
+    - ID: 401525560, Boston College vs Miami
+    - ID: 401532451, Central Michigan vs Toledo
+    - ID: 401525900, Oklahoma vs TCU
+    - ID: 401531394, Temple vs Memphis
+    - ID: 401531376, Tulane vs UTSA
+    ... and 55 more
+  Week 14: 10 missing games
+    - ID: 401539476, Liberty vs New Mexico State
+    - ID: 401539475, Washington vs Oregon
+    - ID: 401539479, Texas vs Oklahoma State
+    - ID: 401539481, Toledo vs Miami (OH)
+    - ID: 401539482, UNLV vs Boise State
+    - ID: 401539484, Troy vs App State
+    - ID: 401539483, Alabama vs Georgia
+    - ID: 401539477, Tulane vs SMU
+    - ID: 401539480, Iowa vs Michigan
+    - ID: 401539478, Florida State vs Louisville
+  Week 15: 1 missing games
+    - ID: 401520445, Army vs Navy
+
+2024:
+  Week 5: 56 missing games
+    - ID: 401645331, Temple vs Army
+    - ID: 401634767, Miami vs Virginia Tech
+    - ID: 401628501, Rutgers vs Washington
+    - ID: 401628496, Indiana vs Maryland
+    - ID: 401645337, Tulane vs South Florida
+    - ID: 401636880, Baylor vs BYU
+    - ID: 401635560, Boston College vs Western Kentucky
+    - ID: 401628497, Michigan vs Minnesota
+    - ID: 401636883, Kansas State vs Oklahoma State
+    - ID: 401635564, NC State vs Northern Illinois
+    ... and 46 more
+  Week 6: 49 missing games
+    - ID: 401643797, Troy vs Texas State
+    - ID: 401641029, UTEP vs Sam Houston
+    - ID: 401641001, Kennesaw State vs Jacksonville State
+    - ID: 401636891, TCU vs Houston
+    - ID: 401628506, Oregon vs Michigan State
+    - ID: 401634779, UNLV vs Syracuse
+    - ID: 401628509, Wisconsin vs Purdue
+    - ID: 401628510, Penn State vs UCLA
+    - ID: 401629044, Northern Illinois vs Massachusetts
+    - ID: 401635567, Virginia vs Boston College
+    ... and 39 more
+  Week 7: 52 missing games
+    - ID: 401640982, Liberty vs Florida International
+    - ID: 401641002, Jacksonville State vs New Mexico State
+    - ID: 401643803, James Madison vs Coastal Carolina
+    - ID: 401641030, Western Kentucky vs UTEP
+    - ID: 401641009, Louisiana Tech vs Middle Tennessee
+    - ID: 401628513, Maryland vs Northwestern
+    - ID: 401643733, Utah State vs UNLV
+    - ID: 401636892, Arizona State vs Utah
+    - ID: 401628512, Iowa vs Washington
+    - ID: 401628517, Rutgers vs Wisconsin
+    ... and 42 more
+  Week 8: 59 missing games
+    - ID: 401643809, South Alabama vs Troy
+    - ID: 401641019, Middle Tennessee vs Kennesaw State
+    - ID: 401641010, New Mexico State vs Louisiana Tech
+    - ID: 401641038, Sam Houston vs Western Kentucky
+    - ID: 401640983, UTEP vs Florida International
+    - ID: 401643810, Marshall vs Georgia State
+    - ID: 401634768, Virginia Tech vs Boston College
+    - ID: 401634769, Duke vs Florida State
+    - ID: 401628523, Purdue vs Oregon
+    - ID: 401636898, BYU vs Oklahoma State
+    ... and 49 more
+  Week 9: 57 missing games
+    - ID: 401640984, Florida International vs Sam Houston
+    - ID: 401641011, Louisiana Tech vs UTEP
+    - ID: 401640993, Kennesaw State vs Liberty
+    - ID: 401641003, Jacksonville State vs Middle Tennessee
+    - ID: 401643815, Old Dominion vs Georgia Southern
+    - ID: 401634770, Pittsburgh vs Syracuse
+    - ID: 401634771, Boston College vs Louisville
+    - ID: 401643740, UNLV vs Boise State
+    - ID: 401628532, USC vs Rutgers
+    - ID: 401635597, Virginia Tech vs Georgia Tech
+    ... and 47 more
+  Week 10: 49 missing games
+    - ID: 401640985, Florida International vs New Mexico State
+    - ID: 401643820, Texas State vs Louisiana
+    - ID: 401641012, Sam Houston vs Louisiana Tech
+    - ID: 401640994, Liberty vs Jacksonville State
+    - ID: 401641020, Western Kentucky vs Kennesaw State
+    - ID: 401645356, Charlotte vs Tulane
+    - ID: 401629036, UConn vs Georgia State
+    - ID: 401645357, Florida Atlantic vs South Florida
+    - ID: 401643747, Boise State vs San Diego State
+    - ID: 401645359, UTSA vs Memphis
+    ... and 39 more
+  Week 11: 50 missing games
+    - ID: 401644760, Central Michigan vs Bowling Green
+    - ID: 401644688, Ball State vs Miami (OH)
+    - ID: 401644762, Western Michigan vs Northern Illinois
+    - ID: 401644761, Kent State vs Ohio
+    - ID: 401643825, Coastal Carolina vs App State
+    - ID: 401645361, East Carolina vs Florida Atlantic
+    - ID: 401634773, Wake Forest vs California
+    - ID: 401628542, UCLA vs Iowa
+    - ID: 401645362, Memphis vs Rice
+    - ID: 401643754, San Diego State vs New Mexico
+    ... and 40 more
+  Week 12: 55 missing games
+    - ID: 401644764, Bowling Green vs Western Michigan
+    - ID: 401644763, Buffalo vs Ball State
+    - ID: 401644765, Toledo vs Central Michigan
+    - ID: 401644766, Northern Illinois vs Akron
+    - ID: 401644767, Ohio vs Eastern Michigan
+    - ID: 401644689, Miami (OH) vs Kent State
+    - ID: 401645365, Tulsa vs East Carolina
+    - ID: 401645366, UTSA vs North Texas
+    - ID: 401643759, Colorado State vs Wyoming
+    - ID: 401628553, Washington vs UCLA
+    ... and 45 more
+  Week 13: 65 missing games
+    - ID: 401644769, Kent State vs Akron
+    - ID: 401644770, Central Michigan vs Western Michigan
+    - ID: 401644690, Miami (OH) vs Northern Illinois
+    - ID: 401644772, Eastern Michigan vs Buffalo
+    - ID: 401644773, Toledo vs Ohio
+    - ID: 401634772, Georgia Tech vs NC State
+    - ID: 401645374, UTSA vs Temple
+    - ID: 401628558, Michigan State vs Purdue
+    - ID: 401643767, San José State vs UNLV
+    - ID: 401635518, Syracuse vs UConn
+    ... and 55 more
+  Week 14: 67 missing games
+    - ID: 401644775, Akron vs Toledo
+    - ID: 401644776, Buffalo vs Kent State
+    - ID: 401645376, Tulane vs Memphis
+    - ID: 401645379, East Carolina vs Navy
+    - ID: 401644691, Bowling Green vs Miami (OH)
+    - ID: 401644777, Ohio vs Ball State
+    - ID: 401636938, Colorado vs Oklahoma State
+    - ID: 401628568, Wisconsin vs Minnesota
+    - ID: 401643769, Boise State vs Oregon State
+    - ID: 401628442, Ole Miss vs Mississippi State
+    ... and 57 more
+  Week 15: 9 missing games
+    - ID: 401673466, Jacksonville State vs Western Kentucky
+    - ID: 401673468, Boise State vs UNLV
+    - ID: 401673462, Army vs Tulane
+    - ID: 401673465, Arizona State vs Iowa State
+    - ID: 401673467, Miami (OH) vs Ohio
+    - ID: 401673469, Texas vs Georgia
+    - ID: 401673470, Louisiana vs Marshall
+    - ID: 401673464, Oregon vs Penn State
+    - ID: 401673463, SMU vs Clemson
+  Week 16: 1 missing games
+    - ID: 401645383, Army vs Navy
+
+2025:
+  Week 1: 96 missing games
+    - ID: 401756846, Kansas State vs Iowa State
+    - ID: 401760371, UNLV vs Idaho State
+    - ID: 401756847, Kansas vs Fresno State
+    - ID: 401757218, Western Kentucky vs Sam Houston
+    - ID: 401754516, Hawai'i vs Stanford
+    - ID: 401762522, South Florida vs Boise State
+    - ID: 401762790, Bowling Green vs Lafayette
+    - ID: 401752794, Rutgers vs Ohio
+    - ID: 401756848, UCF vs Jacksonville State
+    - ID: 401761588, UL Monroe vs St. Francis (PA)
+    ... and 86 more
+  Week 2: 83 missing games
+    - ID: 401754528, Louisville vs James Madison
+    - ID: 401752826, Maryland vs Northern Illinois
+    - ID: 401752817, Northwestern vs Western Illinois
+    - ID: 401760363, Boise State vs Eastern Washington
+    - ID: 401754524, NC State vs Virginia
+    - ID: 401754621, Florida State vs East Texas A&M
+    - ID: 401752822, Iowa State vs Iowa
+    - ID: 401754618, Syracuse vs UConn
+    - ID: 401757227, Jacksonville State vs Liberty
+    - ID: 401752825, Duke vs Illinois
+    ... and 73 more
+  Week 3: 70 missing games
+    - ID: 401754531, Wake Forest vs NC State
+    - ID: 401752836, Indiana vs Indiana State
+    - ID: 401754532, Syracuse vs Colgate
+    - ID: 401756893, Houston vs Colorado
+    - ID: 401756888, Arizona vs Kansas State
+    - ID: 401752837, UCLA vs New Mexico
+    - ID: 401761608, Troy vs Memphis
+    - ID: 401752703, Temple vs Oklahoma
+    - ID: 401752696, Alabama vs Wisconsin
+    - ID: 401752839, Michigan vs Central Michigan
+    ... and 60 more
+  Week 4: 62 missing games
+    - ID: 401762468, Charlotte vs Rice
+    - ID: 401756900, Oklahoma State vs Tulsa
+    - ID: 401752844, Rutgers vs Iowa
+    - ID: 401762469, Army vs North Texas
+    - ID: 401762470, South Florida vs South Carolina State
+    - ID: 401754636, TCU vs SMU
+    - ID: 401754642, Louisville vs Bowling Green
+    - ID: 401760376, Miami (OH) vs UNLV
+    - ID: 401754537, Clemson vs Syracuse
+    - ID: 401752708, Memphis vs Arkansas
+    ... and 52 more
+  Week 5: 53 missing games
+    - ID: 401762471, East Carolina vs Army
+    - ID: 401754543, Virginia vs Florida State
+    - ID: 401756902, Arizona State vs TCU
+    - ID: 401752939, Oregon State vs Houston
+    - ID: 401752850, Illinois vs USC
+    - ID: 401754547, Pittsburgh vs Louisville
+    - ID: 401752717, Arkansas vs Notre Dame
+    - ID: 401752849, Minnesota vs Rutgers
+    - ID: 401756905, Kansas vs Cincinnati
+    - ID: 401756906, Kansas State vs UCF
+    ... and 43 more
+  Week 6: 51 missing games
+    - ID: 401757275, New Mexico State vs Sam Houston
+    - ID: 401757276, Delaware vs Western Kentucky
+    - ID: 401762475, South Florida vs Charlotte
+    - ID: 401760384, San José State vs New Mexico
+    - ID: 401760382, San Diego State vs Colorado State
+    - ID: 401756909, BYU vs West Virginia
+    - ID: 401762830, Ball State vs Ohio
+    - ID: 401756911, Baylor vs Kansas State
+    - ID: 401760381, Navy vs Air Force
+    - ID: 401754552, North Carolina vs Clemson
+    ... and 41 more
+  Week 7: 56 missing games
+    - ID: 401757278, Middle Tennessee vs Missouri State
+    - ID: 401757277, UTEP vs Liberty
+    - ID: 401757280, Kennesaw State vs Louisiana Tech
+    - ID: 401762480, Tulane vs East Carolina
+    - ID: 401757279, Sam Houston vs Jacksonville State
+    - ID: 401761622, Georgia Southern vs Southern Miss
+    - ID: 401762481, North Texas vs South Florida
+    - ID: 401760388, Colorado State vs Fresno State
+    - ID: 401752862, Washington vs Rutgers
+    - ID: 401762835, Bowling Green vs Toledo
+    ... and 46 more
+  Week 8: 60 missing games
+    - ID: 401757282, Liberty vs New Mexico State
+    - ID: 401761628, South Alabama vs Arkansas State
+    - ID: 401757281, Western Kentucky vs Florida International
+    - ID: 401757283, Jacksonville State vs Delaware
+    - ID: 401757284, Sam Houston vs UTEP
+    - ID: 401762486, East Carolina vs Tulsa
+    - ID: 401754564, Miami vs Louisville
+    - ID: 401752872, Minnesota vs Nebraska
+    - ID: 401760396, Utah State vs San José State
+    - ID: 401754371, California vs North Carolina
+    ... and 50 more
+  Week 9: 53 missing games
+    - ID: 401757285, Florida International vs Kennesaw State
+    - ID: 401757286, Louisiana Tech vs Western Kentucky
+    - ID: 401757287, Delaware vs Middle Tennessee
+    - ID: 401757288, New Mexico State vs Missouri State
+    - ID: 401761634, Georgia State vs South Alabama
+    - ID: 401762492, Charlotte vs North Texas
+    - ID: 401754372, Virginia Tech vs California
+    - ID: 401760397, Nevada vs Boise State
+    - ID: 401752750, Oklahoma vs Ole Miss
+    - ID: 401762848, Eastern Michigan vs Ohio
+    ... and 43 more
+  Week 10: 52 missing games
+    - ID: 401761639, Texas State vs James Madison
+    - ID: 401757289, Kennesaw State vs UTEP
+    - ID: 401757292, Middle Tennessee vs Jacksonville State
+    - ID: 401757291, Missouri State vs Florida International
+    - ID: 401762443, UTSA vs Tulane
+    - ID: 401761640, Coastal Carolina vs Marshall
+    - ID: 401762497, Rice vs Memphis
+    - ID: 401754575, Syracuse vs North Carolina
+    - ID: 401757290, Louisiana Tech vs Sam Houston
+    - ID: 401754581, SMU vs Miami
+    ... and 42 more
+  Week 11: 52 missing games
+    - ID: 401762851, Akron vs Massachusetts
+    - ID: 401762852, Ohio vs Miami (OH)
+    - ID: 401762853, Ball State vs Kent State
+    - ID: 401762854, Toledo vs Northern Illinois
+    - ID: 401761644, App State vs Georgia Southern
+    - ID: 401762500, South Florida vs UTSA
+    - ID: 401756946, UCF vs Houston
+    - ID: 401762501, Memphis vs Tulane
+    - ID: 401752896, USC vs Northwestern
+    - ID: 401756947, West Virginia vs Colorado
+    ... and 42 more
+  Week 12: 59 missing games
+    - ID: 401762856, Akron vs Kent State
+    - ID: 401762857, Western Michigan vs Ohio
+    - ID: 401762859, Massachusetts vs Northern Illinois
+    - ID: 401762860, Miami (OH) vs Toledo
+    - ID: 401762858, Central Michigan vs Buffalo
+    - ID: 401761649, Old Dominion vs Troy
+    - ID: 401754591, Louisville vs Clemson
+    - ID: 401752904, Oregon vs Minnesota
+    - ID: 401762861, Ball State vs Eastern Michigan
+    - ID: 401762510, Navy vs South Florida
+    ... and 49 more
+  Week 13: 64 missing games
+    - ID: 401762864, Northern Illinois vs Western Michigan
+    - ID: 401762863, Ohio vs Massachusetts
+    - ID: 401762862, Bowling Green vs Akron
+    - ID: 401762865, Buffalo vs Miami (OH)
+    - ID: 401762866, Kent State vs Central Michigan
+    - ID: 401761655, Arkansas State vs Louisiana
+    - ID: 401754598, NC State vs Florida State
+    - ID: 401760418, UNLV vs Hawai'i
+    - ID: 401756958, Iowa State vs Kansas
+    - ID: 401752909, Northwestern vs Minnesota
+    ... and 54 more
+  Week 14: 67 missing games
+    - ID: 401762868, Massachusetts vs Bowling Green
+    - ID: 401762869, Eastern Michigan vs Western Michigan
+    - ID: 401762516, Memphis vs Navy
+    - ID: 401756964, Kansas vs Utah
+    - ID: 401752916, Nebraska vs Iowa
+    - ID: 401762871, Northern Illinois vs Kent State
+    - ID: 401752788, Mississippi State vs Ole Miss
+    - ID: 401762870, Buffalo vs Ohio
+    - ID: 401760421, Colorado State vs Air Force
+    - ID: 401760426, New Mexico vs San Diego State
+    ... and 57 more
+  Week 16: 1 missing games
+    - ID: 401762521, Navy vs Army
+
+
+Total missing games: 5279

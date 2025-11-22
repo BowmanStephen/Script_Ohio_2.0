@@ -1,0 +1,24 @@
+metadata:
+  title: Weekly Analysis Plan
+  objective: Generate comprehensive weekly analysis including predictions and insights
+  created_at: 2025-11-19T12:00:00Z
+  author: system
+  version: "1.0"
+tasks[3]{id,name,description,agent_type,estimated_time}:
+  task_1,Generate Predictions,Run model predictions for week,model_engine,8.0
+  task_2,Generate Insights,Create analysis and insights,insight_generator,6.0
+  task_3,Create Visualizations,Generate charts and dashboards,insight_generator,4.0
+steps[5]{id,task_id,action,step_type,timeout}:
+  step_1,task_1,load_models,AGENT_EXECUTION,30
+  step_2,task_1,run_predictions,AGENT_EXECUTION,180
+  step_3,task_2,analyze_results,ANALYSIS,120
+  step_4,task_2,generate_insights,ANALYSIS,90
+  step_5,task_3,create_visualizations,VISUALIZATION,60
+shared_inputs:
+  week: "{{week}}"
+  season: "{{season}}"
+workflow_config:
+  parallel_execution: false
+  error_recovery: true
+  max_retries: 3
+

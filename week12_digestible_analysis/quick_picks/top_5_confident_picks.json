@@ -1,0 +1,94 @@
+{
+  "top_5_confident_picks": [
+    {
+      "home_team": "Tulsa",
+      "away_team": "Oregon State",
+      "predicted_winner": "Tulsa",
+      "predicted_margin": 0.99,
+      "confidence": 0.6956,
+      "home_rank": 121,
+      "away_rank": 91
+    },
+    {
+      "home_team": "Akron",
+      "away_team": "Kent State",
+      "predicted_winner": "Akron",
+      "predicted_margin": 3.96,
+      "confidence": 0.6889,
+      "home_rank": 117,
+      "away_rank": 122
+    },
+    {
+      "home_team": "Central Michigan",
+      "away_team": "Buffalo",
+      "predicted_winner": "Central Michigan",
+      "predicted_margin": 2.05,
+      "confidence": 0.682,
+      "home_rank": 114,
+      "away_rank": 100
+    },
+    {
+      "home_team": "Ball State",
+      "away_team": "Eastern Michigan",
+      "predicted_winner": "Ball State",
+      "predicted_margin": 2.2,
+      "confidence": 0.6653,
+      "home_rank": 116,
+      "away_rank": 106
+    },
+    {
+      "home_team": "Massachusetts",
+      "away_team": "Northern Illinois",
+      "predicted_winner": "Massachusetts",
+      "predicted_margin": 0.75,
+      "confidence": 0.6603,
+      "home_rank": 119,
+      "away_rank": 74
+    }
+  ],
+  "must_watch_games": [
+    {
+      "home_team": "Tulsa",
+      "away_team": "Oregon State",
+      "predicted_winner": "Tulsa",
+      "predicted_margin": 0.99,
+      "confidence": 0.6956,
+      "upset_potential": "High"
+    },
+    {
+      "home_team": "Akron",
+      "away_team": "Kent State",
+      "predicted_winner": "Akron",
+      "predicted_margin": 3.96,
+      "confidence": 0.6889,
+      "upset_potential": "Low"
+    },
+    {
+      "home_team": "Central Michigan",
+      "away_team": "Buffalo",
+      "predicted_winner": "Central Michigan",
+      "predicted_margin": 2.05,
+      "confidence": 0.682,
+      "upset_potential": "Medium"
+    },
+    {
+      "home_team": "Ball State",
+      "away_team": "Eastern Michigan",
+      "predicted_winner": "Ball State",
+      "predicted_margin": 2.2,
+      "confidence": 0.6653,
+      "upset_potential": "Medium"
+    },
+    {
+      "home_team": "Massachusetts",
+      "away_team": "Northern Illinois",
+      "predicted_winner": "Massachusetts",
+      "predicted_margin": 0.75,
+      "confidence": 0.6603,
+      "upset_potential": "High"
+    }
+  ],
+  "generated_at": "2025-11-14T18:35:51.599377",
+  "week": 12,
+  "season": 2025
+}

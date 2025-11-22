@@ -1,0 +1,420 @@
+{
+  "summary": {
+    "totalCalls": 33891,
+    "remainingCalls": 0,
+    "uniqueEndpoints": 10,
+    "averageCallsPerDay": 1473.52,
+    "accountType": "web",
+    "isActive": true,
+    "patronLevel": 2
+  },
+  "trends": {
+    "last30Days": 33891,
+    "previous30Days": 0,
+    "changePercentage": 0,
+    "trend": "stable"
+  },
+  "endpointUsage": [
+    {
+      "endpoint": "/games",
+      "count": 13896,
+      "percentage": 41,
+      "lastUsed": "2025-11-19T04:15:37.031Z",
+      "firstUsed": "2025-09-13T19:36:28.563Z",
+      "avgIntervalSeconds": 413
+    },
+    {
+      "endpoint": "/lines",
+      "count": 13586,
+      "percentage": 40.09,
+      "lastUsed": "2025-11-19T04:13:09.977Z",
+      "firstUsed": "2025-09-21T17:20:20.753Z",
+      "avgIntervalSeconds": 372
+    },
+    {
+      "endpoint": "/plays",
+      "count": 4543,
+      "percentage": 13.4,
+      "lastUsed": "2025-11-18T20:42:38.558Z",
+      "firstUsed": "2025-10-25T17:48:06.371Z",
+      "avgIntervalSeconds": 459
+    },
+    {
+      "endpoint": "/stats/season/advanced",
+      "count": 1427,
+      "percentage": 4.21,
+      "lastUsed": "2025-11-19T03:47:36.206Z",
+      "firstUsed": "2025-10-27T04:30:28.632Z",
+      "avgIntervalSeconds": 1392
+    },
+    {
+      "endpoint": "/rankings",
+      "count": 56,
+      "percentage": 0.17,
+      "lastUsed": "2025-11-07T20:27:05.922Z",
+      "firstUsed": "2025-09-21T17:53:45.899Z",
+      "avgIntervalSeconds": 74000
+    },
+    {
+      "endpoint": "/games/teams",
+      "count": 52,
+      "percentage": 0.15,
+      "lastUsed": "2025-11-17T20:09:28.222Z",
+      "firstUsed": "2025-11-14T17:17:20.680Z",
+      "avgIntervalSeconds": 5285
+    },
+    {
+      "endpoint": "/stats/game/advanced",
+      "count": 50,
+      "percentage": 0.15,
+      "lastUsed": "2025-11-17T20:08:40.779Z",
+      "firstUsed": "2025-11-14T17:16:52.073Z",
+      "avgIntervalSeconds": 5500
+    },
+    {
+      "endpoint": "/drives",
+      "count": 48,
+      "percentage": 0.14,
+      "lastUsed": "2025-11-17T20:09:22.633Z",
+      "firstUsed": "2025-11-14T19:18:52.388Z",
+      "avgIntervalSeconds": 5579
+    },
+    {
+      "endpoint": "/records",
+      "count": 42,
+      "percentage": 0.12,
+      "lastUsed": "2025-11-05T18:21:18.990Z",
+      "firstUsed": "2025-10-25T03:55:47.935Z",
+      "avgIntervalSeconds": 24447
+    },
+    {
+      "endpoint": "/metrics/wp/pregame",
+      "count": 40,
+      "percentage": 0.12,
+      "lastUsed": "2025-11-05T18:21:18.771Z",
+      "firstUsed": "2025-10-25T03:55:47.266Z",
+      "avgIntervalSeconds": 25701
+    }
+  ],
+  "recentActivity": [
+    {
+      "endpoint": "/games",
+      "timestamp": "2025-11-19T04:15:37.031Z",
+      "userAgent": "OpenAPI-Generator/5.12.1/python",
+      "query": {
+        "week": "7",
+        "year": "2022"
+      },
+      "apiVersion": "2"
+    },
+    {
+      "endpoint": "/games",
+      "timestamp": "2025-11-19T04:15:36.803Z",
+      "userAgent": "OpenAPI-Generator/5.12.1/python",
+      "query": {
+        "week": "7",
+        "year": "2022"
+      },
+      "apiVersion": "2"
+    },
+    {
+      "endpoint": "/games",
+      "timestamp": "2025-11-19T04:15:36.578Z",
+      "userAgent": "OpenAPI-Generator/5.12.1/python",
+      "query": {
+        "week": "7",
+        "year": "2022"
+      },
+      "apiVersion": "2"
+    },
+    {
+      "endpoint": "/games",
+      "timestamp": "2025-11-19T04:15:36.357Z",
+      "userAgent": "OpenAPI-Generator/5.12.1/python",
+      "query": {
+        "week": "7",
+        "year": "2022"
+      },
+      "apiVersion": "2"
+    },
+    {
+      "endpoint": "/games",
+      "timestamp": "2025-11-19T04:15:36.130Z",
+      "userAgent": "OpenAPI-Generator/5.12.1/python",
+      "query": {
+        "week": "7",
+        "year": "2022"
+      },
+      "apiVersion": "2"
+    },
+    {
+      "endpoint": "/games",
+      "timestamp": "2025-11-19T04:15:35.903Z",
+      "userAgent": "OpenAPI-Generator/5.12.1/python",
+      "query": {
+        "week": "7",
+        "year": "2022"
+      },
+      "apiVersion": "2"
+    },
+    {
+      "endpoint": "/games",
+      "timestamp": "2025-11-19T04:15:35.679Z",
+      "userAgent": "OpenAPI-Generator/5.12.1/python",
+      "query": {
+        "week": "7",
+        "year": "2022"
+      },
+      "apiVersion": "2"
+    },
+    {
+      "endpoint": "/games",
+      "timestamp": "2025-11-19T04:15:35.454Z",
+      "userAgent": "OpenAPI-Generator/5.12.1/python",
+      "query": {
+        "week": "7",
+        "year": "2022"
+      },
+      "apiVersion": "2"
+    },
+    {
+      "endpoint": "/games",
+      "timestamp": "2025-11-19T04:15:35.224Z",
+      "userAgent": "OpenAPI-Generator/5.12.1/python",
+      "query": {
+        "week": "7",
+        "year": "2022"
+      },
+      "apiVersion": "2"
+    },
+    {
+      "endpoint": "/games",
+      "timestamp": "2025-11-19T04:15:34.991Z",
+      "userAgent": "OpenAPI-Generator/5.12.1/python",
+      "query": {
+        "week": "7",
+        "year": "2022"
+      },
+      "apiVersion": "2"
+    }
+  ],
+  "dailyUsage": [
+    {
+      "date": "2025-11-19T00:00:00.000Z",
+      "calls": 26443,
+      "uniqueEndpoints": 7
+    },
+    {
+      "date": "2025-11-18T00:00:00.000Z",
+      "calls": 2453,
+      "uniqueEndpoints": 9
+    },
+    {
+      "date": "2025-11-17T00:00:00.000Z",
+      "calls": 101,
+      "uniqueEndpoints": 7
+    },
+    {
+      "date": "2025-11-15T00:00:00.000Z",
+      "calls": 9,
+      "uniqueEndpoints": 1
+    },
+    {
+      "date": "2025-11-14T00:00:00.000Z",
+      "calls": 126,
+      "uniqueEndpoints": 7
+    },
+    {
+      "date": "2025-11-07T00:00:00.000Z",
+      "calls": 15,
+      "uniqueEndpoints": 3
+    },
+    {
+      "date": "2025-11-06T00:00:00.000Z",
+      "calls": 1,
+      "uniqueEndpoints": 1
+    },
+    {
+      "date": "2025-11-05T00:00:00.000Z",
+      "calls": 17,
+      "uniqueEndpoints": 5
+    },
+    {
+      "date": "2025-11-03T00:00:00.000Z",
+      "calls": 802,
+      "uniqueEndpoints": 5
+    },
+    {
+      "date": "2025-11-02T00:00:00.000Z",
+      "calls": 631,
+      "uniqueEndpoints": 8
+    },
+    {
+      "date": "2025-10-27T00:00:00.000Z",
+      "calls": 43,
+      "uniqueEndpoints": 8
+    },
+    {
+      "date": "2025-10-26T00:00:00.000Z",
+      "calls": 46,
+      "uniqueEndpoints": 6
+    },
+    {
+      "date": "2025-10-25T00:00:00.000Z",
+      "calls": 2998,
+      "uniqueEndpoints": 8
+    },
+    {
+      "date": "2025-10-24T00:00:00.000Z",
+      "calls": 2,
+      "uniqueEndpoints": 2
+    },
+    {
+      "date": "2025-10-23T00:00:00.000Z",
+      "calls": 6,
+      "uniqueEndpoints": 2
+    },
+    {
+      "date": "2025-10-22T00:00:00.000Z",
+      "calls": 69,
+      "uniqueEndpoints": 7
+    },
+    {
+      "date": "2025-10-21T00:00:00.000Z",
+      "calls": 15,
+      "uniqueEndpoints": 2
+    },
+    {
+      "date": "2025-10-15T00:00:00.000Z",
+      "calls": 7,
+      "uniqueEndpoints": 1
+    },
+    {
+      "date": "2025-10-14T00:00:00.000Z",
+      "calls": 8,
+      "uniqueEndpoints": 1
+    },
+    {
+      "date": "2025-09-21T00:00:00.000Z",
+      "calls": 62,
+      "uniqueEndpoints": 5
+    },
+    {
+      "date": "2025-09-20T00:00:00.000Z",
+      "calls": 2,
+      "uniqueEndpoints": 2
+    },
+    {
+      "date": "2025-09-19T00:00:00.000Z",
+      "calls": 13,
+      "uniqueEndpoints": 2
+    },
+    {
+      "date": "2025-09-13T00:00:00.000Z",
+      "calls": 22,
+      "uniqueEndpoints": 3
+    }
+  ],
+  "weeklyUsage": [
+    {
+      "week": "2025-11-17T00:00:00.000Z",
+      "calls": 28997,
+      "uniqueEndpoints": 13
+    },
+    {
+      "week": "2025-11-10T00:00:00.000Z",
+      "calls": 135,
+      "uniqueEndpoints": 7
+    },
+    {
+      "week": "2025-11-03T00:00:00.000Z",
+      "calls": 835,
+      "uniqueEndpoints": 7
+    },
+    {
+      "week": "2025-10-27T00:00:00.000Z",
+      "calls": 674,
+      "uniqueEndpoints": 9
+    },
+    {
+      "week": "2025-10-20T00:00:00.000Z",
+      "calls": 3136,
+      "uniqueEndpoints": 13
+    },
+    {
+      "week": "2025-10-13T00:00:00.000Z",
+      "calls": 15,
+      "uniqueEndpoints": 1
+    },
+    {
+      "week": "2025-09-15T00:00:00.000Z",
+      "calls": 77,
+      "uniqueEndpoints": 5
+    },
+    {
+      "week": "2025-09-08T00:00:00.000Z",
+      "calls": 22,
+      "uniqueEndpoints": 3
+    }
+  ],
+  "monthlyUsage": [
+    {
+      "month": "2025-11-01T00:00:00.000Z",
+      "calls": 30598,
+      "uniqueEndpoints": 18
+    },
+    {
+      "month": "2025-10-01T00:00:00.000Z",
+      "calls": 3194,
+      "uniqueEndpoints": 15
+    },
+    {
+      "month": "2025-09-01T00:00:00.000Z",
+      "calls": 99,
+      "uniqueEndpoints": 7
+    }
+  ],
+  "topUserAgents": [
+    {
+      "userAgent": "OpenAPI-Generator/5.12.1/python",
+      "count": 29114,
+      "percentage": 85.9
+    },
+    {
+      "userAgent": "python-requests/2.32.4",
+      "count": 3761,
+      "percentage": 11.1
+    },
+    {
+      "userAgent": "python-requests/2.31.0",
+      "count": 728,
+      "percentage": 2.15
+    },
+    {
+      "userAgent": "python-requests/2.32.5",
+      "count": 137,
+      "percentage": 0.4
+    },
+    {
+      "userAgent": "Script-Ohio-Model/1.0",
+      "count": 71,
+      "percentage": 0.21
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "hasMore": true
+  },
+  "filters": {
+    "effectiveStartDate": "2025-08-21"
+  },
+  "metadata": {
+    "generatedAt": "2025-11-19T04:15:37.304Z",
+    "requestId": "1b64dbbf",
+    "limitations": {
+      "maxHistoryDays": 90,
+      "message": "Usage statistics are limited to the past 90 days"
+    }
+  }
+}

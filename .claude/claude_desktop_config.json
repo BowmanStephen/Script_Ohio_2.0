@@ -1,0 +1,144 @@
+{
+  "mcpServers": {
+    "agent_orchestrator": {
+      "command": "python3",
+      "args": [
+        "-c",
+        "import sys; sys.path.append('/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0'); from mcp_servers.agents.agent_mcp_bridge import AgentMCPBridge; bridge = AgentMCPBridge(); bridge.start_server()"
+      ],
+      "description": "College Football Analytics Agent System with MCP Integration",
+      "enabled": true,
+      "priority": "critical",
+      "cwd": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0"
+    },
+    "database_postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://localhost/college_football"
+      ],
+      "env": {
+        "POSTGRES_PASSWORD": "${POSTGRES_PASSWORD:postgres}"
+      },
+      "description": "PostgreSQL database integration for college football analytics"
+    },
+    "database_sqlite": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-sqlite",
+        "--database-path",
+        "data/football_analysis.db"
+      ],
+      "description": "SQLite database for local analytics operations"
+    },
+    "data_processing_pandas": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-pandas"
+      ],
+      "description": "Advanced data processing with pandas for college football metrics"
+    },
+    "csv_editor": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-csv-editor"
+      ],
+      "description": "CSV editing and processing for game data and statistics",
+      "enabled": false,
+      "note": "Package not found in npm - using pandas MCP instead for CSV operations"
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0"
+      ],
+      "description": "File system access for managing analytics files and notebooks"
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "description": "Persistent memory for storing analytics insights and context"
+    },
+    "web_fetch": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-fetch"
+      ],
+      "description": "Web content fetching for additional sports data sources",
+      "enabled": false,
+      "note": "Package not published to npm - use playwright MCP for web operations instead"
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      },
+      "description": "GitHub integration for version control and collaboration"
+    },
+    "visualization_echarts": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-echarts"
+      ],
+      "description": "ECharts integration for dynamic football visualizations",
+      "enabled": false,
+      "note": "Package not found in npm - use datawrapper or quickchart alternatives"
+    },
+    "datawrapper": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-datawrapper"
+      ],
+      "description": "Datawrapper integration for professional chart creation"
+    },
+    "quickchart": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@gongrzhe/quickchart-mcp-server"
+      ],
+      "description": "QuickChart API for real-time chart generation",
+      "note": "Updated to use @gongrzhe/quickchart-mcp-server (verified exists)"
+    },
+    "model_execution": {
+      "command": "python3",
+      "args": [
+        "-c",
+        "import sys; sys.path.append('/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0'); from mcp_servers.agents.model_mcp_server import ModelMCPServer; server = ModelMCPServer(); server.start()"
+      ],
+      "description": "ML Model execution server for predictions and analysis",
+      "enabled": true,
+      "cwd": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0"
+    }
+  },
+  "systemPrompts": [
+    "You are an expert college football analyst with access to the Script Ohio 2.0 intelligent agent system and advanced analytics tools.",
+    "You have access to specialized agents including the Analytics Orchestrator, Learning Navigator, and Model Execution Engine through MCP integration.",
+    "When analyzing football data, you can:",
+    "  - Use the agent_orchestrator to coordinate complex multi-agent analysis workflows",
+    "  - Query databases using the database servers for historical and current season data",
+    "  - Process data with pandas for advanced metrics and feature engineering",
+    "  - Execute ML models for predictions using the model_execution server",
+    "  - Create dynamic visualizations using ECharts, Datawrapper, or QuickChart",
+    "  - Store insights in memory for context building across sessions",
+    "  - Access files and notebooks for comprehensive analysis",
+    "The agent system provides role-based experiences (Analyst, Data Scientist, Production) with intelligent context optimization.",
+    "For educational requests, use the Learning Navigator agent capabilities to guide users through starter pack notebooks.",
+    "For advanced analysis, coordinate with the Model Execution Engine to use trained Ridge, XGBoost, and FastAI models.",
+    "Always provide actionable insights backed by data and consider context like opponent strength, injuries, and weather conditions.",
+    "Use the persistent memory to store important findings and build context over multiple interactions."
+  ]
+}

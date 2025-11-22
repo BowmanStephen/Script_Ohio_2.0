@@ -1,0 +1,54 @@
+import os
+import sys
+from dotenv import load_dotenv
+
+# Load env vars
+load_dotenv()
+
+# Ensure src is in path
+sys.path.append(os.getcwd())
+
+from src.cfbd_client.graphql import GraphQLClient, GraphQLRequest
+
+def test_graphql():
+    print("Testing src.cfbd_client.graphql.GraphQLClient...")
+    
+    key = os.getenv("CFBD_API_KEY")
+    if not key:
+        print("❌ Error: CFBD_API_KEY not found in environment")
+        return
+
+    host = os.getenv("CFBD_HOST", "production")
+    print(f"Host: {host}")
+    
+    client = GraphQLClient(api_key=key)
+    
+    # Simple query (introspection or something simple if possible, but let's try a real one if we know the schema)
+    # Since I don't know the schema for sure, I'll try a simple query that usually works or just check if it connects.
+    # But wait, the user provided API docs are for REST. Does GraphQL exist?
+    # The code has a GraphQL client, so presumably yes.
+    # Let's try a simple query for teams or games.
+    
+    query = """
+    query {
+        game(where: {year: {_eq: 2024}, week: {_eq: 1}, homeTeam: {_eq: "Ohio State"}}) {
+            id
+            homeTeam
+            awayTeam
+        }
+    }
+    """
+    
+    # Note: The schema in the query above is a guess based on common Hasura/GraphQL patterns often used with CFBD.
+    # If this fails with syntax error, it's not a 401. If it fails with 401, we found the issue.
+    
+    req = GraphQLRequest(query=query)
+    
+    try:
+        data = client.query(req)
+        print(f"✅ Success! Data: {data}")
+    except Exception as e:
+        print(f"❌ Failed with error: {e}")
+
+if __name__ == "__main__":
+    test_graphql()

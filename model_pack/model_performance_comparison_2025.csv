@@ -1,0 +1,4 @@
+Model,Task,MAE,RMSE,R²,Accuracy,AUC,Log Loss
+Ridge Regression,Score Margin Prediction,10.84,13.86,0.462,-,-,-
+XGBoost,Win Probability,-,-,-,0.466,0.478,0.847
+FastAI Neural Network,Win Probability,-,-,-,0.613,0.733,1.096

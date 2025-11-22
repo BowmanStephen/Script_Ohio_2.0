@@ -1,0 +1,79 @@
+{
+  "integration_date": "2025-11-14T19:23:36.043355",
+  "season": 2025,
+  "weeks_covered": "1-13",
+  "data_sources": [
+    "CFBD API (games, stats, drives, plays)"
+  ],
+  "files_created": {
+    "advanced_game_stats": {
+      "records": 2540,
+      "description": "Advanced per-game metrics through Week 12",
+      "estimated_size_mb": 2.14
+    },
+    "advanced_season_stats": {
+      "records": 136,
+      "description": "Advanced season metrics aggregated through Week 12",
+      "estimated_size_mb": 0.16
+    },
+    "drives": {
+      "records": 29812,
+      "description": "Drive-level data Weeks 1-12",
+      "estimated_size_mb": 5.22
+    },
+    "game_stats": {
+      "records": 2582,
+      "description": "Traditional box score stats Weeks 1-12",
+      "estimated_size_mb": 0.43
+    },
+    "plays": {
+      "records": 224786,
+      "description": "Play-by-play files per week (regular season weeks 1-12)",
+      "estimated_size_mb": 64.36
+    },
+    "season_stats": {
+      "records": 136,
+      "description": "Traditional season stats aggregated through Week 12",
+      "estimated_size_mb": 0.03
+    }
+  },
+  "validation_results": {
+    "advanced_game_stats/2025.csv": "PASS",
+    "advanced_season_stats/2025.csv": "PASS",
+    "drives/drives_2025.csv": "PASS",
+    "game_stats/2025.csv": "PASS",
+    "season_stats/2025.csv": "PASS",
+    "plays/2025/": "PASS: weeks 1-12"
+  },
+  "file_sizes": {
+    "advanced_game_stats": 2.14,
+    "advanced_season_stats": 0.16,
+    "drives": 5.22,
+    "game_stats": 0.43,
+    "plays": 64.36,
+    "season_stats": 0.03
+  },
+  "data_quality": {
+    "completeness": "CFBD data complete through Week 12",
+    "schema_compliance": "Matched 2024 column order for starter_pack datasets",
+    "data_consistency": "Verified row counts and per-week play files"
+  },
+  "last_updated": "2025-11-19T20:28:29.159884+00:00",
+  "known_weeks": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    16
+  ]
+}

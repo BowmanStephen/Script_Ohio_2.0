@@ -1,0 +1,27 @@
+name: CFBD Governance Checks
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  governance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements-dev.txt
+      - name: Verify agents use shared CFBD clients
+        run: python project_management/automation/check_cfbd_clients.py
+      - name: Schema diff guard
+        env:
+          CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
+        run: |
+          python project_management/cfbd_schema_diff.py --check --snapshot-dir logs/cfbd_schema --log logs/cfbd_schema/diff.log

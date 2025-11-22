@@ -1,0 +1,82 @@
+================================================================================
+Training Data Migration Report
+================================================================================
+Generated: 2025-11-20 18:58:08
+Dry Run: False
+
+SUMMARY
+--------------------------------------------------------------------------------
+Total weeks processed: 13
+Status breakdown:
+  migrated: 13
+Duplicates removed: 13
+
+DETAILED RESULTS
+--------------------------------------------------------------------------------
+
+Week 01: training_data_2025_week01.csv
+  Status: migrated
+  Source: root (/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/training_data_2025_week01.csv)
+  Canonical: /Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/data/training/weekly/training_data_2025_week01.csv
+
+Week 02: training_data_2025_week02.csv
+  Status: migrated
+  Source: root (/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/training_data_2025_week02.csv)
+  Canonical: /Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/data/training/weekly/training_data_2025_week02.csv
+
+Week 03: training_data_2025_week03.csv
+  Status: migrated
+  Source: root (/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/training_data_2025_week03.csv)
+  Canonical: /Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/data/training/weekly/training_data_2025_week03.csv
+
+Week 04: training_data_2025_week04.csv
+  Status: migrated
+  Source: root (/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/training_data_2025_week04.csv)
+  Canonical: /Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/data/training/weekly/training_data_2025_week04.csv
+
+Week 05: training_data_2025_week05.csv
+  Status: migrated
+  Source: root (/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/training_data_2025_week05.csv)
+  Canonical: /Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/data/training/weekly/training_data_2025_week05.csv
+
+Week 06: training_data_2025_week06.csv
+  Status: migrated
+  Source: root (/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/training_data_2025_week06.csv)
+  Canonical: /Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/data/training/weekly/training_data_2025_week06.csv
+
+Week 07: training_data_2025_week07.csv
+  Status: migrated
+  Source: root (/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/training_data_2025_week07.csv)
+  Canonical: /Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/data/training/weekly/training_data_2025_week07.csv
+
+Week 08: training_data_2025_week08.csv
+  Status: migrated
+  Source: root (/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/training_data_2025_week08.csv)
+  Canonical: /Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/data/training/weekly/training_data_2025_week08.csv
+
+Week 09: training_data_2025_week09.csv
+  Status: migrated
+  Source: root (/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/training_data_2025_week09.csv)
+  Canonical: /Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/data/training/weekly/training_data_2025_week09.csv
+
+Week 10: training_data_2025_week10.csv
+  Status: migrated
+  Source: root (/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/training_data_2025_week10.csv)
+  Canonical: /Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/data/training/weekly/training_data_2025_week10.csv
+
+Week 11: training_data_2025_week11.csv
+  Status: migrated
+  Source: root (/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/training_data_2025_week11.csv)
+  Canonical: /Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/data/training/weekly/training_data_2025_week11.csv
+
+Week 12: training_data_2025_week12.csv
+  Status: migrated
+  Source: root (/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/training_data_2025_week12.csv)
+  Canonical: /Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/data/training/weekly/training_data_2025_week12.csv
+
+Week 13: training_data_2025_week13.csv
+  Status: migrated
+  Source: root (/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/training_data_2025_week13.csv)
+  Canonical: /Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/data/training/weekly/training_data_2025_week13.csv
+
+================================================================================

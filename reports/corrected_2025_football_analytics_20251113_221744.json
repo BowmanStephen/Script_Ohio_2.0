@@ -1,0 +1,1507 @@
+{
+  "metadata": {
+    "generated_at": "2025-11-13T22:17:44.555630",
+    "version": "1.0.0",
+    "analysis_type": "corrected_football_analytics"
+  },
+  "top_teams": [
+    {
+      "rank": 1,
+      "team": "Florida State",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 11
+    },
+    {
+      "rank": 2,
+      "team": "Baylor",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 11
+    },
+    {
+      "rank": 3,
+      "team": "Georgia",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 10
+    },
+    {
+      "rank": 4,
+      "team": "Kentucky",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 10
+    },
+    {
+      "rank": 5,
+      "team": "Clemson",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 10
+    },
+    {
+      "rank": 6,
+      "team": "Southern Miss",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 9
+    },
+    {
+      "rank": 7,
+      "team": "Syracuse",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 11
+    },
+    {
+      "rank": 8,
+      "team": "Ohio State",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 11
+    },
+    {
+      "rank": 9,
+      "team": "Texas A&M",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 11
+    },
+    {
+      "rank": 10,
+      "team": "Virginia Tech",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 11
+    },
+    {
+      "rank": 11,
+      "team": "Alabama",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 10
+    },
+    {
+      "rank": 12,
+      "team": "Arkansas",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 10
+    },
+    {
+      "rank": 13,
+      "team": "Auburn",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 10
+    },
+    {
+      "rank": 14,
+      "team": "Florida",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 10
+    },
+    {
+      "rank": 15,
+      "team": "LSU",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 9
+    },
+    {
+      "rank": 16,
+      "team": "Mississippi State",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 10
+    },
+    {
+      "rank": 17,
+      "team": "Missouri",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 10
+    },
+    {
+      "rank": 18,
+      "team": "Texas",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 10
+    },
+    {
+      "rank": 19,
+      "team": "South Carolina",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 8
+    },
+    {
+      "rank": 20,
+      "team": "Tennessee",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 9
+    },
+    {
+      "rank": 21,
+      "team": "Notre Dame",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 12
+    },
+    {
+      "rank": 22,
+      "team": "Memphis",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 9
+    },
+    {
+      "rank": 23,
+      "team": "Miami",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 11
+    },
+    {
+      "rank": 24,
+      "team": "Vanderbilt",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 11
+    },
+    {
+      "rank": 25,
+      "team": "Georgia Tech",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 11
+    }
+  ],
+  "team_metrics": {
+    "Florida State": {
+      "team": "Florida State",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Baylor": {
+      "team": "Baylor",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Georgia": {
+      "team": "Georgia",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Kentucky": {
+      "team": "Kentucky",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Clemson": {
+      "team": "Clemson",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Southern Miss": {
+      "team": "Southern Miss",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Syracuse": {
+      "team": "Syracuse",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Ohio State": {
+      "team": "Ohio State",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Texas A&M": {
+      "team": "Texas A&M",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Virginia Tech": {
+      "team": "Virginia Tech",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Alabama": {
+      "team": "Alabama",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Arkansas": {
+      "team": "Arkansas",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Auburn": {
+      "team": "Auburn",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Florida": {
+      "team": "Florida",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "LSU": {
+      "team": "LSU",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Mississippi State": {
+      "team": "Mississippi State",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Missouri": {
+      "team": "Missouri",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Texas": {
+      "team": "Texas",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "South Carolina": {
+      "team": "South Carolina",
+      "games_played": 8,
+      "wins": 0,
+      "losses": 8,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Tennessee": {
+      "team": "Tennessee",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Notre Dame": {
+      "team": "Notre Dame",
+      "games_played": 12,
+      "wins": 0,
+      "losses": 12,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Memphis": {
+      "team": "Memphis",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Miami": {
+      "team": "Miami",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Vanderbilt": {
+      "team": "Vanderbilt",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Georgia Tech": {
+      "team": "Georgia Tech",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Louisville": {
+      "team": "Louisville",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Minnesota": {
+      "team": "Minnesota",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Rutgers": {
+      "team": "Rutgers",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Cincinnati": {
+      "team": "Cincinnati",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Maryland": {
+      "team": "Maryland",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "UCLA": {
+      "team": "UCLA",
+      "games_played": 12,
+      "wins": 0,
+      "losses": 12,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Purdue": {
+      "team": "Purdue",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Michigan State": {
+      "team": "Michigan State",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Tulane": {
+      "team": "Tulane",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Washington": {
+      "team": "Washington",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Indiana": {
+      "team": "Indiana",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Penn State": {
+      "team": "Penn State",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Michigan": {
+      "team": "Michigan",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Nebraska": {
+      "team": "Nebraska",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "USC": {
+      "team": "USC",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Wisconsin": {
+      "team": "Wisconsin",
+      "games_played": 12,
+      "wins": 0,
+      "losses": 12,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Iowa State": {
+      "team": "Iowa State",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "UNLV": {
+      "team": "UNLV",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Oregon": {
+      "team": "Oregon",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Duke": {
+      "team": "Duke",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Illinois": {
+      "team": "Illinois",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Iowa": {
+      "team": "Iowa",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Northwestern": {
+      "team": "Northwestern",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "California": {
+      "team": "California",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Washington State": {
+      "team": "Washington State",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Oregon State": {
+      "team": "Oregon State",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Texas Tech": {
+      "team": "Texas Tech",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "App State": {
+      "team": "App State",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Wake Forest": {
+      "team": "Wake Forest",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Tulsa": {
+      "team": "Tulsa",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "North Texas": {
+      "team": "North Texas",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Colorado State": {
+      "team": "Colorado State",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Virginia": {
+      "team": "Virginia",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "NC State": {
+      "team": "NC State",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Colorado": {
+      "team": "Colorado",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "North Carolina": {
+      "team": "North Carolina",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "SMU": {
+      "team": "SMU",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "BYU": {
+      "team": "BYU",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Charlotte": {
+      "team": "Charlotte",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Pittsburgh": {
+      "team": "Pittsburgh",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Stanford": {
+      "team": "Stanford",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "San Diego State": {
+      "team": "San Diego State",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Boston College": {
+      "team": "Boston College",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "UConn": {
+      "team": "UConn",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "TCU": {
+      "team": "TCU",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "West Virginia": {
+      "team": "West Virginia",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "UCF": {
+      "team": "UCF",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Kansas": {
+      "team": "Kansas",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Ohio": {
+      "team": "Ohio",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Rice": {
+      "team": "Rice",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Arizona": {
+      "team": "Arizona",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Arizona State": {
+      "team": "Arizona State",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Arkansas State": {
+      "team": "Arkansas State",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Houston": {
+      "team": "Houston",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Wyoming": {
+      "team": "Wyoming",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "East Carolina": {
+      "team": "East Carolina",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Oklahoma State": {
+      "team": "Oklahoma State",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Utah": {
+      "team": "Utah",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Kansas State": {
+      "team": "Kansas State",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Buffalo": {
+      "team": "Buffalo",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Florida Atlantic": {
+      "team": "Florida Atlantic",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Utah State": {
+      "team": "Utah State",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "New Mexico State": {
+      "team": "New Mexico State",
+      "games_played": 7,
+      "wins": 0,
+      "losses": 7,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Toledo": {
+      "team": "Toledo",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Florida International": {
+      "team": "Florida International",
+      "games_played": 5,
+      "wins": 0,
+      "losses": 5,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Louisiana Tech": {
+      "team": "Louisiana Tech",
+      "games_played": 6,
+      "wins": 0,
+      "losses": 6,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Nevada": {
+      "team": "Nevada",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Middle Tennessee": {
+      "team": "Middle Tennessee",
+      "games_played": 6,
+      "wins": 0,
+      "losses": 6,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "UTEP": {
+      "team": "UTEP",
+      "games_played": 5,
+      "wins": 0,
+      "losses": 5,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Western Kentucky": {
+      "team": "Western Kentucky",
+      "games_played": 7,
+      "wins": 0,
+      "losses": 7,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "New Mexico": {
+      "team": "New Mexico",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "San Jos\u00e9 State": {
+      "team": "San Jos\u00e9 State",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Fresno State": {
+      "team": "Fresno State",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Air Force": {
+      "team": "Air Force",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Miami (OH)": {
+      "team": "Miami (OH)",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Boise State": {
+      "team": "Boise State",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Northern Illinois": {
+      "team": "Northern Illinois",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Navy": {
+      "team": "Navy",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Louisiana": {
+      "team": "Louisiana",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Texas State": {
+      "team": "Texas State",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Georgia State": {
+      "team": "Georgia State",
+      "games_played": 7,
+      "wins": 0,
+      "losses": 7,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "South Alabama": {
+      "team": "South Alabama",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "UTSA": {
+      "team": "UTSA",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Eastern Michigan": {
+      "team": "Eastern Michigan",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "UL Monroe": {
+      "team": "UL Monroe",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Georgia Southern": {
+      "team": "Georgia Southern",
+      "games_played": 8,
+      "wins": 0,
+      "losses": 8,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Marshall": {
+      "team": "Marshall",
+      "games_played": 8,
+      "wins": 0,
+      "losses": 8,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Old Dominion": {
+      "team": "Old Dominion",
+      "games_played": 7,
+      "wins": 0,
+      "losses": 7,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Massachusetts": {
+      "team": "Massachusetts",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Western Michigan": {
+      "team": "Western Michigan",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "South Florida": {
+      "team": "South Florida",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Temple": {
+      "team": "Temple",
+      "games_played": 9,
+      "wins": 0,
+      "losses": 9,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Akron": {
+      "team": "Akron",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Kent State": {
+      "team": "Kent State",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Central Michigan": {
+      "team": "Central Michigan",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Ball State": {
+      "team": "Ball State",
+      "games_played": 11,
+      "wins": 0,
+      "losses": 11,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    },
+    "Bowling Green": {
+      "team": "Bowling Green",
+      "games_played": 10,
+      "wins": 0,
+      "losses": 10,
+      "win_percentage": 0.0,
+      "avg_points_scored": 0.0,
+      "avg_points_allowed": 0.0,
+      "avg_margin": 0.0
+    }
+  },
+  "key_stats": {
+    "home_win_rate": 0.0,
+    "avg_points_per_game": 0.0,
+    "total_games": 612,
+    "total_teams": 122,
+    "prediction_accuracy": 0.0
+  },
+  "high_scorers": [
+    {
+      "team": "Florida State",
+      "ppg": 0.0
+    },
+    {
+      "team": "Baylor",
+      "ppg": 0.0
+    },
+    {
+      "team": "Georgia",
+      "ppg": 0.0
+    },
+    {
+      "team": "Kentucky",
+      "ppg": 0.0
+    },
+    {
+      "team": "Clemson",
+      "ppg": 0.0
+    }
+  ],
+  "best_defenders": [
+    {
+      "team": "Florida State",
+      "ppg_allowed": 0.0
+    },
+    {
+      "team": "Baylor",
+      "ppg_allowed": 0.0
+    },
+    {
+      "team": "Georgia",
+      "ppg_allowed": 0.0
+    },
+    {
+      "team": "Kentucky",
+      "ppg_allowed": 0.0
+    },
+    {
+      "team": "Clemson",
+      "ppg_allowed": 0.0
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "generated_at": "2025-11-14T16:00:32.134382",
+  "total_games": 48,
+  "average_confidence": 94.68333333333334,
+  "high_upset_games": 33,
+  "value_opportunities": 19,
+  "top_confident_games": [
+    {
+      "matchup": "Akron vs Kent State",
+      "prediction": "Akron by 7.6 points",
+      "confidence_pct": "95.0%"
+    },
+    {
+      "matchup": "Western Michigan vs Ohio",
+      "prediction": "Ohio by -0.9 points",
+      "confidence_pct": "95.0%"
+    },
+    {
+      "matchup": "Central Michigan vs Buffalo",
+      "prediction": "Buffalo by -6.2 points",
+      "confidence_pct": "95.0%"
+    },
+    {
+      "matchup": "Massachusetts vs Northern Illinois",
+      "prediction": "Northern Illinois by -4.0 points",
+      "confidence_pct": "95.0%"
+    },
+    {
+      "matchup": "Miami (OH) vs Toledo",
+      "prediction": "Miami (OH) by 0.4 points",
+      "confidence_pct": "95.0%"
+    }
+  ]
+}

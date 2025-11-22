@@ -1,0 +1,95 @@
+{
+  "metadata": {
+    "generated_at": "2025-11-13T22:15:11.110187",
+    "version": "1.0.0",
+    "analysis_type": "comprehensive_football_analytics"
+  },
+  "summary": {
+    "games_analyzed": 612,
+    "teams_ranked": 122,
+    "predictions_made": 612,
+    "key_insights": 3
+  },
+  "top_teams": [
+    {
+      "rank": 1,
+      "team": "Florida State",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 11
+    },
+    {
+      "rank": 2,
+      "team": "Baylor",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 11
+    },
+    {
+      "rank": 3,
+      "team": "Georgia",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 10
+    },
+    {
+      "rank": 4,
+      "team": "Kentucky",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 10
+    },
+    {
+      "rank": 5,
+      "team": "Clemson",
+      "win_percentage": 0.0,
+      "points_scored": 0.0,
+      "points_allowed": 0.0,
+      "avg_margin": 0.0,
+      "games_played": 10
+    }
+  ],
+  "prediction_accuracy": 0.0,
+  "confidence_metrics": {
+    "average_prediction_confidence": 5.000000000000004,
+    "high_confidence_predictions": 0
+  },
+  "insights": [
+    {
+      "type": "home_advantage",
+      "insight": "Home teams win 0.0% of games",
+      "confidence": 0.0,
+      "data_support": "0/612 home wins"
+    },
+    {
+      "type": "high_scoring_teams",
+      "insights": [
+        "Florida State: 0.0 PPG",
+        "Baylor: 0.0 PPG",
+        "Georgia: 0.0 PPG",
+        "Kentucky: 0.0 PPG",
+        "Clemson: 0.0 PPG"
+      ],
+      "confidence": 85
+    },
+    {
+      "type": "best_defenses",
+      "insights": [
+        "Florida State: 0.0 PPG allowed",
+        "Baylor: 0.0 PPG allowed",
+        "Georgia: 0.0 PPG allowed",
+        "Kentucky: 0.0 PPG allowed",
+        "Clemson: 0.0 PPG allowed"
+      ],
+      "confidence": 85
+    }
+  ]
+}

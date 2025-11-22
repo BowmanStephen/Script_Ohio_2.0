@@ -1,0 +1,169 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: script-ohio-ingress
+  namespace: script-ohio-prod
+  labels:
+    app: script-ohio
+    tier: networking
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+    nginx.ingress.kubernetes.io/rate-limit-connections: "50"
+    nginx.ingress.kubernetes.io/rate-limit-requests-per-second: "20"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Frame-Options: DENY";
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+      more_set_headers "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'";
+      more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains";
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"
+    external-dns.alpha.kubernetes.io/hostname: "script-ohio.com,api.script-ohio.com"
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "10254"
+spec:
+  tls:
+  - hosts:
+    - script-ohio.com
+    - api.script-ohio.com
+    secretName: script-ohio-tls
+  rules:
+  - host: script-ohio.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: analytics-orchestrator-service
+            port:
+              number: 80
+  - host: api.script-ohio.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: analytics-orchestrator-service
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: script-ohio-network-policy
+  namespace: script-ohio-prod
+  labels:
+    app: script-ohio
+    tier: security
+spec:
+  podSelector:
+    matchLabels:
+      app: script-ohio
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow traffic from ingress controller
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 8000
+  # Allow traffic within same namespace
+  - from:
+    - podSelector:
+        matchLabels:
+          app: script-ohio
+    ports:
+    - protocol: TCP
+      port: 8000
+    - protocol: TCP
+      port: 9090
+  # Allow traffic from monitoring namespace
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: script-ohio-monitoring
+    ports:
+    - protocol: TCP
+      port: 9090
+  egress:
+  # Allow DNS
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  # Allow outbound HTTPS
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+  # Allow database access
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 5432
+  # Allow Redis access
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 6379
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: script-ohio-sa
+  namespace: script-ohio-prod
+  labels:
+    app: script-ohio
+    tier: security
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: script-ohio-role
+  namespace: script-ohio-prod
+  labels:
+    app: script-ohio
+    tier: security
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps", "secrets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: script-ohio-rolebinding
+  namespace: script-ohio-prod
+  labels:
+    app: script-ohio
+    tier: security
+subjects:
+- kind: ServiceAccount
+  name: script-ohio-sa
+  namespace: script-ohio-prod
+roleRef:
+  kind: Role
+  name: script-ohio-role
+  apiGroup: rbac.authorization.k8s.io

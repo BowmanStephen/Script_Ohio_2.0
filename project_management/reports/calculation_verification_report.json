@@ -1,0 +1,136 @@
+{
+  "timestamp": "2025-11-18T20:01:49.104580",
+  "overall_status": "\u26a0\ufe0f NEEDS_ATTENTION",
+  "compliance_score": 83.3,
+  "total_issues": 1,
+  "critical_issues": 0,
+  "warning_issues": 0,
+  "issues": [
+    "Temporal Consistency: Found 3916 invalid season/week combinations"
+  ],
+  "verifications": {
+    "feature_engineering": {
+      "status": "\u2705 COMPLIANT",
+      "issues": [],
+      "feature_count": 84,
+      "expected_features": 86,
+      "actual_features": 84,
+      "missing_features": [],
+      "extra_features": [],
+      "data_type_issues": [],
+      "value_range_issues": []
+    },
+    "opponent_adjustments": {
+      "status": "\u2705 COMPLIANT",
+      "issues": [],
+      "methodology": "subtraction_based",
+      "data_leakage_check": "\u2705 PASS",
+      "temporal_consistency": "\u2705 PASS",
+      "opponent_adjustment_columns": [
+        "home_adjusted_epa",
+        "home_adjusted_epa_allowed",
+        "away_adjusted_epa",
+        "away_adjusted_epa_allowed",
+        "home_adjusted_rushing_epa",
+        "home_adjusted_rushing_epa_allowed",
+        "away_adjusted_rushing_epa",
+        "away_adjusted_rushing_epa_allowed",
+        "home_adjusted_passing_epa",
+        "home_adjusted_passing_epa_allowed"
+      ],
+      "weeks_1_4_count": 310
+    },
+    "epa_calculations": {
+      "status": "\u2705 AVAILABLE",
+      "issues": [],
+      "epa_columns": [
+        "home_adjusted_epa",
+        "home_adjusted_epa_allowed",
+        "away_adjusted_epa",
+        "away_adjusted_epa_allowed",
+        "home_adjusted_rushing_epa",
+        "home_adjusted_rushing_epa_allowed",
+        "away_adjusted_rushing_epa",
+        "away_adjusted_rushing_epa_allowed",
+        "home_adjusted_passing_epa",
+        "home_adjusted_passing_epa_allowed",
+        "away_adjusted_passing_epa",
+        "away_adjusted_passing_epa_allowed"
+      ],
+      "ppa_columns": [],
+      "advanced_metrics_available": true
+    },
+    "data_integrity": {
+      "status": "\u2705 INTEGRITY_OK",
+      "issues": [],
+      "duplicate_records": "0",
+      "null_percentage": 1.29,
+      "outlier_count": 0,
+      "consistency_issues": []
+    },
+    "model_compatibility": {
+      "status": "\u2705 COMPATIBLE",
+      "issues": [],
+      "model_files_found": 11,
+      "feature_schema_match": "\u2705 PASS",
+      "data_types_compatible": "\u2705 PASS"
+    },
+    "temporal_consistency": {
+      "status": "\u26a0\ufe0f INVALID_DATES",
+      "issues": [
+        "Found 3916 invalid season/week combinations"
+      ],
+      "chronological_order": "\u2705 PASS",
+      "future_data_leakage": "\u2705 PASS",
+      "week_progression": "\u2705 PASS"
+    }
+  },
+  "recommendations": [],
+  "best_practices_summary": {
+    "feature_engineering": {
+      "status": "\u2705 COMPLIANT",
+      "compliant": true,
+      "key_points": [
+        "\u2705 Expected ~86 features for model compatibility",
+        "\u2705 Proper data types for numeric columns",
+        "\u2705 Reasonable value ranges for key metrics"
+      ]
+    },
+    "opponent_adjustments": {
+      "status": "\u2705 COMPLIANT",
+      "compliant": true,
+      "key_points": [
+        "\u2705 Subtraction-based methodology used",
+        "\u2705 Week 5+ filtering to prevent data leakage",
+        "\u2705 No obvious future data indicators"
+      ]
+    },
+    "data_integrity": {
+      "status": "\u2705 INTEGRITY_OK",
+      "compliant": true,
+      "key_points": [
+        "\u2705 Low duplicate record rate",
+        "\u2705 Acceptable null value percentage",
+        "\u2705 No extreme statistical outliers"
+      ]
+    },
+    "model_compatibility": {
+      "status": "\u2705 COMPATIBLE",
+      "compliant": true,
+      "key_points": [
+        "\u2705 Trained models available for deployment",
+        "\u2705 Feature schema matches model requirements",
+        "\u2705 Sufficient training data volume"
+      ]
+    },
+    "temporal_consistency": {
+      "status": "\u26a0\ufe0f INVALID_DATES",
+      "compliant": false,
+      "key_points": [
+        "\u2705 Valid season/week combinations",
+        "\u2705 No future data leakage indicators",
+        "\u2705 Chronological data consistency"
+      ]
+    }
+  }
+}

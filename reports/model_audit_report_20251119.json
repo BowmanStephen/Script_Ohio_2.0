@@ -1,0 +1,808 @@
+{
+  "audit_date": "2025-11-19T20:58:13.622456",
+  "project_root": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0",
+  "summary": {
+    "total_model_files": 25,
+    "total_references": 11,
+    "production_models": 5,
+    "referenced_models": 6,
+    "legacy_models": 9,
+    "outdated_models": 3,
+    "orphaned_models": 2,
+    "backup_models": 7,
+    "files_to_archive": 12,
+    "missing_files": 7
+  },
+  "model_files": {
+    "model_pack/fastai_home_win_model_2025.pkl": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/fastai_home_win_model_2025.pkl",
+      "relative_path": "model_pack/fastai_home_win_model_2025.pkl",
+      "directory": "model_pack",
+      "size_bytes": 213781,
+      "size_mb": 0.2,
+      "modified_time": "2025-11-19T19:47:34.465105",
+      "extension": ".pkl"
+    },
+    "model_pack/ridge_model_2025.joblib": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/ridge_model_2025.joblib",
+      "relative_path": "model_pack/ridge_model_2025.joblib",
+      "directory": "model_pack",
+      "size_bytes": 1017,
+      "size_mb": 0.0,
+      "modified_time": "2025-11-19T19:47:31.698942",
+      "extension": ".joblib"
+    },
+    "model_pack/xgb_home_win_model_2025.pkl": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/xgb_home_win_model_2025.pkl",
+      "relative_path": "model_pack/xgb_home_win_model_2025.pkl",
+      "directory": "model_pack",
+      "size_bytes": 321112,
+      "size_mb": 0.31,
+      "modified_time": "2025-11-19T19:47:31.871726",
+      "extension": ".pkl"
+    },
+    "model_pack/random_forest_model_2025.pkl": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/random_forest_model_2025.pkl",
+      "relative_path": "model_pack/random_forest_model_2025.pkl",
+      "directory": "model_pack",
+      "size_bytes": 74809841,
+      "size_mb": 71.34,
+      "modified_time": "2025-11-19T20:22:26.341645",
+      "extension": ".pkl"
+    },
+    "model_pack/rf_components/random_forest_home.joblib": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/rf_components/random_forest_home.joblib",
+      "relative_path": "model_pack/rf_components/random_forest_home.joblib",
+      "directory": "model_pack",
+      "size_bytes": 37673585,
+      "size_mb": 35.93,
+      "modified_time": "2025-11-19T20:22:26.368283",
+      "extension": ".joblib"
+    },
+    "model_pack/rf_components/random_forest_away.joblib": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/rf_components/random_forest_away.joblib",
+      "relative_path": "model_pack/rf_components/random_forest_away.joblib",
+      "directory": "model_pack",
+      "size_bytes": 37136897,
+      "size_mb": 35.42,
+      "modified_time": "2025-11-19T20:22:26.397295",
+      "extension": ".joblib"
+    },
+    "model_pack/rf_components/random_forest_features.joblib": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/rf_components/random_forest_features.joblib",
+      "relative_path": "model_pack/rf_components/random_forest_features.joblib",
+      "directory": "model_pack",
+      "size_bytes": 384,
+      "size_mb": 0.0,
+      "modified_time": "2025-11-19T20:22:26.400936",
+      "extension": ".joblib"
+    },
+    "model_pack/backups/models/critical/models_backup_20251114_135815/fastai_home_win_model_2025.pkl": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/backups/models/critical/models_backup_20251114_135815/fastai_home_win_model_2025.pkl",
+      "relative_path": "model_pack/backups/models/critical/models_backup_20251114_135815/fastai_home_win_model_2025.pkl",
+      "directory": "model_pack",
+      "size_bytes": 885,
+      "size_mb": 0.0,
+      "modified_time": "2025-11-14T13:58:15.449863",
+      "extension": ".pkl"
+    },
+    "model_pack/backups/models/critical/models_backup_20251114_135815/xgb_home_win_model_2025.pkl": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/backups/models/critical/models_backup_20251114_135815/xgb_home_win_model_2025.pkl",
+      "relative_path": "model_pack/backups/models/critical/models_backup_20251114_135815/xgb_home_win_model_2025.pkl",
+      "directory": "model_pack",
+      "size_bytes": 321112,
+      "size_mb": 0.31,
+      "modified_time": "2025-11-14T13:58:15.452664",
+      "extension": ".pkl"
+    },
+    "model_pack/backups/models/critical/models_backup_20251114_135815/xgb_home_win_model_2025_fixed.pkl": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/backups/models/critical/models_backup_20251114_135815/xgb_home_win_model_2025_fixed.pkl",
+      "relative_path": "model_pack/backups/models/critical/models_backup_20251114_135815/xgb_home_win_model_2025_fixed.pkl",
+      "directory": "model_pack",
+      "size_bytes": 321111,
+      "size_mb": 0.31,
+      "modified_time": "2025-11-14T13:58:15.453196",
+      "extension": ".pkl"
+    },
+    "model_pack/backups/models/critical/models_backup_20251114_135815/fastai_home_win_model_2025_fixed.pkl": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/backups/models/critical/models_backup_20251114_135815/fastai_home_win_model_2025_fixed.pkl",
+      "relative_path": "model_pack/backups/models/critical/models_backup_20251114_135815/fastai_home_win_model_2025_fixed.pkl",
+      "directory": "model_pack",
+      "size_bytes": 217269,
+      "size_mb": 0.21,
+      "modified_time": "2025-11-14T13:58:15.450907",
+      "extension": ".pkl"
+    },
+    "model_pack/backups/models/critical/models_backup_20251114_135815/xgb_home_win_model.pkl": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/backups/models/critical/models_backup_20251114_135815/xgb_home_win_model.pkl",
+      "relative_path": "model_pack/backups/models/critical/models_backup_20251114_135815/xgb_home_win_model.pkl",
+      "directory": "model_pack",
+      "size_bytes": 294046,
+      "size_mb": 0.28,
+      "modified_time": "2025-11-14T13:58:15.452171",
+      "extension": ".pkl"
+    },
+    "model_pack/backups/models/critical/models_backup_20251114_135815/fastai_home_win_model.pkl": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/backups/models/critical/models_backup_20251114_135815/fastai_home_win_model.pkl",
+      "relative_path": "model_pack/backups/models/critical/models_backup_20251114_135815/fastai_home_win_model.pkl",
+      "directory": "model_pack",
+      "size_bytes": 213014,
+      "size_mb": 0.2,
+      "modified_time": "2025-11-14T13:58:15.449387",
+      "extension": ".pkl"
+    },
+    "model_pack/backups/models/critical/models_backup_20251114_135815/fastai_home_win_model_2025_original.pkl": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/backups/models/critical/models_backup_20251114_135815/fastai_home_win_model_2025_original.pkl",
+      "relative_path": "model_pack/backups/models/critical/models_backup_20251114_135815/fastai_home_win_model_2025_original.pkl",
+      "directory": "model_pack",
+      "size_bytes": 213014,
+      "size_mb": 0.2,
+      "modified_time": "2025-11-14T13:58:15.451550",
+      "extension": ".pkl"
+    },
+    "model_pack/archived_models/20251119/xgb_home_win_model_copy.pkl": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/archived_models/20251119/xgb_home_win_model_copy.pkl",
+      "relative_path": "model_pack/archived_models/20251119/xgb_home_win_model_copy.pkl",
+      "directory": "model_pack",
+      "size_bytes": 294046,
+      "size_mb": 0.28,
+      "modified_time": "2025-08-10T00:54:42",
+      "extension": ".pkl"
+    },
+    "model_pack/archived_models/20251119/ridge_model_2025_fixed.joblib": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/archived_models/20251119/ridge_model_2025_fixed.joblib",
+      "relative_path": "model_pack/archived_models/20251119/ridge_model_2025_fixed.joblib",
+      "directory": "model_pack",
+      "size_bytes": 2673,
+      "size_mb": 0.0,
+      "modified_time": "2025-11-18T15:48:23.161381",
+      "extension": ".joblib"
+    },
+    "model_pack/archived_models/20251119/fastai_home_win_model_copy.pkl": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/archived_models/20251119/fastai_home_win_model_copy.pkl",
+      "relative_path": "model_pack/archived_models/20251119/fastai_home_win_model_copy.pkl",
+      "directory": "model_pack",
+      "size_bytes": 213014,
+      "size_mb": 0.2,
+      "modified_time": "2025-08-10T00:34:26",
+      "extension": ".pkl"
+    },
+    "model_pack/archived_models/20251119/ridge_model_copy.joblib": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/archived_models/20251119/ridge_model_copy.joblib",
+      "relative_path": "model_pack/archived_models/20251119/ridge_model_copy.joblib",
+      "directory": "model_pack",
+      "size_bytes": 1097,
+      "size_mb": 0.0,
+      "modified_time": "2025-08-10T00:52:10",
+      "extension": ".joblib"
+    },
+    "model_pack/archived_models/20251119/xgb_home_win_model_2025_fixed.pkl": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/archived_models/20251119/xgb_home_win_model_2025_fixed.pkl",
+      "relative_path": "model_pack/archived_models/20251119/xgb_home_win_model_2025_fixed.pkl",
+      "directory": "model_pack",
+      "size_bytes": 312032,
+      "size_mb": 0.3,
+      "modified_time": "2025-11-18T15:48:23.386569",
+      "extension": ".pkl"
+    },
+    "model_pack/archived_models/20251119/fastai_home_win_model_2025_full_features.pkl": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/archived_models/20251119/fastai_home_win_model_2025_full_features.pkl",
+      "relative_path": "model_pack/archived_models/20251119/fastai_home_win_model_2025_full_features.pkl",
+      "directory": "model_pack",
+      "size_bytes": 202873,
+      "size_mb": 0.19,
+      "modified_time": "2025-11-18T15:53:28.990220",
+      "extension": ".pkl"
+    },
+    "model_pack/archived_models/20251119/fastai_home_win_model_2025_fixed.pkl": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/archived_models/20251119/fastai_home_win_model_2025_fixed.pkl",
+      "relative_path": "model_pack/archived_models/20251119/fastai_home_win_model_2025_fixed.pkl",
+      "directory": "model_pack",
+      "size_bytes": 230793,
+      "size_mb": 0.22,
+      "modified_time": "2025-11-18T15:54:21.712335",
+      "extension": ".pkl"
+    },
+    "model_pack/archived_models/20251119/xgb_home_win_model.pkl": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/archived_models/20251119/xgb_home_win_model.pkl",
+      "relative_path": "model_pack/archived_models/20251119/xgb_home_win_model.pkl",
+      "directory": "model_pack",
+      "size_bytes": 294046,
+      "size_mb": 0.28,
+      "modified_time": "2025-08-10T00:54:42",
+      "extension": ".pkl"
+    },
+    "model_pack/archived_models/20251119/fastai_home_win_model.pkl": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/archived_models/20251119/fastai_home_win_model.pkl",
+      "relative_path": "model_pack/archived_models/20251119/fastai_home_win_model.pkl",
+      "directory": "model_pack",
+      "size_bytes": 213014,
+      "size_mb": 0.2,
+      "modified_time": "2025-08-10T00:34:26",
+      "extension": ".pkl"
+    },
+    "model_pack/archived_models/20251119/ridge_model.joblib": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/archived_models/20251119/ridge_model.joblib",
+      "relative_path": "model_pack/archived_models/20251119/ridge_model.joblib",
+      "directory": "model_pack",
+      "size_bytes": 1097,
+      "size_mb": 0.0,
+      "modified_time": "2025-08-10T00:52:10",
+      "extension": ".joblib"
+    },
+    "model_pack/archived_models/20251119/fastai_home_win_model_2025_original.pkl": {
+      "full_path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/archived_models/20251119/fastai_home_win_model_2025_original.pkl",
+      "relative_path": "model_pack/archived_models/20251119/fastai_home_win_model_2025_original.pkl",
+      "directory": "model_pack",
+      "size_bytes": 213014,
+      "size_mb": 0.2,
+      "modified_time": "2025-11-10T15:44:46.739884",
+      "extension": ".pkl"
+    }
+  },
+  "references": {
+    "model_name.pkl": [
+      {
+        "file": "agents/model_execution_engine.py",
+        "line": 328,
+        "context": "     326:     \n     327:     To fix the pickle protocol issue permanently, retrain the FastAI model with\n>>>  328:     FastAI's native export method: learn.export('model_name.pkl')\n     329:     \"\"\"\n     330: "
+      }
+    ],
+    "ridge_model_2025.joblib": [
+      {
+        "file": "agents/model_execution_engine.py",
+        "line": 702,
+        "context": "     700:             {\n     701:                 'name': 'ridge_model_2025',\n>>>  702:                 'file_path': model_pack_path / 'ridge_model_2025.joblib',\n     703:                 'model_type': 'regression',\n     704:                 'target_feature': 'margin',"
+      },
+      {
+        "file": "config/model_config.py",
+        "line": 22,
+        "context": "      20: MODEL_INFO: Dict[str, ModelConfig] = {\n      21:     \"ridge\": ModelConfig(\n>>>   22:         file=\"model_pack/ridge_model_2025.joblib\",\n      23:         features=RIDGE_FEATURES,\n      24:         type=\"regression\","
+      },
+      {
+        "file": "config/model_config.py",
+        "line": 22,
+        "context": "      20: MODEL_INFO: Dict[str, ModelConfig] = {\n      21:     \"ridge\": ModelConfig(\n>>>   22:         file=\"model_pack/ridge_model_2025.joblib\",\n      23:         features=RIDGE_FEATURES,\n      24:         type=\"regression\","
+      },
+      {
+        "file": "config/model_config.py",
+        "line": 22,
+        "context": "      20: MODEL_INFO: Dict[str, ModelConfig] = {\n      21:     \"ridge\": ModelConfig(\n>>>   22:         file=\"model_pack/ridge_model_2025.joblib\",\n      23:         features=RIDGE_FEATURES,\n      24:         type=\"regression\","
+      },
+      {
+        "file": "model_pack/model_training_agent.py",
+        "line": 223,
+        "context": "     221: \n     222:         # Save model\n>>>  223:         joblib.dump(model, 'ridge_model_2025.joblib')\n     224: \n     225:         logger.info(f\"Ridge Regression trained successfully!\")"
+      },
+      {
+        "file": "model_pack/model_training_agent.py",
+        "line": 825,
+        "context": "     823:             \"\u2705 Model Retraining Pipeline: All models successfully retrained with 2025 data\",\n     824:             \"\u2705 Temporal Validation: Train 2016-2024, Test 2025 validation implemented\",\n>>>  825:             \"\u2705 Ridge Regression: Updated margin prediction model saved as 'ridge_model_2025.joblib'\",\n     826:             \"\u2705 XGBoost Classifier: Updated win probability model saved as 'xgb_home_win_model_2025.pkl'\",\n     827:             \"\u2705 FastAI Neural Network: Updated neural network saved as 'fastai_home_win_model_2025.pkl'\","
+      },
+      {
+        "file": "model_pack/model_training_agent.py",
+        "line": 863,
+        "context": "     861:             \"\",\n     862:             \"DELIVERABLES GENERATED:\",\n>>>  863:             \"\ud83d\udcc4 ridge_model_2025.joblib - Updated regression model\",\n     864:             \"\ud83d\udcc4 xgb_home_win_model_2025.pkl - Updated XGBoost classifier\",\n     865:             \"\ud83d\udcc4 fastai_home_win_model_2025.pkl - Updated neural network\","
+      },
+      {
+        "file": "scripts/retrain_models_full_features.py",
+        "line": 154,
+        "context": "     152:     \n     153:     # Save\n>>>  154:     model_path = output_dir / 'ridge_model_2025.joblib'\n     155:     joblib.dump(model, model_path)\n     156:     logger.info(f\"Saved Ridge model to {model_path}\")"
+      }
+    ],
+    "xgb_home_win_model_2025.pkl": [
+      {
+        "file": "agents/model_execution_engine.py",
+        "line": 709,
+        "context": "     707:             {\n     708:                 'name': 'xgb_home_win_model_2025',\n>>>  709:                 'file_path': model_pack_path / 'xgb_home_win_model_2025.pkl',\n     710:                 'model_type': 'classification',\n     711:                 'target_feature': 'home_win',"
+      },
+      {
+        "file": "config/model_config.py",
+        "line": 29,
+        "context": "      27:     ),\n      28:     \"xgb\": ModelConfig(\n>>>   29:         file=\"model_pack/xgb_home_win_model_2025.pkl\",\n      30:         features=XGB_FEATURES,\n      31:         type=\"classification\","
+      },
+      {
+        "file": "config/model_config.py",
+        "line": 29,
+        "context": "      27:     ),\n      28:     \"xgb\": ModelConfig(\n>>>   29:         file=\"model_pack/xgb_home_win_model_2025.pkl\",\n      30:         features=XGB_FEATURES,\n      31:         type=\"classification\","
+      },
+      {
+        "file": "config/model_config.py",
+        "line": 29,
+        "context": "      27:     ),\n      28:     \"xgb\": ModelConfig(\n>>>   29:         file=\"model_pack/xgb_home_win_model_2025.pkl\",\n      30:         features=XGB_FEATURES,\n      31:         type=\"classification\","
+      },
+      {
+        "file": "model_pack/model_training_agent.py",
+        "line": 306,
+        "context": "     304: \n     305:         # Save model\n>>>  306:         joblib.dump(model, 'xgb_home_win_model_2025.pkl')\n     307: \n     308:         logger.info(f\"XGBoost trained successfully!\")"
+      },
+      {
+        "file": "model_pack/model_training_agent.py",
+        "line": 826,
+        "context": "     824:             \"\u2705 Temporal Validation: Train 2016-2024, Test 2025 validation implemented\",\n     825:             \"\u2705 Ridge Regression: Updated margin prediction model saved as 'ridge_model_2025.joblib'\",\n>>>  826:             \"\u2705 XGBoost Classifier: Updated win probability model saved as 'xgb_home_win_model_2025.pkl'\",\n     827:             \"\u2705 FastAI Neural Network: Updated neural network saved as 'fastai_home_win_model_2025.pkl'\",\n     828:             \"\u2705 Performance Analysis: Comprehensive comparison reports generated\","
+      },
+      {
+        "file": "model_pack/model_training_agent.py",
+        "line": 864,
+        "context": "     862:             \"DELIVERABLES GENERATED:\",\n     863:             \"\ud83d\udcc4 ridge_model_2025.joblib - Updated regression model\",\n>>>  864:             \"\ud83d\udcc4 xgb_home_win_model_2025.pkl - Updated XGBoost classifier\",\n     865:             \"\ud83d\udcc4 fastai_home_win_model_2025.pkl - Updated neural network\",\n     866:             \"\ud83d\udcc4 model_performance_comparison_2025.csv - Performance metrics\","
+      },
+      {
+        "file": "scripts/retrain_models_full_features.py",
+        "line": 199,
+        "context": "     197:     \n     198:     # Save\n>>>  199:     model_path = output_dir / 'xgb_home_win_model_2025.pkl'\n     200:     joblib.dump(model, model_path)\n     201:     logger.info(f\"Saved XGBoost model to {model_path}\")"
+      }
+    ],
+    "fastai_home_win_model_2025.pkl": [
+      {
+        "file": "agents/model_execution_engine.py",
+        "line": 716,
+        "context": "     714:             {\n     715:                 'name': 'fastai_home_win_model_2025',\n>>>  716:                 'file_path': model_pack_path / 'fastai_home_win_model_2025.pkl',\n     717:                 'model_type': 'classification',\n     718:                 'target_feature': 'home_win',"
+      },
+      {
+        "file": "config/model_config.py",
+        "line": 36,
+        "context": "      34:     ),\n      35:     \"fastai\": ModelConfig(\n>>>   36:         file=\"model_pack/fastai_home_win_model_2025.pkl\",\n      37:         features=XGB_FEATURES,  # FastAI uses same features as XGBoost\n      38:         type=\"classification\","
+      },
+      {
+        "file": "config/model_config.py",
+        "line": 36,
+        "context": "      34:     ),\n      35:     \"fastai\": ModelConfig(\n>>>   36:         file=\"model_pack/fastai_home_win_model_2025.pkl\",\n      37:         features=XGB_FEATURES,  # FastAI uses same features as XGBoost\n      38:         type=\"classification\","
+      },
+      {
+        "file": "config/model_config.py",
+        "line": 36,
+        "context": "      34:     ),\n      35:     \"fastai\": ModelConfig(\n>>>   36:         file=\"model_pack/fastai_home_win_model_2025.pkl\",\n      37:         features=XGB_FEATURES,  # FastAI uses same features as XGBoost\n      38:         type=\"classification\","
+      },
+      {
+        "file": "model_pack/model_training_agent.py",
+        "line": 477,
+        "context": "     475:             # Save model with pickle protocol 4 (fixes protocol 0 error)\n     476:             import pickle\n>>>  477:             model_path = Path('fastai_home_win_model_2025.pkl')\n     478:             # Use export first, then re-save with protocol 4 if needed\n     479:             learn.export(str(model_path))"
+      },
+      {
+        "file": "model_pack/model_training_agent.py",
+        "line": 827,
+        "context": "     825:             \"\u2705 Ridge Regression: Updated margin prediction model saved as 'ridge_model_2025.joblib'\",\n     826:             \"\u2705 XGBoost Classifier: Updated win probability model saved as 'xgb_home_win_model_2025.pkl'\",\n>>>  827:             \"\u2705 FastAI Neural Network: Updated neural network saved as 'fastai_home_win_model_2025.pkl'\",\n     828:             \"\u2705 Performance Analysis: Comprehensive comparison reports generated\",\n     829:             \"\u2705 Model Interpretability: Feature importance and SHAP analyses completed\","
+      },
+      {
+        "file": "model_pack/model_training_agent.py",
+        "line": 477,
+        "context": "     475:             # Save model with pickle protocol 4 (fixes protocol 0 error)\n     476:             import pickle\n>>>  477:             model_path = Path('fastai_home_win_model_2025.pkl')\n     478:             # Use export first, then re-save with protocol 4 if needed\n     479:             learn.export(str(model_path))"
+      },
+      {
+        "file": "model_pack/model_training_agent.py",
+        "line": 865,
+        "context": "     863:             \"\ud83d\udcc4 ridge_model_2025.joblib - Updated regression model\",\n     864:             \"\ud83d\udcc4 xgb_home_win_model_2025.pkl - Updated XGBoost classifier\",\n>>>  865:             \"\ud83d\udcc4 fastai_home_win_model_2025.pkl - Updated neural network\",\n     866:             \"\ud83d\udcc4 model_performance_comparison_2025.csv - Performance metrics\",\n     867:             \"\ud83d\udcc4 model_performance_comparison_2025.png - Performance visualizations\","
+      },
+      {
+        "file": "scripts/retrain_models_full_features.py",
+        "line": 291,
+        "context": "     289:         \n     290:         # Save using export\n>>>  291:         model_path = output_dir / 'fastai_home_win_model_2025.pkl'\n     292:         try:\n     293:             learn.export(model_path)"
+      }
+    ],
+    "random_forest_model_2025.pkl": [
+      {
+        "file": "agents/model_execution_engine.py",
+        "line": 723,
+        "context": "     721:             {\n     722:                 'name': 'random_forest_model_2025',\n>>>  723:                 'file_path': model_pack_path / 'random_forest_model_2025.pkl',\n     724:                 'model_type': 'regression',\n     725:                 'target_feature': 'margin',"
+      }
+    ],
+    "learn.export('model_name.pkl": [
+      {
+        "file": "agents/model_execution_engine.py",
+        "line": 328,
+        "context": "     326:     \n     327:     To fix the pickle protocol issue permanently, retrain the FastAI model with\n>>>  328:     FastAI's native export method: learn.export('model_name.pkl')\n     329:     \"\"\"\n     330: "
+      }
+    ],
+    "'ridge_model_2025.joblib": [
+      {
+        "file": "agents/model_execution_engine.py",
+        "line": 702,
+        "context": "     700:             {\n     701:                 'name': 'ridge_model_2025',\n>>>  702:                 'file_path': model_pack_path / 'ridge_model_2025.joblib',\n     703:                 'model_type': 'regression',\n     704:                 'target_feature': 'margin',"
+      },
+      {
+        "file": "model_pack/model_training_agent.py",
+        "line": 223,
+        "context": "     221: \n     222:         # Save model\n>>>  223:         joblib.dump(model, 'ridge_model_2025.joblib')\n     224: \n     225:         logger.info(f\"Ridge Regression trained successfully!\")"
+      },
+      {
+        "file": "model_pack/model_training_agent.py",
+        "line": 825,
+        "context": "     823:             \"\u2705 Model Retraining Pipeline: All models successfully retrained with 2025 data\",\n     824:             \"\u2705 Temporal Validation: Train 2016-2024, Test 2025 validation implemented\",\n>>>  825:             \"\u2705 Ridge Regression: Updated margin prediction model saved as 'ridge_model_2025.joblib'\",\n     826:             \"\u2705 XGBoost Classifier: Updated win probability model saved as 'xgb_home_win_model_2025.pkl'\",\n     827:             \"\u2705 FastAI Neural Network: Updated neural network saved as 'fastai_home_win_model_2025.pkl'\","
+      },
+      {
+        "file": "scripts/retrain_models_full_features.py",
+        "line": 154,
+        "context": "     152:     \n     153:     # Save\n>>>  154:     model_path = output_dir / 'ridge_model_2025.joblib'\n     155:     joblib.dump(model, model_path)\n     156:     logger.info(f\"Saved Ridge model to {model_path}\")"
+      }
+    ],
+    "'xgb_home_win_model_2025.pkl": [
+      {
+        "file": "agents/model_execution_engine.py",
+        "line": 709,
+        "context": "     707:             {\n     708:                 'name': 'xgb_home_win_model_2025',\n>>>  709:                 'file_path': model_pack_path / 'xgb_home_win_model_2025.pkl',\n     710:                 'model_type': 'classification',\n     711:                 'target_feature': 'home_win',"
+      },
+      {
+        "file": "model_pack/model_training_agent.py",
+        "line": 306,
+        "context": "     304: \n     305:         # Save model\n>>>  306:         joblib.dump(model, 'xgb_home_win_model_2025.pkl')\n     307: \n     308:         logger.info(f\"XGBoost trained successfully!\")"
+      },
+      {
+        "file": "model_pack/model_training_agent.py",
+        "line": 826,
+        "context": "     824:             \"\u2705 Temporal Validation: Train 2016-2024, Test 2025 validation implemented\",\n     825:             \"\u2705 Ridge Regression: Updated margin prediction model saved as 'ridge_model_2025.joblib'\",\n>>>  826:             \"\u2705 XGBoost Classifier: Updated win probability model saved as 'xgb_home_win_model_2025.pkl'\",\n     827:             \"\u2705 FastAI Neural Network: Updated neural network saved as 'fastai_home_win_model_2025.pkl'\",\n     828:             \"\u2705 Performance Analysis: Comprehensive comparison reports generated\","
+      },
+      {
+        "file": "scripts/retrain_models_full_features.py",
+        "line": 199,
+        "context": "     197:     \n     198:     # Save\n>>>  199:     model_path = output_dir / 'xgb_home_win_model_2025.pkl'\n     200:     joblib.dump(model, model_path)\n     201:     logger.info(f\"Saved XGBoost model to {model_path}\")"
+      }
+    ],
+    "'fastai_home_win_model_2025.pkl": [
+      {
+        "file": "agents/model_execution_engine.py",
+        "line": 716,
+        "context": "     714:             {\n     715:                 'name': 'fastai_home_win_model_2025',\n>>>  716:                 'file_path': model_pack_path / 'fastai_home_win_model_2025.pkl',\n     717:                 'model_type': 'classification',\n     718:                 'target_feature': 'home_win',"
+      },
+      {
+        "file": "model_pack/model_training_agent.py",
+        "line": 827,
+        "context": "     825:             \"\u2705 Ridge Regression: Updated margin prediction model saved as 'ridge_model_2025.joblib'\",\n     826:             \"\u2705 XGBoost Classifier: Updated win probability model saved as 'xgb_home_win_model_2025.pkl'\",\n>>>  827:             \"\u2705 FastAI Neural Network: Updated neural network saved as 'fastai_home_win_model_2025.pkl'\",\n     828:             \"\u2705 Performance Analysis: Comprehensive comparison reports generated\",\n     829:             \"\u2705 Model Interpretability: Feature importance and SHAP analyses completed\","
+      },
+      {
+        "file": "scripts/retrain_models_full_features.py",
+        "line": 291,
+        "context": "     289:         \n     290:         # Save using export\n>>>  291:         model_path = output_dir / 'fastai_home_win_model_2025.pkl'\n     292:         try:\n     293:             learn.export(model_path)"
+      }
+    ],
+    "'random_forest_model_2025.pkl": [
+      {
+        "file": "agents/model_execution_engine.py",
+        "line": 723,
+        "context": "     721:             {\n     722:                 'name': 'random_forest_model_2025',\n>>>  723:                 'file_path': model_pack_path / 'random_forest_model_2025.pkl',\n     724:                 'model_type': 'regression',\n     725:                 'target_feature': 'margin',"
+      }
+    ],
+    "Path('fastai_home_win_model_2025.pkl": [
+      {
+        "file": "model_pack/model_training_agent.py",
+        "line": 477,
+        "context": "     475:             # Save model with pickle protocol 4 (fixes protocol 0 error)\n     476:             import pickle\n>>>  477:             model_path = Path('fastai_home_win_model_2025.pkl')\n     478:             # Use export first, then re-save with protocol 4 if needed\n     479:             learn.export(str(model_path))"
+      }
+    ]
+  },
+  "categories": {
+    "production": [
+      "model_pack/fastai_home_win_model_2025.pkl",
+      "model_pack/ridge_model_2025.joblib",
+      "model_pack/xgb_home_win_model_2025.pkl",
+      "model_pack/backups/models/critical/models_backup_20251114_135815/fastai_home_win_model_2025.pkl",
+      "model_pack/backups/models/critical/models_backup_20251114_135815/xgb_home_win_model_2025.pkl"
+    ],
+    "referenced": [
+      "model_pack/fastai_home_win_model_2025.pkl",
+      "model_pack/ridge_model_2025.joblib",
+      "model_pack/xgb_home_win_model_2025.pkl",
+      "model_pack/random_forest_model_2025.pkl",
+      "model_pack/backups/models/critical/models_backup_20251114_135815/fastai_home_win_model_2025.pkl",
+      "model_pack/backups/models/critical/models_backup_20251114_135815/xgb_home_win_model_2025.pkl"
+    ],
+    "legacy": [
+      "model_pack/rf_components/random_forest_home.joblib",
+      "model_pack/rf_components/random_forest_away.joblib",
+      "model_pack/rf_components/random_forest_features.joblib",
+      "model_pack/archived_models/20251119/xgb_home_win_model_copy.pkl",
+      "model_pack/archived_models/20251119/fastai_home_win_model_copy.pkl",
+      "model_pack/archived_models/20251119/ridge_model_copy.joblib",
+      "model_pack/archived_models/20251119/xgb_home_win_model.pkl",
+      "model_pack/archived_models/20251119/fastai_home_win_model.pkl",
+      "model_pack/archived_models/20251119/ridge_model.joblib"
+    ],
+    "outdated": [
+      "model_pack/archived_models/20251119/ridge_model_2025_fixed.joblib",
+      "model_pack/archived_models/20251119/xgb_home_win_model_2025_fixed.pkl",
+      "model_pack/archived_models/20251119/fastai_home_win_model_2025_fixed.pkl"
+    ],
+    "orphaned": [
+      "model_pack/archived_models/20251119/fastai_home_win_model_2025_full_features.pkl",
+      "model_pack/archived_models/20251119/fastai_home_win_model_2025_original.pkl"
+    ],
+    "backup": [
+      "model_pack/backups/models/critical/models_backup_20251114_135815/fastai_home_win_model_2025.pkl",
+      "model_pack/backups/models/critical/models_backup_20251114_135815/xgb_home_win_model_2025.pkl",
+      "model_pack/backups/models/critical/models_backup_20251114_135815/xgb_home_win_model_2025_fixed.pkl",
+      "model_pack/backups/models/critical/models_backup_20251114_135815/fastai_home_win_model_2025_fixed.pkl",
+      "model_pack/backups/models/critical/models_backup_20251114_135815/xgb_home_win_model.pkl",
+      "model_pack/backups/models/critical/models_backup_20251114_135815/fastai_home_win_model.pkl",
+      "model_pack/backups/models/critical/models_backup_20251114_135815/fastai_home_win_model_2025_original.pkl"
+    ]
+  },
+  "existence_check": {
+    "missing": [
+      {
+        "reference": "model_name.pkl",
+        "referenced_in": [
+          {
+            "file": "agents/model_execution_engine.py",
+            "line": 328,
+            "context": "     326:     \n     327:     To fix the pickle protocol issue permanently, retrain the FastAI model with\n>>>  328:     FastAI's native export method: learn.export('model_name.pkl')\n     329:     \"\"\"\n     330: "
+          }
+        ]
+      },
+      {
+        "reference": "learn.export('model_name.pkl",
+        "referenced_in": [
+          {
+            "file": "agents/model_execution_engine.py",
+            "line": 328,
+            "context": "     326:     \n     327:     To fix the pickle protocol issue permanently, retrain the FastAI model with\n>>>  328:     FastAI's native export method: learn.export('model_name.pkl')\n     329:     \"\"\"\n     330: "
+          }
+        ]
+      },
+      {
+        "reference": "'ridge_model_2025.joblib",
+        "referenced_in": [
+          {
+            "file": "agents/model_execution_engine.py",
+            "line": 702,
+            "context": "     700:             {\n     701:                 'name': 'ridge_model_2025',\n>>>  702:                 'file_path': model_pack_path / 'ridge_model_2025.joblib',\n     703:                 'model_type': 'regression',\n     704:                 'target_feature': 'margin',"
+          },
+          {
+            "file": "model_pack/model_training_agent.py",
+            "line": 223,
+            "context": "     221: \n     222:         # Save model\n>>>  223:         joblib.dump(model, 'ridge_model_2025.joblib')\n     224: \n     225:         logger.info(f\"Ridge Regression trained successfully!\")"
+          },
+          {
+            "file": "model_pack/model_training_agent.py",
+            "line": 825,
+            "context": "     823:             \"\u2705 Model Retraining Pipeline: All models successfully retrained with 2025 data\",\n     824:             \"\u2705 Temporal Validation: Train 2016-2024, Test 2025 validation implemented\",\n>>>  825:             \"\u2705 Ridge Regression: Updated margin prediction model saved as 'ridge_model_2025.joblib'\",\n     826:             \"\u2705 XGBoost Classifier: Updated win probability model saved as 'xgb_home_win_model_2025.pkl'\",\n     827:             \"\u2705 FastAI Neural Network: Updated neural network saved as 'fastai_home_win_model_2025.pkl'\","
+          },
+          {
+            "file": "scripts/retrain_models_full_features.py",
+            "line": 154,
+            "context": "     152:     \n     153:     # Save\n>>>  154:     model_path = output_dir / 'ridge_model_2025.joblib'\n     155:     joblib.dump(model, model_path)\n     156:     logger.info(f\"Saved Ridge model to {model_path}\")"
+          }
+        ]
+      },
+      {
+        "reference": "'xgb_home_win_model_2025.pkl",
+        "referenced_in": [
+          {
+            "file": "agents/model_execution_engine.py",
+            "line": 709,
+            "context": "     707:             {\n     708:                 'name': 'xgb_home_win_model_2025',\n>>>  709:                 'file_path': model_pack_path / 'xgb_home_win_model_2025.pkl',\n     710:                 'model_type': 'classification',\n     711:                 'target_feature': 'home_win',"
+          },
+          {
+            "file": "model_pack/model_training_agent.py",
+            "line": 306,
+            "context": "     304: \n     305:         # Save model\n>>>  306:         joblib.dump(model, 'xgb_home_win_model_2025.pkl')\n     307: \n     308:         logger.info(f\"XGBoost trained successfully!\")"
+          },
+          {
+            "file": "model_pack/model_training_agent.py",
+            "line": 826,
+            "context": "     824:             \"\u2705 Temporal Validation: Train 2016-2024, Test 2025 validation implemented\",\n     825:             \"\u2705 Ridge Regression: Updated margin prediction model saved as 'ridge_model_2025.joblib'\",\n>>>  826:             \"\u2705 XGBoost Classifier: Updated win probability model saved as 'xgb_home_win_model_2025.pkl'\",\n     827:             \"\u2705 FastAI Neural Network: Updated neural network saved as 'fastai_home_win_model_2025.pkl'\",\n     828:             \"\u2705 Performance Analysis: Comprehensive comparison reports generated\","
+          },
+          {
+            "file": "scripts/retrain_models_full_features.py",
+            "line": 199,
+            "context": "     197:     \n     198:     # Save\n>>>  199:     model_path = output_dir / 'xgb_home_win_model_2025.pkl'\n     200:     joblib.dump(model, model_path)\n     201:     logger.info(f\"Saved XGBoost model to {model_path}\")"
+          }
+        ]
+      },
+      {
+        "reference": "'fastai_home_win_model_2025.pkl",
+        "referenced_in": [
+          {
+            "file": "agents/model_execution_engine.py",
+            "line": 716,
+            "context": "     714:             {\n     715:                 'name': 'fastai_home_win_model_2025',\n>>>  716:                 'file_path': model_pack_path / 'fastai_home_win_model_2025.pkl',\n     717:                 'model_type': 'classification',\n     718:                 'target_feature': 'home_win',"
+          },
+          {
+            "file": "model_pack/model_training_agent.py",
+            "line": 827,
+            "context": "     825:             \"\u2705 Ridge Regression: Updated margin prediction model saved as 'ridge_model_2025.joblib'\",\n     826:             \"\u2705 XGBoost Classifier: Updated win probability model saved as 'xgb_home_win_model_2025.pkl'\",\n>>>  827:             \"\u2705 FastAI Neural Network: Updated neural network saved as 'fastai_home_win_model_2025.pkl'\",\n     828:             \"\u2705 Performance Analysis: Comprehensive comparison reports generated\",\n     829:             \"\u2705 Model Interpretability: Feature importance and SHAP analyses completed\","
+          },
+          {
+            "file": "scripts/retrain_models_full_features.py",
+            "line": 291,
+            "context": "     289:         \n     290:         # Save using export\n>>>  291:         model_path = output_dir / 'fastai_home_win_model_2025.pkl'\n     292:         try:\n     293:             learn.export(model_path)"
+          }
+        ]
+      },
+      {
+        "reference": "'random_forest_model_2025.pkl",
+        "referenced_in": [
+          {
+            "file": "agents/model_execution_engine.py",
+            "line": 723,
+            "context": "     721:             {\n     722:                 'name': 'random_forest_model_2025',\n>>>  723:                 'file_path': model_pack_path / 'random_forest_model_2025.pkl',\n     724:                 'model_type': 'regression',\n     725:                 'target_feature': 'margin',"
+          }
+        ]
+      },
+      {
+        "reference": "Path('fastai_home_win_model_2025.pkl",
+        "referenced_in": [
+          {
+            "file": "model_pack/model_training_agent.py",
+            "line": 477,
+            "context": "     475:             # Save model with pickle protocol 4 (fixes protocol 0 error)\n     476:             import pickle\n>>>  477:             model_path = Path('fastai_home_win_model_2025.pkl')\n     478:             # Use export first, then re-save with protocol 4 if needed\n     479:             learn.export(str(model_path))"
+          }
+        ]
+      }
+    ],
+    "found": [
+      {
+        "reference": "fastai_home_win_model_2025.pkl",
+        "location": "model_pack/fastai_home_win_model_2025.pkl",
+        "referenced_in": [
+          {
+            "file": "agents/model_execution_engine.py",
+            "line": 716,
+            "context": "     714:             {\n     715:                 'name': 'fastai_home_win_model_2025',\n>>>  716:                 'file_path': model_pack_path / 'fastai_home_win_model_2025.pkl',\n     717:                 'model_type': 'classification',\n     718:                 'target_feature': 'home_win',"
+          },
+          {
+            "file": "config/model_config.py",
+            "line": 36,
+            "context": "      34:     ),\n      35:     \"fastai\": ModelConfig(\n>>>   36:         file=\"model_pack/fastai_home_win_model_2025.pkl\",\n      37:         features=XGB_FEATURES,  # FastAI uses same features as XGBoost\n      38:         type=\"classification\","
+          },
+          {
+            "file": "config/model_config.py",
+            "line": 36,
+            "context": "      34:     ),\n      35:     \"fastai\": ModelConfig(\n>>>   36:         file=\"model_pack/fastai_home_win_model_2025.pkl\",\n      37:         features=XGB_FEATURES,  # FastAI uses same features as XGBoost\n      38:         type=\"classification\","
+          },
+          {
+            "file": "config/model_config.py",
+            "line": 36,
+            "context": "      34:     ),\n      35:     \"fastai\": ModelConfig(\n>>>   36:         file=\"model_pack/fastai_home_win_model_2025.pkl\",\n      37:         features=XGB_FEATURES,  # FastAI uses same features as XGBoost\n      38:         type=\"classification\","
+          },
+          {
+            "file": "model_pack/model_training_agent.py",
+            "line": 477,
+            "context": "     475:             # Save model with pickle protocol 4 (fixes protocol 0 error)\n     476:             import pickle\n>>>  477:             model_path = Path('fastai_home_win_model_2025.pkl')\n     478:             # Use export first, then re-save with protocol 4 if needed\n     479:             learn.export(str(model_path))"
+          },
+          {
+            "file": "model_pack/model_training_agent.py",
+            "line": 827,
+            "context": "     825:             \"\u2705 Ridge Regression: Updated margin prediction model saved as 'ridge_model_2025.joblib'\",\n     826:             \"\u2705 XGBoost Classifier: Updated win probability model saved as 'xgb_home_win_model_2025.pkl'\",\n>>>  827:             \"\u2705 FastAI Neural Network: Updated neural network saved as 'fastai_home_win_model_2025.pkl'\",\n     828:             \"\u2705 Performance Analysis: Comprehensive comparison reports generated\",\n     829:             \"\u2705 Model Interpretability: Feature importance and SHAP analyses completed\","
+          },
+          {
+            "file": "model_pack/model_training_agent.py",
+            "line": 477,
+            "context": "     475:             # Save model with pickle protocol 4 (fixes protocol 0 error)\n     476:             import pickle\n>>>  477:             model_path = Path('fastai_home_win_model_2025.pkl')\n     478:             # Use export first, then re-save with protocol 4 if needed\n     479:             learn.export(str(model_path))"
+          },
+          {
+            "file": "model_pack/model_training_agent.py",
+            "line": 865,
+            "context": "     863:             \"\ud83d\udcc4 ridge_model_2025.joblib - Updated regression model\",\n     864:             \"\ud83d\udcc4 xgb_home_win_model_2025.pkl - Updated XGBoost classifier\",\n>>>  865:             \"\ud83d\udcc4 fastai_home_win_model_2025.pkl - Updated neural network\",\n     866:             \"\ud83d\udcc4 model_performance_comparison_2025.csv - Performance metrics\",\n     867:             \"\ud83d\udcc4 model_performance_comparison_2025.png - Performance visualizations\","
+          },
+          {
+            "file": "scripts/retrain_models_full_features.py",
+            "line": 291,
+            "context": "     289:         \n     290:         # Save using export\n>>>  291:         model_path = output_dir / 'fastai_home_win_model_2025.pkl'\n     292:         try:\n     293:             learn.export(model_path)"
+          }
+        ]
+      },
+      {
+        "reference": "random_forest_model_2025.pkl",
+        "location": "model_pack/random_forest_model_2025.pkl",
+        "referenced_in": [
+          {
+            "file": "agents/model_execution_engine.py",
+            "line": 723,
+            "context": "     721:             {\n     722:                 'name': 'random_forest_model_2025',\n>>>  723:                 'file_path': model_pack_path / 'random_forest_model_2025.pkl',\n     724:                 'model_type': 'regression',\n     725:                 'target_feature': 'margin',"
+          }
+        ]
+      }
+    ],
+    "multiple_locations": {
+      "ridge_model_2025.joblib": {
+        "locations": [
+          "model_pack/ridge_model_2025.joblib",
+          "ridge_model_2025.joblib"
+        ],
+        "referenced_in": [
+          {
+            "file": "agents/model_execution_engine.py",
+            "line": 702,
+            "context": "     700:             {\n     701:                 'name': 'ridge_model_2025',\n>>>  702:                 'file_path': model_pack_path / 'ridge_model_2025.joblib',\n     703:                 'model_type': 'regression',\n     704:                 'target_feature': 'margin',"
+          },
+          {
+            "file": "config/model_config.py",
+            "line": 22,
+            "context": "      20: MODEL_INFO: Dict[str, ModelConfig] = {\n      21:     \"ridge\": ModelConfig(\n>>>   22:         file=\"model_pack/ridge_model_2025.joblib\",\n      23:         features=RIDGE_FEATURES,\n      24:         type=\"regression\","
+          },
+          {
+            "file": "config/model_config.py",
+            "line": 22,
+            "context": "      20: MODEL_INFO: Dict[str, ModelConfig] = {\n      21:     \"ridge\": ModelConfig(\n>>>   22:         file=\"model_pack/ridge_model_2025.joblib\",\n      23:         features=RIDGE_FEATURES,\n      24:         type=\"regression\","
+          },
+          {
+            "file": "config/model_config.py",
+            "line": 22,
+            "context": "      20: MODEL_INFO: Dict[str, ModelConfig] = {\n      21:     \"ridge\": ModelConfig(\n>>>   22:         file=\"model_pack/ridge_model_2025.joblib\",\n      23:         features=RIDGE_FEATURES,\n      24:         type=\"regression\","
+          },
+          {
+            "file": "model_pack/model_training_agent.py",
+            "line": 223,
+            "context": "     221: \n     222:         # Save model\n>>>  223:         joblib.dump(model, 'ridge_model_2025.joblib')\n     224: \n     225:         logger.info(f\"Ridge Regression trained successfully!\")"
+          },
+          {
+            "file": "model_pack/model_training_agent.py",
+            "line": 825,
+            "context": "     823:             \"\u2705 Model Retraining Pipeline: All models successfully retrained with 2025 data\",\n     824:             \"\u2705 Temporal Validation: Train 2016-2024, Test 2025 validation implemented\",\n>>>  825:             \"\u2705 Ridge Regression: Updated margin prediction model saved as 'ridge_model_2025.joblib'\",\n     826:             \"\u2705 XGBoost Classifier: Updated win probability model saved as 'xgb_home_win_model_2025.pkl'\",\n     827:             \"\u2705 FastAI Neural Network: Updated neural network saved as 'fastai_home_win_model_2025.pkl'\","
+          },
+          {
+            "file": "model_pack/model_training_agent.py",
+            "line": 863,
+            "context": "     861:             \"\",\n     862:             \"DELIVERABLES GENERATED:\",\n>>>  863:             \"\ud83d\udcc4 ridge_model_2025.joblib - Updated regression model\",\n     864:             \"\ud83d\udcc4 xgb_home_win_model_2025.pkl - Updated XGBoost classifier\",\n     865:             \"\ud83d\udcc4 fastai_home_win_model_2025.pkl - Updated neural network\","
+          },
+          {
+            "file": "scripts/retrain_models_full_features.py",
+            "line": 154,
+            "context": "     152:     \n     153:     # Save\n>>>  154:     model_path = output_dir / 'ridge_model_2025.joblib'\n     155:     joblib.dump(model, model_path)\n     156:     logger.info(f\"Saved Ridge model to {model_path}\")"
+          }
+        ]
+      },
+      "xgb_home_win_model_2025.pkl": {
+        "locations": [
+          "model_pack/xgb_home_win_model_2025.pkl",
+          "xgb_home_win_model_2025.pkl"
+        ],
+        "referenced_in": [
+          {
+            "file": "agents/model_execution_engine.py",
+            "line": 709,
+            "context": "     707:             {\n     708:                 'name': 'xgb_home_win_model_2025',\n>>>  709:                 'file_path': model_pack_path / 'xgb_home_win_model_2025.pkl',\n     710:                 'model_type': 'classification',\n     711:                 'target_feature': 'home_win',"
+          },
+          {
+            "file": "config/model_config.py",
+            "line": 29,
+            "context": "      27:     ),\n      28:     \"xgb\": ModelConfig(\n>>>   29:         file=\"model_pack/xgb_home_win_model_2025.pkl\",\n      30:         features=XGB_FEATURES,\n      31:         type=\"classification\","
+          },
+          {
+            "file": "config/model_config.py",
+            "line": 29,
+            "context": "      27:     ),\n      28:     \"xgb\": ModelConfig(\n>>>   29:         file=\"model_pack/xgb_home_win_model_2025.pkl\",\n      30:         features=XGB_FEATURES,\n      31:         type=\"classification\","
+          },
+          {
+            "file": "config/model_config.py",
+            "line": 29,
+            "context": "      27:     ),\n      28:     \"xgb\": ModelConfig(\n>>>   29:         file=\"model_pack/xgb_home_win_model_2025.pkl\",\n      30:         features=XGB_FEATURES,\n      31:         type=\"classification\","
+          },
+          {
+            "file": "model_pack/model_training_agent.py",
+            "line": 306,
+            "context": "     304: \n     305:         # Save model\n>>>  306:         joblib.dump(model, 'xgb_home_win_model_2025.pkl')\n     307: \n     308:         logger.info(f\"XGBoost trained successfully!\")"
+          },
+          {
+            "file": "model_pack/model_training_agent.py",
+            "line": 826,
+            "context": "     824:             \"\u2705 Temporal Validation: Train 2016-2024, Test 2025 validation implemented\",\n     825:             \"\u2705 Ridge Regression: Updated margin prediction model saved as 'ridge_model_2025.joblib'\",\n>>>  826:             \"\u2705 XGBoost Classifier: Updated win probability model saved as 'xgb_home_win_model_2025.pkl'\",\n     827:             \"\u2705 FastAI Neural Network: Updated neural network saved as 'fastai_home_win_model_2025.pkl'\",\n     828:             \"\u2705 Performance Analysis: Comprehensive comparison reports generated\","
+          },
+          {
+            "file": "model_pack/model_training_agent.py",
+            "line": 864,
+            "context": "     862:             \"DELIVERABLES GENERATED:\",\n     863:             \"\ud83d\udcc4 ridge_model_2025.joblib - Updated regression model\",\n>>>  864:             \"\ud83d\udcc4 xgb_home_win_model_2025.pkl - Updated XGBoost classifier\",\n     865:             \"\ud83d\udcc4 fastai_home_win_model_2025.pkl - Updated neural network\",\n     866:             \"\ud83d\udcc4 model_performance_comparison_2025.csv - Performance metrics\","
+          },
+          {
+            "file": "scripts/retrain_models_full_features.py",
+            "line": 199,
+            "context": "     197:     \n     198:     # Save\n>>>  199:     model_path = output_dir / 'xgb_home_win_model_2025.pkl'\n     200:     joblib.dump(model, model_path)\n     201:     logger.info(f\"Saved XGBoost model to {model_path}\")"
+          }
+        ]
+      }
+    }
+  },
+  "files_to_archive": [
+    "model_pack/archived_models/20251119/fastai_home_win_model.pkl",
+    "model_pack/archived_models/20251119/fastai_home_win_model_2025_fixed.pkl",
+    "model_pack/archived_models/20251119/fastai_home_win_model_copy.pkl",
+    "model_pack/archived_models/20251119/ridge_model.joblib",
+    "model_pack/archived_models/20251119/ridge_model_2025_fixed.joblib",
+    "model_pack/archived_models/20251119/ridge_model_copy.joblib",
+    "model_pack/archived_models/20251119/xgb_home_win_model.pkl",
+    "model_pack/archived_models/20251119/xgb_home_win_model_2025_fixed.pkl",
+    "model_pack/archived_models/20251119/xgb_home_win_model_copy.pkl",
+    "model_pack/rf_components/random_forest_away.joblib",
+    "model_pack/rf_components/random_forest_features.joblib",
+    "model_pack/rf_components/random_forest_home.joblib"
+  ]
+}

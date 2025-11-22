@@ -1,0 +1,9 @@
+{
+  "games": ["id", "home_team", "away_team", "home_points", "away_points", "week", "season", "fetched_at"],
+  "ratings": ["team", "conference", "rating_type", "rating_value", "fetched_at"],
+  "lines": ["game_id", "provider", "spread", "over_under", "fetched_at"],
+  "recruiting": ["team", "rank", "points", "avg_rating", "fetched_at"],
+  "weather": ["game_id", "home_team", "away_team", "temperature", "temperature_high", "temperature_low", "wind_speed", "weather_condition", "fetched_at"],
+  "media": ["game_id", "tv", "radio", "satellite", "internet", "fetched_at"],
+  "predicted_points": ["team", "opponent", "predicted_margin", "win_probability", "is_home", "fetched_at"]
+}

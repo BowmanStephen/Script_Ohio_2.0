@@ -1,0 +1,289 @@
+{
+  "verification_date": "2025-11-18T20:16:54.960303",
+  "season": 2025,
+  "checks": {
+    "epa_calculations": {
+      "status": "pass",
+      "columns_checked": 6,
+      "issues": [],
+      "historical_comparison": {
+        "home_adjusted_epa": {
+          "historical_mean": 0.1712429543889724,
+          "historical_std": 0.06546528756590386,
+          "current_mean": 0.15261315498944725,
+          "deviation_sigma": 0.28457523203836166,
+          "status": "OK"
+        },
+        "away_adjusted_epa": {
+          "historical_mean": 0.16770763351951784,
+          "historical_std": 0.0645143122878302,
+          "current_mean": 0.15189127500998179,
+          "deviation_sigma": 0.24516046050326742,
+          "status": "OK"
+        },
+        "home_adjusted_rushing_epa": {
+          "historical_mean": 0.11383552979095928,
+          "historical_std": 0.05721160888972077,
+          "current_mean": 0.0995923565582385,
+          "deviation_sigma": 0.248955998775973,
+          "status": "OK"
+        },
+        "away_adjusted_rushing_epa": {
+          "historical_mean": 0.11079190788032667,
+          "historical_std": 0.05720949382665974,
+          "current_mean": 0.10010144651656092,
+          "deviation_sigma": 0.18686516255775673,
+          "status": "OK"
+        },
+        "home_adjusted_passing_epa": {
+          "historical_mean": 0.2528836369917089,
+          "historical_std": 0.08247959378188181,
+          "current_mean": 0.23134891624430037,
+          "deviation_sigma": 0.2610914986361031,
+          "status": "OK"
+        },
+        "away_adjusted_passing_epa": {
+          "historical_mean": 0.24963536789607657,
+          "historical_std": 0.08138015833419494,
+          "current_mean": 0.23041547609706317,
+          "deviation_sigma": 0.23617417552918962,
+          "status": "OK"
+        }
+      },
+      "all_within_range": true
+    },
+    "opponent_adjustments": {
+      "status": "warning",
+      "adjusted_features_count": 48,
+      "key_features_checked": 6,
+      "methodology_checks": {
+        "home_adjusted_epa": {
+          "mean": 0.1698368598955331,
+          "std": 0.06320798669753154,
+          "min": -0.0397985098422805,
+          "max": 0.4337403341778083,
+          "methodology": "subtraction_based"
+        },
+        "away_adjusted_epa": {
+          "mean": 0.16651388504538842,
+          "std": 0.06224121066742157,
+          "min": -0.0381995121405946,
+          "max": 0.4260581035662615,
+          "methodology": "subtraction_based"
+        },
+        "home_adjusted_success": {
+          "mean": 0.4268292987928256,
+          "std": 0.03931744043786454,
+          "min": 0.2952080286795307,
+          "max": 0.5629589362940594,
+          "methodology": "subtraction_based"
+        },
+        "away_adjusted_success": {
+          "mean": 0.42481353582928844,
+          "std": 0.03896155910916568,
+          "min": 0.2864740381317385,
+          "max": 0.5726611075692905,
+          "methodology": "subtraction_based"
+        },
+        "home_adjusted_explosiveness": {
+          "mean": 1.232078197806554,
+          "std": 0.04745987273387813,
+          "min": 1.0877852960642551,
+          "max": 1.3834487815661511,
+          "methodology": "subtraction_based"
+        },
+        "away_adjusted_explosiveness": {
+          "mean": 1.2320602263396292,
+          "std": 0.04713969760591932,
+          "min": 1.0838679056317242,
+          "max": 1.3848589004341654,
+          "methodology": "subtraction_based"
+        }
+      },
+      "historical_means": {
+        "home_adjusted_epa": 0.1712429543889724,
+        "away_adjusted_epa": 0.16770763351951784,
+        "home_adjusted_success": 0.4267684082446299,
+        "away_adjusted_success": 0.4248643264818932,
+        "home_adjusted_explosiveness": 1.2343041460919397,
+        "away_adjusted_explosiveness": 1.2340468527762865
+      },
+      "issues": [
+        {
+          "feature": "home_adjusted_explosiveness",
+          "issue": "mean_too_far_from_zero",
+          "mean": 1.232078197806554
+        },
+        {
+          "feature": "away_adjusted_explosiveness",
+          "issue": "mean_too_far_from_zero",
+          "mean": 1.2320602263396292
+        }
+      ],
+      "methodology_correct": false
+    },
+    "feature_engineering": {
+      "status": "warning",
+      "total_columns": 88,
+      "feature_groups": {
+        "EPA Metrics": {
+          "required": 6,
+          "present": 6,
+          "missing": 0,
+          "status": "complete"
+        },
+        "Success Rates": {
+          "required": 6,
+          "present": 6,
+          "missing": 0,
+          "status": "complete"
+        },
+        "Explosiveness": {
+          "required": 6,
+          "present": 6,
+          "missing": 0,
+          "status": "complete"
+        },
+        "Line Yards": {
+          "required": 6,
+          "present": 6,
+          "missing": 0,
+          "status": "complete"
+        },
+        "Havoc": {
+          "required": 4,
+          "present": 4,
+          "missing": 0,
+          "status": "complete"
+        },
+        "Points Per Opportunity": {
+          "required": 4,
+          "present": 4,
+          "missing": 0,
+          "status": "complete"
+        },
+        "Average Start": {
+          "required": 4,
+          "present": 4,
+          "missing": 0,
+          "status": "complete"
+        }
+      },
+      "missing_features": {},
+      "data_type_issues": [],
+      "missing_value_issues": {
+        "home_adjusted_epa": 253,
+        "away_adjusted_epa": 253,
+        "home_adjusted_rushing_epa": 268,
+        "away_adjusted_rushing_epa": 268,
+        "home_adjusted_passing_epa": 268,
+        "away_adjusted_passing_epa": 268,
+        "home_adjusted_success": 253,
+        "away_adjusted_success": 253,
+        "home_adjusted_standard_down_success": 268,
+        "away_adjusted_standard_down_success": 268,
+        "home_adjusted_passing_down_success": 268,
+        "away_adjusted_passing_down_success": 268,
+        "home_adjusted_explosiveness": 268,
+        "away_adjusted_explosiveness": 268,
+        "home_adjusted_rush_explosiveness": 268,
+        "away_adjusted_rush_explosiveness": 268,
+        "home_adjusted_pass_explosiveness": 268,
+        "away_adjusted_pass_explosiveness": 268,
+        "home_adjusted_line_yards": 268,
+        "away_adjusted_line_yards": 268,
+        "home_adjusted_second_level_yards": 268,
+        "away_adjusted_second_level_yards": 268,
+        "home_adjusted_open_field_yards": 268,
+        "away_adjusted_open_field_yards": 268,
+        "home_total_havoc_offense": 268,
+        "away_total_havoc_offense": 268,
+        "home_total_havoc_defense": 268,
+        "away_total_havoc_defense": 268,
+        "home_points_per_opportunity_offense": 268,
+        "away_points_per_opportunity_offense": 268,
+        "home_points_per_opportunity_defense": 268,
+        "away_points_per_opportunity_defense": 268,
+        "home_avg_start_offense": 268,
+        "away_avg_start_offense": 268,
+        "home_avg_start_defense": 268,
+        "away_avg_start_defense": 268
+      },
+      "all_features_present": true,
+      "no_data_type_issues": true,
+      "no_missing_values": false
+    },
+    "model_compatibility": {
+      "status": "pass",
+      "models": {
+        "ridge": {
+          "exists": true
+        },
+        "xgb": {
+          "exists": true
+        },
+        "fastai": {
+          "exists": true
+        }
+      },
+      "numeric_features_count": 79,
+      "non_numeric_feature_issues": [],
+      "missing_metadata": [],
+      "all_models_exist": true,
+      "data_types_correct": true,
+      "metadata_complete": true
+    },
+    "temporal_consistency": {
+      "status": "warning",
+      "2025_week_distribution": {
+        "1": 47,
+        "2": 48,
+        "3": 45,
+        "4": 49,
+        "5": 50,
+        "6": 49,
+        "7": 55,
+        "8": 58,
+        "9": 51,
+        "10": 50,
+        "11": 49,
+        "12": 71
+      },
+      "games_before_week5": 189,
+      "week5_plus_filter_applied": false,
+      "historical_weeks_sample": {
+        "1": 310,
+        "5": 433,
+        "6": 411,
+        "7": 416,
+        "8": 440
+      }
+    },
+    "data_leakage": {
+      "status": "pass",
+      "correlation_check": {
+        "correlation": NaN,
+        "within_expected_range": "False"
+      },
+      "leakage_warning": null,
+      "methodology_correct": true,
+      "no_data_leakage": true
+    }
+  },
+  "summary": {
+    "overall_status": "warning",
+    "checks_passed": 3,
+    "total_checks": 6,
+    "epa_calculations": "pass",
+    "opponent_adjustments": "warning",
+    "feature_engineering": "warning",
+    "model_compatibility": "pass",
+    "temporal_consistency": "warning",
+    "data_leakage": "pass",
+    "recommendations": [
+      "Verify opponent adjustment methodology (subtraction-based)",
+      "Check for missing features or data type issues",
+      "Consider filtering to Week 5+ for opponent adjustments"
+    ]
+  }
+}

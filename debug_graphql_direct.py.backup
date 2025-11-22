@@ -1,0 +1,53 @@
+import os
+import sys
+import requests
+from dotenv import load_dotenv
+
+# Load env vars
+load_dotenv()
+
+def test_graphql_endpoint():
+    print("Testing GraphQL endpoint directly...")
+    
+    key = os.getenv("CFBD_API_KEY")
+    if not key:
+        print("❌ Error: CFBD_API_KEY not found in environment")
+        return
+
+    # Endpoint from src/data_sources/cfbd_graphql.py
+    url = "https://graphql.collegefootballdata.com/v1/graphql"
+    print(f"Testing URL: {url}")
+    
+    headers = {
+        "Authorization": f"Bearer {key}",
+        "User-Agent": "ScriptOhio2.0/CFBD-GraphQL",
+        "Content-Type": "application/json"
+    }
+    
+    # Simple introspection query
+    query = """
+    query {
+        __schema {
+            types {
+                name
+            }
+        }
+    }
+    """
+    
+    try:
+        response = requests.post(url, json={"query": query}, headers=headers, timeout=10)
+        print(f"Status Code: {response.status_code}")
+        if response.status_code == 200:
+            print("✅ Success! Endpoint is valid and key works.")
+            # print(response.json()) # Too verbose
+        elif response.status_code == 401:
+            print("❌ 401 Unauthorized! This is the error.")
+        else:
+            print(f"❌ Failed with status {response.status_code}: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Exception: {e}")
+
+if __name__ == "__main__":
+    test_graphql_endpoint()

@@ -1,0 +1,203 @@
+"""GraphQL client utilities for CFBD Phase 2."""
+from __future__ import annotations
+
+import json
+import logging
+import os
+import time
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+import requests
+
+from .client import HOST_MAP
+
+_LOGGER = logging.getLogger("cfbd_graphql")
+if not _LOGGER.handlers:
+    handler = logging.StreamHandler()
+    handler.setFormatter(logging.Formatter("%(message)s"))
+    _LOGGER.addHandler(handler)
+_LOGGER.setLevel(logging.INFO)
+
+
+class GraphQLQueryError(RuntimeError):
+    """Raised when the CFBD GraphQL API returns errors."""
+
+
+@dataclass(slots=True)
+class GraphQLRequest:
+    """GraphQL request payload."""
+
+    query: str
+    variables: Optional[Dict[str, Any]] = None
+    operation_name: Optional[str] = None
+
+
+@dataclass(slots=True)
+class GraphQLClientMetrics:
+    """Basic metrics for GraphQL requests."""
+
+    total_requests: int = 0
+    successful_requests: int = 0
+    failed_requests: int = 0
+    total_latency_ms: float = 0.0
+
+
+class GraphQLClient:
+    """Synchronous GraphQL client with throttling and error handling."""
+
+    _throttle_interval: float = 0.17
+
+    def __init__(
+        self,
+        api_key: Optional[str] = None,
+        host: Optional[str] = None,
+        session: Optional[requests.Session] = None,
+        telemetry_hook = None,
+        metrics_log_path: Optional[str] = None,
+    ) -> None:
+        self._api_key = api_key or os.getenv("CFBD_API_KEY")
+        if not self._api_key:
+            # If GraphQL is disabled, we might not need a key, but let's keep the check 
+            # unless we want to allow instantiation without key if disabled.
+            # For now, just check if disabled.
+            pass
+
+        if os.getenv("CFBD_GRAPHQL_DISABLED", "false").lower() in ("true", "1", "yes"):
+            _LOGGER.warning("CFBD GraphQL client is disabled via environment variable.")
+            self._disabled = True
+        else:
+            self._disabled = False
+
+        if not self._api_key and not self._disabled:
+             raise ValueError(
+                "CFBD_API_KEY is required. Set the environment variable or pass api_key explicitly."
+            )
+
+        host_choice = (host or os.getenv("CFBD_HOST") or "production").lower()
+        if host_choice not in HOST_MAP:
+            raise ValueError(
+                "CFBD_HOST must be one of {'production', 'next'} — "
+                f"received '{host_choice}'."
+            )
+        # Fix: Use the dedicated GraphQL endpoint instead of appending /graphql to the REST API host
+        if host_choice == "production":
+            self._base_url = "https://graphql.collegefootballdata.com/v1/graphql"
+        else:
+             # Fallback for 'next' or other hosts if they have a similar pattern, 
+             # but for now assume production is the main one.
+            self._base_url = f"{HOST_MAP[host_choice]}/graphql"
+
+        self._session = session or requests.Session()
+        self._last_request_ts = 0.0
+        self._telemetry_hook = telemetry_hook
+        self._metrics_log_path = Path(metrics_log_path) if metrics_log_path else None
+        if self._metrics_log_path and not self._metrics_log_path.parent.exists():
+            self._metrics_log_path.parent.mkdir(parents=True, exist_ok=True)
+        self._metrics = GraphQLClientMetrics()
+
+    def query(self, request: GraphQLRequest) -> Dict[str, Any]:
+        """Execute a GraphQL query and return the data payload."""
+        if getattr(self, "_disabled", False):
+             _LOGGER.warning("Attempted to query disabled GraphQL client. Returning empty result.")
+             return {}
+
+        payload = {
+            "query": request.query,
+            "variables": request.variables or {},
+        }
+        if request.operation_name:
+            payload["operationName"] = request.operation_name
+
+        response = self._execute(payload)
+        if "errors" in response:
+            raise GraphQLQueryError(response["errors"])
+        return response.get("data", {})
+
+    def subscribe(self, *_, **__):  # pragma: no cover - placeholder
+        """Placeholder for future subscription support."""
+
+        raise NotImplementedError("GraphQL subscriptions require websocket infrastructure")
+
+    def _execute(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        self._throttle()
+        start = time.monotonic()
+        result = self._session.post(
+            self._base_url,
+            headers={"Authorization": f"Bearer {self._api_key}", "Content-Type": "application/json"},
+            data=json.dumps(payload),
+            timeout=30,
+        )
+        latency_ms = (time.monotonic() - start) * 1000
+        _LOGGER.info(
+            "%s (status=%s, latency_ms=%.0f)",
+            payload.get("operationName") or "GraphQL",
+            result.status_code,
+            latency_ms,
+        )
+        self._record_metrics(result.status_code, latency_ms, payload.get("operationName"))
+        result.raise_for_status()
+        return result.json()
+
+    def _throttle(self) -> None:
+        elapsed = time.monotonic() - self._last_request_ts
+        if elapsed < self._throttle_interval:
+            time.sleep(self._throttle_interval - elapsed)
+        self._last_request_ts = time.monotonic()
+
+    def _record_metrics(self, status: int, latency_ms: float, operation: Optional[str]) -> None:
+        self._metrics.total_requests += 1
+        self._metrics.total_latency_ms += latency_ms
+        if 200 <= status < 300:
+            self._metrics.successful_requests += 1
+            outcome = "success"
+        else:
+            self._metrics.failed_requests += 1
+            outcome = "error"
+
+        event = {
+            "timestamp": time.time(),
+            "client": "graphql",
+            "operation": operation or "GraphQL",
+            "status": status,
+            "latency_ms": round(latency_ms, 2),
+            "outcome": outcome,
+        }
+        if self._telemetry_hook:
+            self._telemetry_hook(event)
+        if self._metrics_log_path:
+            with self._metrics_log_path.open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps(event) + "\n")
+
+    def get_metrics(self) -> Dict[str, Any]:
+        """Return current metrics snapshot."""
+        avg_latency = (
+            self._metrics.total_latency_ms / self._metrics.total_requests
+            if self._metrics.total_requests
+            else 0.0
+        )
+        return {
+            "total_requests": self._metrics.total_requests,
+            "successful_requests": self._metrics.successful_requests,
+            "failed_requests": self._metrics.failed_requests,
+            "average_latency_ms": round(avg_latency, 2),
+        }
+
+
+def build_bool_exp(**conditions: Any) -> Dict[str, Any]:
+    """Helper for GraphQL BoolExp clauses."""
+
+    return {key: {"_eq": value} for key, value in conditions.items() if value is not None}
+
+
+def build_order_by(field: str, direction: str = "asc") -> Dict[str, str]:
+    """Helper for GraphQL order by clauses."""
+
+    direction = direction.lower()
+    if direction not in {"asc", "desc"}:
+        raise ValueError("direction must be 'asc' or 'desc'")
+    return {field: direction}
+
+
+__all__ = ["GraphQLClient", "GraphQLQueryError", "GraphQLRequest", "build_bool_exp", "build_order_by"]

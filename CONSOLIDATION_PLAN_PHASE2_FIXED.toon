@@ -1,0 +1,217 @@
+metadata:
+  title: Consolidation Plan - Phase 2 & 3 Execution (Fixed)
+  objective: Complete codebase consolidation leveraging agent system capabilities for automated execution, validation, and quality assurance
+  created_at: 2025-11-19T23:30:00Z
+  author: consolidation_team
+  version: "3.1"
+  status: Phase 1 Complete - Ready for Phase 2 (Fixed)
+  enhancement_level: 10x_engineer_mode
+
+tasks[19]{id,name,description,agent_type,estimated_time,dependencies,priority,status,risk_level}:
+  task_00,Establish Baseline Metrics,Collect code complexity LOC test coverage performance baseline before any changes,quality_assurance,20.0,,critical,low,pending
+  task_01,Comprehensive Impact Analysis,Use codebase_search to analyze actual dependencies call sites and usage patterns not just grep,insight_generator,30.0,task_00,high,medium,pending
+  task_02,Audit All Import Usage,Find all files importing deprecated components including tests notebooks examples,quality_assurance,25.0,task_01,high,low,pending
+  task_03,Update Test Files,Remove or update TestContextManager TestAnalyticsOrchestrator test_context_manager_enhanced validate_core_agents,quality_assurance,40.0,task_02,high,high,pending
+  task_04,Update Example Code,Update core_tools/demo_agent_system.py project_management/core_tools/demo_agent_system.py to remove ContextManager demo,workflow_automator,15.0,task_02,medium,low,pending
+  task_05,Update Starter Pack Docs,Update starter_pack README notebooks CLAUDE.md that reference deprecated components,workflow_automator,30.0,task_02,medium,low,pending
+  task_06,Replace AnalyticsOrchestrator,Replace agents/analytics_orchestrator.py with simplified version maintaining backward compatibility,workflow_automator,35.0,task_02,high,high,pending
+  task_07,Update Test Files Simplified,Update agents/test_agent_system.py validate_core_agents.py to use SimplifiedAnalyticsOrchestrator,quality_assurance,25.0,task_06,high,medium,pending
+  task_08,Update MCP Bridge,Update mcp_servers/agents/mcp_enhanced_orchestrator.py to remove ContextManager import,workflow_automator,10.0,task_06,medium,low,pending
+  task_09,Remove ContextManager Imports,Remove ContextManager imports from all production code files with dependency verification,workflow_automator,30.0,task_02,high,medium,pending
+  task_10,Remove StateAware Imports,Remove StateAwareAnalyticsSession imports from all production code files with dependency verification,workflow_automator,25.0,task_02,high,medium,pending
+  task_11,Update Core Init,Remove deprecated components from agents/core/__init__.py agents/__init__.py,workflow_automator,10.0,task_09,task_10,medium,low,pending
+  task_12,Comprehensive Documentation Update,Use codebase_search to find ALL markdown files referencing deprecated components and update,workflow_automator,60.0,task_02,medium,low,pending
+  task_13,Automated Quality Validation,Use run_consolidation_validation.py to validate syntax imports and code quality after each major change,quality_assurance,45.0,task_06,task_09,task_10,high,low,pending
+  task_14,Convert Plan To Workflow,Convert consolidation plan to workflow using scripts/plan_to_workflow.py CLI tool,workflow_automator,30.0,task_00,task_01,task_02,high,low,pending
+  task_15,Validation Test Suite,Run complete validation test suite including weekly analysis scripts with performance comparison,quality_assurance,40.0,task_06,task_07,task_08,task_09,task_10,task_13,high,low,pending
+  task_16,Pre-Removal Validation,Verify no active usage of deprecated files before removal date 2025-12-19 with dependency graph,quality_assurance,20.0,task_15,high,low,pending
+  task_17,Remove Deprecated Files,Remove deprecated files after 30-day period on 2025-12-19 with backup verification,workflow_automator,15.0,task_16,high,low,pending
+  task_18,Rollback Verification,Test rollback by restoring backups running tests and verifying functionality,quality_assurance,30.0,task_17,high,low,pending
+  task_19,Final Metrics and Validation,Collect final metrics compare to baseline generate comprehensive report,quality_assurance,30.0,task_18,high,low,pending
+
+steps[70]{id,task_id,action,step_type,parameters,timeout,dependencies}:
+  step_000,task_00,run_baseline_metrics_script,CODE_ANALYSIS,script:scripts/collect_baseline_metrics.py output:CONSOLIDATION_BASELINE_METRICS.json,120,
+  step_001,task_00,verify_baseline_collected,VALIDATION,check_file:CONSOLIDATION_BASELINE_METRICS.json contains:loc_metrics complexity_metrics coverage_metrics performance_metrics,30,step_000
+  step_002,task_01,analyze_dependency_graph,CODE_ANALYSIS,tool:codebase_search pattern:ContextManager usage actual call sites,180,
+  step_003,task_01,analyze_stateaware_usage,CODE_ANALYSIS,tool:codebase_search pattern:StateAwareAnalyticsSession inheritance usage,120,
+  step_004,task_01,analyze_orchestrator_usage,CODE_ANALYSIS,tool:codebase_search pattern:AnalyticsOrchestrator instantiation methods,120,
+  step_005,task_01,generate_impact_report,CODE_ANALYSIS,output_file:CONSOLIDATION_IMPACT_ANALYSIS.md,30,step_002,step_003,step_004
+  step_006,task_02,grep_all_imports,CODE_ANALYSIS,pattern:from agents.analytics_orchestrator import|import.*AnalyticsOrchestrator,60,
+  step_007,task_02,grep_deprecated_imports,CODE_ANALYSIS,pattern:ContextManager|StateAwareAnalyticsSession|WorkflowAutomatorAgent|AsyncAgentOrchestrator,90,
+  step_008,task_02,search_notebook_imports,CODE_ANALYSIS,tool:codebase_search pattern:notebooks using deprecated components,60,
+  step_009,task_02,create_comprehensive_import_report,CODE_ANALYSIS,output_file:CONSOLIDATION_IMPORT_AUDIT.md includes_notebooks includes_tests,30,step_006,step_007,step_008
+  step_010,task_03,identify_test_files,CODE_ANALYSIS,files:tests/test_agent_system.py tests/test_context_manager_enhanced.py validate_core_agents.py core_tools/test_agents.py project_management/core_tools/test_agents.py,30,
+  step_011,task_03,update_test_agent_system,CODE_MODIFICATION,file:tests/test_agent_system.py action:remove TestContextManager class update TestAnalyticsOrchestrator,90,step_010
+  step_012,task_03,remove_test_context_manager_enhanced,CODE_MODIFICATION,file:tests/test_context_manager_enhanced.py action:delete_or_deprecate entire file,30,step_010
+  step_013,task_03,update_validate_core_agents,CODE_MODIFICATION,file:validate_core_agents.py action:update test_context_manager function mark deprecated,30,step_010
+  step_014,task_03,update_core_tools_tests,CODE_MODIFICATION,files:core_tools/test_agents.py project_management/core_tools/test_agents.py action:remove ContextManager tests,30,step_010
+  step_015,task_03,update_pytest_markers,CODE_MODIFICATION,file:pytest.ini action:remove context_manager markers if present,15,step_011
+  step_016,task_03,verify_test_updates,VALIDATION,test_command:python3 -m pytest tests/test_agent_system.py -v --tb=short,60,step_011,step_015
+  step_017,task_04,update_core_tools_demo,CODE_MODIFICATION,file:core_tools/demo_agent_system.py action:remove demo_context_manager function or mark deprecated,45,
+  step_018,task_04,update_project_management_demo,CODE_MODIFICATION,file:project_management/core_tools/demo_agent_system.py action:remove demo_context_manager function,45,
+  step_019,task_04,test_demo_scripts,VALIDATION,test_command:python3 core_tools/demo_agent_system.py,30,step_017,step_018
+  step_020,task_05,scan_starter_pack,CODE_ANALYSIS,tool:codebase_search pattern:starter_pack files referencing deprecated components,60,
+  step_021,task_05,update_starter_pack_readme,CODE_MODIFICATION,file:starter_pack/README.md action:remove deprecated component references,30,
+  step_022,task_05,update_starter_pack_claude,CODE_MODIFICATION,file:starter_pack/CLAUDE.md action:update examples remove deprecated patterns,30,
+  step_023,task_05,update_notebook_comments,CODE_MODIFICATION,files:starter_pack/*.ipynb action:update markdown cells if they reference deprecated components,60,
+  step_024,task_06,backup_current_orchestrator,FILE_OPERATION,source:agents/analytics_orchestrator.py dest:agents/analytics_orchestrator.py.backup,10,
+  step_025,task_06,verify_simplified_exists,VALIDATION,check_file:agents/simplified_analytics_orchestrator.py exists,10,
+  step_026,task_06,copy_simplified_orchestrator,FILE_OPERATION,source:agents/simplified_analytics_orchestrator.py dest:agents/analytics_orchestrator.py,15,step_024,step_025
+  step_027,task_06,verify_backward_compatibility,VALIDATION,test_import:from agents.analytics_orchestrator import AnalyticsOrchestrator test_instantiation,45,step_026
+  step_028,task_06,test_orchestrator_api,VALIDATION,test_code:orchestrator = AnalyticsOrchestrator(); request = AnalyticsRequest(...); response = orchestrator.process_analytics_request(request),60,step_027
+  step_029,task_07,update_test_agent_system_orchestrator,CODE_MODIFICATION,file:agents/test_agent_system.py change:use SimplifiedAnalyticsOrchestrator remove context_manager tests,45,
+  step_030,task_07,update_validate_core_agents,CODE_MODIFICATION,file:validate_core_agents.py change:remove ContextManager test update AnalyticsOrchestrator test,30,
+  step_031,task_07,run_agent_test_suite,VALIDATION,test_command:python3 -m pytest agents/tests/test_analytics_orchestrator.py -v,60,step_029,step_030
+  step_032,task_08,remove_contextmanager_import_mcp,CODE_MODIFICATION,file:mcp_servers/agents/mcp_enhanced_orchestrator.py action:remove ContextManager import verify no usage,30,
+  step_033,task_08,test_mcp_bridge,VALIDATION,test_import:from mcp_servers.agents.mcp_enhanced_orchestrator import MCPServerType,30,step_032
+  step_034,task_09,find_all_contextmanager_imports,CODE_ANALYSIS,pattern:from agents.core.context_manager import|import.*ContextManager tool:codebase_search,90,
+  step_035,task_09,verify_no_inheritance,CODE_ANALYSIS,pattern:class.*\(.*ContextManager\) tool:codebase_search,60,
+  step_036,task_09,remove_contextmanager_production,CODE_MODIFICATION,files:agents/*.py scripts/*.py action:remove ContextManager imports and usage,120,step_034,
+  step_037,task_09,remove_from_core_init,CODE_MODIFICATION,file:agents/core/__init__.py action:remove ContextManager export,15,
+  step_038,task_09,verify_no_contextmanager_usage,VALIDATION,test_pattern:codebase_search for ContextManager usage in agents scripts,45,step_036,step_037
+  step_039,task_10,find_all_stateaware_imports,CODE_ANALYSIS,pattern:from agents.state_aware_analytics_system import|import.*StateAwareAnalyticsSession tool:codebase_search,90,
+  step_040,task_10,remove_stateaware_imports,CODE_MODIFICATION,pattern:StateAwareAnalyticsSession action:remove all imports usage,120,step_039
+  step_041,task_10,verify_no_stateaware_usage,VALIDATION,test_pattern:codebase_search for StateAwareAnalyticsSession,45,step_040
+  step_042,task_11,update_agents_init,CODE_MODIFICATION,file:agents/__init__.py action:remove deprecated component exports if present,20,step_037,step_040
+  step_043,task_11,test_core_imports,VALIDATION,test_import:from agents.core import AgentFactory RequestRouter from agents import AnalyticsOrchestrator,30,step_042
+  step_044,task_12,comprehensive_docs_search,CODE_ANALYSIS,tool:codebase_search pattern:all markdown files referencing deprecated components,180,
+  step_045,task_12,update_documentation_files,CODE_MODIFICATION,files:AGENTS.md .cursorrules CLAUDE.md action:update remove deprecated references,120,step_044
+  step_046,task_12,update_migration_guide,CODE_MODIFICATION,file:CONSOLIDATION_MIGRATION_GUIDE.md action:mark Phase 2 complete add examples,30,
+  step_047,task_13,run_syntax_validation,VALIDATION,script:scripts/run_consolidation_validation.py action:syntax_validation,300,
+  step_048,task_13,run_test_execution,VALIDATION,script:scripts/run_consolidation_validation.py action:test_execution,600,
+  step_049,task_13,run_import_validation,VALIDATION,script:scripts/run_consolidation_validation.py action:import_validation,120,
+  step_050,task_13,compare_performance,PERFORMANCE_MEASUREMENT,script:scripts/run_consolidation_validation.py baseline:CONSOLIDATION_BASELINE_METRICS.json,60,step_047,step_048,step_049
+  step_051,task_13,generate_qa_report,CODE_ANALYSIS,output_file:CONSOLIDATION_QA_REPORT.md,30,step_047,step_048,step_049,step_050
+  step_052,task_14,convert_plan_to_workflow,WORKFLOW_PREPARATION,script:scripts/plan_to_workflow.py input:CONSOLIDATION_PLAN_PHASE2_FIXED.toon output:consolidation_workflow.json,30,
+  step_053,task_14,validate_workflow_conversion,VALIDATION,check_file:consolidation_workflow.json valid_json:true,15,step_052
+  step_054,task_15,run_weekly_analysis_validation,VALIDATION,test_command:python3 scripts/run_weekly_analysis.py --week 13 compare_performance,180,
+  step_055,task_15,run_comprehensive_validation,VALIDATION,test_command:python3 scripts/run_consolidation_validation.py --baseline CONSOLIDATION_BASELINE_METRICS.json,60,
+  step_056,task_15,run_full_pytest_suite,VALIDATION,test_command:python3 -m pytest tests/ agents/tests/ -v --tb=short,240,
+  step_057,task_15,performance_comparison,PERFORMANCE_MEASUREMENT,compare:baseline_metrics current_metrics threshold:no_regression,60,step_054,step_055,step_056
+  step_058,task_15,generate_validation_report,CODE_ANALYSIS,output_file:CONSOLIDATION_PHASE2_VALIDATION_REPORT.md,30,step_054,step_055,step_056,step_057
+  step_059,task_16,final_deprecation_check,CODE_ANALYSIS,tool:codebase_search pattern:any remaining usage of deprecated components,90,
+  step_060,task_16,verify_dependency_graph,CODE_ANALYSIS,generate:dependency_graph verify:no_active_dependencies,60,
+  step_061,task_16,confirm_removal_safe,VALIDATION,test_pattern:grep codebase_search verify no production usage,45,step_059,step_060
+  step_062,task_17,create_final_backups,FILE_OPERATION,files:all deprecated files backup_dir:archive/consolidation_20251219/,15,
+  step_063,task_17,remove_context_manager_file,FILE_OPERATION,file:agents/core/context_manager.py action:delete verify_backup,10,step_062
+  step_064,task_17,remove_stateaware_file,FILE_OPERATION,file:agents/state_aware_analytics_system.py action:delete verify_backup,10,step_062
+  step_065,task_17,remove_workflow_automator_file,FILE_OPERATION,file:agents/workflow_automator_agent.py action:delete verify_backup,10,step_062
+  step_066,task_17,remove_async_framework_file,FILE_OPERATION,file:agents/async_agent_framework.py action:delete verify_backup,10,step_062
+  step_067,task_17,verify_file_removal,VALIDATION,test_pattern:verify files deleted imports fail gracefully,30,step_063,step_064,step_065,step_066
+  step_068,task_18,restore_backup_test,VALIDATION,action:restore from archive/consolidation_20251219/ test:import ContextManager,60,
+  step_069,task_18,run_tests_after_rollback,VALIDATION,test_command:python3 -m pytest tests/ agents/tests/ -v,120,step_068
+  step_070,task_18,verify_rollback_functionality,VALIDATION,test_command:python3 validate_core_agents.py,30,step_069
+  step_071,task_18,generate_rollback_report,CODE_ANALYSIS,output_file:CONSOLIDATION_ROLLBACK_REPORT.md,30,step_068,step_069,step_070
+  step_072,task_19,calculate_final_metrics,CODE_ANALYSIS,script:scripts/collect_baseline_metrics.py output:CONSOLIDATION_FINAL_METRICS.json,120,
+  step_073,task_19,measure_performance_improvement,PERFORMANCE_MEASUREMENT,compare:CONSOLIDATION_BASELINE_METRICS.json CONSOLIDATION_FINAL_METRICS.json,60,
+  step_074,task_19,calculate_complexity_reduction,CODE_ANALYSIS,metrics:patterns_reduced complexity_reduction_percent target:80_percent,30,
+  step_075,task_19,generate_final_report,CODE_ANALYSIS,output_file:CONSOLIDATION_FINAL_REPORT.md includes:metrics comparison recommendations,60,step_072,step_073,step_074
+
+shared_inputs:
+  base_path: /Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0
+  deprecation_date: 2025-11-19
+  removal_date: 2025-12-19
+  simplified_orchestrator: agents/simplified_analytics_orchestrator.py
+  current_orchestrator: agents/analytics_orchestrator.py
+  backup_directory: archive/consolidation_20251219/
+  baseline_metrics_file: CONSOLIDATION_BASELINE_METRICS.json
+  test_files_list: tests/test_agent_system.py tests/test_context_manager_enhanced.py validate_core_agents.py core_tools/test_agents.py project_management/core_tools/test_agents.py
+  starter_pack_files: starter_pack/README.md starter_pack/CLAUDE.md starter_pack/*.ipynb
+
+workflow_config:
+  parallel_execution: true
+  error_recovery: true
+  max_retries: 3
+  timeout_override:
+    validation_steps: 300
+    file_operations: 30
+    code_analysis: 240
+    workflow_execution: 600
+  agent_integration:
+    use_validation_scripts: true
+    use_cli_tools: true
+    use_insight_generator: true
+
+dependencies[18]{from_id,to_id,type}:
+  task_00,task_01,blocks
+  task_01,task_02,blocks
+  task_02,task_03,blocks
+  task_02,task_04,blocks
+  task_02,task_05,blocks
+  task_02,task_06,blocks
+  task_02,task_09,blocks
+  task_02,task_10,blocks
+  task_02,task_12,blocks
+  task_06,task_07,blocks
+  task_06,task_08,blocks
+  task_06,task_13,blocks
+  task_09,task_11,blocks
+  task_10,task_11,blocks
+  task_13,task_15,blocks
+  task_15,task_16,blocks
+  task_16,task_17,blocks
+  task_17,task_18,blocks
+  task_18,task_19,blocks
+
+validation_checkpoints[7]{checkpoint_id,name,step_ids,pass_criteria}:
+  cp_00,Baseline Established,step_000,step_001,all_metrics_collected
+  cp_01,Impact Analysis Complete,step_002,step_003,step_004,step_005,dependency_graph_created
+  cp_02,Import Audit Complete,step_006,step_007,step_008,step_009,all_files_catalogued including_notebooks
+  cp_03,Orchestrator Replacement Complete,step_026,step_027,step_028,all_tests_pass backward_compatible
+  cp_04,Deprecated Imports Removed,step_038,step_041,step_043,no_imports_found verified_by_codebase_search
+  cp_05,Phase 2 Validation Complete,step_054,step_055,step_056,step_057,step_058,all_tests_pass no_performance_regression
+  cp_06,Rollback Verified,step_068,step_069,step_070,step_071,rollback_successful tests_pass
+  cp_07,Phase 3 Complete,step_072,step_073,step_074,step_075,all_metrics_collected complexity_reduction_achieved
+
+success_criteria:
+  baseline_established: All metrics collected before changes
+  impact_analysis_complete: Real dependency graph created not just grep
+  all_imports_catalogued: Including notebooks tests examples
+  orchestrator_replaced: Backward compatible all tests pass
+  deprecated_removed: Verified by codebase_search not just grep
+  tests_updated: TestContextManager removed test files updated
+  examples_updated: Demo scripts starter pack updated
+  documentation_updated: All markdown files scanned and updated
+  qa_validated: Validation scripts confirm quality maintained
+  workflow_converted: Plan converted to workflow JSON successfully
+  performance_maintained: No regression compared to baseline
+  complexity_reduced: 80% reduction in complexity patterns achieved
+  files_removed: Deprecated files removed with backups verified
+  rollback_tested: Backup restoration verified and functional
+
+risk_mitigation:
+  high_risk_tasks:
+    - task_id: task_06
+      risk: Orchestrator replacement breaking changes
+      mitigation: Backup created backward compatibility tested rollback plan ready
+    - task_id: task_03
+      risk: Test file updates breaking test suite
+      mitigation: Incremental updates verify after each change pytest markers updated
+    - task_id: task_14
+      risk: Workflow conversion failure
+      mitigation: CLI tool fallback manual execution workflow documented
+  rollback_plan:
+    orchestrator_rollback:
+      trigger: step_028 fails
+      action: Restore from agents/analytics_orchestrator.py.backup
+      verify: Run validation suite
+    test_rollback:
+      trigger: step_016 fails
+      action: Restore TestContextManager temporarily mark deprecated
+      verify: Tests pass with warnings
+
+automation_opportunities:
+  - Use validation scripts for automated quality checks after each change
+  - Use CLI tools for workflow conversion instead of deprecated agent
+  - Use codebase_search for real dependency analysis not grep
+  - Automated test suite updates via code modification patterns
+  - Performance regression detection via baseline comparison
+
+estimated_timeline:
+  phase_2_weeks: 2-3
+  phase_3_week: 4
+  total_weeks: 4
+  start_date: 2025-11-19
+  target_completion: 2025-12-19
+  automation_savings: 40_percent_time_reduction_via_scripts
+

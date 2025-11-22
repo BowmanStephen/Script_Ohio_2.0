@@ -1,0 +1,402 @@
+{
+  "summary": {
+    "total_notebooks": 20,
+    "execution_time": 2.387892007827759,
+    "status_counts": {
+      "PASS": 20
+    },
+    "syntax_valid_count": 20,
+    "import_issues_count": 0
+  },
+  "detailed_results": {
+    "starter_pack/00_data_dictionary.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "os"
+      ],
+      "imports_failed": [],
+      "total_cells": 22,
+      "code_cells": 9,
+      "imports_found": 2,
+      "execution_time": 0.18227815628051758,
+      "warnings": []
+    },
+    "starter_pack/01_intro_to_data.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "matplotlib.pyplot",
+        "os"
+      ],
+      "imports_failed": [],
+      "total_cells": 11,
+      "code_cells": 11,
+      "imports_found": 3,
+      "execution_time": 0.16684818267822266,
+      "warnings": []
+    },
+    "starter_pack/02_build_simple_rankings.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "matplotlib.pyplot",
+        "seaborn",
+        "os"
+      ],
+      "imports_failed": [],
+      "total_cells": 10,
+      "code_cells": 10,
+      "imports_found": 4,
+      "execution_time": 0.6789507865905762,
+      "warnings": []
+    },
+    "starter_pack/03_metrics_comparison.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "matplotlib.pyplot",
+        "seaborn",
+        "os"
+      ],
+      "imports_failed": [],
+      "total_cells": 10,
+      "code_cells": 10,
+      "imports_found": 4,
+      "execution_time": 0.002296924591064453,
+      "warnings": []
+    },
+    "starter_pack/04_team_similarity.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "numpy",
+        "sklearn.preprocessing",
+        "sklearn.neighbors",
+        "matplotlib.pyplot",
+        "seaborn",
+        "os",
+        "math"
+      ],
+      "imports_failed": [],
+      "total_cells": 7,
+      "code_cells": 7,
+      "imports_found": 8,
+      "execution_time": 0.2136850357055664,
+      "warnings": []
+    },
+    "starter_pack/05_matchup_predictor.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "numpy",
+        "sklearn.linear_model",
+        "sklearn.metrics",
+        "sklearn.model_selection",
+        "seaborn",
+        "matplotlib.pyplot",
+        "os"
+      ],
+      "imports_failed": [],
+      "total_cells": 8,
+      "code_cells": 8,
+      "imports_found": 8,
+      "execution_time": 0.0006349086761474609,
+      "warnings": []
+    },
+    "starter_pack/06_custom_rankings_by_metric.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "matplotlib.pyplot",
+        "seaborn",
+        "os"
+      ],
+      "imports_failed": [],
+      "total_cells": 9,
+      "code_cells": 9,
+      "imports_found": 4,
+      "execution_time": 0.0009243488311767578,
+      "warnings": []
+    },
+    "starter_pack/07_drive_efficiency.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "matplotlib.pyplot",
+        "seaborn",
+        "os"
+      ],
+      "imports_failed": [],
+      "total_cells": 8,
+      "code_cells": 8,
+      "imports_found": 4,
+      "execution_time": 0.0007679462432861328,
+      "warnings": []
+    },
+    "starter_pack/08_offense_vs_defense_comparison.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "matplotlib.pyplot",
+        "seaborn",
+        "os",
+        "sklearn.preprocessing",
+        "numpy"
+      ],
+      "imports_failed": [],
+      "total_cells": 7,
+      "code_cells": 7,
+      "imports_found": 6,
+      "execution_time": 0.0004999637603759766,
+      "warnings": []
+    },
+    "starter_pack/09_opponent_adjustments.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "matplotlib.pyplot",
+        "seaborn",
+        "os"
+      ],
+      "imports_failed": [],
+      "total_cells": 7,
+      "code_cells": 7,
+      "imports_found": 4,
+      "execution_time": 0.0004749298095703125,
+      "warnings": []
+    },
+    "starter_pack/10_srs_adjusted_metrics.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "numpy",
+        "os",
+        "matplotlib.pyplot",
+        "seaborn"
+      ],
+      "imports_failed": [],
+      "total_cells": 8,
+      "code_cells": 8,
+      "imports_found": 5,
+      "execution_time": 0.0006940364837646484,
+      "warnings": []
+    },
+    "starter_pack/11_metric_distribution_explorer.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "seaborn",
+        "matplotlib.pyplot",
+        "os"
+      ],
+      "imports_failed": [],
+      "total_cells": 7,
+      "code_cells": 7,
+      "imports_found": 4,
+      "execution_time": 0.00048279762268066406,
+      "warnings": []
+    },
+    "starter_pack/12_efficiency_dashboards.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "matplotlib.pyplot",
+        "seaborn",
+        "numpy",
+        "os",
+        "math",
+        "sklearn.preprocessing"
+      ],
+      "imports_failed": [],
+      "total_cells": 6,
+      "code_cells": 6,
+      "imports_found": 7,
+      "execution_time": 0.0006251335144042969,
+      "warnings": []
+    },
+    "model_pack/01_linear_regression_margin.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "sklearn.linear_model",
+        "sklearn.metrics",
+        "matplotlib.pyplot",
+        "numpy",
+        "joblib"
+      ],
+      "imports_failed": [],
+      "total_cells": 26,
+      "code_cells": 10,
+      "imports_found": 7,
+      "execution_time": 0.0008370876312255859,
+      "warnings": []
+    },
+    "model_pack/02_random_forest_team_points.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "sklearn.model_selection",
+        "sklearn.ensemble",
+        "sklearn.metrics",
+        "matplotlib.pyplot",
+        "joblib"
+      ],
+      "imports_failed": [],
+      "total_cells": 21,
+      "code_cells": 6,
+      "imports_found": 6,
+      "execution_time": 0.07203888893127441,
+      "warnings": []
+    },
+    "model_pack/03_xgboost_win_probability.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "sklearn.model_selection",
+        "xgboost",
+        "sklearn.metrics",
+        "matplotlib.pyplot",
+        "sklearn.calibration",
+        "joblib"
+      ],
+      "imports_failed": [],
+      "total_cells": 28,
+      "code_cells": 9,
+      "imports_found": 8,
+      "execution_time": 0.022646188735961914,
+      "warnings": []
+    },
+    "model_pack/04_fastai_win_probability.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "fastai.tabular.all",
+        "sklearn.metrics",
+        "sklearn.calibration"
+      ],
+      "imports_failed": [],
+      "total_cells": 30,
+      "code_cells": 10,
+      "imports_found": 5,
+      "execution_time": 0.8148417472839355,
+      "warnings": []
+    },
+    "model_pack/05_logistic_regression_win_probability.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "sklearn.model_selection",
+        "sklearn.linear_model",
+        "sklearn.preprocessing",
+        "sklearn.pipeline",
+        "sklearn.metrics",
+        "matplotlib.pyplot",
+        "sklearn.calibration",
+        "joblib"
+      ],
+      "imports_failed": [],
+      "total_cells": 25,
+      "code_cells": 8,
+      "imports_found": 10,
+      "execution_time": 0.0006158351898193359,
+      "warnings": []
+    },
+    "model_pack/06_shap_interpretability.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "sklearn.model_selection",
+        "xgboost",
+        "shap"
+      ],
+      "imports_failed": [],
+      "total_cells": 19,
+      "code_cells": 6,
+      "imports_found": 4,
+      "execution_time": 0.22657203674316406,
+      "warnings": []
+    },
+    "model_pack/07_stacked_ensemble.ipynb": {
+      "status": "PASS",
+      "syntax_errors": [],
+      "import_errors": [],
+      "syntax_valid": true,
+      "imports_successful": [
+        "pandas",
+        "sklearn.model_selection",
+        "sklearn.linear_model",
+        "sklearn.ensemble",
+        "xgboost",
+        "sklearn.preprocessing",
+        "sklearn.pipeline",
+        "numpy",
+        "sklearn.metrics",
+        "shap"
+      ],
+      "imports_failed": [],
+      "total_cells": 22,
+      "code_cells": 7,
+      "imports_found": 13,
+      "execution_time": 0.0007221698760986328,
+      "warnings": []
+    }
+  }
+}

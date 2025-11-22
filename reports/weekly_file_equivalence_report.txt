@@ -1,0 +1,102 @@
+================================================================================
+Weekly Training File Equivalence Report
+================================================================================
+Generated: 2025-11-20 18:56:40
+Season: 2025
+
+SUMMARY
+--------------------------------------------------------------------------------
+Total weeks analyzed: 13
+Files in both locations: 13
+Identical files (duplicates): 0
+Different files: 13
+Root-only files: 0
+Weekly training-only files: 0
+
+DETAILED COMPARISON
+--------------------------------------------------------------------------------
+
+Week 01: training_data_2025_week01.csv
+  ⚠️  DIFFERENT: Files have different content
+     Root: 106721 bytes, 77 rows, modified 2025-11-19 21:01:16.114800
+     Weekly: 105520 bytes, 77 rows, modified 2025-11-19 12:20:49.084645
+     Canonical: root (newer)
+
+Week 02: training_data_2025_week02.csv
+  ⚠️  DIFFERENT: Files have different content
+     Root: 98243 bytes, 71 rows, modified 2025-11-19 21:01:16.118541
+     Weekly: 97113 bytes, 71 rows, modified 2025-11-19 12:20:49.087990
+     Canonical: root (newer)
+
+Week 03: training_data_2025_week03.csv
+  ⚠️  DIFFERENT: Files have different content
+     Root: 78507 bytes, 57 rows, modified 2025-11-19 21:01:16.121706
+     Weekly: 77679 bytes, 57 rows, modified 2025-11-19 12:20:49.090822
+     Canonical: root (newer)
+
+Week 04: training_data_2025_week04.csv
+  ⚠️  DIFFERENT: Files have different content
+     Root: 69295 bytes, 51 rows, modified 2025-11-19 21:01:16.124616
+     Weekly: 68450 bytes, 51 rows, modified 2025-11-19 12:20:49.093420
+     Canonical: root (newer)
+
+Week 05: training_data_2025_week05.csv
+  ⚠️  DIFFERENT: Files have different content
+     Root: 53918 bytes, 40 rows, modified 2025-11-19 21:01:16.126949
+     Weekly: 53370 bytes, 40 rows, modified 2025-11-19 12:20:49.095548
+     Canonical: root (newer)
+
+Week 06: training_data_2025_week06.csv
+  ⚠️  DIFFERENT: Files have different content
+     Root: 51721 bytes, 38 rows, modified 2025-11-19 21:01:16.129101
+     Weekly: 51210 bytes, 38 rows, modified 2025-11-19 12:20:49.097680
+     Canonical: root (newer)
+
+Week 07: training_data_2025_week07.csv
+  ⚠️  DIFFERENT: Files have different content
+     Root: 55299 bytes, 41 rows, modified 2025-11-19 21:01:16.131349
+     Weekly: 54744 bytes, 41 rows, modified 2025-11-19 12:20:49.099838
+     Canonical: root (newer)
+
+Week 08: training_data_2025_week08.csv
+  ⚠️  DIFFERENT: Files have different content
+     Root: 59220 bytes, 44 rows, modified 2025-11-19 21:01:16.133745
+     Weekly: 58656 bytes, 44 rows, modified 2025-11-19 12:20:49.102106
+     Canonical: root (newer)
+
+Week 09: training_data_2025_week09.csv
+  ⚠️  DIFFERENT: Files have different content
+     Root: 51383 bytes, 38 rows, modified 2025-11-19 21:01:16.135886
+     Weekly: 50912 bytes, 38 rows, modified 2025-11-19 12:20:49.104264
+     Canonical: root (newer)
+
+Week 10: training_data_2025_week10.csv
+  ⚠️  DIFFERENT: Files have different content
+     Root: 52815 bytes, 39 rows, modified 2025-11-19 21:01:16.138040
+     Weekly: 52318 bytes, 39 rows, modified 2025-11-19 12:20:49.106377
+     Canonical: root (newer)
+
+Week 11: training_data_2025_week11.csv
+  ⚠️  DIFFERENT: Files have different content
+     Root: 47576 bytes, 35 rows, modified 2025-11-19 21:01:16.140068
+     Weekly: 47121 bytes, 35 rows, modified 2025-11-19 12:20:49.108338
+     Canonical: root (newer)
+
+Week 12: training_data_2025_week12.csv
+  ⚠️  DIFFERENT: Files have different content
+     Root: 58127 bytes, 43 rows, modified 2025-11-19 21:01:16.142533
+     Weekly: 57514 bytes, 43 rows, modified 2025-11-19 12:20:49.110598
+     Canonical: root (newer)
+
+Week 13: training_data_2025_week13.csv
+  ⚠️  DIFFERENT: Files have different content
+     Root: 63138 bytes, 47 rows, modified 2025-11-19 21:01:16.145041
+     Weekly: 62489 bytes, 47 rows, modified 2025-11-19 12:20:49.112978
+     Canonical: root (newer)
+
+================================================================================
+RECOMMENDATIONS
+--------------------------------------------------------------------------------
+- 13 files differ between locations - investigate which is correct
+
+================================================================================

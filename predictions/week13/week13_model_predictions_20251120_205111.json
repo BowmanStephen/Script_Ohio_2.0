@@ -1,0 +1,1764 @@
+{
+  "timestamp": "2025-11-20T20:51:09.706872",
+  "predictions": [
+    {
+      "game_id": 401761655,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Arkansas State",
+      "away_team": "Louisiana",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 0.9987513391549712,
+          "predicted_winner": "Arkansas State",
+          "confidence": 0.04993756695774856
+        },
+        "xgb": {
+          "home_win_probability": 0.44707462191581726,
+          "away_win_probability": 0.5529253780841827,
+          "predicted_winner": "Louisiana",
+          "confidence": 0.10585075616836548
+        },
+        "fastai": {
+          "home_win_probability": -0.9691389203071594,
+          "away_win_probability": 1.9691389203071594,
+          "predicted_winner": "Louisiana",
+          "confidence": 2.938277840614319
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Louisiana",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.095409"
+    },
+    {
+      "game_id": 401754598,
+      "season": 2025,
+      "week": 13,
+      "home_team": "NC State",
+      "away_team": "Florida State",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": -4.932599204895062,
+          "predicted_winner": "Florida State",
+          "confidence": 0.24662996024475312
+        },
+        "xgb": {
+          "home_win_probability": 0.2979080379009247,
+          "away_win_probability": 0.7020919620990753,
+          "predicted_winner": "Florida State",
+          "confidence": 0.40418392419815063
+        },
+        "fastai": {
+          "home_win_probability": -0.2354625016450882,
+          "away_win_probability": 1.2354625016450882,
+          "predicted_winner": "Florida State",
+          "confidence": 1.4709250032901764
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Florida State",
+        "confidence": 0.7072462959110267,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.147500"
+    },
+    {
+      "game_id": 401760418,
+      "season": 2025,
+      "week": 13,
+      "home_team": "UNLV",
+      "away_team": "Hawai'i",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 7.958870051044833,
+          "predicted_winner": "UNLV",
+          "confidence": 0.39794350255224165
+        },
+        "xgb": {
+          "home_win_probability": 0.23126140236854553,
+          "away_win_probability": 0.7687385976314545,
+          "predicted_winner": "Hawai'i",
+          "confidence": 0.5374771952629089
+        },
+        "fastai": {
+          "home_win_probability": -0.007245134562253952,
+          "away_win_probability": 1.007245134562254,
+          "predicted_winner": "Hawai'i",
+          "confidence": 1.014490269124508
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Hawai'i",
+        "confidence": 0.6499703223132195,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.156590"
+    },
+    {
+      "game_id": 401752781,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Texas A&M",
+      "away_team": "Samford",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 18.273262475944748,
+          "predicted_winner": "Texas A&M",
+          "confidence": 0.9136631237972374
+        },
+        "xgb": {
+          "home_win_probability": 0.8138104677200317,
+          "away_win_probability": 0.18618953227996826,
+          "predicted_winner": "Texas A&M",
+          "confidence": 0.6276209354400635
+        },
+        "fastai": {
+          "home_win_probability": 0.6845393180847168,
+          "away_win_probability": 0.3154606819152832,
+          "predicted_winner": "Texas A&M",
+          "confidence": 0.3690786361694336
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Texas A&M",
+        "confidence": 0.6367875651355782,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.165872"
+    },
+    {
+      "game_id": 401754603,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Virginia Tech",
+      "away_team": "Miami",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": -13.21609987020161,
+          "predicted_winner": "Miami",
+          "confidence": 0.6608049935100805
+        },
+        "xgb": {
+          "home_win_probability": 0.1828189641237259,
+          "away_win_probability": 0.8171810358762741,
+          "predicted_winner": "Miami",
+          "confidence": 0.6343620717525482
+        },
+        "fastai": {
+          "home_win_probability": 0.04218881204724312,
+          "away_win_probability": 0.9578111879527569,
+          "predicted_winner": "Miami",
+          "confidence": 0.9156223759055138
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Miami",
+        "confidence": 0.7369298137227142,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.175444"
+    },
+    {
+      "game_id": 401752909,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Northwestern",
+      "away_team": "Minnesota",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 3.4053360529933485,
+          "predicted_winner": "Northwestern",
+          "confidence": 0.17026680264966743
+        },
+        "xgb": {
+          "home_win_probability": 0.44174516201019287,
+          "away_win_probability": 0.5582548379898071,
+          "predicted_winner": "Minnesota",
+          "confidence": 0.11650967597961426
+        },
+        "fastai": {
+          "home_win_probability": -0.2865753769874573,
+          "away_win_probability": 1.2865753769874573,
+          "predicted_winner": "Minnesota",
+          "confidence": 1.5731507539749146
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Minnesota",
+        "confidence": 0.6199757442013988,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.184665"
+    },
+    {
+      "game_id": 401756958,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Iowa State",
+      "away_team": "Kansas",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 2.4581188265636342,
+          "predicted_winner": "Iowa State",
+          "confidence": 0.12290594132818171
+        },
+        "xgb": {
+          "home_win_probability": 0.7495434284210205,
+          "away_win_probability": 0.2504565715789795,
+          "predicted_winner": "Iowa State",
+          "confidence": 0.499086856842041
+        },
+        "fastai": {
+          "home_win_probability": -1.5873843431472778,
+          "away_win_probability": 2.587384343147278,
+          "predicted_winner": "Kansas",
+          "confidence": 4.174768686294556
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Kansas",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.193692"
+    },
+    {
+      "game_id": 401754602,
+      "season": 2025,
+      "week": 13,
+      "home_team": "SMU",
+      "away_team": "Louisville",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 4.42921234030235,
+          "predicted_winner": "SMU",
+          "confidence": 0.2214606170151175
+        },
+        "xgb": {
+          "home_win_probability": 0.5701817274093628,
+          "away_win_probability": 0.4298182725906372,
+          "predicted_winner": "SMU",
+          "confidence": 0.14036345481872559
+        },
+        "fastai": {
+          "home_win_probability": -1.093612790107727,
+          "away_win_probability": 2.093612790107727,
+          "predicted_winner": "Louisville",
+          "confidence": 3.187225580215454
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Louisville",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.202242"
+    },
+    {
+      "game_id": 401752778,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Oklahoma",
+      "away_team": "Missouri",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 3.3068307327586197,
+          "predicted_winner": "Oklahoma",
+          "confidence": 0.165341536637931
+        },
+        "xgb": {
+          "home_win_probability": 0.8310907483100891,
+          "away_win_probability": 0.1689092516899109,
+          "predicted_winner": "Oklahoma",
+          "confidence": 0.6621814966201782
+        },
+        "fastai": {
+          "home_win_probability": -1.9939252138137817,
+          "away_win_probability": 2.9939252138137817,
+          "predicted_winner": "Missouri",
+          "confidence": 4.9878504276275635
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Missouri",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.210921"
+    },
+    {
+      "game_id": 401754606,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Wake Forest",
+      "away_team": "Delaware",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 6.433489924978801,
+          "predicted_winner": "Wake Forest",
+          "confidence": 0.32167449624894007
+        },
+        "xgb": {
+          "home_win_probability": 0.9702273607254028,
+          "away_win_probability": 0.029772639274597168,
+          "predicted_winner": "Wake Forest",
+          "confidence": 0.9404547214508057
+        },
+        "fastai": {
+          "home_win_probability": -1.7018758058547974,
+          "away_win_probability": 2.7018758058547974,
+          "predicted_winner": "Delaware",
+          "confidence": 4.403751611709595
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Delaware",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.220710"
+    },
+    {
+      "game_id": 401752912,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Ohio State",
+      "away_team": "Rutgers",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 23.49771906084036,
+          "predicted_winner": "Ohio State",
+          "confidence": 1.0
+        },
+        "xgb": {
+          "home_win_probability": 0.9786030650138855,
+          "away_win_probability": 0.021396934986114502,
+          "predicted_winner": "Ohio State",
+          "confidence": 0.957206130027771
+        },
+        "fastai": {
+          "home_win_probability": -1.824720025062561,
+          "away_win_probability": 2.824720025062561,
+          "predicted_winner": "Rutgers",
+          "confidence": 4.649440050125122
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Rutgers",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.229867"
+    },
+    {
+      "game_id": 401752776,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Georgia",
+      "away_team": "Charlotte",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 36.875462827093756,
+          "predicted_winner": "Georgia",
+          "confidence": 1.0
+        },
+        "xgb": {
+          "home_win_probability": 0.9574486613273621,
+          "away_win_probability": 0.04255133867263794,
+          "predicted_winner": "Georgia",
+          "confidence": 0.9148973226547241
+        },
+        "fastai": {
+          "home_win_probability": -0.8731191754341125,
+          "away_win_probability": 1.8731191754341125,
+          "predicted_winner": "Charlotte",
+          "confidence": 2.746238350868225
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Charlotte",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.239541"
+    },
+    {
+      "game_id": 401761657,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Georgia Southern",
+      "away_team": "Old Dominion",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": -4.342426630341777,
+          "predicted_winner": "Old Dominion",
+          "confidence": 0.21712133151708884
+        },
+        "xgb": {
+          "home_win_probability": 0.08532044291496277,
+          "away_win_probability": 0.9146795570850372,
+          "predicted_winner": "Old Dominion",
+          "confidence": 0.8293591141700745
+        },
+        "fastai": {
+          "home_win_probability": -1.3691685199737549,
+          "away_win_probability": 2.369168519973755,
+          "predicted_winner": "Old Dominion",
+          "confidence": 3.7383370399475098
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Old Dominion",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.248304"
+    },
+    {
+      "game_id": 401756954,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Arizona",
+      "away_team": "Baylor",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 1.092785481541462,
+          "predicted_winner": "Arizona",
+          "confidence": 0.0546392740770731
+        },
+        "xgb": {
+          "home_win_probability": 0.7784076929092407,
+          "away_win_probability": 0.22159230709075928,
+          "predicted_winner": "Arizona",
+          "confidence": 0.5568153858184814
+        },
+        "fastai": {
+          "home_win_probability": -2.110905885696411,
+          "away_win_probability": 3.110905885696411,
+          "predicted_winner": "Baylor",
+          "confidence": 5.221811771392822
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Baylor",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.256994"
+    },
+    {
+      "game_id": 401752954,
+      "season": 2025,
+      "week": 13,
+      "home_team": "James Madison",
+      "away_team": "Washington State",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 11.946096081320128,
+          "predicted_winner": "James Madison",
+          "confidence": 0.5973048040660064
+        },
+        "xgb": {
+          "home_win_probability": 0.9209961295127869,
+          "away_win_probability": 0.07900387048721313,
+          "predicted_winner": "James Madison",
+          "confidence": 0.8419922590255737
+        },
+        "fastai": {
+          "home_win_probability": -0.5851557850837708,
+          "away_win_probability": 1.5851557850837708,
+          "predicted_winner": "Washington State",
+          "confidence": 2.1703115701675415
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Washington State",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.266742"
+    },
+    {
+      "game_id": 401760419,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Wyoming",
+      "away_team": "Nevada",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 3.533697766159314,
+          "predicted_winner": "Wyoming",
+          "confidence": 0.1766848883079657
+        },
+        "xgb": {
+          "home_win_probability": 0.7835172414779663,
+          "away_win_probability": 0.2164827585220337,
+          "predicted_winner": "Wyoming",
+          "confidence": 0.5670344829559326
+        },
+        "fastai": {
+          "home_win_probability": -1.1803654432296753,
+          "away_win_probability": 2.1803654432296753,
+          "predicted_winner": "Nevada",
+          "confidence": 3.3607308864593506
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Nevada",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.276166"
+    },
+    {
+      "game_id": 401752773,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Alabama",
+      "away_team": "Eastern Illinois",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 21.01030601311477,
+          "predicted_winner": "Alabama",
+          "confidence": 1.0
+        },
+        "xgb": {
+          "home_win_probability": 0.9589186906814575,
+          "away_win_probability": 0.04108130931854248,
+          "predicted_winner": "Alabama",
+          "confidence": 0.917837381362915
+        },
+        "fastai": {
+          "home_win_probability": 0.9127331376075745,
+          "away_win_probability": 0.08726686239242554,
+          "predicted_winner": "Alabama",
+          "confidence": 0.8254662752151489
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Alabama",
+        "confidence": 0.914434552192688,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.285457"
+    },
+    {
+      "game_id": 401752774,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Auburn",
+      "away_team": "Mercer",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 10.888715786041537,
+          "predicted_winner": "Auburn",
+          "confidence": 0.5444357893020768
+        },
+        "xgb": {
+          "home_win_probability": 0.38756024837493896,
+          "away_win_probability": 0.612439751625061,
+          "predicted_winner": "Mercer",
+          "confidence": 0.22487950325012207
+        },
+        "fastai": {
+          "home_win_probability": 0.6477584838867188,
+          "away_win_probability": 0.35224151611328125,
+          "predicted_winner": "Auburn",
+          "confidence": 0.2955169677734375
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Auburn",
+        "confidence": 0.3549440867752121,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.294339"
+    },
+    {
+      "game_id": 401761656,
+      "season": 2025,
+      "week": 13,
+      "home_team": "App State",
+      "away_team": "Marshall",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": -5.002819569007414,
+          "predicted_winner": "Marshall",
+          "confidence": 0.2501409784503707
+        },
+        "xgb": {
+          "home_win_probability": 0.4471995234489441,
+          "away_win_probability": 0.5528004765510559,
+          "predicted_winner": "Marshall",
+          "confidence": 0.10560095310211182
+        },
+        "fastai": {
+          "home_win_probability": -0.5528638958930969,
+          "away_win_probability": 1.552863895893097,
+          "predicted_winner": "Marshall",
+          "confidence": 2.105727791786194
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Marshall",
+        "confidence": 0.8204899077795588,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.302516"
+    },
+    {
+      "game_id": 401752911,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Oregon",
+      "away_team": "USC",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 6.064616868469905,
+          "predicted_winner": "Oregon",
+          "confidence": 0.30323084342349527
+        },
+        "xgb": {
+          "home_win_probability": 0.7694258689880371,
+          "away_win_probability": 0.2305741310119629,
+          "predicted_winner": "Oregon",
+          "confidence": 0.5388517379760742
+        },
+        "fastai": {
+          "home_win_probability": -1.5197674036026,
+          "away_win_probability": 2.5197674036026,
+          "predicted_winner": "USC",
+          "confidence": 4.0395348072052
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "USC",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.313237"
+    },
+    {
+      "game_id": 401754604,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Notre Dame",
+      "away_team": "Syracuse",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 29.418586141411424,
+          "predicted_winner": "Notre Dame",
+          "confidence": 1.0
+        },
+        "xgb": {
+          "home_win_probability": 0.9717877507209778,
+          "away_win_probability": 0.028212249279022217,
+          "predicted_winner": "Notre Dame",
+          "confidence": 0.9435755014419556
+        },
+        "fastai": {
+          "home_win_probability": -1.1427274942398071,
+          "away_win_probability": 2.142727494239807,
+          "predicted_winner": "Syracuse",
+          "confidence": 3.2854549884796143
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Syracuse",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.322337"
+    },
+    {
+      "game_id": 401752913,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Iowa",
+      "away_team": "Michigan State",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 17.23045876705425,
+          "predicted_winner": "Iowa",
+          "confidence": 0.8615229383527125
+        },
+        "xgb": {
+          "home_win_probability": 0.9331828355789185,
+          "away_win_probability": 0.06681716442108154,
+          "predicted_winner": "Iowa",
+          "confidence": 0.8663656711578369
+        },
+        "fastai": {
+          "home_win_probability": -2.3638534545898438,
+          "away_win_probability": 3.3638534545898438,
+          "predicted_winner": "Michigan State",
+          "confidence": 5.7277069091796875
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Michigan State",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.331339"
+    },
+    {
+      "game_id": 401754600,
+      "season": 2025,
+      "week": 13,
+      "home_team": "North Carolina",
+      "away_team": "Duke",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": -3.7709847847496434,
+          "predicted_winner": "Duke",
+          "confidence": 0.18854923923748218
+        },
+        "xgb": {
+          "home_win_probability": 0.5461161732673645,
+          "away_win_probability": 0.4538838267326355,
+          "predicted_winner": "North Carolina",
+          "confidence": 0.092232346534729
+        },
+        "fastai": {
+          "home_win_probability": -2.3117566108703613,
+          "away_win_probability": 3.3117566108703613,
+          "predicted_winner": "Duke",
+          "confidence": 5.623513221740723
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Duke",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.346981"
+    },
+    {
+      "game_id": 401752782,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Vanderbilt",
+      "away_team": "Kentucky",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 6.454078780801851,
+          "predicted_winner": "Vanderbilt",
+          "confidence": 0.32270393904009254
+        },
+        "xgb": {
+          "home_win_probability": 0.7381160855293274,
+          "away_win_probability": 0.2618839144706726,
+          "predicted_winner": "Vanderbilt",
+          "confidence": 0.4762321710586548
+        },
+        "fastai": {
+          "home_win_probability": -0.3620350956916809,
+          "away_win_probability": 1.362035095691681,
+          "predicted_winner": "Kentucky",
+          "confidence": 1.7240701913833618
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Kentucky",
+        "confidence": 0.8410021004940363,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.385820"
+    },
+    {
+      "game_id": 401752780,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Texas",
+      "away_team": "Arkansas",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 11.334686202469328,
+          "predicted_winner": "Texas",
+          "confidence": 0.5667343101234664
+        },
+        "xgb": {
+          "home_win_probability": 0.7074077129364014,
+          "away_win_probability": 0.29259228706359863,
+          "predicted_winner": "Texas",
+          "confidence": 0.41481542587280273
+        },
+        "fastai": {
+          "home_win_probability": -2.489579916000366,
+          "away_win_probability": 3.489579916000366,
+          "predicted_winner": "Arkansas",
+          "confidence": 5.979159832000732
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Arkansas",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.413335"
+    },
+    {
+      "game_id": 401761658,
+      "season": 2025,
+      "week": 13,
+      "home_team": "South Alabama",
+      "away_team": "Southern Miss",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 2.9033566713640653,
+          "predicted_winner": "South Alabama",
+          "confidence": 0.14516783356820326
+        },
+        "xgb": {
+          "home_win_probability": 0.4258163273334503,
+          "away_win_probability": 0.5741836726665497,
+          "predicted_winner": "Southern Miss",
+          "confidence": 0.14836734533309937
+        },
+        "fastai": {
+          "home_win_probability": -0.8304556012153625,
+          "away_win_probability": 1.8304556012153625,
+          "predicted_winner": "Southern Miss",
+          "confidence": 2.660911202430725
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Southern Miss",
+        "confidence": 0.9848154604440092,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.425633"
+    },
+    {
+      "game_id": 401752914,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Maryland",
+      "away_team": "Michigan",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": -10.339357546178881,
+          "predicted_winner": "Michigan",
+          "confidence": 0.5169678773089441
+        },
+        "xgb": {
+          "home_win_probability": 0.14786531031131744,
+          "away_win_probability": 0.8521346896886826,
+          "predicted_winner": "Michigan",
+          "confidence": 0.7042693793773651
+        },
+        "fastai": {
+          "home_win_probability": -1.255123496055603,
+          "away_win_probability": 2.255123496055603,
+          "predicted_winner": "Michigan",
+          "confidence": 3.510246992111206
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Michigan",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.443120"
+    },
+    {
+      "game_id": 401756960,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Utah",
+      "away_team": "Kansas State",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 10.606843036990625,
+          "predicted_winner": "Utah",
+          "confidence": 0.5303421518495313
+        },
+        "xgb": {
+          "home_win_probability": 0.9665971994400024,
+          "away_win_probability": 0.03340280055999756,
+          "predicted_winner": "Utah",
+          "confidence": 0.9331943988800049
+        },
+        "fastai": {
+          "home_win_probability": -0.7880180478096008,
+          "away_win_probability": 1.7880180478096008,
+          "predicted_winner": "Kansas State",
+          "confidence": 2.5760360956192017
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Kansas State",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.455856"
+    },
+    {
+      "game_id": 401761660,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Troy",
+      "away_team": "Georgia State",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 8.11153156945505,
+          "predicted_winner": "Troy",
+          "confidence": 0.40557657847275247
+        },
+        "xgb": {
+          "home_win_probability": 0.6627533435821533,
+          "away_win_probability": 0.3372466564178467,
+          "predicted_winner": "Troy",
+          "confidence": 0.32550668716430664
+        },
+        "fastai": {
+          "home_win_probability": -1.0561374425888062,
+          "away_win_probability": 2.056137442588806,
+          "predicted_winner": "Georgia State",
+          "confidence": 3.1122748851776123
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Georgia State",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.465561"
+    },
+    {
+      "game_id": 401756959,
+      "season": 2025,
+      "week": 13,
+      "home_team": "UCF",
+      "away_team": "Oklahoma State",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 13.223943882194213,
+          "predicted_winner": "UCF",
+          "confidence": 0.6611971941097107
+        },
+        "xgb": {
+          "home_win_probability": 0.8271408081054688,
+          "away_win_probability": 0.17285919189453125,
+          "predicted_winner": "UCF",
+          "confidence": 0.6542816162109375
+        },
+        "fastai": {
+          "home_win_probability": -0.692573606967926,
+          "away_win_probability": 1.692573606967926,
+          "predicted_winner": "Oklahoma State",
+          "confidence": 2.385147213935852
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Oklahoma State",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.475706"
+    },
+    {
+      "game_id": 401756957,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Houston",
+      "away_team": "TCU",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": -2.554206757711192,
+          "predicted_winner": "TCU",
+          "confidence": 0.1277103378855596
+        },
+        "xgb": {
+          "home_win_probability": 0.6844421625137329,
+          "away_win_probability": 0.3155578374862671,
+          "predicted_winner": "Houston",
+          "confidence": 0.3688843250274658
+        },
+        "fastai": {
+          "home_win_probability": -2.3251850605010986,
+          "away_win_probability": 3.3251850605010986,
+          "predicted_winner": "TCU",
+          "confidence": 5.650370121002197
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "TCU",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.484570"
+    },
+    {
+      "game_id": 401752779,
+      "season": 2025,
+      "week": 13,
+      "home_team": "South Carolina",
+      "away_team": "Coastal Carolina",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 13.440485788977824,
+          "predicted_winner": "South Carolina",
+          "confidence": 0.6720242894488913
+        },
+        "xgb": {
+          "home_win_probability": 0.9284789562225342,
+          "away_win_probability": 0.07152104377746582,
+          "predicted_winner": "South Carolina",
+          "confidence": 0.8569579124450684
+        },
+        "fastai": {
+          "home_win_probability": -0.9392684102058411,
+          "away_win_probability": 1.939268410205841,
+          "predicted_winner": "Coastal Carolina",
+          "confidence": 2.878536820411682
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Coastal Carolina",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.494014"
+    },
+    {
+      "game_id": 401754605,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Clemson",
+      "away_team": "Furman",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 13.07110039311707,
+          "predicted_winner": "Clemson",
+          "confidence": 0.6535550196558535
+        },
+        "xgb": {
+          "home_win_probability": 0.9338353276252747,
+          "away_win_probability": 0.06616467237472534,
+          "predicted_winner": "Clemson",
+          "confidence": 0.8676706552505493
+        },
+        "fastai": {
+          "home_win_probability": 0.9401741623878479,
+          "away_win_probability": 0.0598258376121521,
+          "predicted_winner": "Clemson",
+          "confidence": 0.8803483247756958
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Clemson",
+        "confidence": 0.8005246665606996,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.502843"
+    },
+    {
+      "game_id": 401761659,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Texas State",
+      "away_team": "UL Monroe",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 18.27331982448264,
+          "predicted_winner": "Texas State",
+          "confidence": 0.9136659912241321
+        },
+        "xgb": {
+          "home_win_probability": 0.8683338761329651,
+          "away_win_probability": 0.1316661238670349,
+          "predicted_winner": "Texas State",
+          "confidence": 0.7366677522659302
+        },
+        "fastai": {
+          "home_win_probability": -0.7146270871162415,
+          "away_win_probability": 1.7146270871162415,
+          "predicted_winner": "UL Monroe",
+          "confidence": 2.429254174232483
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "UL Monroe",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.512008"
+    },
+    {
+      "game_id": 401754601,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Georgia Tech",
+      "away_team": "Pittsburgh",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 0.7106362011731377,
+          "predicted_winner": "Georgia Tech",
+          "confidence": 0.03553181005865689
+        },
+        "xgb": {
+          "home_win_probability": 0.28516820073127747,
+          "away_win_probability": 0.7148317992687225,
+          "predicted_winner": "Pittsburgh",
+          "confidence": 0.42966359853744507
+        },
+        "fastai": {
+          "home_win_probability": -0.06108052656054497,
+          "away_win_probability": 1.061080526560545,
+          "predicted_winner": "Pittsburgh",
+          "confidence": 1.12216105312109
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Pittsburgh",
+        "confidence": 0.5291188205723972,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.523619"
+    },
+    {
+      "game_id": 401760415,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Air Force",
+      "away_team": "New Mexico",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 1.8852616383407579,
+          "predicted_winner": "Air Force",
+          "confidence": 0.09426308191703789
+        },
+        "xgb": {
+          "home_win_probability": 0.45957210659980774,
+          "away_win_probability": 0.5404278934001923,
+          "predicted_winner": "New Mexico",
+          "confidence": 0.08085578680038452
+        },
+        "fastai": {
+          "home_win_probability": -0.30000001192092896,
+          "away_win_probability": 1.300000011920929,
+          "predicted_winner": "New Mexico",
+          "confidence": 1.600000023841858
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "New Mexico",
+        "confidence": 0.5917062975197601,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.533957"
+    },
+    {
+      "game_id": 401752908,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Penn State",
+      "away_team": "Nebraska",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 11.521015033241568,
+          "predicted_winner": "Penn State",
+          "confidence": 0.5760507516620784
+        },
+        "xgb": {
+          "home_win_probability": 0.6794769763946533,
+          "away_win_probability": 0.3205230236053467,
+          "predicted_winner": "Penn State",
+          "confidence": 0.35895395278930664
+        },
+        "fastai": {
+          "home_win_probability": -1.3631457090377808,
+          "away_win_probability": 2.3631457090377808,
+          "predicted_winner": "Nebraska",
+          "confidence": 3.7262914180755615
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Nebraska",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.544311"
+    },
+    {
+      "game_id": 401760416,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Boise State",
+      "away_team": "Colorado State",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 12.24706620941825,
+          "predicted_winner": "Boise State",
+          "confidence": 0.6123533104709125
+        },
+        "xgb": {
+          "home_win_probability": 0.9258753061294556,
+          "away_win_probability": 0.07412469387054443,
+          "predicted_winner": "Boise State",
+          "confidence": 0.8517506122589111
+        },
+        "fastai": {
+          "home_win_probability": -0.06861956417560577,
+          "away_win_probability": 1.0686195641756058,
+          "predicted_winner": "Colorado State",
+          "confidence": 1.1372391283512115
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Boise State",
+        "confidence": 0.8671143503603451,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.553157"
+    },
+    {
+      "game_id": 401752915,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Wisconsin",
+      "away_team": "Illinois",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": -1.0585376730122462,
+          "predicted_winner": "Illinois",
+          "confidence": 0.05292688365061231
+        },
+        "xgb": {
+          "home_win_probability": 0.24940727651119232,
+          "away_win_probability": 0.7505927234888077,
+          "predicted_winner": "Illinois",
+          "confidence": 0.5011854469776154
+        },
+        "fastai": {
+          "home_win_probability": -2.0155115127563477,
+          "away_win_probability": 3.0155115127563477,
+          "predicted_winner": "Illinois",
+          "confidence": 5.031023025512695
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Illinois",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.561724"
+    },
+    {
+      "game_id": 401754599,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Stanford",
+      "away_team": "California",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": -2.928557394766422,
+          "predicted_winner": "California",
+          "confidence": 0.1464278697383211
+        },
+        "xgb": {
+          "home_win_probability": 0.5137637257575989,
+          "away_win_probability": 0.4862362742424011,
+          "predicted_winner": "Stanford",
+          "confidence": 0.027527451515197754
+        },
+        "fastai": {
+          "home_win_probability": -1.4059747457504272,
+          "away_win_probability": 2.4059747457504272,
+          "predicted_winner": "California",
+          "confidence": 3.8119494915008545
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "California",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.571466"
+    },
+    {
+      "game_id": 401752775,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Florida",
+      "away_team": "Tennessee",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": -5.561940143563348,
+          "predicted_winner": "Tennessee",
+          "confidence": 0.2780970071781674
+        },
+        "xgb": {
+          "home_win_probability": 0.492438942193985,
+          "away_win_probability": 0.507561057806015,
+          "predicted_winner": "Tennessee",
+          "confidence": 0.01512211561203003
+        },
+        "fastai": {
+          "home_win_probability": -1.1958035230636597,
+          "away_win_probability": 2.1958035230636597,
+          "predicted_winner": "Tennessee",
+          "confidence": 3.3916070461273193
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Tennessee",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.580816"
+    },
+    {
+      "game_id": 401752777,
+      "season": 2025,
+      "week": 13,
+      "home_team": "LSU",
+      "away_team": "Western Kentucky",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 13.075364443938888,
+          "predicted_winner": "LSU",
+          "confidence": 0.6537682221969444
+        },
+        "xgb": {
+          "home_win_probability": 0.946617603302002,
+          "away_win_probability": 0.05338239669799805,
+          "predicted_winner": "LSU",
+          "confidence": 0.8932352066040039
+        },
+        "fastai": {
+          "home_win_probability": -1.4714301824569702,
+          "away_win_probability": 2.47143018245697,
+          "predicted_winner": "Western Kentucky",
+          "confidence": 3.9428603649139404
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Western Kentucky",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.589215"
+    },
+    {
+      "game_id": 401756955,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Cincinnati",
+      "away_team": "BYU",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": -3.642700402435011,
+          "predicted_winner": "BYU",
+          "confidence": 0.18213502012175056
+        },
+        "xgb": {
+          "home_win_probability": 0.2759641706943512,
+          "away_win_probability": 0.7240358293056488,
+          "predicted_winner": "BYU",
+          "confidence": 0.4480716586112976
+        },
+        "fastai": {
+          "home_win_probability": -1.07902991771698,
+          "away_win_probability": 2.07902991771698,
+          "predicted_winner": "BYU",
+          "confidence": 3.15805983543396
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "BYU",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.598230"
+    },
+    {
+      "game_id": 401756956,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Colorado",
+      "away_team": "Arizona State",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": -4.159689786758449,
+          "predicted_winner": "Arizona State",
+          "confidence": 0.20798448933792243
+        },
+        "xgb": {
+          "home_win_probability": 0.3090137243270874,
+          "away_win_probability": 0.6909862756729126,
+          "predicted_winner": "Arizona State",
+          "confidence": 0.3819725513458252
+        },
+        "fastai": {
+          "home_win_probability": -0.7366779446601868,
+          "away_win_probability": 1.7366779446601868,
+          "predicted_winner": "Arizona State",
+          "confidence": 2.4733558893203735
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Arizona State",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.607240"
+    },
+    {
+      "game_id": 401760417,
+      "season": 2025,
+      "week": 13,
+      "home_team": "Fresno State",
+      "away_team": "Utah State",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 4.644889467315309,
+          "predicted_winner": "Fresno State",
+          "confidence": 0.23224447336576545
+        },
+        "xgb": {
+          "home_win_probability": 0.44555819034576416,
+          "away_win_probability": 0.5544418096542358,
+          "predicted_winner": "Utah State",
+          "confidence": 0.10888361930847168
+        },
+        "fastai": {
+          "home_win_probability": -2.3336968421936035,
+          "away_win_probability": 3.3336968421936035,
+          "predicted_winner": "Utah State",
+          "confidence": 5.667393684387207
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Utah State",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.616045"
+    },
+    {
+      "game_id": 401760420,
+      "season": 2025,
+      "week": 13,
+      "home_team": "San Diego State",
+      "away_team": "San Jos\u00e9 State",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": 9.031312993318885,
+          "predicted_winner": "San Diego State",
+          "confidence": 0.45156564966594426
+        },
+        "xgb": {
+          "home_win_probability": 0.7435896992683411,
+          "away_win_probability": 0.25641030073165894,
+          "predicted_winner": "San Diego State",
+          "confidence": 0.48717939853668213
+        },
+        "fastai": {
+          "home_win_probability": -1.658434510231018,
+          "away_win_probability": 2.658434510231018,
+          "predicted_winner": "San Jos\u00e9 State",
+          "confidence": 4.316869020462036
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "San Jos\u00e9 State",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.624644"
+    },
+    {
+      "game_id": 401752910,
+      "season": 2025,
+      "week": 13,
+      "home_team": "UCLA",
+      "away_team": "Washington",
+      "model_predictions": {
+        "ridge": {
+          "predicted_margin": -8.959549625212311,
+          "predicted_winner": "Washington",
+          "confidence": 0.44797748126061554
+        },
+        "xgb": {
+          "home_win_probability": 0.14055563509464264,
+          "away_win_probability": 0.8594443649053574,
+          "predicted_winner": "Washington",
+          "confidence": 0.7188887298107147
+        },
+        "fastai": {
+          "home_win_probability": -1.2120808362960815,
+          "away_win_probability": 2.2120808362960815,
+          "predicted_winner": "Washington",
+          "confidence": 3.424161672592163
+        }
+      },
+      "ensemble_prediction": {
+        "method": "weighted_average",
+        "predicted_winner": "Washington",
+        "confidence": 1.0,
+        "supporting_models": [
+          "ridge",
+          "xgb",
+          "fastai"
+        ]
+      },
+      "generation_time": "2025-11-20T20:51:11.633440"
+    }
+  ],
+  "performance": {
+    "model_usage": {
+      "ridge": 47,
+      "xgb": 47,
+      "fastai": 47
+    },
+    "confidence_distribution": {
+      "mean": 0.9160651060421839,
+      "std": 0.156401706270685,
+      "min": 0.3549440867752121,
+      "max": 1.0,
+      "high_confidence_games": 41,
+      "low_confidence_games": 0
+    },
+    "agreement_analysis": {
+      "mean_agreement": 0.4255319148936171,
+      "perfect_agreement_games": 0,
+      "disagreement_games": 34
+    }
+  }
+}

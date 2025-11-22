@@ -1,0 +1,191 @@
+"""GraphQL client helpers for CollegeFootballData."""
+
+from __future__ import annotations
+
+import asyncio
+import os
+from dataclasses import dataclass
+from typing import Any, AsyncIterator, Callable, Dict, Optional
+
+from gql import Client, gql
+from gql.transport.requests import RequestsHTTPTransport
+from gql.transport.websockets import WebsocketsTransport
+from tenacity import retry, stop_after_attempt, wait_exponential_jitter
+
+DEFAULT_GRAPHQL_ENDPOINT = os.getenv(
+    "CFBD_GRAPHQL_ENDPOINT",
+    "https://graphql.collegefootballdata.com/v1/graphql",
+)
+
+
+def _build_headers(api_key: str) -> Dict[str, str]:
+    return {
+        "Authorization": f"Bearer {api_key}",
+        "User-Agent": "ScriptOhio2.0/CFBD-GraphQL",
+    }
+
+
+class CFBDGraphQLClient:
+    """Synchronous helper around gql.Client for canonical queries."""
+
+    def __init__(
+        self,
+        *,
+        api_key: Optional[str] = None,
+        endpoint: str = DEFAULT_GRAPHQL_ENDPOINT,
+        timeout: int = 30,
+        fetch_schema: bool = False,
+    ) -> None:
+        token = api_key or os.getenv("CFBD_API_KEY")
+        if not token:
+            raise ValueError("CFBD_API_KEY is required for GraphQL access.")
+
+        self._endpoint = endpoint
+        self._transport = RequestsHTTPTransport(
+            url=self._endpoint,
+            headers=_build_headers(token),
+            timeout=timeout,
+        )
+        self._client = Client(
+            transport=self._transport,
+            fetch_schema_from_transport=fetch_schema,
+        )
+
+    @retry(wait=wait_exponential_jitter(initial=1, max=8), stop=stop_after_attempt(5))
+    def execute(self, query: str, variables: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Execute an arbitrary GraphQL query with retry resilience."""
+
+        document = gql(query)
+        return self._client.execute(document, variable_values=variables)
+
+    def fetch_games(
+        self,
+        *,
+        season: int,
+        week: Optional[int] = None,
+        team: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        query = """
+        query Games($season: Int!, $week: smallint, $team: String) {
+          game(
+            where: {
+              season: { _eq: $season }
+              _and: [
+                { week: { _eq: $week } }
+                { _or: [{ homeTeam: { _eq: $team } }, { awayTeam: { _eq: $team } }] }
+              ]
+            }
+          ) {
+            id
+            week
+            homeTeam
+            awayTeam
+            homePoints
+            awayPoints
+            startDate
+            seasonType
+          }
+        }
+        """
+        variables: Dict[str, Any] = {"season": season}
+        if week is not None:
+            variables["week"] = week
+        if team is not None:
+            variables["team"] = team
+
+        return self.execute(query, variables)
+
+    def fetch_team_talent(self, *, year: int) -> Dict[str, Any]:
+        query = """
+        query TeamTalent($year: smallint!) {
+          teamTalent(where: { year: { _eq: $year } }) {
+            team { teamId school conference }
+            talent
+            year
+          }
+        }
+        """
+        return self.execute(query, {"year": year})
+
+    def fetch_recruits(self, *, year: int, limit: int = 25) -> Dict[str, Any]:
+        query = """
+        query Recruits($year: smallint!, $limit: Int!) {
+          recruit(
+            where: { year: { _eq: $year } }
+            limit: $limit
+            order_by: [{ rating: desc }, { stars: desc }]
+          ) {
+            id
+            name
+            stars
+            rating
+            position { position positionGroup }
+            recruitType
+            overallRank
+            college { school conference }
+          }
+        }
+        """
+        return self.execute(query, {"year": year, "limit": limit})
+
+
+@dataclass(slots=True)
+class GraphQLSubscriptionConfig:
+    api_key: Optional[str] = None
+    endpoint: str = DEFAULT_GRAPHQL_ENDPOINT.replace("https://", "wss://")
+    ping_interval: float = 20.0
+
+    def resolve_api_key(self) -> str:
+        key = self.api_key or os.getenv("CFBD_API_KEY")
+        if not key:
+            raise ValueError("CFBD_API_KEY is required for GraphQL subscriptions.")
+        return key
+
+
+class CFBDGraphQLSubscriptionManager:
+    """Async subscription scaffold for GraphQL streams (e.g., live plays)."""
+
+    def __init__(self, config: Optional[GraphQLSubscriptionConfig] = None) -> None:
+        cfg = config or GraphQLSubscriptionConfig()
+        token = cfg.resolve_api_key()
+        self._transport = WebsocketsTransport(
+            url=cfg.endpoint,
+            headers=_build_headers(token),
+            ping_interval=cfg.ping_interval,
+        )
+
+    async def subscribe(
+        self,
+        query: str,
+        variables: Optional[Dict[str, Any]] = None,
+    ) -> AsyncIterator[Dict[str, Any]]:
+        """Async generator that yields subscription payloads."""
+
+        gql_query = gql(query)
+        async with Client(
+            transport=self._transport,
+            fetch_schema_from_transport=False,
+        ) as session:
+            async for result in session.subscribe(gql_query, variable_values=variables):
+                yield result
+
+    def subscribe_blocking(
+        self,
+        query: str,
+        variables: Optional[Dict[str, Any]] = None,
+        callback: Optional[Callable[[Dict[str, Any]], None]] = None,
+        max_events: Optional[int] = None,
+    ) -> None:
+        """Convenience blocking wrapper for environments that are not async-native."""
+
+        async def _runner() -> None:
+            count = 0
+            async for payload in self.subscribe(query, variables):
+                if callback:
+                    callback(payload)
+                count += 1
+                if max_events is not None and count >= max_events:
+                    break
+
+        asyncio.run(_runner())
+

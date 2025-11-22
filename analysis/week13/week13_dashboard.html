@@ -1,0 +1,440 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Week 13 Prediction Dashboard</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <style>
+            body { padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+            .card { margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+            .high-conf { background-color: #d4edda; }
+            .low-conf { background-color: #f8d7da; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="mb-4">Week 13 Prediction Dashboard</h1>
+            <p class="text-muted">Generated: 2025-11-19 21:04</p>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.3.0.min.js" integrity="sha256-bO3dS6yCpk9aK4gUpNELtCiDeSYvGYnK7jFI58NQnHI=" crossorigin="anonymous"></script>                <div id="7620de45-ef7a-47b3-ba12-e2acfc96d3d7" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("7620de45-ef7a-47b3-ba12-e2acfc96d3d7")) {                    Plotly.newPlot(                        "7620de45-ef7a-47b3-ba12-e2acfc96d3d7",                        [{"bingroup":"x","hovertemplate":"Confidence Score (0.5-1.0)=%{x}\u003cbr\u003ecount=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"","marker":{"color":"#1f77b4","pattern":{"shape":""}},"name":"","nbinsx":20,"orientation":"v","showlegend":false,"x":{"dtype":"f8","bdata":"eLPSeMgP3T8bq6+EdUXfP2\u002fDzTpwmuA\u002fuBZ6RBMF5j\u002fAVl8ePQfmPyg+IqkL3+E\u002fCCslfVqD1D8zmVFFoy\u002fgP9d9peVtbuI\u002fKFElaKeR3j\u002foPw5i\u002f8PnP5Ur8DkwG+U\u002f3L5HSBBJ3z\u002fjKaK66NDWP1sbtKK7teA\u002fq+VVMsFw2z\u002fd+zJioEDmPwyTI3KQOeM\u002f5Vx6VcZ02j9\u002fF1abKebYP4nNOdvPbeY\u002f7UxCbRW+6T9dAbHS9mbYPxFl\u002fbNj8ts\u002f6\u002f7\u002f4XSk4z+A0TxgT8bXP6gBJpNCOd4\u002fYH9f0gjb5z\u002fb+ZFkjDzfPw\u002f6k6yWv+I\u002foGOlZqXV1z+DxUTmqKjeP1uznHC1j+E\u002fixZWq5MH4j\u002fEQd079mrjP5zOgBJLE8k\u002fwYclQfEN5D8ornwMgyfWP+E8LG29B9E\u002flIk7MIrlyT879+qUiGjbP5dhKx6Zmt0\u002fJbeWotfS0j+GDIgz2VvSPxXiosKSUOE\u002f38ypn9OA1D8pVSQ6lQfhPw=="},"xaxis":"x","yaxis":"y","type":"histogram"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Confidence Score (0.5-1.0)"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"count"}},"legend":{"tracegroupgap":0},"title":{"text":"Prediction Confidence Distribution"},"barmode":"relative","bargap":0.1},                        {"responsive": true}                    )                };            </script>        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div>                            <div id="2b83ad38-8f49-4a43-bdef-446c3e798b1d" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("2b83ad38-8f49-4a43-bdef-446c3e798b1d")) {                    Plotly.newPlot(                        "2b83ad38-8f49-4a43-bdef-446c3e798b1d",                        [{"customdata":[["Michigan State"],["Utah"],["Rutgers"],["Notre Dame"],["Eastern Illinois"],["Miami"],["Texas A&M"],["Georgia"],["Nebraska"],["Texas"],["Pittsburgh"],["Mercer"],["UCF"],["Missouri"],["Texas State"]],"hovertemplate":"Confidence=%{marker.color}\u003cbr\u003eGame=%{y}\u003cbr\u003ewinner=%{customdata[0]}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"","marker":{"color":{"dtype":"f8","bdata":"7UxCbRW+6T9gf1\u002fSCNvnP+g\u002fDmL\u002fw+c\u002fic05289t5j\u002fd+zJioEDmP8BWXx49B+Y\u002fuBZ6RBMF5j+VK\u002fA5MBvlP8GHJUHxDeQ\u002f6\u002f7\u002f4XSk4z\u002fEQd079mrjPwyTI3KQOeM\u002fD\u002fqTrJa\u002f4j\u002fXfaXlbW7iP4sWVquTB+I\u002f"},"coloraxis":"coloraxis","pattern":{"shape":""}},"name":"","orientation":"h","showlegend":false,"textposition":"auto","x":{"dtype":"f8","bdata":"7UxCbRW+6T9gf1\u002fSCNvnP+g\u002fDmL\u002fw+c\u002fic05289t5j\u002fd+zJioEDmP8BWXx49B+Y\u002fuBZ6RBMF5j+VK\u002fA5MBvlP8GHJUHxDeQ\u002f6\u002f7\u002f4XSk4z\u002fEQd079mrjPwyTI3KQOeM\u002fD\u002fqTrJa\u002f4j\u002fXfaXlbW7iP4sWVquTB+I\u002f"},"xaxis":"x","y":["Michigan State @ Iowa","Kansas State @ Utah","Rutgers @ Ohio State","Syracuse @ Notre Dame","Eastern Illinois @ Alabama","Miami @ Virginia Tech","Samford @ Texas A&M","Charlotte @ Georgia","Nebraska @ Penn State","Arkansas @ Texas","Pittsburgh @ Georgia Tech","Mercer @ Auburn","Oklahoma State @ UCF","Missouri @ Oklahoma","UL Monroe @ Texas State"],"yaxis":"y","type":"bar"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Confidence"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Game"},"categoryorder":"total ascending"},"coloraxis":{"colorbar":{"title":{"text":"Confidence"}},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"legend":{"tracegroupgap":0},"title":{"text":"Top 15 High Confidence Predictions"},"barmode":"relative"},                        {"responsive": true}                    )                };            </script>        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Detailed Predictions Table</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table border="1" class="dataframe table table-striped table-hover">
+  <thead>
+    <tr style="text-align: right;">
+      <th>game</th>
+      <th>winner</th>
+      <th>confidence</th>
+      <th>home_team</th>
+      <th>away_team</th>
+      <th>home_win_prob</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Michigan State @ Iowa</td>
+      <td>Michigan State</td>
+      <td>0.804</td>
+      <td>Iowa</td>
+      <td>Michigan State</td>
+      <td>0.094</td>
+    </tr>
+    <tr>
+      <td>Kansas State @ Utah</td>
+      <td>Utah</td>
+      <td>0.745</td>
+      <td>Utah</td>
+      <td>Kansas State</td>
+      <td>0.075</td>
+    </tr>
+    <tr>
+      <td>Rutgers @ Ohio State</td>
+      <td>Rutgers</td>
+      <td>0.743</td>
+      <td>Ohio State</td>
+      <td>Rutgers</td>
+      <td>0.171</td>
+    </tr>
+    <tr>
+      <td>Syracuse @ Notre Dame</td>
+      <td>Notre Dame</td>
+      <td>0.701</td>
+      <td>Notre Dame</td>
+      <td>Syracuse</td>
+      <td>0.170</td>
+    </tr>
+    <tr>
+      <td>Eastern Illinois @ Alabama</td>
+      <td>Eastern Illinois</td>
+      <td>0.695</td>
+      <td>Alabama</td>
+      <td>Eastern Illinois</td>
+      <td>0.084</td>
+    </tr>
+    <tr>
+      <td>Miami @ Virginia Tech</td>
+      <td>Miami</td>
+      <td>0.688</td>
+      <td>Virginia Tech</td>
+      <td>Miami</td>
+      <td>0.104</td>
+    </tr>
+    <tr>
+      <td>Samford @ Texas A&amp;M</td>
+      <td>Texas A&amp;M</td>
+      <td>0.688</td>
+      <td>Texas A&amp;M</td>
+      <td>Samford</td>
+      <td>0.064</td>
+    </tr>
+    <tr>
+      <td>Charlotte @ Georgia</td>
+      <td>Georgia</td>
+      <td>0.660</td>
+      <td>Georgia</td>
+      <td>Charlotte</td>
+      <td>0.123</td>
+    </tr>
+    <tr>
+      <td>Nebraska @ Penn State</td>
+      <td>Nebraska</td>
+      <td>0.627</td>
+      <td>Penn State</td>
+      <td>Nebraska</td>
+      <td>0.094</td>
+    </tr>
+    <tr>
+      <td>Arkansas @ Texas</td>
+      <td>Texas</td>
+      <td>0.614</td>
+      <td>Texas</td>
+      <td>Arkansas</td>
+      <td>0.123</td>
+    </tr>
+    <tr>
+      <td>Pittsburgh @ Georgia Tech</td>
+      <td>Pittsburgh</td>
+      <td>0.607</td>
+      <td>Georgia Tech</td>
+      <td>Pittsburgh</td>
+      <td>0.081</td>
+    </tr>
+    <tr>
+      <td>Mercer @ Auburn</td>
+      <td>Mercer</td>
+      <td>0.601</td>
+      <td>Auburn</td>
+      <td>Mercer</td>
+      <td>0.064</td>
+    </tr>
+    <tr>
+      <td>Oklahoma State @ UCF</td>
+      <td>UCF</td>
+      <td>0.586</td>
+      <td>UCF</td>
+      <td>Oklahoma State</td>
+      <td>0.248</td>
+    </tr>
+    <tr>
+      <td>Missouri @ Oklahoma</td>
+      <td>Missouri</td>
+      <td>0.576</td>
+      <td>Oklahoma</td>
+      <td>Missouri</td>
+      <td>0.103</td>
+    </tr>
+    <tr>
+      <td>UL Monroe @ Texas State</td>
+      <td>Texas State</td>
+      <td>0.563</td>
+      <td>Texas State</td>
+      <td>UL Monroe</td>
+      <td>0.156</td>
+    </tr>
+    <tr>
+      <td>Minnesota @ Northwestern</td>
+      <td>Minnesota</td>
+      <td>0.558</td>
+      <td>Northwestern</td>
+      <td>Minnesota</td>
+      <td>0.097</td>
+    </tr>
+    <tr>
+      <td>Furman @ Clemson</td>
+      <td>Furman</td>
+      <td>0.549</td>
+      <td>Clemson</td>
+      <td>Furman</td>
+      <td>0.064</td>
+    </tr>
+    <tr>
+      <td>Utah State @ Fresno State</td>
+      <td>Fresno State</td>
+      <td>0.541</td>
+      <td>Fresno State</td>
+      <td>Utah State</td>
+      <td>0.168</td>
+    </tr>
+    <tr>
+      <td>Washington @ UCLA</td>
+      <td>Washington</td>
+      <td>0.532</td>
+      <td>UCLA</td>
+      <td>Washington</td>
+      <td>0.153</td>
+    </tr>
+    <tr>
+      <td>Washington State @ James Madison</td>
+      <td>Washington State</td>
+      <td>0.522</td>
+      <td>James Madison</td>
+      <td>Washington State</td>
+      <td>0.112</td>
+    </tr>
+    <tr>
+      <td>Hawai'i @ UNLV</td>
+      <td>Hawai'i</td>
+      <td>0.519</td>
+      <td>UNLV</td>
+      <td>Hawai'i</td>
+      <td>0.096</td>
+    </tr>
+    <tr>
+      <td>Louisville @ SMU</td>
+      <td>Louisville</td>
+      <td>0.506</td>
+      <td>SMU</td>
+      <td>Louisville</td>
+      <td>0.071</td>
+    </tr>
+    <tr>
+      <td>Old Dominion @ Georgia Southern</td>
+      <td>Old Dominion</td>
+      <td>0.489</td>
+      <td>Georgia Southern</td>
+      <td>Old Dominion</td>
+      <td>0.165</td>
+    </tr>
+    <tr>
+      <td>Florida State @ NC State</td>
+      <td>Florida State</td>
+      <td>0.489</td>
+      <td>NC State</td>
+      <td>Florida State</td>
+      <td>0.162</td>
+    </tr>
+    <tr>
+      <td>Georgia State @ Troy</td>
+      <td>Troy</td>
+      <td>0.488</td>
+      <td>Troy</td>
+      <td>Georgia State</td>
+      <td>0.245</td>
+    </tr>
+    <tr>
+      <td>Coastal Carolina @ South Carolina</td>
+      <td>Coastal Carolina</td>
+      <td>0.479</td>
+      <td>South Carolina</td>
+      <td>Coastal Carolina</td>
+      <td>0.192</td>
+    </tr>
+    <tr>
+      <td>Delaware @ Wake Forest</td>
+      <td>Wake Forest</td>
+      <td>0.478</td>
+      <td>Wake Forest</td>
+      <td>Delaware</td>
+      <td>0.217</td>
+    </tr>
+    <tr>
+      <td>Michigan @ Maryland</td>
+      <td>Michigan</td>
+      <td>0.472</td>
+      <td>Maryland</td>
+      <td>Michigan</td>
+      <td>0.062</td>
+    </tr>
+    <tr>
+      <td>Western Kentucky @ LSU</td>
+      <td>LSU</td>
+      <td>0.463</td>
+      <td>LSU</td>
+      <td>Western Kentucky</td>
+      <td>0.187</td>
+    </tr>
+    <tr>
+      <td>Louisiana @ Arkansas State</td>
+      <td>Louisiana</td>
+      <td>0.454</td>
+      <td>Arkansas State</td>
+      <td>Louisiana</td>
+      <td>0.122</td>
+    </tr>
+    <tr>
+      <td>Kentucky @ Vanderbilt</td>
+      <td>Kentucky</td>
+      <td>0.437</td>
+      <td>Vanderbilt</td>
+      <td>Kentucky</td>
+      <td>0.067</td>
+    </tr>
+    <tr>
+      <td>Nevada @ Wyoming</td>
+      <td>Wyoming</td>
+      <td>0.429</td>
+      <td>Wyoming</td>
+      <td>Nevada</td>
+      <td>0.184</td>
+    </tr>
+    <tr>
+      <td>Tennessee @ Florida</td>
+      <td>Tennessee</td>
+      <td>0.428</td>
+      <td>Florida</td>
+      <td>Tennessee</td>
+      <td>0.132</td>
+    </tr>
+    <tr>
+      <td>Marshall @ App State</td>
+      <td>Marshall</td>
+      <td>0.413</td>
+      <td>App State</td>
+      <td>Marshall</td>
+      <td>0.250</td>
+    </tr>
+    <tr>
+      <td>USC @ Oregon</td>
+      <td>USC</td>
+      <td>0.389</td>
+      <td>Oregon</td>
+      <td>USC</td>
+      <td>0.136</td>
+    </tr>
+    <tr>
+      <td>Duke @ North Carolina</td>
+      <td>Duke</td>
+      <td>0.381</td>
+      <td>North Carolina</td>
+      <td>Duke</td>
+      <td>0.176</td>
+    </tr>
+    <tr>
+      <td>TCU @ Houston</td>
+      <td>TCU</td>
+      <td>0.372</td>
+      <td>Houston</td>
+      <td>TCU</td>
+      <td>0.096</td>
+    </tr>
+    <tr>
+      <td>Southern Miss @ South Alabama</td>
+      <td>Southern Miss</td>
+      <td>0.371</td>
+      <td>South Alabama</td>
+      <td>Southern Miss</td>
+      <td>0.312</td>
+    </tr>
+    <tr>
+      <td>Baylor @ Arizona</td>
+      <td>Baylor</td>
+      <td>0.357</td>
+      <td>Arizona</td>
+      <td>Baylor</td>
+      <td>0.096</td>
+    </tr>
+    <tr>
+      <td>Colorado State @ Boise State</td>
+      <td>Boise State</td>
+      <td>0.346</td>
+      <td>Boise State</td>
+      <td>Colorado State</td>
+      <td>0.326</td>
+    </tr>
+    <tr>
+      <td>Kansas @ Iowa State</td>
+      <td>Kansas</td>
+      <td>0.321</td>
+      <td>Iowa State</td>
+      <td>Kansas</td>
+      <td>0.099</td>
+    </tr>
+    <tr>
+      <td>San José State @ San Diego State</td>
+      <td>San José State</td>
+      <td>0.320</td>
+      <td>San Diego State</td>
+      <td>San José State</td>
+      <td>0.275</td>
+    </tr>
+    <tr>
+      <td>BYU @ Cincinnati</td>
+      <td>BYU</td>
+      <td>0.294</td>
+      <td>Cincinnati</td>
+      <td>BYU</td>
+      <td>0.169</td>
+    </tr>
+    <tr>
+      <td>Arizona State @ Colorado</td>
+      <td>Arizona State</td>
+      <td>0.287</td>
+      <td>Colorado</td>
+      <td>Arizona State</td>
+      <td>0.188</td>
+    </tr>
+    <tr>
+      <td>Illinois @ Wisconsin</td>
+      <td>Illinois</td>
+      <td>0.266</td>
+      <td>Wisconsin</td>
+      <td>Illinois</td>
+      <td>0.178</td>
+    </tr>
+    <tr>
+      <td>California @ Stanford</td>
+      <td>California</td>
+      <td>0.202</td>
+      <td>Stanford</td>
+      <td>California</td>
+      <td>0.335</td>
+    </tr>
+    <tr>
+      <td>New Mexico @ Air Force</td>
+      <td>Air Force</td>
+      <td>0.196</td>
+      <td>Air Force</td>
+      <td>New Mexico</td>
+      <td>0.387</td>
+    </tr>
+  </tbody>
+</table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+    

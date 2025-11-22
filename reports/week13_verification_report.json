@@ -1,0 +1,254 @@
+{
+  "verification_date": "2025-11-18T20:57:28.158875",
+  "season": 2025,
+  "week": 13,
+  "checks": {
+    "starter_pack": {
+      "status": "complete",
+      "total_games": 124,
+      "fbs_games": 0,
+      "unique_game_ids": 124,
+      "games_with_scores": 0,
+      "games_without_scores": 124,
+      "game_ids": [
+        "401752773",
+        "401752774",
+        "401752775",
+        "401752776",
+        "401752777",
+        "401752778",
+        "401752779",
+        "401752780",
+        "401752781",
+        "401752782",
+        "401752908",
+        "401752909",
+        "401752910",
+        "401752911",
+        "401752912",
+        "401752913",
+        "401752914",
+        "401752915",
+        "401752954",
+        "401754598",
+        "401754599",
+        "401754600",
+        "401754601",
+        "401754602",
+        "401754603",
+        "401754604",
+        "401754605",
+        "401754606",
+        "401756954",
+        "401756955",
+        "401756956",
+        "401756957",
+        "401756958",
+        "401756959",
+        "401756960",
+        "401757175",
+        "401757305",
+        "401757306",
+        "401757307",
+        "401757308",
+        "401757309",
+        "401760415",
+        "401760416",
+        "401760417",
+        "401760418",
+        "401760419",
+        "401760420",
+        "401761655",
+        "401761656",
+        "401761657",
+        "401761658",
+        "401761659",
+        "401761660",
+        "401762511",
+        "401762512",
+        "401762513",
+        "401762514",
+        "401762515",
+        "401762862",
+        "401762863",
+        "401762864",
+        "401762865",
+        "401762866",
+        "401762867",
+        "401767068",
+        "401767088",
+        "401767104",
+        "401767118",
+        "401767125",
+        "401767134",
+        "401767139",
+        "401767148",
+        "401767170",
+        "401767178",
+        "401767188",
+        "401767195",
+        "401767208",
+        "401767215",
+        "401767234",
+        "401767247",
+        "401767264",
+        "401767276",
+        "401767284",
+        "401767291",
+        "401767338",
+        "401767340",
+        "401767349",
+        "401767358",
+        "401767367",
+        "401767378",
+        "401767394",
+        "401767397",
+        "401767403",
+        "401767430",
+        "401767445",
+        "401767453",
+        "401767467",
+        "401767475",
+        "401767489",
+        "401767508",
+        "401767515",
+        "401767520",
+        "401767522",
+        "401767540",
+        "401767557",
+        "401767564",
+        "401767591",
+        "401767601",
+        "401767611",
+        "401767625",
+        "401767633",
+        "401767647",
+        "401767671",
+        "401767678",
+        "401767696",
+        "401767708",
+        "401767718",
+        "401767725",
+        "401767738",
+        "401767749",
+        "401767756",
+        "401767761",
+        "401767770",
+        "401788996"
+      ],
+      "teams": {
+        "home_teams": [],
+        "away_teams": []
+      }
+    },
+    "migration": {
+      "status": "not_migrated",
+      "in_migration_file": false,
+      "migration_game_count": 0,
+      "in_training_data": false,
+      "training_game_count": 0
+    },
+    "features": {
+      "status": "incomplete",
+      "files": {
+        "enhanced_games": {
+          "exists": false,
+          "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/data/week13/enhanced/week13_enhanced_games.csv"
+        },
+        "features_86": {
+          "exists": false,
+          "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/data/week13/enhanced/week13_features_86.csv"
+        },
+        "features_model_compatible": {
+          "exists": true,
+          "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/data/week13/enhanced/week13_features_86_model_compatible.csv",
+          "row_count": 64,
+          "columns": 88
+        }
+      },
+      "has_86_features": false,
+      "all_files_exist": false
+    },
+    "predictions": {
+      "status": "complete",
+      "prediction_files": {
+        "predictions_json": {
+          "exists": true,
+          "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/predictions/week13/week13_predictions.json",
+          "data_keys": "list"
+        },
+        "predictions_csv": {
+          "exists": true,
+          "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/predictions/week13/week13_predictions_all_60_games.csv",
+          "row_count": 60
+        },
+        "summary": {
+          "exists": true,
+          "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/predictions/week13/week13_prediction_summary.json",
+          "data_keys": [
+            "report_metadata",
+            "summary_statistics",
+            "model_information",
+            "quality_metrics"
+          ]
+        }
+      },
+      "models": {
+        "ridge": {
+          "exists": true,
+          "last_modified": "2025-11-18T20:56:27.514975",
+          "days_old": 0
+        },
+        "xgb": {
+          "exists": true,
+          "last_modified": "2025-11-18T20:56:27.620659",
+          "days_old": 0
+        },
+        "fastai": {
+          "exists": true,
+          "last_modified": "2025-11-18T15:54:57.002507",
+          "days_old": 0
+        }
+      },
+      "all_predictions_exist": true
+    },
+    "analysis": {
+      "status": "complete",
+      "analysis_files": {
+        "comprehensive": {
+          "exists": true,
+          "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/analysis/week13/week13_comprehensive_analysis.json",
+          "has_data": true
+        },
+        "power_rankings": {
+          "exists": true,
+          "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/analysis/week13/week13_power_rankings.csv",
+          "row_count": 25
+        },
+        "strategic_recommendations": {
+          "exists": true,
+          "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/analysis/week13/week13_strategic_recommendations.csv",
+          "row_count": 64
+        },
+        "upset_alerts": {
+          "exists": true,
+          "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/analysis/week13/week13_upset_alerts.csv",
+          "row_count": 3
+        }
+      },
+      "all_analysis_exist": true
+    }
+  },
+  "summary": {
+    "overall_status": "incomplete",
+    "starter_pack_ready": true,
+    "migration_complete": false,
+    "features_generated": false,
+    "predictions_exist": true,
+    "analysis_exists": true,
+    "recommendations": [
+      "Run migration script for Week 13 data",
+      "Generate Week 13 features (86 columns)"
+    ]
+  }
+}

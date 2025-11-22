@@ -1,0 +1,37 @@
+# Script Ohio 2.0 - Core Dependencies
+# Source file for pip-compile - edit this file, then run: pip-compile requirements.in
+# Generated locked file: requirements.txt
+# Python 3.13+ required (specified in project documentation)
+
+# Data Science & Machine Learning Core
+pandas>=2.0.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+joblib>=1.3.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Jupyter Notebooks
+jupyter>=1.0.0
+
+# Machine Learning Models
+xgboost>=2.0.0
+fastai>=2.7.0; python_version >= "3.8"
+shap>=0.42.0
+
+# Agent System Framework
+pydantic>=2.4.0
+
+# Optional: System Monitoring (graceful fallback if not installed)
+psutil>=5.9.0
+
+# Environment Variable Management
+python-dotenv>=1.0.0
+
+# CFBD API Client + tooling (aligns with REST, Next, GraphQL integrations)
+cfbd>=5.3.1
+gql[requests]>=3.5.0
+tenacity>=8.2.3
+

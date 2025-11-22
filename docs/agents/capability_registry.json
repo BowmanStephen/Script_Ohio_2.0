@@ -1,0 +1,977 @@
+{
+  "agent_types": {
+    "weekly_model_validation": {
+      "class": "WeeklyModelValidationAgent",
+      "permission_level": "READ_EXECUTE_WRITE",
+      "capabilities": {
+        "validate_models": {
+          "description": "Run validation suite across Week 13 ML models.",
+          "tools_required": [
+            "model_loader",
+            "data_validator"
+          ],
+          "data_access": [
+            "model_pack/",
+            "starter_pack/data/"
+          ],
+          "execution_time_estimate": 12.0
+        },
+        "check_compatibility": {
+          "description": "Assess compatibility between enhanced data and models.",
+          "tools_required": [
+            "data_validator"
+          ],
+          "data_access": [
+            "starter_pack/data/",
+            "model_pack/"
+          ],
+          "execution_time_estimate": 4.0
+        },
+        "performance_test": {
+          "description": "Benchmark model performance metrics.",
+          "tools_required": [
+            "performance_tester"
+          ],
+          "data_access": [
+            "model_pack/"
+          ],
+          "execution_time_estimate": 6.0
+        }
+      }
+    },
+    "insight_generator": {
+      "class": "InsightGeneratorAgent",
+      "permission_level": "READ_EXECUTE_WRITE",
+      "capabilities": {
+        "generate_analysis": {
+          "description": "Generate advanced analytics insights and statistical analysis",
+          "tools_required": [
+            "analyze_feature_importance",
+            "create_learning_path_chart",
+            "export_analysis_results"
+          ],
+          "data_access": [
+            "starter_pack/",
+            "model_pack/"
+          ],
+          "execution_time_estimate": 3.0
+        },
+        "statistical_analysis": {
+          "description": "Perform comprehensive statistical analysis and hypothesis testing",
+          "tools_required": [
+            "analyze_feature_importance"
+          ],
+          "data_access": [
+            "model_pack/"
+          ],
+          "execution_time_estimate": 4.0
+        },
+        "create_visualizations": {
+          "description": "Generate sophisticated data visualizations and charts",
+          "tools_required": [
+            "create_learning_path_chart"
+          ],
+          "data_access": [
+            "starter_pack/",
+            "model_pack/"
+          ],
+          "execution_time_estimate": 2.5
+        },
+        "comparative_analysis": {
+          "description": "Compare teams, players, and seasons using advanced metrics",
+          "tools_required": [
+            "analyze_feature_importance",
+            "export_analysis_results"
+          ],
+          "data_access": [
+            "starter_pack/",
+            "model_pack/"
+          ],
+          "execution_time_estimate": 3.5
+        },
+        "trend_analysis": {
+          "description": "Analyze temporal trends and patterns in college football data",
+          "tools_required": [
+            "analyze_feature_importance",
+            "create_learning_path_chart"
+          ],
+          "data_access": [
+            "model_pack/",
+            "starter_pack/"
+          ],
+          "execution_time_estimate": 3.0
+        },
+        "cfbd_real_time_analysis": {
+          "description": "Pull live CFBD REST/NEXT data and align it with the 86-feature schema.",
+          "tools_required": [
+            "cfbd_rest_client",
+            "feature_engineering"
+          ],
+          "data_access": [
+            "api.collegefootballdata.com",
+            "model_pack/updated_training_data.csv"
+          ],
+          "execution_time_estimate": 2.5
+        },
+        "graphql_trend_scan": {
+          "description": "Analyze recruiting/talent trends using GraphQL API (requires Patreon Tier 3+ access).",
+          "tools_required": [
+            "cfbd_graphql_client",
+            "gql"
+          ],
+          "data_access": [
+            "graphql.collegefootballdata.com"
+          ],
+          "execution_time_estimate": 2.5
+        },
+        "generate_infographic": {
+          "description": "Generate interactive infographic components for documentation and reports",
+          "tools_required": [
+            "create_visualizations"
+          ],
+          "data_access": [
+            "src/infographics/",
+            "docs/",
+            "starter_pack/",
+            "model_pack/"
+          ],
+          "execution_time_estimate": 2.5
+        }
+      }
+    },
+    "week12_mock_enhancement": {
+      "class": "Week12MockEnhancementAgent",
+      "permission_level": "READ_EXECUTE_WRITE",
+      "capabilities": {
+        "enhance_mock_data": {
+          "description": "Enhance mock datasets with Week 12 patterns.",
+          "tools_required": [
+            "pandas",
+            "numpy"
+          ],
+          "data_access": [
+            "starter_pack/data/",
+            "model_pack/"
+          ],
+          "execution_time_estimate": 5.0
+        }
+      }
+    },
+    "performance_monitor": {
+      "class": "PerformanceMonitorAgent",
+      "permission_level": "READ_EXECUTE_WRITE",
+      "capabilities": {
+        "monitor_system_performance": {
+          "description": "Real-time system performance monitoring",
+          "tools_required": [
+            "system_metrics",
+            "resource_monitor"
+          ],
+          "data_access": [
+            "agents/*",
+            "model_pack/*"
+          ],
+          "execution_time_estimate": 1.0
+        },
+        "detect_performance_bottlenecks": {
+          "description": "Identify system performance bottlenecks",
+          "tools_required": [
+            "bottleneck_analyzer",
+            "profiler"
+          ],
+          "data_access": [
+            "agents/*"
+          ],
+          "execution_time_estimate": 3.0
+        },
+        "generate_optimization_recommendations": {
+          "description": "Generate performance optimization recommendations",
+          "tools_required": [
+            "optimization_engine",
+            "performance_analyzer"
+          ],
+          "data_access": [
+            "agents/*",
+            "model_pack/*"
+          ],
+          "execution_time_estimate": 5.0
+        },
+        "benchmark_performance": {
+          "description": "Run comprehensive performance benchmarks",
+          "tools_required": [
+            "benchmark_suite",
+            "load_generator"
+          ],
+          "data_access": [
+            "agents/*",
+            "model_pack/*"
+          ],
+          "execution_time_estimate": 10.0
+        }
+      }
+    },
+    "week12_model_validation": {
+      "class": "Week12ModelValidationAgent",
+      "permission_level": "READ_EXECUTE_WRITE",
+      "capabilities": {
+        "validate_models": {
+          "description": "Run validation suite across Week 12 ML models.",
+          "tools_required": [
+            "model_loader",
+            "data_validator"
+          ],
+          "data_access": [
+            "model_pack/",
+            "starter_pack/data/"
+          ],
+          "execution_time_estimate": 12.0
+        },
+        "check_compatibility": {
+          "description": "Assess compatibility between enhanced data and models.",
+          "tools_required": [
+            "data_validator"
+          ],
+          "data_access": [
+            "starter_pack/data/",
+            "model_pack/"
+          ],
+          "execution_time_estimate": 4.0
+        },
+        "performance_test": {
+          "description": "Benchmark model performance metrics.",
+          "tools_required": [
+            "performance_tester"
+          ],
+          "data_access": [
+            "model_pack/"
+          ],
+          "execution_time_estimate": 6.0
+        }
+      }
+    },
+    "learning_navigator": {
+      "class": "LearningNavigatorAgent",
+      "permission_level": "READ_EXECUTE",
+      "capabilities": {
+        "guide_learning_path": {
+          "description": "Guide users through starter pack notebooks",
+          "tools_required": [
+            "notebook_loader",
+            "progress_tracker"
+          ],
+          "data_access": [
+            "starter_pack/*"
+          ],
+          "execution_time_estimate": 2.0
+        },
+        "recommend_content": {
+          "description": "Recommend content based on user skill level",
+          "tools_required": [
+            "content_analyzer",
+            "user_profiler"
+          ],
+          "data_access": [
+            "starter_pack/*"
+          ],
+          "execution_time_estimate": 1.5
+        }
+      }
+    },
+    "model_engine": {
+      "class": "ModelExecutionEngine",
+      "permission_level": "READ_EXECUTE_WRITE",
+      "capabilities": {
+        "predict_game_outcome": {
+          "description": "Predict game outcomes using trained ML models",
+          "tools_required": [
+            "load_model_info",
+            "predict_game_outcome"
+          ],
+          "data_access": [
+            "model_pack/*"
+          ],
+          "execution_time_estimate": 2.0
+        },
+        "batch_predictions": {
+          "description": "Process multiple predictions in batch",
+          "tools_required": [
+            "predict_game_outcome"
+          ],
+          "data_access": [
+            "model_pack/*"
+          ],
+          "execution_time_estimate": 5.0
+        },
+        "model_comparison": {
+          "description": "Compare predictions across multiple models",
+          "tools_required": [
+            "load_model_info",
+            "predict_game_outcome"
+          ],
+          "data_access": [
+            "model_pack/*"
+          ],
+          "execution_time_estimate": 8.0
+        },
+        "model_performance_analysis": {
+          "description": "Analyze model performance and metrics",
+          "tools_required": [
+            "analyze_feature_importance",
+            "load_model_info"
+          ],
+          "data_access": [
+            "model_pack/*"
+          ],
+          "execution_time_estimate": 3.0
+        },
+        "kelly_criterion_analysis": {
+          "description": "Calculate optimal bet sizes using Kelly Criterion",
+          "tools_required": [
+            "kelly_calculator",
+            "model_prediction"
+          ],
+          "data_access": [
+            "model_pack/*"
+          ],
+          "execution_time_estimate": 3.0
+        },
+        "value_betting_detection": {
+          "description": "Identify value betting opportunities using 86-feature pipeline",
+          "tools_required": [
+            "value_detector",
+            "market_analyzer"
+          ],
+          "data_access": [
+            "model_pack/*"
+          ],
+          "execution_time_estimate": 4.0
+        },
+        "betting_opportunity_analysis": {
+          "description": "Comprehensive betting analysis with confidence intervals",
+          "tools_required": [
+            "betting_analytics",
+            "risk_manager"
+          ],
+          "data_access": [
+            "model_pack/*"
+          ],
+          "execution_time_estimate": 5.0
+        }
+      }
+    },
+    "week12_matchup_analysis": {
+      "class": "Week12MatchupAnalysisAgent",
+      "permission_level": "READ_EXECUTE_WRITE",
+      "capabilities": {
+        "analyze_matchups": {
+          "description": "Analyze Week 12 matchups and generate insights.",
+          "tools_required": [
+            "pandas",
+            "numpy"
+          ],
+          "data_access": [
+            "model_pack/",
+            "starter_pack/data/"
+          ],
+          "execution_time_estimate": 8.0
+        }
+      }
+    },
+    "report_generator": {
+      "class": "ReportGeneratorAgent",
+      "permission_level": "READ_EXECUTE_WRITE",
+      "capabilities": {
+        "generate_weekly_report": {
+          "description": "Generate comprehensive weekly report with visualizations",
+          "tools_required": [
+            "shap_utils",
+            "dashboard_utils"
+          ],
+          "data_access": [
+            "analysis/",
+            "model_pack/"
+          ],
+          "execution_time_estimate": 20.0
+        }
+      }
+    },
+    "weekly_prediction_generation": {
+      "class": "WeeklyPredictionGenerationAgent",
+      "permission_level": "READ_EXECUTE_WRITE",
+      "capabilities": {
+        "generate_predictions": {
+          "description": "Generate predictions using validated ML models",
+          "tools_required": [
+            "model_predictor",
+            "data_processor",
+            "confidence_calculator",
+            "ensemble_generator"
+          ],
+          "data_access": [
+            "model_pack/",
+            "starter_pack/data/"
+          ],
+          "execution_time_estimate": 15.0
+        },
+        "calculate_confidence": {
+          "description": "Calculate confidence metrics for predictions",
+          "tools_required": [
+            "confidence_calculator"
+          ],
+          "data_access": [
+            "model_pack/predictions/"
+          ],
+          "execution_time_estimate": 2.0
+        },
+        "create_ensemble": {
+          "description": "Create ensemble predictions from model outputs",
+          "tools_required": [
+            "ensemble_generator"
+          ],
+          "data_access": [
+            "model_pack/",
+            "starter_pack/data/"
+          ],
+          "execution_time_estimate": 4.0
+        }
+      }
+    },
+    "weekly_matchup_analysis": {
+      "class": "WeeklyMatchupAnalysisAgent",
+      "permission_level": "READ_EXECUTE_WRITE",
+      "capabilities": {
+        "analyze_matchups": {
+          "description": "Analyze Week 13 matchups and generate insights.",
+          "tools_required": [
+            "pandas",
+            "numpy"
+          ],
+          "data_access": [
+            "model_pack/",
+            "starter_pack/data/"
+          ],
+          "execution_time_estimate": 8.0
+        }
+      }
+    },
+    "conversational_ai": {
+      "class": "ConversationalAIAgent",
+      "permission_level": "READ_EXECUTE_WRITE",
+      "capabilities": {
+        "natural_language_processing": {
+          "description": "Process and understand natural language queries with context awareness",
+          "tools_required": [
+            "analyze_feature_importance"
+          ],
+          "data_access": [
+            "starter_pack/",
+            "model_pack/"
+          ],
+          "execution_time_estimate": 1.5
+        },
+        "intent_recognition": {
+          "description": "Identify user intent from conversational queries",
+          "tools_required": [],
+          "data_access": [],
+          "execution_time_estimate": 1.0
+        },
+        "conversation_management": {
+          "description": "Manage multi-turn conversations with context tracking",
+          "tools_required": [
+            "export_analysis_results"
+          ],
+          "data_access": [],
+          "execution_time_estimate": 2.0
+        },
+        "query_expansion": {
+          "description": "Intelligently expand and reformulate user queries",
+          "tools_required": [],
+          "data_access": [
+            "starter_pack/"
+          ],
+          "execution_time_estimate": 1.5
+        },
+        "clarification_handling": {
+          "description": "Handle clarification requests and ambiguous queries",
+          "tools_required": [],
+          "data_access": [],
+          "execution_time_estimate": 2.0
+        }
+      }
+    },
+    "weekly_analysis_orchestrator": {
+      "class": "WeeklyAnalysisOrchestrator",
+      "permission_level": "ADMIN",
+      "capabilities": {
+        "run_weekly_analysis": {
+          "description": "Run complete Week 13 analysis pipeline",
+          "tools_required": [
+            "matchup_analysis",
+            "model_validation",
+            "prediction_generation"
+          ],
+          "data_access": [
+            "data/",
+            "analysis/",
+            "predictions/",
+            "model_pack/"
+          ],
+          "execution_time_estimate": 30.0
+        },
+        "validate_models": {
+          "description": "Validate models for Week 13",
+          "tools_required": [
+            "model_validation"
+          ],
+          "data_access": [
+            "model_pack/",
+            "data/"
+          ],
+          "execution_time_estimate": 12.0
+        },
+        "generate_predictions": {
+          "description": "Generate predictions for Week 13",
+          "tools_required": [
+            "prediction_generation"
+          ],
+          "data_access": [
+            "data/",
+            "model_pack/",
+            "predictions/"
+          ],
+          "execution_time_estimate": 15.0
+        }
+      }
+    },
+    "validation_agent": {
+      "class": "ValidationAgent",
+      "permission_level": "READ_EXECUTE",
+      "capabilities": {
+        "validate_file_moves": {
+          "description": "Verify all files moved correctly and exist in destinations",
+          "tools_required": [
+            "pathlib",
+            "os"
+          ],
+          "data_access": [
+            "filesystem"
+          ],
+          "execution_time_estimate": 1.0
+        },
+        "validate_import_integrity": {
+          "description": "Check Python imports still work after file reorganization",
+          "tools_required": [
+            "importlib",
+            "sys"
+          ],
+          "data_access": [
+            "python_modules"
+          ],
+          "execution_time_estimate": 1.5
+        },
+        "update_gitignore": {
+          "description": "Update .gitignore with new exclusions for organized files",
+          "tools_required": [
+            "pathlib"
+          ],
+          "data_access": [
+            "filesystem"
+          ],
+          "execution_time_estimate": 0.5
+        },
+        "generate_validation_report": {
+          "description": "Create comprehensive validation and organization report",
+          "tools_required": [
+            "json",
+            "pathlib"
+          ],
+          "data_access": [
+            "filesystem"
+          ],
+          "execution_time_estimate": 0.5
+        }
+      }
+    },
+    "file_organization": {
+      "class": "FileOrganizationAgent",
+      "permission_level": "READ_EXECUTE_WRITE",
+      "capabilities": {
+        "classify_root_files": {
+          "description": "Identify and categorize misplaced files in root directory",
+          "tools_required": [
+            "pathlib",
+            "os"
+          ],
+          "data_access": [
+            "root_directory"
+          ],
+          "execution_time_estimate": 1.0
+        },
+        "create_missing_directories": {
+          "description": "Create missing directory structure per CLAUDE.md",
+          "tools_required": [
+            "pathlib",
+            "os"
+          ],
+          "data_access": [
+            "filesystem"
+          ],
+          "execution_time_estimate": 0.5
+        },
+        "organize_into_directories": {
+          "description": "Move files to appropriate subdirectories with proper naming",
+          "tools_required": [
+            "shutil",
+            "pathlib",
+            "os"
+          ],
+          "data_access": [
+            "filesystem",
+            "root_directory"
+          ],
+          "execution_time_estimate": 2.0
+        }
+      }
+    },
+    "validation_orchestrator": {
+      "class": "ValidationOrchestrator",
+      "permission_level": "ADMIN",
+      "capabilities": {
+        "coordinate_validation": {
+          "description": "Coordinate validation phases and sub-agent execution",
+          "tools_required": [
+            "file_system",
+            "agent_framework",
+            "analytics"
+          ],
+          "data_access": [
+            "agents/activation_fix/",
+            "agents/core/"
+          ],
+          "execution_time_estimate": 120.0
+        },
+        "discover_system": {
+          "description": "Discover and analyze activation fix system architecture",
+          "tools_required": [
+            "file_system",
+            "code_analysis"
+          ],
+          "data_access": [
+            "agents/activation_fix/"
+          ],
+          "execution_time_estimate": 30.0
+        },
+        "validate_comprehensive": {
+          "description": "Execute comprehensive validation across all components",
+          "tools_required": [
+            "testing_framework",
+            "performance_analysis"
+          ],
+          "data_access": [
+            "agents/",
+            "tests/"
+          ],
+          "execution_time_estimate": 45.0
+        },
+        "document_system": {
+          "description": "Create comprehensive documentation and educational content",
+          "tools_required": [
+            "documentation_generator",
+            "tutorial_creator"
+          ],
+          "data_access": [
+            "agents/",
+            "documentation/"
+          ],
+          "execution_time_estimate": 30.0
+        },
+        "quality_assurance": {
+          "description": "Execute quality assurance testing and grading",
+          "tools_required": [
+            "testing_framework",
+            "quality_metrics"
+          ],
+          "data_access": [
+            "tests/",
+            "agents/"
+          ],
+          "execution_time_estimate": 30.0
+        },
+        "synthesize_results": {
+          "description": "Synthesize all findings and create final recommendations",
+          "tools_required": [
+            "report_generator",
+            "project_management"
+          ],
+          "data_access": [
+            "project_management/"
+          ],
+          "execution_time_estimate": 15.0
+        }
+      }
+    },
+    "cfbd_integration": {
+      "class": "CFBDIntegrationAgent",
+      "permission_level": "READ_EXECUTE",
+      "capabilities": {
+        "team_snapshot": {
+          "description": "Return normalized CFBD snapshot for a single team",
+          "tools_required": [
+            "cfbd_client"
+          ],
+          "data_access": [
+            "CFBD REST"
+          ],
+          "execution_time_estimate": 1.0
+        },
+        "live_scoreboard": {
+          "description": "Return the latest live scoreboard events (REST-based)",
+          "tools_required": [
+            "cfbd_rest_client"
+          ],
+          "data_access": [
+            "CFBD REST"
+          ],
+          "execution_time_estimate": 0.2
+        }
+      }
+    },
+    "quality_assurance": {
+      "class": "QualityAssuranceAgent",
+      "permission_level": "READ_EXECUTE",
+      "capabilities": {
+        "cfbd_health_check": {
+          "description": "Summarize CFBD client telemetry and error rates",
+          "tools_required": [
+            "telemetry"
+          ],
+          "data_access": [
+            "cfbd_logs"
+          ],
+          "execution_time_estimate": 0.5
+        },
+        "cfbd_recent_events": {
+          "description": "Return the latest telemetry events for inspection",
+          "tools_required": [
+            "telemetry"
+          ],
+          "data_access": [
+            "cfbd_logs"
+          ],
+          "execution_time_estimate": 0.2
+        }
+      }
+    },
+    "week12_prediction_generation": {
+      "class": "Week12PredictionGenerationAgent",
+      "permission_level": "READ_EXECUTE_WRITE",
+      "capabilities": {
+        "generate_predictions": {
+          "description": "Generate predictions using validated ML models",
+          "tools_required": [
+            "model_predictor",
+            "data_processor",
+            "confidence_calculator",
+            "ensemble_generator"
+          ],
+          "data_access": [
+            "model_pack/",
+            "starter_pack/data/"
+          ],
+          "execution_time_estimate": 15.0
+        },
+        "calculate_confidence": {
+          "description": "Calculate confidence metrics for predictions",
+          "tools_required": [
+            "confidence_calculator"
+          ],
+          "data_access": [
+            "model_pack/predictions/"
+          ],
+          "execution_time_estimate": 2.0
+        },
+        "create_ensemble": {
+          "description": "Create ensemble predictions from model outputs",
+          "tools_required": [
+            "ensemble_generator"
+          ],
+          "data_access": [
+            "model_pack/",
+            "starter_pack/data/"
+          ],
+          "execution_time_estimate": 4.0
+        }
+      }
+    }
+  },
+  "capability_index": {
+    "validate_models": [
+      "weekly_model_validation",
+      "week12_model_validation",
+      "weekly_analysis_orchestrator"
+    ],
+    "check_compatibility": [
+      "weekly_model_validation",
+      "week12_model_validation"
+    ],
+    "performance_test": [
+      "weekly_model_validation",
+      "week12_model_validation"
+    ],
+    "generate_analysis": [
+      "insight_generator"
+    ],
+    "statistical_analysis": [
+      "insight_generator"
+    ],
+    "create_visualizations": [
+      "insight_generator"
+    ],
+    "comparative_analysis": [
+      "insight_generator"
+    ],
+    "trend_analysis": [
+      "insight_generator"
+    ],
+    "cfbd_real_time_analysis": [
+      "insight_generator"
+    ],
+    "graphql_trend_scan": [
+      "insight_generator"
+    ],
+    "generate_infographic": [
+      "insight_generator"
+    ],
+    "enhance_mock_data": [
+      "week12_mock_enhancement"
+    ],
+    "monitor_system_performance": [
+      "performance_monitor"
+    ],
+    "detect_performance_bottlenecks": [
+      "performance_monitor"
+    ],
+    "generate_optimization_recommendations": [
+      "performance_monitor"
+    ],
+    "benchmark_performance": [
+      "performance_monitor"
+    ],
+    "guide_learning_path": [
+      "learning_navigator"
+    ],
+    "recommend_content": [
+      "learning_navigator"
+    ],
+    "predict_game_outcome": [
+      "model_engine"
+    ],
+    "batch_predictions": [
+      "model_engine"
+    ],
+    "model_comparison": [
+      "model_engine"
+    ],
+    "model_performance_analysis": [
+      "model_engine"
+    ],
+    "kelly_criterion_analysis": [
+      "model_engine"
+    ],
+    "value_betting_detection": [
+      "model_engine"
+    ],
+    "betting_opportunity_analysis": [
+      "model_engine"
+    ],
+    "analyze_matchups": [
+      "week12_matchup_analysis",
+      "weekly_matchup_analysis"
+    ],
+    "generate_weekly_report": [
+      "report_generator"
+    ],
+    "generate_predictions": [
+      "weekly_prediction_generation",
+      "weekly_analysis_orchestrator",
+      "week12_prediction_generation"
+    ],
+    "calculate_confidence": [
+      "weekly_prediction_generation",
+      "week12_prediction_generation"
+    ],
+    "create_ensemble": [
+      "weekly_prediction_generation",
+      "week12_prediction_generation"
+    ],
+    "natural_language_processing": [
+      "conversational_ai"
+    ],
+    "intent_recognition": [
+      "conversational_ai"
+    ],
+    "conversation_management": [
+      "conversational_ai"
+    ],
+    "query_expansion": [
+      "conversational_ai"
+    ],
+    "clarification_handling": [
+      "conversational_ai"
+    ],
+    "run_weekly_analysis": [
+      "weekly_analysis_orchestrator"
+    ],
+    "validate_file_moves": [
+      "validation_agent"
+    ],
+    "validate_import_integrity": [
+      "validation_agent"
+    ],
+    "update_gitignore": [
+      "validation_agent"
+    ],
+    "generate_validation_report": [
+      "validation_agent"
+    ],
+    "classify_root_files": [
+      "file_organization"
+    ],
+    "create_missing_directories": [
+      "file_organization"
+    ],
+    "organize_into_directories": [
+      "file_organization"
+    ],
+    "coordinate_validation": [
+      "validation_orchestrator"
+    ],
+    "discover_system": [
+      "validation_orchestrator"
+    ],
+    "validate_comprehensive": [
+      "validation_orchestrator"
+    ],
+    "document_system": [
+      "validation_orchestrator"
+    ],
+    "quality_assurance": [
+      "validation_orchestrator"
+    ],
+    "synthesize_results": [
+      "validation_orchestrator"
+    ],
+    "team_snapshot": [
+      "cfbd_integration"
+    ],
+    "live_scoreboard": [
+      "cfbd_integration"
+    ],
+    "cfbd_health_check": [
+      "quality_assurance"
+    ],
+    "cfbd_recent_events": [
+      "quality_assurance"
+    ]
+  }
+}

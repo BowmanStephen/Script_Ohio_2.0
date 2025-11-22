@@ -1,0 +1,6 @@
+home_team,away_team,ensemble_predicted_winner,ensemble_margin,confidence_score
+Georgia,Tennessee,Georgia,168.58395229404832,1.0
+Ohio State,Michigan,Ohio State,189.9634596572392,1.0
+Alabama,Auburn,Alabama,193.988708950539,1.0
+Florida State,Miami,Florida State,118.43944104626948,1.0
+Oregon,Washington,Oregon,115.81004188129796,0.9999999999999998

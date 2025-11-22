@@ -1,0 +1,125 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "# CFBD GraphQL Playground\n",
+        "\n",
+        "Use this notebook to explore the CollegeFootballData.com GraphQL endpoint with the new `data_sources.cfbd_graphql` helper. Authenticate with `CFBD_API_KEY` (Tier 3 access required) and run the snippets below to pull talent, recruiting, and live-subscription data.\n",
+        "\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {},
+      "outputs": [],
+      "source": [
+        "from __future__ import annotations\n",
+        "\n",
+        "import asyncio\n",
+        "import os\n",
+        "import sys\n",
+        "from pathlib import Path\n",
+        "\n",
+        "import pandas as pd\n",
+        "\n",
+        "PROJECT_ROOT = Path.cwd().resolve().parents[1]\n",
+        "SRC_DIR = PROJECT_ROOT / \"src\"\n",
+        "if str(SRC_DIR) not in sys.path:\n",
+        "    sys.path.append(str(SRC_DIR))\n",
+        "\n",
+        "from data_sources import CFBDGraphQLClient, CFBDGraphQLSubscriptionManager, GraphQLSubscriptionConfig\n",
+        "\n",
+        "api_key = os.environ.get(\"CFBD_API_KEY\")\n",
+        "if not api_key:\n",
+        "    raise RuntimeError(\"CFBD_API_KEY must be exported before running GraphQL queries.\")\n",
+        "\n",
+        "graphql_client = CFBDGraphQLClient(api_key=api_key)\n",
+        "print(\"GraphQL endpoint:\", graphql_client._endpoint)  # noqa: SLF001\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {},
+      "outputs": [],
+      "source": [
+        "season = int(os.environ.get(\"CFBD_SAMPLE_SEASON\", 2025))\n",
+        "limit = int(os.environ.get(\"CFBD_SAMPLE_LIMIT\", 15))\n",
+        "\n",
+        "talent_payload = graphql_client.fetch_team_talent(year=season)\n",
+        "recruit_payload = graphql_client.fetch_recruits(year=season, limit=limit)\n",
+        "\n",
+        "talent_df = pd.DataFrame(talent_payload.get(\"teamTalent\", []))\n",
+        "recruit_df = pd.DataFrame(recruit_payload.get(\"recruit\", []))\n",
+        "\n",
+        "talent_df.head()\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {},
+      "outputs": [],
+      "source": [
+        "recruit_df[['name', 'position', 'stars', 'rating', 'overallRank']].head()\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {},
+      "outputs": [],
+      "source": [
+        "subscription_config = GraphQLSubscriptionConfig(api_key=api_key)\n",
+        "subscription_manager = CFBDGraphQLSubscriptionManager(config=subscription_config)\n",
+        "\n",
+        "subscription_query = \"\"\"\n",
+        "subscription LiveScoreboard($limit: Int!) {\n",
+        "  scoreboard(limit: $limit) {\n",
+        "    id\n",
+        "    startDate\n",
+        "    homeTeam\n",
+        "    homePoints\n",
+        "    awayTeam\n",
+        "    awayPoints\n",
+        "    status\n",
+        "  }\n",
+        "}\n",
+        "\"\"\"\n",
+        "\n",
+        "async def preview_subscription(limit: int = 3):\n",
+        "    event_iter = subscription_manager.subscribe(subscription_query, {\"limit\": limit})\n",
+        "    async for idx, payload in enumerate(event_iter, start=1):\n",
+        "        print(f\"Event {idx}: {payload}\")\n",
+        "        if idx >= limit:\n",
+        "            break\n",
+        "\n",
+        "# Uncomment to run in an async-friendly environment (e.g., JupyterLab with asyncio support)\n",
+        "# await preview_subscription(limit=2)\n",
+        "print(\"Subscription helper ready. Run `await preview_subscription()` in an async cell to stream live events.\")\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Notes & Tips\n",
+        "\n",
+        "- The GraphQL API enforces Patreon Tier 3 authentication and rate limits; cache results when iterating.\n",
+        "- Subscriptions require websockets; run the async helper from a notebook kernel that supports `await` (e.g., JupyterLab).\n",
+        "- Combine this notebook with the ingestion workflow to persist GraphQL enrichments alongside REST-derived features.\n",
+        "\n"
+      ]
+    }
+  ],
+  "metadata": {
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 2
+}

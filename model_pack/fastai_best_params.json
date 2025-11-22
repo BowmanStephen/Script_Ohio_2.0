@@ -1,0 +1,13 @@
+{
+  "n_epochs": 6,
+  "batch_size": 64,
+  "learning_rate": 0.006586289317583112,
+  "layers": [
+    600,
+    250
+  ],
+  "dropout": 0.30000000000000004,
+  "best_validation_loss": 0.18456365168094635,
+  "n_trials": 5,
+  "optimization_date": "2025-11-19T14:18:09.525239"
+}

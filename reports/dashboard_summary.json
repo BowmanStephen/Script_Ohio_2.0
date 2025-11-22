@@ -1,0 +1,11 @@
+{
+  "created_at": "2025-11-13",
+  "visualizations_created": 8,
+  "top_team": "Ohio State",
+  "top_power_rating": 1015.7574214835776,
+  "top_conference": "SEC",
+  "home_win_rate": 0.0,
+  "avg_margin": 0.0,
+  "total_games_analyzed": 612,
+  "dashboard_file": "reports/football_analytics_dashboard.png"
+}

@@ -1,0 +1,2897 @@
+
+2025 COLLEGE FOOTBALL DATA ACQUISITION REPORT
+============================================
+Generated: 2025-11-19 21:01:16
+Processing Time: 0:02:08.587494
+
+DATA SUMMARY:
+- Season: 2025
+- Current Week: 13
+- Total Games Targeted: 621
+- Successful Game Fetches: 621
+- Successful Play Fetches: 0
+- Failed Game Fetches: 0
+- Failed Play Fetches: 574
+
+ERROR SUMMARY:
+Failed Play Fetches:
+  - Game 401756846: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760371: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756847: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754516: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401762522: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752794: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756848: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754373: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401762789: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761588: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752674: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756876: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754517: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756852: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752793: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752796: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401762791: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760357: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752802: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761589: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754374: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756854: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752795: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752667: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754375: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401757224: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760358: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752803: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752677: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752676: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752673: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754520: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752801: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752797: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752670: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754518: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756878: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752806: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754519: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760359: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752807: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752669: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752665: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756853: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752804: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752666: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752675: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752799: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761590: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754616: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752668: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756855: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752679: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761591: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752678: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761593: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761595: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752808: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752798: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756877: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752671: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401757225: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752672: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761592: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761594: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756851: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754521: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760361: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756850: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752947: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752936: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756849: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752805: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752800: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752680: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754522: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754523: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754528: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752817: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752826: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760363: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756885: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754529: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754525: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752812: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752822: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752825: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754524: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752811: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754618: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752813: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752693: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754621: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752694: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754620: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760366: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752685: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752937: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752815: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752692: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756880: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752689: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754622: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761596: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754637: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756881: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752686: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761603: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752824: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752818: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756883: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760367: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752820: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752684: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752682: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761602: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760365: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401757228: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761599: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756887: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754530: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756884: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760364: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754641: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761601: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761598: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756886: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756882: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754527: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752691: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752688: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752690: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761597: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752683: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752687: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752695: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752810: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752816: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752819: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752814: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752681: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752823: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761600: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756879: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752948: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754526: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752821: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401757230: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754531: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752836: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754532: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756893: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756888: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752837: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752838: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754619: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752696: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752703: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752839: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761608: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752831: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754623: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756891: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752828: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752697: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752702: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752949: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754615: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754639: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752938: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754638: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752835: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752833: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756892: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752705: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752832: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752834: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756890: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752706: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754535: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401757258: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752701: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761606: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752829: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752827: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752700: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761605: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761607: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754536: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401757234: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752830: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752698: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761604: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752699: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752707: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752704: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756894: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756895: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754534: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760368: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760369: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752840: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756889: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754533: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760370: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756900: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752844: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754537: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752845: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754642: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756901: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754636: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752708: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760376: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754617: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752715: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752841: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761610: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752711: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752714: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761613: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754541: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754640: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752848: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752846: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401757262: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754538: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752712: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754542: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760375: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401757261: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756899: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401757268: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761611: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401757264: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761609: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760372: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752713: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756898: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752842: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752709: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401757263: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752716: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756896: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754539: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752843: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752710: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760377: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752723: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761612: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401757267: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760373: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756897: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754540: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752847: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760374: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754543: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756902: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752939: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756906: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756905: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752850: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754547: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754545: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752849: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754546: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752717: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761617: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752725: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761614: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761616: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752853: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752719: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756908: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752852: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760380: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752724: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752851: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754544: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756907: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401757274: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760378: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752720: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401757271: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756904: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754548: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401757269: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754549: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760379: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752950: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752721: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752854: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752718: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752722: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761615: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756903: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760384: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760382: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756909: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752861: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754550: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754552: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756912: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760381: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752728: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756911: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752856: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754556: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754557: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756910: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754554: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752855: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754555: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752940: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761618: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752857: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752726: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752858: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752727: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401757165: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752729: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761620: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752860: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761619: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760385: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756913: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761621: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752730: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756914: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752859: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754553: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756915: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760383: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754551: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761622: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752862: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760388: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756920: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752863: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756917: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754559: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752865: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752734: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761625: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754561: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752733: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752736: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754562: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761624: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754563: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752867: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761626: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752870: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756918: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756919: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752866: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754560: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760386: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752735: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752737: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761623: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752869: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760391: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752731: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754558: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752864: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752868: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756921: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752732: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756916: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761627: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760387: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756922: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760390: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760389: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761628: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754564: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752872: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760396: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754371: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754566: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752745: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756925: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752873: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756927: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754569: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752744: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756928: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752874: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761633: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761629: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760392: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761631: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752877: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752742: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754565: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752878: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761632: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752739: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760393: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756923: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752741: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761668: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752951: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752876: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760394: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752879: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752875: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752743: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761630: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752738: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754568: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752871: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752740: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756926: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756924: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760395: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752941: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754567: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761634: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754372: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760397: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752883: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752884: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754571: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754573: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761635: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752750: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756932: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752942: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752885: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752746: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760400: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752880: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756931: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761637: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752751: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760399: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754574: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752882: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752752: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752952: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756930: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756933: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752749: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756935: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754572: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752886: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761638: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761636: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752881: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754570: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760398: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752748: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752747: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756929: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756934: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761639: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761640: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754575: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756936: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752889: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756938: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754581: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754577: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752891: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752758: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760401: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756939: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754580: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760404: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761641: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752887: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756941: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754583: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752755: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752888: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754582: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761642: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760402: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754576: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756940: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752753: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760405: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752756: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752890: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756937: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752754: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754578: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752892: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752943: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754579: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752757: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761643: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756942: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760403: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761644: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756946: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752896: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752762: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752893: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756947: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754584: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761646: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761647: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756945: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752761: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752897: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752894: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752898: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756944: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754590: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756943: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752763: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754587: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752764: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761645: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752899: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754588: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761648: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760406: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754586: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754589: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754585: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752759: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760409: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752760: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752895: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760407: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752944: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760408: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761649: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754591: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752904: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752901: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752905: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756951: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401757174: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754597: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756952: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752772: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752768: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756948: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752945: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752767: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761651: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760411: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754595: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752906: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761654: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761653: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752903: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761652: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752907: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760413: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752765: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756953: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754592: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754593: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752771: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754596: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401761650: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756949: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752769: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760414: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752902: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401754594: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752900: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752766: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752770: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401752953: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401756950: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760412: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+  - Game 401760410: 2 validation errors for GetPlays
+year
+  field required (type=value_error.missing)
+week
+  field required (type=value_error.missing)
+
+DATA COVERAGE:
+- Weeks Covered: 1-13
+- FBS Games Only: Yes
+- Play-by-Play Coverage: 0 games
+- Talent Ratings: Not Available
+
+RECOMMENDATIONS:
+- Review play-by-play data availability for recent games
+- Some games may not have complete play-by-play data

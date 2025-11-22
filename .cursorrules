@@ -1,0 +1,564 @@
+# Script Ohio 2.0 Project Rules
+
+## Project Scope
+- Workspace curates CollegeFootballData.com starter/model packs with `cfbd` Python API client
+- Primary code in Jupyter notebooks (`starter_pack/`, `model_pack/`); Python modules in `src/` only when notebook logic reused
+- **Agent System**: Production-ready multi-agent architecture (95% complete) - see `AGENTS.md` for comprehensive guidelines
+- **2025 Status**: Grade A+ system, 100% syntax validation, 4,989 games (2016-2025), verified agent functionality
+
+## Environment & Tooling
+- Target Python **3.13** (local virtualenv provisioned)
+- Install: `pip install -r requirements.txt` (or `pip install cfbd` for lightweight scripts)
+- Prefer notebook development; use `%pip install` sparingly - capture deps in requirements files
+
+## Data Handling
+- Source-of-truth CSVs: `starter_pack/data/` (read-only)
+- Never commit derived datasets >5MB. Use `.gitignore`d directories (`outputs/` if needed)
+- Match column naming: `snake_case`, descriptive prefixes like `adjusted_`
+- **Model Training Data**: `model_pack/updated_training_data.csv` (6.8MB, 86 columns, 2016-2025)
+
+## API Usage
+- Access tokens from CollegeFootballData.com; never hardcode/commit keys. Use env vars (`CFBD_API_KEY`)
+- Configure: `cfbd.Configuration(access_token=os.environ["CFBD_API_KEY"], host="https://api.collegefootballdata.com")`
+- Next API (experimental): `host="https://apinext.collegefootballdata.com"`
+- Rate limits: 6 req/sec → `time.sleep(0.17)` throttling for loops
+- Prefer official client classes (`GamesApi`, `StatsApi`, etc.) over manual `requests`
+- **Full patterns**: See `AGENTS.md` CFBD Integration section
+
+## Security Considerations
+
+### Enhanced Security Requirements
+
+**Dependency Security**:
+- Run `pip-audit` or `safety check` before committing
+- Keep dependencies up to date
+- Review security advisories monthly
+- Add dependency scanning to CI/CD pipeline
+
+**Data Security**:
+- Encrypt sensitive data at rest (cache files, model files)
+- Use encryption for SQLite cache files in production
+- Review pickle file security (potential deserialization risks)
+- Implement data encryption for production deployments
+
+**Authentication & Authorization**:
+- Implement API key rotation mechanism
+- Add audit logging for all API key usage
+- Log authentication events (without exposing credentials)
+- Implement rate limiting on internal endpoints
+
+**Input Validation**:
+- Validate and sanitize all external inputs
+- Use type hints for parameter validation
+- Implement input validation in all agent actions
+- Sanitize user-provided data before processing
+
+**Network Security**:
+- Require HTTPS in production deployments
+- Validate SSL certificates
+- Implement certificate pinning for critical APIs
+- Review WebSocket authentication
+
+**Error Handling**:
+- Don't expose system internals in error messages
+- Use user-friendly error messages
+- Log detailed errors server-side only
+- Implement error categorization
+
+**Full security guide**: See `docs/SECURITY_BEST_PRACTICES.md`
+
+## Agent System Quick Reference
+
+### Core Requirements
+- All agents inherit from `BaseAgent` in `agents/core/agent_framework.py`
+- 4-level permission model: READ_ONLY, READ_EXECUTE, READ_EXECUTE_WRITE, ADMIN
+- Define capabilities with execution time estimates in `_define_capabilities()`
+- Implement `_execute_action()` with proper error handling
+
+### Essential Pattern
+```python
+from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
+
+class CustomAgent(BaseAgent):
+    def __init__(self, agent_id: str):
+        super().__init__(agent_id, "Agent Name", PermissionLevel.READ_EXECUTE)
+    
+    def _define_capabilities(self) -> List[AgentCapability]:
+        return [AgentCapability(name="action", ...)]
+    
+    def _execute_action(self, action: str, parameters: Dict, user_context: Dict) -> Dict:
+        # Implementation
+        pass
+```
+
+**Full patterns and examples**: See `AGENTS.md` lines 177-367 (Agent Development Framework)
+
+### Agent Types
+- `learning_navigator`: Educational guidance, learning paths
+- `model_engine`: ML predictions, ensemble modeling
+- `insight_generator`: Advanced stats, CFBD live pulls, visualization
+- `workflow_automator`: Multi-step pipelines, agent chaining
+- `cfbd_integration`: Rate-limited CFBD API access, caching
+- `quality_assurance`: Syntax validation, QA reporting
+
+**Complete agent cheat sheet**: See `AGENTS.md` lines 30-41
+
+## CFBD Integration Quick Reference
+
+### Essential Patterns
+- API Key: `CFBD_API_KEY` environment variable (required)
+- Rate Limiting: 6 req/sec → `time.sleep(0.17)` between requests
+- Official Client: `cfbd` package with `GamesApi`, `StatsApi`, `TeamsApi` classes
+- Host Options: `https://api.collegefootballdata.com` (production) or `https://apinext.collegefootballdata.com` (experimental)
+
+### Minimal Authentication Pattern
+```python
+from cfbd import Configuration, ApiClient, GamesApi
+configuration = Configuration()
+configuration.api_key['Authorization'] = f"Bearer {os.environ['CFBD_API_KEY']}"
+games_api = GamesApi(ApiClient(configuration))
+```
+
+**Full integration patterns**: See `AGENTS.md` CFBD Integration section (authentication, rate limiting, data transformation, caching)
+
+### Data Quality Notes
+- Historical: 1869-present (games), 2003-present (play-by-play)
+- Model Training: 2016-2025, Week 5+, FBS games (4,989 games)
+- Features: 86 opponent-adjusted features (prevents data leakage)
+
+## Project Structure
+
+### Directory Organization
+- `agents/`: Agent system code
+  - `agents/core/`: Framework (agent_framework.py, context_manager.py, tool_loader.py)
+  - `agents/system/`: System components (deprecated, see MIGRATION_GUIDE.md)
+- `starter_pack/`: 13 educational notebooks (12 + data dictionary)
+- `model_pack/`: 7 ML modeling notebooks + pre-trained models (`*_2025.joblib`, `*_2025.pkl`)
+- `tests/`: Test suite for agent system and models
+- `project_management/`: Project documentation and tools
+
+### File Naming Conventions
+- Agents: `{domain}_agent.py` (e.g., `learning_navigator_agent.py`)
+- Core: `{component}.py` (e.g., `agent_framework.py`)
+- Tests: `test_{component}.py`
+- Models: `{model_type}_model_2025.{ext}` (e.g., `ridge_model_2025.joblib`)
+
+## Coding Standards
+- Follow PEP 8; prefer type hints in new Python modules
+- Pandas idioms: vectorized operations, `.assign` pipelines, avoid chained indexing
+- Notebooks: Include top markdown cell with objectives, inputs, outputs
+- Keep notebook cells deterministic; move long jobs to helper scripts/modules
+- **Agent Code**: Use dataclasses for request/response objects, enums for status/permission levels
+
+## Quick Commands
+
+### Agent System
+```bash
+# Modern demo
+python3 agents/demo_agent_system.py
+
+# Smoke tests
+python3 agents/test_agent_system.py
+
+# Pytest suite
+python3 -m pytest agents/tests -q
+
+# Weekly analysis
+python3 scripts/run_weekly_analysis.py --week 13
+
+# Verify agents
+python3 scripts/verify_weekly_agents.py
+```
+
+### Security & Quality Tests
+- **Dependency scanning**: `pip-audit` or `safety check`
+- **Type checking**: `mypy agents/ src/`
+- **Linting**: `black --check agents/ src/`
+- **Code coverage**: `pytest --cov=agents --cov-report=term-missing`
+
+### Environment Setup
+```bash
+# Bootstrap dev environment
+scripts/bootstrap_dev_env.sh
+
+# For detailed setup: See docs/sdk_onboarding.md
+```
+
+### Model Files (Verified)
+- `model_pack/ridge_model_2025.joblib`: Ridge regression
+- `model_pack/xgb_home_win_model_2025.pkl`: XGBoost classifier
+- `model_pack/fastai_home_win_model_2025.pkl`: FastAI neural network (mock on load - known issue)
+- Training data: `model_pack/updated_training_data.csv` (86 features, 4,989 games)
+
+## Version Control
+- Notebooks: Restart kernel and run all before commits
+- Exclude secrets, local paths, interactive credentials from versioned files
+- Commit messages: Reference dataset/model touchpoints (e.g., "Update EPA feature engineering in model pack notebook 05")
+- **Agent commits**: Reference agent type and capability (e.g., "Add batch prediction to ModelExecutionEngine")
+
+## PR Instructions
+
+Before submitting a pull request:
+
+- **Before committing**: Run `python3 -m pytest agents/tests -q` and `python3 agents/test_agent_system.py`
+- **Code quality**: Ensure syntax validation passes: `find . -name "*.py" -exec python3 -m py_compile {} \;`
+- **TOON plans**: Run `python3 scripts/smoke_test_toon.py` before creating/modifying plans in `.cursor/plans/`
+- **Agent changes**: Update smoke tests/pytest suite to cover new agent functionality
+- **Documentation**: Update `AGENTS.md` if adding new agents or capabilities
+- **Breaking changes**: Never modify existing agent interfaces - use additive patterns only
+
+### Security Checklist
+- [ ] No hardcoded secrets or API keys
+- [ ] All environment variables documented
+- [ ] Dependencies scanned for vulnerabilities (`pip-audit`)
+- [ ] Input validation implemented for new features
+- [ ] Error messages don't expose system internals
+
+### Code Quality Checklist
+- [ ] Type hints added to public APIs
+- [ ] Code passes linting (`black`, `flake8`)
+- [ ] Type checking passes (`mypy`)
+- [ ] Test coverage maintained or improved
+- [ ] Documentation updated
+
+### Performance Checklist
+- [ ] No performance regressions
+- [ ] Caching implemented where appropriate
+- [ ] Async operations used for I/O
+- [ ] Large files split if >1000 lines
+
+## Cursor IDE Optimizations
+
+### Quick Development Patterns
+- Cursor auto-suggests agent patterns when typing `class MyAgent(BaseAgent):`
+- Use Cursor Command Palette: "Create New Agent" → Select template
+- Performance profiling: Hover over methods for execution time estimates
+
+### Debug Configuration
+Create `.vscode/launch.json` for agent debugging:
+```json
+{
+  "version": "0.2.0",
+  "configurations": [{
+    "name": "Debug Agent",
+    "type": "python",
+    "program": "${workspaceFolder}/agents/analytics_orchestrator.py",
+    "args": ["--debug"],
+    "env": {"CFBD_API_KEY": "${env:CFBD_API_KEY}"}
+  }]
+}
+```
+
+**Full Cursor patterns**: See `AGENTS.md` Cursor-Specific section (lines 1134-1365) for snippets, AI integration, performance monitoring
+
+## Documentation References
+
+### Primary Documentation
+- **Agent Development**: `AGENTS.md` - Comprehensive agent framework (OpenAI standards)
+- **SDK Onboarding**: `docs/sdk_onboarding.md` - Installation, caching, key management
+- **Migration Guide**: `agents/system/MIGRATION_GUIDE.md` - Legacy component migration
+- **CFBD Resources**: 
+  - Website: https://collegefootballdata.com/
+  - API Docs: https://apinext.collegefootballdata.com/
+  - Python Client: https://github.com/CFBD/cfbd-python
+
+### Key Sections in AGENTS.md
+- **Quick Start** (lines 7-23): Orchestrator usage examples
+- **Agent Cheat Sheet** (lines 30-41): All agent types and capabilities
+- **Agent Development** (lines 177-367): BaseAgent patterns, permissions, capabilities
+- **CFBD Integration** (lines 238-586): Full authentication, rate limiting, caching patterns
+- **Development Workflows** (lines 827-1106): Agent creation, ML integration, performance
+- **Testing** (lines 613-825): Test templates and QA checklists
+
+## Implementation Status
+- **Agent System**: 95% complete, production-ready
+- **Context Manager**: 40% token reduction, role detection working
+- **Model Engine**: 3 models load (Ridge/XGBoost work; FastAI uses mock due to pickle protocol)
+- **Tool Loader**: 6 tools loaded (data_loading, model_execution, visualization, analysis, export)
+- **Code Quality**: 100% syntax validation, A+ grade
+
+## Notes
+- FastAI model warnings expected (placeholder pickle); ridge/XGB models load correctly
+- `agents/system/` directories deprecated - see MIGRATION_GUIDE.md
+- For detailed patterns, code examples, and advanced features, always refer to `AGENTS.md`
+
+## TOON Format Integration (Token Optimization)
+
+**TOON v2.0 Specification** (2025-11-10): Token-Oriented Object Notation - 
+line-oriented, indentation-based format encoding JSON data model with explicit 
+structure and minimal quoting. Official spec: 
+https://github.com/toon-format/spec
+
+### When to Use TOON Formatting
+
+**Always consider TOON formatting when:**
+- ✅ Generating agent responses with uniform arrays of objects
+- ✅ Creating analysis outputs that will be consumed by LLMs
+- ✅ Exporting data with tabular structures (games, predictions, stats)
+- ✅ Caching data that will be sent to LLMs
+- ✅ Token savings potential > 20% (estimate before encoding)
+
+**TOON Format Guidelines:**
+- **Uniform Arrays**: Use TOON for arrays where all objects have the same 
+  structure
+  - Example: `elimination_games`, `path_to_playoff`, `top_10` matchups
+- **Agent Responses**: Prefer TOON for agent outputs when arrays are uniform
+- **Analysis Artifacts**: Generate both JSON and TOON versions when appropriate
+- **Token Optimization**: Use TOON to reduce LLM input costs by 50-70%
+
+### TOON v2.0 Syntax Reference
+
+**Array Header Format (v2.0 Breaking Change):**
+- ✅ Use `[N]` format only (e.g., `items[3]:`)
+- ❌ `[#N]` format is invalid in v2.0 (removed breaking change)
+- All array headers MUST use `[N]` format: `key[N<delim?>]:` or 
+  `key[N<delim?>]{field1,field2}:`
+
+**Tabular Array Pattern:**
+```yaml
+# Declare structure once, stream data compactly
+arrayName[length]{field1,field2,field3}:
+  value1,value2,value3
+  value4,value5,value6
+```
+
+**Delimiter Options:**
+- Comma (default): `items[3]: a,b,c` or `items[3]{a,b}:`
+- Tab: `items[3	]{a	b}:` (HTAB inside brackets/braces)
+- Pipe: `items[3|]{a|b}:` (pipe inside brackets/braces)
+
+**Primitive Arrays:**
+```yaml
+tags[3]: admin,ops,dev
+```
+
+**Nested Objects:**
+```yaml
+user:
+  id: 123
+  name: Ada
+```
+
+**Objects as List Items:**
+```yaml
+items[2]:
+  - id: 1
+    name: First
+  - id: 2
+    name: Second
+```
+
+### TOON v2.0 Features
+
+**Key Folding (Encoder, Optional):**
+- `keyFolding='safe'` with `flattenDepth` control
+- Collapses nested single-key objects: `{a: {b: {c: 1}}}` → `a.b.c: 1`
+- Default: OFF (backward compatible)
+- Requirements: All segments must be IdentifierSegments 
+  (`^[A-Za-z_][A-Za-z0-9_]*$`), no path separator in segments, no collisions
+
+**Path Expansion (Decoder, Optional):**
+- `expandPaths='safe'` with conflict resolution
+- Expands dotted keys: `a.b.c: 1` → `{"a": {"b": {"c": 1}}}`
+- Default: OFF (backward compatible)
+- Conflict resolution: Error in strict mode (default), last-write-wins in 
+  non-strict mode
+
+**Strict Mode (Decoder, Default: true):**
+- Enforces array count matches declared `[N]`
+- Enforces indentation is exact multiple of indentSize (default 2 spaces)
+- Rejects tabs in indentation (tabs allowed in quoted strings and as delimiter)
+- Rejects blank lines inside arrays/tabular rows
+- Rejects invalid escape sequences (only `\\`, `\"`, `\n`, `\r`, `\t` valid)
+- Rejects missing colons after keys
+
+**Canonical Number Formatting:**
+- No exponent notation (1e6 → 1000000)
+- No leading zeros except "0" (05 → string, not number)
+- No trailing zeros in fractional part (1.5000 → 1.5)
+- -0 normalized to 0
+- Sufficient precision for round-trip fidelity
+
+**Quoting Rules:**
+Strings MUST be quoted if:
+- Empty string
+- Leading/trailing whitespace
+- Equals `true`, `false`, or `null` (case-sensitive)
+- Numeric-like (matches number pattern or leading zeros)
+- Contains colon, quote, backslash, brackets, braces
+- Contains control characters (newline, carriage return, tab)
+- Contains active delimiter (comma/tab/pipe in array scope)
+- Equals "-" or starts with "-"
+
+**Indentation Rules:**
+- Default: 2 spaces per level
+- Tabs MUST NOT be used for indentation
+- Exactly one space after `: ` in key-value lines
+- No trailing spaces or trailing newline
+
+### Implementation
+
+**Python Interface:**
+```python
+from src.toon_format import encode, decode, encode_file, decode_file
+
+# Encode JSON to TOON
+toon_output = encode(data)
+
+# Decode TOON to JSON
+json_data = decode(toon_output)
+
+# File operations
+encode_file("data.json", "data.toon")
+decode_file("data.toon", "data.json")
+```
+
+**CLI Usage:**
+```bash
+# Check TOON CLI
+npx @toon-format/cli --version
+
+# Install if needed
+npm install -g @toon-format/cli
+
+# Encode/Decode
+npx @toon-format/cli input.json -o output.toon
+npx @toon-format/cli --decode input.toon -o output.json
+```
+
+**References:**
+- Official Spec: https://github.com/toon-format/spec
+- Format Guide: `docs/TOON_FORMAT_GUIDE.md`
+- Plan System: `docs/TOON_PLAN_SYSTEM.md`
+- Plan Conversion: `scripts/plan_to_workflow.py`
+
+**Cursor AI Reminders:**
+- When generating analysis outputs with uniform arrays, suggest TOON format
+- When user asks about token optimization, mention TOON as an option
+- When creating agent responses, evaluate if TOON would save tokens
+- When exporting large datasets, offer TOON as an alternative format
+- Always use `[N]` format (never `[#N]`) for array headers
+- Ensure uniform arrays for maximum token savings (50-70% reduction)
+
+## Plan Structure for TOON Conversion
+
+When creating plans in `.cursor/plans/`, structure them for TOON conversion:
+
+### Required Structure:
+- **Tasks Array**: Uniform structure (id, name, description, agent_type, estimated_time)
+- **Steps Array**: Uniform structure (id, task_id, action, step_type, parameters)
+- **Dependencies**: Array of step/task IDs
+- **Metadata**: Plan-level information
+
+### TOON Optimization:
+- Use uniform arrays (same fields for all items)
+- Avoid deeply nested non-uniform structures
+- Group related data into arrays
+- Use flat structures where possible
+- Always use `[N]` format for array headers (v2.0 requirement)
+
+### Plan Template:
+```markdown
+## Objective
+[Clear objective]
+
+## Tasks
+### Task 1: [Name]
+- **ID**: task_1
+- **Agent**: model_engine
+- **Steps**: step_1, step_2
+- **Time**: 5.0s
+
+## Steps
+### Step 1: [Action]
+- **ID**: step_1
+- **Task**: task_1
+- **Action**: run_prediction
+- **Type**: AGENT_EXECUTION
+```
+
+### Conversion:
+```bash
+# Convert plan to TOON
+python scripts/plan_to_workflow.py .cursor/plans/my_plan.plan.md --toon
+
+# Execute TOON plan via WorkflowAutomatorAgent
+python scripts/plan_to_workflow.py my_plan.toon --execute
+```
+
+**Reference**: See `docs/PLAN_STRUCTURE.md` for complete specification and `docs/TOON_PLAN_SYSTEM.md` for user guide
+
+## Plan Creation Validation
+
+**CRITICAL**: When Cursor AI creates or modifies plans in `.cursor/plans/`, it MUST:
+
+1. **Run TOON smoke test** before finalizing the plan:
+   ```bash
+   python3 scripts/smoke_test_toon.py
+   ```
+   - This verifies TOON CLI availability, encoding/decoding, markdown parsing, plan validation, workflow conversion, and end-to-end functionality
+   - All 6 tests must pass before proceeding
+   - If tests fail, fix TOON-related issues before completing the plan
+
+2. **Validate plan structure** after creation:
+   ```bash
+   python3 scripts/plan_to_workflow.py .cursor/plans/[plan_name].plan.md --toon --validate-only
+   ```
+   - Ensures plan follows required structure for TOON conversion
+   - Catches structural errors early (missing fields, non-uniform arrays, 
+     invalid references)
+   - Verifies v2.0 compliance (no `[#N]` format)
+
+3. **Test plan conversion** (optional but recommended):
+   ```bash
+   python3 scripts/plan_to_workflow.py .cursor/plans/[plan_name].plan.md --toon --output /tmp/test_workflow.json
+   ```
+   - Verifies the plan can be successfully converted to a workflow
+   - Confirms all steps, tasks, and dependencies are valid
+
+**When to run validation:**
+- ✅ Before creating a new plan
+- ✅ After modifying an existing plan
+- ✅ When adding TOON-related features
+- ✅ Before committing plan changes
+
+**If smoke test fails:**
+- Check TOON CLI: `npx @toon-format/cli --version`
+- Install if needed: `npm install -g @toon-format/cli`
+- Review error messages in smoke test output
+- Fix issues before proceeding with plan creation
+
+**Cursor AI Behavior:**
+- When user requests plan creation/modification, run `python3 scripts/smoke_test_toon.py` first
+- If smoke test fails, inform user and wait for resolution before creating plan
+- After plan creation, automatically validate with `--validate-only` flag
+- Report validation results to user (success or specific errors)
+- Only mark plan as complete when both smoke test and validation pass
+- Ensure all array headers use `[N]` format (never `[#N]`) per v2.0 spec
+
+## Output Formatting
+
+### Markdown Code Block Output Format
+- **ALWAYS** return final outputs inside a fenced Markdown code block
+- Format: Start with three backticks followed by "markdown", end with three backticks
+- Do NOT include any explanation or text outside the code block
+- Keep lines under 80-100 characters to prevent horizontal scrolling
+- Use proper markdown formatting within the block (headers, lists, paragraphs, etc.)
+- Break long content into sections with headers
+- Use lists and shorter paragraphs for better readability
+
+**Example:**
+````markdown
+```markdown
+# Section Title
+
+Short paragraph here.
+
+## Subsection
+
+- List item 1
+- List item 2
+
+More content...
+```
+````

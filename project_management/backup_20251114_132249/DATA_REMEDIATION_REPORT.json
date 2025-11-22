@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-11-14T01:16:28.301548",
+  "fixes_applied": [],
+  "summary": {
+    "ridge_features_ok": true,
+    "xgb_features_ok": true,
+    "opponent_adj_features": 48,
+    "rows": 4874,
+    "columns": 88,
+    "fixes_applied": 0
+  },
+  "backup_file": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/updated_training_data_BACKUP_20251114_011628.csv"
+}

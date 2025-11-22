@@ -1,0 +1,59 @@
+metadata:
+  title: Fix Power Rankings Calculation
+  objective: Replace random data generators with real calculations from Elo/talent/EPA metrics and training data for win-loss records
+  created_at: 2025-11-19T22:00:00Z
+  author: user
+  version: "1.0"
+
+tasks[3]{id,name,description,agent_type,estimated_time}:
+  task_1,Update Data Loading,Add training data loading to _load_enhanced_weekly_data method,workflow_automator,2.0
+  task_2,Fix Strength Metrics,Replace random strength metric calculations with real Elo/talent/EPA calculations,workflow_automator,5.0
+  task_3,Fix Power Rankings,Replace random power rankings with real win-loss records and calculated ratings,workflow_automator,3.0
+
+steps[9]{id,task_id,action,step_type,timeout}:
+  step_1,task_1,update_load_method,AGENT_EXECUTION,60
+  step_2,task_2,fix_offensive_rating,AGENT_EXECUTION,30
+  step_3,task_2,fix_defensive_rating,AGENT_EXECUTION,30
+  step_4,task_2,fix_overall_rating,AGENT_EXECUTION,30
+  step_5,task_2,fix_strength_of_schedule,AGENT_EXECUTION,30
+  step_6,task_2,fix_remaining_metrics,AGENT_EXECUTION,60
+  step_7,task_3,fix_power_rankings_method,AGENT_EXECUTION,60
+  step_8,task_3,test_calculations,ANALYSIS,120
+  step_9,task_3,verify_output,ANALYSIS,60
+
+shared_inputs:
+  file_path: agents/weekly_matchup_analysis_agent.py
+  data_sources:
+    enhanced_games: data/week{week}/enhanced/week{week}_enhanced_games.csv
+    training_data: model_pack/updated_training_data.csv
+  calculation_patterns:
+    elo_talent_epa: core_tools/final_analysis.py
+    win_loss_records: core_tools/corrected_analysis.py
+
+workflow_config:
+  parallel_execution: false
+  error_recovery: true
+  max_retries: 3
+
+code_changes[3]{method_name,start_line,end_line,change_type}:
+  _load_enhanced_weekly_data,147,180,MODIFY
+  _calculate_team_strength_metrics,560,585,REPLACE
+  _generate_power_rankings,694,705,REPLACE
+
+method_replacements[9]{method_name,new_implementation,data_source}:
+  _load_enhanced_weekly_data,Add training_data loading from model_pack/updated_training_data.csv,training_data
+  _calculate_offensive_rating,Calculate from home_adjusted_epa and away_adjusted_epa in enhanced games,enhanced_games
+  _calculate_defensive_rating,Calculate from home_adjusted_epa_allowed and away_adjusted_epa_allowed,enhanced_games
+  _calculate_special_teams_rating,Average of offensive and defensive ratings,calculated
+  _calculate_overall_rating,Use Elo + talent + EPA*1000 formula from final_analysis.py,enhanced_games
+  _calculate_strength_of_schedule,Calculate from opponents average Elo ratings,enhanced_games
+  _estimate_injury_impact,Return neutral 1.0 placeholder,placeholder
+  _calculate_consistency_rating,Calculate from EPA variance,enhanced_games
+  _generate_power_rankings,Calculate wins/losses from training data scores and use real ratings,training_data
+
+verification_checks[4]{check_name,expected_result,validation_method}:
+  data_loading,training_data loaded with completed games,check_length_gt_zero
+  strength_metrics,ratings between 0-100 not random,check_range_0_100
+  win_loss_records,realistic records like 8-4 not 12-1,check_realistic_range
+  power_rankings,top teams have highest ratings,check_sorting_descending
+

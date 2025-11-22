@@ -1,0 +1,27 @@
+{
+  "update_date": "2025-11-13",
+  "total_notebooks": 13,
+  "successful_updates": 13,
+  "replacements_applied": [
+    [
+      "./data/",
+      "config.data_dir / "
+    ],
+    [
+      "data/merged/",
+      "config.data_dir / "
+    ],
+    [
+      "2023",
+      "config.current_year"
+    ],
+    [
+      "2024",
+      "config.current_year"
+    ],
+    [
+      "2025",
+      "config.current_year"
+    ]
+  ]
+}

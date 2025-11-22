@@ -1,0 +1,56 @@
+{
+  "monitoring": {
+    "name": "Activation Script Monitoring",
+    "version": "1.0.0",
+    "created": "2025-11-13T19:50:01.703860",
+    "description": "Monitor activation script failures and PATH resolution issues",
+    "metrics": {
+      "activation_success_rate": {
+        "type": "counter",
+        "description": "Number of successful activations",
+        "unit": "count"
+      },
+      "activation_failure_rate": {
+        "type": "counter",
+        "description": "Number of failed activations",
+        "unit": "count"
+      },
+      "path_resolution_failures": {
+        "type": "counter",
+        "description": "Number of PATH resolution failures",
+        "unit": "count"
+      },
+      "executable_resolution_failures": {
+        "type": "counter",
+        "description": "Number of python/pip resolution failures",
+        "unit": "count"
+      }
+    },
+    "check_interval": "hourly",
+    "monitoring_period_days": 2,
+    "alerts": {
+      "failure_rate_threshold": 0.01,
+      "failure_rate_unit": "percentage",
+      "alert_conditions": [
+        {
+          "metric": "activation_failure_rate",
+          "threshold": 0.01,
+          "operator": "greater_than",
+          "severity": "warning",
+          "message": "Activation failure rate exceeds 1.0%"
+        },
+        {
+          "metric": "path_resolution_failures",
+          "threshold": 5,
+          "operator": "greater_than",
+          "severity": "error",
+          "message": "PATH resolution failures exceed threshold"
+        }
+      ],
+      "notification_channels": [
+        "log",
+        "console"
+      ]
+    }
+  }
+}

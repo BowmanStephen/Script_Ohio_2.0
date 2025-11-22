@@ -1,0 +1,229 @@
+2025-11-07 14:43:22,366 - INFO - Starting complete model training pipeline...
+2025-11-07 14:43:22,366 - INFO - Loading updated training data with 2025 season...
+2025-11-07 14:43:22,397 - INFO - Loaded dataset with 4989 games
+2025-11-07 14:43:22,398 - INFO - Season range: 2016 - 2025
+2025-11-07 14:43:22,398 - INFO - Games per season:
+2025-11-07 14:43:22,398 - INFO -   2016: 539 games
+2025-11-07 14:43:22,398 - INFO -   2017: 560 games
+2025-11-07 14:43:22,398 - INFO -   2018: 525 games
+2025-11-07 14:43:22,398 - INFO -   2019: 585 games
+2025-11-07 14:43:22,398 - INFO -   2021: 565 games
+2025-11-07 14:43:22,398 - INFO -   2022: 566 games
+2025-11-07 14:43:22,398 - INFO -   2023: 576 games
+2025-11-07 14:43:22,398 - INFO -   2024: 604 games
+2025-11-07 14:43:22,398 - INFO -   2025: 469 games
+2025-11-07 14:43:22,399 - INFO - Training set: 4520 games (2016-2024)
+2025-11-07 14:43:22,399 - INFO - Test set: 469 games (2025)
+2025-11-07 14:43:22,399 - ERROR - Error in training pipeline: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+2025-11-07 14:43:32,217 - INFO - Starting complete model training pipeline...
+2025-11-07 14:43:32,218 - INFO - Loading updated training data with 2025 season...
+2025-11-07 14:43:32,251 - INFO - Loaded dataset with 4989 games
+2025-11-07 14:43:32,251 - INFO - Season range: 2016 - 2025
+2025-11-07 14:43:32,251 - INFO - Games per season:
+2025-11-07 14:43:32,251 - INFO -   2016: 539 games
+2025-11-07 14:43:32,252 - INFO -   2017: 560 games
+2025-11-07 14:43:32,252 - INFO -   2018: 525 games
+2025-11-07 14:43:32,252 - INFO -   2019: 585 games
+2025-11-07 14:43:32,252 - INFO -   2021: 565 games
+2025-11-07 14:43:32,252 - INFO -   2022: 566 games
+2025-11-07 14:43:32,252 - INFO -   2023: 576 games
+2025-11-07 14:43:32,252 - INFO -   2024: 604 games
+2025-11-07 14:43:32,252 - INFO -   2025: 469 games
+2025-11-07 14:43:32,252 - INFO - Training set: 4520 games (2016-2024)
+2025-11-07 14:43:32,252 - INFO - Test set: 469 games (2025)
+2025-11-07 14:43:32,253 - INFO - Data loading and preparation completed successfully!
+2025-11-07 14:43:32,253 - INFO - Training Ridge Regression model...
+2025-11-07 14:43:32,263 - INFO - Ridge Regression trained successfully!
+2025-11-07 14:43:32,263 - INFO - MAE: 17.31, RMSE: 20.64, R²: -2.856
+2025-11-07 14:43:32,263 - INFO - Training XGBoost Classifier...
+2025-11-07 14:43:32,418 - INFO - XGBoost trained successfully!
+2025-11-07 14:43:32,418 - INFO - Accuracy: 0.431, Log Loss: 0.828, AUC: 0.416, F1: 0.433
+2025-11-07 14:43:32,418 - INFO - Training FastAI Neural Network...
+2025-11-07 14:43:32,481 - ERROR - Error training FastAI model: cannot access local variable 'accuracy' where it is not associated with a value
+2025-11-07 14:43:32,481 - INFO - Generating performance comparisons...
+2025-11-07 14:43:33,018 - INFO - Performance comparison completed!
+2025-11-07 14:43:33,018 - INFO - Generating feature importance analysis...
+2025-11-07 14:43:33,222 - INFO - Feature importance analysis completed!
+2025-11-07 14:43:33,222 - INFO - Generating temporal validation report...
+2025-11-07 14:43:33,222 - INFO - Temporal validation report generated!
+2025-11-07 14:43:33,222 - INFO - Model training pipeline completed successfully!
+2025-11-18 20:43:06,766 - INFO - Starting complete model training pipeline...
+2025-11-18 20:43:06,767 - INFO - Loading updated training data with 2025 season...
+2025-11-18 20:43:06,805 - INFO - Loaded dataset with 4865 games
+2025-11-18 20:43:06,805 - INFO - Season range: 2016 - 2025
+2025-11-18 20:43:06,805 - INFO - Games per season:
+2025-11-18 20:43:06,808 - INFO -   2016: 539 games
+2025-11-18 20:43:06,808 - INFO -   2017: 560 games
+2025-11-18 20:43:06,808 - INFO -   2018: 525 games
+2025-11-18 20:43:06,808 - INFO -   2019: 585 games
+2025-11-18 20:43:06,808 - INFO -   2021: 565 games
+2025-11-18 20:43:06,808 - INFO -   2022: 566 games
+2025-11-18 20:43:06,808 - INFO -   2023: 576 games
+2025-11-18 20:43:06,808 - INFO -   2024: 604 games
+2025-11-18 20:43:06,808 - INFO -   2025: 345 games
+2025-11-18 20:43:06,808 - INFO - Training set: 4520 games (2016-2024)
+2025-11-18 20:43:06,809 - INFO - Test set: 345 games (2025)
+2025-11-18 20:43:06,809 - INFO - Data loading and preparation completed successfully!
+2025-11-18 20:43:06,810 - INFO - Training Ridge Regression model...
+2025-11-18 20:43:06,813 - INFO - Ridge Regression trained successfully!
+2025-11-18 20:43:06,813 - INFO - MAE: 7.63, RMSE: 9.64, R²: 0.000
+2025-11-18 20:43:06,813 - INFO - Training XGBoost Classifier...
+2025-11-18 20:43:06,974 - ERROR - Error in training pipeline: y_true contains only one label (0). Please provide the list of all expected class labels explicitly through the labels argument.
+2025-11-18 23:06:58,361 - INFO - Loading updated training data with 2025 season...
+2025-11-18 23:06:58,392 - INFO - Loaded dataset with 5009 games
+2025-11-18 23:06:58,393 - INFO - Season range: 2016 - 2025
+2025-11-18 23:06:58,393 - INFO - Games per season:
+2025-11-18 23:06:58,393 - INFO -   2016: 539 games
+2025-11-18 23:06:58,393 - INFO -   2017: 560 games
+2025-11-18 23:06:58,393 - INFO -   2018: 525 games
+2025-11-18 23:06:58,393 - INFO -   2019: 585 games
+2025-11-18 23:06:58,393 - INFO -   2021: 565 games
+2025-11-18 23:06:58,393 - INFO -   2022: 566 games
+2025-11-18 23:06:58,393 - INFO -   2023: 576 games
+2025-11-18 23:06:58,393 - INFO -   2024: 604 games
+2025-11-18 23:06:58,393 - INFO -   2025: 489 games
+2025-11-18 23:06:58,394 - INFO - Training set: 4520 games (2016-2024)
+2025-11-18 23:06:58,394 - INFO - Test set: 489 games (2025)
+2025-11-18 23:06:58,394 - INFO - Data loading and preparation completed successfully!
+2025-11-18 23:12:15,527 - INFO - Starting complete model training pipeline...
+2025-11-18 23:12:15,527 - INFO - Loading updated training data with 2025 season...
+2025-11-18 23:12:15,554 - INFO - Loaded dataset with 5009 games
+2025-11-18 23:12:15,555 - INFO - Season range: 2016 - 2025
+2025-11-18 23:12:15,555 - INFO - Games per season:
+2025-11-18 23:12:15,555 - INFO -   2016: 539 games
+2025-11-18 23:12:15,555 - INFO -   2017: 560 games
+2025-11-18 23:12:15,555 - INFO -   2018: 525 games
+2025-11-18 23:12:15,555 - INFO -   2019: 585 games
+2025-11-18 23:12:15,555 - INFO -   2021: 565 games
+2025-11-18 23:12:15,555 - INFO -   2022: 566 games
+2025-11-18 23:12:15,555 - INFO -   2023: 576 games
+2025-11-18 23:12:15,555 - INFO -   2024: 604 games
+2025-11-18 23:12:15,555 - INFO -   2025: 489 games
+2025-11-18 23:12:15,555 - INFO - Training set: 4520 games (2016-2024)
+2025-11-18 23:12:15,556 - INFO - Test set: 489 games (2025)
+2025-11-18 23:12:15,556 - INFO - Data loading and preparation completed successfully!
+2025-11-18 23:12:15,556 - INFO - Training Ridge Regression model...
+2025-11-18 23:12:15,559 - INFO - Ridge Regression trained successfully!
+2025-11-18 23:12:15,559 - INFO - MAE: 9.17, RMSE: 11.72, R²: 0.000
+2025-11-18 23:12:15,559 - INFO - Training XGBoost Classifier...
+2025-11-18 23:12:15,710 - WARNING - Test set contains only one class (0) - AUC set to 0.5
+2025-11-18 23:12:15,711 - INFO - XGBoost trained successfully!
+2025-11-18 23:12:15,711 - INFO - Accuracy: 0.376, Log Loss: 1.288, AUC: 0.500, F1: 0.000
+2025-11-18 23:12:15,712 - INFO - Training FastAI Neural Network...
+2025-11-18 23:12:15,754 - ERROR - Error training FastAI model: cannot access local variable 'accuracy' where it is not associated with a value
+2025-11-18 23:12:15,754 - INFO - Generating performance comparisons...
+2025-11-18 23:12:16,222 - INFO - Performance comparison completed!
+2025-11-18 23:12:16,222 - INFO - Generating feature importance analysis...
+2025-11-18 23:12:16,418 - INFO - Feature importance analysis completed!
+2025-11-18 23:12:16,418 - INFO - Generating temporal validation report...
+2025-11-18 23:12:16,418 - INFO - Temporal validation report generated!
+2025-11-18 23:12:16,419 - INFO - Model training pipeline completed successfully!
+2025-11-18 23:17:18,546 - INFO - Starting complete model training pipeline...
+2025-11-18 23:17:18,547 - INFO - Loading updated training data with 2025 season...
+2025-11-18 23:17:18,579 - INFO - Loaded dataset with 5009 games
+2025-11-18 23:17:18,579 - INFO - Season range: 2016 - 2025
+2025-11-18 23:17:18,579 - INFO - Games per season:
+2025-11-18 23:17:18,579 - INFO -   2016: 539 games
+2025-11-18 23:17:18,579 - INFO -   2017: 560 games
+2025-11-18 23:17:18,579 - INFO -   2018: 525 games
+2025-11-18 23:17:18,579 - INFO -   2019: 585 games
+2025-11-18 23:17:18,579 - INFO -   2021: 565 games
+2025-11-18 23:17:18,579 - INFO -   2022: 566 games
+2025-11-18 23:17:18,579 - INFO -   2023: 576 games
+2025-11-18 23:17:18,579 - INFO -   2024: 604 games
+2025-11-18 23:17:18,579 - INFO -   2025: 489 games
+2025-11-18 23:17:18,580 - INFO - Training set: 4520 games (2016-2024)
+2025-11-18 23:17:18,580 - INFO - Test set: 489 games (2025)
+2025-11-18 23:17:18,580 - INFO - Data loading and preparation completed successfully!
+2025-11-18 23:17:18,580 - INFO - Training Ridge Regression model...
+2025-11-18 23:17:18,584 - INFO - Ridge Regression trained successfully!
+2025-11-18 23:17:18,584 - INFO - MAE: 9.17, RMSE: 11.72, R²: 0.000
+2025-11-18 23:17:18,584 - INFO - Training XGBoost Classifier...
+2025-11-18 23:17:18,746 - WARNING - Test set contains only one class (0) - AUC set to 0.5
+2025-11-18 23:17:18,747 - INFO - XGBoost trained successfully!
+2025-11-18 23:17:18,747 - INFO - Accuracy: 0.376, Log Loss: 1.288, AUC: 0.500, F1: 0.000
+2025-11-18 23:17:18,747 - INFO - Training FastAI Neural Network...
+2025-11-18 23:17:18,792 - ERROR - Error training FastAI model: cannot access local variable 'accuracy' where it is not associated with a value
+2025-11-18 23:17:18,792 - INFO - Generating performance comparisons...
+2025-11-18 23:17:19,310 - INFO - Performance comparison completed!
+2025-11-18 23:17:19,310 - INFO - Generating feature importance analysis...
+2025-11-18 23:17:19,535 - INFO - Feature importance analysis completed!
+2025-11-18 23:17:19,535 - INFO - Generating temporal validation report...
+2025-11-18 23:17:19,535 - INFO - Temporal validation report generated!
+2025-11-18 23:17:19,535 - INFO - Model training pipeline completed successfully!
+2025-11-19 19:46:57,504 - INFO - Loading updated training data with 2025 season...
+2025-11-19 19:46:57,547 - INFO - Loaded dataset with 4885 games
+2025-11-19 19:46:57,547 - INFO - Season range: 2016 - 2025
+2025-11-19 19:46:57,547 - INFO - Games per season:
+2025-11-19 19:46:57,550 - INFO -   2016: 539 games
+2025-11-19 19:46:57,550 - INFO -   2017: 560 games
+2025-11-19 19:46:57,550 - INFO -   2018: 525 games
+2025-11-19 19:46:57,550 - INFO -   2019: 585 games
+2025-11-19 19:46:57,550 - INFO -   2021: 565 games
+2025-11-19 19:46:57,550 - INFO -   2022: 566 games
+2025-11-19 19:46:57,550 - INFO -   2023: 576 games
+2025-11-19 19:46:57,550 - INFO -   2024: 604 games
+2025-11-19 19:46:57,550 - INFO -   2025: 365 games
+2025-11-19 19:46:57,551 - INFO - Training set: 4520 games (2016-2024)
+2025-11-19 19:46:57,551 - INFO - Test set: 365 games (2025)
+2025-11-19 19:46:57,552 - INFO - Data loading and preparation completed successfully!
+2025-11-19 19:46:57,552 - INFO - Training FastAI Neural Network...
+2025-11-19 19:46:57,553 - INFO - ⚠️ No optimized hyperparameters found. Using defaults.
+2025-11-19 19:47:00,183 - WARNING - No test games with outcomes - using validation metrics
+2025-11-19 19:47:00,260 - ERROR - Error training FastAI model: 'Tensor' object has no attribute 'astype'
+2025-11-19 19:47:20,277 - INFO - Loading updated training data with 2025 season...
+2025-11-19 19:47:20,314 - INFO - Loaded dataset with 4885 games
+2025-11-19 19:47:20,314 - INFO - Season range: 2016 - 2025
+2025-11-19 19:47:20,314 - INFO - Games per season:
+2025-11-19 19:47:20,314 - INFO -   2016: 539 games
+2025-11-19 19:47:20,314 - INFO -   2017: 560 games
+2025-11-19 19:47:20,314 - INFO -   2018: 525 games
+2025-11-19 19:47:20,314 - INFO -   2019: 585 games
+2025-11-19 19:47:20,314 - INFO -   2021: 565 games
+2025-11-19 19:47:20,314 - INFO -   2022: 566 games
+2025-11-19 19:47:20,314 - INFO -   2023: 576 games
+2025-11-19 19:47:20,314 - INFO -   2024: 604 games
+2025-11-19 19:47:20,314 - INFO -   2025: 365 games
+2025-11-19 19:47:20,315 - INFO - Training set: 4520 games (2016-2024)
+2025-11-19 19:47:20,315 - INFO - Test set: 365 games (2025)
+2025-11-19 19:47:20,316 - INFO - Data loading and preparation completed successfully!
+2025-11-19 19:47:20,316 - INFO - Training FastAI Neural Network...
+2025-11-19 19:47:20,316 - INFO - ⚠️ No optimized hyperparameters found. Using defaults.
+2025-11-19 19:47:22,817 - WARNING - No test games with outcomes - using validation metrics
+2025-11-19 19:47:22,915 - WARNING - Could not re-save with protocol 4: persistent IDs in protocol 0 must be ASCII strings. Using default export.
+2025-11-19 19:47:22,915 - INFO - FastAI Neural Network trained successfully!
+2025-11-19 19:47:22,915 - INFO - Accuracy: 0.662, Log Loss: 0.804, AUC: 0.730, F1: 0.696
+2025-11-19 19:47:31,653 - INFO - Loading updated training data with 2025 season...
+2025-11-19 19:47:31,690 - INFO - Loaded dataset with 4885 games
+2025-11-19 19:47:31,691 - INFO - Season range: 2016 - 2025
+2025-11-19 19:47:31,691 - INFO - Games per season:
+2025-11-19 19:47:31,691 - INFO -   2016: 539 games
+2025-11-19 19:47:31,691 - INFO -   2017: 560 games
+2025-11-19 19:47:31,691 - INFO -   2018: 525 games
+2025-11-19 19:47:31,691 - INFO -   2019: 585 games
+2025-11-19 19:47:31,691 - INFO -   2021: 565 games
+2025-11-19 19:47:31,691 - INFO -   2022: 566 games
+2025-11-19 19:47:31,691 - INFO -   2023: 576 games
+2025-11-19 19:47:31,691 - INFO -   2024: 604 games
+2025-11-19 19:47:31,691 - INFO -   2025: 365 games
+2025-11-19 19:47:31,692 - INFO - Training set: 4520 games (2016-2024)
+2025-11-19 19:47:31,692 - INFO - Test set: 365 games (2025)
+2025-11-19 19:47:31,693 - INFO - Data loading and preparation completed successfully!
+2025-11-19 19:47:31,693 - INFO - Training Ridge Regression model...
+2025-11-19 19:47:31,698 - INFO - Ridge Regression trained successfully!
+2025-11-19 19:47:31,699 - INFO - MAE: 10.84, RMSE: 13.86, R²: 0.462
+2025-11-19 19:47:31,699 - INFO - Training XGBoost Classifier...
+2025-11-19 19:47:31,871 - INFO - XGBoost trained successfully!
+2025-11-19 19:47:31,871 - INFO - Accuracy: 0.466, Log Loss: 0.847, AUC: 0.478, F1: 0.496
+2025-11-19 19:47:31,871 - INFO - Training FastAI Neural Network...
+2025-11-19 19:47:31,872 - INFO - ⚠️ No optimized hyperparameters found. Using defaults.
+2025-11-19 19:47:34,373 - WARNING - No test games with outcomes - using validation metrics
+2025-11-19 19:47:34,465 - WARNING - Could not re-save with protocol 4: persistent IDs in protocol 0 must be ASCII strings. Using default export.
+2025-11-19 19:47:34,465 - INFO - FastAI Neural Network trained successfully!
+2025-11-19 19:47:34,465 - INFO - Accuracy: 0.613, Log Loss: 1.096, AUC: 0.733, F1: 0.543
+2025-11-19 19:47:34,466 - INFO - Generating performance comparisons...
+2025-11-19 19:47:34,866 - INFO - Performance comparison completed!

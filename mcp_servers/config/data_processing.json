@@ -1,0 +1,265 @@
+{
+  "pandas": {
+    "name": "Pandas MCP Server",
+    "description": "Advanced data manipulation server for college football analytics, optimized for the 86 opponent-adjusted features in the training dataset",
+    "installation": {
+      "command": "uvx mcp-server-pandas",
+      "dependencies": ["pandas>=2.0.0", "numpy>=1.24.0", "scipy>=1.10.0"],
+      "prerequisites": ["Python 3.8+"]
+    },
+    "configuration": {
+      "chunk_size": 10000,
+      "memory_limit": "2GB",
+      "parallel_processing": true,
+      "cache_operations": true,
+      "data_types_optimization": true
+    },
+    "operations": {
+      "data_loading": {
+        "csv_import": {
+          "method": "read_csv_optimized",
+          "chunking": true,
+          "dtype_inference": true,
+          "date_parsing": true,
+          "encoding_detection": true
+        },
+        "excel_import": {
+          "method": "read_excel_bulk",
+          "sheet_detection": true,
+          "merged_cells": true,
+          "formulas": false
+        }
+      },
+      "feature_engineering": {
+        "opponent_adjusted_metrics": {
+          "epa_per_play": "calculate_epa_per_play",
+          "success_rate": "calculate_success_rate",
+          "explosiveness": "calculate_explosiveness",
+          "havoc_rate": "calculate_havoc_rate",
+          "field_position": "calculate_average_start_position",
+          "talent_composite": "calculate_talent_rating"
+        },
+        "rolling_statistics": {
+          "window_sizes": [3, 5, 10],
+          "metrics": ["points_scored", "points_allowed", "yards_per_play"],
+          "exponential_weighting": true
+        },
+        "advanced_stats": {
+          "sos_strength": "calculate_strength_of_schedule",
+          "power_rankings": "calculate_power_ratings",
+          "efficiency_metrics": "calculate_efficiency_ratings"
+        }
+      },
+      "data_cleaning": {
+        "missing_values": {
+          "strategy": "contextual",
+          "interpolation_methods": ["linear", "polynomial"],
+          "missing_threshold": 0.05
+        },
+        "outlier_detection": {
+          "method": "iqr_zscore",
+          "threshold": 3,
+          "action": "flag"
+        },
+        "data_validation": {
+          "ranges": {
+            "score": [0, 200],
+            "yards": [-100, 1000],
+            "efficiency": [-10, 10]
+          }
+        }
+      },
+      "aggregation": {
+        "game_level": {
+          "group_by": ["game_id", "team_id"],
+          "aggregations": {
+            "epa": ["mean", "sum", "max"],
+            "success_rate": "mean",
+            "explosiveness": ["mean", "max"]
+          }
+        },
+        "season_level": {
+          "group_by": ["team_id", "season"],
+          "aggregations": {
+            "wins": "sum",
+            "points_scored": ["mean", "sum"],
+            "points_allowed": ["mean", "sum"]
+          }
+        }
+      }
+    },
+    "optimizations": {
+      "memory_usage": {
+        "categorical_columns": ["team_name", "conference", "venue"],
+        "numeric_precision": "float32",
+        "string_length_optimization": true
+      },
+      "query_performance": {
+        "indexing": ["game_date", "team_id", "season"],
+        "partitioning": "season",
+        "caching": "frequent_queries"
+      }
+    },
+    "integration": {
+      "ml_pipeline": {
+        "feature_preparation": true,
+        "train_test_split": "temporal",
+        "cross_validation": "time_series"
+      },
+      "notebooks": {
+        "auto_completions": true,
+        "function_hints": true,
+        "error_recovery": true
+      }
+    },
+    "workflows": {
+      "data_pipeline": [
+        "load_raw_data",
+        "clean_and_validate",
+        "engineer_features",
+        "aggregation_and_summaries",
+        "export_for_ml"
+      ],
+      "model_training": [
+        "prepare_training_data",
+        "feature_selection",
+        "cross_validation_split",
+        "model_fitting",
+        "performance_evaluation"
+      ]
+    }
+  },
+  "csv_editor": {
+    "name": "CSV Editor MCP Server",
+    "description": "Advanced CSV processing with 40+ operations specifically optimized for college football game data",
+    "installation": {
+      "command": "npx -y @modelcontextprotocol/server-csv-editor",
+      "dependencies": ["papaparse", "csv-parser", "fast-csv"],
+      "prerequisites": ["Node.js 16+"]
+    },
+    "configuration": {
+      "max_file_size": "100MB",
+      "auto_detect_delimiter": true,
+      "encoding_detection": true,
+      "backup_original": true,
+      "validation_rules": true
+    },
+    "operations": {
+      "file_operations": [
+        "merge_csv_files",
+        "split_large_files",
+        "convert_delimiters",
+        "normalize_headers",
+        "remove_duplicates",
+        "sort_by_columns",
+        "filter_rows",
+        "transform_columns"
+      ],
+      "data_cleaning": [
+        "standardize_team_names",
+        "normalize_conferences",
+        "convert_dates",
+        "handle_missing_values",
+        "validate_score_ranges",
+        "check_data_consistency"
+      ],
+      "analytics_operations": [
+        "calculate_derived_stats",
+        "aggregate_by_season",
+        "compute_team_rankings",
+        "generate_summaries",
+        "export_reports"
+      ]
+    },
+    "specific_operations": {
+      "football_data": {
+        "team_name_standardization": {
+          "method": "fuzzy_matching",
+          "reference_list": "data/teams/master_team_list.csv",
+          "confidence_threshold": 0.8
+        },
+        "score_validation": {
+          "min_score": 0,
+          "max_score": 200,
+          "tie_handling": "overtime_rules"
+        },
+        "date_processing": {
+          "formats": ["MM/DD/YYYY", "YYYY-MM-DD", "ISO8601"],
+          "timezone": "EST",
+          "season_detection": true
+        }
+      }
+    },
+    "batch_processing": {
+      "enabled": true,
+      "parallel_files": 5,
+      "progress_tracking": true,
+      "error_handling": "continue_on_error"
+    },
+    "export_formats": {
+      "csv": true,
+      "json": true,
+      "excel": true,
+      "parquet": true,
+      "feather": true
+    }
+  },
+  "data_validation_rules": {
+    "game_data": {
+      "required_columns": ["game_date", "home_team", "away_team", "home_score", "away_score"],
+      "score_ranges": {
+        "home_score": [0, 200],
+        "away_score": [0, 200]
+      },
+      "date_constraints": {
+        "min_date": "1869-01-01",
+        "max_date": "current_date + 1_year"
+      }
+    },
+    "team_data": {
+      "required_columns": ["team_name", "conference", "division"],
+      "name_constraints": {
+        "min_length": 2,
+        "max_length": 50,
+        "allowed_characters": "letters_numbers_spaces"
+      }
+    }
+  },
+  "performance_metrics": {
+    "processing_speed": {
+      "small_files": "<1 second per 10K rows",
+      "large_files": "<10 seconds per 100K rows",
+      "batch_processing": "<1 minute per 1M rows"
+    },
+    "memory_usage": {
+      "csv_editor": "50MB per 100K rows",
+      "pandas_operations": "100MB per 100K rows (optimized)"
+    }
+  },
+  "integration_examples": {
+    "notebook_usage": {
+      "load_data": "Load and clean 2025 season data",
+      "feature_engineering": "Create opponent-adjusted metrics",
+      "model_preparation": "Prepare data for ML training"
+    },
+    "agent_integration": {
+      "data_processing_agent": "Automated data cleaning and validation",
+      "feature_engineering_agent": "Automated feature creation",
+      "quality_assurance_agent": "Data quality checks and reporting"
+    }
+  },
+  "error_handling": {
+    "data_quality_issues": [
+      "log_detailed_errors",
+      "suggest_corrections",
+      "create_quality_reports",
+      "flag_suspicious_records"
+    ],
+    "processing_errors": [
+      "automatic_retry",
+      "fallback_methods",
+      "partial_processing",
+      "graceful_degradation"
+    ]
+  }
+}

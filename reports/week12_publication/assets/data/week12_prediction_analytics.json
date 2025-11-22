@@ -1,0 +1,509 @@
+{
+  "confidence_intervals": {
+    "margin_confidence_intervals": {
+      "90%": {
+        "lower": 53.113306355818466,
+        "upper": 113.98270690516485,
+        "mean": 83.54800663049166,
+        "std": 66.92352750174088
+      },
+      "95%": {
+        "lower": 46.486992403633906,
+        "upper": 120.6090208573494,
+        "mean": 83.54800663049166,
+        "std": 66.92352750174088
+      },
+      "99%": {
+        "lower": 32.10941296932624,
+        "upper": 134.98660029165706,
+        "mean": 83.54800663049166,
+        "std": 66.92352750174088
+      }
+    },
+    "win_probability_confidence_intervals": {
+      "90%": {
+        "lower": 0.7533191963703504,
+        "upper": 1.0017967115544646,
+        "mean": 0.8775579539624074,
+        "std": 0.2731913189699856
+      },
+      "95%": {
+        "lower": 0.7262696442011312,
+        "upper": 1.0288462637236837,
+        "mean": 0.8775579539624074,
+        "std": 0.2731913189699856
+      },
+      "99%": {
+        "lower": 0.6675783283682639,
+        "upper": 1.087537579556551,
+        "mean": 0.8775579539624074,
+        "std": 0.2731913189699856
+      }
+    },
+    "sample_size": 15,
+    "confidence_levels": [
+      0.9,
+      0.95,
+      0.99
+    ]
+  },
+  "distribution_analysis": {
+    "margin_distribution": {
+      "mean": 83.54800663049166,
+      "median": 75.18453227415627,
+      "std": 66.92352750174088,
+      "min": -11.50131250875324,
+      "max": 193.988708950539,
+      "q25": 40.53166031902751,
+      "q75": 117.12474146378372,
+      "skewness": 0.2652333325412126,
+      "kurtosis": -0.8667593230362427
+    },
+    "win_probability_distribution": {
+      "mean": 0.8775579539624074,
+      "median": 0.9999999607022892,
+      "std": 0.2731913189699856,
+      "min": 0.2056744073361986,
+      "max": 1.0,
+      "q25": 0.997288487191586,
+      "q75": 1.0
+    },
+    "confidence_distribution": {
+      "mean": 0.8985366124062091,
+      "median": 0.9999999214045784,
+      "std": 0.21077335103507322,
+      "high_confidence_games": 12,
+      "low_confidence_games": 0
+    },
+    "game_categories": {
+      "close_games": 0,
+      "blowout_predictions": 12,
+      "moderate_predictions": 3,
+      "total_games": 15
+    }
+  },
+  "key_insights": {
+    "highest_confidence_games": [
+      {
+        "home_team": "Georgia",
+        "away_team": "Tennessee",
+        "ensemble_predicted_winner": "Georgia",
+        "ensemble_margin": 168.58395229404832,
+        "confidence_score": 1.0
+      },
+      {
+        "home_team": "Ohio State",
+        "away_team": "Michigan",
+        "ensemble_predicted_winner": "Ohio State",
+        "ensemble_margin": 189.9634596572392,
+        "confidence_score": 1.0
+      },
+      {
+        "home_team": "Alabama",
+        "away_team": "Auburn",
+        "ensemble_predicted_winner": "Alabama",
+        "ensemble_margin": 193.988708950539,
+        "confidence_score": 1.0
+      },
+      {
+        "home_team": "Florida State",
+        "away_team": "Miami",
+        "ensemble_predicted_winner": "Florida State",
+        "ensemble_margin": 118.43944104626948,
+        "confidence_score": 1.0
+      },
+      {
+        "home_team": "Oregon",
+        "away_team": "Washington",
+        "ensemble_predicted_winner": "Oregon",
+        "ensemble_margin": 115.81004188129796,
+        "confidence_score": 0.9999999999999998
+      }
+    ],
+    "lowest_confidence_games": [
+      {
+        "home_team": "Kansas State",
+        "away_team": "TCU",
+        "ensemble_predicted_winner": "Kansas State",
+        "ensemble_margin": 7.615992658004965,
+        "confidence_score": 0.4135581662708878
+      },
+      {
+        "home_team": "Wisconsin",
+        "away_team": "Minnesota",
+        "ensemble_predicted_winner": "Minnesota",
+        "ensemble_margin": -9.158518772337564,
+        "confidence_score": 0.4870040982828525
+      },
+      {
+        "home_team": "Utah",
+        "away_team": "Arizona",
+        "ensemble_predicted_winner": "Arizona",
+        "ensemble_margin": -11.50131250875324,
+        "confidence_score": 0.5886511853276027
+      },
+      {
+        "home_team": "Iowa",
+        "away_team": "Nebraska",
+        "ensemble_predicted_winner": "Iowa",
+        "ensemble_margin": 36.33630201055374,
+        "confidence_score": 0.9905532892952328
+      },
+      {
+        "home_team": "Ole Miss",
+        "away_team": "Missouri",
+        "ensemble_predicted_winner": "Ole Miss",
+        "ensemble_margin": 44.72701862750128,
+        "confidence_score": 0.998600659471111
+      }
+    ],
+    "closest_predictions": [
+      {
+        "home_team": "Kansas State",
+        "away_team": "TCU",
+        "ensemble_predicted_winner": "Kansas State",
+        "ensemble_margin": 7.615992658004965,
+        "confidence_score": 0.4135581662708878
+      },
+      {
+        "home_team": "Wisconsin",
+        "away_team": "Minnesota",
+        "ensemble_predicted_winner": "Minnesota",
+        "ensemble_margin": -9.158518772337564,
+        "confidence_score": 0.4870040982828525
+      },
+      {
+        "home_team": "Utah",
+        "away_team": "Arizona",
+        "ensemble_predicted_winner": "Arizona",
+        "ensemble_margin": -11.50131250875324,
+        "confidence_score": 0.5886511853276027
+      },
+      {
+        "home_team": "Iowa",
+        "away_team": "Nebraska",
+        "ensemble_predicted_winner": "Iowa",
+        "ensemble_margin": 36.33630201055374,
+        "confidence_score": 0.9905532892952328
+      },
+      {
+        "home_team": "Ole Miss",
+        "away_team": "Missouri",
+        "ensemble_predicted_winner": "Ole Miss",
+        "ensemble_margin": 44.72701862750128,
+        "confidence_score": 0.998600659471111
+      }
+    ],
+    "largest_mismatches": [
+      {
+        "home_team": "Alabama",
+        "away_team": "Auburn",
+        "ensemble_predicted_winner": "Alabama",
+        "ensemble_margin": 193.988708950539,
+        "confidence_score": 1.0
+      },
+      {
+        "home_team": "Ohio State",
+        "away_team": "Michigan",
+        "ensemble_predicted_winner": "Ohio State",
+        "ensemble_margin": 189.9634596572392,
+        "confidence_score": 1.0
+      },
+      {
+        "home_team": "Georgia",
+        "away_team": "Tennessee",
+        "ensemble_predicted_winner": "Georgia",
+        "ensemble_margin": 168.58395229404832,
+        "confidence_score": 1.0
+      },
+      {
+        "home_team": "Florida State",
+        "away_team": "Miami",
+        "ensemble_predicted_winner": "Florida State",
+        "ensemble_margin": 118.43944104626948,
+        "confidence_score": 1.0
+      },
+      {
+        "home_team": "Oregon",
+        "away_team": "Washington",
+        "ensemble_predicted_winner": "Oregon",
+        "ensemble_margin": 115.81004188129796,
+        "confidence_score": 0.9999999999999998
+      }
+    ],
+    "upset_specials": [
+      {
+        "home_team": "Utah",
+        "away_team": "Arizona",
+        "ensemble_predicted_winner": "Arizona",
+        "ensemble_margin": -11.50131250875324,
+        "confidence_score": 0.5886511853276027
+      },
+      {
+        "home_team": "Wisconsin",
+        "away_team": "Minnesota",
+        "ensemble_predicted_winner": "Minnesota",
+        "ensemble_margin": -9.158518772337564,
+        "confidence_score": 0.4870040982828525
+      }
+    ],
+    "rivalry_highlights": [
+      {
+        "home_team": "Ohio State",
+        "away_team": "Michigan",
+        "ensemble_predicted_winner": "Ohio State",
+        "ensemble_margin": 189.9634596572392,
+        "confidence_score": 1.0
+      },
+      {
+        "home_team": "Alabama",
+        "away_team": "Auburn",
+        "ensemble_predicted_winner": "Alabama",
+        "ensemble_margin": 193.988708950539,
+        "confidence_score": 1.0
+      },
+      {
+        "home_team": "Georgia",
+        "away_team": "Tennessee",
+        "ensemble_predicted_winner": "Georgia",
+        "ensemble_margin": 168.58395229404832,
+        "confidence_score": 1.0
+      },
+      {
+        "home_team": "Florida State",
+        "away_team": "Miami",
+        "ensemble_predicted_winner": "Florida State",
+        "ensemble_margin": 118.43944104626948,
+        "confidence_score": 1.0
+      }
+    ],
+    "summary_statistics": {
+      "home_team_win_rate": 0.8666666666666667,
+      "average_predicted_margin": 83.54800663049166,
+      "average_confidence": 0.8985366124062091,
+      "total_games_analyzed": 15
+    }
+  },
+  "betting_analytics": {
+    "value_opportunities": [
+      {
+        "home_team": "Georgia",
+        "away_team": "Tennessee",
+        "ensemble_predicted_winner": "Georgia",
+        "ensemble_win_probability": 1.0,
+        "expected_value": 0.5,
+        "confidence_score": 1.0
+      },
+      {
+        "home_team": "Ohio State",
+        "away_team": "Michigan",
+        "ensemble_predicted_winner": "Ohio State",
+        "ensemble_win_probability": 1.0,
+        "expected_value": 0.5,
+        "confidence_score": 1.0
+      },
+      {
+        "home_team": "Oregon",
+        "away_team": "Washington",
+        "ensemble_predicted_winner": "Oregon",
+        "ensemble_win_probability": 1.0,
+        "expected_value": 0.5,
+        "confidence_score": 0.9999999999999998
+      },
+      {
+        "home_team": "Alabama",
+        "away_team": "Auburn",
+        "ensemble_predicted_winner": "Alabama",
+        "ensemble_win_probability": 1.0,
+        "expected_value": 0.5,
+        "confidence_score": 1.0
+      },
+      {
+        "home_team": "Florida State",
+        "away_team": "Miami",
+        "ensemble_predicted_winner": "Florida State",
+        "ensemble_win_probability": 1.0,
+        "expected_value": 0.5,
+        "confidence_score": 1.0
+      },
+      {
+        "home_team": "Utah",
+        "away_team": "Arizona",
+        "ensemble_predicted_winner": "Arizona",
+        "ensemble_win_probability": 0.2056744073361986,
+        "expected_value": 0.2943255926638014,
+        "confidence_score": 0.5886511853276027
+      },
+      {
+        "home_team": "Wisconsin",
+        "away_team": "Minnesota",
+        "ensemble_predicted_winner": "Minnesota",
+        "ensemble_win_probability": 0.2564979508585737,
+        "expected_value": 0.24350204914142637,
+        "confidence_score": 0.4870040982828525
+      }
+    ],
+    "high_value_picks": [
+      {
+        "home_team": "Georgia",
+        "away_team": "Tennessee",
+        "ensemble_predicted_winner": "Georgia",
+        "ensemble_margin": 168.58395229404832,
+        "confidence_score": 1.0,
+        "ensemble_win_probability": 1.0
+      },
+      {
+        "home_team": "Ohio State",
+        "away_team": "Michigan",
+        "ensemble_predicted_winner": "Ohio State",
+        "ensemble_margin": 189.9634596572392,
+        "confidence_score": 1.0,
+        "ensemble_win_probability": 1.0
+      },
+      {
+        "home_team": "Alabama",
+        "away_team": "Auburn",
+        "ensemble_predicted_winner": "Alabama",
+        "ensemble_margin": 193.988708950539,
+        "confidence_score": 1.0,
+        "ensemble_win_probability": 1.0
+      },
+      {
+        "home_team": "Florida State",
+        "away_team": "Miami",
+        "ensemble_predicted_winner": "Florida State",
+        "ensemble_margin": 118.43944104626948,
+        "confidence_score": 1.0,
+        "ensemble_win_probability": 1.0
+      },
+      {
+        "home_team": "Oregon",
+        "away_team": "Washington",
+        "ensemble_predicted_winner": "Oregon",
+        "ensemble_margin": 115.81004188129796,
+        "confidence_score": 0.9999999999999998,
+        "ensemble_win_probability": 1.0
+      }
+    ],
+    "risk_assessment": [],
+    "confidence_rankings": [
+      {
+        "home_team": "Georgia",
+        "away_team": "Tennessee",
+        "ensemble_predicted_winner": "Georgia",
+        "ensemble_margin": 168.58395229404832,
+        "confidence_score": 1.0
+      },
+      {
+        "home_team": "Ohio State",
+        "away_team": "Michigan",
+        "ensemble_predicted_winner": "Ohio State",
+        "ensemble_margin": 189.9634596572392,
+        "confidence_score": 1.0
+      },
+      {
+        "home_team": "Alabama",
+        "away_team": "Auburn",
+        "ensemble_predicted_winner": "Alabama",
+        "ensemble_margin": 193.988708950539,
+        "confidence_score": 1.0
+      },
+      {
+        "home_team": "Florida State",
+        "away_team": "Miami",
+        "ensemble_predicted_winner": "Florida State",
+        "ensemble_margin": 118.43944104626948,
+        "confidence_score": 1.0
+      },
+      {
+        "home_team": "Oregon",
+        "away_team": "Washington",
+        "ensemble_predicted_winner": "Oregon",
+        "ensemble_margin": 115.81004188129796,
+        "confidence_score": 0.9999999999999998
+      },
+      {
+        "home_team": "Notre Dame",
+        "away_team": "Navy",
+        "ensemble_predicted_winner": "Notre Dame",
+        "ensemble_margin": 110.80524776851968,
+        "confidence_score": 0.9999999999999976
+      },
+      {
+        "home_team": "Texas",
+        "away_team": "LSU",
+        "ensemble_predicted_winner": "Texas",
+        "ensemble_margin": 98.88326433110322,
+        "confidence_score": 0.9999999999983716
+      },
+      {
+        "home_team": "Penn State",
+        "away_team": "Michigan State",
+        "ensemble_predicted_winner": "Penn State",
+        "ensemble_margin": 75.18453227415627,
+        "confidence_score": 0.9999999214045784
+      },
+      {
+        "home_team": "USC",
+        "away_team": "UCLA",
+        "ensemble_predicted_winner": "USC",
+        "ensemble_margin": 63.06416558422987,
+        "confidence_score": 0.9999933496678226
+      },
+      {
+        "home_team": "Clemson",
+        "away_team": "North Carolina",
+        "ensemble_predicted_winner": "Clemson",
+        "ensemble_margin": 50.477803655002845,
+        "confidence_score": 0.9996885163746796
+      }
+    ],
+    "summary": {
+      "total_games": 15,
+      "value_opportunities": 15,
+      "high_confidence_picks": 12,
+      "average_home_ev": 0.3775579539624075,
+      "average_away_ev": -0.3775579539624075
+    }
+  },
+  "performance_benchmarks": {
+    "model_performance_metrics": {
+      "margin_mae": 74.15385178023645,
+      "margin_rmse": 94.07638707167622,
+      "win_prediction_accuracy": 0.8666666666666667
+    },
+    "prediction_accuracy_indicators": {
+      "confidence_distribution": {
+        "high_confidence_games": 12,
+        "medium_confidence_games": 3,
+        "low_confidence_games": 0
+      },
+      "prediction_consensus": {
+        "model_agreement_rate": 1.0
+      },
+      "extreme_predictions": {
+        "games_predicted_over_30_points": 12,
+        "games_predicted_under_3_points": 0
+      }
+    },
+    "risk_reward_analysis": {
+      "high_risk_high_reward_opportunities": 0,
+      "low_risk_low_reward_games": 0,
+      "average_risk_score": 0.10146338759379091,
+      "risk_return_correlation": -0.6288589051404645
+    },
+    "quality_metrics": {
+      "data_completeness": {
+        "total_predictions": 15,
+        "complete_predictions": 15,
+        "completeness_rate": 1.0
+      },
+      "prediction_range": {
+        "min_predicted_margin": -11.50131250875324,
+        "max_predicted_margin": 193.988708950539,
+        "margin_range": 205.49002145929225
+      }
+    }
+  },
+  "analysis_timestamp": "2025-11-14T08:39:58.807786"
+}

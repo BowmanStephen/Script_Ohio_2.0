@@ -1,0 +1,11 @@
+{
+  "total_games": 60,
+  "models_used": [
+    "ridge",
+    "xgb"
+  ],
+  "ridge_predictions": 60,
+  "xgb_predictions": 60,
+  "ensemble_predictions": 60,
+  "generation_time": "2025-11-18T14:31:53.216372"
+}

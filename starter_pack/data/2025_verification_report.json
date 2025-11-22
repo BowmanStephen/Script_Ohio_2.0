@@ -1,0 +1,531 @@
+{
+  "file_existence": {
+    "advanced_game_stats": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/advanced_game_stats/2025.csv",
+      "size_mb": 2.3292036056518555
+    },
+    "advanced_season_stats": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/advanced_season_stats/2025.csv",
+      "size_mb": 0.15741539001464844
+    },
+    "drives": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/drives/drives_2025.csv",
+      "size_mb": 5.681546211242676
+    },
+    "game_stats": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/game_stats/2025.csv",
+      "size_mb": 0.47240352630615234
+    },
+    "season_stats": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/season_stats/2025.csv",
+      "size_mb": 0.03119945526123047
+    },
+    "games": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/games.csv",
+      "size_mb": 22.07977867126465
+    },
+    "teams": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/teams.csv",
+      "size_mb": 0.1170654296875
+    },
+    "conferences": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/conferences.csv",
+      "size_mb": 0.0017480850219726562
+    },
+    "plays_week_1": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/plays/2025/regular_1_plays.csv",
+      "size_mb": 6.740664482116699
+    },
+    "plays_week_2": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/plays/2025/regular_2_plays.csv",
+      "size_mb": 6.385830879211426
+    },
+    "plays_week_3": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/plays/2025/regular_3_plays.csv",
+      "size_mb": 5.824668884277344
+    },
+    "plays_week_4": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/plays/2025/regular_4_plays.csv",
+      "size_mb": 5.541743278503418
+    },
+    "plays_week_5": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/plays/2025/regular_5_plays.csv",
+      "size_mb": 5.196105003356934
+    },
+    "plays_week_6": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/plays/2025/regular_6_plays.csv",
+      "size_mb": 5.069962501525879
+    },
+    "plays_week_7": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/plays/2025/regular_7_plays.csv",
+      "size_mb": 5.252068519592285
+    },
+    "plays_week_8": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/plays/2025/regular_8_plays.csv",
+      "size_mb": 5.219263076782227
+    },
+    "plays_week_9": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/plays/2025/regular_9_plays.csv",
+      "size_mb": 6.2795515060424805
+    },
+    "plays_week_10": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/plays/2025/regular_10_plays.csv",
+      "size_mb": 6.122550964355469
+    },
+    "plays_week_11": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/plays/2025/regular_11_plays.csv",
+      "size_mb": 6.403416633605957
+    },
+    "plays_week_12": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/plays/2025/regular_12_plays.csv",
+      "size_mb": 6.683375358581543
+    },
+    "ref_advanced_game_stats": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/advanced_game_stats/2024.csv",
+      "size_mb": 2.690251350402832
+    },
+    "ref_advanced_season_stats": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/advanced_season_stats/2024.csv",
+      "size_mb": 0.1660900115966797
+    },
+    "ref_drives": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/drives/drives_2024.csv",
+      "size_mb": 6.295260429382324
+    },
+    "ref_game_stats": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/game_stats/2024.csv",
+      "size_mb": 0.5678071975708008
+    },
+    "ref_season_stats": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/season_stats/2024.csv",
+      "size_mb": 0.031380653381347656
+    },
+    "ref_plays": {
+      "exists": true,
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/starter_pack/data/plays/2024/regular_1_plays.csv",
+      "size_mb": 6.054618835449219
+    }
+  },
+  "schema_compliance": {
+    "advanced_game_stats": {
+      "status": "PASS",
+      "actual_columns": 61,
+      "reference_columns": 61,
+      "expected_columns": 61,
+      "columns_match": true,
+      "missing_columns": [],
+      "extra_columns": [],
+      "note": null
+    },
+    "advanced_season_stats": {
+      "status": "PASS",
+      "actual_columns": 82,
+      "reference_columns": 82,
+      "expected_columns": 82,
+      "columns_match": true,
+      "missing_columns": [],
+      "extra_columns": [],
+      "note": null
+    },
+    "drives": {
+      "status": "PASS",
+      "actual_columns": 24,
+      "reference_columns": 24,
+      "expected_columns": 24,
+      "columns_match": true,
+      "missing_columns": [],
+      "extra_columns": [],
+      "note": null
+    },
+    "game_stats": {
+      "status": "PASS",
+      "actual_columns": 47,
+      "reference_columns": 46,
+      "expected_columns": 46,
+      "columns_match": true,
+      "missing_columns": [],
+      "extra_columns": [
+        "points"
+      ],
+      "note": "Extra columns are acceptable enhancements"
+    },
+    "season_stats": {
+      "status": "PASS",
+      "actual_columns": 66,
+      "reference_columns": 66,
+      "expected_columns": 66,
+      "columns_match": true,
+      "missing_columns": [],
+      "extra_columns": [],
+      "note": null
+    },
+    "plays": {
+      "status": "PASS",
+      "actual_columns": 27,
+      "reference_columns": 27,
+      "expected_columns": 27,
+      "columns_match": true,
+      "missing_columns": [],
+      "extra_columns": [],
+      "note": null
+    }
+  },
+  "data_completeness": {
+    "advanced_game_stats": {
+      "total_records": 2768,
+      "unique_games": 1384,
+      "weeks_present": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "week_range": "1-12",
+      "has_all_weeks": true,
+      "missing_weeks": []
+    },
+    "plays": {
+      "weekly_files": {
+        "1": {
+          "exists": true,
+          "records": 24398,
+          "file_size_mb": 6.740664482116699
+        },
+        "2": {
+          "exists": true,
+          "records": 23290,
+          "file_size_mb": 6.385830879211426
+        },
+        "3": {
+          "exists": true,
+          "records": 21055,
+          "file_size_mb": 5.824668884277344
+        },
+        "4": {
+          "exists": true,
+          "records": 20097,
+          "file_size_mb": 5.541743278503418
+        },
+        "5": {
+          "exists": true,
+          "records": 18837,
+          "file_size_mb": 5.196105003356934
+        },
+        "6": {
+          "exists": true,
+          "records": 18429,
+          "file_size_mb": 5.069962501525879
+        },
+        "7": {
+          "exists": true,
+          "records": 19054,
+          "file_size_mb": 5.252068519592285
+        },
+        "8": {
+          "exists": true,
+          "records": 18994,
+          "file_size_mb": 5.219263076782227
+        },
+        "9": {
+          "exists": true,
+          "records": 19902,
+          "file_size_mb": 6.2795515060424805
+        },
+        "10": {
+          "exists": true,
+          "records": 19431,
+          "file_size_mb": 6.122550964355469
+        },
+        "11": {
+          "exists": true,
+          "records": 20287,
+          "file_size_mb": 6.403416633605957
+        },
+        "12": {
+          "exists": true,
+          "records": 21107,
+          "file_size_mb": 6.683375358581543
+        }
+      },
+      "weeks_present": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "total_plays": 244881,
+      "has_all_weeks": true
+    },
+    "games": {
+      "total_2025_records": 1599,
+      "weeks_present": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "16"
+      ],
+      "week_range": "1-16",
+      "has_weeks_1_12": true
+    },
+    "advanced_season_stats": {
+      "total_records": 136,
+      "weeks_present": "N/A (season-level data)"
+    },
+    "drives": {
+      "total_records": 32464,
+      "weeks_present": "N/A (season-level data)"
+    },
+    "game_stats": {
+      "total_records": 2812,
+      "weeks_present": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
+      ]
+    },
+    "season_stats": {
+      "total_records": 136,
+      "weeks_present": "N/A (season-level data)"
+    }
+  },
+  "data_quality": {
+    "advanced_game_stats": {
+      "total_records": 2768,
+      "null_counts": {
+        "gameId": 0,
+        "season": 0,
+        "week": 0,
+        "team": 0,
+        "opponent": 0,
+        "offense_passingPlays_explosiveness": 0,
+        "offense_passingPlays_successRate": 0,
+        "offense_passingPlays_totalPPA": 0,
+        "offense_passingPlays_ppa": 0,
+        "offense_rushingPlays_explosiveness": 0,
+        "offense_rushingPlays_successRate": 0,
+        "offense_rushingPlays_totalPPA": 0,
+        "offense_rushingPlays_ppa": 0,
+        "offense_passingDowns_explosiveness": 0,
+        "offense_passingDowns_successRate": 0,
+        "offense_passingDowns_ppa": 0,
+        "offense_standardDowns_explosiveness": 0,
+        "offense_standardDowns_successRate": 0,
+        "offense_standardDowns_ppa": 0,
+        "offense_openFieldYardsTotal": 0,
+        "offense_openFieldYards": 0,
+        "offense_secondLevelYardsTotal": 0,
+        "offense_secondLevelYards": 0,
+        "offense_lineYardsTotal": 0,
+        "offense_lineYards": 0,
+        "offense_stuffRate": 0,
+        "offense_powerSuccess": 0,
+        "offense_explosiveness": 0,
+        "offense_successRate": 0,
+        "offense_totalPPA": 0,
+        "offense_ppa": 0,
+        "offense_drives": 0,
+        "offense_plays": 0,
+        "defense_passingPlays_explosiveness": 0,
+        "defense_passingPlays_successRate": 0,
+        "defense_passingPlays_totalPPA": 0,
+        "defense_passingPlays_ppa": 0,
+        "defense_rushingPlays_explosiveness": 0,
+        "defense_rushingPlays_successRate": 0,
+        "defense_rushingPlays_totalPPA": 0,
+        "defense_rushingPlays_ppa": 0,
+        "defense_passingDowns_explosiveness": 0,
+        "defense_passingDowns_successRate": 0,
+        "defense_passingDowns_ppa": 0,
+        "defense_standardDowns_explosiveness": 0,
+        "defense_standardDowns_successRate": 0,
+        "defense_standardDowns_ppa": 0,
+        "defense_openFieldYardsTotal": 0,
+        "defense_openFieldYards": 0,
+        "defense_secondLevelYardsTotal": 0,
+        "defense_secondLevelYards": 0,
+        "defense_lineYardsTotal": 0,
+        "defense_lineYards": 0,
+        "defense_stuffRate": 0,
+        "defense_powerSuccess": 0,
+        "defense_explosiveness": 0,
+        "defense_successRate": 0,
+        "defense_totalPPA": 0,
+        "defense_ppa": 0,
+        "defense_drives": 0,
+        "defense_plays": 0
+      },
+      "critical_nulls": {
+        "gameId": "0",
+        "season": "0",
+        "week": "0",
+        "team": "0",
+        "opponent": "0"
+      },
+      "week_range_valid": true,
+      "season_valid": true,
+      "duplicates": "0"
+    },
+    "plays": {
+      "1": {
+        "total_records": 24398,
+        "null_counts": "17829",
+        "has_game_id": true,
+        "has_week": false
+      },
+      "2": {
+        "total_records": 23290,
+        "null_counts": "7205",
+        "has_game_id": true,
+        "has_week": false
+      },
+      "3": {
+        "total_records": 21055,
+        "null_counts": "8898",
+        "has_game_id": true,
+        "has_week": false
+      },
+      "4": {
+        "total_records": 20097,
+        "null_counts": "13339",
+        "has_game_id": true,
+        "has_week": false
+      },
+      "5": {
+        "total_records": 18837,
+        "null_counts": "12600",
+        "has_game_id": true,
+        "has_week": false
+      },
+      "6": {
+        "total_records": 18429,
+        "null_counts": "11832",
+        "has_game_id": true,
+        "has_week": false
+      },
+      "7": {
+        "total_records": 19054,
+        "null_counts": "13957",
+        "has_game_id": true,
+        "has_week": false
+      },
+      "8": {
+        "total_records": 18994,
+        "null_counts": "13546",
+        "has_game_id": true,
+        "has_week": false
+      },
+      "9": {
+        "total_records": 19902,
+        "null_counts": "5135",
+        "has_game_id": true,
+        "has_week": false
+      },
+      "10": {
+        "total_records": 19431,
+        "null_counts": "4631",
+        "has_game_id": true,
+        "has_week": false
+      },
+      "11": {
+        "total_records": 20287,
+        "null_counts": "5139",
+        "has_game_id": true,
+        "has_week": false
+      },
+      "12": {
+        "total_records": 21107,
+        "null_counts": "5398",
+        "has_game_id": true,
+        "has_week": false
+      }
+    }
+  },
+  "cross_reference": {
+    "game_id_consistency": {
+      "games_csv_ids_weeks_1_12": 1405,
+      "adv_stats_ids": 1384,
+      "missing_in_adv_stats": 30,
+      "missing_in_games": 9,
+      "coverage_percentage": 98.5,
+      "consistent": true
+    },
+    "team_consistency": {
+      "teams_in_reference": 682,
+      "teams_in_adv_stats": 310,
+      "missing_teams": 10,
+      "consistent": false
+    }
+  },
+  "issues": [],
+  "summary": {
+    "verification_date": "2025-11-17T14:45:33.217458",
+    "year": 2025,
+    "week_range": "1-12",
+    "files_exist": "8/8 main files, 12/12 play files",
+    "schema_compliance": "6/6 files pass",
+    "has_all_weeks": true,
+    "game_id_consistency": true,
+    "overall_status": "PASS"
+  }
+}

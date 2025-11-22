@@ -1,0 +1,14 @@
+{
+  "name": "week12-digestible-analysis",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "hydrate": "node scripts/hydrate_dashboard.js"
+  },
+  "dependencies": {
+    "@script-ohio/cfbd-rate-limit": "file:../node_helpers/cfbd-rate-limit",
+    "cfbd": "^5.13.2"
+  }
+}
+

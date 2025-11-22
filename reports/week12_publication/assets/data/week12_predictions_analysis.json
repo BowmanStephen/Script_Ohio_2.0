@@ -1,0 +1,129 @@
+{
+  "total_games": 15,
+  "prediction_summary": {
+    "average_predicted_margin": 83.54800663049166,
+    "margin_std": 66.92352750174086,
+    "largest_margin": 193.988708950539,
+    "smallest_margin": -11.501312508753239,
+    "home_team_wins": 13,
+    "away_team_wins": 2,
+    "average_home_win_prob": 0.8775579539624074,
+    "high_home_win_prob_games": 13,
+    "low_home_win_prob_games": 2
+  },
+  "confidence_analysis": {
+    "average_confidence": 0.8985366124062091,
+    "confidence_std": 0.21077335103507322,
+    "high_confidence_games": 12,
+    "low_confidence_games": 0
+  },
+  "upset_predictions": [
+    {
+      "home_team": "Wisconsin",
+      "away_team": "Minnesota",
+      "predicted_winner": "Minnesota",
+      "predicted_margin": -9.158518772337565,
+      "win_probability": 0.25649795085857374,
+      "confidence": 0.4870040982828525
+    }
+  ],
+  "high_confidence_games": [
+    {
+      "home_team": "Georgia",
+      "away_team": "Tennessee",
+      "predicted_winner": "Georgia",
+      "predicted_margin": 168.58395229404832,
+      "win_probability": 1.0,
+      "confidence": 1.0
+    },
+    {
+      "home_team": "Ohio State",
+      "away_team": "Michigan",
+      "predicted_winner": "Ohio State",
+      "predicted_margin": 189.9634596572392,
+      "win_probability": 1.0,
+      "confidence": 1.0
+    },
+    {
+      "home_team": "Alabama",
+      "away_team": "Auburn",
+      "predicted_winner": "Alabama",
+      "predicted_margin": 193.988708950539,
+      "win_probability": 1.0,
+      "confidence": 1.0
+    },
+    {
+      "home_team": "Florida State",
+      "away_team": "Miami",
+      "predicted_winner": "Florida State",
+      "predicted_margin": 118.43944104626947,
+      "win_probability": 1.0,
+      "confidence": 1.0
+    },
+    {
+      "home_team": "Oregon",
+      "away_team": "Washington",
+      "predicted_winner": "Oregon",
+      "predicted_margin": 115.81004188129795,
+      "win_probability": 0.9999999999999999,
+      "confidence": 0.9999999999999998
+    },
+    {
+      "home_team": "Notre Dame",
+      "away_team": "Navy",
+      "predicted_winner": "Notre Dame",
+      "predicted_margin": 110.80524776851968,
+      "win_probability": 0.9999999999999988,
+      "confidence": 0.9999999999999976
+    },
+    {
+      "home_team": "Texas",
+      "away_team": "LSU",
+      "predicted_winner": "Texas",
+      "predicted_margin": 98.88326433110322,
+      "win_probability": 0.9999999999991858,
+      "confidence": 0.9999999999983715
+    },
+    {
+      "home_team": "Penn State",
+      "away_team": "Michigan State",
+      "predicted_winner": "Penn State",
+      "predicted_margin": 75.18453227415627,
+      "win_probability": 0.9999999607022891,
+      "confidence": 0.9999999214045783
+    },
+    {
+      "home_team": "USC",
+      "away_team": "UCLA",
+      "predicted_winner": "USC",
+      "predicted_margin": 63.06416558422987,
+      "win_probability": 0.9999966748339113,
+      "confidence": 0.9999933496678226
+    },
+    {
+      "home_team": "Clemson",
+      "away_team": "North Carolina",
+      "predicted_winner": "Clemson",
+      "predicted_margin": 50.477803655002845,
+      "win_probability": 0.9998442581873398,
+      "confidence": 0.9996885163746796
+    },
+    {
+      "home_team": "Ole Miss",
+      "away_team": "Missouri",
+      "predicted_winner": "Ole Miss",
+      "predicted_margin": 44.72701862750128,
+      "win_probability": 0.9993003297355555,
+      "confidence": 0.998600659471111
+    },
+    {
+      "home_team": "Iowa",
+      "away_team": "Nebraska",
+      "predicted_winner": "Iowa",
+      "predicted_margin": 36.33630201055374,
+      "win_probability": 0.9952766446476164,
+      "confidence": 0.9905532892952329
+    }
+  ],
+  "close_predictions": []
+}

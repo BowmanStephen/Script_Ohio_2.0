@@ -1,0 +1,17 @@
+{
+  "report_metadata": {
+    "title": "Week 12 College Football Prediction Analytics",
+    "generated_at": "2025-11-14T08:39:58.808476",
+    "games_analyzed": 15
+  },
+  "key_findings": {
+    "average_confidence": 0.8985366124062091,
+    "high_confidence_games": 12,
+    "close_competitive_games": 0,
+    "predicted_blowouts": 12
+  },
+  "betting_insights": {
+    "value_opportunities": 15,
+    "high_confidence_picks": 12
+  }
+}

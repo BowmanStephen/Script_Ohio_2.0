@@ -1,0 +1,464 @@
+{
+  "summary": {
+    "total_games": 48,
+    "avg_confidence": 57.6,
+    "high_confidence_games": 0,
+    "upset_alerts": 33
+  },
+  "top_confident_picks": [
+    {
+      "matchup": "Tulsa vs Oregon State",
+      "prediction": "Tulsa by 0.99",
+      "confidence": "69.6%",
+      "reasoning": "Margin +1.0 | Win Prob 69.6% | Models ridge_model_2025, xgb_home_win_model_2025 | EPA diff +0.00 | Talent diff -4.0"
+    },
+    {
+      "matchup": "Akron vs Kent State",
+      "prediction": "Akron by 3.96",
+      "confidence": "68.9%",
+      "reasoning": "Margin +4.0 | Win Prob 68.9% | Models ridge_model_2025, xgb_home_win_model_2025 | EPA diff +0.00 | Talent diff +45.7"
+    },
+    {
+      "matchup": "Central Michigan vs Buffalo",
+      "prediction": "Central Michigan by 2.05",
+      "confidence": "68.2%",
+      "reasoning": "Margin +2.0 | Win Prob 68.2% | Models ridge_model_2025, xgb_home_win_model_2025 | EPA diff +0.00 | Talent diff -421.1"
+    },
+    {
+      "matchup": "Ball State vs Eastern Michigan",
+      "prediction": "Ball State by 2.2",
+      "confidence": "66.5%",
+      "reasoning": "Margin +2.2 | Win Prob 66.5% | Models ridge_model_2025, xgb_home_win_model_2025 | EPA diff +0.00 | Talent diff -291.4"
+    },
+    {
+      "matchup": "Massachusetts vs Northern Illinois",
+      "prediction": "Massachusetts by 0.75",
+      "confidence": "66.0%",
+      "reasoning": "Margin +0.8 | Win Prob 66.0% | Models ridge_model_2025, xgb_home_win_model_2025 | EPA diff +0.00 | Talent diff -179.6"
+    }
+  ],
+  "upset_alerts": [
+    {
+      "matchup": "Western Michigan (101) vs Ohio (48)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "59.3%"
+    },
+    {
+      "matchup": "Massachusetts (119) vs Northern Illinois (74)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "66.0%"
+    },
+    {
+      "matchup": "Miami (OH) (46) vs Toledo (70)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "57.4%"
+    },
+    {
+      "matchup": "Oregon (3) vs Minnesota (40)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "53.2%"
+    },
+    {
+      "matchup": "Arizona State (25) vs West Virginia (51)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "56.6%"
+    },
+    {
+      "matchup": "Charlotte (111) vs UTSA (65)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "60.7%"
+    },
+    {
+      "matchup": "Duke (41) vs Virginia (85)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "54.5%"
+    },
+    {
+      "matchup": "East Carolina (78) vs Memphis (35)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "54.5%"
+    },
+    {
+      "matchup": "Florida State (84) vs Virginia Tech (30)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "58.4%"
+    },
+    {
+      "matchup": "Fresno State (58) vs Wyoming (98)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "56.8%"
+    },
+    {
+      "matchup": "Georgia State (96) vs Marshall (57)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "60.9%"
+    },
+    {
+      "matchup": "Illinois (42) vs Maryland (75)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "55.0%"
+    },
+    {
+      "matchup": "Indiana (12) vs Wisconsin (45)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "57.6%"
+    },
+    {
+      "matchup": "LSU (20) vs Arkansas (50)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "56.2%"
+    },
+    {
+      "matchup": "Miami (10) vs NC State (61)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "52.1%"
+    },
+    {
+      "matchup": "Michigan State (90) vs Penn State (7)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "51.7%"
+    },
+    {
+      "matchup": "Missouri (26) vs Mississippi State (92)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "56.3%"
+    },
+    {
+      "matchup": "Northwestern (83) vs Michigan (11)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "52.0%"
+    },
+    {
+      "matchup": "Ohio State (2) vs UCLA (66)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "52.7%"
+    },
+    {
+      "matchup": "Oklahoma State (87) vs Kansas State (17)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "56.6%"
+    },
+    {
+      "matchup": "Pittsburgh (64) vs Notre Dame (1)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "53.6%"
+    },
+    {
+      "matchup": "Southern Miss (120) vs Texas State (34)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "64.1%"
+    },
+    {
+      "matchup": "Tulane (13) vs Florida Atlantic (113)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "55.5%"
+    },
+    {
+      "matchup": "UL Monroe (109) vs South Alabama (37)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "60.8%"
+    },
+    {
+      "matchup": "Wake Forest (93) vs North Carolina (53)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "56.2%"
+    },
+    {
+      "matchup": "Washington (31) vs Purdue (107)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "56.2%"
+    },
+    {
+      "matchup": "Western Kentucky (72) vs Middle Tennessee (112)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "57.4%"
+    },
+    {
+      "matchup": "Nevada (105) vs San Jos\u00e9 State (63)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "59.3%"
+    },
+    {
+      "matchup": "Tennessee (8) vs New Mexico State (110)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "52.4%"
+    },
+    {
+      "matchup": "UNLV (27) vs Utah State (88)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "55.1%"
+    },
+    {
+      "matchup": "Tulsa (121) vs Oregon State (91)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "69.6%"
+    },
+    {
+      "matchup": "Washington State (44) vs Louisiana Tech (97)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "57.7%"
+    },
+    {
+      "matchup": "San Diego State (103) vs Boise State (23)",
+      "reason": "Large ranking differential suggests potential upset",
+      "confidence": "55.5%"
+    }
+  ],
+  "conference_insights": {
+    "AAC": {
+      "avg_confidence": 0.607,
+      "game_count": "5",
+      "avg_margin": 0.762
+    },
+    "ACC": {
+      "avg_confidence": 0.547,
+      "game_count": "7",
+      "avg_margin": -0.884
+    },
+    "B12": {
+      "avg_confidence": 0.576,
+      "game_count": "6",
+      "avg_margin": -0.263
+    },
+    "B1G": {
+      "avg_confidence": 0.537,
+      "game_count": "8",
+      "avg_margin": -0.672
+    },
+    "CUSA": {
+      "avg_confidence": 0.574,
+      "game_count": "1",
+      "avg_margin": 2.28
+    },
+    "Ind": {
+      "avg_confidence": 0.568,
+      "game_count": "1",
+      "avg_margin": 0.61
+    },
+    "MAC": {
+      "avg_confidence": 0.644,
+      "game_count": "6",
+      "avg_margin": 1.545
+    },
+    "MWC": {
+      "avg_confidence": 0.573,
+      "game_count": "5",
+      "avg_margin": 0.5
+    },
+    "PAC": {
+      "avg_confidence": 0.577,
+      "game_count": "1",
+      "avg_margin": 1.28
+    },
+    "SBC": {
+      "avg_confidence": 0.619,
+      "game_count": "3",
+      "avg_margin": -0.17
+    },
+    "SEC": {
+      "avg_confidence": 0.549,
+      "game_count": "5",
+      "avg_margin": -0.8
+    }
+  },
+  "betting_opportunities": [
+    {
+      "matchup": "Western Michigan vs Ohio",
+      "value_type": "Upset Special",
+      "confidence": "59.3%",
+      "predicted_margin": -0.19
+    },
+    {
+      "matchup": "Massachusetts vs Northern Illinois",
+      "value_type": "Upset Special",
+      "confidence": "66.0%",
+      "predicted_margin": 0.75
+    },
+    {
+      "matchup": "Miami (OH) vs Toledo",
+      "value_type": "Upset Special",
+      "confidence": "57.4%",
+      "predicted_margin": 0.5
+    },
+    {
+      "matchup": "Oregon vs Minnesota",
+      "value_type": "Upset Special",
+      "confidence": "53.2%",
+      "predicted_margin": -0.53
+    },
+    {
+      "matchup": "Arizona State vs West Virginia",
+      "value_type": "Upset Special",
+      "confidence": "56.6%",
+      "predicted_margin": -0.4
+    },
+    {
+      "matchup": "Charlotte vs UTSA",
+      "value_type": "Upset Special",
+      "confidence": "60.7%",
+      "predicted_margin": 0.52
+    },
+    {
+      "matchup": "Duke vs Virginia",
+      "value_type": "Upset Special",
+      "confidence": "54.5%",
+      "predicted_margin": 0.63
+    },
+    {
+      "matchup": "East Carolina vs Memphis",
+      "value_type": "Upset Special",
+      "confidence": "54.5%",
+      "predicted_margin": -0.52
+    },
+    {
+      "matchup": "Florida State vs Virginia Tech",
+      "value_type": "Upset Special",
+      "confidence": "58.4%",
+      "predicted_margin": -0.96
+    },
+    {
+      "matchup": "Fresno State vs Wyoming",
+      "value_type": "Upset Special",
+      "confidence": "56.8%",
+      "predicted_margin": 1.11
+    },
+    {
+      "matchup": "Georgia State vs Marshall",
+      "value_type": "Upset Special",
+      "confidence": "60.9%",
+      "predicted_margin": 0.16
+    },
+    {
+      "matchup": "Illinois vs Maryland",
+      "value_type": "Upset Special",
+      "confidence": "55.0%",
+      "predicted_margin": 0.38
+    },
+    {
+      "matchup": "Indiana vs Wisconsin",
+      "value_type": "Upset Special",
+      "confidence": "57.6%",
+      "predicted_margin": -1.18
+    },
+    {
+      "matchup": "LSU vs Arkansas",
+      "value_type": "Upset Special",
+      "confidence": "56.2%",
+      "predicted_margin": -1.02
+    },
+    {
+      "matchup": "Miami vs NC State",
+      "value_type": "Upset Special",
+      "confidence": "52.1%",
+      "predicted_margin": -0.14
+    },
+    {
+      "matchup": "Michigan State vs Penn State",
+      "value_type": "Upset Special",
+      "confidence": "51.7%",
+      "predicted_margin": -2.23
+    },
+    {
+      "matchup": "Missouri vs Mississippi State",
+      "value_type": "Upset Special",
+      "confidence": "56.3%",
+      "predicted_margin": 0.71
+    },
+    {
+      "matchup": "Northwestern vs Michigan",
+      "value_type": "Upset Special",
+      "confidence": "52.0%",
+      "predicted_margin": -1.36
+    },
+    {
+      "matchup": "Ohio State vs UCLA",
+      "value_type": "Upset Special",
+      "confidence": "52.7%",
+      "predicted_margin": -0.65
+    },
+    {
+      "matchup": "Oklahoma State vs Kansas State",
+      "value_type": "Upset Special",
+      "confidence": "56.6%",
+      "predicted_margin": -0.96
+    },
+    {
+      "matchup": "Pittsburgh vs Notre Dame",
+      "value_type": "Upset Special",
+      "confidence": "53.6%",
+      "predicted_margin": -3.25
+    },
+    {
+      "matchup": "Southern Miss vs Texas State",
+      "value_type": "Upset Special",
+      "confidence": "64.1%",
+      "predicted_margin": -0.45
+    },
+    {
+      "matchup": "Tulane vs Florida Atlantic",
+      "value_type": "Upset Special",
+      "confidence": "55.5%",
+      "predicted_margin": 2.33
+    },
+    {
+      "matchup": "UL Monroe vs South Alabama",
+      "value_type": "Upset Special",
+      "confidence": "60.8%",
+      "predicted_margin": -0.22
+    },
+    {
+      "matchup": "Wake Forest vs North Carolina",
+      "value_type": "Upset Special",
+      "confidence": "56.2%",
+      "predicted_margin": -0.32
+    },
+    {
+      "matchup": "Washington vs Purdue",
+      "value_type": "Upset Special",
+      "confidence": "56.2%",
+      "predicted_margin": 1.42
+    },
+    {
+      "matchup": "Western Kentucky vs Middle Tennessee",
+      "value_type": "Upset Special",
+      "confidence": "57.4%",
+      "predicted_margin": 2.28
+    },
+    {
+      "matchup": "Nevada vs San Jos\u00e9 State",
+      "value_type": "Upset Special",
+      "confidence": "59.3%",
+      "predicted_margin": 0.46
+    },
+    {
+      "matchup": "Tennessee vs New Mexico State",
+      "value_type": "Upset Special",
+      "confidence": "52.4%",
+      "predicted_margin": 1.47
+    },
+    {
+      "matchup": "UNLV vs Utah State",
+      "value_type": "Upset Special",
+      "confidence": "55.1%",
+      "predicted_margin": 0.53
+    },
+    {
+      "matchup": "Tulsa vs Oregon State",
+      "value_type": "Upset Special",
+      "confidence": "69.6%",
+      "predicted_margin": 0.99
+    },
+    {
+      "matchup": "Washington State vs Louisiana Tech",
+      "value_type": "Upset Special",
+      "confidence": "57.7%",
+      "predicted_margin": 1.28
+    },
+    {
+      "matchup": "San Diego State vs Boise State",
+      "value_type": "Upset Special",
+      "confidence": "55.5%",
+      "predicted_margin": -1.03
+    }
+  ]
+}

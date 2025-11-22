@@ -1,0 +1,407 @@
+{
+  "metadata": {
+    "generated_at": "2025-11-13T22:21:44.007964",
+    "version": "1.0.0",
+    "analysis_type": "working_football_analytics"
+  },
+  "summary": {
+    "games_analyzed": 612,
+    "teams_evaluated": 122,
+    "conferences_analyzed": 11,
+    "top_team": "Ohio State",
+    "top_conference": "ACC"
+  },
+  "power_rankings": [
+    {
+      "rank": 1,
+      "team": "Ohio State",
+      "avg_elo": 2106.7272727272725,
+      "avg_talent": 885.7313262706853,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 11
+    },
+    {
+      "rank": 2,
+      "team": "Texas",
+      "avg_elo": 2039.2,
+      "avg_talent": 864.4181911897933,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 10
+    },
+    {
+      "rank": 3,
+      "team": "Alabama",
+      "avg_elo": 1992.3,
+      "avg_talent": 795.1270121802041,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 10
+    },
+    {
+      "rank": 4,
+      "team": "Georgia",
+      "avg_elo": 1999.2,
+      "avg_talent": 779.5698837818408,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 10
+    },
+    {
+      "rank": 5,
+      "team": "Indiana",
+      "avg_elo": 1837.8,
+      "avg_talent": 940.9580632799319,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 10
+    },
+    {
+      "rank": 6,
+      "team": "Clemson",
+      "avg_elo": 1800.3,
+      "avg_talent": 854.5680408653682,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 10
+    },
+    {
+      "rank": 7,
+      "team": "LSU",
+      "avg_elo": 1752.6666666666667,
+      "avg_talent": 883.5238579312402,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 9
+    },
+    {
+      "rank": 8,
+      "team": "Michigan",
+      "avg_elo": 1858.3636363636363,
+      "avg_talent": 770.5793327797667,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 11
+    },
+    {
+      "rank": 9,
+      "team": "Notre Dame",
+      "avg_elo": 2145.9166666666665,
+      "avg_talent": 399.27586718855633,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 12
+    },
+    {
+      "rank": 10,
+      "team": "Tennessee",
+      "avg_elo": 1956.4444444444443,
+      "avg_talent": 555.9117987469511,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 9
+    },
+    {
+      "rank": 11,
+      "team": "Florida",
+      "avg_elo": 1667.0,
+      "avg_talent": 788.3155972494025,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 10
+    },
+    {
+      "rank": 12,
+      "team": "Oregon",
+      "avg_elo": 2060.0,
+      "avg_talent": 390.55572244130104,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 11
+    },
+    {
+      "rank": 13,
+      "team": "Minnesota",
+      "avg_elo": 1606.909090909091,
+      "avg_talent": 839.3617196711549,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 11
+    },
+    {
+      "rank": 14,
+      "team": "Penn State",
+      "avg_elo": 1998.909090909091,
+      "avg_talent": 428.21853471199864,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 11
+    },
+    {
+      "rank": 15,
+      "team": "Miami",
+      "avg_elo": 1864.1818181818182,
+      "avg_talent": 523.7296221978331,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 11
+    },
+    {
+      "rank": 16,
+      "team": "Iowa",
+      "avg_elo": 1786.0,
+      "avg_talent": 595.0234041653422,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 11
+    },
+    {
+      "rank": 17,
+      "team": "South Florida",
+      "avg_elo": 1456.9,
+      "avg_talent": 911.9560194462103,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 10
+    },
+    {
+      "rank": 18,
+      "team": "Arizona State",
+      "avg_elo": 1712.0,
+      "avg_talent": 649.9974232663017,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 11
+    },
+    {
+      "rank": 19,
+      "team": "Kansas",
+      "avg_elo": 1702.090909090909,
+      "avg_talent": 653.5732201747124,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 11
+    },
+    {
+      "rank": 20,
+      "team": "Kansas State",
+      "avg_elo": 1761.7,
+      "avg_talent": 583.7199282824639,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 10
+    },
+    {
+      "rank": 21,
+      "team": "Boston College",
+      "avg_elo": 1506.0,
+      "avg_talent": 822.7401211198049,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 11
+    },
+    {
+      "rank": 22,
+      "team": "TCU",
+      "avg_elo": 1615.7272727272727,
+      "avg_talent": 696.0399560051138,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 11
+    },
+    {
+      "rank": 23,
+      "team": "Boise State",
+      "avg_elo": 1741.4545454545455,
+      "avg_talent": 564.5408864989333,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 11
+    },
+    {
+      "rank": 24,
+      "team": "West Virginia",
+      "avg_elo": 1553.0,
+      "avg_talent": 747.0734413763267,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 11
+    },
+    {
+      "rank": 25,
+      "team": "Texas A&M",
+      "avg_elo": 1758.5454545454545,
+      "avg_talent": 519.7277814285152,
+      "avg_epa": 0.1544662919064821,
+      "games_played": 11
+    }
+  ],
+  "conference_rankings": [
+    [
+      "ACC",
+      {
+        "conference": "ACC",
+        "teams": 49,
+        "avg_elo": 1548.2714698000411,
+        "avg_talent": 559.5624166065425,
+        "avg_epa": 0.1544662919064821,
+        "games": 112
+      }
+    ],
+    [
+      "SEC",
+      {
+        "conference": "SEC",
+        "teams": 49,
+        "avg_elo": 1546.10832302618,
+        "avg_talent": 585.2111894907181,
+        "avg_epa": 0.1544662919064821,
+        "games": 89
+      }
+    ],
+    [
+      "B1G",
+      {
+        "conference": "B1G",
+        "teams": 50,
+        "avg_elo": 1521.622878787879,
+        "avg_talent": 535.0493916991029,
+        "avg_epa": 0.1544662919064821,
+        "games": 118
+      }
+    ],
+    [
+      "B12",
+      {
+        "conference": "B12",
+        "teams": 39,
+        "avg_elo": 1508.9182077182077,
+        "avg_talent": 532.3993438535839,
+        "avg_epa": 0.15446629190648212,
+        "games": 100
+      }
+    ],
+    [
+      "SBC",
+      {
+        "conference": "SBC",
+        "teams": 37,
+        "avg_elo": 1489.8974815724814,
+        "avg_talent": 560.8204554406105,
+        "avg_epa": 0.15446629190648212,
+        "games": 60
+      }
+    ],
+    [
+      "MWC",
+      {
+        "conference": "MWC",
+        "teams": 40,
+        "avg_elo": 1482.7921843434342,
+        "avg_talent": 536.283608252036,
+        "avg_epa": 0.1544662919064821,
+        "games": 71
+      }
+    ],
+    [
+      "Ind",
+      {
+        "conference": "Ind",
+        "teams": 21,
+        "avg_elo": 1478.0367243867242,
+        "avg_talent": 529.6919693764544,
+        "avg_epa": 0.15446629190648214,
+        "games": 21
+      }
+    ],
+    [
+      "AAC",
+      {
+        "conference": "AAC",
+        "teams": 42,
+        "avg_elo": 1469.1944564694566,
+        "avg_talent": 548.9848945171223,
+        "avg_epa": 0.1544662919064821,
+        "games": 73
+      }
+    ],
+    [
+      "MAC",
+      {
+        "conference": "MAC",
+        "teams": 45,
+        "avg_elo": 1448.7965656565657,
+        "avg_talent": 526.2211561089855,
+        "avg_epa": 0.15446629190648212,
+        "games": 87
+      }
+    ],
+    [
+      "PAC",
+      {
+        "conference": "PAC",
+        "teams": 17,
+        "avg_elo": 1435.8246583481878,
+        "avg_talent": 585.7438915564974,
+        "avg_epa": 0.1544662919064821,
+        "games": 17
+      }
+    ],
+    [
+      "CUSA",
+      {
+        "conference": "CUSA",
+        "teams": 22,
+        "avg_elo": 1399.333230027548,
+        "avg_talent": 526.2092642063747,
+        "avg_epa": 0.15446629190648214,
+        "games": 27
+      }
+    ]
+  ],
+  "performance_trends": {
+    "high_epa_teams": [
+      {
+        "team": "Florida State",
+        "epa": 0.1544662919064821
+      },
+      {
+        "team": "Baylor",
+        "epa": 0.1544662919064821
+      },
+      {
+        "team": "Georgia",
+        "epa": 0.1544662919064821
+      },
+      {
+        "team": "Kentucky",
+        "epa": 0.1544662919064821
+      },
+      {
+        "team": "Clemson",
+        "epa": 0.1544662919064821
+      }
+    ],
+    "high_elo_teams": [
+      {
+        "team": "Notre Dame",
+        "elo": 2145.9166666666665
+      },
+      {
+        "team": "Ohio State",
+        "elo": 2106.7272727272725
+      },
+      {
+        "team": "Oregon",
+        "elo": 2060.0
+      },
+      {
+        "team": "Texas",
+        "elo": 2039.2
+      },
+      {
+        "team": "Georgia",
+        "elo": 1999.2
+      }
+    ],
+    "high_talent_teams": [
+      {
+        "team": "Indiana",
+        "talent": 940.9580632799319
+      },
+      {
+        "team": "South Florida",
+        "talent": 911.9560194462103
+      },
+      {
+        "team": "Ohio State",
+        "talent": 885.7313262706853
+      },
+      {
+        "team": "LSU",
+        "talent": 883.5238579312402
+      },
+      {
+        "team": "Texas",
+        "talent": 864.4181911897933
+      }
+    ]
+  }
+}

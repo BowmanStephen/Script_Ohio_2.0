@@ -1,0 +1,405 @@
+{
+  "timestamp": "2025-11-13T22:26:30.821015",
+  "teams_analyzed": 122,
+  "games_analyzed": 612,
+  "top_power_rankings": [
+    [
+      "Ohio State",
+      {
+        "games_played": 11,
+        "win_rate": 0.0,
+        "avg_elo": 1866.6363636363637,
+        "avg_talent": 742.5432948569583,
+        "avg_epa": 0.15446629190648212,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 1015.7574214835776,
+        "wins": 0,
+        "losses": 11
+      }
+    ],
+    [
+      "Texas",
+      {
+        "games_played": 10,
+        "win_rate": 0.0,
+        "avg_elo": 1815.6,
+        "avg_talent": 749.6268144478372,
+        "avg_epa": 0.1544662919064821,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 997.4679319062958,
+        "wins": 0,
+        "losses": 10
+      }
+    ],
+    [
+      "Alabama",
+      {
+        "games_played": 10,
+        "win_rate": 0.0,
+        "avg_elo": 1821.2,
+        "avg_talent": 707.725381186044,
+        "avg_epa": 0.1544662919064821,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 987.1375019277579,
+        "wins": 0,
+        "losses": 10
+      }
+    ],
+    [
+      "Georgia",
+      {
+        "games_played": 10,
+        "win_rate": 0.0,
+        "avg_elo": 1824.3,
+        "avg_talent": 691.7094383911451,
+        "avg_epa": 0.1544662919064821,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 983.5727190892882,
+        "wins": 0,
+        "losses": 10
+      }
+    ],
+    [
+      "LSU",
+      {
+        "games_played": 9,
+        "win_rate": 0.0,
+        "avg_elo": 1695.888888888889,
+        "avg_talent": 751.3498582934018,
+        "avg_epa": 0.15446629190648212,
+        "avg_success": 0.42486138065484547,
+        "power_rating": 950.1004006155207,
+        "wins": 0,
+        "losses": 9
+      }
+    ],
+    [
+      "Indiana",
+      {
+        "games_played": 10,
+        "win_rate": 0.0,
+        "avg_elo": 1718.3,
+        "avg_talent": 720.3861703041708,
+        "avg_epa": 0.1544662919064821,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 949.7757386631959,
+        "wins": 0,
+        "losses": 10
+      }
+    ],
+    [
+      "Florida",
+      {
+        "games_played": 10,
+        "win_rate": 0.0,
+        "avg_elo": 1692.95,
+        "avg_talent": 746.4266014322068,
+        "avg_epa": 0.1544662919064821,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 947.4478680016067,
+        "wins": 0,
+        "losses": 10
+      }
+    ],
+    [
+      "Clemson",
+      {
+        "games_played": 10,
+        "win_rate": 0.0,
+        "avg_elo": 1712.3,
+        "avg_talent": 706.7031078798603,
+        "avg_epa": 0.1544662919064821,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 943.2708199359028,
+        "wins": 0,
+        "losses": 10
+      }
+    ],
+    [
+      "Tennessee",
+      {
+        "games_played": 9,
+        "win_rate": 0.0,
+        "avg_elo": 1769.9444444444443,
+        "avg_talent": 583.8796001760884,
+        "avg_epa": 0.15446629190648212,
+        "avg_success": 0.42486138065484547,
+        "power_rating": 929.4815454025488,
+        "wins": 0,
+        "losses": 9
+      }
+    ],
+    [
+      "Oregon",
+      {
+        "games_played": 11,
+        "win_rate": 0.0,
+        "avg_elo": 1840.909090909091,
+        "avg_talent": 470.23890224117235,
+        "avg_epa": 0.15446629190648212,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 923.7751946079328,
+        "wins": 0,
+        "losses": 11
+      }
+    ],
+    [
+      "Notre Dame",
+      {
+        "games_played": 12,
+        "win_rate": 0.0,
+        "avg_elo": 1837.2916666666667,
+        "avg_talent": 461.74996238285456,
+        "avg_epa": 0.1544662919064821,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 919.7815429534677,
+        "wins": 0,
+        "losses": 12
+      }
+    ],
+    [
+      "South Carolina",
+      {
+        "games_played": 8,
+        "win_rate": 0.0,
+        "avg_elo": 1758.875,
+        "avg_talent": 563.7639892175608,
+        "avg_epa": 0.1544662919064821,
+        "avg_success": 0.42486138065484547,
+        "power_rating": 919.0190843372129,
+        "wins": 0,
+        "losses": 8
+      }
+    ],
+    [
+      "Penn State",
+      {
+        "games_played": 11,
+        "win_rate": 0.0,
+        "avg_elo": 1800.6818181818182,
+        "avg_talent": 487.62017672495546,
+        "avg_epa": 0.15446629190648212,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 912.8986678621586,
+        "wins": 0,
+        "losses": 11
+      }
+    ],
+    [
+      "Texas A&M",
+      {
+        "games_played": 11,
+        "win_rate": 0.0,
+        "avg_elo": 1724.6818181818182,
+        "avg_talent": 558.0088517778088,
+        "avg_epa": 0.15446629190648212,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 903.6152703780145,
+        "wins": 0,
+        "losses": 11
+      }
+    ],
+    [
+      "Michigan",
+      {
+        "games_played": 11,
+        "win_rate": 0.0,
+        "avg_elo": 1676.8181818181818,
+        "avg_talent": 613.1243190177915,
+        "avg_epa": 0.15446629190648212,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 901.0044560045548,
+        "wins": 0,
+        "losses": 11
+      }
+    ],
+    [
+      "Miami",
+      {
+        "games_played": 11,
+        "win_rate": 0.0,
+        "avg_elo": 1720.3636363636363,
+        "avg_talent": 553.697047100419,
+        "avg_epa": 0.15446629190648212,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 900.5944562475248,
+        "wins": 0,
+        "losses": 11
+      }
+    ],
+    [
+      "Iowa",
+      {
+        "games_played": 11,
+        "win_rate": 0.0,
+        "avg_elo": 1710.909090909091,
+        "avg_talent": 555.7183263260272,
+        "avg_epa": 0.15446629190648212,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 897.4190218333893,
+        "wins": 0,
+        "losses": 11
+      }
+    ],
+    [
+      "Wisconsin",
+      {
+        "games_played": 12,
+        "win_rate": 0.0,
+        "avg_elo": 1653.8333333333333,
+        "avg_talent": 613.7394711782555,
+        "avg_epa": 0.1544662919064821,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 891.9950622587545,
+        "wins": 0,
+        "losses": 12
+      }
+    ],
+    [
+      "Minnesota",
+      {
+        "games_played": 11,
+        "win_rate": 0.0,
+        "avg_elo": 1599.2272727272727,
+        "avg_talent": 668.2417768487521,
+        "avg_epa": 0.15446629190648212,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 886.5033297174793,
+        "wins": 0,
+        "losses": 11
+      }
+    ],
+    [
+      "Kentucky",
+      {
+        "games_played": 10,
+        "win_rate": 0.0,
+        "avg_elo": 1620.85,
+        "avg_talent": 624.6608908669305,
+        "avg_epa": 0.1544662919064821,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 882.0781548320238,
+        "wins": 0,
+        "losses": 10
+      }
+    ]
+  ],
+  "matchup_predictions": [
+    [
+      "Ohio State",
+      "Michigan"
+    ],
+    [
+      "Georgia",
+      "Alabama"
+    ],
+    [
+      "Texas",
+      "Oklahoma"
+    ],
+    [
+      "Oregon",
+      "Washington"
+    ],
+    [
+      "LSU",
+      "Alabama"
+    ],
+    [
+      "Clemson",
+      "North Carolina"
+    ],
+    [
+      "Notre Dame",
+      "USC"
+    ],
+    [
+      "Penn State",
+      "Ohio State"
+    ]
+  ],
+  "underrated_teams": [],
+  "overrated_teams": [
+    [
+      "North Texas",
+      -610.9510926975908,
+      {
+        "games_played": 9,
+        "win_rate": 0.0,
+        "avg_elo": 1367.5555555555557,
+        "avg_talent": 544.1411768793268,
+        "avg_epa": 0.15446629190648212,
+        "avg_success": 0.42486138065484547,
+        "power_rating": 756.6044628579649,
+        "wins": 0,
+        "losses": 9
+      }
+    ],
+    [
+      "Western Kentucky",
+      -641.3318743957257,
+      {
+        "games_played": 7,
+        "win_rate": 0.0,
+        "avg_elo": 1387.857142857143,
+        "avg_talent": 483.47507915538483,
+        "avg_epa": 0.15446629190648212,
+        "avg_success": 0.42486138065484547,
+        "power_rating": 746.5252684614172,
+        "wins": 0,
+        "losses": 7
+      }
+    ],
+    [
+      "South Florida",
+      -601.655409792619,
+      {
+        "games_played": 10,
+        "win_rate": 0.0,
+        "avg_elo": 1460.2,
+        "avg_talent": 760.4156754514545,
+        "avg_epa": 0.1544662919064821,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 858.544590207381,
+        "wins": 0,
+        "losses": 10
+      }
+    ],
+    [
+      "Louisville",
+      -826.1109270936602,
+      {
+        "games_played": 10,
+        "win_rate": 0.0,
+        "avg_elo": 1695.65,
+        "avg_talent": 483.1306177813174,
+        "avg_epa": 0.1544662919064821,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 869.5390729063399,
+        "wins": 0,
+        "losses": 10
+      }
+    ],
+    [
+      "Illinois",
+      -753.3875074019983,
+      {
+        "games_played": 11,
+        "win_rate": 0.0,
+        "avg_elo": 1584.409090909091,
+        "avg_talent": 503.0601985717057,
+        "avg_epa": 0.15446629190648212,
+        "avg_success": 0.4248613806548455,
+        "power_rating": 831.0215835070927,
+        "wins": 0,
+        "losses": 11
+      }
+    ]
+  ],
+  "strategic_insights": [
+    "Home field advantage significant in 2025",
+    "Power ratings better predictor than Elo alone",
+    "Conference strength affects team performance",
+    "Underrated teams offer betting value"
+  ]
+}

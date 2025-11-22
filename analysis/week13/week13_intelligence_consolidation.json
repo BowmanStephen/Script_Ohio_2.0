@@ -1,0 +1,4238 @@
+{
+  "consolidation_metadata": {
+    "timestamp": "2025-11-20T20:41:26.086868",
+    "total_processing_time": 0.06252098083496094,
+    "agent_id": "default_week13_consolidation",
+    "week": 13,
+    "season": 2025
+  },
+  "asset_discovery": {
+    "discovered_assets": [
+      {
+        "file_path": "analysis/week13/week13_intelligence_consolidation.json",
+        "asset_type": "analysis",
+        "file_size": 158206,
+        "created_time": "2025-11-20T20:37:21.662229",
+        "modified_time": "2025-11-20T20:37:21.662229",
+        "description": "Week 13 comprehensive analysis report",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "scripts/enhance_week13_analysis.py",
+        "asset_type": "scripts",
+        "file_size": 15413,
+        "created_time": "2025-11-20T20:35:17.710100",
+        "modified_time": "2025-11-20T20:35:17.710100",
+        "description": "Week 13 processing and analysis script",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "predictions/week13/week13_predictions_summary_20251120_203455.csv",
+        "asset_type": "predictions",
+        "file_size": 2940,
+        "created_time": "2025-11-20T20:34:55.244572",
+        "modified_time": "2025-11-20T20:34:55.244572",
+        "description": "Week 13 predictions and analysis - Executive summary",
+        "key_metrics": {
+          "rows": 47,
+          "columns": 6,
+          "file_size_kb": 2.9814453125,
+          "has_teams": true,
+          "unique_home_teams": 47
+        },
+        "quality_score": 0.9999999999999999
+      },
+      {
+        "file_path": "predictions/week13/week13_model_predictions_20251120_203455.json",
+        "asset_type": "predictions",
+        "file_size": 52208,
+        "created_time": "2025-11-20T20:34:55.241425",
+        "modified_time": "2025-11-20T20:34:55.241425",
+        "description": "Week 13 predictions and analysis",
+        "key_metrics": {
+          "predictions_count": 47
+        },
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "scripts/week13_model_predictions.py",
+        "asset_type": "scripts",
+        "file_size": 20477,
+        "created_time": "2025-11-20T20:34:49.154400",
+        "modified_time": "2025-11-20T20:34:49.154400",
+        "description": "Week 13 processing and analysis script",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "analysis/week13/week13_comprehensive_report.html",
+        "asset_type": "analysis",
+        "file_size": 140,
+        "created_time": "2025-11-20T20:27:53.990411",
+        "modified_time": "2025-11-20T20:27:53.990411",
+        "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "analysis/week13/week13_upset_alerts.csv",
+        "asset_type": "analysis",
+        "file_size": 1469,
+        "created_time": "2025-11-20T20:27:53.914025",
+        "modified_time": "2025-11-20T20:27:53.914025",
+        "description": "Week 13 comprehensive analysis report",
+        "key_metrics": {
+          "rows": 3,
+          "columns": 13,
+          "file_size_kb": 1.44140625,
+          "has_teams": true,
+          "unique_home_teams": 3
+        },
+        "quality_score": 0.9999999999999999
+      },
+      {
+        "file_path": "analysis/week13/week13_power_rankings.csv",
+        "asset_type": "analysis",
+        "file_size": 2073,
+        "created_time": "2025-11-20T20:27:53.913190",
+        "modified_time": "2025-11-20T20:27:53.913190",
+        "description": "Week 13 comprehensive analysis report",
+        "key_metrics": {
+          "rows": 25,
+          "columns": 8,
+          "file_size_kb": 2.0859375
+        },
+        "quality_score": 0.7999999999999999
+      },
+      {
+        "file_path": "analysis/week13/week13_strategic_recommendations.csv",
+        "asset_type": "analysis",
+        "file_size": 20070,
+        "created_time": "2025-11-20T20:27:53.911906",
+        "modified_time": "2025-11-20T20:27:53.911906",
+        "description": "Week 13 comprehensive analysis report",
+        "key_metrics": {
+          "rows": 47,
+          "columns": 13,
+          "file_size_kb": 19.7001953125,
+          "has_teams": true,
+          "unique_home_teams": 47
+        },
+        "quality_score": 0.9999999999999999
+      },
+      {
+        "file_path": "analysis/week13/week13_comprehensive_analysis.json",
+        "asset_type": "analysis",
+        "file_size": 267724,
+        "created_time": "2025-11-20T20:27:53.909956",
+        "modified_time": "2025-11-20T20:27:53.909956",
+        "description": "Week 13 comprehensive analysis report - Comprehensive coverage (47 games)",
+        "key_metrics": {
+          "games_analyzed": 47,
+          "week": 13,
+          "season": 2025,
+          "ranked_teams": 25
+        },
+        "quality_score": 0.7
+      },
+      {
+        "file_path": "validation/week13/validation_summary.csv",
+        "asset_type": "reports",
+        "file_size": 150,
+        "created_time": "2025-11-20T20:27:51.687371",
+        "modified_time": "2025-11-20T20:27:51.687371",
+        "description": "Week 13 validation and reporting - Executive summary",
+        "key_metrics": {
+          "rows": 5,
+          "columns": 2,
+          "file_size_kb": 0.1572265625
+        },
+        "quality_score": 0.7999999999999999
+      },
+      {
+        "file_path": "validation/week13/week13_model_validation_report.json",
+        "asset_type": "reports",
+        "file_size": 10668,
+        "created_time": "2025-11-20T20:27:51.686248",
+        "modified_time": "2025-11-20T20:27:51.686248",
+        "description": "Week 13 validation and reporting - Quality validation",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "reports/week13_enhancement_summary.md",
+        "asset_type": "reports",
+        "file_size": 1563,
+        "created_time": "2025-11-20T20:00:23.266420",
+        "modified_time": "2025-11-20T20:00:23.266420",
+        "description": "Week 13 validation and reporting - Executive summary",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "predictions/week13/week13_predictions_enhanced.csv",
+        "asset_type": "predictions",
+        "file_size": 19531,
+        "created_time": "2025-11-20T20:00:23.265333",
+        "modified_time": "2025-11-20T20:00:23.265333",
+        "description": "Week 13 predictions and analysis - Enhanced analysis",
+        "key_metrics": {
+          "rows": 60,
+          "columns": 27,
+          "file_size_kb": 19.06640625,
+          "has_teams": true,
+          "unique_home_teams": 60
+        },
+        "quality_score": 0.9834567901234568
+      },
+      {
+        "file_path": "predictions/week13/week13_predictions_meta_ensemble.csv",
+        "asset_type": "predictions",
+        "file_size": 14712,
+        "created_time": "2025-11-20T19:38:30.964165",
+        "modified_time": "2025-11-20T19:38:30.964165",
+        "description": "Week 13 predictions and analysis",
+        "key_metrics": {
+          "rows": 60,
+          "columns": 18,
+          "file_size_kb": 14.5068359375,
+          "has_teams": true,
+          "unique_home_teams": 60
+        },
+        "quality_score": 0.9999999999999999
+      },
+      {
+        "file_path": "reports/Prediction_Tracker_week13.csv",
+        "asset_type": "reports",
+        "file_size": 22748,
+        "created_time": "2025-11-20T19:30:51.828967",
+        "modified_time": "2025-11-20T19:20:11.703286",
+        "description": "Week 13 validation and reporting",
+        "key_metrics": {
+          "rows": 60,
+          "columns": 63,
+          "file_size_kb": 22.9189453125
+        },
+        "quality_score": 0.7872751322751322
+      },
+      {
+        "file_path": "scripts/generate_week13_master_report_html.py",
+        "asset_type": "scripts",
+        "file_size": 53077,
+        "created_time": "2025-11-20T11:46:56.071865",
+        "modified_time": "2025-11-20T11:46:56.071865",
+        "description": "Week 13 processing and analysis script",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "analysis/week13/week13_master_report.html",
+        "asset_type": "analysis",
+        "file_size": 398845,
+        "created_time": "2025-11-20T11:45:14.763981",
+        "modified_time": "2025-11-20T11:36:53.155171",
+        "description": "Week 13 comprehensive analysis report",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "scripts/generate_week13_master_report.py",
+        "asset_type": "scripts",
+        "file_size": 44951,
+        "created_time": "2025-11-20T11:35:56.303994",
+        "modified_time": "2025-11-20T11:35:56.303994",
+        "description": "Week 13 processing and analysis script",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "analysis/week13/week13_unified_data.json",
+        "asset_type": "analysis",
+        "file_size": 410221,
+        "created_time": "2025-11-20T11:30:59.314821",
+        "modified_time": "2025-11-20T11:30:59.314821",
+        "description": "Week 13 comprehensive analysis report",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "scripts/generate_comprehensive_week13_analysis.py",
+        "asset_type": "scripts",
+        "file_size": 19049,
+        "created_time": "2025-11-19T22:44:56.537700",
+        "modified_time": "2025-11-19T22:44:56.537700",
+        "description": "Week 13 processing and analysis script - Comprehensive coverage",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "analysis/week13/week13_narrative_previews_20251119_221939.md",
+        "asset_type": "analysis",
+        "file_size": 9865,
+        "created_time": "2025-11-19T22:19:39.115133",
+        "modified_time": "2025-11-19T22:19:39.115133",
+        "description": "Week 13 comprehensive analysis report",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "analysis/week13/week13_detailed_predictions_20251119_221939.csv",
+        "asset_type": "analysis",
+        "file_size": 74608,
+        "created_time": "2025-11-19T22:19:39.114853",
+        "modified_time": "2025-11-19T22:19:39.114853",
+        "description": "Week 13 comprehensive analysis report",
+        "key_metrics": {
+          "rows": 47,
+          "columns": 94,
+          "file_size_kb": 72.931640625,
+          "has_teams": true,
+          "unique_home_teams": 47,
+          "has_confidence": true,
+          "avg_confidence": 0.8270666731233278
+        },
+        "quality_score": 0.9978723404255319
+      },
+      {
+        "file_path": "analysis/week13/week13_comprehensive_analysis_20251119_221939.json",
+        "asset_type": "analysis",
+        "file_size": 303881,
+        "created_time": "2025-11-19T22:19:39.111034",
+        "modified_time": "2025-11-19T22:19:39.111034",
+        "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "analysis/week13/week13_narrative_previews_20251119_213035.md",
+        "asset_type": "analysis",
+        "file_size": 9859,
+        "created_time": "2025-11-19T21:30:35.114295",
+        "modified_time": "2025-11-19T21:30:35.114295",
+        "description": "Week 13 comprehensive analysis report",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "analysis/week13/week13_detailed_predictions_20251119_213035.csv",
+        "asset_type": "analysis",
+        "file_size": 73782,
+        "created_time": "2025-11-19T21:30:35.114056",
+        "modified_time": "2025-11-19T21:30:35.114056",
+        "description": "Week 13 comprehensive analysis report",
+        "key_metrics": {
+          "rows": 47,
+          "columns": 93,
+          "file_size_kb": 72.1484375,
+          "has_teams": true,
+          "unique_home_teams": 47,
+          "has_confidence": true,
+          "avg_confidence": 0.9342049620473903
+        },
+        "quality_score": 0.9978494623655914
+      },
+      {
+        "file_path": "analysis/week13/week13_comprehensive_analysis_20251119_213035.json",
+        "asset_type": "analysis",
+        "file_size": 302125,
+        "created_time": "2025-11-19T21:30:35.110582",
+        "modified_time": "2025-11-19T21:30:35.110582",
+        "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "analysis/week13/week13_narrative_previews_20251119_212406.md",
+        "asset_type": "analysis",
+        "file_size": 9980,
+        "created_time": "2025-11-19T21:24:06.933546",
+        "modified_time": "2025-11-19T21:24:06.933546",
+        "description": "Week 13 comprehensive analysis report",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "analysis/week13/week13_detailed_predictions_20251119_212406.csv",
+        "asset_type": "analysis",
+        "file_size": 70184,
+        "created_time": "2025-11-19T21:24:06.933268",
+        "modified_time": "2025-11-19T21:24:06.933268",
+        "description": "Week 13 comprehensive analysis report",
+        "key_metrics": {
+          "rows": 47,
+          "columns": 92,
+          "file_size_kb": 68.66796875,
+          "has_teams": true,
+          "unique_home_teams": 47,
+          "has_confidence": true,
+          "avg_confidence": 1.0
+        },
+        "quality_score": 0.9978260869565216
+      },
+      {
+        "file_path": "analysis/week13/week13_comprehensive_analysis_20251119_212406.json",
+        "asset_type": "analysis",
+        "file_size": 297466,
+        "created_time": "2025-11-19T21:24:06.929597",
+        "modified_time": "2025-11-19T21:24:06.929597",
+        "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "predictions/week13/week13_predictions_summary_20251119_210249.csv",
+        "asset_type": "predictions",
+        "file_size": 2947,
+        "created_time": "2025-11-19T21:07:47.545987",
+        "modified_time": "2025-11-19T21:02:49.063351",
+        "description": "Week 13 predictions and analysis - Executive summary",
+        "key_metrics": {
+          "rows": 47,
+          "columns": 6,
+          "file_size_kb": 2.99609375,
+          "has_teams": true,
+          "unique_home_teams": 47
+        },
+        "quality_score": 0.9999999999999999
+      },
+      {
+        "file_path": "analysis/week13/week13_dashboard.html",
+        "asset_type": "analysis",
+        "file_size": 28289,
+        "created_time": "2025-11-19T21:05:56.819447",
+        "modified_time": "2025-11-19T21:04:16.483282",
+        "description": "Week 13 comprehensive analysis report - Interactive dashboard",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "scripts/generate_week13_dashboard.py",
+        "asset_type": "scripts",
+        "file_size": 4556,
+        "created_time": "2025-11-19T21:05:05.179340",
+        "modified_time": "2025-11-19T21:05:05.179340",
+        "description": "Week 13 processing and analysis script - Interactive dashboard",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "scripts/compare_week13_schema.py",
+        "asset_type": "scripts",
+        "file_size": 2473,
+        "created_time": "2025-11-19T21:05:05.179279",
+        "modified_time": "2025-11-19T21:05:05.179279",
+        "description": "Week 13 processing and analysis script",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "analysis/week13/week13_enhanced_analysis.json",
+        "asset_type": "analysis",
+        "file_size": 12145,
+        "created_time": "2025-11-19T21:03:23.578404",
+        "modified_time": "2025-11-19T21:03:23.578404",
+        "description": "Week 13 comprehensive analysis report - Enhanced analysis",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "predictions/week13/week13_model_predictions_20251119_210249.json",
+        "asset_type": "predictions",
+        "file_size": 52224,
+        "created_time": "2025-11-19T21:02:49.062102",
+        "modified_time": "2025-11-19T21:02:49.062102",
+        "description": "Week 13 predictions and analysis",
+        "key_metrics": {
+          "predictions_count": 47
+        },
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "data/week13/enhanced/week13_enhanced_games.csv",
+        "asset_type": "data",
+        "file_size": 60897,
+        "created_time": "2025-11-19T21:01:55.509734",
+        "modified_time": "2025-11-19T21:01:55.509734",
+        "description": "Week 13 dataset and features - Enhanced analysis",
+        "key_metrics": {
+          "rows": 47,
+          "columns": 87,
+          "file_size_kb": 59.5986328125,
+          "has_teams": true,
+          "unique_home_teams": 47
+        },
+        "quality_score": 0.9965517241379309
+      },
+      {
+        "file_path": "data/week13/enhanced/week13_features_86.csv",
+        "asset_type": "data",
+        "file_size": 60897,
+        "created_time": "2025-11-19T21:01:55.507853",
+        "modified_time": "2025-11-19T21:01:55.507853",
+        "description": "Week 13 dataset and features",
+        "key_metrics": {
+          "rows": 47,
+          "columns": 87,
+          "file_size_kb": 59.5986328125,
+          "has_teams": true,
+          "unique_home_teams": 47
+        },
+        "quality_score": 0.9965517241379309
+      },
+      {
+        "file_path": "scripts/verify_week13_predictions.py",
+        "asset_type": "scripts",
+        "file_size": 2996,
+        "created_time": "2025-11-19T13:15:59.811052",
+        "modified_time": "2025-11-19T13:15:59.811052",
+        "description": "Week 13 processing and analysis script",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "predictions/week13/prediction_insights.json",
+        "asset_type": "predictions",
+        "file_size": 424,
+        "created_time": "2025-11-18T22:31:48.543380",
+        "modified_time": "2025-11-18T19:01:49.482326",
+        "description": "Week 13 predictions and analysis",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "predictions/week13/week13_predictions.json",
+        "asset_type": "predictions",
+        "file_size": 77302,
+        "created_time": "2025-11-18T22:31:48.543372",
+        "modified_time": "2025-11-18T19:01:49.482201",
+        "description": "Week 13 predictions and analysis",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "predictions/week13/week13_prediction_summary.json",
+        "asset_type": "predictions",
+        "file_size": 827,
+        "created_time": "2025-11-18T22:31:48.543272",
+        "modified_time": "2025-11-18T19:01:49.483138",
+        "description": "Week 13 predictions and analysis - Executive summary",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "predictions/week13/week13_comprehensive_predictions.csv",
+        "asset_type": "predictions",
+        "file_size": 40527,
+        "created_time": "2025-11-18T22:31:48.543144",
+        "modified_time": "2025-11-18T20:00:16.247807",
+        "description": "Week 13 predictions and analysis - Comprehensive coverage",
+        "key_metrics": {
+          "rows": 64,
+          "columns": 25,
+          "file_size_kb": 39.755859375,
+          "has_teams": true,
+          "unique_home_teams": 64
+        },
+        "quality_score": 0.9989999999999999
+      },
+      {
+        "file_path": "predictions/week13/week13_recommendations.csv",
+        "asset_type": "predictions",
+        "file_size": 890,
+        "created_time": "2025-11-18T22:31:48.542974",
+        "modified_time": "2025-11-18T19:01:49.482922",
+        "description": "Week 13 predictions and analysis",
+        "key_metrics": {
+          "rows": 7,
+          "columns": 6,
+          "file_size_kb": 0.8798828125,
+          "has_confidence": true,
+          "avg_confidence": 0.6630889705795988
+        },
+        "quality_score": 0.7999999999999999
+      },
+      {
+        "file_path": "reports/week13_verification_report.json",
+        "asset_type": "reports",
+        "file_size": 6652,
+        "created_time": "2025-11-18T20:57:28.683035",
+        "modified_time": "2025-11-18T20:57:28.683035",
+        "description": "Week 13 validation and reporting",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "data/week13/enhanced/week13_features_86_model_compatible.csv",
+        "asset_type": "data",
+        "file_size": 92105,
+        "created_time": "2025-11-18T20:57:09.889793",
+        "modified_time": "2025-11-18T20:57:09.889793",
+        "description": "Week 13 dataset and features",
+        "key_metrics": {
+          "rows": 64,
+          "columns": 88,
+          "file_size_kb": 89.625,
+          "has_teams": true,
+          "unique_home_teams": 64
+        },
+        "quality_score": 0.996590909090909
+      },
+      {
+        "file_path": "model_pack/2025_week13_real_games.csv",
+        "asset_type": "data",
+        "file_size": 80327,
+        "created_time": "2025-11-18T20:56:51.189215",
+        "modified_time": "2025-11-18T20:56:51.189215",
+        "description": "Week 13 dataset and features",
+        "key_metrics": {
+          "rows": 64,
+          "columns": 86,
+          "file_size_kb": 78.623046875,
+          "has_teams": true,
+          "unique_home_teams": 64
+        },
+        "quality_score": 0.9941133720930232
+      },
+      {
+        "file_path": "scripts/verify_week13_data.py",
+        "asset_type": "scripts",
+        "file_size": 19277,
+        "created_time": "2025-11-18T20:10:29.927539",
+        "modified_time": "2025-11-18T20:10:29.927539",
+        "description": "Week 13 processing and analysis script",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "predictions/week13/week13_predictions_summary_20251118_200454.csv",
+        "asset_type": "predictions",
+        "file_size": 3656,
+        "created_time": "2025-11-18T20:04:54.668531",
+        "modified_time": "2025-11-18T20:04:54.668531",
+        "description": "Week 13 predictions and analysis - Executive summary",
+        "key_metrics": {
+          "rows": 64,
+          "columns": 6,
+          "file_size_kb": 3.7109375,
+          "has_teams": true,
+          "unique_home_teams": 64
+        },
+        "quality_score": 0.9999999999999999
+      },
+      {
+        "file_path": "predictions/week13/week13_model_predictions_20251118_200454.json",
+        "asset_type": "predictions",
+        "file_size": 69843,
+        "created_time": "2025-11-18T20:04:54.666839",
+        "modified_time": "2025-11-18T20:04:54.666839",
+        "description": "Week 13 predictions and analysis",
+        "key_metrics": {
+          "predictions_count": 64
+        },
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "analysis/week13/enhanced_week13_summary_20251118_200409.md",
+        "asset_type": "analysis",
+        "file_size": 808,
+        "created_time": "2025-11-18T20:04:09.340564",
+        "modified_time": "2025-11-18T20:04:09.340564",
+        "description": "Week 13 comprehensive analysis report - Enhanced analysis",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "analysis/week13/enhanced_week13_analysis_20251118_200409.json",
+        "asset_type": "analysis",
+        "file_size": 67566,
+        "created_time": "2025-11-18T20:04:09.340327",
+        "modified_time": "2025-11-18T20:04:09.340327",
+        "description": "Week 13 comprehensive analysis report - Enhanced analysis",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "scripts/enhanced_week13_analysis.py",
+        "asset_type": "scripts",
+        "file_size": 21313,
+        "created_time": "2025-11-18T20:03:28.757922",
+        "modified_time": "2025-11-18T20:03:28.732290",
+        "description": "Week 13 processing and analysis script - Enhanced analysis",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "predictions/week13/week13_enhanced_analysis_report.json",
+        "asset_type": "predictions",
+        "file_size": 219880,
+        "created_time": "2025-11-18T20:03:16.794526",
+        "modified_time": "2025-11-18T20:03:16.794526",
+        "description": "Week 13 predictions and analysis - Enhanced analysis",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "predictions/week13/week13_predictions_summary.json",
+        "asset_type": "predictions",
+        "file_size": 203,
+        "created_time": "2025-11-18T14:31:53.216480",
+        "modified_time": "2025-11-18T14:31:53.216480",
+        "description": "Week 13 predictions and analysis - Executive summary (60 games) using ['ridge', 'xgb'] models",
+        "key_metrics": {
+          "total_games": 60,
+          "models_used": [
+            "ridge",
+            "xgb"
+          ]
+        },
+        "quality_score": 0.7
+      },
+      {
+        "file_path": "predictions/week13/week13_predictions_all_60_games.csv",
+        "asset_type": "predictions",
+        "file_size": 12465,
+        "created_time": "2025-11-18T14:31:53.216104",
+        "modified_time": "2025-11-18T14:31:53.216104",
+        "description": "Week 13 predictions and analysis",
+        "key_metrics": {
+          "rows": 60,
+          "columns": 16,
+          "file_size_kb": 12.2421875,
+          "has_teams": true,
+          "unique_home_teams": 60
+        },
+        "quality_score": 0.9999999999999999
+      },
+      {
+        "file_path": "scripts/expand_week13_coverage.py",
+        "asset_type": "scripts",
+        "file_size": 16320,
+        "created_time": "2025-11-18T14:31:24.737698",
+        "modified_time": "2025-11-18T14:31:24.737698",
+        "description": "Week 13 processing and analysis script",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "predictions/week13/week13_model_predictions.csv",
+        "asset_type": "predictions",
+        "file_size": 9482,
+        "created_time": "2025-11-18T14:12:34.304409",
+        "modified_time": "2025-11-18T14:12:34.304409",
+        "description": "Week 13 predictions and analysis",
+        "key_metrics": {
+          "rows": 64,
+          "columns": 11,
+          "file_size_kb": 9.3818359375,
+          "has_teams": true,
+          "unique_home_teams": 64
+        },
+        "quality_score": 0.9999999999999999
+      },
+      {
+        "file_path": "scripts/generate_week13_features.py",
+        "asset_type": "scripts",
+        "file_size": 1482,
+        "created_time": "2025-11-18T13:59:43.338804",
+        "modified_time": "2025-11-18T13:59:43.338804",
+        "description": "Week 13 processing and analysis script",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "scripts/predict_all_week13_games.py",
+        "asset_type": "scripts",
+        "file_size": 9470,
+        "created_time": "2025-11-17T15:51:07.461590",
+        "modified_time": "2025-11-17T15:51:07.461590",
+        "description": "Week 13 processing and analysis script",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "scripts/compare_week13_predictions.py",
+        "asset_type": "scripts",
+        "file_size": 8848,
+        "created_time": "2025-11-17T15:47:45.958251",
+        "modified_time": "2025-11-17T15:47:45.958251",
+        "description": "Week 13 processing and analysis script",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "scripts/import_week13_predictions.py",
+        "asset_type": "scripts",
+        "file_size": 14024,
+        "created_time": "2025-11-17T15:33:55.623965",
+        "modified_time": "2025-11-17T15:33:55.623965",
+        "description": "Week 13 processing and analysis script",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "scripts/predict_week13_proper.py",
+        "asset_type": "scripts",
+        "file_size": 15364,
+        "created_time": "2025-11-17T15:27:55.973356",
+        "modified_time": "2025-11-17T15:27:55.973356",
+        "description": "Week 13 processing and analysis script",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "scripts/fetch_week13_simple.py",
+        "asset_type": "scripts",
+        "file_size": 4325,
+        "created_time": "2025-11-17T15:27:55.973315",
+        "modified_time": "2025-11-17T15:27:55.973315",
+        "description": "Week 13 processing and analysis script",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "scripts/pull_and_predict_week13.py",
+        "asset_type": "scripts",
+        "file_size": 3013,
+        "created_time": "2025-11-17T15:27:55.973264",
+        "modified_time": "2025-11-17T15:27:55.973264",
+        "description": "Week 13 processing and analysis script",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "scripts/verify_week13_setup.py",
+        "asset_type": "scripts",
+        "file_size": 8813,
+        "created_time": "2025-11-17T15:27:17.616339",
+        "modified_time": "2025-11-17T15:27:17.616339",
+        "description": "Week 13 processing and analysis script",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "scripts/prepare_week13_analysis.py",
+        "asset_type": "scripts",
+        "file_size": 588,
+        "created_time": "2025-11-17T15:11:49.299544",
+        "modified_time": "2025-11-17T15:11:49.299544",
+        "description": "Week 13 processing and analysis script",
+        "key_metrics": {},
+        "quality_score": 0.5
+      },
+      {
+        "file_path": "scripts/test_week13_agents.py",
+        "asset_type": "scripts",
+        "file_size": 1674,
+        "created_time": "2025-11-17T15:10:56.177469",
+        "modified_time": "2025-11-17T15:10:56.177469",
+        "description": "Week 13 processing and analysis script",
+        "key_metrics": {},
+        "quality_score": 0.5
+      }
+    ],
+    "total_count": 68,
+    "discovery_time": 0.06142592430114746,
+    "asset_types": [
+      "data",
+      "reports",
+      "analysis",
+      "predictions",
+      "scripts"
+    ]
+  },
+  "quality_validation": {
+    "total_assets": 68,
+    "quality_distribution": {
+      "high": 17,
+      "medium": 51,
+      "low": 0
+    },
+    "quality_issues": [],
+    "recommendations": [
+      "Consider improving data quality standards across assets"
+    ]
+  },
+  "asset_organization": {
+    "by_type": {
+      "analysis": [
+        {
+          "file_path": "analysis/week13/week13_intelligence_consolidation.json",
+          "asset_type": "analysis",
+          "file_size": 158206,
+          "created_time": "2025-11-20T20:37:21.662229",
+          "modified_time": "2025-11-20T20:37:21.662229",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_comprehensive_report.html",
+          "asset_type": "analysis",
+          "file_size": 140,
+          "created_time": "2025-11-20T20:27:53.990411",
+          "modified_time": "2025-11-20T20:27:53.990411",
+          "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_upset_alerts.csv",
+          "asset_type": "analysis",
+          "file_size": 1469,
+          "created_time": "2025-11-20T20:27:53.914025",
+          "modified_time": "2025-11-20T20:27:53.914025",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {
+            "rows": 3,
+            "columns": 13,
+            "file_size_kb": 1.44140625,
+            "has_teams": true,
+            "unique_home_teams": 3
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "analysis/week13/week13_power_rankings.csv",
+          "asset_type": "analysis",
+          "file_size": 2073,
+          "created_time": "2025-11-20T20:27:53.913190",
+          "modified_time": "2025-11-20T20:27:53.913190",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {
+            "rows": 25,
+            "columns": 8,
+            "file_size_kb": 2.0859375
+          },
+          "quality_score": 0.7999999999999999
+        },
+        {
+          "file_path": "analysis/week13/week13_strategic_recommendations.csv",
+          "asset_type": "analysis",
+          "file_size": 20070,
+          "created_time": "2025-11-20T20:27:53.911906",
+          "modified_time": "2025-11-20T20:27:53.911906",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 13,
+            "file_size_kb": 19.7001953125,
+            "has_teams": true,
+            "unique_home_teams": 47
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "analysis/week13/week13_comprehensive_analysis.json",
+          "asset_type": "analysis",
+          "file_size": 267724,
+          "created_time": "2025-11-20T20:27:53.909956",
+          "modified_time": "2025-11-20T20:27:53.909956",
+          "description": "Week 13 comprehensive analysis report - Comprehensive coverage (47 games)",
+          "key_metrics": {
+            "games_analyzed": 47,
+            "week": 13,
+            "season": 2025,
+            "ranked_teams": 25
+          },
+          "quality_score": 0.7
+        },
+        {
+          "file_path": "analysis/week13/week13_master_report.html",
+          "asset_type": "analysis",
+          "file_size": 398845,
+          "created_time": "2025-11-20T11:45:14.763981",
+          "modified_time": "2025-11-20T11:36:53.155171",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_unified_data.json",
+          "asset_type": "analysis",
+          "file_size": 410221,
+          "created_time": "2025-11-20T11:30:59.314821",
+          "modified_time": "2025-11-20T11:30:59.314821",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_narrative_previews_20251119_221939.md",
+          "asset_type": "analysis",
+          "file_size": 9865,
+          "created_time": "2025-11-19T22:19:39.115133",
+          "modified_time": "2025-11-19T22:19:39.115133",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_detailed_predictions_20251119_221939.csv",
+          "asset_type": "analysis",
+          "file_size": 74608,
+          "created_time": "2025-11-19T22:19:39.114853",
+          "modified_time": "2025-11-19T22:19:39.114853",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 94,
+            "file_size_kb": 72.931640625,
+            "has_teams": true,
+            "unique_home_teams": 47,
+            "has_confidence": true,
+            "avg_confidence": 0.8270666731233278
+          },
+          "quality_score": 0.9978723404255319
+        },
+        {
+          "file_path": "analysis/week13/week13_comprehensive_analysis_20251119_221939.json",
+          "asset_type": "analysis",
+          "file_size": 303881,
+          "created_time": "2025-11-19T22:19:39.111034",
+          "modified_time": "2025-11-19T22:19:39.111034",
+          "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_narrative_previews_20251119_213035.md",
+          "asset_type": "analysis",
+          "file_size": 9859,
+          "created_time": "2025-11-19T21:30:35.114295",
+          "modified_time": "2025-11-19T21:30:35.114295",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_detailed_predictions_20251119_213035.csv",
+          "asset_type": "analysis",
+          "file_size": 73782,
+          "created_time": "2025-11-19T21:30:35.114056",
+          "modified_time": "2025-11-19T21:30:35.114056",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 93,
+            "file_size_kb": 72.1484375,
+            "has_teams": true,
+            "unique_home_teams": 47,
+            "has_confidence": true,
+            "avg_confidence": 0.9342049620473903
+          },
+          "quality_score": 0.9978494623655914
+        },
+        {
+          "file_path": "analysis/week13/week13_comprehensive_analysis_20251119_213035.json",
+          "asset_type": "analysis",
+          "file_size": 302125,
+          "created_time": "2025-11-19T21:30:35.110582",
+          "modified_time": "2025-11-19T21:30:35.110582",
+          "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_narrative_previews_20251119_212406.md",
+          "asset_type": "analysis",
+          "file_size": 9980,
+          "created_time": "2025-11-19T21:24:06.933546",
+          "modified_time": "2025-11-19T21:24:06.933546",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_detailed_predictions_20251119_212406.csv",
+          "asset_type": "analysis",
+          "file_size": 70184,
+          "created_time": "2025-11-19T21:24:06.933268",
+          "modified_time": "2025-11-19T21:24:06.933268",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 92,
+            "file_size_kb": 68.66796875,
+            "has_teams": true,
+            "unique_home_teams": 47,
+            "has_confidence": true,
+            "avg_confidence": 1.0
+          },
+          "quality_score": 0.9978260869565216
+        },
+        {
+          "file_path": "analysis/week13/week13_comprehensive_analysis_20251119_212406.json",
+          "asset_type": "analysis",
+          "file_size": 297466,
+          "created_time": "2025-11-19T21:24:06.929597",
+          "modified_time": "2025-11-19T21:24:06.929597",
+          "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_dashboard.html",
+          "asset_type": "analysis",
+          "file_size": 28289,
+          "created_time": "2025-11-19T21:05:56.819447",
+          "modified_time": "2025-11-19T21:04:16.483282",
+          "description": "Week 13 comprehensive analysis report - Interactive dashboard",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_enhanced_analysis.json",
+          "asset_type": "analysis",
+          "file_size": 12145,
+          "created_time": "2025-11-19T21:03:23.578404",
+          "modified_time": "2025-11-19T21:03:23.578404",
+          "description": "Week 13 comprehensive analysis report - Enhanced analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/enhanced_week13_summary_20251118_200409.md",
+          "asset_type": "analysis",
+          "file_size": 808,
+          "created_time": "2025-11-18T20:04:09.340564",
+          "modified_time": "2025-11-18T20:04:09.340564",
+          "description": "Week 13 comprehensive analysis report - Enhanced analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/enhanced_week13_analysis_20251118_200409.json",
+          "asset_type": "analysis",
+          "file_size": 67566,
+          "created_time": "2025-11-18T20:04:09.340327",
+          "modified_time": "2025-11-18T20:04:09.340327",
+          "description": "Week 13 comprehensive analysis report - Enhanced analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        }
+      ],
+      "scripts": [
+        {
+          "file_path": "scripts/enhance_week13_analysis.py",
+          "asset_type": "scripts",
+          "file_size": 15413,
+          "created_time": "2025-11-20T20:35:17.710100",
+          "modified_time": "2025-11-20T20:35:17.710100",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/week13_model_predictions.py",
+          "asset_type": "scripts",
+          "file_size": 20477,
+          "created_time": "2025-11-20T20:34:49.154400",
+          "modified_time": "2025-11-20T20:34:49.154400",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/generate_week13_master_report_html.py",
+          "asset_type": "scripts",
+          "file_size": 53077,
+          "created_time": "2025-11-20T11:46:56.071865",
+          "modified_time": "2025-11-20T11:46:56.071865",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/generate_week13_master_report.py",
+          "asset_type": "scripts",
+          "file_size": 44951,
+          "created_time": "2025-11-20T11:35:56.303994",
+          "modified_time": "2025-11-20T11:35:56.303994",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/generate_comprehensive_week13_analysis.py",
+          "asset_type": "scripts",
+          "file_size": 19049,
+          "created_time": "2025-11-19T22:44:56.537700",
+          "modified_time": "2025-11-19T22:44:56.537700",
+          "description": "Week 13 processing and analysis script - Comprehensive coverage",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/generate_week13_dashboard.py",
+          "asset_type": "scripts",
+          "file_size": 4556,
+          "created_time": "2025-11-19T21:05:05.179340",
+          "modified_time": "2025-11-19T21:05:05.179340",
+          "description": "Week 13 processing and analysis script - Interactive dashboard",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/compare_week13_schema.py",
+          "asset_type": "scripts",
+          "file_size": 2473,
+          "created_time": "2025-11-19T21:05:05.179279",
+          "modified_time": "2025-11-19T21:05:05.179279",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/verify_week13_predictions.py",
+          "asset_type": "scripts",
+          "file_size": 2996,
+          "created_time": "2025-11-19T13:15:59.811052",
+          "modified_time": "2025-11-19T13:15:59.811052",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/verify_week13_data.py",
+          "asset_type": "scripts",
+          "file_size": 19277,
+          "created_time": "2025-11-18T20:10:29.927539",
+          "modified_time": "2025-11-18T20:10:29.927539",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/enhanced_week13_analysis.py",
+          "asset_type": "scripts",
+          "file_size": 21313,
+          "created_time": "2025-11-18T20:03:28.757922",
+          "modified_time": "2025-11-18T20:03:28.732290",
+          "description": "Week 13 processing and analysis script - Enhanced analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/expand_week13_coverage.py",
+          "asset_type": "scripts",
+          "file_size": 16320,
+          "created_time": "2025-11-18T14:31:24.737698",
+          "modified_time": "2025-11-18T14:31:24.737698",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/generate_week13_features.py",
+          "asset_type": "scripts",
+          "file_size": 1482,
+          "created_time": "2025-11-18T13:59:43.338804",
+          "modified_time": "2025-11-18T13:59:43.338804",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/predict_all_week13_games.py",
+          "asset_type": "scripts",
+          "file_size": 9470,
+          "created_time": "2025-11-17T15:51:07.461590",
+          "modified_time": "2025-11-17T15:51:07.461590",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/compare_week13_predictions.py",
+          "asset_type": "scripts",
+          "file_size": 8848,
+          "created_time": "2025-11-17T15:47:45.958251",
+          "modified_time": "2025-11-17T15:47:45.958251",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/import_week13_predictions.py",
+          "asset_type": "scripts",
+          "file_size": 14024,
+          "created_time": "2025-11-17T15:33:55.623965",
+          "modified_time": "2025-11-17T15:33:55.623965",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/predict_week13_proper.py",
+          "asset_type": "scripts",
+          "file_size": 15364,
+          "created_time": "2025-11-17T15:27:55.973356",
+          "modified_time": "2025-11-17T15:27:55.973356",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/fetch_week13_simple.py",
+          "asset_type": "scripts",
+          "file_size": 4325,
+          "created_time": "2025-11-17T15:27:55.973315",
+          "modified_time": "2025-11-17T15:27:55.973315",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/pull_and_predict_week13.py",
+          "asset_type": "scripts",
+          "file_size": 3013,
+          "created_time": "2025-11-17T15:27:55.973264",
+          "modified_time": "2025-11-17T15:27:55.973264",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/verify_week13_setup.py",
+          "asset_type": "scripts",
+          "file_size": 8813,
+          "created_time": "2025-11-17T15:27:17.616339",
+          "modified_time": "2025-11-17T15:27:17.616339",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/prepare_week13_analysis.py",
+          "asset_type": "scripts",
+          "file_size": 588,
+          "created_time": "2025-11-17T15:11:49.299544",
+          "modified_time": "2025-11-17T15:11:49.299544",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/test_week13_agents.py",
+          "asset_type": "scripts",
+          "file_size": 1674,
+          "created_time": "2025-11-17T15:10:56.177469",
+          "modified_time": "2025-11-17T15:10:56.177469",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        }
+      ],
+      "predictions": [
+        {
+          "file_path": "predictions/week13/week13_predictions_summary_20251120_203455.csv",
+          "asset_type": "predictions",
+          "file_size": 2940,
+          "created_time": "2025-11-20T20:34:55.244572",
+          "modified_time": "2025-11-20T20:34:55.244572",
+          "description": "Week 13 predictions and analysis - Executive summary",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 6,
+            "file_size_kb": 2.9814453125,
+            "has_teams": true,
+            "unique_home_teams": 47
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "predictions/week13/week13_model_predictions_20251120_203455.json",
+          "asset_type": "predictions",
+          "file_size": 52208,
+          "created_time": "2025-11-20T20:34:55.241425",
+          "modified_time": "2025-11-20T20:34:55.241425",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "predictions_count": 47
+          },
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions_enhanced.csv",
+          "asset_type": "predictions",
+          "file_size": 19531,
+          "created_time": "2025-11-20T20:00:23.265333",
+          "modified_time": "2025-11-20T20:00:23.265333",
+          "description": "Week 13 predictions and analysis - Enhanced analysis",
+          "key_metrics": {
+            "rows": 60,
+            "columns": 27,
+            "file_size_kb": 19.06640625,
+            "has_teams": true,
+            "unique_home_teams": 60
+          },
+          "quality_score": 0.9834567901234568
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions_meta_ensemble.csv",
+          "asset_type": "predictions",
+          "file_size": 14712,
+          "created_time": "2025-11-20T19:38:30.964165",
+          "modified_time": "2025-11-20T19:38:30.964165",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "rows": 60,
+            "columns": 18,
+            "file_size_kb": 14.5068359375,
+            "has_teams": true,
+            "unique_home_teams": 60
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions_summary_20251119_210249.csv",
+          "asset_type": "predictions",
+          "file_size": 2947,
+          "created_time": "2025-11-19T21:07:47.545987",
+          "modified_time": "2025-11-19T21:02:49.063351",
+          "description": "Week 13 predictions and analysis - Executive summary",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 6,
+            "file_size_kb": 2.99609375,
+            "has_teams": true,
+            "unique_home_teams": 47
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "predictions/week13/week13_model_predictions_20251119_210249.json",
+          "asset_type": "predictions",
+          "file_size": 52224,
+          "created_time": "2025-11-19T21:02:49.062102",
+          "modified_time": "2025-11-19T21:02:49.062102",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "predictions_count": 47
+          },
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/prediction_insights.json",
+          "asset_type": "predictions",
+          "file_size": 424,
+          "created_time": "2025-11-18T22:31:48.543380",
+          "modified_time": "2025-11-18T19:01:49.482326",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions.json",
+          "asset_type": "predictions",
+          "file_size": 77302,
+          "created_time": "2025-11-18T22:31:48.543372",
+          "modified_time": "2025-11-18T19:01:49.482201",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_prediction_summary.json",
+          "asset_type": "predictions",
+          "file_size": 827,
+          "created_time": "2025-11-18T22:31:48.543272",
+          "modified_time": "2025-11-18T19:01:49.483138",
+          "description": "Week 13 predictions and analysis - Executive summary",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_comprehensive_predictions.csv",
+          "asset_type": "predictions",
+          "file_size": 40527,
+          "created_time": "2025-11-18T22:31:48.543144",
+          "modified_time": "2025-11-18T20:00:16.247807",
+          "description": "Week 13 predictions and analysis - Comprehensive coverage",
+          "key_metrics": {
+            "rows": 64,
+            "columns": 25,
+            "file_size_kb": 39.755859375,
+            "has_teams": true,
+            "unique_home_teams": 64
+          },
+          "quality_score": 0.9989999999999999
+        },
+        {
+          "file_path": "predictions/week13/week13_recommendations.csv",
+          "asset_type": "predictions",
+          "file_size": 890,
+          "created_time": "2025-11-18T22:31:48.542974",
+          "modified_time": "2025-11-18T19:01:49.482922",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "rows": 7,
+            "columns": 6,
+            "file_size_kb": 0.8798828125,
+            "has_confidence": true,
+            "avg_confidence": 0.6630889705795988
+          },
+          "quality_score": 0.7999999999999999
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions_summary_20251118_200454.csv",
+          "asset_type": "predictions",
+          "file_size": 3656,
+          "created_time": "2025-11-18T20:04:54.668531",
+          "modified_time": "2025-11-18T20:04:54.668531",
+          "description": "Week 13 predictions and analysis - Executive summary",
+          "key_metrics": {
+            "rows": 64,
+            "columns": 6,
+            "file_size_kb": 3.7109375,
+            "has_teams": true,
+            "unique_home_teams": 64
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "predictions/week13/week13_model_predictions_20251118_200454.json",
+          "asset_type": "predictions",
+          "file_size": 69843,
+          "created_time": "2025-11-18T20:04:54.666839",
+          "modified_time": "2025-11-18T20:04:54.666839",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "predictions_count": 64
+          },
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_enhanced_analysis_report.json",
+          "asset_type": "predictions",
+          "file_size": 219880,
+          "created_time": "2025-11-18T20:03:16.794526",
+          "modified_time": "2025-11-18T20:03:16.794526",
+          "description": "Week 13 predictions and analysis - Enhanced analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions_summary.json",
+          "asset_type": "predictions",
+          "file_size": 203,
+          "created_time": "2025-11-18T14:31:53.216480",
+          "modified_time": "2025-11-18T14:31:53.216480",
+          "description": "Week 13 predictions and analysis - Executive summary (60 games) using ['ridge', 'xgb'] models",
+          "key_metrics": {
+            "total_games": 60,
+            "models_used": [
+              "ridge",
+              "xgb"
+            ]
+          },
+          "quality_score": 0.7
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions_all_60_games.csv",
+          "asset_type": "predictions",
+          "file_size": 12465,
+          "created_time": "2025-11-18T14:31:53.216104",
+          "modified_time": "2025-11-18T14:31:53.216104",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "rows": 60,
+            "columns": 16,
+            "file_size_kb": 12.2421875,
+            "has_teams": true,
+            "unique_home_teams": 60
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "predictions/week13/week13_model_predictions.csv",
+          "asset_type": "predictions",
+          "file_size": 9482,
+          "created_time": "2025-11-18T14:12:34.304409",
+          "modified_time": "2025-11-18T14:12:34.304409",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "rows": 64,
+            "columns": 11,
+            "file_size_kb": 9.3818359375,
+            "has_teams": true,
+            "unique_home_teams": 64
+          },
+          "quality_score": 0.9999999999999999
+        }
+      ],
+      "reports": [
+        {
+          "file_path": "validation/week13/validation_summary.csv",
+          "asset_type": "reports",
+          "file_size": 150,
+          "created_time": "2025-11-20T20:27:51.687371",
+          "modified_time": "2025-11-20T20:27:51.687371",
+          "description": "Week 13 validation and reporting - Executive summary",
+          "key_metrics": {
+            "rows": 5,
+            "columns": 2,
+            "file_size_kb": 0.1572265625
+          },
+          "quality_score": 0.7999999999999999
+        },
+        {
+          "file_path": "validation/week13/week13_model_validation_report.json",
+          "asset_type": "reports",
+          "file_size": 10668,
+          "created_time": "2025-11-20T20:27:51.686248",
+          "modified_time": "2025-11-20T20:27:51.686248",
+          "description": "Week 13 validation and reporting - Quality validation",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "reports/week13_enhancement_summary.md",
+          "asset_type": "reports",
+          "file_size": 1563,
+          "created_time": "2025-11-20T20:00:23.266420",
+          "modified_time": "2025-11-20T20:00:23.266420",
+          "description": "Week 13 validation and reporting - Executive summary",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "reports/Prediction_Tracker_week13.csv",
+          "asset_type": "reports",
+          "file_size": 22748,
+          "created_time": "2025-11-20T19:30:51.828967",
+          "modified_time": "2025-11-20T19:20:11.703286",
+          "description": "Week 13 validation and reporting",
+          "key_metrics": {
+            "rows": 60,
+            "columns": 63,
+            "file_size_kb": 22.9189453125
+          },
+          "quality_score": 0.7872751322751322
+        },
+        {
+          "file_path": "reports/week13_verification_report.json",
+          "asset_type": "reports",
+          "file_size": 6652,
+          "created_time": "2025-11-18T20:57:28.683035",
+          "modified_time": "2025-11-18T20:57:28.683035",
+          "description": "Week 13 validation and reporting",
+          "key_metrics": {},
+          "quality_score": 0.5
+        }
+      ],
+      "data": [
+        {
+          "file_path": "data/week13/enhanced/week13_enhanced_games.csv",
+          "asset_type": "data",
+          "file_size": 60897,
+          "created_time": "2025-11-19T21:01:55.509734",
+          "modified_time": "2025-11-19T21:01:55.509734",
+          "description": "Week 13 dataset and features - Enhanced analysis",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 87,
+            "file_size_kb": 59.5986328125,
+            "has_teams": true,
+            "unique_home_teams": 47
+          },
+          "quality_score": 0.9965517241379309
+        },
+        {
+          "file_path": "data/week13/enhanced/week13_features_86.csv",
+          "asset_type": "data",
+          "file_size": 60897,
+          "created_time": "2025-11-19T21:01:55.507853",
+          "modified_time": "2025-11-19T21:01:55.507853",
+          "description": "Week 13 dataset and features",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 87,
+            "file_size_kb": 59.5986328125,
+            "has_teams": true,
+            "unique_home_teams": 47
+          },
+          "quality_score": 0.9965517241379309
+        },
+        {
+          "file_path": "data/week13/enhanced/week13_features_86_model_compatible.csv",
+          "asset_type": "data",
+          "file_size": 92105,
+          "created_time": "2025-11-18T20:57:09.889793",
+          "modified_time": "2025-11-18T20:57:09.889793",
+          "description": "Week 13 dataset and features",
+          "key_metrics": {
+            "rows": 64,
+            "columns": 88,
+            "file_size_kb": 89.625,
+            "has_teams": true,
+            "unique_home_teams": 64
+          },
+          "quality_score": 0.996590909090909
+        },
+        {
+          "file_path": "model_pack/2025_week13_real_games.csv",
+          "asset_type": "data",
+          "file_size": 80327,
+          "created_time": "2025-11-18T20:56:51.189215",
+          "modified_time": "2025-11-18T20:56:51.189215",
+          "description": "Week 13 dataset and features",
+          "key_metrics": {
+            "rows": 64,
+            "columns": 86,
+            "file_size_kb": 78.623046875,
+            "has_teams": true,
+            "unique_home_teams": 64
+          },
+          "quality_score": 0.9941133720930232
+        }
+      ]
+    },
+    "by_quality": {
+      "high": [
+        {
+          "file_path": "predictions/week13/week13_predictions_summary_20251120_203455.csv",
+          "asset_type": "predictions",
+          "file_size": 2940,
+          "created_time": "2025-11-20T20:34:55.244572",
+          "modified_time": "2025-11-20T20:34:55.244572",
+          "description": "Week 13 predictions and analysis - Executive summary",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 6,
+            "file_size_kb": 2.9814453125,
+            "has_teams": true,
+            "unique_home_teams": 47
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "analysis/week13/week13_upset_alerts.csv",
+          "asset_type": "analysis",
+          "file_size": 1469,
+          "created_time": "2025-11-20T20:27:53.914025",
+          "modified_time": "2025-11-20T20:27:53.914025",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {
+            "rows": 3,
+            "columns": 13,
+            "file_size_kb": 1.44140625,
+            "has_teams": true,
+            "unique_home_teams": 3
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "analysis/week13/week13_strategic_recommendations.csv",
+          "asset_type": "analysis",
+          "file_size": 20070,
+          "created_time": "2025-11-20T20:27:53.911906",
+          "modified_time": "2025-11-20T20:27:53.911906",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 13,
+            "file_size_kb": 19.7001953125,
+            "has_teams": true,
+            "unique_home_teams": 47
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions_enhanced.csv",
+          "asset_type": "predictions",
+          "file_size": 19531,
+          "created_time": "2025-11-20T20:00:23.265333",
+          "modified_time": "2025-11-20T20:00:23.265333",
+          "description": "Week 13 predictions and analysis - Enhanced analysis",
+          "key_metrics": {
+            "rows": 60,
+            "columns": 27,
+            "file_size_kb": 19.06640625,
+            "has_teams": true,
+            "unique_home_teams": 60
+          },
+          "quality_score": 0.9834567901234568
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions_meta_ensemble.csv",
+          "asset_type": "predictions",
+          "file_size": 14712,
+          "created_time": "2025-11-20T19:38:30.964165",
+          "modified_time": "2025-11-20T19:38:30.964165",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "rows": 60,
+            "columns": 18,
+            "file_size_kb": 14.5068359375,
+            "has_teams": true,
+            "unique_home_teams": 60
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "analysis/week13/week13_detailed_predictions_20251119_221939.csv",
+          "asset_type": "analysis",
+          "file_size": 74608,
+          "created_time": "2025-11-19T22:19:39.114853",
+          "modified_time": "2025-11-19T22:19:39.114853",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 94,
+            "file_size_kb": 72.931640625,
+            "has_teams": true,
+            "unique_home_teams": 47,
+            "has_confidence": true,
+            "avg_confidence": 0.8270666731233278
+          },
+          "quality_score": 0.9978723404255319
+        },
+        {
+          "file_path": "analysis/week13/week13_detailed_predictions_20251119_213035.csv",
+          "asset_type": "analysis",
+          "file_size": 73782,
+          "created_time": "2025-11-19T21:30:35.114056",
+          "modified_time": "2025-11-19T21:30:35.114056",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 93,
+            "file_size_kb": 72.1484375,
+            "has_teams": true,
+            "unique_home_teams": 47,
+            "has_confidence": true,
+            "avg_confidence": 0.9342049620473903
+          },
+          "quality_score": 0.9978494623655914
+        },
+        {
+          "file_path": "analysis/week13/week13_detailed_predictions_20251119_212406.csv",
+          "asset_type": "analysis",
+          "file_size": 70184,
+          "created_time": "2025-11-19T21:24:06.933268",
+          "modified_time": "2025-11-19T21:24:06.933268",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 92,
+            "file_size_kb": 68.66796875,
+            "has_teams": true,
+            "unique_home_teams": 47,
+            "has_confidence": true,
+            "avg_confidence": 1.0
+          },
+          "quality_score": 0.9978260869565216
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions_summary_20251119_210249.csv",
+          "asset_type": "predictions",
+          "file_size": 2947,
+          "created_time": "2025-11-19T21:07:47.545987",
+          "modified_time": "2025-11-19T21:02:49.063351",
+          "description": "Week 13 predictions and analysis - Executive summary",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 6,
+            "file_size_kb": 2.99609375,
+            "has_teams": true,
+            "unique_home_teams": 47
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "data/week13/enhanced/week13_enhanced_games.csv",
+          "asset_type": "data",
+          "file_size": 60897,
+          "created_time": "2025-11-19T21:01:55.509734",
+          "modified_time": "2025-11-19T21:01:55.509734",
+          "description": "Week 13 dataset and features - Enhanced analysis",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 87,
+            "file_size_kb": 59.5986328125,
+            "has_teams": true,
+            "unique_home_teams": 47
+          },
+          "quality_score": 0.9965517241379309
+        },
+        {
+          "file_path": "data/week13/enhanced/week13_features_86.csv",
+          "asset_type": "data",
+          "file_size": 60897,
+          "created_time": "2025-11-19T21:01:55.507853",
+          "modified_time": "2025-11-19T21:01:55.507853",
+          "description": "Week 13 dataset and features",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 87,
+            "file_size_kb": 59.5986328125,
+            "has_teams": true,
+            "unique_home_teams": 47
+          },
+          "quality_score": 0.9965517241379309
+        },
+        {
+          "file_path": "predictions/week13/week13_comprehensive_predictions.csv",
+          "asset_type": "predictions",
+          "file_size": 40527,
+          "created_time": "2025-11-18T22:31:48.543144",
+          "modified_time": "2025-11-18T20:00:16.247807",
+          "description": "Week 13 predictions and analysis - Comprehensive coverage",
+          "key_metrics": {
+            "rows": 64,
+            "columns": 25,
+            "file_size_kb": 39.755859375,
+            "has_teams": true,
+            "unique_home_teams": 64
+          },
+          "quality_score": 0.9989999999999999
+        },
+        {
+          "file_path": "data/week13/enhanced/week13_features_86_model_compatible.csv",
+          "asset_type": "data",
+          "file_size": 92105,
+          "created_time": "2025-11-18T20:57:09.889793",
+          "modified_time": "2025-11-18T20:57:09.889793",
+          "description": "Week 13 dataset and features",
+          "key_metrics": {
+            "rows": 64,
+            "columns": 88,
+            "file_size_kb": 89.625,
+            "has_teams": true,
+            "unique_home_teams": 64
+          },
+          "quality_score": 0.996590909090909
+        },
+        {
+          "file_path": "model_pack/2025_week13_real_games.csv",
+          "asset_type": "data",
+          "file_size": 80327,
+          "created_time": "2025-11-18T20:56:51.189215",
+          "modified_time": "2025-11-18T20:56:51.189215",
+          "description": "Week 13 dataset and features",
+          "key_metrics": {
+            "rows": 64,
+            "columns": 86,
+            "file_size_kb": 78.623046875,
+            "has_teams": true,
+            "unique_home_teams": 64
+          },
+          "quality_score": 0.9941133720930232
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions_summary_20251118_200454.csv",
+          "asset_type": "predictions",
+          "file_size": 3656,
+          "created_time": "2025-11-18T20:04:54.668531",
+          "modified_time": "2025-11-18T20:04:54.668531",
+          "description": "Week 13 predictions and analysis - Executive summary",
+          "key_metrics": {
+            "rows": 64,
+            "columns": 6,
+            "file_size_kb": 3.7109375,
+            "has_teams": true,
+            "unique_home_teams": 64
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions_all_60_games.csv",
+          "asset_type": "predictions",
+          "file_size": 12465,
+          "created_time": "2025-11-18T14:31:53.216104",
+          "modified_time": "2025-11-18T14:31:53.216104",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "rows": 60,
+            "columns": 16,
+            "file_size_kb": 12.2421875,
+            "has_teams": true,
+            "unique_home_teams": 60
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "predictions/week13/week13_model_predictions.csv",
+          "asset_type": "predictions",
+          "file_size": 9482,
+          "created_time": "2025-11-18T14:12:34.304409",
+          "modified_time": "2025-11-18T14:12:34.304409",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "rows": 64,
+            "columns": 11,
+            "file_size_kb": 9.3818359375,
+            "has_teams": true,
+            "unique_home_teams": 64
+          },
+          "quality_score": 0.9999999999999999
+        }
+      ],
+      "medium": [
+        {
+          "file_path": "analysis/week13/week13_intelligence_consolidation.json",
+          "asset_type": "analysis",
+          "file_size": 158206,
+          "created_time": "2025-11-20T20:37:21.662229",
+          "modified_time": "2025-11-20T20:37:21.662229",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/enhance_week13_analysis.py",
+          "asset_type": "scripts",
+          "file_size": 15413,
+          "created_time": "2025-11-20T20:35:17.710100",
+          "modified_time": "2025-11-20T20:35:17.710100",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_model_predictions_20251120_203455.json",
+          "asset_type": "predictions",
+          "file_size": 52208,
+          "created_time": "2025-11-20T20:34:55.241425",
+          "modified_time": "2025-11-20T20:34:55.241425",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "predictions_count": 47
+          },
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/week13_model_predictions.py",
+          "asset_type": "scripts",
+          "file_size": 20477,
+          "created_time": "2025-11-20T20:34:49.154400",
+          "modified_time": "2025-11-20T20:34:49.154400",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_comprehensive_report.html",
+          "asset_type": "analysis",
+          "file_size": 140,
+          "created_time": "2025-11-20T20:27:53.990411",
+          "modified_time": "2025-11-20T20:27:53.990411",
+          "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_power_rankings.csv",
+          "asset_type": "analysis",
+          "file_size": 2073,
+          "created_time": "2025-11-20T20:27:53.913190",
+          "modified_time": "2025-11-20T20:27:53.913190",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {
+            "rows": 25,
+            "columns": 8,
+            "file_size_kb": 2.0859375
+          },
+          "quality_score": 0.7999999999999999
+        },
+        {
+          "file_path": "analysis/week13/week13_comprehensive_analysis.json",
+          "asset_type": "analysis",
+          "file_size": 267724,
+          "created_time": "2025-11-20T20:27:53.909956",
+          "modified_time": "2025-11-20T20:27:53.909956",
+          "description": "Week 13 comprehensive analysis report - Comprehensive coverage (47 games)",
+          "key_metrics": {
+            "games_analyzed": 47,
+            "week": 13,
+            "season": 2025,
+            "ranked_teams": 25
+          },
+          "quality_score": 0.7
+        },
+        {
+          "file_path": "validation/week13/validation_summary.csv",
+          "asset_type": "reports",
+          "file_size": 150,
+          "created_time": "2025-11-20T20:27:51.687371",
+          "modified_time": "2025-11-20T20:27:51.687371",
+          "description": "Week 13 validation and reporting - Executive summary",
+          "key_metrics": {
+            "rows": 5,
+            "columns": 2,
+            "file_size_kb": 0.1572265625
+          },
+          "quality_score": 0.7999999999999999
+        },
+        {
+          "file_path": "validation/week13/week13_model_validation_report.json",
+          "asset_type": "reports",
+          "file_size": 10668,
+          "created_time": "2025-11-20T20:27:51.686248",
+          "modified_time": "2025-11-20T20:27:51.686248",
+          "description": "Week 13 validation and reporting - Quality validation",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "reports/week13_enhancement_summary.md",
+          "asset_type": "reports",
+          "file_size": 1563,
+          "created_time": "2025-11-20T20:00:23.266420",
+          "modified_time": "2025-11-20T20:00:23.266420",
+          "description": "Week 13 validation and reporting - Executive summary",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "reports/Prediction_Tracker_week13.csv",
+          "asset_type": "reports",
+          "file_size": 22748,
+          "created_time": "2025-11-20T19:30:51.828967",
+          "modified_time": "2025-11-20T19:20:11.703286",
+          "description": "Week 13 validation and reporting",
+          "key_metrics": {
+            "rows": 60,
+            "columns": 63,
+            "file_size_kb": 22.9189453125
+          },
+          "quality_score": 0.7872751322751322
+        },
+        {
+          "file_path": "scripts/generate_week13_master_report_html.py",
+          "asset_type": "scripts",
+          "file_size": 53077,
+          "created_time": "2025-11-20T11:46:56.071865",
+          "modified_time": "2025-11-20T11:46:56.071865",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_master_report.html",
+          "asset_type": "analysis",
+          "file_size": 398845,
+          "created_time": "2025-11-20T11:45:14.763981",
+          "modified_time": "2025-11-20T11:36:53.155171",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/generate_week13_master_report.py",
+          "asset_type": "scripts",
+          "file_size": 44951,
+          "created_time": "2025-11-20T11:35:56.303994",
+          "modified_time": "2025-11-20T11:35:56.303994",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_unified_data.json",
+          "asset_type": "analysis",
+          "file_size": 410221,
+          "created_time": "2025-11-20T11:30:59.314821",
+          "modified_time": "2025-11-20T11:30:59.314821",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/generate_comprehensive_week13_analysis.py",
+          "asset_type": "scripts",
+          "file_size": 19049,
+          "created_time": "2025-11-19T22:44:56.537700",
+          "modified_time": "2025-11-19T22:44:56.537700",
+          "description": "Week 13 processing and analysis script - Comprehensive coverage",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_narrative_previews_20251119_221939.md",
+          "asset_type": "analysis",
+          "file_size": 9865,
+          "created_time": "2025-11-19T22:19:39.115133",
+          "modified_time": "2025-11-19T22:19:39.115133",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_comprehensive_analysis_20251119_221939.json",
+          "asset_type": "analysis",
+          "file_size": 303881,
+          "created_time": "2025-11-19T22:19:39.111034",
+          "modified_time": "2025-11-19T22:19:39.111034",
+          "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_narrative_previews_20251119_213035.md",
+          "asset_type": "analysis",
+          "file_size": 9859,
+          "created_time": "2025-11-19T21:30:35.114295",
+          "modified_time": "2025-11-19T21:30:35.114295",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_comprehensive_analysis_20251119_213035.json",
+          "asset_type": "analysis",
+          "file_size": 302125,
+          "created_time": "2025-11-19T21:30:35.110582",
+          "modified_time": "2025-11-19T21:30:35.110582",
+          "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_narrative_previews_20251119_212406.md",
+          "asset_type": "analysis",
+          "file_size": 9980,
+          "created_time": "2025-11-19T21:24:06.933546",
+          "modified_time": "2025-11-19T21:24:06.933546",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_comprehensive_analysis_20251119_212406.json",
+          "asset_type": "analysis",
+          "file_size": 297466,
+          "created_time": "2025-11-19T21:24:06.929597",
+          "modified_time": "2025-11-19T21:24:06.929597",
+          "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_dashboard.html",
+          "asset_type": "analysis",
+          "file_size": 28289,
+          "created_time": "2025-11-19T21:05:56.819447",
+          "modified_time": "2025-11-19T21:04:16.483282",
+          "description": "Week 13 comprehensive analysis report - Interactive dashboard",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/generate_week13_dashboard.py",
+          "asset_type": "scripts",
+          "file_size": 4556,
+          "created_time": "2025-11-19T21:05:05.179340",
+          "modified_time": "2025-11-19T21:05:05.179340",
+          "description": "Week 13 processing and analysis script - Interactive dashboard",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/compare_week13_schema.py",
+          "asset_type": "scripts",
+          "file_size": 2473,
+          "created_time": "2025-11-19T21:05:05.179279",
+          "modified_time": "2025-11-19T21:05:05.179279",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_enhanced_analysis.json",
+          "asset_type": "analysis",
+          "file_size": 12145,
+          "created_time": "2025-11-19T21:03:23.578404",
+          "modified_time": "2025-11-19T21:03:23.578404",
+          "description": "Week 13 comprehensive analysis report - Enhanced analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_model_predictions_20251119_210249.json",
+          "asset_type": "predictions",
+          "file_size": 52224,
+          "created_time": "2025-11-19T21:02:49.062102",
+          "modified_time": "2025-11-19T21:02:49.062102",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "predictions_count": 47
+          },
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/verify_week13_predictions.py",
+          "asset_type": "scripts",
+          "file_size": 2996,
+          "created_time": "2025-11-19T13:15:59.811052",
+          "modified_time": "2025-11-19T13:15:59.811052",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/prediction_insights.json",
+          "asset_type": "predictions",
+          "file_size": 424,
+          "created_time": "2025-11-18T22:31:48.543380",
+          "modified_time": "2025-11-18T19:01:49.482326",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions.json",
+          "asset_type": "predictions",
+          "file_size": 77302,
+          "created_time": "2025-11-18T22:31:48.543372",
+          "modified_time": "2025-11-18T19:01:49.482201",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_prediction_summary.json",
+          "asset_type": "predictions",
+          "file_size": 827,
+          "created_time": "2025-11-18T22:31:48.543272",
+          "modified_time": "2025-11-18T19:01:49.483138",
+          "description": "Week 13 predictions and analysis - Executive summary",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_recommendations.csv",
+          "asset_type": "predictions",
+          "file_size": 890,
+          "created_time": "2025-11-18T22:31:48.542974",
+          "modified_time": "2025-11-18T19:01:49.482922",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "rows": 7,
+            "columns": 6,
+            "file_size_kb": 0.8798828125,
+            "has_confidence": true,
+            "avg_confidence": 0.6630889705795988
+          },
+          "quality_score": 0.7999999999999999
+        },
+        {
+          "file_path": "reports/week13_verification_report.json",
+          "asset_type": "reports",
+          "file_size": 6652,
+          "created_time": "2025-11-18T20:57:28.683035",
+          "modified_time": "2025-11-18T20:57:28.683035",
+          "description": "Week 13 validation and reporting",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/verify_week13_data.py",
+          "asset_type": "scripts",
+          "file_size": 19277,
+          "created_time": "2025-11-18T20:10:29.927539",
+          "modified_time": "2025-11-18T20:10:29.927539",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_model_predictions_20251118_200454.json",
+          "asset_type": "predictions",
+          "file_size": 69843,
+          "created_time": "2025-11-18T20:04:54.666839",
+          "modified_time": "2025-11-18T20:04:54.666839",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "predictions_count": 64
+          },
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/enhanced_week13_summary_20251118_200409.md",
+          "asset_type": "analysis",
+          "file_size": 808,
+          "created_time": "2025-11-18T20:04:09.340564",
+          "modified_time": "2025-11-18T20:04:09.340564",
+          "description": "Week 13 comprehensive analysis report - Enhanced analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/enhanced_week13_analysis_20251118_200409.json",
+          "asset_type": "analysis",
+          "file_size": 67566,
+          "created_time": "2025-11-18T20:04:09.340327",
+          "modified_time": "2025-11-18T20:04:09.340327",
+          "description": "Week 13 comprehensive analysis report - Enhanced analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/enhanced_week13_analysis.py",
+          "asset_type": "scripts",
+          "file_size": 21313,
+          "created_time": "2025-11-18T20:03:28.757922",
+          "modified_time": "2025-11-18T20:03:28.732290",
+          "description": "Week 13 processing and analysis script - Enhanced analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_enhanced_analysis_report.json",
+          "asset_type": "predictions",
+          "file_size": 219880,
+          "created_time": "2025-11-18T20:03:16.794526",
+          "modified_time": "2025-11-18T20:03:16.794526",
+          "description": "Week 13 predictions and analysis - Enhanced analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions_summary.json",
+          "asset_type": "predictions",
+          "file_size": 203,
+          "created_time": "2025-11-18T14:31:53.216480",
+          "modified_time": "2025-11-18T14:31:53.216480",
+          "description": "Week 13 predictions and analysis - Executive summary (60 games) using ['ridge', 'xgb'] models",
+          "key_metrics": {
+            "total_games": 60,
+            "models_used": [
+              "ridge",
+              "xgb"
+            ]
+          },
+          "quality_score": 0.7
+        },
+        {
+          "file_path": "scripts/expand_week13_coverage.py",
+          "asset_type": "scripts",
+          "file_size": 16320,
+          "created_time": "2025-11-18T14:31:24.737698",
+          "modified_time": "2025-11-18T14:31:24.737698",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/generate_week13_features.py",
+          "asset_type": "scripts",
+          "file_size": 1482,
+          "created_time": "2025-11-18T13:59:43.338804",
+          "modified_time": "2025-11-18T13:59:43.338804",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/predict_all_week13_games.py",
+          "asset_type": "scripts",
+          "file_size": 9470,
+          "created_time": "2025-11-17T15:51:07.461590",
+          "modified_time": "2025-11-17T15:51:07.461590",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/compare_week13_predictions.py",
+          "asset_type": "scripts",
+          "file_size": 8848,
+          "created_time": "2025-11-17T15:47:45.958251",
+          "modified_time": "2025-11-17T15:47:45.958251",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/import_week13_predictions.py",
+          "asset_type": "scripts",
+          "file_size": 14024,
+          "created_time": "2025-11-17T15:33:55.623965",
+          "modified_time": "2025-11-17T15:33:55.623965",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/predict_week13_proper.py",
+          "asset_type": "scripts",
+          "file_size": 15364,
+          "created_time": "2025-11-17T15:27:55.973356",
+          "modified_time": "2025-11-17T15:27:55.973356",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/fetch_week13_simple.py",
+          "asset_type": "scripts",
+          "file_size": 4325,
+          "created_time": "2025-11-17T15:27:55.973315",
+          "modified_time": "2025-11-17T15:27:55.973315",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/pull_and_predict_week13.py",
+          "asset_type": "scripts",
+          "file_size": 3013,
+          "created_time": "2025-11-17T15:27:55.973264",
+          "modified_time": "2025-11-17T15:27:55.973264",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/verify_week13_setup.py",
+          "asset_type": "scripts",
+          "file_size": 8813,
+          "created_time": "2025-11-17T15:27:17.616339",
+          "modified_time": "2025-11-17T15:27:17.616339",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/prepare_week13_analysis.py",
+          "asset_type": "scripts",
+          "file_size": 588,
+          "created_time": "2025-11-17T15:11:49.299544",
+          "modified_time": "2025-11-17T15:11:49.299544",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/test_week13_agents.py",
+          "asset_type": "scripts",
+          "file_size": 1674,
+          "created_time": "2025-11-17T15:10:56.177469",
+          "modified_time": "2025-11-17T15:10:56.177469",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        }
+      ],
+      "low": []
+    },
+    "by_importance": {
+      "critical": [
+        {
+          "file_path": "predictions/week13/week13_predictions_summary_20251120_203455.csv",
+          "asset_type": "predictions",
+          "file_size": 2940,
+          "created_time": "2025-11-20T20:34:55.244572",
+          "modified_time": "2025-11-20T20:34:55.244572",
+          "description": "Week 13 predictions and analysis - Executive summary",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 6,
+            "file_size_kb": 2.9814453125,
+            "has_teams": true,
+            "unique_home_teams": 47
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "analysis/week13/week13_comprehensive_report.html",
+          "asset_type": "analysis",
+          "file_size": 140,
+          "created_time": "2025-11-20T20:27:53.990411",
+          "modified_time": "2025-11-20T20:27:53.990411",
+          "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_comprehensive_analysis.json",
+          "asset_type": "analysis",
+          "file_size": 267724,
+          "created_time": "2025-11-20T20:27:53.909956",
+          "modified_time": "2025-11-20T20:27:53.909956",
+          "description": "Week 13 comprehensive analysis report - Comprehensive coverage (47 games)",
+          "key_metrics": {
+            "games_analyzed": 47,
+            "week": 13,
+            "season": 2025,
+            "ranked_teams": 25
+          },
+          "quality_score": 0.7
+        },
+        {
+          "file_path": "validation/week13/validation_summary.csv",
+          "asset_type": "reports",
+          "file_size": 150,
+          "created_time": "2025-11-20T20:27:51.687371",
+          "modified_time": "2025-11-20T20:27:51.687371",
+          "description": "Week 13 validation and reporting - Executive summary",
+          "key_metrics": {
+            "rows": 5,
+            "columns": 2,
+            "file_size_kb": 0.1572265625
+          },
+          "quality_score": 0.7999999999999999
+        },
+        {
+          "file_path": "reports/week13_enhancement_summary.md",
+          "asset_type": "reports",
+          "file_size": 1563,
+          "created_time": "2025-11-20T20:00:23.266420",
+          "modified_time": "2025-11-20T20:00:23.266420",
+          "description": "Week 13 validation and reporting - Executive summary",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions_meta_ensemble.csv",
+          "asset_type": "predictions",
+          "file_size": 14712,
+          "created_time": "2025-11-20T19:38:30.964165",
+          "modified_time": "2025-11-20T19:38:30.964165",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "rows": 60,
+            "columns": 18,
+            "file_size_kb": 14.5068359375,
+            "has_teams": true,
+            "unique_home_teams": 60
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "scripts/generate_week13_master_report_html.py",
+          "asset_type": "scripts",
+          "file_size": 53077,
+          "created_time": "2025-11-20T11:46:56.071865",
+          "modified_time": "2025-11-20T11:46:56.071865",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_master_report.html",
+          "asset_type": "analysis",
+          "file_size": 398845,
+          "created_time": "2025-11-20T11:45:14.763981",
+          "modified_time": "2025-11-20T11:36:53.155171",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/generate_week13_master_report.py",
+          "asset_type": "scripts",
+          "file_size": 44951,
+          "created_time": "2025-11-20T11:35:56.303994",
+          "modified_time": "2025-11-20T11:35:56.303994",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_unified_data.json",
+          "asset_type": "analysis",
+          "file_size": 410221,
+          "created_time": "2025-11-20T11:30:59.314821",
+          "modified_time": "2025-11-20T11:30:59.314821",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/generate_comprehensive_week13_analysis.py",
+          "asset_type": "scripts",
+          "file_size": 19049,
+          "created_time": "2025-11-19T22:44:56.537700",
+          "modified_time": "2025-11-19T22:44:56.537700",
+          "description": "Week 13 processing and analysis script - Comprehensive coverage",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_comprehensive_analysis_20251119_221939.json",
+          "asset_type": "analysis",
+          "file_size": 303881,
+          "created_time": "2025-11-19T22:19:39.111034",
+          "modified_time": "2025-11-19T22:19:39.111034",
+          "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_comprehensive_analysis_20251119_213035.json",
+          "asset_type": "analysis",
+          "file_size": 302125,
+          "created_time": "2025-11-19T21:30:35.110582",
+          "modified_time": "2025-11-19T21:30:35.110582",
+          "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_comprehensive_analysis_20251119_212406.json",
+          "asset_type": "analysis",
+          "file_size": 297466,
+          "created_time": "2025-11-19T21:24:06.929597",
+          "modified_time": "2025-11-19T21:24:06.929597",
+          "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions_summary_20251119_210249.csv",
+          "asset_type": "predictions",
+          "file_size": 2947,
+          "created_time": "2025-11-19T21:07:47.545987",
+          "modified_time": "2025-11-19T21:02:49.063351",
+          "description": "Week 13 predictions and analysis - Executive summary",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 6,
+            "file_size_kb": 2.99609375,
+            "has_teams": true,
+            "unique_home_teams": 47
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "predictions/week13/week13_prediction_summary.json",
+          "asset_type": "predictions",
+          "file_size": 827,
+          "created_time": "2025-11-18T22:31:48.543272",
+          "modified_time": "2025-11-18T19:01:49.483138",
+          "description": "Week 13 predictions and analysis - Executive summary",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_comprehensive_predictions.csv",
+          "asset_type": "predictions",
+          "file_size": 40527,
+          "created_time": "2025-11-18T22:31:48.543144",
+          "modified_time": "2025-11-18T20:00:16.247807",
+          "description": "Week 13 predictions and analysis - Comprehensive coverage",
+          "key_metrics": {
+            "rows": 64,
+            "columns": 25,
+            "file_size_kb": 39.755859375,
+            "has_teams": true,
+            "unique_home_teams": 64
+          },
+          "quality_score": 0.9989999999999999
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions_summary_20251118_200454.csv",
+          "asset_type": "predictions",
+          "file_size": 3656,
+          "created_time": "2025-11-18T20:04:54.668531",
+          "modified_time": "2025-11-18T20:04:54.668531",
+          "description": "Week 13 predictions and analysis - Executive summary",
+          "key_metrics": {
+            "rows": 64,
+            "columns": 6,
+            "file_size_kb": 3.7109375,
+            "has_teams": true,
+            "unique_home_teams": 64
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "analysis/week13/enhanced_week13_summary_20251118_200409.md",
+          "asset_type": "analysis",
+          "file_size": 808,
+          "created_time": "2025-11-18T20:04:09.340564",
+          "modified_time": "2025-11-18T20:04:09.340564",
+          "description": "Week 13 comprehensive analysis report - Enhanced analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions_summary.json",
+          "asset_type": "predictions",
+          "file_size": 203,
+          "created_time": "2025-11-18T14:31:53.216480",
+          "modified_time": "2025-11-18T14:31:53.216480",
+          "description": "Week 13 predictions and analysis - Executive summary (60 games) using ['ridge', 'xgb'] models",
+          "key_metrics": {
+            "total_games": 60,
+            "models_used": [
+              "ridge",
+              "xgb"
+            ]
+          },
+          "quality_score": 0.7
+        }
+      ],
+      "important": [
+        {
+          "file_path": "scripts/enhance_week13_analysis.py",
+          "asset_type": "scripts",
+          "file_size": 15413,
+          "created_time": "2025-11-20T20:35:17.710100",
+          "modified_time": "2025-11-20T20:35:17.710100",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_model_predictions_20251120_203455.json",
+          "asset_type": "predictions",
+          "file_size": 52208,
+          "created_time": "2025-11-20T20:34:55.241425",
+          "modified_time": "2025-11-20T20:34:55.241425",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "predictions_count": 47
+          },
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/week13_model_predictions.py",
+          "asset_type": "scripts",
+          "file_size": 20477,
+          "created_time": "2025-11-20T20:34:49.154400",
+          "modified_time": "2025-11-20T20:34:49.154400",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "validation/week13/week13_model_validation_report.json",
+          "asset_type": "reports",
+          "file_size": 10668,
+          "created_time": "2025-11-20T20:27:51.686248",
+          "modified_time": "2025-11-20T20:27:51.686248",
+          "description": "Week 13 validation and reporting - Quality validation",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions_enhanced.csv",
+          "asset_type": "predictions",
+          "file_size": 19531,
+          "created_time": "2025-11-20T20:00:23.265333",
+          "modified_time": "2025-11-20T20:00:23.265333",
+          "description": "Week 13 predictions and analysis - Enhanced analysis",
+          "key_metrics": {
+            "rows": 60,
+            "columns": 27,
+            "file_size_kb": 19.06640625,
+            "has_teams": true,
+            "unique_home_teams": 60
+          },
+          "quality_score": 0.9834567901234568
+        },
+        {
+          "file_path": "analysis/week13/week13_detailed_predictions_20251119_221939.csv",
+          "asset_type": "analysis",
+          "file_size": 74608,
+          "created_time": "2025-11-19T22:19:39.114853",
+          "modified_time": "2025-11-19T22:19:39.114853",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 94,
+            "file_size_kb": 72.931640625,
+            "has_teams": true,
+            "unique_home_teams": 47,
+            "has_confidence": true,
+            "avg_confidence": 0.8270666731233278
+          },
+          "quality_score": 0.9978723404255319
+        },
+        {
+          "file_path": "analysis/week13/week13_detailed_predictions_20251119_213035.csv",
+          "asset_type": "analysis",
+          "file_size": 73782,
+          "created_time": "2025-11-19T21:30:35.114056",
+          "modified_time": "2025-11-19T21:30:35.114056",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 93,
+            "file_size_kb": 72.1484375,
+            "has_teams": true,
+            "unique_home_teams": 47,
+            "has_confidence": true,
+            "avg_confidence": 0.9342049620473903
+          },
+          "quality_score": 0.9978494623655914
+        },
+        {
+          "file_path": "analysis/week13/week13_detailed_predictions_20251119_212406.csv",
+          "asset_type": "analysis",
+          "file_size": 70184,
+          "created_time": "2025-11-19T21:24:06.933268",
+          "modified_time": "2025-11-19T21:24:06.933268",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 92,
+            "file_size_kb": 68.66796875,
+            "has_teams": true,
+            "unique_home_teams": 47,
+            "has_confidence": true,
+            "avg_confidence": 1.0
+          },
+          "quality_score": 0.9978260869565216
+        },
+        {
+          "file_path": "analysis/week13/week13_dashboard.html",
+          "asset_type": "analysis",
+          "file_size": 28289,
+          "created_time": "2025-11-19T21:05:56.819447",
+          "modified_time": "2025-11-19T21:04:16.483282",
+          "description": "Week 13 comprehensive analysis report - Interactive dashboard",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/generate_week13_dashboard.py",
+          "asset_type": "scripts",
+          "file_size": 4556,
+          "created_time": "2025-11-19T21:05:05.179340",
+          "modified_time": "2025-11-19T21:05:05.179340",
+          "description": "Week 13 processing and analysis script - Interactive dashboard",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_enhanced_analysis.json",
+          "asset_type": "analysis",
+          "file_size": 12145,
+          "created_time": "2025-11-19T21:03:23.578404",
+          "modified_time": "2025-11-19T21:03:23.578404",
+          "description": "Week 13 comprehensive analysis report - Enhanced analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_model_predictions_20251119_210249.json",
+          "asset_type": "predictions",
+          "file_size": 52224,
+          "created_time": "2025-11-19T21:02:49.062102",
+          "modified_time": "2025-11-19T21:02:49.062102",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "predictions_count": 47
+          },
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/verify_week13_predictions.py",
+          "asset_type": "scripts",
+          "file_size": 2996,
+          "created_time": "2025-11-19T13:15:59.811052",
+          "modified_time": "2025-11-19T13:15:59.811052",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions.json",
+          "asset_type": "predictions",
+          "file_size": 77302,
+          "created_time": "2025-11-18T22:31:48.543372",
+          "modified_time": "2025-11-18T19:01:49.482201",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "reports/week13_verification_report.json",
+          "asset_type": "reports",
+          "file_size": 6652,
+          "created_time": "2025-11-18T20:57:28.683035",
+          "modified_time": "2025-11-18T20:57:28.683035",
+          "description": "Week 13 validation and reporting",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_model_predictions_20251118_200454.json",
+          "asset_type": "predictions",
+          "file_size": 69843,
+          "created_time": "2025-11-18T20:04:54.666839",
+          "modified_time": "2025-11-18T20:04:54.666839",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "predictions_count": 64
+          },
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/enhanced_week13_analysis_20251118_200409.json",
+          "asset_type": "analysis",
+          "file_size": 67566,
+          "created_time": "2025-11-18T20:04:09.340327",
+          "modified_time": "2025-11-18T20:04:09.340327",
+          "description": "Week 13 comprehensive analysis report - Enhanced analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/enhanced_week13_analysis.py",
+          "asset_type": "scripts",
+          "file_size": 21313,
+          "created_time": "2025-11-18T20:03:28.757922",
+          "modified_time": "2025-11-18T20:03:28.732290",
+          "description": "Week 13 processing and analysis script - Enhanced analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_enhanced_analysis_report.json",
+          "asset_type": "predictions",
+          "file_size": 219880,
+          "created_time": "2025-11-18T20:03:16.794526",
+          "modified_time": "2025-11-18T20:03:16.794526",
+          "description": "Week 13 predictions and analysis - Enhanced analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_predictions_all_60_games.csv",
+          "asset_type": "predictions",
+          "file_size": 12465,
+          "created_time": "2025-11-18T14:31:53.216104",
+          "modified_time": "2025-11-18T14:31:53.216104",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "rows": 60,
+            "columns": 16,
+            "file_size_kb": 12.2421875,
+            "has_teams": true,
+            "unique_home_teams": 60
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "predictions/week13/week13_model_predictions.csv",
+          "asset_type": "predictions",
+          "file_size": 9482,
+          "created_time": "2025-11-18T14:12:34.304409",
+          "modified_time": "2025-11-18T14:12:34.304409",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "rows": 64,
+            "columns": 11,
+            "file_size_kb": 9.3818359375,
+            "has_teams": true,
+            "unique_home_teams": 64
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "scripts/compare_week13_predictions.py",
+          "asset_type": "scripts",
+          "file_size": 8848,
+          "created_time": "2025-11-17T15:47:45.958251",
+          "modified_time": "2025-11-17T15:47:45.958251",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/import_week13_predictions.py",
+          "asset_type": "scripts",
+          "file_size": 14024,
+          "created_time": "2025-11-17T15:33:55.623965",
+          "modified_time": "2025-11-17T15:33:55.623965",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/prepare_week13_analysis.py",
+          "asset_type": "scripts",
+          "file_size": 588,
+          "created_time": "2025-11-17T15:11:49.299544",
+          "modified_time": "2025-11-17T15:11:49.299544",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        }
+      ],
+      "supplementary": [
+        {
+          "file_path": "analysis/week13/week13_intelligence_consolidation.json",
+          "asset_type": "analysis",
+          "file_size": 158206,
+          "created_time": "2025-11-20T20:37:21.662229",
+          "modified_time": "2025-11-20T20:37:21.662229",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_upset_alerts.csv",
+          "asset_type": "analysis",
+          "file_size": 1469,
+          "created_time": "2025-11-20T20:27:53.914025",
+          "modified_time": "2025-11-20T20:27:53.914025",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {
+            "rows": 3,
+            "columns": 13,
+            "file_size_kb": 1.44140625,
+            "has_teams": true,
+            "unique_home_teams": 3
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "analysis/week13/week13_power_rankings.csv",
+          "asset_type": "analysis",
+          "file_size": 2073,
+          "created_time": "2025-11-20T20:27:53.913190",
+          "modified_time": "2025-11-20T20:27:53.913190",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {
+            "rows": 25,
+            "columns": 8,
+            "file_size_kb": 2.0859375
+          },
+          "quality_score": 0.7999999999999999
+        },
+        {
+          "file_path": "analysis/week13/week13_strategic_recommendations.csv",
+          "asset_type": "analysis",
+          "file_size": 20070,
+          "created_time": "2025-11-20T20:27:53.911906",
+          "modified_time": "2025-11-20T20:27:53.911906",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 13,
+            "file_size_kb": 19.7001953125,
+            "has_teams": true,
+            "unique_home_teams": 47
+          },
+          "quality_score": 0.9999999999999999
+        },
+        {
+          "file_path": "reports/Prediction_Tracker_week13.csv",
+          "asset_type": "reports",
+          "file_size": 22748,
+          "created_time": "2025-11-20T19:30:51.828967",
+          "modified_time": "2025-11-20T19:20:11.703286",
+          "description": "Week 13 validation and reporting",
+          "key_metrics": {
+            "rows": 60,
+            "columns": 63,
+            "file_size_kb": 22.9189453125
+          },
+          "quality_score": 0.7872751322751322
+        },
+        {
+          "file_path": "analysis/week13/week13_narrative_previews_20251119_221939.md",
+          "asset_type": "analysis",
+          "file_size": 9865,
+          "created_time": "2025-11-19T22:19:39.115133",
+          "modified_time": "2025-11-19T22:19:39.115133",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_narrative_previews_20251119_213035.md",
+          "asset_type": "analysis",
+          "file_size": 9859,
+          "created_time": "2025-11-19T21:30:35.114295",
+          "modified_time": "2025-11-19T21:30:35.114295",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "analysis/week13/week13_narrative_previews_20251119_212406.md",
+          "asset_type": "analysis",
+          "file_size": 9980,
+          "created_time": "2025-11-19T21:24:06.933546",
+          "modified_time": "2025-11-19T21:24:06.933546",
+          "description": "Week 13 comprehensive analysis report",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/compare_week13_schema.py",
+          "asset_type": "scripts",
+          "file_size": 2473,
+          "created_time": "2025-11-19T21:05:05.179279",
+          "modified_time": "2025-11-19T21:05:05.179279",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "data/week13/enhanced/week13_enhanced_games.csv",
+          "asset_type": "data",
+          "file_size": 60897,
+          "created_time": "2025-11-19T21:01:55.509734",
+          "modified_time": "2025-11-19T21:01:55.509734",
+          "description": "Week 13 dataset and features - Enhanced analysis",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 87,
+            "file_size_kb": 59.5986328125,
+            "has_teams": true,
+            "unique_home_teams": 47
+          },
+          "quality_score": 0.9965517241379309
+        },
+        {
+          "file_path": "data/week13/enhanced/week13_features_86.csv",
+          "asset_type": "data",
+          "file_size": 60897,
+          "created_time": "2025-11-19T21:01:55.507853",
+          "modified_time": "2025-11-19T21:01:55.507853",
+          "description": "Week 13 dataset and features",
+          "key_metrics": {
+            "rows": 47,
+            "columns": 87,
+            "file_size_kb": 59.5986328125,
+            "has_teams": true,
+            "unique_home_teams": 47
+          },
+          "quality_score": 0.9965517241379309
+        },
+        {
+          "file_path": "predictions/week13/prediction_insights.json",
+          "asset_type": "predictions",
+          "file_size": 424,
+          "created_time": "2025-11-18T22:31:48.543380",
+          "modified_time": "2025-11-18T19:01:49.482326",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "predictions/week13/week13_recommendations.csv",
+          "asset_type": "predictions",
+          "file_size": 890,
+          "created_time": "2025-11-18T22:31:48.542974",
+          "modified_time": "2025-11-18T19:01:49.482922",
+          "description": "Week 13 predictions and analysis",
+          "key_metrics": {
+            "rows": 7,
+            "columns": 6,
+            "file_size_kb": 0.8798828125,
+            "has_confidence": true,
+            "avg_confidence": 0.6630889705795988
+          },
+          "quality_score": 0.7999999999999999
+        },
+        {
+          "file_path": "data/week13/enhanced/week13_features_86_model_compatible.csv",
+          "asset_type": "data",
+          "file_size": 92105,
+          "created_time": "2025-11-18T20:57:09.889793",
+          "modified_time": "2025-11-18T20:57:09.889793",
+          "description": "Week 13 dataset and features",
+          "key_metrics": {
+            "rows": 64,
+            "columns": 88,
+            "file_size_kb": 89.625,
+            "has_teams": true,
+            "unique_home_teams": 64
+          },
+          "quality_score": 0.996590909090909
+        },
+        {
+          "file_path": "model_pack/2025_week13_real_games.csv",
+          "asset_type": "data",
+          "file_size": 80327,
+          "created_time": "2025-11-18T20:56:51.189215",
+          "modified_time": "2025-11-18T20:56:51.189215",
+          "description": "Week 13 dataset and features",
+          "key_metrics": {
+            "rows": 64,
+            "columns": 86,
+            "file_size_kb": 78.623046875,
+            "has_teams": true,
+            "unique_home_teams": 64
+          },
+          "quality_score": 0.9941133720930232
+        },
+        {
+          "file_path": "scripts/verify_week13_data.py",
+          "asset_type": "scripts",
+          "file_size": 19277,
+          "created_time": "2025-11-18T20:10:29.927539",
+          "modified_time": "2025-11-18T20:10:29.927539",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/expand_week13_coverage.py",
+          "asset_type": "scripts",
+          "file_size": 16320,
+          "created_time": "2025-11-18T14:31:24.737698",
+          "modified_time": "2025-11-18T14:31:24.737698",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/generate_week13_features.py",
+          "asset_type": "scripts",
+          "file_size": 1482,
+          "created_time": "2025-11-18T13:59:43.338804",
+          "modified_time": "2025-11-18T13:59:43.338804",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/predict_all_week13_games.py",
+          "asset_type": "scripts",
+          "file_size": 9470,
+          "created_time": "2025-11-17T15:51:07.461590",
+          "modified_time": "2025-11-17T15:51:07.461590",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/predict_week13_proper.py",
+          "asset_type": "scripts",
+          "file_size": 15364,
+          "created_time": "2025-11-17T15:27:55.973356",
+          "modified_time": "2025-11-17T15:27:55.973356",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/fetch_week13_simple.py",
+          "asset_type": "scripts",
+          "file_size": 4325,
+          "created_time": "2025-11-17T15:27:55.973315",
+          "modified_time": "2025-11-17T15:27:55.973315",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/pull_and_predict_week13.py",
+          "asset_type": "scripts",
+          "file_size": 3013,
+          "created_time": "2025-11-17T15:27:55.973264",
+          "modified_time": "2025-11-17T15:27:55.973264",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/verify_week13_setup.py",
+          "asset_type": "scripts",
+          "file_size": 8813,
+          "created_time": "2025-11-17T15:27:17.616339",
+          "modified_time": "2025-11-17T15:27:17.616339",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        },
+        {
+          "file_path": "scripts/test_week13_agents.py",
+          "asset_type": "scripts",
+          "file_size": 1674,
+          "created_time": "2025-11-17T15:10:56.177469",
+          "modified_time": "2025-11-17T15:10:56.177469",
+          "description": "Week 13 processing and analysis script",
+          "key_metrics": {},
+          "quality_score": 0.5
+        }
+      ]
+    },
+    "recommendations": {
+      "priority_assets": [
+        "predictions/week13/week13_predictions_summary_20251120_203455.csv",
+        "analysis/week13/week13_comprehensive_report.html",
+        "analysis/week13/week13_comprehensive_analysis.json",
+        "validation/week13/validation_summary.csv",
+        "reports/week13_enhancement_summary.md"
+      ],
+      "quality_improvements": [],
+      "consolidation_opportunities": [
+        "Consider consolidating 21 analysis files",
+        "Consider consolidating 21 scripts files",
+        "Consider consolidating 17 predictions files",
+        "Multiple prediction files could be unified"
+      ]
+    }
+  },
+  "executive_summary": {
+    "overview": {
+      "total_assets": 68,
+      "asset_types": 5,
+      "high_quality_assets": 17,
+      "critical_assets": 20
+    },
+    "key_insights": [
+      "Discovered 68 Week 13 assets across 5 categories",
+      "25.0% of assets meet high quality standards",
+      "Identified 20 critical assets for immediate attention",
+      "Largest asset category: analysis with 21 files"
+    ],
+    "recommendations": {
+      "priority_assets": [
+        "predictions/week13/week13_predictions_summary_20251120_203455.csv",
+        "analysis/week13/week13_comprehensive_report.html",
+        "analysis/week13/week13_comprehensive_analysis.json",
+        "validation/week13/validation_summary.csv",
+        "reports/week13_enhancement_summary.md"
+      ],
+      "quality_improvements": [],
+      "consolidation_opportunities": [
+        "Consider consolidating 21 analysis files",
+        "Consider consolidating 21 scripts files",
+        "Consider consolidating 17 predictions files",
+        "Multiple prediction files could be unified"
+      ]
+    },
+    "next_steps": [
+      "Review critical assets for immediate integration",
+      "Create unified dashboard from top assets",
+      "Document consolidation process for future weeks",
+      "Execute consolidation opportunities to reduce redundancy"
+    ],
+    "quality_metrics": {
+      "overall_quality_score": 0.625,
+      "high_quality_percentage": 25.0,
+      "asset_coverage_score": 100.0,
+      "organization_efficiency": 29.411764705882355
+    }
+  },
+  "file_manifest": [
+    {
+      "file_path": "analysis/week13/week13_intelligence_consolidation.json",
+      "asset_type": "analysis",
+      "file_size": 158206,
+      "created_time": "2025-11-20T20:37:21.662229",
+      "modified_time": "2025-11-20T20:37:21.662229",
+      "description": "Week 13 comprehensive analysis report",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "scripts/enhance_week13_analysis.py",
+      "asset_type": "scripts",
+      "file_size": 15413,
+      "created_time": "2025-11-20T20:35:17.710100",
+      "modified_time": "2025-11-20T20:35:17.710100",
+      "description": "Week 13 processing and analysis script",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "predictions/week13/week13_predictions_summary_20251120_203455.csv",
+      "asset_type": "predictions",
+      "file_size": 2940,
+      "created_time": "2025-11-20T20:34:55.244572",
+      "modified_time": "2025-11-20T20:34:55.244572",
+      "description": "Week 13 predictions and analysis - Executive summary",
+      "key_metrics": {
+        "rows": 47,
+        "columns": 6,
+        "file_size_kb": 2.9814453125,
+        "has_teams": true,
+        "unique_home_teams": 47
+      },
+      "quality_score": 0.9999999999999999
+    },
+    {
+      "file_path": "predictions/week13/week13_model_predictions_20251120_203455.json",
+      "asset_type": "predictions",
+      "file_size": 52208,
+      "created_time": "2025-11-20T20:34:55.241425",
+      "modified_time": "2025-11-20T20:34:55.241425",
+      "description": "Week 13 predictions and analysis",
+      "key_metrics": {
+        "predictions_count": 47
+      },
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "scripts/week13_model_predictions.py",
+      "asset_type": "scripts",
+      "file_size": 20477,
+      "created_time": "2025-11-20T20:34:49.154400",
+      "modified_time": "2025-11-20T20:34:49.154400",
+      "description": "Week 13 processing and analysis script",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "analysis/week13/week13_comprehensive_report.html",
+      "asset_type": "analysis",
+      "file_size": 140,
+      "created_time": "2025-11-20T20:27:53.990411",
+      "modified_time": "2025-11-20T20:27:53.990411",
+      "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "analysis/week13/week13_upset_alerts.csv",
+      "asset_type": "analysis",
+      "file_size": 1469,
+      "created_time": "2025-11-20T20:27:53.914025",
+      "modified_time": "2025-11-20T20:27:53.914025",
+      "description": "Week 13 comprehensive analysis report",
+      "key_metrics": {
+        "rows": 3,
+        "columns": 13,
+        "file_size_kb": 1.44140625,
+        "has_teams": true,
+        "unique_home_teams": 3
+      },
+      "quality_score": 0.9999999999999999
+    },
+    {
+      "file_path": "analysis/week13/week13_power_rankings.csv",
+      "asset_type": "analysis",
+      "file_size": 2073,
+      "created_time": "2025-11-20T20:27:53.913190",
+      "modified_time": "2025-11-20T20:27:53.913190",
+      "description": "Week 13 comprehensive analysis report",
+      "key_metrics": {
+        "rows": 25,
+        "columns": 8,
+        "file_size_kb": 2.0859375
+      },
+      "quality_score": 0.7999999999999999
+    },
+    {
+      "file_path": "analysis/week13/week13_strategic_recommendations.csv",
+      "asset_type": "analysis",
+      "file_size": 20070,
+      "created_time": "2025-11-20T20:27:53.911906",
+      "modified_time": "2025-11-20T20:27:53.911906",
+      "description": "Week 13 comprehensive analysis report",
+      "key_metrics": {
+        "rows": 47,
+        "columns": 13,
+        "file_size_kb": 19.7001953125,
+        "has_teams": true,
+        "unique_home_teams": 47
+      },
+      "quality_score": 0.9999999999999999
+    },
+    {
+      "file_path": "analysis/week13/week13_comprehensive_analysis.json",
+      "asset_type": "analysis",
+      "file_size": 267724,
+      "created_time": "2025-11-20T20:27:53.909956",
+      "modified_time": "2025-11-20T20:27:53.909956",
+      "description": "Week 13 comprehensive analysis report - Comprehensive coverage (47 games)",
+      "key_metrics": {
+        "games_analyzed": 47,
+        "week": 13,
+        "season": 2025,
+        "ranked_teams": 25
+      },
+      "quality_score": 0.7
+    },
+    {
+      "file_path": "validation/week13/validation_summary.csv",
+      "asset_type": "reports",
+      "file_size": 150,
+      "created_time": "2025-11-20T20:27:51.687371",
+      "modified_time": "2025-11-20T20:27:51.687371",
+      "description": "Week 13 validation and reporting - Executive summary",
+      "key_metrics": {
+        "rows": 5,
+        "columns": 2,
+        "file_size_kb": 0.1572265625
+      },
+      "quality_score": 0.7999999999999999
+    },
+    {
+      "file_path": "validation/week13/week13_model_validation_report.json",
+      "asset_type": "reports",
+      "file_size": 10668,
+      "created_time": "2025-11-20T20:27:51.686248",
+      "modified_time": "2025-11-20T20:27:51.686248",
+      "description": "Week 13 validation and reporting - Quality validation",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "reports/week13_enhancement_summary.md",
+      "asset_type": "reports",
+      "file_size": 1563,
+      "created_time": "2025-11-20T20:00:23.266420",
+      "modified_time": "2025-11-20T20:00:23.266420",
+      "description": "Week 13 validation and reporting - Executive summary",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "predictions/week13/week13_predictions_enhanced.csv",
+      "asset_type": "predictions",
+      "file_size": 19531,
+      "created_time": "2025-11-20T20:00:23.265333",
+      "modified_time": "2025-11-20T20:00:23.265333",
+      "description": "Week 13 predictions and analysis - Enhanced analysis",
+      "key_metrics": {
+        "rows": 60,
+        "columns": 27,
+        "file_size_kb": 19.06640625,
+        "has_teams": true,
+        "unique_home_teams": 60
+      },
+      "quality_score": 0.9834567901234568
+    },
+    {
+      "file_path": "predictions/week13/week13_predictions_meta_ensemble.csv",
+      "asset_type": "predictions",
+      "file_size": 14712,
+      "created_time": "2025-11-20T19:38:30.964165",
+      "modified_time": "2025-11-20T19:38:30.964165",
+      "description": "Week 13 predictions and analysis",
+      "key_metrics": {
+        "rows": 60,
+        "columns": 18,
+        "file_size_kb": 14.5068359375,
+        "has_teams": true,
+        "unique_home_teams": 60
+      },
+      "quality_score": 0.9999999999999999
+    },
+    {
+      "file_path": "reports/Prediction_Tracker_week13.csv",
+      "asset_type": "reports",
+      "file_size": 22748,
+      "created_time": "2025-11-20T19:30:51.828967",
+      "modified_time": "2025-11-20T19:20:11.703286",
+      "description": "Week 13 validation and reporting",
+      "key_metrics": {
+        "rows": 60,
+        "columns": 63,
+        "file_size_kb": 22.9189453125
+      },
+      "quality_score": 0.7872751322751322
+    },
+    {
+      "file_path": "scripts/generate_week13_master_report_html.py",
+      "asset_type": "scripts",
+      "file_size": 53077,
+      "created_time": "2025-11-20T11:46:56.071865",
+      "modified_time": "2025-11-20T11:46:56.071865",
+      "description": "Week 13 processing and analysis script",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "analysis/week13/week13_master_report.html",
+      "asset_type": "analysis",
+      "file_size": 398845,
+      "created_time": "2025-11-20T11:45:14.763981",
+      "modified_time": "2025-11-20T11:36:53.155171",
+      "description": "Week 13 comprehensive analysis report",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "scripts/generate_week13_master_report.py",
+      "asset_type": "scripts",
+      "file_size": 44951,
+      "created_time": "2025-11-20T11:35:56.303994",
+      "modified_time": "2025-11-20T11:35:56.303994",
+      "description": "Week 13 processing and analysis script",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "analysis/week13/week13_unified_data.json",
+      "asset_type": "analysis",
+      "file_size": 410221,
+      "created_time": "2025-11-20T11:30:59.314821",
+      "modified_time": "2025-11-20T11:30:59.314821",
+      "description": "Week 13 comprehensive analysis report",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "scripts/generate_comprehensive_week13_analysis.py",
+      "asset_type": "scripts",
+      "file_size": 19049,
+      "created_time": "2025-11-19T22:44:56.537700",
+      "modified_time": "2025-11-19T22:44:56.537700",
+      "description": "Week 13 processing and analysis script - Comprehensive coverage",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "analysis/week13/week13_narrative_previews_20251119_221939.md",
+      "asset_type": "analysis",
+      "file_size": 9865,
+      "created_time": "2025-11-19T22:19:39.115133",
+      "modified_time": "2025-11-19T22:19:39.115133",
+      "description": "Week 13 comprehensive analysis report",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "analysis/week13/week13_detailed_predictions_20251119_221939.csv",
+      "asset_type": "analysis",
+      "file_size": 74608,
+      "created_time": "2025-11-19T22:19:39.114853",
+      "modified_time": "2025-11-19T22:19:39.114853",
+      "description": "Week 13 comprehensive analysis report",
+      "key_metrics": {
+        "rows": 47,
+        "columns": 94,
+        "file_size_kb": 72.931640625,
+        "has_teams": true,
+        "unique_home_teams": 47,
+        "has_confidence": true,
+        "avg_confidence": 0.8270666731233278
+      },
+      "quality_score": 0.9978723404255319
+    },
+    {
+      "file_path": "analysis/week13/week13_comprehensive_analysis_20251119_221939.json",
+      "asset_type": "analysis",
+      "file_size": 303881,
+      "created_time": "2025-11-19T22:19:39.111034",
+      "modified_time": "2025-11-19T22:19:39.111034",
+      "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "analysis/week13/week13_narrative_previews_20251119_213035.md",
+      "asset_type": "analysis",
+      "file_size": 9859,
+      "created_time": "2025-11-19T21:30:35.114295",
+      "modified_time": "2025-11-19T21:30:35.114295",
+      "description": "Week 13 comprehensive analysis report",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "analysis/week13/week13_detailed_predictions_20251119_213035.csv",
+      "asset_type": "analysis",
+      "file_size": 73782,
+      "created_time": "2025-11-19T21:30:35.114056",
+      "modified_time": "2025-11-19T21:30:35.114056",
+      "description": "Week 13 comprehensive analysis report",
+      "key_metrics": {
+        "rows": 47,
+        "columns": 93,
+        "file_size_kb": 72.1484375,
+        "has_teams": true,
+        "unique_home_teams": 47,
+        "has_confidence": true,
+        "avg_confidence": 0.9342049620473903
+      },
+      "quality_score": 0.9978494623655914
+    },
+    {
+      "file_path": "analysis/week13/week13_comprehensive_analysis_20251119_213035.json",
+      "asset_type": "analysis",
+      "file_size": 302125,
+      "created_time": "2025-11-19T21:30:35.110582",
+      "modified_time": "2025-11-19T21:30:35.110582",
+      "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "analysis/week13/week13_narrative_previews_20251119_212406.md",
+      "asset_type": "analysis",
+      "file_size": 9980,
+      "created_time": "2025-11-19T21:24:06.933546",
+      "modified_time": "2025-11-19T21:24:06.933546",
+      "description": "Week 13 comprehensive analysis report",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "analysis/week13/week13_detailed_predictions_20251119_212406.csv",
+      "asset_type": "analysis",
+      "file_size": 70184,
+      "created_time": "2025-11-19T21:24:06.933268",
+      "modified_time": "2025-11-19T21:24:06.933268",
+      "description": "Week 13 comprehensive analysis report",
+      "key_metrics": {
+        "rows": 47,
+        "columns": 92,
+        "file_size_kb": 68.66796875,
+        "has_teams": true,
+        "unique_home_teams": 47,
+        "has_confidence": true,
+        "avg_confidence": 1.0
+      },
+      "quality_score": 0.9978260869565216
+    },
+    {
+      "file_path": "analysis/week13/week13_comprehensive_analysis_20251119_212406.json",
+      "asset_type": "analysis",
+      "file_size": 297466,
+      "created_time": "2025-11-19T21:24:06.929597",
+      "modified_time": "2025-11-19T21:24:06.929597",
+      "description": "Week 13 comprehensive analysis report - Comprehensive coverage",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "predictions/week13/week13_predictions_summary_20251119_210249.csv",
+      "asset_type": "predictions",
+      "file_size": 2947,
+      "created_time": "2025-11-19T21:07:47.545987",
+      "modified_time": "2025-11-19T21:02:49.063351",
+      "description": "Week 13 predictions and analysis - Executive summary",
+      "key_metrics": {
+        "rows": 47,
+        "columns": 6,
+        "file_size_kb": 2.99609375,
+        "has_teams": true,
+        "unique_home_teams": 47
+      },
+      "quality_score": 0.9999999999999999
+    },
+    {
+      "file_path": "analysis/week13/week13_dashboard.html",
+      "asset_type": "analysis",
+      "file_size": 28289,
+      "created_time": "2025-11-19T21:05:56.819447",
+      "modified_time": "2025-11-19T21:04:16.483282",
+      "description": "Week 13 comprehensive analysis report - Interactive dashboard",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "scripts/generate_week13_dashboard.py",
+      "asset_type": "scripts",
+      "file_size": 4556,
+      "created_time": "2025-11-19T21:05:05.179340",
+      "modified_time": "2025-11-19T21:05:05.179340",
+      "description": "Week 13 processing and analysis script - Interactive dashboard",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "scripts/compare_week13_schema.py",
+      "asset_type": "scripts",
+      "file_size": 2473,
+      "created_time": "2025-11-19T21:05:05.179279",
+      "modified_time": "2025-11-19T21:05:05.179279",
+      "description": "Week 13 processing and analysis script",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "analysis/week13/week13_enhanced_analysis.json",
+      "asset_type": "analysis",
+      "file_size": 12145,
+      "created_time": "2025-11-19T21:03:23.578404",
+      "modified_time": "2025-11-19T21:03:23.578404",
+      "description": "Week 13 comprehensive analysis report - Enhanced analysis",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "predictions/week13/week13_model_predictions_20251119_210249.json",
+      "asset_type": "predictions",
+      "file_size": 52224,
+      "created_time": "2025-11-19T21:02:49.062102",
+      "modified_time": "2025-11-19T21:02:49.062102",
+      "description": "Week 13 predictions and analysis",
+      "key_metrics": {
+        "predictions_count": 47
+      },
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "data/week13/enhanced/week13_enhanced_games.csv",
+      "asset_type": "data",
+      "file_size": 60897,
+      "created_time": "2025-11-19T21:01:55.509734",
+      "modified_time": "2025-11-19T21:01:55.509734",
+      "description": "Week 13 dataset and features - Enhanced analysis",
+      "key_metrics": {
+        "rows": 47,
+        "columns": 87,
+        "file_size_kb": 59.5986328125,
+        "has_teams": true,
+        "unique_home_teams": 47
+      },
+      "quality_score": 0.9965517241379309
+    },
+    {
+      "file_path": "data/week13/enhanced/week13_features_86.csv",
+      "asset_type": "data",
+      "file_size": 60897,
+      "created_time": "2025-11-19T21:01:55.507853",
+      "modified_time": "2025-11-19T21:01:55.507853",
+      "description": "Week 13 dataset and features",
+      "key_metrics": {
+        "rows": 47,
+        "columns": 87,
+        "file_size_kb": 59.5986328125,
+        "has_teams": true,
+        "unique_home_teams": 47
+      },
+      "quality_score": 0.9965517241379309
+    },
+    {
+      "file_path": "scripts/verify_week13_predictions.py",
+      "asset_type": "scripts",
+      "file_size": 2996,
+      "created_time": "2025-11-19T13:15:59.811052",
+      "modified_time": "2025-11-19T13:15:59.811052",
+      "description": "Week 13 processing and analysis script",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "predictions/week13/prediction_insights.json",
+      "asset_type": "predictions",
+      "file_size": 424,
+      "created_time": "2025-11-18T22:31:48.543380",
+      "modified_time": "2025-11-18T19:01:49.482326",
+      "description": "Week 13 predictions and analysis",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "predictions/week13/week13_predictions.json",
+      "asset_type": "predictions",
+      "file_size": 77302,
+      "created_time": "2025-11-18T22:31:48.543372",
+      "modified_time": "2025-11-18T19:01:49.482201",
+      "description": "Week 13 predictions and analysis",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "predictions/week13/week13_prediction_summary.json",
+      "asset_type": "predictions",
+      "file_size": 827,
+      "created_time": "2025-11-18T22:31:48.543272",
+      "modified_time": "2025-11-18T19:01:49.483138",
+      "description": "Week 13 predictions and analysis - Executive summary",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "predictions/week13/week13_comprehensive_predictions.csv",
+      "asset_type": "predictions",
+      "file_size": 40527,
+      "created_time": "2025-11-18T22:31:48.543144",
+      "modified_time": "2025-11-18T20:00:16.247807",
+      "description": "Week 13 predictions and analysis - Comprehensive coverage",
+      "key_metrics": {
+        "rows": 64,
+        "columns": 25,
+        "file_size_kb": 39.755859375,
+        "has_teams": true,
+        "unique_home_teams": 64
+      },
+      "quality_score": 0.9989999999999999
+    },
+    {
+      "file_path": "predictions/week13/week13_recommendations.csv",
+      "asset_type": "predictions",
+      "file_size": 890,
+      "created_time": "2025-11-18T22:31:48.542974",
+      "modified_time": "2025-11-18T19:01:49.482922",
+      "description": "Week 13 predictions and analysis",
+      "key_metrics": {
+        "rows": 7,
+        "columns": 6,
+        "file_size_kb": 0.8798828125,
+        "has_confidence": true,
+        "avg_confidence": 0.6630889705795988
+      },
+      "quality_score": 0.7999999999999999
+    },
+    {
+      "file_path": "reports/week13_verification_report.json",
+      "asset_type": "reports",
+      "file_size": 6652,
+      "created_time": "2025-11-18T20:57:28.683035",
+      "modified_time": "2025-11-18T20:57:28.683035",
+      "description": "Week 13 validation and reporting",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "data/week13/enhanced/week13_features_86_model_compatible.csv",
+      "asset_type": "data",
+      "file_size": 92105,
+      "created_time": "2025-11-18T20:57:09.889793",
+      "modified_time": "2025-11-18T20:57:09.889793",
+      "description": "Week 13 dataset and features",
+      "key_metrics": {
+        "rows": 64,
+        "columns": 88,
+        "file_size_kb": 89.625,
+        "has_teams": true,
+        "unique_home_teams": 64
+      },
+      "quality_score": 0.996590909090909
+    },
+    {
+      "file_path": "model_pack/2025_week13_real_games.csv",
+      "asset_type": "data",
+      "file_size": 80327,
+      "created_time": "2025-11-18T20:56:51.189215",
+      "modified_time": "2025-11-18T20:56:51.189215",
+      "description": "Week 13 dataset and features",
+      "key_metrics": {
+        "rows": 64,
+        "columns": 86,
+        "file_size_kb": 78.623046875,
+        "has_teams": true,
+        "unique_home_teams": 64
+      },
+      "quality_score": 0.9941133720930232
+    },
+    {
+      "file_path": "scripts/verify_week13_data.py",
+      "asset_type": "scripts",
+      "file_size": 19277,
+      "created_time": "2025-11-18T20:10:29.927539",
+      "modified_time": "2025-11-18T20:10:29.927539",
+      "description": "Week 13 processing and analysis script",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "predictions/week13/week13_predictions_summary_20251118_200454.csv",
+      "asset_type": "predictions",
+      "file_size": 3656,
+      "created_time": "2025-11-18T20:04:54.668531",
+      "modified_time": "2025-11-18T20:04:54.668531",
+      "description": "Week 13 predictions and analysis - Executive summary",
+      "key_metrics": {
+        "rows": 64,
+        "columns": 6,
+        "file_size_kb": 3.7109375,
+        "has_teams": true,
+        "unique_home_teams": 64
+      },
+      "quality_score": 0.9999999999999999
+    },
+    {
+      "file_path": "predictions/week13/week13_model_predictions_20251118_200454.json",
+      "asset_type": "predictions",
+      "file_size": 69843,
+      "created_time": "2025-11-18T20:04:54.666839",
+      "modified_time": "2025-11-18T20:04:54.666839",
+      "description": "Week 13 predictions and analysis",
+      "key_metrics": {
+        "predictions_count": 64
+      },
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "analysis/week13/enhanced_week13_summary_20251118_200409.md",
+      "asset_type": "analysis",
+      "file_size": 808,
+      "created_time": "2025-11-18T20:04:09.340564",
+      "modified_time": "2025-11-18T20:04:09.340564",
+      "description": "Week 13 comprehensive analysis report - Enhanced analysis",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "analysis/week13/enhanced_week13_analysis_20251118_200409.json",
+      "asset_type": "analysis",
+      "file_size": 67566,
+      "created_time": "2025-11-18T20:04:09.340327",
+      "modified_time": "2025-11-18T20:04:09.340327",
+      "description": "Week 13 comprehensive analysis report - Enhanced analysis",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "scripts/enhanced_week13_analysis.py",
+      "asset_type": "scripts",
+      "file_size": 21313,
+      "created_time": "2025-11-18T20:03:28.757922",
+      "modified_time": "2025-11-18T20:03:28.732290",
+      "description": "Week 13 processing and analysis script - Enhanced analysis",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "predictions/week13/week13_enhanced_analysis_report.json",
+      "asset_type": "predictions",
+      "file_size": 219880,
+      "created_time": "2025-11-18T20:03:16.794526",
+      "modified_time": "2025-11-18T20:03:16.794526",
+      "description": "Week 13 predictions and analysis - Enhanced analysis",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "predictions/week13/week13_predictions_summary.json",
+      "asset_type": "predictions",
+      "file_size": 203,
+      "created_time": "2025-11-18T14:31:53.216480",
+      "modified_time": "2025-11-18T14:31:53.216480",
+      "description": "Week 13 predictions and analysis - Executive summary (60 games) using ['ridge', 'xgb'] models",
+      "key_metrics": {
+        "total_games": 60,
+        "models_used": [
+          "ridge",
+          "xgb"
+        ]
+      },
+      "quality_score": 0.7
+    },
+    {
+      "file_path": "predictions/week13/week13_predictions_all_60_games.csv",
+      "asset_type": "predictions",
+      "file_size": 12465,
+      "created_time": "2025-11-18T14:31:53.216104",
+      "modified_time": "2025-11-18T14:31:53.216104",
+      "description": "Week 13 predictions and analysis",
+      "key_metrics": {
+        "rows": 60,
+        "columns": 16,
+        "file_size_kb": 12.2421875,
+        "has_teams": true,
+        "unique_home_teams": 60
+      },
+      "quality_score": 0.9999999999999999
+    },
+    {
+      "file_path": "scripts/expand_week13_coverage.py",
+      "asset_type": "scripts",
+      "file_size": 16320,
+      "created_time": "2025-11-18T14:31:24.737698",
+      "modified_time": "2025-11-18T14:31:24.737698",
+      "description": "Week 13 processing and analysis script",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "predictions/week13/week13_model_predictions.csv",
+      "asset_type": "predictions",
+      "file_size": 9482,
+      "created_time": "2025-11-18T14:12:34.304409",
+      "modified_time": "2025-11-18T14:12:34.304409",
+      "description": "Week 13 predictions and analysis",
+      "key_metrics": {
+        "rows": 64,
+        "columns": 11,
+        "file_size_kb": 9.3818359375,
+        "has_teams": true,
+        "unique_home_teams": 64
+      },
+      "quality_score": 0.9999999999999999
+    },
+    {
+      "file_path": "scripts/generate_week13_features.py",
+      "asset_type": "scripts",
+      "file_size": 1482,
+      "created_time": "2025-11-18T13:59:43.338804",
+      "modified_time": "2025-11-18T13:59:43.338804",
+      "description": "Week 13 processing and analysis script",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "scripts/predict_all_week13_games.py",
+      "asset_type": "scripts",
+      "file_size": 9470,
+      "created_time": "2025-11-17T15:51:07.461590",
+      "modified_time": "2025-11-17T15:51:07.461590",
+      "description": "Week 13 processing and analysis script",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "scripts/compare_week13_predictions.py",
+      "asset_type": "scripts",
+      "file_size": 8848,
+      "created_time": "2025-11-17T15:47:45.958251",
+      "modified_time": "2025-11-17T15:47:45.958251",
+      "description": "Week 13 processing and analysis script",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "scripts/import_week13_predictions.py",
+      "asset_type": "scripts",
+      "file_size": 14024,
+      "created_time": "2025-11-17T15:33:55.623965",
+      "modified_time": "2025-11-17T15:33:55.623965",
+      "description": "Week 13 processing and analysis script",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "scripts/predict_week13_proper.py",
+      "asset_type": "scripts",
+      "file_size": 15364,
+      "created_time": "2025-11-17T15:27:55.973356",
+      "modified_time": "2025-11-17T15:27:55.973356",
+      "description": "Week 13 processing and analysis script",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "scripts/fetch_week13_simple.py",
+      "asset_type": "scripts",
+      "file_size": 4325,
+      "created_time": "2025-11-17T15:27:55.973315",
+      "modified_time": "2025-11-17T15:27:55.973315",
+      "description": "Week 13 processing and analysis script",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "scripts/pull_and_predict_week13.py",
+      "asset_type": "scripts",
+      "file_size": 3013,
+      "created_time": "2025-11-17T15:27:55.973264",
+      "modified_time": "2025-11-17T15:27:55.973264",
+      "description": "Week 13 processing and analysis script",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "scripts/verify_week13_setup.py",
+      "asset_type": "scripts",
+      "file_size": 8813,
+      "created_time": "2025-11-17T15:27:17.616339",
+      "modified_time": "2025-11-17T15:27:17.616339",
+      "description": "Week 13 processing and analysis script",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "scripts/prepare_week13_analysis.py",
+      "asset_type": "scripts",
+      "file_size": 588,
+      "created_time": "2025-11-17T15:11:49.299544",
+      "modified_time": "2025-11-17T15:11:49.299544",
+      "description": "Week 13 processing and analysis script",
+      "key_metrics": {},
+      "quality_score": 0.5
+    },
+    {
+      "file_path": "scripts/test_week13_agents.py",
+      "asset_type": "scripts",
+      "file_size": 1674,
+      "created_time": "2025-11-17T15:10:56.177469",
+      "modified_time": "2025-11-17T15:10:56.177469",
+      "description": "Week 13 processing and analysis script",
+      "key_metrics": {},
+      "quality_score": 0.5
+    }
+  ]
+}

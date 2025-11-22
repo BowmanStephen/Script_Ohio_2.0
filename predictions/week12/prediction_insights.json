@@ -1,0 +1,17 @@
+{
+  "total_predictions": 15,
+  "home_win_predictions": 12,
+  "away_win_predictions": 3,
+  "average_confidence": 0.20378073003497504,
+  "high_confidence_predictions": 0,
+  "average_predicted_margin": 1.6858706881241556,
+  "upset_predictions": 0,
+  "close_games": 15,
+  "blowout_predictions": 0,
+  "prediction_patterns": {
+    "home_win_rate": 0.8,
+    "upset_rate": 0.0,
+    "close_game_rate": 1.0,
+    "blowout_rate": 0.0
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "total_games": 15,
+  "high_confidence_games": 7,
+  "high_confidence_examples": [
+    {
+      "home_team": "USC",
+      "away_team": "UCLA",
+      "home_win_probability": 0.26591628789901733
+    },
+    {
+      "home_team": "Florida State",
+      "away_team": "Miami",
+      "home_win_probability": 0.24576199054718018
+    },
+    {
+      "home_team": "Utah",
+      "away_team": "Arizona",
+      "home_win_probability": 0.23491552472114563
+    },
+    {
+      "home_team": "Georgia",
+      "away_team": "Tennessee",
+      "home_win_probability": 0.22425594925880432
+    },
+    {
+      "home_team": "Notre Dame",
+      "away_team": "Navy",
+      "home_win_probability": 0.20830625295639038
+    }
+  ],
+  "potential_upsets": [
+    {
+      "home_team": "Kansas State",
+      "away_team": "TCU",
+      "home_win_probability": 0.40125536918640137
+    }
+  ],
+  "ats_recommendation_split": {
+    "Away ATS": 14,
+    "Home ATS": 1
+  },
+  "average_margin": -7.92635839989015,
+  "average_home_win_probability": 0.32509341537952424
+}

@@ -1,0 +1,6 @@
+home_team,away_team,ensemble_predicted_winner,ensemble_margin,confidence_score
+Kansas State,TCU,Kansas State,7.615992658004965,0.4135581662708878
+Wisconsin,Minnesota,Minnesota,-9.158518772337564,0.4870040982828525
+Utah,Arizona,Arizona,-11.50131250875324,0.5886511853276027
+Iowa,Nebraska,Iowa,36.33630201055374,0.9905532892952328
+Ole Miss,Missouri,Ole Miss,44.72701862750128,0.998600659471111

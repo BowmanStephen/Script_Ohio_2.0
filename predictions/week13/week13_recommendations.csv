@@ -1,0 +1,8 @@
+type,game_id,teams,recommendation,action,confidence
+high_confidence,401752781,Texas A&M vs Samford,Strong bet on Samford (100.0% confidence),Consider strong bet,1.0
+high_confidence,401752773,Alabama vs Eastern Illinois,Strong bet on Eastern Illinois (100.0% confidence),Consider strong bet,1.0
+high_confidence,401752774,Auburn vs Mercer,Strong bet on Mercer (100.0% confidence),Consider strong bet,1.0
+high_confidence,401754605,Clemson vs Furman,Strong bet on Furman (100.0% confidence),Consider strong bet,1.0
+close_game,401762864,Northern Illinois vs Western Michigan,Very close game expected (-1.3 margin),Consider prop bets,0.18132577184305557
+close_game,401762863,Ohio vs Massachusetts,Very close game expected (2.2 margin),Consider prop bets,0.23969824159434225
+close_game,401762862,Bowling Green vs Akron,Very close game expected (-1.9 margin),Consider prop bets,0.22059878061979402

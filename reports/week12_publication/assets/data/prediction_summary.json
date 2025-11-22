@@ -1,0 +1,11 @@
+{
+  "total_games": 15,
+  "games_with_predictions": 0,
+  "average_confidence": NaN,
+  "high_confidence_games": 0,
+  "generation_timestamp": "2025-11-14T08:35:39.962977",
+  "models_used": [
+    "ridge",
+    "xgb"
+  ]
+}

@@ -1,0 +1,13 @@
+scrape_configs:
+  - job_name: cfbd-telemetry
+    scrape_interval: 30s
+    static_configs:
+      - targets:
+          - telemetry-sidecar:9107
+        labels:
+          service: cfbd-clients
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        regex: "([\w-]+):.*"
+        replacement: "$1"

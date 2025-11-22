@@ -1,0 +1,45 @@
+================================================================================
+TRAINING DATASET VALIDATION REPORT
+================================================================================
+
+Validation Status: ✅ PASS
+Total Games: 5,142
+
+WARNINGS:
+  ⚠️  2016: Contains Week 1 games (should be Week 5+)
+  ⚠️  2017: Contains Week 1 games (should be Week 5+)
+  ⚠️  2018: Contains Week 1 games (should be Week 5+)
+  ⚠️  2019: Contains Week 1 games (should be Week 5+)
+  ⚠️  2021: Contains Week 1 games (should be Week 5+)
+  ⚠️  2022: Contains Week 1 games (should be Week 5+)
+  ⚠️  2023: Contains Week 1 games (should be Week 5+)
+  ⚠️  2024: Contains Week 1 games (should be Week 5+)
+
+CHECKS:
+  duplicates: PASS
+  required_columns: PASS
+  feature_count: 81
+  season_distribution:
+    2016: 539
+    2017: 560
+    2018: 525
+    2019: 585
+    2021: 565
+    2022: 566
+    2023: 576
+    2024: 604
+    2025: 622
+  missing_values:
+
+================================================================================
+SEASON DISTRIBUTION:
+================================================================================
+2016: 539 games
+2017: 560 games
+2018: 525 games
+2019: 585 games
+2021: 565 games
+2022: 566 games
+2023: 576 games
+2024: 604 games
+2025: 622 games

@@ -1,0 +1,3282 @@
+{
+  "analysis_metadata": {
+    "analysis_date": "2025-11-18T15:50:38.929371",
+    "week": 12,
+    "season": 2025,
+    "total_games_analyzed": 15,
+    "analysis_components": [
+      "head_to_head_analysis",
+      "team_strength_metrics",
+      "matchup_insights",
+      "situational_factors",
+      "advanced_statistics",
+      "strategic_recommendations"
+    ]
+  },
+  "team_rankings": [
+    {
+      "rank": 1,
+      "team": "North Carolina",
+      "rating": 89.47047550257861,
+      "record": "11-3",
+      "strength_of_schedule": 0.6687790383622889
+    },
+    {
+      "rank": 2,
+      "team": "Ole Miss",
+      "rating": 81.8883462495043,
+      "record": "12-4",
+      "strength_of_schedule": 0.38095687217324953
+    },
+    {
+      "rank": 3,
+      "team": "Ohio State",
+      "rating": 81.76184672014796,
+      "record": "10-2",
+      "strength_of_schedule": 0.3963907619052304
+    },
+    {
+      "rank": 4,
+      "team": "LSU",
+      "rating": 93.86798568310768,
+      "record": "12-3",
+      "strength_of_schedule": 0.3061800891057719
+    },
+    {
+      "rank": 5,
+      "team": "Miami",
+      "rating": 95.61986293990408,
+      "record": "10-1",
+      "strength_of_schedule": 0.4368659523304609
+    },
+    {
+      "rank": 6,
+      "team": "Kansas State",
+      "rating": 89.49779936796087,
+      "record": "9-2",
+      "strength_of_schedule": 0.7330981856844958
+    },
+    {
+      "rank": 7,
+      "team": "Florida State",
+      "rating": 84.47273168848592,
+      "record": "11-1",
+      "strength_of_schedule": 0.7231398312621191
+    },
+    {
+      "rank": 8,
+      "team": "Arizona",
+      "rating": 89.64068007839609,
+      "record": "8-2",
+      "strength_of_schedule": 0.5852374630229666
+    },
+    {
+      "rank": 9,
+      "team": "Penn State",
+      "rating": 84.77522092050289,
+      "record": "11-3",
+      "strength_of_schedule": 0.7585515083530641
+    },
+    {
+      "rank": 10,
+      "team": "Virginia",
+      "rating": 94.3667897420001,
+      "record": "9-3",
+      "strength_of_schedule": 0.7095383896513683
+    },
+    {
+      "rank": 11,
+      "team": "Georgia",
+      "rating": 89.5033181628019,
+      "record": "10-2",
+      "strength_of_schedule": 0.5618677302778234
+    },
+    {
+      "rank": 12,
+      "team": "Navy",
+      "rating": 97.96930591853076,
+      "record": "12-4",
+      "strength_of_schedule": 0.4132269058210604
+    },
+    {
+      "rank": 13,
+      "team": "Utah",
+      "rating": 85.69295281664864,
+      "record": "9-4",
+      "strength_of_schedule": 0.3965468590374881
+    },
+    {
+      "rank": 14,
+      "team": "Michigan State",
+      "rating": 93.11722986149232,
+      "record": "8-4",
+      "strength_of_schedule": 0.7615779546036846
+    },
+    {
+      "rank": 15,
+      "team": "Alabama",
+      "rating": 88.46371649911822,
+      "record": "11-4",
+      "strength_of_schedule": 0.397662114168958
+    },
+    {
+      "rank": 16,
+      "team": "Washington",
+      "rating": 81.22706304084467,
+      "record": "8-4",
+      "strength_of_schedule": 0.3136183059753692
+    },
+    {
+      "rank": 17,
+      "team": "Virginia Tech",
+      "rating": 81.58744785381667,
+      "record": "8-2",
+      "strength_of_schedule": 0.7184072448086445
+    },
+    {
+      "rank": 18,
+      "team": "Baylor",
+      "rating": 87.02952005098032,
+      "record": "11-3",
+      "strength_of_schedule": 0.6557768726025104
+    },
+    {
+      "rank": 19,
+      "team": "UCLA",
+      "rating": 87.91407889609314,
+      "record": "11-2",
+      "strength_of_schedule": 0.6941724448235016
+    },
+    {
+      "rank": 20,
+      "team": "USC",
+      "rating": 83.25020188086081,
+      "record": "10-2",
+      "strength_of_schedule": 0.6846394783874152
+    },
+    {
+      "rank": 21,
+      "team": "TCU",
+      "rating": 87.64663233574713,
+      "record": "12-2",
+      "strength_of_schedule": 0.30267488114395935
+    },
+    {
+      "rank": 22,
+      "team": "Michigan",
+      "rating": 81.7995662312594,
+      "record": "10-2",
+      "strength_of_schedule": 0.7908077109896879
+    },
+    {
+      "rank": 23,
+      "team": "Oregon",
+      "rating": 80.18651696640849,
+      "record": "11-3",
+      "strength_of_schedule": 0.4641219042820028
+    },
+    {
+      "rank": 24,
+      "team": "Tennessee",
+      "rating": 96.58581266501619,
+      "record": "9-0",
+      "strength_of_schedule": 0.37041610062574415
+    },
+    {
+      "rank": 25,
+      "team": "Notre Dame",
+      "rating": 86.69030934034393,
+      "record": "10-3",
+      "strength_of_schedule": 0.3041952012736379
+    }
+  ],
+  "top_matchups": [
+    {
+      "game_id": "2025_week12_001",
+      "home_team": "Georgia",
+      "away_team": "Tennessee",
+      "winner_recommendation": "Tennessee",
+      "confidence_level": 0.80439602252629,
+      "score_prediction": {
+        "home_score": 28,
+        "away_score": 26
+      },
+      "spread_analysis": {
+        "predicted_spread": 6.333730572098105,
+        "recommendation": "Away"
+      },
+      "over_under_analysis": {
+        "predicted_total": 51.808284735400754,
+        "recommendation": "Under"
+      },
+      "betting_recommendations": [
+        "Under Total",
+        "Over Total"
+      ],
+      "upset_probability": 0.1433417881530832,
+      "key_factors": [
+        "Turnover margin",
+        "Red zone",
+        "Third downs"
+      ],
+      "strategic_advantages": {
+        "home": [
+          "Pass defense",
+          "Run game"
+        ],
+        "away": [
+          "Pass game",
+          "Coaching"
+        ]
+      },
+      "game_script_prediction": "Blowout"
+    },
+    {
+      "game_id": "2025_week12_002",
+      "home_team": "Ohio State",
+      "away_team": "Michigan",
+      "winner_recommendation": "Michigan",
+      "confidence_level": 0.7372107711647427,
+      "score_prediction": {
+        "home_score": 21,
+        "away_score": 18
+      },
+      "spread_analysis": {
+        "predicted_spread": 12.58750290890736,
+        "recommendation": "Away"
+      },
+      "over_under_analysis": {
+        "predicted_total": 51.30896462224861,
+        "recommendation": "Under"
+      },
+      "betting_recommendations": [
+        "Away ML",
+        "Under Total"
+      ],
+      "upset_probability": 0.2572499215177857,
+      "key_factors": [
+        "Third downs",
+        "Special teams",
+        "Red zone"
+      ],
+      "strategic_advantages": {
+        "home": [
+          "Home field",
+          "Pass defense"
+        ],
+        "away": [
+          "Run defense",
+          "Pass game"
+        ]
+      },
+      "game_script_prediction": "Close game"
+    },
+    {
+      "game_id": "2025_week12_003",
+      "home_team": "Texas",
+      "away_team": "LSU",
+      "winner_recommendation": "Texas",
+      "confidence_level": 0.7555182924736137,
+      "score_prediction": {
+        "home_score": 45,
+        "away_score": 35
+      },
+      "spread_analysis": {
+        "predicted_spread": -10.366588811188146,
+        "recommendation": "Home"
+      },
+      "over_under_analysis": {
+        "predicted_total": 62.20477105743457,
+        "recommendation": "Over"
+      },
+      "betting_recommendations": [
+        "Over Total",
+        "Away ML"
+      ],
+      "upset_probability": 0.20573962446294225,
+      "key_factors": [
+        "Third downs",
+        "Special teams",
+        "Red zone"
+      ],
+      "strategic_advantages": {
+        "home": [
+          "Run game",
+          "Pass defense"
+        ],
+        "away": [
+          "Pass game",
+          "Run defense"
+        ]
+      },
+      "game_script_prediction": "Blowout"
+    },
+    {
+      "game_id": "2025_week12_004",
+      "home_team": "Oregon",
+      "away_team": "Washington",
+      "winner_recommendation": "Washington",
+      "confidence_level": 0.6470103240427159,
+      "score_prediction": {
+        "home_score": 22,
+        "away_score": 21
+      },
+      "spread_analysis": {
+        "predicted_spread": 13.66740164405045,
+        "recommendation": "Away"
+      },
+      "over_under_analysis": {
+        "predicted_total": 59.92088909078634,
+        "recommendation": "Over"
+      },
+      "betting_recommendations": [
+        "Prop Bet",
+        "Away ML"
+      ],
+      "upset_probability": 0.3538257274321195,
+      "key_factors": [
+        "Red zone",
+        "Turnover margin",
+        "Special teams"
+      ],
+      "strategic_advantages": {
+        "home": [
+          "Pass defense",
+          "Home field"
+        ],
+        "away": [
+          "Run defense",
+          "Pass game"
+        ]
+      },
+      "game_script_prediction": "High-scoring"
+    },
+    {
+      "game_id": "2025_week12_005",
+      "home_team": "Florida State",
+      "away_team": "Miami",
+      "winner_recommendation": "Florida State",
+      "confidence_level": 0.6734779955641603,
+      "score_prediction": {
+        "home_score": 28,
+        "away_score": 33
+      },
+      "spread_analysis": {
+        "predicted_spread": -9.772216796451321,
+        "recommendation": "Home"
+      },
+      "over_under_analysis": {
+        "predicted_total": 46.68782919389754,
+        "recommendation": "Under"
+      },
+      "betting_recommendations": [
+        "Away ML",
+        "Under Total"
+      ],
+      "upset_probability": 0.11047837034794972,
+      "key_factors": [
+        "Third downs",
+        "Special teams",
+        "Red zone"
+      ],
+      "strategic_advantages": {
+        "home": [
+          "Pass defense",
+          "Run game"
+        ],
+        "away": [
+          "Run defense",
+          "Pass game"
+        ]
+      },
+      "game_script_prediction": "Defensive battle"
+    }
+  ],
+  "upset_alerts": [
+    {
+      "game_id": "2025_week12_004",
+      "home_team": "Oregon",
+      "away_team": "Washington",
+      "winner_recommendation": "Washington",
+      "confidence_level": 0.6470103240427159,
+      "score_prediction": {
+        "home_score": 22,
+        "away_score": 21
+      },
+      "spread_analysis": {
+        "predicted_spread": 13.66740164405045,
+        "recommendation": "Away"
+      },
+      "over_under_analysis": {
+        "predicted_total": 59.92088909078634,
+        "recommendation": "Over"
+      },
+      "betting_recommendations": [
+        "Prop Bet",
+        "Away ML"
+      ],
+      "upset_probability": 0.3538257274321195,
+      "key_factors": [
+        "Red zone",
+        "Turnover margin",
+        "Special teams"
+      ],
+      "strategic_advantages": {
+        "home": [
+          "Pass defense",
+          "Home field"
+        ],
+        "away": [
+          "Run defense",
+          "Pass game"
+        ]
+      },
+      "game_script_prediction": "High-scoring"
+    },
+    {
+      "game_id": "2025_week12_012",
+      "home_team": "Utah",
+      "away_team": "Arizona",
+      "winner_recommendation": "Utah",
+      "confidence_level": 0.7948232529229149,
+      "score_prediction": {
+        "home_score": 31,
+        "away_score": 20
+      },
+      "spread_analysis": {
+        "predicted_spread": -2.6040652235205926,
+        "recommendation": "Home"
+      },
+      "over_under_analysis": {
+        "predicted_total": 47.656834167441836,
+        "recommendation": "Under"
+      },
+      "betting_recommendations": [
+        "Prop Bet",
+        "Over Total"
+      ],
+      "upset_probability": 0.31739128445725506,
+      "key_factors": [
+        "Special teams",
+        "Turnover margin",
+        "Third downs"
+      ],
+      "strategic_advantages": {
+        "home": [
+          "Home field",
+          "Pass defense"
+        ],
+        "away": [
+          "Coaching",
+          "Pass game"
+        ]
+      },
+      "game_script_prediction": "Defensive battle"
+    },
+    {
+      "game_id": "2025_week12_014",
+      "home_team": "TCU",
+      "away_team": "Baylor",
+      "winner_recommendation": "TCU",
+      "confidence_level": 0.7579317904170847,
+      "score_prediction": {
+        "home_score": 29,
+        "away_score": 23
+      },
+      "spread_analysis": {
+        "predicted_spread": 3.0435238010444152,
+        "recommendation": "Away"
+      },
+      "over_under_analysis": {
+        "predicted_total": 61.489682396377546,
+        "recommendation": "Over"
+      },
+      "betting_recommendations": [
+        "Away ML",
+        "Over Total"
+      ],
+      "upset_probability": 0.3357456320644756,
+      "key_factors": [
+        "Third downs",
+        "Special teams",
+        "Red zone"
+      ],
+      "strategic_advantages": {
+        "home": [
+          "Pass defense",
+          "Run game"
+        ],
+        "away": [
+          "Coaching",
+          "Pass game"
+        ]
+      },
+      "game_script_prediction": "Defensive battle"
+    }
+  ],
+  "playoff_implications": {
+    "teams_in_hunt": 9,
+    "bubble_teams": 5
+  },
+  "conference_races": {
+    "tight_races": 3,
+    "decided_races": 4
+  },
+  "heisman_implications": {
+    "candidates_affected": 6,
+    "boost_opportunities": 3
+  },
+  "coaching_hot_seat": {
+    "hot_seat_games": 3,
+    "contract_extension_games": 2
+  },
+  "bowl_projections": {
+    "teams_affected": 17,
+    "bowl_jumps": 6
+  },
+  "detailed_analysis": {
+    "head_to_head": {
+      "Georgia_vs_Tennessee": {
+        "historical_record": {
+          "home_wins": 4,
+          "away_wins": 6,
+          "total_games": 12
+        },
+        "recent_form": {
+          "home_team": {
+            "last_5_record": "5-3",
+            "points_per_game": 35.93683636806178,
+            "points_allowed_per_game": 24.17955630099853
+          },
+          "away_team": {
+            "last_5_record": "4-0",
+            "points_per_game": 37.46745477522607,
+            "points_allowed_per_game": 29.855648897690408
+          }
+        },
+        "series_trend": "Away team dominates",
+        "momentum_advantage": "Even",
+        "rivalry_intensity": 1.0
+      },
+      "Ohio State_vs_Michigan": {
+        "historical_record": {
+          "home_wins": 6,
+          "away_wins": 3,
+          "total_games": 14
+        },
+        "recent_form": {
+          "home_team": {
+            "last_5_record": "4-1",
+            "points_per_game": 37.41936083917224,
+            "points_allowed_per_game": 33.50316285856257
+          },
+          "away_team": {
+            "last_5_record": "5-3",
+            "points_per_game": 32.064109279610335,
+            "points_allowed_per_game": 33.64592434598855
+          }
+        },
+        "series_trend": "Evenly matched",
+        "momentum_advantage": "Home team",
+        "rivalry_intensity": 1.5
+      },
+      "Texas_vs_LSU": {
+        "historical_record": {
+          "home_wins": 6,
+          "away_wins": 5,
+          "total_games": 10
+        },
+        "recent_form": {
+          "home_team": {
+            "last_5_record": "3-0",
+            "points_per_game": 21.74304701017542,
+            "points_allowed_per_game": 20.720700155006842
+          },
+          "away_team": {
+            "last_5_record": "2-0",
+            "points_per_game": 38.47445352840967,
+            "points_allowed_per_game": 18.823754284658236
+          }
+        },
+        "series_trend": "Evenly matched",
+        "momentum_advantage": "Away team",
+        "rivalry_intensity": 1.0
+      },
+      "Oregon_vs_Washington": {
+        "historical_record": {
+          "home_wins": 3,
+          "away_wins": 6,
+          "total_games": 11
+        },
+        "recent_form": {
+          "home_team": {
+            "last_5_record": "5-3",
+            "points_per_game": 41.88175109192079,
+            "points_allowed_per_game": 20.17457052222599
+          },
+          "away_team": {
+            "last_5_record": "5-0",
+            "points_per_game": 22.153583750181586,
+            "points_allowed_per_game": 31.888588272902844
+          }
+        },
+        "series_trend": "Away team dominates",
+        "momentum_advantage": "Home team",
+        "rivalry_intensity": 1.0
+      },
+      "Florida State_vs_Miami": {
+        "historical_record": {
+          "home_wins": 3,
+          "away_wins": 2,
+          "total_games": 11
+        },
+        "recent_form": {
+          "home_team": {
+            "last_5_record": "3-1",
+            "points_per_game": 42.67714872815884,
+            "points_allowed_per_game": 23.63649468464365
+          },
+          "away_team": {
+            "last_5_record": "2-1",
+            "points_per_game": 31.165161175606002,
+            "points_allowed_per_game": 18.56946251487792
+          }
+        },
+        "series_trend": "Away team dominates",
+        "momentum_advantage": "Home team",
+        "rivalry_intensity": 1.0
+      },
+      "Kansas State_vs_TCU": {
+        "historical_record": {
+          "home_wins": 8,
+          "away_wins": 6,
+          "total_games": 11
+        },
+        "recent_form": {
+          "home_team": {
+            "last_5_record": "2-0",
+            "points_per_game": 23.49491537230313,
+            "points_allowed_per_game": 18.51795702145389
+          },
+          "away_team": {
+            "last_5_record": "5-1",
+            "points_per_game": 22.326364343794108,
+            "points_allowed_per_game": 22.88269549630273
+          }
+        },
+        "series_trend": "Home team dominates",
+        "momentum_advantage": "Home team",
+        "rivalry_intensity": 1.0
+      },
+      "Penn State_vs_Michigan State": {
+        "historical_record": {
+          "home_wins": 7,
+          "away_wins": 6,
+          "total_games": 11
+        },
+        "recent_form": {
+          "home_team": {
+            "last_5_record": "4-0",
+            "points_per_game": 34.04372028725287,
+            "points_allowed_per_game": 30.05169142900654
+          },
+          "away_team": {
+            "last_5_record": "2-0",
+            "points_per_game": 44.2717431094143,
+            "points_allowed_per_game": 19.434343686932273
+          }
+        },
+        "series_trend": "Home team dominates",
+        "momentum_advantage": "Away team",
+        "rivalry_intensity": 1.0
+      },
+      "Alabama_vs_Auburn": {
+        "historical_record": {
+          "home_wins": 4,
+          "away_wins": 6,
+          "total_games": 12
+        },
+        "recent_form": {
+          "home_team": {
+            "last_5_record": "3-1",
+            "points_per_game": 42.08435161867311,
+            "points_allowed_per_game": 20.920391752605138
+          },
+          "away_team": {
+            "last_5_record": "5-1",
+            "points_per_game": 21.318170985808294,
+            "points_allowed_per_game": 30.001929304404747
+          }
+        },
+        "series_trend": "Away team dominates",
+        "momentum_advantage": "Home team",
+        "rivalry_intensity": 1.5
+      },
+      "Ole Miss_vs_Missouri": {
+        "historical_record": {
+          "home_wins": 5,
+          "away_wins": 5,
+          "total_games": 11
+        },
+        "recent_form": {
+          "home_team": {
+            "last_5_record": "5-1",
+            "points_per_game": 43.41210457147177,
+            "points_allowed_per_game": 32.3836493840427
+          },
+          "away_team": {
+            "last_5_record": "3-2",
+            "points_per_game": 31.481296212884438,
+            "points_allowed_per_game": 31.26653960095527
+          }
+        },
+        "series_trend": "Evenly matched",
+        "momentum_advantage": "Home team",
+        "rivalry_intensity": 1.0
+      },
+      "USC_vs_UCLA": {
+        "historical_record": {
+          "home_wins": 8,
+          "away_wins": 3,
+          "total_games": 13
+        },
+        "recent_form": {
+          "home_team": {
+            "last_5_record": "4-0",
+            "points_per_game": 44.80280271631304,
+            "points_allowed_per_game": 20.134732386126416
+          },
+          "away_team": {
+            "last_5_record": "5-0",
+            "points_per_game": 30.03737357131817,
+            "points_allowed_per_game": 15.035815787828495
+          }
+        },
+        "series_trend": "Home team dominates",
+        "momentum_advantage": "Home team",
+        "rivalry_intensity": 1.0
+      },
+      "Notre Dame_vs_Navy": {
+        "historical_record": {
+          "home_wins": 4,
+          "away_wins": 5,
+          "total_games": 12
+        },
+        "recent_form": {
+          "home_team": {
+            "last_5_record": "3-2",
+            "points_per_game": 44.818642807267345,
+            "points_allowed_per_game": 24.110342585784068
+          },
+          "away_team": {
+            "last_5_record": "5-2",
+            "points_per_game": 20.635638488944238,
+            "points_allowed_per_game": 19.401479974641866
+          }
+        },
+        "series_trend": "Away team dominates",
+        "momentum_advantage": "Home team",
+        "rivalry_intensity": 1.0
+      },
+      "Utah_vs_Arizona": {
+        "historical_record": {
+          "home_wins": 7,
+          "away_wins": 6,
+          "total_games": 15
+        },
+        "recent_form": {
+          "home_team": {
+            "last_5_record": "2-0",
+            "points_per_game": 35.828746048456736,
+            "points_allowed_per_game": 21.91824492793101
+          },
+          "away_team": {
+            "last_5_record": "2-0",
+            "points_per_game": 37.034781813565324,
+            "points_allowed_per_game": 22.117051425866308
+          }
+        },
+        "series_trend": "Evenly matched",
+        "momentum_advantage": "Even",
+        "rivalry_intensity": 1.0
+      },
+      "Clemson_vs_North Carolina": {
+        "historical_record": {
+          "home_wins": 7,
+          "away_wins": 3,
+          "total_games": 15
+        },
+        "recent_form": {
+          "home_team": {
+            "last_5_record": "3-0",
+            "points_per_game": 29.186404215811667,
+            "points_allowed_per_game": 29.318818170708727
+          },
+          "away_team": {
+            "last_5_record": "4-0",
+            "points_per_game": 33.93262017369239,
+            "points_allowed_per_game": 15.697152883143302
+          }
+        },
+        "series_trend": "Evenly matched",
+        "momentum_advantage": "Away team",
+        "rivalry_intensity": 1.0
+      },
+      "TCU_vs_Baylor": {
+        "historical_record": {
+          "home_wins": 6,
+          "away_wins": 4,
+          "total_games": 12
+        },
+        "recent_form": {
+          "home_team": {
+            "last_5_record": "4-0",
+            "points_per_game": 24.404272420337833,
+            "points_allowed_per_game": 30.645886812002473
+          },
+          "away_team": {
+            "last_5_record": "2-3",
+            "points_per_game": 27.767265595169924,
+            "points_allowed_per_game": 32.29398950847914
+          }
+        },
+        "series_trend": "Evenly matched",
+        "momentum_advantage": "Even",
+        "rivalry_intensity": 1.0
+      },
+      "Virginia Tech_vs_Virginia": {
+        "historical_record": {
+          "home_wins": 4,
+          "away_wins": 6,
+          "total_games": 11
+        },
+        "recent_form": {
+          "home_team": {
+            "last_5_record": "2-1",
+            "points_per_game": 29.804080046334825,
+            "points_allowed_per_game": 26.18968745004544
+          },
+          "away_team": {
+            "last_5_record": "4-0",
+            "points_per_game": 25.596151341600184,
+            "points_allowed_per_game": 30.78269873986224
+          }
+        },
+        "series_trend": "Away team dominates",
+        "momentum_advantage": "Home team",
+        "rivalry_intensity": 1.0
+      }
+    },
+    "team_strengths": {
+      "North Carolina": {
+        "offensive_rating": 87.59860172095881,
+        "defensive_rating": 89.12441972362227,
+        "special_teams_rating": 74.99199609709423,
+        "overall_rating": 94.10408285216944,
+        "strength_of_schedule": 0.4647057334180751,
+        "injury_factor": 0.9983484026950776,
+        "consistency_rating": 0.767592574392963,
+        "clutch_performance": 0.7248042852241887,
+        "adjusted_rating": 80.7341253170282
+      },
+      "Ole Miss": {
+        "offensive_rating": 82.43286588183247,
+        "defensive_rating": 91.4616767823288,
+        "special_teams_rating": 73.32510828335211,
+        "overall_rating": 76.23722615138038,
+        "strength_of_schedule": 0.4113786633976466,
+        "injury_factor": 0.9348368002039594,
+        "consistency_rating": 0.6337765430249521,
+        "clutch_performance": 0.8120616565603433,
+        "adjusted_rating": 77.9753477746633
+      },
+      "Ohio State": {
+        "offensive_rating": 90.21658057473027,
+        "defensive_rating": 93.54509841318841,
+        "special_teams_rating": 94.0062434336425,
+        "overall_rating": 76.49200700734093,
+        "strength_of_schedule": 0.7178375766658205,
+        "injury_factor": 0.9832255620063131,
+        "consistency_rating": 0.875329668540555,
+        "clutch_performance": 0.7238842923020876,
+        "adjusted_rating": 77.68974543012641
+      },
+      "LSU": {
+        "offensive_rating": 73.19312692136307,
+        "defensive_rating": 89.18200025027483,
+        "special_teams_rating": 85.16686779226194,
+        "overall_rating": 78.05716731112047,
+        "strength_of_schedule": 0.6903504041326837,
+        "injury_factor": 0.9975951338159929,
+        "consistency_rating": 0.7422817379782376,
+        "clutch_performance": 0.9170220893359428,
+        "adjusted_rating": 75.5106280313609
+      },
+      "Miami": {
+        "offensive_rating": 82.07841564805376,
+        "defensive_rating": 79.5211163843464,
+        "special_teams_rating": 82.1786821307967,
+        "overall_rating": 82.7725911137251,
+        "strength_of_schedule": 0.5796393846409127,
+        "injury_factor": 0.9371624561036402,
+        "consistency_rating": 0.8575121586867465,
+        "clutch_performance": 0.7499253949404456,
+        "adjusted_rating": 81.14397664134236
+      },
+      "Kansas State": {
+        "offensive_rating": 86.37527306376832,
+        "defensive_rating": 93.85739405687376,
+        "special_teams_rating": 94.77523739420586,
+        "overall_rating": 75.82890692330749,
+        "strength_of_schedule": 0.3425062905253088,
+        "injury_factor": 0.9057437528345464,
+        "consistency_rating": 0.7894531344388807,
+        "clutch_performance": 0.8177106337117925,
+        "adjusted_rating": 79.34484733551389
+      },
+      "Florida State": {
+        "offensive_rating": 80.84958583346145,
+        "defensive_rating": 89.9676721442992,
+        "special_teams_rating": 89.8452979707313,
+        "overall_rating": 81.08576235310804,
+        "strength_of_schedule": 0.7608496601448946,
+        "injury_factor": 0.913620442826386,
+        "consistency_rating": 0.8506221268591985,
+        "clutch_performance": 0.7114711507788258,
+        "adjusted_rating": 79.30547660362443
+      },
+      "Arizona": {
+        "offensive_rating": 73.43937498151173,
+        "defensive_rating": 81.29131360877915,
+        "special_teams_rating": 87.24395495563968,
+        "overall_rating": 85.30043595518924,
+        "strength_of_schedule": 0.3574141759946218,
+        "injury_factor": 0.9867433834701812,
+        "consistency_rating": 0.6701121276680035,
+        "clutch_performance": 0.7387499165312976,
+        "adjusted_rating": 72.41401908912718
+      },
+      "Penn State": {
+        "offensive_rating": 88.17745624358732,
+        "defensive_rating": 92.40327756779004,
+        "special_teams_rating": 84.6467504691246,
+        "overall_rating": 97.78228310247079,
+        "strength_of_schedule": 0.38245321948418115,
+        "injury_factor": 0.9114043632282612,
+        "consistency_rating": 0.8118240015130801,
+        "clutch_performance": 0.7175649963916588,
+        "adjusted_rating": 75.01693406050737
+      },
+      "Virginia": {
+        "offensive_rating": 80.38018280085022,
+        "defensive_rating": 93.37656965970038,
+        "special_teams_rating": 70.3379783744981,
+        "overall_rating": 92.30358282018236,
+        "strength_of_schedule": 0.5565148870826566,
+        "injury_factor": 0.9751587017550769,
+        "consistency_rating": 0.6023619826867376,
+        "clutch_performance": 0.8721495112334268,
+        "adjusted_rating": 85.76626655390255
+      },
+      "Georgia": {
+        "offensive_rating": 72.63550514525473,
+        "defensive_rating": 86.67577894165935,
+        "special_teams_rating": 90.82107641111635,
+        "overall_rating": 92.9107527126046,
+        "strength_of_schedule": 0.31709941014667115,
+        "injury_factor": 0.9965961586872046,
+        "consistency_rating": 0.8848384538089065,
+        "clutch_performance": 0.8701893574019138,
+        "adjusted_rating": 92.18711472762386
+      },
+      "Navy": {
+        "offensive_rating": 82.08567262020202,
+        "defensive_rating": 87.34280484314425,
+        "special_teams_rating": 74.29361248488051,
+        "overall_rating": 81.90253621562726,
+        "strength_of_schedule": 0.7665503084530423,
+        "injury_factor": 0.9233295998248907,
+        "consistency_rating": 0.8532836906464074,
+        "clutch_performance": 0.7175552140675364,
+        "adjusted_rating": 71.9050231362402
+      },
+      "Utah": {
+        "offensive_rating": 90.7223205680676,
+        "defensive_rating": 76.62915435159385,
+        "special_teams_rating": 87.75914032830156,
+        "overall_rating": 85.31781906991637,
+        "strength_of_schedule": 0.30640504062801466,
+        "injury_factor": 0.960968845672499,
+        "consistency_rating": 0.7517298106311159,
+        "clutch_performance": 0.769353649989864,
+        "adjusted_rating": 70.59970639457207
+      },
+      "Michigan State": {
+        "offensive_rating": 94.28593877834794,
+        "defensive_rating": 85.60433031012946,
+        "special_teams_rating": 71.1775711876409,
+        "overall_rating": 78.4249740454342,
+        "strength_of_schedule": 0.7710397824711401,
+        "injury_factor": 0.9687331634998423,
+        "consistency_rating": 0.7104592351751389,
+        "clutch_performance": 0.7274602722619374,
+        "adjusted_rating": 89.49928426271416
+      },
+      "Alabama": {
+        "offensive_rating": 88.18244099474215,
+        "defensive_rating": 92.46253755951209,
+        "special_teams_rating": 77.23423941878838,
+        "overall_rating": 96.86741048438395,
+        "strength_of_schedule": 0.7875100613489285,
+        "injury_factor": 0.9109818499214111,
+        "consistency_rating": 0.6069675519155803,
+        "clutch_performance": 0.7283961140483569,
+        "adjusted_rating": 71.90298314717272
+      },
+      "Washington": {
+        "offensive_rating": 88.16436662705784,
+        "defensive_rating": 87.02320080331828,
+        "special_teams_rating": 82.88744494415772,
+        "overall_rating": 80.56597858840722,
+        "strength_of_schedule": 0.3563189727569933,
+        "injury_factor": 0.903450755287552,
+        "consistency_rating": 0.7840941981732289,
+        "clutch_performance": 0.8996737682474297,
+        "adjusted_rating": 77.24428173021045
+      },
+      "Virginia Tech": {
+        "offensive_rating": 92.63424446462906,
+        "defensive_rating": 87.74497434587556,
+        "special_teams_rating": 71.28673033867479,
+        "overall_rating": 82.98321571400209,
+        "strength_of_schedule": 0.7280448813648055,
+        "injury_factor": 0.9723828509223869,
+        "consistency_rating": 0.7778313632079537,
+        "clutch_performance": 0.8781062990345676,
+        "adjusted_rating": 82.57117318519948
+      },
+      "Baylor": {
+        "offensive_rating": 84.55688215577914,
+        "defensive_rating": 74.01374618505062,
+        "special_teams_rating": 94.34298264614145,
+        "overall_rating": 97.46979288623278,
+        "strength_of_schedule": 0.5032872216998014,
+        "injury_factor": 0.9682899490601661,
+        "consistency_rating": 0.6198789397407357,
+        "clutch_performance": 0.7466518323646607,
+        "adjusted_rating": 93.31855528916121
+      },
+      "UCLA": {
+        "offensive_rating": 71.81612194072102,
+        "defensive_rating": 85.0731395205829,
+        "special_teams_rating": 91.48116530621316,
+        "overall_rating": 86.92205287754254,
+        "strength_of_schedule": 0.5902896302644692,
+        "injury_factor": 0.9294247114104823,
+        "consistency_rating": 0.6641068249960163,
+        "clutch_performance": 0.8410697250005768,
+        "adjusted_rating": 81.44942008325982
+      },
+      "USC": {
+        "offensive_rating": 75.23467478639353,
+        "defensive_rating": 91.23195452900731,
+        "special_teams_rating": 91.12258863457994,
+        "overall_rating": 87.38889633333659,
+        "strength_of_schedule": 0.4340129449401106,
+        "injury_factor": 0.9268880344536637,
+        "consistency_rating": 0.75252052841511,
+        "clutch_performance": 0.8289428485141539,
+        "adjusted_rating": 81.73343706603444
+      },
+      "TCU": {
+        "offensive_rating": 89.48095131981688,
+        "defensive_rating": 91.92019372730476,
+        "special_teams_rating": 90.43886944834213,
+        "overall_rating": 81.96987428616272,
+        "strength_of_schedule": 0.7208144835619514,
+        "injury_factor": 0.9133703137399463,
+        "consistency_rating": 0.8795159842015029,
+        "clutch_performance": 0.9177640562389563,
+        "adjusted_rating": 90.02965006814537
+      },
+      "Michigan": {
+        "offensive_rating": 91.57026346154949,
+        "defensive_rating": 76.19442575226253,
+        "special_teams_rating": 80.9067896413088,
+        "overall_rating": 90.76759062828947,
+        "strength_of_schedule": 0.6340650905166556,
+        "injury_factor": 0.9933404645864164,
+        "consistency_rating": 0.7905098080642482,
+        "clutch_performance": 0.9300520495238558,
+        "adjusted_rating": 94.93294868219377
+      },
+      "Oregon": {
+        "offensive_rating": 82.32650329133953,
+        "defensive_rating": 85.15488200606117,
+        "special_teams_rating": 78.66325074223619,
+        "overall_rating": 94.94432396751311,
+        "strength_of_schedule": 0.49763178225001303,
+        "injury_factor": 0.9392598610558487,
+        "consistency_rating": 0.6574665354899788,
+        "clutch_performance": 0.7776203352059103,
+        "adjusted_rating": 73.30930135200191
+      },
+      "Tennessee": {
+        "offensive_rating": 85.5354813430448,
+        "defensive_rating": 93.58763567876025,
+        "special_teams_rating": 75.05272032465861,
+        "overall_rating": 94.28665551255207,
+        "strength_of_schedule": 0.46814232514375453,
+        "injury_factor": 0.9275178782987562,
+        "consistency_rating": 0.6779647350256247,
+        "clutch_performance": 0.8886841138873206,
+        "adjusted_rating": 79.30703520238507
+      },
+      "Notre Dame": {
+        "offensive_rating": 75.6176874765043,
+        "defensive_rating": 73.36352651076287,
+        "special_teams_rating": 79.9223839602439,
+        "overall_rating": 75.39496566127835,
+        "strength_of_schedule": 0.7828312341499974,
+        "injury_factor": 0.9509353597753117,
+        "consistency_rating": 0.751979745825903,
+        "clutch_performance": 0.7323659729655363,
+        "adjusted_rating": 83.92100695869085
+      },
+      "Missouri": {
+        "offensive_rating": 94.21901090662625,
+        "defensive_rating": 70.83742651780092,
+        "special_teams_rating": 73.40313476213278,
+        "overall_rating": 80.62751858972925,
+        "strength_of_schedule": 0.3164736939942424,
+        "injury_factor": 0.9563493854077093,
+        "consistency_rating": 0.6231337031136662,
+        "clutch_performance": 0.7312987160042002,
+        "adjusted_rating": 76.97644379152436
+      },
+      "Texas": {
+        "offensive_rating": 83.64239109795528,
+        "defensive_rating": 91.15801270515222,
+        "special_teams_rating": 76.09483985363168,
+        "overall_rating": 86.45577439213092,
+        "strength_of_schedule": 0.7062233468548191,
+        "injury_factor": 0.9680411049615792,
+        "consistency_rating": 0.6434487246238726,
+        "clutch_performance": 0.8509263271373764,
+        "adjusted_rating": 93.80949989725976
+      },
+      "Auburn": {
+        "offensive_rating": 94.29283569743731,
+        "defensive_rating": 82.19811724881156,
+        "special_teams_rating": 84.31612513132049,
+        "overall_rating": 89.25912685212758,
+        "strength_of_schedule": 0.6624046465121587,
+        "injury_factor": 0.9539450385217636,
+        "consistency_rating": 0.6743824872191014,
+        "clutch_performance": 0.7911598197259293,
+        "adjusted_rating": 70.36025985639473
+      },
+      "Clemson": {
+        "offensive_rating": 71.70427203905376,
+        "defensive_rating": 89.37937833149483,
+        "special_teams_rating": 72.87088081625828,
+        "overall_rating": 96.9218919261993,
+        "strength_of_schedule": 0.34634295079210187,
+        "injury_factor": 0.975719712096433,
+        "consistency_rating": 0.7513106418818704,
+        "clutch_performance": 0.7274897341213102,
+        "adjusted_rating": 80.87084360831514
+      }
+    },
+    "matchup_insights": [
+      {
+        "game_id": "2025_week12_001",
+        "home_team": "Georgia",
+        "away_team": "Tennessee",
+        "key_matchups": [
+          "QB vs Secondary",
+          "OL vs DL",
+          "WR vs CB",
+          "LB vs RB"
+        ],
+        "offensive_comparison": {
+          "advantage": "Georgia",
+          "margin": 8.841341760576103
+        },
+        "defensive_comparison": {
+          "advantage": "Georgia",
+          "margin": 8.92072957010431
+        },
+        "special_teams_battle": {
+          "advantage": "Even",
+          "margin": 0
+        },
+        "coaching_matchup": {
+          "advantage": "Georgia",
+          "experience_edge": 0.8310605198565613
+        },
+        "x_factors": [
+          "Turnover battle",
+          "Special teams",
+          "Weather conditions",
+          "Injuries"
+        ],
+        "game_flow_prediction": "Balanced game",
+        "critical_situations": [
+          "Third down efficiency",
+          "Red zone performance",
+          "Two-minute drill"
+        ]
+      },
+      {
+        "game_id": "2025_week12_002",
+        "home_team": "Ohio State",
+        "away_team": "Michigan",
+        "key_matchups": [
+          "QB vs Secondary",
+          "OL vs DL",
+          "WR vs CB",
+          "LB vs RB"
+        ],
+        "offensive_comparison": {
+          "advantage": "Michigan",
+          "margin": 1.7111833505726382
+        },
+        "defensive_comparison": {
+          "advantage": "Michigan",
+          "margin": 4.902626474751106
+        },
+        "special_teams_battle": {
+          "advantage": "Even",
+          "margin": 0
+        },
+        "coaching_matchup": {
+          "advantage": "Michigan",
+          "experience_edge": 0.9640030157585537
+        },
+        "x_factors": [
+          "Turnover battle",
+          "Special teams",
+          "Weather conditions",
+          "Injuries"
+        ],
+        "game_flow_prediction": "High-scoring shootout",
+        "critical_situations": [
+          "Third down efficiency",
+          "Red zone performance",
+          "Two-minute drill"
+        ]
+      },
+      {
+        "game_id": "2025_week12_003",
+        "home_team": "Texas",
+        "away_team": "LSU",
+        "key_matchups": [
+          "QB vs Secondary",
+          "OL vs DL",
+          "WR vs CB",
+          "LB vs RB"
+        ],
+        "offensive_comparison": {
+          "advantage": "Texas",
+          "margin": 2.0645743753244505
+        },
+        "defensive_comparison": {
+          "advantage": "LSU",
+          "margin": 3.750967684757375
+        },
+        "special_teams_battle": {
+          "advantage": "Even",
+          "margin": 0
+        },
+        "coaching_matchup": {
+          "advantage": "LSU",
+          "experience_edge": 1.095453142174125
+        },
+        "x_factors": [
+          "Turnover battle",
+          "Special teams",
+          "Weather conditions",
+          "Injuries"
+        ],
+        "game_flow_prediction": "Balanced game",
+        "critical_situations": [
+          "Third down efficiency",
+          "Red zone performance",
+          "Two-minute drill"
+        ]
+      },
+      {
+        "game_id": "2025_week12_004",
+        "home_team": "Oregon",
+        "away_team": "Washington",
+        "key_matchups": [
+          "QB vs Secondary",
+          "OL vs DL",
+          "WR vs CB",
+          "LB vs RB"
+        ],
+        "offensive_comparison": {
+          "advantage": "Washington",
+          "margin": 1.697509149997336
+        },
+        "defensive_comparison": {
+          "advantage": "Washington",
+          "margin": 8.177987324690896
+        },
+        "special_teams_battle": {
+          "advantage": "Even",
+          "margin": 0
+        },
+        "coaching_matchup": {
+          "advantage": "Oregon",
+          "experience_edge": 1.1728108191118072
+        },
+        "x_factors": [
+          "Turnover battle",
+          "Special teams",
+          "Weather conditions",
+          "Injuries"
+        ],
+        "game_flow_prediction": "Balanced game",
+        "critical_situations": [
+          "Third down efficiency",
+          "Red zone performance",
+          "Two-minute drill"
+        ]
+      },
+      {
+        "game_id": "2025_week12_005",
+        "home_team": "Florida State",
+        "away_team": "Miami",
+        "key_matchups": [
+          "QB vs Secondary",
+          "OL vs DL",
+          "WR vs CB",
+          "LB vs RB"
+        ],
+        "offensive_comparison": {
+          "advantage": "Florida State",
+          "margin": 2.173706620081714
+        },
+        "defensive_comparison": {
+          "advantage": "Miami",
+          "margin": 6.566529240160219
+        },
+        "special_teams_battle": {
+          "advantage": "Even",
+          "margin": 0
+        },
+        "coaching_matchup": {
+          "advantage": "Florida State",
+          "experience_edge": 1.0871108965368634
+        },
+        "x_factors": [
+          "Turnover battle",
+          "Special teams",
+          "Weather conditions",
+          "Injuries"
+        ],
+        "game_flow_prediction": "Balanced game",
+        "critical_situations": [
+          "Third down efficiency",
+          "Red zone performance",
+          "Two-minute drill"
+        ]
+      },
+      {
+        "game_id": "2025_week12_006",
+        "home_team": "Kansas State",
+        "away_team": "TCU",
+        "key_matchups": [
+          "QB vs Secondary",
+          "OL vs DL",
+          "WR vs CB",
+          "LB vs RB"
+        ],
+        "offensive_comparison": {
+          "advantage": "Kansas State",
+          "margin": 4.063012346124591
+        },
+        "defensive_comparison": {
+          "advantage": "TCU",
+          "margin": 9.289014424641227
+        },
+        "special_teams_battle": {
+          "advantage": "Even",
+          "margin": 0
+        },
+        "coaching_matchup": {
+          "advantage": "TCU",
+          "experience_edge": 0.8287799416615755
+        },
+        "x_factors": [
+          "Turnover battle",
+          "Special teams",
+          "Weather conditions",
+          "Injuries"
+        ],
+        "game_flow_prediction": "High-scoring shootout",
+        "critical_situations": [
+          "Third down efficiency",
+          "Red zone performance",
+          "Two-minute drill"
+        ]
+      },
+      {
+        "game_id": "2025_week12_007",
+        "home_team": "Penn State",
+        "away_team": "Michigan State",
+        "key_matchups": [
+          "QB vs Secondary",
+          "OL vs DL",
+          "WR vs CB",
+          "LB vs RB"
+        ],
+        "offensive_comparison": {
+          "advantage": "Michigan State",
+          "margin": 1.9665950881945782
+        },
+        "defensive_comparison": {
+          "advantage": "Michigan State",
+          "margin": 4.432550290903819
+        },
+        "special_teams_battle": {
+          "advantage": "Even",
+          "margin": 0
+        },
+        "coaching_matchup": {
+          "advantage": "Penn State",
+          "experience_edge": 1.0263002079842432
+        },
+        "x_factors": [
+          "Turnover battle",
+          "Special teams",
+          "Weather conditions",
+          "Injuries"
+        ],
+        "game_flow_prediction": "Defensive struggle",
+        "critical_situations": [
+          "Third down efficiency",
+          "Red zone performance",
+          "Two-minute drill"
+        ]
+      },
+      {
+        "game_id": "2025_week12_008",
+        "home_team": "Alabama",
+        "away_team": "Auburn",
+        "key_matchups": [
+          "QB vs Secondary",
+          "OL vs DL",
+          "WR vs CB",
+          "LB vs RB"
+        ],
+        "offensive_comparison": {
+          "advantage": "Auburn",
+          "margin": 4.471759587151766
+        },
+        "defensive_comparison": {
+          "advantage": "Alabama",
+          "margin": 9.017280573158784
+        },
+        "special_teams_battle": {
+          "advantage": "Even",
+          "margin": 0
+        },
+        "coaching_matchup": {
+          "advantage": "Auburn",
+          "experience_edge": 0.9378580613344669
+        },
+        "x_factors": [
+          "Turnover battle",
+          "Special teams",
+          "Weather conditions",
+          "Injuries"
+        ],
+        "game_flow_prediction": "Defensive struggle",
+        "critical_situations": [
+          "Third down efficiency",
+          "Red zone performance",
+          "Two-minute drill"
+        ]
+      },
+      {
+        "game_id": "2025_week12_009",
+        "home_team": "Ole Miss",
+        "away_team": "Missouri",
+        "key_matchups": [
+          "QB vs Secondary",
+          "OL vs DL",
+          "WR vs CB",
+          "LB vs RB"
+        ],
+        "offensive_comparison": {
+          "advantage": "Missouri",
+          "margin": 9.475670316462892
+        },
+        "defensive_comparison": {
+          "advantage": "Missouri",
+          "margin": 8.718414333853103
+        },
+        "special_teams_battle": {
+          "advantage": "Even",
+          "margin": 0
+        },
+        "coaching_matchup": {
+          "advantage": "Missouri",
+          "experience_edge": 1.0586487626902703
+        },
+        "x_factors": [
+          "Turnover battle",
+          "Special teams",
+          "Weather conditions",
+          "Injuries"
+        ],
+        "game_flow_prediction": "High-scoring shootout",
+        "critical_situations": [
+          "Third down efficiency",
+          "Red zone performance",
+          "Two-minute drill"
+        ]
+      },
+      {
+        "game_id": "2025_week12_010",
+        "home_team": "USC",
+        "away_team": "UCLA",
+        "key_matchups": [
+          "QB vs Secondary",
+          "OL vs DL",
+          "WR vs CB",
+          "LB vs RB"
+        ],
+        "offensive_comparison": {
+          "advantage": "USC",
+          "margin": 6.127611088130755
+        },
+        "defensive_comparison": {
+          "advantage": "USC",
+          "margin": 9.36036179862954
+        },
+        "special_teams_battle": {
+          "advantage": "Even",
+          "margin": 0
+        },
+        "coaching_matchup": {
+          "advantage": "UCLA",
+          "experience_edge": 0.9238775986422982
+        },
+        "x_factors": [
+          "Turnover battle",
+          "Special teams",
+          "Weather conditions",
+          "Injuries"
+        ],
+        "game_flow_prediction": "Defensive struggle",
+        "critical_situations": [
+          "Third down efficiency",
+          "Red zone performance",
+          "Two-minute drill"
+        ]
+      },
+      {
+        "game_id": "2025_week12_011",
+        "home_team": "Notre Dame",
+        "away_team": "Navy",
+        "key_matchups": [
+          "QB vs Secondary",
+          "OL vs DL",
+          "WR vs CB",
+          "LB vs RB"
+        ],
+        "offensive_comparison": {
+          "advantage": "Notre Dame",
+          "margin": 5.6351180369419325
+        },
+        "defensive_comparison": {
+          "advantage": "Navy",
+          "margin": 9.516076528314166
+        },
+        "special_teams_battle": {
+          "advantage": "Even",
+          "margin": 0
+        },
+        "coaching_matchup": {
+          "advantage": "Navy",
+          "experience_edge": 1.0552395176586131
+        },
+        "x_factors": [
+          "Turnover battle",
+          "Special teams",
+          "Weather conditions",
+          "Injuries"
+        ],
+        "game_flow_prediction": "Balanced game",
+        "critical_situations": [
+          "Third down efficiency",
+          "Red zone performance",
+          "Two-minute drill"
+        ]
+      },
+      {
+        "game_id": "2025_week12_012",
+        "home_team": "Utah",
+        "away_team": "Arizona",
+        "key_matchups": [
+          "QB vs Secondary",
+          "OL vs DL",
+          "WR vs CB",
+          "LB vs RB"
+        ],
+        "offensive_comparison": {
+          "advantage": "Utah",
+          "margin": 3.5674756817612527
+        },
+        "defensive_comparison": {
+          "advantage": "Arizona",
+          "margin": 4.997741913644549
+        },
+        "special_teams_battle": {
+          "advantage": "Even",
+          "margin": 0
+        },
+        "coaching_matchup": {
+          "advantage": "Arizona",
+          "experience_edge": 1.186190500814293
+        },
+        "x_factors": [
+          "Turnover battle",
+          "Special teams",
+          "Weather conditions",
+          "Injuries"
+        ],
+        "game_flow_prediction": "High-scoring shootout",
+        "critical_situations": [
+          "Third down efficiency",
+          "Red zone performance",
+          "Two-minute drill"
+        ]
+      },
+      {
+        "game_id": "2025_week12_013",
+        "home_team": "Clemson",
+        "away_team": "North Carolina",
+        "key_matchups": [
+          "QB vs Secondary",
+          "OL vs DL",
+          "WR vs CB",
+          "LB vs RB"
+        ],
+        "offensive_comparison": {
+          "advantage": "North Carolina",
+          "margin": 3.721308892565518
+        },
+        "defensive_comparison": {
+          "advantage": "Clemson",
+          "margin": 2.6522116628231336
+        },
+        "special_teams_battle": {
+          "advantage": "Even",
+          "margin": 0
+        },
+        "coaching_matchup": {
+          "advantage": "Clemson",
+          "experience_edge": 1.1604665687337599
+        },
+        "x_factors": [
+          "Turnover battle",
+          "Special teams",
+          "Weather conditions",
+          "Injuries"
+        ],
+        "game_flow_prediction": "Defensive struggle",
+        "critical_situations": [
+          "Third down efficiency",
+          "Red zone performance",
+          "Two-minute drill"
+        ]
+      },
+      {
+        "game_id": "2025_week12_014",
+        "home_team": "TCU",
+        "away_team": "Baylor",
+        "key_matchups": [
+          "QB vs Secondary",
+          "OL vs DL",
+          "WR vs CB",
+          "LB vs RB"
+        ],
+        "offensive_comparison": {
+          "advantage": "Baylor",
+          "margin": 5.834489354482936
+        },
+        "defensive_comparison": {
+          "advantage": "TCU",
+          "margin": 1.285584591476916
+        },
+        "special_teams_battle": {
+          "advantage": "Even",
+          "margin": 0
+        },
+        "coaching_matchup": {
+          "advantage": "TCU",
+          "experience_edge": 0.9849583015975741
+        },
+        "x_factors": [
+          "Turnover battle",
+          "Special teams",
+          "Weather conditions",
+          "Injuries"
+        ],
+        "game_flow_prediction": "Defensive struggle",
+        "critical_situations": [
+          "Third down efficiency",
+          "Red zone performance",
+          "Two-minute drill"
+        ]
+      },
+      {
+        "game_id": "2025_week12_015",
+        "home_team": "Virginia Tech",
+        "away_team": "Virginia",
+        "key_matchups": [
+          "QB vs Secondary",
+          "OL vs DL",
+          "WR vs CB",
+          "LB vs RB"
+        ],
+        "offensive_comparison": {
+          "advantage": "Virginia",
+          "margin": 5.525481332077583
+        },
+        "defensive_comparison": {
+          "advantage": "Virginia",
+          "margin": 7.932325991743136
+        },
+        "special_teams_battle": {
+          "advantage": "Even",
+          "margin": 0
+        },
+        "coaching_matchup": {
+          "advantage": "Virginia",
+          "experience_edge": 0.8742139341979156
+        },
+        "x_factors": [
+          "Turnover battle",
+          "Special teams",
+          "Weather conditions",
+          "Injuries"
+        ],
+        "game_flow_prediction": "High-scoring shootout",
+        "critical_situations": [
+          "Third down efficiency",
+          "Red zone performance",
+          "Two-minute drill"
+        ]
+      }
+    ],
+    "situational_factors": {
+      "weather_impacts": {
+        "2025_week12_001": {
+          "impact": 0.9546706687707702,
+          "conditions": "Clear"
+        },
+        "2025_week12_002": {
+          "impact": 0.9113144519167382,
+          "conditions": "Clear"
+        },
+        "2025_week12_003": {
+          "impact": 0.8670206279657193,
+          "conditions": "Clear"
+        },
+        "2025_week12_004": {
+          "impact": 0.855038201993838,
+          "conditions": "Clear"
+        },
+        "2025_week12_005": {
+          "impact": 1.0433495575593776,
+          "conditions": "Clear"
+        },
+        "2025_week12_006": {
+          "impact": 1.182914811790423,
+          "conditions": "Clear"
+        },
+        "2025_week12_007": {
+          "impact": 0.9349382534358628,
+          "conditions": "Clear"
+        },
+        "2025_week12_008": {
+          "impact": 1.101728419305078,
+          "conditions": "Clear"
+        },
+        "2025_week12_009": {
+          "impact": 0.9046707528785257,
+          "conditions": "Clear"
+        },
+        "2025_week12_010": {
+          "impact": 1.096464422414859,
+          "conditions": "Clear"
+        },
+        "2025_week12_011": {
+          "impact": 0.9283751621786588,
+          "conditions": "Clear"
+        },
+        "2025_week12_012": {
+          "impact": 1.110630226450019,
+          "conditions": "Clear"
+        },
+        "2025_week12_013": {
+          "impact": 1.089515863799671,
+          "conditions": "Clear"
+        },
+        "2025_week12_014": {
+          "impact": 0.9835681960932972,
+          "conditions": "Clear"
+        },
+        "2025_week12_015": {
+          "impact": 1.03749808676264,
+          "conditions": "Clear"
+        }
+      },
+      "travel_factors": {
+        "2025_week12_001": {
+          "advantage": "Georgia",
+          "distance_penalty": 0.9606092565200631
+        },
+        "2025_week12_002": {
+          "advantage": "Ohio State",
+          "distance_penalty": 0.9838128914242612
+        },
+        "2025_week12_003": {
+          "advantage": "Texas",
+          "distance_penalty": 0.916292127497751
+        },
+        "2025_week12_004": {
+          "advantage": "Oregon",
+          "distance_penalty": 0.9526427392566845
+        },
+        "2025_week12_005": {
+          "advantage": "Florida State",
+          "distance_penalty": 0.9034090569006775
+        },
+        "2025_week12_006": {
+          "advantage": "Kansas State",
+          "distance_penalty": 0.962636708627639
+        },
+        "2025_week12_007": {
+          "advantage": "Penn State",
+          "distance_penalty": 0.9581377873720522
+        },
+        "2025_week12_008": {
+          "advantage": "Alabama",
+          "distance_penalty": 0.9067368014771312
+        },
+        "2025_week12_009": {
+          "advantage": "Ole Miss",
+          "distance_penalty": 0.9528178112445413
+        },
+        "2025_week12_010": {
+          "advantage": "USC",
+          "distance_penalty": 0.9049895886162318
+        },
+        "2025_week12_011": {
+          "advantage": "Notre Dame",
+          "distance_penalty": 0.9239036358111574
+        },
+        "2025_week12_012": {
+          "advantage": "Utah",
+          "distance_penalty": 0.9728663701854283
+        },
+        "2025_week12_013": {
+          "advantage": "Clemson",
+          "distance_penalty": 0.947898170557403
+        },
+        "2025_week12_014": {
+          "advantage": "TCU",
+          "distance_penalty": 0.9452990278931512
+        },
+        "2025_week12_015": {
+          "advantage": "Virginia Tech",
+          "distance_penalty": 0.9048819239237402
+        }
+      },
+      "motivational_factors": {
+        "2025_week12_001": {
+          "home_motivation": 0.9358730904990894,
+          "away_motivation": 0.9553310176873501
+        },
+        "2025_week12_002": {
+          "home_motivation": 0.8404000738369926,
+          "away_motivation": 1.0194349056673129
+        },
+        "2025_week12_003": {
+          "home_motivation": 0.8424908350066171,
+          "away_motivation": 1.0044113085936843
+        },
+        "2025_week12_004": {
+          "home_motivation": 0.9097118844668256,
+          "away_motivation": 0.8774373445594519
+        },
+        "2025_week12_005": {
+          "home_motivation": 0.8707246445438939,
+          "away_motivation": 1.1417492138102912
+        },
+        "2025_week12_006": {
+          "home_motivation": 0.903575886987452,
+          "away_motivation": 0.9801591861837391
+        },
+        "2025_week12_007": {
+          "home_motivation": 0.810210570539182,
+          "away_motivation": 1.054937708993827
+        },
+        "2025_week12_008": {
+          "home_motivation": 0.8236114079852209,
+          "away_motivation": 1.1367620239305793
+        },
+        "2025_week12_009": {
+          "home_motivation": 0.8133612689128309,
+          "away_motivation": 0.9635788848079624
+        },
+        "2025_week12_010": {
+          "home_motivation": 1.1141721511794422,
+          "away_motivation": 0.8245931053171638
+        },
+        "2025_week12_011": {
+          "home_motivation": 1.1265153914373083,
+          "away_motivation": 0.9194040646454364
+        },
+        "2025_week12_012": {
+          "home_motivation": 1.1488519372541217,
+          "away_motivation": 1.0643333678018096
+        },
+        "2025_week12_013": {
+          "home_motivation": 1.1193160022351958,
+          "away_motivation": 1.182590706561078
+        },
+        "2025_week12_014": {
+          "home_motivation": 0.8671617846703281,
+          "away_motivation": 1.1977312773098534
+        },
+        "2025_week12_015": {
+          "home_motivation": 1.1534985653491039,
+          "away_motivation": 0.8400427039061525
+        }
+      },
+      "injury_situations": {
+        "2025_week12_001": {
+          "home_impact": 0.9740769730375138,
+          "away_impact": 0.9153951377719566
+        },
+        "2025_week12_002": {
+          "home_impact": 0.9015479842901228,
+          "away_impact": 0.9076455424248226
+        },
+        "2025_week12_003": {
+          "home_impact": 0.9770619946873311,
+          "away_impact": 0.9324799952578499
+        },
+        "2025_week12_004": {
+          "home_impact": 0.9367685746185677,
+          "away_impact": 0.9723638933896324
+        },
+        "2025_week12_005": {
+          "home_impact": 0.9491393192581239,
+          "away_impact": 0.9427760498592604
+        },
+        "2025_week12_006": {
+          "home_impact": 0.956707421201541,
+          "away_impact": 0.9962739399606375
+        },
+        "2025_week12_007": {
+          "home_impact": 0.9401770814617905,
+          "away_impact": 0.9583327903198886
+        },
+        "2025_week12_008": {
+          "home_impact": 0.9288319595517068,
+          "away_impact": 0.9368704952592091
+        },
+        "2025_week12_009": {
+          "home_impact": 0.9868289371453469,
+          "away_impact": 0.9707575756040553
+        },
+        "2025_week12_010": {
+          "home_impact": 0.9151112534249475,
+          "away_impact": 0.9823864053191738
+        },
+        "2025_week12_011": {
+          "home_impact": 0.9047269499309954,
+          "away_impact": 0.9288985825135558
+        },
+        "2025_week12_012": {
+          "home_impact": 0.9690469453440564,
+          "away_impact": 0.9937791600781221
+        },
+        "2025_week12_013": {
+          "home_impact": 0.9975504195270607,
+          "away_impact": 0.9204409887136861
+        },
+        "2025_week12_014": {
+          "home_impact": 0.9180548190671806,
+          "away_impact": 0.9923236025429494
+        },
+        "2025_week12_015": {
+          "home_impact": 0.9826065343439262,
+          "away_impact": 0.9743312542136453
+        }
+      },
+      "playoff_implications": {
+        "2025_week12_001": {
+          "implications": "Medium"
+        },
+        "2025_week12_002": {
+          "implications": "High"
+        },
+        "2025_week12_003": {
+          "implications": "Medium"
+        },
+        "2025_week12_004": {
+          "implications": "High"
+        },
+        "2025_week12_005": {
+          "implications": "High"
+        },
+        "2025_week12_006": {
+          "implications": "High"
+        },
+        "2025_week12_007": {
+          "implications": "High"
+        },
+        "2025_week12_008": {
+          "implications": "High"
+        },
+        "2025_week12_009": {
+          "implications": "High"
+        },
+        "2025_week12_010": {
+          "implications": "High"
+        },
+        "2025_week12_011": {
+          "implications": "Low"
+        },
+        "2025_week12_012": {
+          "implications": "Medium"
+        },
+        "2025_week12_013": {
+          "implications": "High"
+        },
+        "2025_week12_014": {
+          "implications": "High"
+        },
+        "2025_week12_015": {
+          "implications": "High"
+        }
+      },
+      "rivalry_factors": {
+        "2025_week12_001": {
+          "intensity": 1.4334112551059173,
+          "historical_significance": 1.010581406950156
+        },
+        "2025_week12_002": {
+          "intensity": 1.4540845390666772,
+          "historical_significance": 0.9155379551195899
+        },
+        "2025_week12_003": {
+          "intensity": 1.0004381816031336,
+          "historical_significance": 1.0950249708797541
+        },
+        "2025_week12_004": {
+          "intensity": 1.3387709053572303,
+          "historical_significance": 0.8445982845005269
+        },
+        "2025_week12_005": {
+          "intensity": 1.1971054456763763,
+          "historical_significance": 1.144321131224368
+        },
+        "2025_week12_006": {
+          "intensity": 1.3104245531007461,
+          "historical_significance": 1.050945006576858
+        },
+        "2025_week12_007": {
+          "intensity": 1.3297538584884065,
+          "historical_significance": 1.1373115829941587
+        },
+        "2025_week12_008": {
+          "intensity": 1.2755116750253237,
+          "historical_significance": 1.0687110241476914
+        },
+        "2025_week12_009": {
+          "intensity": 1.4958444562084001,
+          "historical_significance": 1.151408217905978
+        },
+        "2025_week12_010": {
+          "intensity": 1.1097421707174036,
+          "historical_significance": 1.044267131299844
+        },
+        "2025_week12_011": {
+          "intensity": 1.022827590518228,
+          "historical_significance": 1.1333131483780936
+        },
+        "2025_week12_012": {
+          "intensity": 1.3643546755147935,
+          "historical_significance": 1.1921588398722567
+        },
+        "2025_week12_013": {
+          "intensity": 1.0281472291081064,
+          "historical_significance": 0.9055409299956753
+        },
+        "2025_week12_014": {
+          "intensity": 1.094343947392763,
+          "historical_significance": 0.8134814980251117
+        },
+        "2025_week12_015": {
+          "intensity": 1.4491682605182792,
+          "historical_significance": 0.9765416539647895
+        }
+      }
+    },
+    "advanced_stats": {
+      "2025_week12_001": {
+        "pace_prediction": {
+          "plays_per_game": 146,
+          "tempo": "Slow"
+        },
+        "scoring_probability": 0.5346747741360632,
+        "turnover_projection": {
+          "home_turnovers": 3,
+          "away_turnovers": 3
+        },
+        "explosive_play_probability": 0.20270260492974845,
+        "third_down_efficiency_projection": {
+          "home_rate": 0.4513165765273205,
+          "away_rate": 0.46626424331652006
+        },
+        "red_zone_efficiency_projection": {
+          "home_rate": 0.7914567626691628,
+          "away_rate": 0.767428213520191
+        },
+        "time_of_possession_prediction": {
+          "home_minutes": 28,
+          "away_minutes": 28
+        },
+        "penalty_projection": {
+          "home_penalties": 5,
+          "away_penalties": 11
+        },
+        "sack_projection": {
+          "home_sacks": 1,
+          "away_sacks": 5
+        },
+        "big_play_projection": {
+          "home_big_plays": 6,
+          "away_big_plays": 4
+        }
+      },
+      "2025_week12_002": {
+        "pace_prediction": {
+          "plays_per_game": 158,
+          "tempo": "Fast"
+        },
+        "scoring_probability": 0.4667496218128647,
+        "turnover_projection": {
+          "home_turnovers": 0,
+          "away_turnovers": 2
+        },
+        "explosive_play_probability": 0.2021876614482388,
+        "third_down_efficiency_projection": {
+          "home_rate": 0.37645988432888816,
+          "away_rate": 0.4109405804431686
+        },
+        "red_zone_efficiency_projection": {
+          "home_rate": 0.8295540440705973,
+          "away_rate": 0.7506796377479618
+        },
+        "time_of_possession_prediction": {
+          "home_minutes": 34,
+          "away_minutes": 26
+        },
+        "penalty_projection": {
+          "home_penalties": 5,
+          "away_penalties": 12
+        },
+        "sack_projection": {
+          "home_sacks": 1,
+          "away_sacks": 6
+        },
+        "big_play_projection": {
+          "home_big_plays": 4,
+          "away_big_plays": 8
+        }
+      },
+      "2025_week12_003": {
+        "pace_prediction": {
+          "plays_per_game": 152,
+          "tempo": "Medium"
+        },
+        "scoring_probability": 0.4228821839087828,
+        "turnover_projection": {
+          "home_turnovers": 1,
+          "away_turnovers": 3
+        },
+        "explosive_play_probability": 0.292363867756367,
+        "third_down_efficiency_projection": {
+          "home_rate": 0.3543047908155968,
+          "away_rate": 0.45895921973819287
+        },
+        "red_zone_efficiency_projection": {
+          "home_rate": 0.7563449609201084,
+          "away_rate": 0.8724681503531655
+        },
+        "time_of_possession_prediction": {
+          "home_minutes": 29,
+          "away_minutes": 30
+        },
+        "penalty_projection": {
+          "home_penalties": 7,
+          "away_penalties": 7
+        },
+        "sack_projection": {
+          "home_sacks": 1,
+          "away_sacks": 5
+        },
+        "big_play_projection": {
+          "home_big_plays": 5,
+          "away_big_plays": 5
+        }
+      },
+      "2025_week12_004": {
+        "pace_prediction": {
+          "plays_per_game": 179,
+          "tempo": "Fast"
+        },
+        "scoring_probability": 0.5648413934496993,
+        "turnover_projection": {
+          "home_turnovers": 2,
+          "away_turnovers": 0
+        },
+        "explosive_play_probability": 0.10076673036534155,
+        "third_down_efficiency_projection": {
+          "home_rate": 0.4573273855987929,
+          "away_rate": 0.37445363428622996
+        },
+        "red_zone_efficiency_projection": {
+          "home_rate": 0.8465628237353475,
+          "away_rate": 0.8558096050841157
+        },
+        "time_of_possession_prediction": {
+          "home_minutes": 34,
+          "away_minutes": 25
+        },
+        "penalty_projection": {
+          "home_penalties": 8,
+          "away_penalties": 11
+        },
+        "sack_projection": {
+          "home_sacks": 3,
+          "away_sacks": 2
+        },
+        "big_play_projection": {
+          "home_big_plays": 5,
+          "away_big_plays": 6
+        }
+      },
+      "2025_week12_005": {
+        "pace_prediction": {
+          "plays_per_game": 158,
+          "tempo": "Medium"
+        },
+        "scoring_probability": 0.47664473847889155,
+        "turnover_projection": {
+          "home_turnovers": 2,
+          "away_turnovers": 2
+        },
+        "explosive_play_probability": 0.17118715702136436,
+        "third_down_efficiency_projection": {
+          "home_rate": 0.367807342063557,
+          "away_rate": 0.41754864393014807
+        },
+        "red_zone_efficiency_projection": {
+          "home_rate": 0.885257654658358,
+          "away_rate": 0.8576094689124385
+        },
+        "time_of_possession_prediction": {
+          "home_minutes": 33,
+          "away_minutes": 25
+        },
+        "penalty_projection": {
+          "home_penalties": 6,
+          "away_penalties": 6
+        },
+        "sack_projection": {
+          "home_sacks": 1,
+          "away_sacks": 2
+        },
+        "big_play_projection": {
+          "home_big_plays": 7,
+          "away_big_plays": 7
+        }
+      },
+      "2025_week12_006": {
+        "pace_prediction": {
+          "plays_per_game": 141,
+          "tempo": "Fast"
+        },
+        "scoring_probability": 0.5614805287059297,
+        "turnover_projection": {
+          "home_turnovers": 2,
+          "away_turnovers": 0
+        },
+        "explosive_play_probability": 0.29749050031879976,
+        "third_down_efficiency_projection": {
+          "home_rate": 0.4571049930924187,
+          "away_rate": 0.41216921478732693
+        },
+        "red_zone_efficiency_projection": {
+          "home_rate": 0.8458587064410056,
+          "away_rate": 0.8993152345579971
+        },
+        "time_of_possession_prediction": {
+          "home_minutes": 29,
+          "away_minutes": 25
+        },
+        "penalty_projection": {
+          "home_penalties": 12,
+          "away_penalties": 9
+        },
+        "sack_projection": {
+          "home_sacks": 2,
+          "away_sacks": 2
+        },
+        "big_play_projection": {
+          "home_big_plays": 5,
+          "away_big_plays": 8
+        }
+      },
+      "2025_week12_007": {
+        "pace_prediction": {
+          "plays_per_game": 147,
+          "tempo": "Medium"
+        },
+        "scoring_probability": 0.41415141392643356,
+        "turnover_projection": {
+          "home_turnovers": 0,
+          "away_turnovers": 3
+        },
+        "explosive_play_probability": 0.27281416278557324,
+        "third_down_efficiency_projection": {
+          "home_rate": 0.4716399097512457,
+          "away_rate": 0.44266933569274747
+        },
+        "red_zone_efficiency_projection": {
+          "home_rate": 0.8791800956717128,
+          "away_rate": 0.8502205905994176
+        },
+        "time_of_possession_prediction": {
+          "home_minutes": 32,
+          "away_minutes": 26
+        },
+        "penalty_projection": {
+          "home_penalties": 11,
+          "away_penalties": 10
+        },
+        "sack_projection": {
+          "home_sacks": 3,
+          "away_sacks": 2
+        },
+        "big_play_projection": {
+          "home_big_plays": 6,
+          "away_big_plays": 3
+        }
+      },
+      "2025_week12_008": {
+        "pace_prediction": {
+          "plays_per_game": 166,
+          "tempo": "Medium"
+        },
+        "scoring_probability": 0.556984056720597,
+        "turnover_projection": {
+          "home_turnovers": 2,
+          "away_turnovers": 2
+        },
+        "explosive_play_probability": 0.21412621155496414,
+        "third_down_efficiency_projection": {
+          "home_rate": 0.4280950981545158,
+          "away_rate": 0.4030218722391863
+        },
+        "red_zone_efficiency_projection": {
+          "home_rate": 0.8771329795779985,
+          "away_rate": 0.7392090121510625
+        },
+        "time_of_possession_prediction": {
+          "home_minutes": 28,
+          "away_minutes": 32
+        },
+        "penalty_projection": {
+          "home_penalties": 12,
+          "away_penalties": 8
+        },
+        "sack_projection": {
+          "home_sacks": 3,
+          "away_sacks": 5
+        },
+        "big_play_projection": {
+          "home_big_plays": 5,
+          "away_big_plays": 5
+        }
+      },
+      "2025_week12_009": {
+        "pace_prediction": {
+          "plays_per_game": 169,
+          "tempo": "Medium"
+        },
+        "scoring_probability": 0.6928818050542441,
+        "turnover_projection": {
+          "home_turnovers": 1,
+          "away_turnovers": 0
+        },
+        "explosive_play_probability": 0.25068948433477156,
+        "third_down_efficiency_projection": {
+          "home_rate": 0.4843079492315362,
+          "away_rate": 0.4709869129830831
+        },
+        "red_zone_efficiency_projection": {
+          "home_rate": 0.8521697149633201,
+          "away_rate": 0.7858226479982917
+        },
+        "time_of_possession_prediction": {
+          "home_minutes": 30,
+          "away_minutes": 27
+        },
+        "penalty_projection": {
+          "home_penalties": 11,
+          "away_penalties": 9
+        },
+        "sack_projection": {
+          "home_sacks": 1,
+          "away_sacks": 2
+        },
+        "big_play_projection": {
+          "home_big_plays": 8,
+          "away_big_plays": 6
+        }
+      },
+      "2025_week12_010": {
+        "pace_prediction": {
+          "plays_per_game": 154,
+          "tempo": "Slow"
+        },
+        "scoring_probability": 0.5429325865383876,
+        "turnover_projection": {
+          "home_turnovers": 3,
+          "away_turnovers": 3
+        },
+        "explosive_play_probability": 0.16233149427498555,
+        "third_down_efficiency_projection": {
+          "home_rate": 0.40873724021460867,
+          "away_rate": 0.3679368858301825
+        },
+        "red_zone_efficiency_projection": {
+          "home_rate": 0.8997197673706947,
+          "away_rate": 0.7465280958719432
+        },
+        "time_of_possession_prediction": {
+          "home_minutes": 34,
+          "away_minutes": 31
+        },
+        "penalty_projection": {
+          "home_penalties": 11,
+          "away_penalties": 7
+        },
+        "sack_projection": {
+          "home_sacks": 1,
+          "away_sacks": 5
+        },
+        "big_play_projection": {
+          "home_big_plays": 8,
+          "away_big_plays": 4
+        }
+      },
+      "2025_week12_011": {
+        "pace_prediction": {
+          "plays_per_game": 143,
+          "tempo": "Fast"
+        },
+        "scoring_probability": 0.46429661242247233,
+        "turnover_projection": {
+          "home_turnovers": 1,
+          "away_turnovers": 2
+        },
+        "explosive_play_probability": 0.25929970567837735,
+        "third_down_efficiency_projection": {
+          "home_rate": 0.37214190478674136,
+          "away_rate": 0.35785669121118097
+        },
+        "red_zone_efficiency_projection": {
+          "home_rate": 0.7371936990464378,
+          "away_rate": 0.7562299614303141
+        },
+        "time_of_possession_prediction": {
+          "home_minutes": 33,
+          "away_minutes": 29
+        },
+        "penalty_projection": {
+          "home_penalties": 8,
+          "away_penalties": 9
+        },
+        "sack_projection": {
+          "home_sacks": 2,
+          "away_sacks": 5
+        },
+        "big_play_projection": {
+          "home_big_plays": 8,
+          "away_big_plays": 6
+        }
+      },
+      "2025_week12_012": {
+        "pace_prediction": {
+          "plays_per_game": 145,
+          "tempo": "Slow"
+        },
+        "scoring_probability": 0.6440339721002589,
+        "turnover_projection": {
+          "home_turnovers": 2,
+          "away_turnovers": 0
+        },
+        "explosive_play_probability": 0.11967582526918373,
+        "third_down_efficiency_projection": {
+          "home_rate": 0.4338823725703058,
+          "away_rate": 0.4289440462338605
+        },
+        "red_zone_efficiency_projection": {
+          "home_rate": 0.7515755619602023,
+          "away_rate": 0.8266337821165448
+        },
+        "time_of_possession_prediction": {
+          "home_minutes": 30,
+          "away_minutes": 25
+        },
+        "penalty_projection": {
+          "home_penalties": 7,
+          "away_penalties": 5
+        },
+        "sack_projection": {
+          "home_sacks": 2,
+          "away_sacks": 3
+        },
+        "big_play_projection": {
+          "home_big_plays": 3,
+          "away_big_plays": 4
+        }
+      },
+      "2025_week12_013": {
+        "pace_prediction": {
+          "plays_per_game": 170,
+          "tempo": "Fast"
+        },
+        "scoring_probability": 0.7398469269390573,
+        "turnover_projection": {
+          "home_turnovers": 3,
+          "away_turnovers": 0
+        },
+        "explosive_play_probability": 0.1395468751945083,
+        "third_down_efficiency_projection": {
+          "home_rate": 0.49617576077176995,
+          "away_rate": 0.3542611577365383
+        },
+        "red_zone_efficiency_projection": {
+          "home_rate": 0.7788731658082387,
+          "away_rate": 0.8258089958727521
+        },
+        "time_of_possession_prediction": {
+          "home_minutes": 30,
+          "away_minutes": 29
+        },
+        "penalty_projection": {
+          "home_penalties": 12,
+          "away_penalties": 9
+        },
+        "sack_projection": {
+          "home_sacks": 6,
+          "away_sacks": 2
+        },
+        "big_play_projection": {
+          "home_big_plays": 3,
+          "away_big_plays": 4
+        }
+      },
+      "2025_week12_014": {
+        "pace_prediction": {
+          "plays_per_game": 176,
+          "tempo": "Fast"
+        },
+        "scoring_probability": 0.7047117689586451,
+        "turnover_projection": {
+          "home_turnovers": 3,
+          "away_turnovers": 1
+        },
+        "explosive_play_probability": 0.18806044438703617,
+        "third_down_efficiency_projection": {
+          "home_rate": 0.4316191115649425,
+          "away_rate": 0.4876520111729179
+        },
+        "red_zone_efficiency_projection": {
+          "home_rate": 0.8488584894524868,
+          "away_rate": 0.8422645744476875
+        },
+        "time_of_possession_prediction": {
+          "home_minutes": 28,
+          "away_minutes": 25
+        },
+        "penalty_projection": {
+          "home_penalties": 6,
+          "away_penalties": 10
+        },
+        "sack_projection": {
+          "home_sacks": 5,
+          "away_sacks": 2
+        },
+        "big_play_projection": {
+          "home_big_plays": 8,
+          "away_big_plays": 5
+        }
+      },
+      "2025_week12_015": {
+        "pace_prediction": {
+          "plays_per_game": 159,
+          "tempo": "Fast"
+        },
+        "scoring_probability": 0.6203009960623271,
+        "turnover_projection": {
+          "home_turnovers": 0,
+          "away_turnovers": 2
+        },
+        "explosive_play_probability": 0.19328244868828945,
+        "third_down_efficiency_projection": {
+          "home_rate": 0.3575594999229674,
+          "away_rate": 0.451208908540379
+        },
+        "red_zone_efficiency_projection": {
+          "home_rate": 0.7291889258830323,
+          "away_rate": 0.8616706488718057
+        },
+        "time_of_possession_prediction": {
+          "home_minutes": 31,
+          "away_minutes": 25
+        },
+        "penalty_projection": {
+          "home_penalties": 5,
+          "away_penalties": 5
+        },
+        "sack_projection": {
+          "home_sacks": 4,
+          "away_sacks": 1
+        },
+        "big_play_projection": {
+          "home_big_plays": 8,
+          "away_big_plays": 7
+        }
+      }
+    },
+    "recommendations": [
+      {
+        "game_id": "2025_week12_001",
+        "home_team": "Georgia",
+        "away_team": "Tennessee",
+        "winner_recommendation": "Tennessee",
+        "confidence_level": 0.80439602252629,
+        "score_prediction": {
+          "home_score": 28,
+          "away_score": 26
+        },
+        "spread_analysis": {
+          "predicted_spread": 6.333730572098105,
+          "recommendation": "Away"
+        },
+        "over_under_analysis": {
+          "predicted_total": 51.808284735400754,
+          "recommendation": "Under"
+        },
+        "betting_recommendations": [
+          "Under Total",
+          "Over Total"
+        ],
+        "upset_probability": 0.1433417881530832,
+        "key_factors": [
+          "Turnover margin",
+          "Red zone",
+          "Third downs"
+        ],
+        "strategic_advantages": {
+          "home": [
+            "Pass defense",
+            "Run game"
+          ],
+          "away": [
+            "Pass game",
+            "Coaching"
+          ]
+        },
+        "game_script_prediction": "Blowout"
+      },
+      {
+        "game_id": "2025_week12_002",
+        "home_team": "Ohio State",
+        "away_team": "Michigan",
+        "winner_recommendation": "Michigan",
+        "confidence_level": 0.7372107711647427,
+        "score_prediction": {
+          "home_score": 21,
+          "away_score": 18
+        },
+        "spread_analysis": {
+          "predicted_spread": 12.58750290890736,
+          "recommendation": "Away"
+        },
+        "over_under_analysis": {
+          "predicted_total": 51.30896462224861,
+          "recommendation": "Under"
+        },
+        "betting_recommendations": [
+          "Away ML",
+          "Under Total"
+        ],
+        "upset_probability": 0.2572499215177857,
+        "key_factors": [
+          "Third downs",
+          "Special teams",
+          "Red zone"
+        ],
+        "strategic_advantages": {
+          "home": [
+            "Home field",
+            "Pass defense"
+          ],
+          "away": [
+            "Run defense",
+            "Pass game"
+          ]
+        },
+        "game_script_prediction": "Close game"
+      },
+      {
+        "game_id": "2025_week12_003",
+        "home_team": "Texas",
+        "away_team": "LSU",
+        "winner_recommendation": "Texas",
+        "confidence_level": 0.7555182924736137,
+        "score_prediction": {
+          "home_score": 45,
+          "away_score": 35
+        },
+        "spread_analysis": {
+          "predicted_spread": -10.366588811188146,
+          "recommendation": "Home"
+        },
+        "over_under_analysis": {
+          "predicted_total": 62.20477105743457,
+          "recommendation": "Over"
+        },
+        "betting_recommendations": [
+          "Over Total",
+          "Away ML"
+        ],
+        "upset_probability": 0.20573962446294225,
+        "key_factors": [
+          "Third downs",
+          "Special teams",
+          "Red zone"
+        ],
+        "strategic_advantages": {
+          "home": [
+            "Run game",
+            "Pass defense"
+          ],
+          "away": [
+            "Pass game",
+            "Run defense"
+          ]
+        },
+        "game_script_prediction": "Blowout"
+      },
+      {
+        "game_id": "2025_week12_004",
+        "home_team": "Oregon",
+        "away_team": "Washington",
+        "winner_recommendation": "Washington",
+        "confidence_level": 0.6470103240427159,
+        "score_prediction": {
+          "home_score": 22,
+          "away_score": 21
+        },
+        "spread_analysis": {
+          "predicted_spread": 13.66740164405045,
+          "recommendation": "Away"
+        },
+        "over_under_analysis": {
+          "predicted_total": 59.92088909078634,
+          "recommendation": "Over"
+        },
+        "betting_recommendations": [
+          "Prop Bet",
+          "Away ML"
+        ],
+        "upset_probability": 0.3538257274321195,
+        "key_factors": [
+          "Red zone",
+          "Turnover margin",
+          "Special teams"
+        ],
+        "strategic_advantages": {
+          "home": [
+            "Pass defense",
+            "Home field"
+          ],
+          "away": [
+            "Run defense",
+            "Pass game"
+          ]
+        },
+        "game_script_prediction": "High-scoring"
+      },
+      {
+        "game_id": "2025_week12_005",
+        "home_team": "Florida State",
+        "away_team": "Miami",
+        "winner_recommendation": "Florida State",
+        "confidence_level": 0.6734779955641603,
+        "score_prediction": {
+          "home_score": 28,
+          "away_score": 33
+        },
+        "spread_analysis": {
+          "predicted_spread": -9.772216796451321,
+          "recommendation": "Home"
+        },
+        "over_under_analysis": {
+          "predicted_total": 46.68782919389754,
+          "recommendation": "Under"
+        },
+        "betting_recommendations": [
+          "Away ML",
+          "Under Total"
+        ],
+        "upset_probability": 0.11047837034794972,
+        "key_factors": [
+          "Third downs",
+          "Special teams",
+          "Red zone"
+        ],
+        "strategic_advantages": {
+          "home": [
+            "Pass defense",
+            "Run game"
+          ],
+          "away": [
+            "Run defense",
+            "Pass game"
+          ]
+        },
+        "game_script_prediction": "Defensive battle"
+      },
+      {
+        "game_id": "2025_week12_006",
+        "home_team": "Kansas State",
+        "away_team": "TCU",
+        "winner_recommendation": "TCU",
+        "confidence_level": 0.8088404231518194,
+        "score_prediction": {
+          "home_score": 25,
+          "away_score": 31
+        },
+        "spread_analysis": {
+          "predicted_spread": 2.152969850469404,
+          "recommendation": "Away"
+        },
+        "over_under_analysis": {
+          "predicted_total": 69.10875181913255,
+          "recommendation": "Over"
+        },
+        "betting_recommendations": [
+          "Over Total",
+          "Home ATS"
+        ],
+        "upset_probability": 0.2127200978826348,
+        "key_factors": [
+          "Turnover margin",
+          "Red zone",
+          "Special teams"
+        ],
+        "strategic_advantages": {
+          "home": [
+            "Run game",
+            "Pass defense"
+          ],
+          "away": [
+            "Pass game",
+            "Run defense"
+          ]
+        },
+        "game_script_prediction": "Defensive battle"
+      },
+      {
+        "game_id": "2025_week12_007",
+        "home_team": "Penn State",
+        "away_team": "Michigan State",
+        "winner_recommendation": "Penn State",
+        "confidence_level": 0.663540816417147,
+        "score_prediction": {
+          "home_score": 28,
+          "away_score": 20
+        },
+        "spread_analysis": {
+          "predicted_spread": 4.98020203425585,
+          "recommendation": "Away"
+        },
+        "over_under_analysis": {
+          "predicted_total": 57.49109021698486,
+          "recommendation": "Over"
+        },
+        "betting_recommendations": [
+          "Over Total",
+          "Home ATS"
+        ],
+        "upset_probability": 0.25716981387353316,
+        "key_factors": [
+          "Turnover margin",
+          "Red zone",
+          "Third downs"
+        ],
+        "strategic_advantages": {
+          "home": [
+            "Home field",
+            "Pass defense"
+          ],
+          "away": [
+            "Pass game",
+            "Run defense"
+          ]
+        },
+        "game_script_prediction": "Blowout"
+      },
+      {
+        "game_id": "2025_week12_008",
+        "home_team": "Alabama",
+        "away_team": "Auburn",
+        "winner_recommendation": "Alabama",
+        "confidence_level": 0.8267056222739465,
+        "score_prediction": {
+          "home_score": 20,
+          "away_score": 31
+        },
+        "spread_analysis": {
+          "predicted_spread": -11.294508111615638,
+          "recommendation": "Home"
+        },
+        "over_under_analysis": {
+          "predicted_total": 67.11305733482007,
+          "recommendation": "Over"
+        },
+        "betting_recommendations": [
+          "Over Total",
+          "Under Total"
+        ],
+        "upset_probability": 0.27028580501267974,
+        "key_factors": [
+          "Third downs",
+          "Special teams",
+          "Red zone"
+        ],
+        "strategic_advantages": {
+          "home": [
+            "Pass defense",
+            "Home field"
+          ],
+          "away": [
+            "Run defense",
+            "Coaching"
+          ]
+        },
+        "game_script_prediction": "Close game"
+      },
+      {
+        "game_id": "2025_week12_009",
+        "home_team": "Ole Miss",
+        "away_team": "Missouri",
+        "winner_recommendation": "Ole Miss",
+        "confidence_level": 0.6503886960370211,
+        "score_prediction": {
+          "home_score": 37,
+          "away_score": 30
+        },
+        "spread_analysis": {
+          "predicted_spread": 12.213867293005627,
+          "recommendation": "Away"
+        },
+        "over_under_analysis": {
+          "predicted_total": 65.53314851573248,
+          "recommendation": "Over"
+        },
+        "betting_recommendations": [
+          "Under Total",
+          "Prop Bet"
+        ],
+        "upset_probability": 0.163159231896209,
+        "key_factors": [
+          "Third downs",
+          "Red zone",
+          "Turnover margin"
+        ],
+        "strategic_advantages": {
+          "home": [
+            "Home field",
+            "Run game"
+          ],
+          "away": [
+            "Coaching",
+            "Run defense"
+          ]
+        },
+        "game_script_prediction": "Defensive battle"
+      },
+      {
+        "game_id": "2025_week12_010",
+        "home_team": "USC",
+        "away_team": "UCLA",
+        "winner_recommendation": "USC",
+        "confidence_level": 0.6102475799193919,
+        "score_prediction": {
+          "home_score": 39,
+          "away_score": 18
+        },
+        "spread_analysis": {
+          "predicted_spread": 0.8723919913159435,
+          "recommendation": "Away"
+        },
+        "over_under_analysis": {
+          "predicted_total": 47.96201972481051,
+          "recommendation": "Under"
+        },
+        "betting_recommendations": [
+          "Prop Bet",
+          "Under Total"
+        ],
+        "upset_probability": 0.2973839612553722,
+        "key_factors": [
+          "Third downs",
+          "Red zone",
+          "Turnover margin"
+        ],
+        "strategic_advantages": {
+          "home": [
+            "Home field",
+            "Run game"
+          ],
+          "away": [
+            "Run defense",
+            "Pass game"
+          ]
+        },
+        "game_script_prediction": "High-scoring"
+      },
+      {
+        "game_id": "2025_week12_011",
+        "home_team": "Notre Dame",
+        "away_team": "Navy",
+        "winner_recommendation": "Navy",
+        "confidence_level": 0.8142211032016256,
+        "score_prediction": {
+          "home_score": 29,
+          "away_score": 40
+        },
+        "spread_analysis": {
+          "predicted_spread": -3.0517878861937646,
+          "recommendation": "Home"
+        },
+        "over_under_analysis": {
+          "predicted_total": 52.855451618768285,
+          "recommendation": "Under"
+        },
+        "betting_recommendations": [
+          "Home ATS",
+          "Away ML"
+        ],
+        "upset_probability": 0.24188006339712662,
+        "key_factors": [
+          "Third downs",
+          "Special teams",
+          "Red zone"
+        ],
+        "strategic_advantages": {
+          "home": [
+            "Home field",
+            "Run game"
+          ],
+          "away": [
+            "Pass game",
+            "Coaching"
+          ]
+        },
+        "game_script_prediction": "Blowout"
+      },
+      {
+        "game_id": "2025_week12_012",
+        "home_team": "Utah",
+        "away_team": "Arizona",
+        "winner_recommendation": "Utah",
+        "confidence_level": 0.7948232529229149,
+        "score_prediction": {
+          "home_score": 31,
+          "away_score": 20
+        },
+        "spread_analysis": {
+          "predicted_spread": -2.6040652235205926,
+          "recommendation": "Home"
+        },
+        "over_under_analysis": {
+          "predicted_total": 47.656834167441836,
+          "recommendation": "Under"
+        },
+        "betting_recommendations": [
+          "Prop Bet",
+          "Over Total"
+        ],
+        "upset_probability": 0.31739128445725506,
+        "key_factors": [
+          "Special teams",
+          "Turnover margin",
+          "Third downs"
+        ],
+        "strategic_advantages": {
+          "home": [
+            "Home field",
+            "Pass defense"
+          ],
+          "away": [
+            "Coaching",
+            "Pass game"
+          ]
+        },
+        "game_script_prediction": "Defensive battle"
+      },
+      {
+        "game_id": "2025_week12_013",
+        "home_team": "Clemson",
+        "away_team": "North Carolina",
+        "winner_recommendation": "North Carolina",
+        "confidence_level": 0.8324146308050332,
+        "score_prediction": {
+          "home_score": 32,
+          "away_score": 27
+        },
+        "spread_analysis": {
+          "predicted_spread": -13.993161723526232,
+          "recommendation": "Home"
+        },
+        "over_under_analysis": {
+          "predicted_total": 64.7420518480836,
+          "recommendation": "Over"
+        },
+        "betting_recommendations": [
+          "Under Total",
+          "Home ATS"
+        ],
+        "upset_probability": 0.14528765606467597,
+        "key_factors": [
+          "Third downs",
+          "Special teams",
+          "Red zone"
+        ],
+        "strategic_advantages": {
+          "home": [
+            "Pass defense",
+            "Home field"
+          ],
+          "away": [
+            "Coaching",
+            "Run defense"
+          ]
+        },
+        "game_script_prediction": "Blowout"
+      },
+      {
+        "game_id": "2025_week12_014",
+        "home_team": "TCU",
+        "away_team": "Baylor",
+        "winner_recommendation": "TCU",
+        "confidence_level": 0.7579317904170847,
+        "score_prediction": {
+          "home_score": 29,
+          "away_score": 23
+        },
+        "spread_analysis": {
+          "predicted_spread": 3.0435238010444152,
+          "recommendation": "Away"
+        },
+        "over_under_analysis": {
+          "predicted_total": 61.489682396377546,
+          "recommendation": "Over"
+        },
+        "betting_recommendations": [
+          "Away ML",
+          "Over Total"
+        ],
+        "upset_probability": 0.3357456320644756,
+        "key_factors": [
+          "Third downs",
+          "Special teams",
+          "Red zone"
+        ],
+        "strategic_advantages": {
+          "home": [
+            "Pass defense",
+            "Run game"
+          ],
+          "away": [
+            "Coaching",
+            "Pass game"
+          ]
+        },
+        "game_script_prediction": "Defensive battle"
+      },
+      {
+        "game_id": "2025_week12_015",
+        "home_team": "Virginia Tech",
+        "away_team": "Virginia",
+        "winner_recommendation": "Virginia Tech",
+        "confidence_level": 0.7447217137765016,
+        "score_prediction": {
+          "home_score": 30,
+          "away_score": 36
+        },
+        "spread_analysis": {
+          "predicted_spread": -2.739879414388623,
+          "recommendation": "Home"
+        },
+        "over_under_analysis": {
+          "predicted_total": 49.21949380079256,
+          "recommendation": "Under"
+        },
+        "betting_recommendations": [
+          "Prop Bet",
+          "Away ML"
+        ],
+        "upset_probability": 0.37063813946213775,
+        "key_factors": [
+          "Third downs",
+          "Special teams",
+          "Red zone"
+        ],
+        "strategic_advantages": {
+          "home": [
+            "Run game",
+            "Pass defense"
+          ],
+          "away": [
+            "Run defense",
+            "Coaching"
+          ]
+        },
+        "game_script_prediction": "Blowout"
+      }
+    ]
+  }
+}

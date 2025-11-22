@@ -1,0 +1,14 @@
+# Script Ohio 2.0 - Production Dependencies
+# Production deployment with exact versions for reproducibility
+# NOTE: This file includes base requirements.txt (locked versions)
+# For Docker builds and production deployments
+
+# Include locked base requirements (exact versions from pip-compile)
+-r requirements.txt
+
+# NOTE: FastAPI/uvicorn/gunicorn removed - not currently used in codebase
+# If web API is needed in future, uncomment and add to requirements-prod.in:
+# fastapi==0.108.0
+# uvicorn[standard]==0.25.0
+# gunicorn==21.2.0
+
