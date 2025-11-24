@@ -1,0 +1,27 @@
+{
+  "coverage_threshold": 90,
+  "bundle_size_limit_kb": 244,
+  "security_thresholds": {
+    "high": 0,
+    "medium": 5,
+    "low": 10
+  },
+  "protected_branches": [
+    "main",
+    "develop",
+    "production",
+    "master"
+  ],
+  "validation_timeouts": {
+    "build": 300,
+    "tests": 600,
+    "security": 120,
+    "performance": 60
+  },
+  "project_structure": {
+    "python_paths": ["agents/", "src/", "scripts/", "tests/"],
+    "frontend_path": "web_app/",
+    "frontend_dist": "web_app/dist/"
+  }
+}
+
