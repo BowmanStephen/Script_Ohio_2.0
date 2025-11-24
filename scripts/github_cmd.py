@@ -174,20 +174,57 @@ def print_validation_summary(results: Dict[str, Any]) -> None:
         if key in results:
             status = "✅ PASS" if results[key].get('success', False) else "❌ FAIL"
             print(f"{label:.<50} {status}")
-            if not results[key].get('success', False) and 'error' in results[key]:
-                print(f"  Error: {results[key]['error']}")
+            
+            # Print detailed information
+            if not results[key].get('success', False):
+                if 'error' in results[key]:
+                    print(f"  Error: {results[key]['error']}")
+                if 'errors' in results[key] and results[key]['errors']:
+                    for err in results[key]['errors'][:3]:  # Show first 3 errors
+                        print(f"  - {err}")
+                if 'message' in results[key]:
+                    print(f"  {results[key]['message']}")
+            else:
+                if 'message' in results[key]:
+                    print(f"  {results[key]['message']}")
     
-    if 'coverage' in results.get('tests', {}):
+    # Coverage information
+    if 'coverage' in results:
+        coverage = results['coverage']
+        threshold = results.get('tests', {}).get('threshold', 90)
+        status = "✅" if coverage >= threshold else "❌"
+        print(f"\nTest Coverage: {coverage:.1f}% (threshold: {threshold}%) {status}")
+    elif 'tests' in results and 'coverage' in results['tests']:
         coverage = results['tests']['coverage']
         threshold = results['tests'].get('threshold', 90)
         status = "✅" if coverage >= threshold else "❌"
         print(f"\nTest Coverage: {coverage:.1f}% (threshold: {threshold}%) {status}")
     
+    # Security vulnerabilities
+    if 'security' in results and 'vulnerabilities' in results['security']:
+        vulns = results['security']['vulnerabilities']
+        if sum(vulns.values()) > 0:
+            print(f"\nSecurity Vulnerabilities:")
+            print(f"  High: {vulns.get('high', 0)}")
+            print(f"  Medium: {vulns.get('medium', 0)}")
+            print(f"  Low: {vulns.get('low', 0)}")
+    
+    # Overall status
+    overall_status = "✅ ALL CHECKS PASSED" if results.get('overall_success', False) else "❌ SOME CHECKS FAILED"
+    print(f"\n{overall_status}")
     print("=" * 70)
 
 
 def main():
     """Main entry point"""
+    import logging
+    
+    # Configure logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(levelname)s: %(message)s'
+    )
+    
     parser = argparse.ArgumentParser(
         description="GitHub Safe Operations CLI - Safe Git operations with comprehensive validation",
         formatter_class=argparse.RawDescriptionHelpFormatter,

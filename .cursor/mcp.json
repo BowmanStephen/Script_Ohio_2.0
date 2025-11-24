@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "vercel": {
+      "url": "https://mcp.vercel.com"
+    },
+    "github": {
+      "command": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/.cursor/bin/github-mcp-server",
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      },
+      "description": "GitHub MCP Server - Official GitHub integration for repositories, issues, pull requests, and more"
+    }
+  }
+}

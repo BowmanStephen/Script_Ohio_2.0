@@ -29,7 +29,13 @@ export const ValueOpportunitiesView: React.FC<ValueOpportunitiesViewProps> = ({ 
                                 </div>
                                 <div className="flex justify-between items-center mt-3 p-2 bg-background rounded border border-border">
                                     <span className="text-sm text-muted-foreground">Model Edge</span>
-                                    <span className="font-bold text-primary">+{game.prediction?.lineValue} pts</span>
+                                    {(() => {
+                                        const lineValue = parseFloat(game.prediction?.lineValue || '0');
+                                        const sign = lineValue >= 0 ? '+' : '';
+                                        return (
+                                            <span className="font-bold text-primary">{sign}{lineValue.toFixed(1)} pts</span>
+                                        );
+                                    })()}
                                 </div>
                             </div>
                         ))

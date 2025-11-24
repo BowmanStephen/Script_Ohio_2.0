@@ -12,7 +12,10 @@ import logging
 from typing import Dict, Any
 from pathlib import Path
 
-from ..github_operations.git_utils import GitUtils
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from github_operations.git_utils import GitUtils
 
 logger = logging.getLogger(__name__)
 

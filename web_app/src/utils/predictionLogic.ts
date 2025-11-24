@@ -70,11 +70,11 @@ export const predictGame = (game: Game, modelType: string, weights: FeatureWeigh
         );
     } else if (modelType === 'FastAI Neural Net') {
         // Neural Net: Complex non-linear relationships
-        // weights are normalized (0-1), so multiply directly
-        const h1 = Math.tanh((home_elo - away_elo) / FASTAI_COEFFICIENTS.ELO_NORMALIZATION * weights.elo);
-        const h2 = Math.tanh((home_talent - away_talent) / FASTAI_COEFFICIENTS.TALENT_NORMALIZATION * weights.talent);
-        const h3 = Math.tanh((home_adjusted_epa - away_adjusted_epa) * FASTAI_COEFFICIENTS.EPA * tempoMultiplier * weights.epa);
-        const h4 = Math.tanh((home_adjusted_explosiveness - away_adjusted_explosiveness) * FASTAI_COEFFICIENTS.EXPLOSIVENESS * weights.success);
+        // Apply tanh transformation first, then apply weights (consistent with XGBoost pattern)
+        const h1 = Math.tanh((home_elo - away_elo) / FASTAI_COEFFICIENTS.ELO_NORMALIZATION) * weights.elo;
+        const h2 = Math.tanh((home_talent - away_talent) / FASTAI_COEFFICIENTS.TALENT_NORMALIZATION) * weights.talent;
+        const h3 = Math.tanh((home_adjusted_epa - away_adjusted_epa) * FASTAI_COEFFICIENTS.EPA * tempoMultiplier) * weights.epa;
+        const h4 = Math.tanh((home_adjusted_explosiveness - away_adjusted_explosiveness) * FASTAI_COEFFICIENTS.EXPLOSIVENESS) * weights.success;
 
         predictedMargin = (h1 * FASTAI_COEFFICIENTS.ELO_WEIGHT + h2 * FASTAI_COEFFICIENTS.TALENT_WEIGHT + h3 * FASTAI_COEFFICIENTS.EPA_WEIGHT + h4 * FASTAI_COEFFICIENTS.EXPLOSIVENESS_WEIGHT);
     } else {
@@ -83,10 +83,15 @@ export const predictGame = (game: Game, modelType: string, weights: FeatureWeigh
         const xgboost = parseFloat(predictGame(game, 'XGBoost', weights, tempoAdjusted).predictedMargin);
         const fastai = parseFloat(predictGame(game, 'FastAI Neural Net', weights, tempoAdjusted).predictedMargin);
 
+        // Normalize weights to sum to 1.0 to ensure proper ensemble weighting
+        const totalWeight = modelPerformance.ridge.weight + 
+                           modelPerformance.xgboost.weight + 
+                           modelPerformance.fastai.weight;
+
         predictedMargin = (
-            ridge * modelPerformance.ridge.weight +
-            xgboost * modelPerformance.xgboost.weight +
-            fastai * modelPerformance.fastai.weight
+            ridge * modelPerformance.ridge.weight / totalWeight +
+            xgboost * modelPerformance.xgboost.weight / totalWeight +
+            fastai * modelPerformance.fastai.weight / totalWeight
         );
     }
 
@@ -104,13 +109,30 @@ export const predictGame = (game: Game, modelType: string, weights: FeatureWeigh
         absLineValue > VALUE_THRESHOLDS.MODERATE ? 'Moderate Value' :
             absLineValue > VALUE_THRESHOLDS.SLIGHT ? 'Slight Value' : 'No Value';
 
+    // Determine suggested side with spread information for clarity
+    let suggestedSide: string;
+    if (Math.abs(lineValue) < 0.5) {
+        suggestedSide = 'Pass';
+    } else if (lineValue > 0) {
+        // Model thinks home will win by more than spread suggests
+        // Format: "Team Name +spread" or "Team Name spread" if negative
+        const spreadDisplay = game.spread >= 0 ? `+${game.spread}` : `${game.spread}`;
+        suggestedSide = `${game.home_team} ${spreadDisplay}`;
+    } else {
+        // Model thinks away will cover (home wins by less than spread or loses)
+        // Format: "Team Name +spread" where spread is from away team's perspective
+        const awaySpread = -game.spread; // Flip sign for away team perspective
+        const spreadDisplay = awaySpread >= 0 ? `+${awaySpread}` : `${awaySpread}`;
+        suggestedSide = `${game.away_team} ${spreadDisplay}`;
+    }
+
     return {
         predictedMargin: predictedMargin.toFixed(1),
         confidence: confidence.toFixed(1),
         lineValue: lineValue.toFixed(1),
         valueRating,
         winner: predictedMargin > 0 ? game.home_team : game.away_team,
-        suggestedSide: lineValue > 0 ? game.home_team : lineValue < 0 ? game.away_team : 'Pass'
+        suggestedSide
     };
     } catch (error) {
         // Log error and return a safe default prediction

@@ -7,9 +7,6 @@ Safe Git/GitHub operations including:
 - Git utility functions
 """
 
-from .push_operations import PushOperations
-from .rollback_operations import RollbackOperations
-from .git_utils import GitUtils
-
+# Avoid circular imports - import only when needed
 __all__ = ['PushOperations', 'RollbackOperations', 'GitUtils']
 

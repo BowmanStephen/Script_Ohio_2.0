@@ -10,7 +10,6 @@ Comprehensive validation suite for GitHub operations including:
 - Performance validation
 """
 
-from .validation_orchestrator import ValidationOrchestrator
-
+# Avoid circular imports - import only when needed
 __all__ = ['ValidationOrchestrator']
 
