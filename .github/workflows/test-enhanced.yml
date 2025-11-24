@@ -149,6 +149,7 @@ jobs:
         path: |
           test-results*.xml
           test-summary.json
+          coverage.xml
           htmlcov/
           benchmark-results.json
         retention-days: 30

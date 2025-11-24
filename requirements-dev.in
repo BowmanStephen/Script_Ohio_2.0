@@ -18,6 +18,11 @@ papermill>=2.5.0
 mypy>=1.5.0
 black>=23.0.0
 flake8>=6.0.0
+ruff>=0.7.0
+bandit>=1.7.6
+pip-audit>=2.7.3
+safety>=3.2.0
+types-requests>=2.31.0.10
 
 # Type Stubs (for mypy)
 pandas-stubs>=2.0.0
