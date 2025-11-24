@@ -1,0 +1,8 @@
+season,week,home_team,away_team,home_points,away_points,neutral_site
+2025,5,Ohio State,Michigan,31,20,False
+2025,5,Alabama,Texas,24,21,False
+2025,6,Ohio State,Texas,28,24,False
+2025,6,Michigan,Alabama,17,27,False
+2025,7,Texas,Michigan,35,38,False
+2025,7,Alabama,Ohio State,21,30,True
+
