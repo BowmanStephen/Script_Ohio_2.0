@@ -99,6 +99,9 @@ Outputs saved to:
 - **SDK Onboarding**: `docs/sdk_onboarding.md` - Installation and setup guide
 - **Data Organization**: `docs/DATA_ORGANIZATION.md` - Directory structure and data access patterns
 - **TOON Format**: `docs/TOON_FORMAT_GUIDE.md` - Token-optimized workflow format
+- **Architecture & Runbooks**: `docs/ARCHITECTURE_OVERVIEW.md`, `docs/WEEKLY_PIPELINE_RUNBOOK.md`, `docs/AGENT_WORKFLOW_RUNBOOK.md`
+- **Artifact Policy**: `docs/DATA_ASSET_SECURITY.md` - Guidance for large/sensitive assets
+- **Front-End Contract**: `docs/FRONTEND_DATA_CONTRACT.md` - API surface for the React app
 
 ## Development
 
@@ -135,4 +138,3 @@ See LICENSE file for details.
 ## Local Development Notes
 
 For local working rhythm and session management, see `README_local.md`.
-

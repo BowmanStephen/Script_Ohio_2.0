@@ -95,3 +95,4 @@ model_pack/backups/daily/
 model_pack/backups/weekly/
 # Keep critical backups versioned
 !model_pack/backups/critical/
+.vercel
