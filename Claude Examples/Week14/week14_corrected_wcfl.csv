@@ -1,0 +1,11 @@
+home_team,away_team,spread,ensemble_pred,pick,pick_line,edge,confidence,value_rating,reasoning,wcfl_points
+Stanford,Notre Dame,32.5,-5.281051304323408,Notre Dame,Notre Dame -32.5,37.781051304323405,95.0,Strong Value,Model favors Notre Dame more than market,10
+Purdue,Indiana,28.5,-3.9817152660018795,Indiana,Indiana -28.5,32.48171526600188,95.0,Strong Value,Model favors Indiana more than market,9
+West Virginia,Texas Tech,21.0,-2.422032783813398,Texas Tech,Texas Tech -21.0,23.4220327838134,95.0,Strong Value,Model favors Texas Tech more than market,8
+Coastal Carolina,James Madison,22.0,-1.050878816495291,James Madison,James Madison -22.0,23.050878816495292,95.0,Strong Value,Model favors James Madison more than market,7
+Tulane,Charlotte,-30.0,8.786797391934254,Charlotte,Charlotte +30.0,21.213202608065746,95.0,Strong Value,"Model predicts Tulane wins by only 8.8, not covering -30.0",6
+Old Dominion,Georgia State,-26.5,5.916934209522584,Georgia State,Georgia State +26.5,20.583065790477416,95.0,Strong Value,"Model predicts Old Dominion wins by only 5.9, not covering -26.5",5
+South Florida,Rice,-27.5,9.743172261663622,Rice,Rice +27.5,17.756827738336376,95.0,Strong Value,"Model predicts South Florida wins by only 9.7, not covering -27.5",4
+Oklahoma State,Iowa State,14.0,-2.4319931939704817,Iowa State,Iowa State -14.0,16.43199319397048,95.0,Strong Value,Model favors Iowa State more than market,3
+California,SMU,13.0,-2.601460631468272,SMU,SMU -13.0,15.601460631468271,95.0,Strong Value,Model favors SMU more than market,2
+Massachusetts,Bowling Green,14.5,-0.33438131360603673,Bowling Green,Bowling Green -14.5,14.834381313606038,95.0,Strong Value,Model favors Bowling Green more than market,1
