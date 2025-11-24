@@ -24,7 +24,9 @@ export const ModelSelection: React.FC<ModelSelectionProps> = ({ selectedModel, o
                             key={model}
                             onClick={() => onSelectModel(model)}
                             variant={selectedModel === model ? "default" : "outline"}
-                            className={`w-full justify-start h-auto py-3 font-medium transition-all ${selectedModel === model
+                            aria-label={`Select ${model} model`}
+                            aria-pressed={selectedModel === model}
+                            className={`w-full justify-start h-auto py-3 font-medium transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ${selectedModel === model
                                 ? 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-md'
                                 : 'bg-card text-muted-foreground border-border hover:bg-accent hover:text-accent-foreground'
                                 }`}

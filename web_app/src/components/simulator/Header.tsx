@@ -10,22 +10,36 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ tempoAdjusted, selectedModel, wcflPicksCount }) => {
     return (
-        <div className="text-center mb-8">
+        <header className="text-center mb-8">
             <h1 className="text-5xl font-bold text-foreground mb-2 tracking-tight">
                 Script Ohio 2.0
             </h1>
-            <p className="text-xl text-muted-foreground font-light">Week 13 • Enhanced ML Simulator</p>
-            <div className="flex justify-center gap-4 mt-6">
-                <Badge variant={tempoAdjusted ? "default" : "outline"} className={`text-sm px-4 py-1 ${tempoAdjusted ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'border-border text-muted-foreground'}`}>
+            <p className="text-xl text-muted-foreground font-light">
+                Week 14 • Enhanced ML Simulator
+            </p>
+            <div className="flex justify-center gap-4 mt-6" role="status" aria-live="polite" aria-atomic="true">
+                <Badge 
+                    variant={tempoAdjusted ? "default" : "outline"} 
+                    className={`text-sm px-4 py-1 ${tempoAdjusted ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'border-border text-muted-foreground'}`}
+                    aria-label={`Tempo adjustment is ${tempoAdjusted ? 'enabled' : 'disabled'}`}
+                >
                     Tempo Adjusted: {tempoAdjusted ? 'ON' : 'OFF'}
                 </Badge>
-                <Badge variant="outline" className="text-sm px-4 py-1 border-border text-foreground font-medium">
+                <Badge 
+                    variant="outline" 
+                    className="text-sm px-4 py-1 border-border text-foreground font-medium"
+                    aria-label={`Selected model: ${selectedModel}`}
+                >
                     Model: {selectedModel}
                 </Badge>
-                <Badge variant="outline" className="text-sm px-4 py-1 border-border text-muted-foreground">
+                <Badge 
+                    variant="outline" 
+                    className="text-sm px-4 py-1 border-border text-muted-foreground"
+                    aria-label={`WCFL picks: ${wcflPicksCount} out of 10`}
+                >
                     WCFL Picks: {wcflPicksCount}/10
                 </Badge>
             </div>
-        </div>
+        </header>
     );
 };

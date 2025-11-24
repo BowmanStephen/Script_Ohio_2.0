@@ -21,7 +21,9 @@ export const TrainingControl: React.FC<TrainingControlProps> = ({ isTraining, tr
                     <Button
                         onClick={onTrain}
                         disabled={isTraining}
-                        className={`w-full py-6 font-bold text-lg transition-all ${isTraining
+                        aria-label={isTraining ? 'Training in progress' : 'Start model training'}
+                        aria-busy={isTraining}
+                        className={`w-full py-6 font-bold text-lg transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ${isTraining
                             ? 'bg-muted text-muted-foreground cursor-not-allowed'
                             : 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-md'
                             }`}
@@ -30,15 +32,16 @@ export const TrainingControl: React.FC<TrainingControlProps> = ({ isTraining, tr
                     </Button>
 
                     {isTraining && (
-                        <div className="space-y-2">
+                        <div className="space-y-2" role="progressbar" aria-valuenow={trainingProgress} aria-valuemin={0} aria-valuemax={100} aria-label="Training progress">
                             <div className="flex justify-between text-sm text-muted-foreground">
                                 <span>Progress</span>
-                                <span>{trainingProgress}%</span>
+                                <span aria-live="polite" aria-atomic="true">{trainingProgress}%</span>
                             </div>
                             <div className="h-2 bg-muted rounded-full overflow-hidden">
                                 <div
                                     className="h-full bg-primary transition-all duration-500"
                                     style={{ width: `${trainingProgress}%` }}
+                                    aria-hidden="true"
                                 />
                             </div>
                         </div>
