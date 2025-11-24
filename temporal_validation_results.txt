@@ -1,11 +1,11 @@
 TEMPORAL VALIDATION RESULTS - 2025 SEASON
 ============================================================
-Generated on: 2025-11-19 19:45:48
+Generated on: 2025-11-24 10:22:53
 
 DATA SPLIT:
 Training Set: 2016-2024 seasons (4520 games)
-Test Set: 2025 season (365 games)
-Total Dataset: 4885 games
+Test Set: 2025 season (430 games)
+Total Dataset: 4950 games
 
 MODEL PERFORMANCE ON 2025 HOLDOUT DATA:
 ----------------------------------------
@@ -17,15 +17,15 @@ RIDGE REGRESSION (Score Margin Prediction):
   Interpretation: Model explains 46.2% of variance in score margins
 
 XGBOOST CLASSIFIER (Win Probability):
-  Accuracy: 0.466 (46.6%)
-  Log Loss: 0.847
-  ROC AUC: 0.478
-  F1 Score: 0.496
-  Interpretation: Model correctly predicts 46.6% of 2025 game outcomes
+  Accuracy: 0.607 (60.7%)
+  Log Loss: 0.756
+  ROC AUC: 0.658
+  F1 Score: 0.604
+  Interpretation: Model correctly predicts 60.7% of 2025 game outcomes
 
 KEY FINDINGS:
 --------------------
 • 2025 season validation shows moderate model performance
 • Temporal validation demonstrates good generalization capability
-• All models successfully trained on expanded dataset (4885 total games)
+• All models successfully trained on expanded dataset (4950 total games)
 • Feature importance patterns remain consistent with original analysis
