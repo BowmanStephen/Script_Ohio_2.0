@@ -13,61 +13,30 @@ Implements OpenAI best practices for error handling:
 
 import time
 import uuid
-import logging
 import traceback
 import asyncio
 from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional, Callable, Union
 from dataclasses import dataclass, field
-from enum import Enum
 from functools import wraps
 from collections import defaultdict
 import json
 
-logger = logging.getLogger("error_handling")
+from src.observability import (
+    ErrorCategory,
+    ErrorReport,
+    ErrorSeverity,
+    ObservabilityHub,
+    get_logger,
+)
 
-class ErrorSeverity(Enum):
-    """Severity levels for different types of errors"""
-    LOW = "low"                           # Non-critical, user can continue
-    MEDIUM = "medium"                     # Affects functionality but system continues
-    HIGH = "high"                         # Critical functionality impacted
-    CRITICAL = "critical"                 # System-level failure
-
-class ErrorCategory(Enum):
-    """Categories of errors for intelligent handling"""
-    NETWORK = "network"                   # Network connectivity issues
-    DATA = "data"                         # Data validation or processing issues
-    MODEL = "model"                       # ML model execution issues
-    AGENT = "agent"                       # Agent-specific failures
-    SYSTEM = "system"                     # System-level failures
-    TIMEOUT = "timeout"                   # Operation timeout
-    RATE_LIMIT = "rate_limit"             # Too many requests
-    RESOURCE = "resource"                 # Resource exhaustion
-    CONFIGURATION = "configuration"       # Configuration errors
-    UNKNOWN = "unknown"                   # Unrecognized errors
+logger = get_logger("error_handling")
 
 class CircuitState(Enum):
     """States for circuit breaker"""
     CLOSED = "closed"                     # Normal operation
     OPEN = "open"                         # Failing, reject requests
     HALF_OPEN = "half_open"               # Testing if failures are resolved
-
-@dataclass
-class ErrorReport:
-    """Comprehensive error reporting structure"""
-    error_id: str = field(default_factory=lambda: str(uuid.uuid4()))
-    timestamp: datetime = field(default_factory=datetime.now)
-    error_type: str = ""
-    error_message: str = ""
-    severity: ErrorSeverity = ErrorSeverity.MEDIUM
-    category: ErrorCategory = ErrorCategory.UNKNOWN
-    context: Dict[str, Any] = field(default_factory=dict)
-    stack_trace: str = ""
-    recovery_attempted: bool = False
-    recovery_successful: bool = False
-    user_facing_message: str = ""
-    technical_details: Dict[str, Any] = field(default_factory=dict)
-    affected_components: List[str] = field(default_factory=list)
 
 @dataclass
 class RetryConfig:
@@ -370,6 +339,7 @@ class ErrorHandler:
             # Update statistics
             self.error_stats[error_report.category.value] += 1
             self.error_reports.append(error_report)
+            ObservabilityHub.instance().emit_error(error_report)
 
             # Categorize and handle the error
             strategy = self.error_strategies.get(error_report.category, self._handle_unknown_error)

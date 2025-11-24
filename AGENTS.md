@@ -371,6 +371,10 @@ print(f\"Status: {result['status']}\")
    - Configure alerting for critical metrics
    - Add distributed tracing for request flows
 
+> **New:** `src/observability/` now exposes `configure_logging`, `ObservabilityHub`,
+> and the canonical error taxonomy. Refer to `docs/OBSERVABILITY_GUIDE.md`
+> before wiring new agents or scripts.
+
 **LOW PRIORITY (Documentation & Process)**
 
 10. **Documentation Gaps**
