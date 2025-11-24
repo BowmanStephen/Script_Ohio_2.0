@@ -30,11 +30,12 @@ In the project configuration screen:
    - Enter: `web_app`
    - This tells Vercel the app is in a subdirectory
 
-3. **Build and Output Settings** (should auto-populate from `vercel.json`):
+3. **Build and Output Settings** (configured in Vercel dashboard):
    - **Build Command**: `npm run build`
    - **Output Directory**: `dist`
    - **Install Command**: `npm install`
    - **Development Command**: `npm run dev`
+   - Note: These should be set in the Vercel project settings, not in `vercel.json`
 
 4. **Environment Variables**: 
    - None required for this app
@@ -87,9 +88,9 @@ Once connected, Vercel automatically deploys:
 ### `vercel.json`
 Located in `web_app/vercel.json`:
 
-- **Build settings**: Build command, output directory, framework
 - **Headers**: Cache control for static assets, security headers
 - **Rewrites**: SPA routing fallback to `index.html`
+- **Note**: Build settings (command, output directory) are configured in the Vercel dashboard, not in `vercel.json`
 
 ### `package.json`
 Located in `web_app/package.json`:
@@ -195,4 +196,6 @@ If you encounter issues:
 2. Test build locally: `cd web_app && npm run build`
 3. Verify all configuration files are correct
 4. Review Vercel documentation for framework-specific issues
+
+
 
