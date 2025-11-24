@@ -1,0 +1,34 @@
+[tool.black]
+line-length = 88
+target-version = ["py313"]
+include = "\\.pyi?$"
+
+[tool.coverage.run]
+branch = true
+source = ["agents", "src", "scripts"]
+omit = [
+    "*/tests/*",
+    "starter_pack/*",
+    "model_pack/*",
+]
+
+[tool.coverage.report]
+skip_empty = true
+show_missing = true
+precision = 2
+
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+extend-select = ["B", "I", "PL", "RUF", "UP"]
+src = ["agents", "src", "scripts"]
+exclude = ["starter_pack", "model_pack", "project_management"]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/*.py" = ["S"]
+"tests/**" = ["S"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/pyright/master/docs/config.schema.json",
+  "include": [
+    "agents",
+    "src",
+    "scripts"
+  ],
+  "exclude": [
+    "starter_pack",
+    "model_pack",
+    "project_management",
+    "**/__pycache__"
+  ],
+  "pythonVersion": "3.13",
+  "typeCheckingMode": "standard",
+  "reportMissingTypeStubs": "warning",
+  "executionEnvironments": [
+    {
+      "root": ".",
+      "extraPaths": [
+        "src"
+      ]
+    }
+  ]
+}
