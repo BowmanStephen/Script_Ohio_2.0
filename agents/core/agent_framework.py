@@ -13,7 +13,6 @@ Version: 1.0
 import json
 import os
 import time
-import logging
 from abc import ABC, abstractmethod
 from collections import deque
 from typing import Dict, List, Optional, Any, Callable
@@ -21,10 +20,16 @@ from dataclasses import dataclass, asdict
 from enum import Enum
 from pathlib import Path
 import importlib.util
+from src.observability import (
+    ErrorCategory,
+    ErrorEvent,
+    ErrorSeverity,
+    configure_logging,
+    get_logger,
+)
 
-# Set up logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+configure_logging(service_name="agents")
+logger = get_logger(__name__, component="agent_framework", service_name="agents")
 
 class AgentStatus(Enum):
     """Agent execution status"""
@@ -95,7 +100,10 @@ class BaseAgent(ABC):
         }
         self.tool_loader = tool_loader
 
-        logger.info(f"Agent {self.name} ({self.agent_id}) initialized")
+        logger.info(
+            "Agent initialized",
+            extra={"event": "agent_init", "agent_id": self.agent_id, "name": name},
+        )
 
     @abstractmethod
     def _define_capabilities(self) -> List[AgentCapability]:
@@ -171,7 +179,17 @@ class BaseAgent(ABC):
         # Check permission level
         required_permission = self.permission_level
         if user_permissions.value < required_permission.value:
-            logger.warning(f"Insufficient permissions for {request.action} on {self.name}")
+            logger.warning(
+                "Insufficient permissions",
+                extra={
+                    "event": "permission_denied",
+                    "action": request.action,
+                    "agent": self.name,
+                    "required": required_permission.value,
+                    "user": user_permissions.value,
+                    "error.category": ErrorCategory.PERMISSION.value,
+                },
+            )
             return False
 
         # Check if action is supported
@@ -195,7 +213,15 @@ class BaseAgent(ABC):
         start_time = time.time()
         self.status = AgentStatus.BUSY
 
-        logger.info(f"Executing {request.action} on {self.name} (Request ID: {request.request_id})")
+        logger.info(
+            "Executing agent action",
+            extra={
+                "event": "agent_execute",
+                "action": request.action,
+                "request_id": request.request_id,
+                "agent": self.name,
+            },
+        )
 
         try:
             # Validate request
@@ -241,7 +267,18 @@ class BaseAgent(ABC):
             self._update_performance_metrics(execution_time, success=False)
 
             error_message = f"Error executing {request.action} on {self.name}: {str(e)}"
-            logger.error(error_message)
+            error_event = ErrorEvent(
+                message=error_message,
+                category=ErrorCategory.EXECUTION,
+                severity=ErrorSeverity.ERROR,
+                context={
+                    "request_id": request.request_id,
+                    "action": request.action,
+                    "agent": self.name,
+                },
+                remediation="Verify request parameters and agent permissions",
+            )
+            logger.error(error_event.message, extra=error_event.to_log_extra())
 
             # Store execution history
             self.execution_history.append({
@@ -515,8 +552,17 @@ class RequestRouter:
 
             except Exception as e:
                 self.instrumentation_metrics['errors_caught'] += 1
-                logger.error(f"[ROUTER_AUDIT] ERROR_CAUGHT: request_id={request.request_id} error={str(e)}")
-                logger.error(f"Error processing request {request.request_id}: {str(e)}")
+                error_event = ErrorEvent(
+                    message=f"Error processing request {request.request_id}: {str(e)}",
+                    category=ErrorCategory.EXECUTION,
+                    severity=ErrorSeverity.ERROR,
+                    context={
+                        "request_id": request.request_id,
+                        "agent_type": request.agent_type,
+                    },
+                    remediation="Inspect agent trace and request payload",
+                )
+                logger.error(error_event.message, extra=error_event.to_log_extra())
                 processed_requests.append(request)
 
         # Remove processed requests from queue
