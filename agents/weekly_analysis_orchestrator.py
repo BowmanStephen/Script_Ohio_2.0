@@ -3,8 +3,8 @@ Weekly Analysis Orchestrator
 Coordinates weekly analysis agents for comprehensive matchup analysis and predictions
 """
 
-import os
 import logging
+from pathlib import Path
 import pandas as pd
 from datetime import datetime
 from typing import Dict, List, Any, Optional
@@ -84,6 +84,14 @@ class WeeklyAnalysisOrchestrator(BaseAgent):
                 data_access=["data/", "model_pack/", "predictions/"],
                 execution_time_estimate=15.0,
             ),
+            AgentCapability(
+                name="generate_massey_ratings",
+                description="Compute Massey ratings for the configured week/season",
+                permission_required=PermissionLevel.READ_EXECUTE_WRITE,
+                tools_required=["model_validation"],
+                data_access=["model_pack/", "src/ratings/"],
+                execution_time_estimate=15.0,
+            ),
         ]
 
     def _execute_action(self, action: str, parameters: Dict[str, Any],
@@ -95,6 +103,8 @@ class WeeklyAnalysisOrchestrator(BaseAgent):
             return self.validate_models(parameters, user_context)
         elif action == "generate_predictions":
             return self.generate_predictions(parameters, user_context)
+        elif action == "generate_massey_ratings":
+            return self.generate_massey_ratings(parameters, user_context)
         else:
             raise ValueError(f"Unknown action: {action}")
 
@@ -309,6 +319,54 @@ class WeeklyAnalysisOrchestrator(BaseAgent):
                             user_context: Dict[str, Any] = None) -> Dict[str, Any]:
         """Generate predictions for the week"""
         return self.prediction_agent.execute_task(parameters or {})
+
+    def generate_massey_ratings(
+        self,
+        parameters: Optional[Dict[str, Any]] = None,
+        user_context: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        """Compute Massey ratings via the shared rating library."""
+        from src.ratings.massey_ratings import MasseyConfig
+        from src.ratings.rating_library import (
+            build_rating_library,
+            load_massey_ratings,
+        )
+
+        params = parameters or {}
+        refresh = bool(params.get("refresh_cache", False))
+        cache_path = params.get("cache_path")
+
+        config_kwargs = {"season": self.season, "week": self.week}
+        if cache_path:
+            config_kwargs["cache_path"] = Path(cache_path)
+        config = MasseyConfig(**config_kwargs)
+
+        ratings_df = load_massey_ratings(
+            config=config,
+            refresh=refresh,
+            persist=True,
+        )
+        build_rating_library(
+            season=self.season,
+            refresh=False,
+            massey_config=config,
+            massey_df=ratings_df,
+        )
+
+        summary = {
+            "status": "success",
+            "teams": len(ratings_df),
+            "hfa": float(ratings_df["hfa"].iloc[0]),
+            "top_team": ratings_df.iloc[0]["team"],
+            "cache_path": str(config.resolved_cache_path()),
+        }
+        logger.info(
+            "Massey ratings generated for season %s week %s (top team: %s)",
+            self.season,
+            self.week,
+            summary["top_team"],
+        )
+        return summary
 
     def analyze_matchups(self, parameters: Dict[str, Any] = None,
                         user_context: Dict[str, Any] = None) -> Dict[str, Any]:

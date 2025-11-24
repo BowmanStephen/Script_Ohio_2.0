@@ -70,6 +70,12 @@ Examples:
                        help='Which step to run (default: all)')
     parser.add_argument('--verbose', '-v', action='store_true',
                        help='Enable verbose logging')
+    parser.add_argument('--massey-only', action='store_true',
+                       help='Run only the Massey ratings solver and exit')
+    parser.add_argument('--refresh-massey-cache', action='store_true',
+                       help='Force recomputation of Massey ratings cache')
+    parser.add_argument('--massey-output', type=Path,
+                       help='Optional override path for Massey ratings CSV output')
     
     args = parser.parse_args()
     
@@ -82,6 +88,42 @@ Examples:
     print()
     
     try:
+        if args.massey_only:
+            from src.ratings.massey_ratings import MasseyConfig
+            from src.ratings.rating_library import (
+                build_rating_library,
+                load_massey_ratings,
+            )
+
+            config_kwargs = {"season": args.season, "week": args.week}
+            if args.massey_output:
+                config_kwargs["cache_path"] = args.massey_output
+            config = MasseyConfig(**config_kwargs)
+
+            logger.info("Running Massey ratings solver...")
+            ratings_df = load_massey_ratings(
+                config=config,
+                refresh=args.refresh_massey_cache,
+                persist=True,
+            )
+            build_rating_library(
+                season=args.season,
+                refresh=False,
+                massey_config=config,
+                massey_df=ratings_df,
+            )
+
+            print("\n" + "=" * 70)
+            print(f"Massey Ratings - Season {args.season}, Week {args.week}")
+            print("=" * 70)
+            print(f"Games solved: {len(ratings_df)}")
+            print(f"Estimated HFA: {ratings_df['hfa'].iloc[0]:.2f} points")
+            print("\nTop 5 teams:")
+            for _, row in ratings_df.head(5).iterrows():
+                print(f"  {row['team']:<20} {row['rating']:>6.2f}")
+            print("\nRatings saved to:", config.resolved_cache_path())
+            return 0
+
         logger.info("=" * 70)
         logger.info(f"Week {args.week} Analysis Pipeline - Season {args.season}")
         logger.info("=" * 70)
