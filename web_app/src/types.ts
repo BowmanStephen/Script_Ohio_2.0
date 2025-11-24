@@ -1,3 +1,6 @@
+/**
+ * Game data structure containing team statistics and game information
+ */
 export interface Game {
     id: number;
     home_team: string;
@@ -20,6 +23,10 @@ export interface Game {
     reasoning?: string;
 }
 
+/**
+ * Feature weights for model predictions
+ * Values should sum to 1.0 (100%)
+ */
 export interface FeatureWeights {
     elo: number;
     talent: number;
@@ -28,6 +35,9 @@ export interface FeatureWeights {
     [key: string]: number;
 }
 
+/**
+ * Prediction result from a model
+ */
 export interface PredictionResult {
     predictedMargin: string;
     confidence: string;
@@ -43,6 +53,9 @@ export interface ModelMetric {
     weight: number;
 }
 
+/**
+ * Model performance metrics and weights
+ */
 export interface ModelPerformance {
     ridge: ModelMetric;
     xgboost: ModelMetric;
