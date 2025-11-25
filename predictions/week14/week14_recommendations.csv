@@ -1,0 +1,66 @@
+type,game_id,teams,recommendation,action,confidence
+close_game,401752783,Missouri @ Arkansas,Very close game expected (-1.2 margin),Consider prop bets,0.9408648327
+close_game,401752785,Florida State @ Florida,Very close game expected (-1.9 margin),Consider prop bets,0.6081226433
+moderate_confidence,401752786,Georgia @ Georgia Tech,Moderate confidence bet (78% confidence),Consider moderate bet,0.7846834718
+close_game,401752787,Kentucky @ Louisville,Very close game expected (1.5 margin),Consider prop bets,0.8518382402
+low_confidence,401752788,Ole Miss @ Mississippi State,Moderate confidence bet (78% confidence),Consider moderate bet,0.7778971537
+low_confidence,401752789,LSU @ Oklahoma,Moderate confidence bet (22% confidence),Consider moderate bet,0.2218581255
+close_game,401752790,Clemson @ South Carolina,Very close game expected (0.6 margin),Consider prop bets,0.9265368122
+close_game,401752791,Vanderbilt @ Tennessee,Very close game expected (0.8 margin),Consider prop bets,0.5332376515
+close_game,401752792,Texas A&M @ Texas,Very close game expected (0.7 margin),Consider prop bets,0.9408025745
+low_confidence,401752916,Iowa @ Nebraska,Moderate confidence bet (97% confidence),Consider moderate bet,0.9741008811
+low_confidence,401752917,Oregon @ Washington,Moderate confidence bet (69% confidence),Consider moderate bet,0.6891525236
+close_game,401752918,Wisconsin @ Minnesota,Very close game expected (-2.3 margin),Consider prop bets,0.6893040489
+moderate_confidence,401752919,UCLA @ USC,Moderate confidence bet (62% confidence),Consider moderate bet,0.6233162197
+moderate_confidence,401752920,Penn State @ Rutgers,Moderate confidence bet (86% confidence),Consider moderate bet,0.8620353817
+low_confidence,401752921,Ohio State @ Michigan,Moderate confidence bet (98% confidence),Consider moderate bet,0.9836002972
+low_confidence,401752922,Northwestern @ Illinois,Moderate confidence bet (68% confidence),Consider moderate bet,0.6764340326
+low_confidence,401752923,Maryland @ Michigan State,Moderate confidence bet (81% confidence),Consider moderate bet,0.8106709022
+high_confidence,401752924,Indiana @ Purdue,Strong bet on Purdue (90% confidence),Consider strong bet,0.8995759386
+moderate_confidence,401752946,Oregon State @ Washington State,Moderate confidence bet (84% confidence),Consider moderate bet,0.8398162858
+low_confidence,401754608,Boston College @ Syracuse,Moderate confidence bet (61% confidence),Consider moderate bet,0.6056542619
+low_confidence,401754609,SMU @ California,Moderate confidence bet (80% confidence),Consider moderate bet,0.8013663481
+close_game,401754610,Wake Forest @ Duke,Very close game expected (0.6 margin),Consider prop bets,0.8882327038
+low_confidence,401754611,Miami @ Pittsburgh,Moderate confidence bet (70% confidence),Consider moderate bet,0.6951972129
+moderate_confidence,401754612,North Carolina @ NC State,Moderate confidence bet (65% confidence),Consider moderate bet,0.6458054724
+low_confidence,401754613,Virginia Tech @ Virginia,Moderate confidence bet (91% confidence),Consider moderate bet,0.9055778434
+high_confidence,401754614,Notre Dame @ Stanford,Strong bet on Stanford (95% confidence),Consider strong bet,0.9539982584
+close_game,401756961,Arizona @ Arizona State,Very close game expected (-0.9 margin),Consider prop bets,0.7908854814
+moderate_confidence,401756963,UCF @ BYU,Moderate confidence bet (72% confidence),Consider moderate bet,0.7191682372
+moderate_confidence,401756964,Utah @ Kansas,Moderate confidence bet (77% confidence),Consider moderate bet,0.7698099419
+moderate_confidence,401756965,Colorado @ Kansas State,Moderate confidence bet (82% confidence),Consider moderate bet,0.8192658003
+low_confidence,401756966,Iowa State @ Oklahoma State,Moderate confidence bet (89% confidence),Consider moderate bet,0.8924389959
+close_game,401756967,Cincinnati @ TCU,Very close game expected (2.6 margin),Consider prop bets,0.8091942954
+high_confidence,401756968,Texas Tech @ West Virginia,Strong bet on West (89% confidence),Consider strong bet,0.8932466942
+close_game,401757310,UTEP @ Delaware,Very close game expected (3.0 margin),Consider prop bets,0.8679619056
+low_confidence,401757311,Florida International @ Sam Houston,Moderate confidence bet (77% confidence),Consider moderate bet,0.7741237501
+close_game,401757312,Western Kentucky @ Jacksonville State,Very close game expected (-2.2 margin),Consider prop bets,0.7808585461
+close_game,401757313,Kennesaw State @ Liberty,Very close game expected (-2.1 margin),Consider prop bets,0.7224445531
+close_game,401757314,Louisiana Tech @ Missouri State,Very close game expected (-0.5 margin),Consider prop bets,0.752665736
+close_game,401757315,Middle Tennessee @ New Mexico State,Very close game expected (2.4 margin),Consider prop bets,0.8980453682
+moderate_confidence,401760421,Air Force @ Colorado State,Moderate confidence bet (68% confidence),Consider moderate bet,0.6776574545
+low_confidence,401760422,Boise State @ Utah State,Moderate confidence bet (72% confidence),Consider moderate bet,0.7214413881
+close_game,401760423,Fresno State @ San José State,Very close game expected (-1.7 margin),Consider prop bets,0.8835503179
+low_confidence,401760424,Wyoming @ Hawai'i,Moderate confidence bet (80% confidence),Consider moderate bet,0.7966498223
+low_confidence,401760425,UNLV @ Nevada,Moderate confidence bet (95% confidence),Consider moderate bet,0.9539402009
+low_confidence,401760426,San Diego State @ New Mexico,Moderate confidence bet (57% confidence),Consider moderate bet,0.5670096026
+close_game,401761661,Arkansas State @ App State,Very close game expected (-0.5 margin),Consider prop bets,0.6217475217
+high_confidence,401761662,James Madison @ Coastal Carolina,Strong bet on Coastal (95% confidence),Consider strong bet,0.9470709589
+moderate_confidence,401761663,Georgia Southern @ Marshall,Moderate confidence bet (59% confidence),Consider moderate bet,0.5915488236
+moderate_confidence,401761664,Georgia State @ Old Dominion,Moderate confidence bet (65% confidence),Consider moderate bet,0.6517715348
+moderate_confidence,401761665,UL Monroe @ Louisiana,Moderate confidence bet (66% confidence),Consider moderate bet,0.6590169566
+low_confidence,401761666,Troy @ Southern Miss,Moderate confidence bet (77% confidence),Consider moderate bet,0.7743949666
+moderate_confidence,401761667,South Alabama @ Texas State,Moderate confidence bet (64% confidence),Consider moderate bet,0.6381678945
+moderate_confidence,401762441,Army @ UTSA,Moderate confidence bet (71% confidence),Consider moderate bet,0.7130796062
+high_confidence,401762442,Temple @ North Texas,Strong bet on Temple (76% confidence),Consider strong bet,0.7595916225
+low_confidence,401762516,Navy @ Memphis,Moderate confidence bet (68% confidence),Consider moderate bet,0.6752097977
+low_confidence,401762517,UAB @ Tulsa,Moderate confidence bet (38% confidence),Consider moderate bet,0.376789641
+moderate_confidence,401762518,Charlotte @ Tulane,Moderate confidence bet (55% confidence),Consider moderate bet,0.5499363605
+low_confidence,401762519,East Carolina @ Florida Atlantic,Moderate confidence bet (71% confidence),Consider moderate bet,0.7093703527
+moderate_confidence,401762520,Rice @ South Florida,Moderate confidence bet (64% confidence),Consider moderate bet,0.6420462988
+low_confidence,401762868,Bowling Green @ Massachusetts,Moderate confidence bet (87% confidence),Consider moderate bet,0.8685046486
+low_confidence,401762869,Western Michigan @ Eastern Michigan,Moderate confidence bet (80% confidence),Consider moderate bet,0.7996954449
+low_confidence,401762870,Ohio @ Buffalo,Moderate confidence bet (68% confidence),Consider moderate bet,0.684573555
+close_game,401762871,Kent State @ Northern Illinois,Very close game expected (1.4 margin),Consider prop bets,0.6222499113
+low_confidence,401762872,Toledo @ Central Michigan,Moderate confidence bet (82% confidence),Consider moderate bet,0.8192190348
+moderate_confidence,401762875,Ball State @ Miami (OH),Moderate confidence bet (75% confidence),Consider moderate bet,0.7530710805

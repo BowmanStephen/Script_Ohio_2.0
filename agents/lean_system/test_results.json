@@ -1,0 +1,215 @@
+{
+  "success": false,
+  "total_test_time_seconds": 0.8826961517333984,
+  "tests_run": 6,
+  "tests_passed": 5,
+  "tests_failed": 1,
+  "success_rate": 83.33333333333334,
+  "performance_score": 50,
+  "legacy_compatible": true,
+  "performance_summary": {
+    "agent_loading_improvement": 78.00715827188002,
+    "response_time_improvement": 98.66015474561235,
+    "cache_hit_rate_actual": 25.0,
+    "fast_agent_performance_ms": 0.025033950805664062
+  },
+  "key_metrics": {
+    "super_orchestrator": {
+      "creation_time_ms": 55.641889572143555,
+      "request_time_ms": 0.09512901306152344,
+      "cache_hit_rate": 0.5
+    },
+    "core_engine": {
+      "creation_time_ms": 469.83909606933594,
+      "education_time_ms": 0.0152587890625,
+      "models_loaded": false
+    },
+    "fast_agent": {
+      "creation_time_ms": 0.12111663818359375,
+      "processing_time_ms": 0.025033950805664062,
+      "cache_hit_rate": 0.25,
+      "total_predictions": 0
+    }
+  },
+  "detailed_results": {
+    "super_orchestrator": {
+      "creation_time": 0.055641889572143555,
+      "creation_success": true,
+      "metrics_available": true,
+      "metrics": {
+        "orchestrator_metrics": {
+          "total_requests": 1,
+          "avg_response_time": 8.106231689453125e-05,
+          "cache_hits": 1,
+          "cache_misses": 1
+        },
+        "model_pool_metrics": {
+          "loaded_models": [],
+          "model_count": 0,
+          "load_times": {}
+        },
+        "agent_cache_size": 0,
+        "response_cache_size": 0,
+        "cache_hit_rate": 0
+      },
+      "request_time": 9.512901306152344e-05,
+      "request_success": true,
+      "response_data": {
+        "status": "success",
+        "execution_time": 8.106231689453125e-05,
+        "metadata": {
+          "agent_used": "insight",
+          "request_type": "analysis",
+          "performance": {
+            "loaded_models": [],
+            "model_count": 0,
+            "load_times": {}
+          },
+          "from_cache": true
+        }
+      },
+      "cache_time": 4.291534423828125e-06,
+      "cache_hit_rate": 0.5,
+      "total_test_time": 0.4036390781402588,
+      "success": true
+    },
+    "core_engine": {
+      "creation_time": 0.46983909606933594,
+      "creation_success": true,
+      "metrics": {
+        "engine_metrics": {
+          "total_analyses": 0,
+          "avg_execution_time": 0,
+          "prediction_count": 0,
+          "narrative_count": 0,
+          "explanation_count": 1
+        },
+        "model_status": "failed",
+        "components": {
+          "model_manager": "active",
+          "data_processor": "active",
+          "content_generator": "active"
+        }
+      },
+      "models_loaded": false,
+      "education_time": 1.52587890625e-05,
+      "education_success": true,
+      "education_data": {
+        "concept": "machine_learning",
+        "level": "beginner",
+        "has_explanation": true
+      },
+      "analysis_time": 2.1457672119140625e-06,
+      "analysis_success": true,
+      "analysis_data": {
+        "has_feature_importance": true
+      },
+      "validation_time": 1.6689300537109375e-06,
+      "validation_success": true,
+      "total_test_time": 0.47358083724975586,
+      "success": true
+    },
+    "fast_agent": {
+      "creation_time": 0.00012111663818359375,
+      "creation_success": true,
+      "metrics": {
+        "agent_metrics": {
+          "total_predictions": 0,
+          "avg_response_time_ms": 0,
+          "cache_hit_rate": 0,
+          "sub_50ms_count": 0,
+          "sub_100ms_count": 0,
+          "timeout_count": 0,
+          "cache_hits": 1
+        },
+        "cache_metrics": {
+          "hits": 0,
+          "misses": 0,
+          "hit_rate": 0,
+          "size": 0,
+          "max_size": 1000
+        },
+        "performance_summary": {
+          "sub_50ms_rate": 0.0,
+          "sub_100ms_rate": 0.0,
+          "cache_hit_rate": 0,
+          "timeout_rate": 0.0
+        }
+      },
+      "prediction_time": 5.888938903808594e-05,
+      "processing_time": 0.025033950805664062,
+      "prediction_success": true,
+      "cache_hit": false,
+      "batch_time": 3.910064697265625e-05,
+      "batch_success": true,
+      "avg_time_per_prediction": 0.012715657552083334,
+      "final_cache_hit_rate": 0.25,
+      "avg_response_time": 0,
+      "total_predictions": 0,
+      "total_test_time": 0.0048868656158447266,
+      "success": true
+    },
+    "integration": {
+      "total_test_time": 0.00026917457580566406,
+      "success": true,
+      "details": {
+        "orchestrator_education": true,
+        "fast_agent_prediction": true,
+        "core_engine_analysis": true
+      }
+    },
+    "performance": {
+      "total_test_time": 3.814697265625e-06,
+      "overall_score": 50,
+      "comparison": {
+        "agent_loading": {
+          "baseline_seconds": 0.253,
+          "actual_seconds": 0.055641889572143555,
+          "target_seconds": 0.05,
+          "improvement_percentage": 78.00715827188002,
+          "target_met": false
+        },
+        "response_time": {
+          "baseline_seconds": 0.0071,
+          "actual_seconds": 9.512901306152344e-05,
+          "target_seconds": 0.001,
+          "improvement_percentage": 98.66015474561235,
+          "target_met": true
+        },
+        "cache_hit_rate": {
+          "baseline_percentage": 0.0,
+          "actual_percentage": 25.0,
+          "target_percentage": 90.0,
+          "improvement_infinite": true,
+          "target_met": false
+        },
+        "fast_agent_processing": {
+          "actual_ms": 0.025033950805664062,
+          "target_ms": 50,
+          "target_met": true
+        }
+      },
+      "success": false
+    },
+    "legacy": {
+      "total_test_time": 9.608268737792969e-05,
+      "overall_compatibility": true,
+      "tests": {
+        "legacy_interface": {
+          "success": true,
+          "response_available": true,
+          "has_metadata": true
+        },
+        "response_structure": {
+          "success": true,
+          "has_status": true,
+          "has_data": true,
+          "has_metadata": true,
+          "has_execution_time": true
+        }
+      },
+      "success": true
+    }
+  },
+  "timestamp": 1764036880.178612
+}

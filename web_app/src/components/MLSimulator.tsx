@@ -9,29 +9,125 @@ import { TrainingProgressChart } from './simulator/TrainingProgressChart';
 import { WCFLStrategyView } from './simulator/WCFLStrategyView';
 import { ValueOpportunitiesView } from './simulator/ValueOpportunitiesView';
 import { ModelPerformanceView } from './simulator/ModelPerformanceView';
-import { PredictionsView } from './simulator/PredictionsView';
+import { PredictionsTableView } from './simulator/PredictionsTableView';
+import { ATSView } from './simulator/ATSView';
 import { ErrorBoundary } from './ErrorBoundary';
 import { week14Games } from '../data/week14Games';
 import { predictGame, calculateWCFLPoints, modelPerformance } from '../utils/predictionLogic';
-import { Game, FeatureWeights as FeatureWeightsType, TrainingHistory, ModelMetricsState } from '../types';
+import { loadPredictionsData, checkApiHealth } from '../utils/apiClient';
+import { loadLiveATSData } from '../utils/apiClient';
+import { Game, FeatureWeights as FeatureWeightsType, TrainingHistory, ModelMetricsState, ATSAnalysis } from '../types';
+import { APP_CONSTANTS } from '../config/constants';
+
+// Helper function to format percentages consistently
+const formatPercent = (value: string | number | undefined): string => {
+    const parsed = typeof value === 'number' ? value : parseFloat(value || '0');
+    const clamped = Math.min(100, Math.max(0, parsed));
+    return clamped.toFixed(1);
+};
 
 const MLSimulator: React.FC = () => {
-    const [selectedModel, setSelectedModel] = useState<string>('Ensemble');
-    const [featureWeights, setFeatureWeights] = useState<FeatureWeightsType>({
-        elo: 0.25,
-        talent: 0.25,
-        epa: 0.35,
-        success: 0.15
-    });
+    const [selectedModel, setSelectedModel] = useState<string>(APP_CONSTANTS.UI.DEFAULT_MODEL);
+    const [featureWeights, setFeatureWeights] = useState<FeatureWeightsType>(
+        APP_CONSTANTS.FEATURE_WEIGHTS.DEFAULT
+    );
     const [tempoAdjusted, setTempoAdjusted] = useState<boolean>(true);
     const [trainingProgress, setTrainingProgress] = useState<number>(0);
     const [isTraining, setIsTraining] = useState<boolean>(false);
     const [modelMetrics, setModelMetrics] = useState<ModelMetricsState | null>(null);
     const [predictions, setPredictions] = useState<Game[]>([]);
     const [wcflPicks, setWcflPicks] = useState<Game[]>([]);
+    const [gameCount, setGameCount] = useState<number>(week14Games.length);
     const [trainingHistory, setTrainingHistory] = useState<TrainingHistory[]>([]);
     const [selectedView, setSelectedView] = useState<string>('predictions');
     const [error, setError] = useState<string | null>(null);
+    const [atsData, setAtsData] = useState<ATSAnalysis[]>([]);
+    const [atsLoading, setAtsLoading] = useState<boolean>(false);
+    const [atsError, setAtsError] = useState<string | null>(null);
+
+    // API integration state
+    const [isApiAvailable, setIsApiAvailable] = useState<boolean>(false);
+    const [apiLoading, setApiLoading] = useState<boolean>(false);
+    const [apiError, setApiError] = useState<string | null>(null);
+    const [dataSource, setDataSource] = useState<'live' | 'static'>('static');
+
+    // Check API availability on mount
+    React.useEffect(() => {
+        const checkApi = async () => {
+            setApiLoading(true);
+            setApiError(null);
+
+            try {
+                const available = await checkApiHealth();
+                setIsApiAvailable(available);
+
+                if (available) {
+                    setDataSource('live');
+                    console.log('✅ Live API server available');
+                } else {
+                    setDataSource('static');
+                    console.log('📊 Using static data (API not available)');
+                }
+            } catch (err) {
+                console.warn('API health check failed:', err);
+                setIsApiAvailable(false);
+                setDataSource('static');
+                setApiError('API server not available');
+            } finally {
+                setApiLoading(false);
+            }
+        };
+
+        checkApi();
+    }, []);
+
+    // Load real prediction outputs on mount
+    React.useEffect(() => {
+        const loadPredictions = async () => {
+            try {
+                const loadedGames = await loadPredictionsData();
+                setPredictions(loadedGames);
+                setWcflPicks(calculateWCFLPoints(loadedGames));
+                setGameCount(loadedGames.length);
+                setModelMetrics({
+                    accuracy: modelPerformance.consensus.accuracy,
+                    mae: modelPerformance.consensus.mae,
+                    rmse: modelPerformance.consensus.mae * 1.3,
+                    r2: 0.5
+                });
+                setError(null);
+            } catch (loadErr) {
+                console.error('Error loading predictions:', loadErr);
+                setError('Failed to load predictions. You can still run the simulator to generate estimates.');
+            }
+        };
+
+        loadPredictions();
+    }, []);
+
+    // Load ATS data on component mount (now uses live API with fallback)
+    React.useEffect(() => {
+        const loadATS = async () => {
+            setAtsLoading(true);
+            setAtsError(null);
+            try {
+                // The loadLiveATSData function handles API fallback to static data automatically
+                const data = await loadLiveATSData();
+                setAtsData(data);
+                if (dataSource === 'live') {
+                    console.log('✅ ATS data loaded from live API');
+                } else {
+                    console.log('📊 ATS data loaded from static files');
+                }
+            } catch (error) {
+                console.error('Error loading ATS data:', error);
+                setAtsError(error instanceof Error ? error.message : 'Failed to load ATS data. Please try again later.');
+            } finally {
+                setAtsLoading(false);
+            }
+        };
+        loadATS();
+    }, [dataSource]);
 
     const handleTrain = () => {
         try {
@@ -78,9 +174,12 @@ const MLSimulator: React.FC = () => {
                             try {
                                 newPredictions = week14Games.map(game => ({
                                     ...game,
-                                    prediction: predictGame(game, selectedModel, featureWeights, tempoAdjusted)
+                                    week: game.week ?? APP_CONSTANTS.CURRENT_WEEK,
+                                    prediction: predictGame(game, selectedModel, featureWeights, tempoAdjusted),
+                                    id: game.id
                                 }));
                                 setPredictions(newPredictions);
+                                setGameCount(newPredictions.length);
                             } catch (err) {
                                 console.error('Error generating predictions:', err);
                                 setError('Failed to generate predictions. Please try again.');
@@ -111,7 +210,7 @@ const MLSimulator: React.FC = () => {
                     setTrainingProgress(0);
                     setError('Training simulation encountered an error. Please try again.');
                 }
-            }, 20);
+            }, APP_CONSTANTS.UI.TRAINING_INTERVAL);
         } catch (err) {
             console.error('Error in training simulation:', err);
             setError('Training simulation failed. Please try again.');
@@ -166,7 +265,7 @@ const MLSimulator: React.FC = () => {
             </a>
             <div id="main-content" className="max-w-7xl mx-auto">
                 <Header
-                    gameCount={week14Games.length}
+                    gameCount={gameCount}
                     tempoAdjusted={tempoAdjusted}
                     selectedModel={selectedModel}
                     wcflPicksCount={wcflPicks.length}
@@ -190,7 +289,7 @@ const MLSimulator: React.FC = () => {
                     <AdvancedSettings
                         tempoAdjusted={tempoAdjusted}
                         onToggleTempo={() => setTempoAdjusted(!tempoAdjusted)}
-                        gameCount={week14Games.length}
+                        gameCount={gameCount}
                         featureCount={86}
                     />
 
@@ -204,29 +303,39 @@ const MLSimulator: React.FC = () => {
 
                 <TrainingProgressChart history={trainingHistory} />
 
-                {predictions.length > 0 && (
+                {(predictions.length > 0 || atsData.length > 0) && (
                     <ErrorBoundary>
+                        {selectedView === 'ats' && (
+                            <ATSView
+                                atsData={atsData}
+                                isLoading={atsLoading}
+                                error={atsError || undefined}
+                            />
+                        )}
                         {selectedView === 'wcfl' && <WCFLStrategyView wcflPicks={wcflPicks} />}
                         {selectedView === 'value' && <ValueOpportunitiesView valueOpportunities={valueOpportunities} />}
                         {selectedView === 'performance' && <ModelPerformanceView modelPerformance={modelPerformance} />}
-                        {selectedView === 'predictions' && <PredictionsView predictions={predictions} />}
+                        {selectedView === 'predictions' && <PredictionsTableView predictions={predictions} />}
                     </ErrorBoundary>
                 )}
 
                 {predictions.length > 0 && (
                     <div className="mt-6 text-center">
                         <button
+                            type="button"
                             onClick={() => {
                                 try {
                                     const csvContent = "data:text/csv;charset=utf-8," +
-                                        "Home,Away,Spread,Model Prediction,Line Value,Confidence,WCFL Points\n" +
-                                        wcflPicks.map(p =>
-                                            `${p.home_team},${p.away_team},${p.spread},${p.prediction?.predictedMargin},${p.prediction?.lineValue},${p.prediction?.confidence},${p.wcflPoints}`
-                                        ).join("\n");
+                                        "Home,Away,Spread,Model Prediction,Line Value,Win Prob (%),WCFL Points\n" +
+                                        wcflPicks.map(p => {
+                                            const spread = Number.isInteger(p.spread) ? p.spread.toString() : p.spread.toFixed(1);
+                                            const winProb = formatPercent(p.prediction?.confidence || '0');
+                                            return `${p.home_team},${p.away_team},${spread},${p.prediction?.predictedMargin},${p.prediction?.lineValue},${winProb},${p.wcflPoints}`;
+                                        }).join("\n");
                                     const encodedUri = encodeURI(csvContent);
                                     const link = document.createElement("a");
                                     link.setAttribute("href", encodedUri);
-                                    link.setAttribute("download", "wcfl_week14_picks.csv");
+                                    link.setAttribute("download", APP_CONSTANTS.FILE_NAMES.WCFL_EXPORT(APP_CONSTANTS.CURRENT_WEEK));
                                     document.body.appendChild(link);
                                     link.click();
                                     document.body.removeChild(link);
@@ -248,6 +357,7 @@ const MLSimulator: React.FC = () => {
                         <p className="font-semibold">Error:</p>
                         <p>{error}</p>
                         <button
+                            type="button"
                             onClick={() => setError(null)}
                             className="mt-2 text-sm underline"
                         >

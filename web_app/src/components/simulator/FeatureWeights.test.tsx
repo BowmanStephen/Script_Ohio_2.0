@@ -36,7 +36,7 @@ describe('FeatureWeights', () => {
       />
     );
 
-    expect(screen.getByText('25%')).toBeInTheDocument();
+    expect(screen.getAllByText('25%').length).toBeGreaterThan(0);
     expect(screen.getByText('35%')).toBeInTheDocument();
   });
 
@@ -68,7 +68,7 @@ describe('FeatureWeights', () => {
 
     const sliders = screen.getAllByRole('slider');
     sliders.forEach(slider => {
-      expect(slider).toBeDisabled();
+      expect(slider).toHaveAttribute('data-disabled');
     });
   });
 
@@ -85,5 +85,4 @@ describe('FeatureWeights', () => {
     expect(screen.getByText(/total/i)).toBeInTheDocument();
   });
 });
-
 

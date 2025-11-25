@@ -1,0 +1,213 @@
+{
+  "generated_at": "2025-11-24T16:49:10.774329",
+  "week": 14,
+  "season": 2025,
+  "assets": {
+    "training_data": {
+      "path": "data/training/weekly/training_data_2025_week14.csv",
+      "games": 65,
+      "features": 83,
+      "status": "exists"
+    },
+    "enhanced_features": {
+      "features": {
+        "path": "data/weekly/week14/enhanced/week14_features_86.csv",
+        "games": 65,
+        "features": 87,
+        "status": "exists"
+      },
+      "games": {
+        "path": "data/weekly/week14/enhanced/week14_enhanced_games.csv",
+        "games": 65,
+        "status": "exists"
+      },
+      "metadata": {
+        "path": "data/weekly/week14/enhanced/enhancement_metadata.json",
+        "status": "exists"
+      }
+    },
+    "predictions": {
+      "week14_model_predictions.json": {
+        "path": "predictions/week14/week14_model_predictions.json",
+        "size_bytes": 54488,
+        "count": 65,
+        "status": "exists"
+      },
+      "week14_model_predictions.csv": {
+        "path": "predictions/week14/week14_model_predictions.csv",
+        "size_bytes": 21625,
+        "count": 65,
+        "status": "exists"
+      },
+      "week14_predictions_unified.json": {
+        "path": "predictions/week14/week14_predictions_unified.json",
+        "size_bytes": 113917,
+        "count": 65,
+        "status": "exists"
+      },
+      "week14_predictions_unified.csv": {
+        "path": "predictions/week14/week14_predictions_unified.csv",
+        "size_bytes": 46925,
+        "count": 65,
+        "status": "exists"
+      },
+      "week14_ats_full_table.csv": {
+        "path": "predictions/week14/week14_ats_full_table.csv",
+        "size_bytes": 22762,
+        "count": 65,
+        "status": "exists"
+      },
+      "week14_summary.json": {
+        "path": "predictions/week14/week14_summary.json",
+        "size_bytes": 2328,
+        "count": 1,
+        "status": "exists"
+      },
+      "prediction_insights.json": {
+        "path": "predictions/week14/prediction_insights.json",
+        "size_bytes": 461,
+        "count": 1,
+        "status": "exists"
+      },
+      "week14_recommendations.csv": {
+        "path": "predictions/week14/week14_recommendations.csv",
+        "size_bytes": 8027,
+        "count": 65,
+        "status": "exists"
+      },
+      "week14_comprehensive_predictions.csv": {
+        "path": "predictions/week14/week14_comprehensive_predictions.csv",
+        "size_bytes": 46925,
+        "count": 65,
+        "status": "exists"
+      },
+      "week14_enhanced_analysis_report.json": {
+        "path": "predictions/week14/week14_enhanced_analysis_report.json",
+        "size_bytes": 2696,
+        "count": 1,
+        "status": "exists"
+      },
+      "week14_enhanced_analysis.md": {
+        "path": "predictions/week14/week14_enhanced_analysis.md",
+        "size_bytes": 1927,
+        "count": 0,
+        "status": "exists"
+      },
+      "week14_predictions_enhanced.csv": {
+        "path": "predictions/week14/week14_predictions_enhanced.csv",
+        "size_bytes": 34537,
+        "count": 65,
+        "status": "exists"
+      }
+    },
+    "analysis": {
+      "week14_comprehensive_analysis.json": {
+        "path": "analysis/week14/week14_comprehensive_analysis.json",
+        "size_bytes": 359302,
+        "count": 0,
+        "status": "exists"
+      },
+      "week14_matchup_analysis.json": {
+        "path": "analysis/week14/week14_matchup_analysis.json",
+        "size_bytes": 262546,
+        "count": 0,
+        "status": "exists"
+      },
+      "week14_model_validation.json": {
+        "path": "analysis/week14/week14_model_validation.json",
+        "size_bytes": 566,
+        "count": 0,
+        "status": "exists"
+      },
+      "week14_power_rankings.csv": {
+        "path": "analysis/week14/week14_power_rankings.csv",
+        "size_bytes": 1774,
+        "count": 25,
+        "status": "exists"
+      },
+      "week14_strategic_recommendations.csv": {
+        "path": "analysis/week14/week14_strategic_recommendations.csv",
+        "size_bytes": 27852,
+        "count": 65,
+        "status": "exists"
+      },
+      "week14_upset_alerts.csv": {
+        "path": "analysis/week14/week14_upset_alerts.csv",
+        "size_bytes": 1491,
+        "count": 3,
+        "status": "exists"
+      },
+      "week14_narrative_previews.md": {
+        "path": "analysis/week14/week14_narrative_previews.md",
+        "size_bytes": 37556,
+        "count": 0,
+        "status": "exists"
+      },
+      "week14_comprehensive_report.html": {
+        "path": "analysis/week14/week14_comprehensive_report.html",
+        "size_bytes": 140,
+        "count": 0,
+        "status": "exists"
+      },
+      "week14_intelligence_consolidation.json": {
+        "path": "analysis/week14/week14_intelligence_consolidation.json",
+        "size_bytes": 7086,
+        "count": 0,
+        "status": "exists"
+      }
+    },
+    "reports": {
+      "week14_master_report.md": {
+        "path": "reports/week14_master_report.md",
+        "size_bytes": 2809,
+        "status": "exists"
+      }
+    },
+    "web_app": {
+      "week14_model_predictions.json": {
+        "path": "web_app/public/week14_model_predictions.json",
+        "size_bytes": 54488,
+        "status": "exists"
+      },
+      "week14_model_predictions.csv": {
+        "path": "web_app/public/week14_model_predictions.csv",
+        "size_bytes": 21625,
+        "status": "exists"
+      },
+      "week14_ats_data.json": {
+        "path": "web_app/public/week14_ats_data.json",
+        "size_bytes": 36616,
+        "status": "exists"
+      },
+      "week14_ats_full_table.csv": {
+        "path": "web_app/public/week14_ats_full_table.csv",
+        "size_bytes": 22762,
+        "status": "exists"
+      }
+    }
+  },
+  "validation_summary": {
+    "week14_validation_report": {
+      "status": "failed",
+      "issues": 1,
+      "warnings": 0
+    },
+    "week14_web_app_validation": {
+      "status": "passed",
+      "issues": 0,
+      "warnings": 0
+    }
+  },
+  "completion_status": {
+    "items": {
+      "training_data": true,
+      "enhanced_features": true,
+      "predictions_unified": true,
+      "analysis_comprehensive": true,
+      "reports_master": true,
+      "web_app_data": true
+    },
+    "completion_rate": 100.0,
+    "all_complete": true
+  }
+}

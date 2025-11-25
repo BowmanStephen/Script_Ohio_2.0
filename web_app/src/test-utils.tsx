@@ -2,6 +2,18 @@ import React, { ReactElement } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
+// Polyfill ResizeObserver for Radix Slider usage in tests
+if (typeof globalThis.ResizeObserver === 'undefined') {
+  // Minimal no-op implementation
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  globalThis.ResizeObserver = class {
+    disconnect() {}
+    observe() {}
+    unobserve() {}
+  };
+}
+
 /**
  * Custom render function that wraps components with any providers
  * needed for testing (e.g., theme providers, context providers)
@@ -22,5 +34,4 @@ function customRender(
 // Re-export everything from @testing-library/react
 export * from '@testing-library/react';
 export { customRender as render };
-
 

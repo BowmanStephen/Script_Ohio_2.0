@@ -8,7 +8,7 @@ describe('ViewSelector', () => {
     const onSelectView = vi.fn();
     render(<ViewSelector selectedView="predictions" onSelectView={onSelectView} />);
 
-    expect(screen.getByRole('tab', { name: /all predictions/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /view all game predictions/i })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: /wcfl strategy/i })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: /value opportunities/i })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: /model performance/i })).toBeInTheDocument();
@@ -35,18 +35,21 @@ describe('ViewSelector', () => {
   it('supports keyboard navigation with arrow keys', async () => {
     const user = userEvent.setup();
     const onSelectView = vi.fn();
-    render(<ViewSelector selectedView="predictions" onSelectView={onSelectView} />);
+    const { rerender } = render(<ViewSelector selectedView="predictions" onSelectView={onSelectView} />);
 
-    const predictionsTab = screen.getByRole('tab', { name: /all predictions/i });
+    const predictionsTab = screen.getByRole('tab', { name: /view all game predictions/i });
     predictionsTab.focus();
 
     // Press right arrow
     await user.keyboard('{ArrowRight}');
-    expect(onSelectView).toHaveBeenCalledWith('wcfl');
+    expect(onSelectView).toHaveBeenLastCalledWith('ats');
 
-    // Press left arrow
-    await user.keyboard('{ArrowLeft}');
-    expect(onSelectView).toHaveBeenCalledWith('predictions');
+    // Simulate parent updating selected view to newly selected tab
+    rerender(<ViewSelector selectedView="ats" onSelectView={onSelectView} />);
+
+    // Press right arrow again
+    await user.keyboard('{ArrowRight}');
+    expect(onSelectView).toHaveBeenLastCalledWith('wcfl');
   });
 
   it('supports Enter key to select view', async () => {
@@ -74,5 +77,3 @@ describe('ViewSelector', () => {
     expect(onSelectView).toHaveBeenCalledWith('predictions');
   });
 });
-
-

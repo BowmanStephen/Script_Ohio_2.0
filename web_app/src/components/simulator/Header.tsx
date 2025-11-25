@@ -1,5 +1,6 @@
 import React from 'react';
 import { Badge } from "@/components/ui/badge";
+import { APP_CONSTANTS } from '../../config/constants';
 
 interface HeaderProps {
     gameCount: number;
@@ -8,14 +9,14 @@ interface HeaderProps {
     wcflPicksCount: number;
 }
 
-export const Header: React.FC<HeaderProps> = ({ tempoAdjusted, selectedModel, wcflPicksCount }) => {
+export const Header: React.FC<HeaderProps> = ({ gameCount, tempoAdjusted, selectedModel, wcflPicksCount }) => {
     return (
         <header className="text-center mb-8">
             <h1 className="text-5xl font-bold text-foreground mb-2 tracking-tight">
                 Script Ohio 2.0
             </h1>
             <p className="text-xl text-muted-foreground font-light">
-                Week 14 • Enhanced ML Simulator
+                Week {APP_CONSTANTS.CURRENT_WEEK} • {gameCount} games loaded
             </p>
             <div className="flex justify-center gap-4 mt-6" role="status" aria-live="polite" aria-atomic="true">
                 <Badge 

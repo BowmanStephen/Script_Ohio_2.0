@@ -1,0 +1,66 @@
+id,game_id,start_date,season,week,home_team,away_team,home_conference,away_conference,spread,neutral_site
+401756964,401756964,2025-11-28 17:00:00,2025,14,Kansas,Utah,Big 12,Big 12,13.0,False
+401756961,401756961,2025-11-29 02:00:00,2025,14,Arizona State,Arizona,Big 12,Big 12,-1.0,False
+401760426,401760426,2025-11-28 20:30:00,2025,14,New Mexico,San Diego State,Mountain West,Mountain West,1.5,False
+401752788,401752788,2025-11-28 17:00:00,2025,14,Mississippi State,Ole Miss,SEC,SEC,7.5,False
+401762519,401762519,2025-11-29 17:00:00,2025,14,Florida Atlantic,East Carolina,American Athletic,American Athletic,6.5,False
+401762442,401762442,2025-11-28 20:30:00,2025,14,North Texas,Temple,American Athletic,American Athletic,-19.5,False
+401752790,401752790,2025-11-29 17:00:00,2025,14,South Carolina,Clemson,SEC,SEC,-2.0,False
+401752921,401752921,2025-11-29 17:00:00,2025,14,Michigan,Ohio State,Big Ten,Big Ten,9.5,False
+401756968,401756968,2025-11-29 17:00:00,2025,14,West Virginia,Texas Tech,Big 12,Big 12,21.0,False
+401762872,401762872,2025-11-29 17:00:00,2025,14,Central Michigan,Toledo,Mid-American,Mid-American,10.5,False
+401762875,401762875,2025-11-29 17:00:00,2025,14,Miami (OH),Ball State,Mid-American,Mid-American,-17.5,False
+401757310,401757310,2025-11-29 18:00:00,2025,14,Delaware,UTEP,Conference USA,Conference USA,-5.0,False
+401761663,401761663,2025-11-29 18:30:00,2025,14,Marshall,Georgia Southern,Sun Belt,Sun Belt,-7.5,False
+401757314,401757314,2025-11-29 19:00:00,2025,14,Missouri State,Louisiana Tech,Conference USA,Conference USA,-3.0,False
+401761664,401761664,2025-11-29 19:00:00,2025,14,Old Dominion,Georgia State,Sun Belt,Sun Belt,-26.5,False
+401761661,401761661,2025-11-29 19:30:00,2025,14,App State,Arkansas State,Sun Belt,Sun Belt,-3.0,False
+401757315,401757315,2025-11-29 20:00:00,2025,14,New Mexico State,Middle Tennessee,Conference USA,Conference USA,-5.0,False
+401761665,401761665,2025-11-29 20:00:00,2025,14,Louisiana,UL Monroe,Sun Belt,Sun Belt,-10.5,False
+401761667,401761667,2025-11-29 20:00:00,2025,14,Texas State,South Alabama,Sun Belt,Sun Belt,-9.0,False
+401762517,401762517,2025-11-29 20:00:00,2025,14,Tulsa,UAB,American Athletic,American Athletic,-9.5,False
+401757313,401757313,2025-11-29 20:30:00,2025,14,Liberty,Kennesaw State,Conference USA,Conference USA,2.0,False
+401761666,401761666,2025-11-29 20:30:00,2025,14,Southern Miss,Troy,Sun Belt,Sun Belt,-7.0,False
+401761662,401761662,2025-11-29 20:45:00,2025,14,Coastal Carolina,James Madison,Sun Belt,Sun Belt,22.0,False
+401752946,401752946,2025-11-29 23:30:00,2025,14,Washington State,Oregon State,Pac-12,Pac-12,-13.5,False
+401760425,401760425,2025-11-30 02:00:00,2025,14,Nevada,UNLV,Mountain West,Mountain West,7.5,False
+401756965,401756965,2025-11-29 17:00:00,2025,14,Kansas State,Colorado,Big 12,Big 12,-17.0,False
+401756967,401756967,2025-11-29 20:30:00,2025,14,TCU,Cincinnati,Big 12,Big 12,-4.0,False
+401754611,401754611,2025-11-29 17:00:00,2025,14,Pittsburgh,Miami,ACC,ACC,6.5,False
+401756966,401756966,2025-11-29 17:00:00,2025,14,Oklahoma State,Iowa State,Big 12,Big 12,14.0,False
+401756963,401756963,2025-11-29 18:00:00,2025,14,BYU,UCF,Big 12,Big 12,-17.0,False
+401757311,401757311,2025-11-29 18:00:00,2025,14,Sam Houston,Florida International,Conference USA,Conference USA,10.0,True
+401754608,401754608,2025-11-29 20:00:00,2025,14,Syracuse,Boston College,ACC,ACC,3.0,False
+401754610,401754610,2025-11-29 20:30:00,2025,14,Duke,Wake Forest,ACC,ACC,-2.5,False
+401754613,401754613,2025-11-30 00:00:00,2025,14,Virginia,Virginia Tech,ACC,ACC,-10.5,False
+401754612,401754612,2025-11-30 00:30:00,2025,14,NC State,North Carolina,ACC,ACC,-7.0,False
+401754609,401754609,2025-11-30 01:00:00,2025,14,California,SMU,ACC,ACC,13.0,False
+401752916,401752916,2025-11-28 17:00:00,2025,14,Nebraska,Iowa,Big Ten,Big Ten,5.5,False
+401760422,401760422,2025-11-28 21:00:00,2025,14,Utah State,Boise State,Mountain West,Mountain West,3.0,False
+401762868,401762868,2025-11-25 21:30:00,2025,14,Massachusetts,Bowling Green,Mid-American,Mid-American,14.5,False
+401762869,401762869,2025-11-26 00:30:00,2025,14,Eastern Michigan,Western Michigan,Mid-American,Mid-American,7.0,False
+401762516,401762516,2025-11-28 00:30:00,2025,14,Memphis,Navy,American Athletic,American Athletic,-5.0,False
+401762870,401762870,2025-11-28 17:00:00,2025,14,Buffalo,Ohio,Mid-American,Mid-American,6.0,False
+401762871,401762871,2025-11-28 17:00:00,2025,14,Northern Illinois,Kent State,Mid-American,Mid-American,-5.0,False
+401752786,401752786,2025-11-28 20:30:00,2025,14,Georgia Tech,Georgia,ACC,ACC,13.5,True
+401752792,401752792,2025-11-29 00:30:00,2025,14,Texas,Texas A&M,SEC,SEC,2.0,False
+401752924,401752924,2025-11-29 00:30:00,2025,14,Purdue,Indiana,Big Ten,Big Ten,28.5,False
+401752787,401752787,2025-11-29 17:00:00,2025,14,Louisville,Kentucky,ACC,ACC,-3.5,False
+401757312,401757312,2025-11-29 19:00:00,2025,14,Jacksonville State,Western Kentucky,Conference USA,Conference USA,2.0,False
+401752783,401752783,2025-11-29 20:30:00,2025,14,Arkansas,Missouri,SEC,SEC,2.5,False
+401752789,401752789,2025-11-29 20:30:00,2025,14,Oklahoma,LSU,SEC,SEC,-10.0,False
+401752918,401752918,2025-11-29 20:30:00,2025,14,Minnesota,Wisconsin,Big Ten,Big Ten,-1.0,False
+401752920,401752920,2025-11-29 20:30:00,2025,14,Rutgers,Penn State,Big Ten,Big Ten,12.0,False
+401762441,401762441,2025-11-29 20:30:00,2025,14,UTSA,Army,American Athletic,American Athletic,-7.0,False
+401752919,401752919,2025-11-29 21:30:00,2025,14,USC,UCLA,Big Ten,Big Ten,-21.0,False
+401752923,401752923,2025-11-30 00:00:00,2025,14,Michigan State,Maryland,Big Ten,Big Ten,-4.0,True
+401762520,401762520,2025-11-30 00:00:00,2025,14,South Florida,Rice,American Athletic,American Athletic,-27.5,False
+401760423,401760423,2025-11-30 03:30:00,2025,14,San José State,Fresno State,Mountain West,Mountain West,2.5,False
+401760424,401760424,2025-11-30 04:00:00,2025,14,Hawai'i,Wyoming,Mountain West,Mountain West,-10.0,False
+401762518,401762518,2025-11-30 00:30:00,2025,14,Tulane,Charlotte,American Athletic,American Athletic,-30.0,False
+401760421,401760421,2025-11-28 20:00:00,2025,14,Colorado State,Air Force,Mountain West,Mountain West,3.0,False
+401752922,401752922,2025-11-30 00:30:00,2025,14,Illinois,Northwestern,Big Ten,Big Ten,-6.5,False
+401752791,401752791,2025-11-29 20:30:00,2025,14,Tennessee,Vanderbilt,SEC,SEC,-3.0,False
+401752785,401752785,2025-11-29 21:30:00,2025,14,Florida,Florida State,SEC,SEC,-1.0,False
+401754614,401754614,2025-11-30 03:30:00,2025,14,Stanford,Notre Dame,ACC,ACC,32.5,False
+401752917,401752917,2025-11-29 20:30:00,2025,14,Washington,Oregon,Big Ten,Big Ten,6.5,False

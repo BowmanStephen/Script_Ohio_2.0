@@ -18,9 +18,28 @@ export interface Game {
     away_adjusted_explosiveness: number;
     home_points_per_opportunity_offense: number;
     away_points_per_opportunity_offense: number;
+    week?: number;
     prediction?: PredictionResult;
     wcflPoints?: number;
     reasoning?: string;
+}
+
+/**
+ * ATS (Against The Spread) analysis data
+ */
+export interface ATSAnalysis {
+    id?: string | number;
+    matchup: string;
+    spread: number;
+    predicted_margin: number;
+    home_win_prob: number;
+    away_win_prob: number;
+    ats_pick: string;
+    model_edge_pts: number;
+    confidence_grade: 'High' | 'Medium' | 'Low';
+    model_agreement: 'high' | 'moderate';
+    ensemble_confidence: number;
+    model_summary: string;
 }
 
 /**

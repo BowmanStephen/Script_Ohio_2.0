@@ -1,0 +1,80 @@
+{
+  "timestamp": "2025-11-24T16:44:01.015667",
+  "week": 14,
+  "season": 2025,
+  "checks": {
+    "training_features": {
+      "status": "failed",
+      "count": 83
+    },
+    "training_missing": {
+      "status": "passed",
+      "missing_count": 0
+    },
+    "training_required_cols": {
+      "status": "passed"
+    },
+    "model_ridge": {
+      "status": "passed",
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/ridge_model_2025.joblib"
+    },
+    "model_xgb": {
+      "status": "passed",
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/xgb_home_win_model_2025.pkl"
+    },
+    "model_fastai": {
+      "status": "passed",
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/fastai_home_win_model_2025.pkl"
+    },
+    "models_available": {
+      "status": "passed",
+      "count": 3,
+      "models": [
+        "ridge",
+        "xgb",
+        "fastai"
+      ]
+    },
+    "predictions_model_predictions_json": {
+      "status": "passed",
+      "count": 65
+    },
+    "predictions_model_predictions_csv": {
+      "status": "passed",
+      "count": 65
+    },
+    "predictions_ats_table": {
+      "status": "passed",
+      "count": 65
+    },
+    "predictions_summary": {
+      "status": "passed",
+      "count": 1
+    },
+    "predictions_enhanced": {
+      "status": "passed",
+      "count": 65
+    },
+    "webapp_model_predictions_json": {
+      "status": "passed",
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/web_app/public/week14_model_predictions.json"
+    },
+    "webapp_model_predictions_csv": {
+      "status": "passed",
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/web_app/public/week14_model_predictions.csv"
+    },
+    "webapp_ats_data": {
+      "status": "passed",
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/web_app/public/week14_ats_data.json"
+    },
+    "webapp_ats_table": {
+      "status": "passed",
+      "path": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/web_app/public/week14_ats_full_table.csv"
+    }
+  },
+  "issues": [
+    "Training data has only 83 features, expected 86+"
+  ],
+  "warnings": [],
+  "status": "failed"
+}

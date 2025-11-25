@@ -35,7 +35,7 @@ from agents.core.agent_framework import (
 )
 from src.utils.cache_manager import get_cache_manager
 try:
-    from cfbd_client import CFBDDataProvider
+    from src.cfbd_client.unified_client import UnifiedCFBDClient as CFBDDataProvider
 except ImportError:
     CFBDDataProvider = None
 
@@ -104,18 +104,23 @@ class AnalyticsOrchestrator:
         self.cfbd_provider = self._initialize_cfbd_provider()
 
         # Initialize subscription manager (polling or websocket)
-        if CFBDSubscriptionManager:
+        # Gracefully handle missing CFBD dependencies or API keys
+        self.subscription_manager = None
+        if CFBDSubscriptionManager and os.getenv("CFBD_API_KEY"):
             try:
                 self.subscription_manager = CFBDSubscriptionManager(
                     telemetry_hook=self._record_cfbd_event,
                     use_websockets=True
                 )
                 self.subscription_manager.start_scoreboard_feed()
+                logger.info("CFBD Subscription Manager started successfully")
             except Exception as e:
                 logger.warning(f"Failed to start subscription manager: {e}")
                 self.subscription_manager = None
+        elif not os.getenv("CFBD_API_KEY"):
+            logger.info("CFBD_API_KEY not set - CFBD Subscription Manager disabled")
         else:
-            self.subscription_manager = None
+            logger.info("CFBDSubscriptionManager not available - CFBD features disabled")
 
         # Load available agents
         self._load_agents()
@@ -229,19 +234,26 @@ class AnalyticsOrchestrator:
                             "cfbd_data_provider": self.cfbd_provider,
                             "live_feed_provider": self.subscription_manager,
                         }
-                    self.agent_factory.create_agent(
-                        "cfbd_integration",
-                        "default_cfbd_integration",
-                        **cfbd_kwargs,
-                    )
+                    # Only create CFBD Integration agent if CFBD provider is available
+                    if self.cfbd_provider:
+                        self.agent_factory.create_agent(
+                            "cfbd_integration",
+                            "default_cfbd_integration",
+                            **cfbd_kwargs,
+                        )
+                        logger.info("Loaded CFBD Integration agent")
+                    else:
+                        logger.info("Skipping CFBD Integration agent - CFBD provider not available")
+
+                    # Quality Assurance agent can work without CFBD
                     self.agent_factory.create_agent(
                         "quality_assurance",
                         "default_quality_assurance",
                         telemetry_events=self.cfbd_telemetry_events,
                         cfbd_data_provider=self.cfbd_provider,
                     )
-                    logger.info("Loaded consolidated agents: CFBD Integration, Quality Assurance")
-                except TypeError as exc:
+                    logger.info("Loaded Quality Assurance agent")
+                except Exception as exc:
                     logger.warning("Skipping consolidated agent instantiation: %s", exc)
 
             except ImportError as e:

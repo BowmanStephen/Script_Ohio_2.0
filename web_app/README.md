@@ -11,6 +11,12 @@ npm ci
 npm run dev   # local dev server
 ```
 
+## Data Sources
+
+- The simulator now auto-loads weekly predictions from `public/week14_model_predictions.json` (falls back to `week14_model_predictions.csv`).
+- ATS tables are pulled from `public/week14_ats_data.json` with CSV fallback already in place.
+- To point at a new week, drop the refreshed files into `public/` and update `APP_CONSTANTS.CURRENT_WEEK` plus the file naming pattern in `src/config/constants.ts`.
+
 ## Quality Checks
 
 - `npm run lint` – ESLint bundle-mode rules

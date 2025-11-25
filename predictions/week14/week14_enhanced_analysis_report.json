@@ -1,0 +1,100 @@
+{
+  "generated_at": "2025-11-24T16:45:53.731474",
+  "week": 14,
+  "season": 2025,
+  "total_games": 65,
+  "summary_statistics": {
+    "average_confidence": 0.7550322187784616,
+    "high_confidence_games": 37,
+    "moderate_confidence_games": 26,
+    "low_confidence_games": 2,
+    "average_predicted_margin": -0.6610424323969231
+  },
+  "top_value_games": [
+    {
+      "matchup": "Notre Dame @ Stanford",
+      "spread": 32.5,
+      "predicted_margin": -17.266446386,
+      "edge_pts": 15.233553614000002,
+      "confidence": 0.9539982584,
+      "ats_pick": "Stanford +32.5"
+    },
+    {
+      "matchup": "Charlotte @ Tulane",
+      "spread": -30.0,
+      "predicted_margin": 15.0658278479,
+      "edge_pts": 14.9341721521,
+      "confidence": 0.5499363605,
+      "ats_pick": "Charlotte +30.0"
+    },
+    {
+      "matchup": "Rice @ South Florida",
+      "spread": -27.5,
+      "predicted_margin": 14.8916134513,
+      "edge_pts": 12.6083865487,
+      "confidence": 0.6420462988,
+      "ats_pick": "Rice +27.5"
+    },
+    {
+      "matchup": "Indiana @ Purdue",
+      "spread": 28.5,
+      "predicted_margin": -16.5005489648,
+      "edge_pts": 11.9994510352,
+      "confidence": 0.8995759386,
+      "ats_pick": "Purdue +28.5"
+    },
+    {
+      "matchup": "Georgia State @ Old Dominion",
+      "spread": -26.5,
+      "predicted_margin": 14.6522239531,
+      "edge_pts": 11.8477760469,
+      "confidence": 0.6517715348,
+      "ats_pick": "Georgia State +26.5"
+    },
+    {
+      "matchup": "Texas Tech @ West Virginia",
+      "spread": 21.0,
+      "predicted_margin": -12.5168661917,
+      "edge_pts": 8.4831338083,
+      "confidence": 0.8932466942,
+      "ats_pick": "West Virginia +21.0"
+    },
+    {
+      "matchup": "UCLA @ USC",
+      "spread": -21.0,
+      "predicted_margin": 12.784645092,
+      "edge_pts": 8.215354908,
+      "confidence": 0.6233162197,
+      "ats_pick": "UCLA +21.0"
+    },
+    {
+      "matchup": "James Madison @ Coastal Carolina",
+      "spread": 22.0,
+      "predicted_margin": -14.2807115512,
+      "edge_pts": 7.7192884488,
+      "confidence": 0.9470709589,
+      "ats_pick": "Coastal Carolina +22.0"
+    },
+    {
+      "matchup": "Temple @ North Texas",
+      "spread": -19.5,
+      "predicted_margin": 12.2122753619,
+      "edge_pts": 7.2877246381,
+      "confidence": 0.7595916225,
+      "ats_pick": "Temple +19.5"
+    },
+    {
+      "matchup": "UAB @ Tulsa",
+      "spread": -9.5,
+      "predicted_margin": 3.4312248904,
+      "edge_pts": 6.0687751096,
+      "confidence": 0.376789641,
+      "ats_pick": "UAB +9.5"
+    }
+  ],
+  "key_insights": [
+    "Average home win probability: 47.4%",
+    "Average predicted margin: -0.7 points"
+  ],
+  "model_performance": {}
+}

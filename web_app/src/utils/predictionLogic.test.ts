@@ -155,6 +155,7 @@ describe('predictionLogic', () => {
             winner: 'Team A',
             suggestedSide: 'Team A',
           },
+        },
       ];
 
       const result = calculateWCFLPoints(games);
@@ -230,4 +231,3 @@ describe('predictionLogic', () => {
     });
   });
 });
-
