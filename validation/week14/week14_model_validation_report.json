@@ -1,6 +1,6 @@
 {
   "report_metadata": {
-    "generation_time": "2025-11-24T16:45:14.713325",
+    "generation_time": "2025-11-24T21:54:47.279805",
     "week": 14,
     "season": 2025,
     "overall_score": 99.20689655172414
@@ -48,7 +48,7 @@
     "compatibility_results": {
       "ridge_regression": {
         "compatible": true,
-        "feature_count_used": 49,
+        "feature_count_used": 8,
         "prediction_successful": true,
         "prediction_shape": [
           1
@@ -89,10 +89,10 @@
         "issues_found": [],
         "performance_metrics": {
           "prediction_range": {
-            "min": -31.395022922941365,
-            "max": 29.727912430591658,
-            "mean": 0.5807836973503934,
-            "std": 12.01221929084243
+            "min": -33.3815704384631,
+            "max": 29.16574409364462,
+            "mean": 0.1844232343827017,
+            "std": 13.291837117809546
           }
         }
       },
@@ -163,17 +163,17 @@
         "prediction_count": 65,
         "prediction_stats": {
           "count": 65,
-          "mean": 0.5807836973503934,
-          "std": 12.01221929084243,
-          "min": -31.395022922941365,
-          "max": 29.727912430591658,
-          "median": 1.4264016034335736,
+          "mean": 0.1844232343827017,
+          "std": 13.291837117809546,
+          "min": -33.3815704384631,
+          "max": 29.16574409364462,
+          "median": 1.6405083315624083,
           "prediction_type": "margin"
         },
         "performance_indicators": {
-          "positive_margin_rate": 0.5384615384615384,
-          "blowout_rate": 0.1076923076923077,
-          "close_game_rate": 0.5076923076923077
+          "positive_margin_rate": 0.5692307692307692,
+          "blowout_rate": 0.12307692307692308,
+          "close_game_rate": 0.4461538461538462
         }
       },
       "xgboost_win_probability": {
@@ -195,11 +195,22 @@
         }
       },
       "fastai_neural_network": {
-        "performance_status": "error",
+        "performance_status": "tested",
         "prediction_count": 65,
-        "prediction_stats": {},
-        "performance_indicators": {},
-        "error": "[Errno 32] Broken pipe"
+        "prediction_stats": {
+          "count": 65,
+          "mean": 0.29426563674440753,
+          "std": 0.23894396841477136,
+          "min": 0.0,
+          "max": 0.8888983130455017,
+          "median": 0.28992870450019836,
+          "prediction_type": "probability"
+        },
+        "performance_indicators": {
+          "home_win_rate": 0.2153846153846154,
+          "close_games_rate": 0.27692307692307694,
+          "high_confidence_rate": 0.5538461538461539
+        }
       }
     },
     "cross_validation": {
@@ -246,7 +257,7 @@
       "ensemble_status": "error",
       "available_models": 3,
       "ensemble_methods": {},
-      "error": "The feature names should match those that were passed during fit.\nFeature names unseen at fit time:\n- away_adjusted_open_field_yards\n- away_adjusted_open_field_yards_allowed\n- away_adjusted_pass_explosiveness\n- away_adjusted_pass_explosiveness_allowed\n- away_adjusted_rush_explosiveness\n- ...\n"
+      "error": "The feature names should match those that were passed during fit.\nFeature names unseen at fit time:\n- away_adjusted_explosiveness\n- away_adjusted_explosiveness_allowed\n- away_adjusted_line_yards\n- away_adjusted_line_yards_allowed\n- away_adjusted_open_field_yards\n- ...\n"
     },
     "bias_analysis": {
       "bias_analysis_status": "completed",
@@ -263,19 +274,19 @@
       "potential_biases": []
     },
     "previous_week_validation": {
-      "validation_status": "pending",
+      "validation_status": "skipped",
       "previous_week": 13,
-      "predictions_available": true,
+      "predictions_available": false,
       "actuals_available": false,
       "model_performance": {},
       "accuracy_metrics": {},
-      "reason": "Week 13 games not yet completed"
+      "reason": "Week 13 predictions not available"
     },
     "model_feature_schemas": {
       "ridge_regression": {
         "source_feature_count": 87,
-        "derived_feature_count": 49,
-        "prepared_feature_count": 49,
+        "derived_feature_count": 8,
+        "prepared_feature_count": 8,
         "missing_features": [],
         "derived_features": [
           "home_talent",
@@ -285,48 +296,7 @@
           "home_adjusted_epa",
           "home_adjusted_epa_allowed",
           "away_adjusted_epa",
-          "away_adjusted_epa_allowed",
-          "home_adjusted_rushing_epa",
-          "home_adjusted_rushing_epa_allowed",
-          "away_adjusted_rushing_epa",
-          "away_adjusted_rushing_epa_allowed",
-          "home_adjusted_passing_epa",
-          "home_adjusted_passing_epa_allowed",
-          "away_adjusted_passing_epa",
-          "away_adjusted_passing_epa_allowed",
-          "home_adjusted_success",
-          "home_adjusted_success_allowed",
-          "away_adjusted_success",
-          "away_adjusted_success_allowed",
-          "home_adjusted_standard_down_success",
-          "home_adjusted_standard_down_success_allowed",
-          "away_adjusted_standard_down_success",
-          "away_adjusted_standard_down_success_allowed",
-          "home_adjusted_passing_down_success",
-          "home_adjusted_passing_down_success_allowed",
-          "away_adjusted_passing_down_success",
-          "away_adjusted_passing_down_success_allowed",
-          "home_adjusted_line_yards",
-          "home_adjusted_line_yards_allowed",
-          "away_adjusted_line_yards",
-          "away_adjusted_line_yards_allowed",
-          "home_adjusted_explosiveness",
-          "home_adjusted_explosiveness_allowed",
-          "away_adjusted_explosiveness",
-          "away_adjusted_explosiveness_allowed",
-          "home_total_havoc_offense",
-          "home_total_havoc_defense",
-          "away_total_havoc_offense",
-          "away_total_havoc_defense",
-          "home_points_per_opportunity_offense",
-          "home_points_per_opportunity_defense",
-          "away_points_per_opportunity_offense",
-          "away_points_per_opportunity_defense",
-          "home_avg_start_offense",
-          "home_avg_start_defense",
-          "away_avg_start_offense",
-          "away_avg_start_defense",
-          "spread"
+          "away_adjusted_epa_allowed"
         ]
       },
       "xgboost_win_probability": {

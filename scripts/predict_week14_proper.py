@@ -6,14 +6,15 @@ Enhanced Week 14 Predictions with Model Feature Alignment
 This script:
 1. Loads Week 14 games and features from training_data_2025_week14.csv
 2. Transforms features to match model training schema
-3. Generates predictions using Ridge, XGBoost, and FastAI models
-4. Creates weighted ensemble predictions combining all three models
-5. Calculates confidence scores and model agreement metrics
-6. Saves comprehensive predictions (CSV and JSON)
+3. Generates predictions using Ridge, XGBoost, FastAI, Logistic Regression, and Random Forest models
+4. Fetches SP+ ratings from GraphQL API (with CSV fallback)
+5. Creates weighted ensemble predictions combining all models and SP+
+6. Calculates confidence scores and model agreement metrics
+7. Saves comprehensive predictions (CSV and JSON)
 
 Optional Features:
 - Hyperparameter tuning for Ridge and XGBoost models (--tune-hyperparameters)
-- Weighted ensemble with default weights: Ridge 40%, XGBoost 35%, FastAI 25%
+- Weighted ensemble with default weights: Ridge 25%, XGBoost 25%, FastAI 15%, Logistic 15%, Random Forest 10%, SP+ 10%
 
 Usage:
     python3 scripts/predict_week14_proper.py
@@ -50,9 +51,12 @@ logger = get_logger(
 
 # Ensemble weighting (renormalized based on available model outputs)
 ENSEMBLE_WEIGHTS = {
-    'ridge': 0.3,
-    'xgb': 0.5,
-    'fastai': 0.2,
+    'ridge': 0.25,
+    'xgb': 0.25,
+    'fastai': 0.15,
+    'logistic': 0.15,
+    'random_forest': 0.10,
+    'sp': 0.10,
 }
 
 # Try importing hyperparameter tuning libraries
@@ -77,6 +81,37 @@ try:
     XGB_AVAILABLE = True
 except ImportError:
     XGB_AVAILABLE = False
+
+# Try importing GraphQL client for SP+ ratings
+try:
+    from src.data_sources.cfbd_graphql import CFBDGraphQLClient
+    GQL_AVAILABLE = True
+except ImportError:
+    GQL_AVAILABLE = False
+    logger.warning(
+        "GraphQL client not available. SP+ ratings will use CSV fallback only.",
+        extra={
+            "event": "dependency_missing",
+            "error.category": ErrorCategory.MODEL.value,
+            "severity": ErrorSeverity.WARNING.value,
+        },
+    )
+
+# Try importing model config
+try:
+    from config.model_config import get_model_config  # type: ignore
+    MODEL_CONFIG_AVAILABLE = True
+except (ImportError, ModuleNotFoundError):
+    MODEL_CONFIG_AVAILABLE = False
+    get_model_config = None  # type: ignore
+    logger.warning(
+        "Model config not available. Using fallback feature lists.",
+        extra={
+            "event": "dependency_missing",
+            "error.category": ErrorCategory.MODEL.value,
+            "severity": ErrorSeverity.WARNING.value,
+        },
+    )
 
 
 def load_models():
@@ -180,6 +215,78 @@ def load_models():
             },
         )
     
+    # Load Logistic Regression model
+    logistic_path = model_pack_dir / 'logistic_regression_model.joblib'
+    if logistic_path.exists():
+        try:
+            models['logistic'] = joblib.load(logistic_path)
+            logger.info(
+                "Loaded Logistic Regression model",
+                extra={"event": "model_loaded", "model": "logistic", "path": str(logistic_path)},
+            )
+        except Exception as e:
+            logger.error(
+                "Failed to load Logistic Regression model",
+                extra={
+                    "event": "model_load_failed",
+                    "model": "logistic",
+                    "path": str(logistic_path),
+                    "error.category": ErrorCategory.MODEL.value,
+                    "error.detail": str(e),
+                },
+            )
+    else:
+        logger.warning(
+            "Logistic Regression model not found",
+            extra={
+                "event": "model_missing",
+                "model": "logistic",
+                "path": str(logistic_path),
+                "error.category": ErrorCategory.MODEL.value,
+            },
+        )
+    
+    # Load Random Forest model
+    rf_path = model_pack_dir / 'random_forest_model_2025.pkl'
+    if rf_path.exists():
+        try:
+            # Try loading as pickle first (if it's a saved RandomForestScorePredictor instance)
+            try:
+                with open(rf_path, 'rb') as f:
+                    models['random_forest'] = pickle.load(f)
+                logger.info(
+                    "Loaded Random Forest model (pickle)",
+                    extra={"event": "model_loaded", "model": "random_forest", "path": str(rf_path)},
+                )
+            except Exception:
+                # Fallback: try loading as joblib
+                models['random_forest'] = joblib.load(rf_path)
+                logger.info(
+                    "Loaded Random Forest model (joblib)",
+                    extra={"event": "model_loaded", "model": "random_forest", "path": str(rf_path)},
+                )
+        except Exception as e:
+            logger.error(
+                "Failed to load Random Forest model",
+                extra={
+                    "event": "model_load_failed",
+                    "model": "random_forest",
+                    "path": str(rf_path),
+                    "error.category": ErrorCategory.MODEL.value,
+                    "error.detail": str(e),
+                },
+            )
+    else:
+        logger.warning(
+            "Random Forest model not found",
+            extra={
+                "event": "model_missing",
+                "model": "random_forest",
+                "path": str(rf_path),
+                "error.category": ErrorCategory.MODEL.value,
+            },
+        )
+    
     return models
 
 
@@ -187,28 +294,40 @@ def get_model_features(models: Dict[str, Any]) -> Dict[str, List[str]]:
     """Get required features for each model"""
     features = {}
     
+    # Use imported get_model_config if available
+    get_model_config_func = get_model_config if MODEL_CONFIG_AVAILABLE else None
+    
     if 'ridge' in models and hasattr(models['ridge'], 'feature_names_in_'):
         features['ridge'] = list(models['ridge'].feature_names_in_)
-        logger.info(f"Ridge features: {features['ridge']}")
+        logger.info(f"Ridge features: {len(features['ridge'])} features")
+    elif get_model_config_func:
+        config = get_model_config_func('ridge')
+        if config:
+            features['ridge'] = config['features']
     
     if 'xgb' in models:
         try:
             booster = models['xgb'].get_booster()
             features['xgb'] = list(booster.feature_names)
-            logger.info(f"XGBoost features: {features['xgb']}")
+            logger.info(f"XGBoost features: {len(features['xgb'])} features")
         except:
-            # Fallback: use training data to infer features
-            training_path = PROJECT_ROOT / 'model_pack' / 'updated_training_data.csv'
-            if training_path.exists():
-                df = pd.read_csv(training_path, nrows=1)
-                # Use the same features as model_training_agent
-                features['xgb'] = [
-                    'home_talent', 'away_talent', 'spread', 'home_elo', 'away_elo',
-                    'home_adjusted_epa', 'home_adjusted_epa_allowed',
-                    'away_adjusted_epa', 'away_adjusted_epa_allowed',
-                    'home_adjusted_success', 'home_adjusted_success_allowed',
-                    'away_adjusted_success', 'away_adjusted_success_allowed'
-                ]
+            # Fallback: use config or training data to infer features
+            if get_model_config_func:
+                config = get_model_config_func('xgb')
+                if config:
+                    features['xgb'] = config['features']
+            else:
+                # Legacy fallback
+                training_path = PROJECT_ROOT / 'model_pack' / 'updated_training_data.csv'
+                if training_path.exists():
+                    df = pd.read_csv(training_path, nrows=1)
+                    features['xgb'] = [
+                        'home_talent', 'away_talent', 'spread', 'home_elo', 'away_elo',
+                        'home_adjusted_epa', 'home_adjusted_epa_allowed',
+                        'away_adjusted_epa', 'away_adjusted_epa_allowed',
+                        'home_adjusted_success', 'home_adjusted_success_allowed',
+                        'away_adjusted_success', 'away_adjusted_success_allowed'
+                    ]
     
     if 'fastai' in models:
         try:
@@ -216,7 +335,7 @@ def get_model_features(models: Dict[str, Any]) -> Dict[str, List[str]]:
             fastai_features = getattr(getattr(models['fastai'], 'dls', None), 'x_names', None)
             if fastai_features:
                 features['fastai'] = list(fastai_features)
-                logger.info(f"FastAI features: {features['fastai']}")
+                logger.info(f"FastAI features: {len(features['fastai'])} features")
             else:
                 # Fallback: use same features as XGBoost
                 features['fastai'] = features.get('xgb', [])
@@ -232,6 +351,63 @@ def get_model_features(models: Dict[str, Any]) -> Dict[str, List[str]]:
                 },
             )
             features['fastai'] = features.get('xgb', [])
+    
+    # Logistic Regression features
+    if 'logistic' in models:
+        if hasattr(models['logistic'], 'feature_names_in_'):
+            features['logistic'] = list(models['logistic'].feature_names_in_)
+            logger.info(f"Logistic Regression features: {len(features['logistic'])} features")
+        elif get_model_config_func:
+            config = get_model_config_func('logistic')
+            if config:
+                features['logistic'] = config['features']
+                logger.info(f"Logistic Regression features (from config): {len(features['logistic'])} features")
+        else:
+            # Fallback feature list
+            features['logistic'] = [
+                'home_adjusted_epa', 'home_adjusted_epa_allowed',
+                'away_adjusted_epa', 'away_adjusted_epa_allowed',
+                'home_talent', 'away_talent', 'home_elo', 'away_elo'
+            ]
+            logger.info(f"Logistic Regression features (fallback): {len(features['logistic'])} features")
+    
+    # Random Forest features
+    if 'random_forest' in models:
+        try:
+            # Check if model has features attribute (RandomForestScorePredictor)
+            if hasattr(models['random_forest'], 'features'):
+                features['random_forest'] = list(models['random_forest'].features)
+                logger.info(f"Random Forest features: {len(features['random_forest'])} features")
+            elif get_model_config_func:
+                config = get_model_config_func('random_forest')
+                if config:
+                    features['random_forest'] = config['features']
+                    logger.info(f"Random Forest features (from config): {len(features['random_forest'])} features")
+            else:
+                # Fallback feature list
+                features['random_forest'] = [
+                    'home_adjusted_success', 'home_adjusted_success_allowed',
+                    'away_adjusted_success', 'away_adjusted_success_allowed',
+                    'home_adjusted_rushing_epa', 'home_adjusted_rushing_epa_allowed',
+                    'away_adjusted_rushing_epa', 'away_adjusted_rushing_epa_allowed',
+                    'home_adjusted_passing_epa', 'home_adjusted_passing_epa_allowed',
+                    'away_adjusted_passing_epa', 'away_adjusted_passing_epa_allowed'
+                ]
+                logger.info(f"Random Forest features (fallback): {len(features['random_forest'])} features")
+        except Exception as e:
+            logger.warning(
+                "Could not extract Random Forest features",
+                extra={
+                    "event": "feature_schema_fallback",
+                    "model": "random_forest",
+                    "error.category": ErrorCategory.MODEL.value,
+                    "error.detail": str(e),
+                },
+            )
+            if get_model_config_func:
+                config = get_model_config_func('random_forest')
+                if config:
+                    features['random_forest'] = config['features']
     
     return features
 
@@ -451,6 +627,243 @@ def margin_to_probability(margin: Optional[float], scale: float = 14.0) -> Optio
         return None
 
 
+def normalize_team_name(team_name: str) -> str:
+    """
+    Normalize team name for matching between different data sources.
+    Handles variations like 'Miami-FL' vs 'Miami (FL)' vs 'Miami'.
+    """
+    if pd.isna(team_name) or not team_name:
+        return ""
+    
+    team = str(team_name).strip()
+    
+    # Common variations mapping
+    variations = {
+        'Ohio State': 'Ohio State',
+        'Ohio St.': 'Ohio State',
+        'Ohio St': 'Ohio State',
+        'Miami-FL': 'Miami',
+        'Miami (FL)': 'Miami',
+        'Miami-Florida': 'Miami',
+        'Miami-OH': 'Miami OH',
+        'Miami (OH)': 'Miami OH',
+        'Miami Ohio': 'Miami OH',
+        'UL-Lafayette': 'Louisiana',
+        'Louisiana-Lafayette': 'Louisiana',
+        'UL-Monroe': 'UL-Monroe',
+        'UL Monroe': 'UL-Monroe',
+        'Louisiana-Monroe': 'UL-Monroe',
+        'Appalachian State': 'Appalachian State',
+        'App State': 'Appalachian State',
+        'Florida Atlantic': 'FAU',
+        'Florida International': 'FIU',
+        'San Jose State': 'San Jose State',
+        'San José State': 'San Jose State',
+        'San Jose St.': 'San Jose State',
+        'Hawaii': 'Hawaii',
+        "Hawai'i": 'Hawaii',
+        'UCF': 'UCF',
+        'Central Florida': 'UCF',
+        'USF': 'USF',
+        'South Florida': 'USF',
+    }
+    
+    # Check exact match first
+    if team in variations:
+        return variations[team]
+    
+    # Handle hyphenated names (CSV format: "Miami-FL")
+    if '-' in team:
+        parts = team.split('-')
+        if len(parts) == 2:
+            name, suffix = parts
+            if suffix.upper() in ['FL', 'OH', 'CA', 'TX', 'NY']:
+                if suffix.upper() == 'FL':
+                    return 'Miami' if 'Miami' in name else name
+                elif suffix.upper() == 'OH':
+                    return 'Miami OH' if 'Miami' in name else name + ' OH'
+                else:
+                    return name
+    
+    # Remove common suffixes
+    for suffix in [' (FL)', ' (OH)', ' St.', ' State', '-FL', '-OH']:
+        if team.endswith(suffix):
+            team = team[:-len(suffix)]
+    
+    return team
+
+
+def load_sp_ratings_from_csv(csv_path: Optional[Path] = None) -> Dict[str, Dict[str, float]]:
+    """
+    Load SP+ ratings from CSV file.
+    
+    Args:
+        csv_path: Path to SP+ CSV file. If None, tries default location.
+    
+    Returns:
+        Dict mapping team_name -> {'sp': rating, 'fpi': None}
+    """
+    if csv_path is None:
+        # Try default locations
+        default_paths = [
+            PROJECT_ROOT / '2025 SP+ - FBS Week 14.csv',
+            PROJECT_ROOT / 'data' / '2025 SP+ - FBS Week 14.csv',
+        ]
+        for path in default_paths:
+            if path.exists():
+                csv_path = path
+                break
+    
+    if csv_path is None or not csv_path.exists():
+        logger.debug("⚠️  SP+ CSV file not found, skipping CSV load")
+        return {}
+    
+    try:
+        logger.info(f"📂 Loading SP+ ratings from CSV: {csv_path}")
+        df = pd.read_csv(csv_path, low_memory=False)
+        
+        # Map column names (handle variations)
+        team_col = 'Team' if 'Team' in df.columns else 'team' if 'team' in df.columns else df.columns[0]
+        sp_col = None
+        for col in df.columns:
+            col_lower = str(col).lower()
+            if 'sp+' in col_lower and 'off' not in col_lower and 'def' not in col_lower and 'st' not in col_lower:
+                sp_col = col
+                break
+        
+        if sp_col is None:
+            logger.warning(f"⚠️  Could not find SP+ column in CSV. Available columns: {list(df.columns)}")
+            return {}
+        
+        team_ratings = {}
+        for _, row in df.iterrows():
+            team = row[team_col]
+            sp_rating = row[sp_col]
+            
+            if pd.notna(team) and pd.notna(sp_rating):
+                team_str = str(team).strip()
+                normalized_name = normalize_team_name(team_str)
+                
+                # Store with original name (primary key)
+                if team_str not in team_ratings:
+                    team_ratings[team_str] = {
+                        'sp': float(sp_rating),
+                        'fpi': None  # CSV doesn't have FPI
+                    }
+                
+                # Store with normalized name (only if different from original)
+                if normalized_name != team_str and normalized_name not in team_ratings:
+                    team_ratings[normalized_name] = {
+                        'sp': float(sp_rating),
+                        'fpi': None
+                    }
+        
+        logger.info(f"  ✅ Loaded SP+ ratings for {len(team_ratings)} teams from CSV")
+        return team_ratings
+        
+    except Exception as e:
+        logger.warning(
+            f"⚠️  Error loading SP+ CSV: {e}",
+            extra={
+                "event": "sp_csv_load_failed",
+                "error.category": ErrorCategory.DATA.value,
+                "error.detail": str(e),
+            },
+        )
+        return {}
+
+
+def fetch_sp_fpi_ratings(season: int = 2025, use_csv: bool = True) -> Dict[str, Dict[str, float]]:
+    """
+    Fetch SP+ and FPI ratings from CFBD GraphQL API, optionally supplemented with CSV.
+    
+    Args:
+        season: Season year
+        use_csv: If True, load SP+ from CSV as primary source, use API for FPI
+    
+    Returns:
+        Dict mapping team_name -> {'sp': rating, 'fpi': rating}
+    """
+    ratings = {}
+    
+    # Try to load from CSV first (more reliable for SP+)
+    if use_csv:
+        csv_ratings = load_sp_ratings_from_csv()
+        if csv_ratings:
+            ratings.update(csv_ratings)
+            logger.info(f"✅ Loaded {len(csv_ratings)} SP+ ratings from CSV")
+    
+    # Fetch from API for FPI (and supplement SP+ if CSV missing some teams)
+    if GQL_AVAILABLE:
+        api_key = os.getenv("CFBD_API_KEY")
+        if api_key:
+            try:
+                logger.info(f"📡 Fetching SP+/FPI ratings from CFBD GraphQL API...")
+                client = CFBDGraphQLClient(api_key=api_key)
+                result = client.get_ratings(season=season)
+                
+                # Handle both response formats
+                if 'ratings' in result:
+                    api_ratings = result['ratings']
+                elif 'data' in result and 'ratings' in result['data']:
+                    api_ratings = result['data']['ratings']
+                else:
+                    logger.warning("⚠️  No ratings data in GraphQL response")
+                    api_ratings = []
+                
+                if api_ratings:
+                    # Merge API ratings (prefer CSV for SP+, use API for FPI)
+                    for rating in api_ratings:
+                        team = rating.get('team')
+                        if team:
+                            normalized = normalize_team_name(team)
+                            
+                            # Initialize if not exists
+                            if normalized not in ratings:
+                                ratings[normalized] = {'sp': None, 'fpi': None}
+                            
+                            # Use API SP+ only if CSV didn't have it
+                            if ratings[normalized]['sp'] is None:
+                                ratings[normalized]['sp'] = rating.get('spOverall')
+                            
+                            # Always use API FPI (CSV doesn't have it)
+                            fpi_rating = rating.get('fpi')
+                            if fpi_rating is not None:
+                                ratings[normalized]['fpi'] = fpi_rating
+                    
+                    logger.info(f"  ✅ Merged API ratings for {len(api_ratings)} teams")
+                
+            except Exception as e:
+                logger.warning(
+                    f"⚠️  Failed to fetch from API: {e}",
+                    extra={
+                        "event": "sp_api_fetch_failed",
+                        "error.category": ErrorCategory.DATA.value,
+                        "error.detail": str(e),
+                    },
+                )
+                # Continue with CSV data only
+    else:
+        logger.info("GraphQL client not available, using CSV only for SP+ ratings")
+    
+    # Filter out entries with no ratings at all
+    ratings = {k: v for k, v in ratings.items() if v.get('sp') is not None or v.get('fpi') is not None}
+    
+    logger.info(f"✅ Total ratings loaded: {len(ratings)} teams")
+    return ratings
+
+
+def calculate_sp_predicted_margin(home_sp: Optional[float], away_sp: Optional[float], 
+                                 neutral_site: bool = False) -> Optional[float]:
+    """Calculate predicted margin from SP+ ratings."""
+    if home_sp is None or away_sp is None:
+        return None
+    
+    base_margin = home_sp - away_sp
+    home_advantage = 2.5 if not neutral_site else 0.0
+    return base_margin + home_advantage
+
+
 def transform_week14_for_models(week14_data: Dict[str, pd.DataFrame], 
                                 model_features: Dict[str, List[str]],
                                 defaults: Dict[str, float]) -> Dict[str, pd.DataFrame]:
@@ -493,6 +906,9 @@ def create_ensemble_prediction(
     ridge_margin: Optional[float],
     xgb_prob: Optional[float],
     fastai_prob: Optional[float],
+    logistic_prob: Optional[float] = None,
+    rf_margin: Optional[float] = None,
+    sp_margin: Optional[float] = None,
     model_weights: Optional[Dict[str, float]] = None
 ) -> Dict[str, Any]:
     """
@@ -502,6 +918,9 @@ def create_ensemble_prediction(
         ridge_margin: Ridge regression predicted margin
         xgb_prob: XGBoost home win probability
         fastai_prob: FastAI home win probability
+        logistic_prob: Logistic Regression home win probability
+        rf_margin: Random Forest predicted margin
+        sp_margin: SP+ predicted margin
         model_weights: Optional weights for each model
         
     Returns:
@@ -509,13 +928,9 @@ def create_ensemble_prediction(
     """
     if model_weights is None:
         # Default weights based on model performance
-        # Ridge: 0.3, XGBoost: 0.5, FastAI: 0.2
-        # Weights renormalized based on available model outputs
-        model_weights = {
-            'ridge': 0.3,
-            'xgb': 0.5,
-            'fastai': 0.2
-        }
+        # Original: Ridge 0.3, XGBoost 0.5, FastAI 0.2
+        # Updated with new models: rebalanced to include all 6 (5 ML + SP+)
+        model_weights = ENSEMBLE_WEIGHTS.copy()
     
     ensemble = {
         'ensemble_margin': np.nan,
@@ -556,10 +971,39 @@ def create_ensemble_prediction(
     if fastai_prob is not None and not np.isnan(fastai_prob):
         available_models.append('fastai')
         probs.append(fastai_prob)
-        weights.append(model_weights.get('fastai', 0.2))
+        weights.append(model_weights.get('fastai', 0.15))
         # Convert probability to margin estimate
         fastai_margin = (fastai_prob - 0.5) * 28.0
         margins.append(fastai_margin)
+    
+    # Logistic Regression probability
+    if logistic_prob is not None and not np.isnan(logistic_prob):
+        available_models.append('logistic')
+        probs.append(logistic_prob)
+        weights.append(model_weights.get('logistic', 0.15))
+        # Convert probability to margin estimate
+        logistic_margin = (logistic_prob - 0.5) * 28.0
+        margins.append(logistic_margin)
+    
+    # Random Forest margin (convert to probability for ensemble)
+    if rf_margin is not None and not np.isnan(rf_margin):
+        available_models.append('random_forest')
+        margins.append(rf_margin)
+        # Convert margin to probability
+        rf_prob = 0.5 + (rf_margin / 28.0)
+        rf_prob = np.clip(rf_prob, 0.05, 0.95)
+        probs.append(rf_prob)
+        weights.append(model_weights.get('random_forest', 0.10))
+    
+    # SP+ margin (convert to probability for ensemble)
+    if sp_margin is not None and not np.isnan(sp_margin):
+        available_models.append('sp')
+        margins.append(sp_margin)
+        # Convert margin to probability
+        sp_prob = 0.5 + (sp_margin / 28.0)
+        sp_prob = np.clip(sp_prob, 0.05, 0.95)
+        probs.append(sp_prob)
+        weights.append(model_weights.get('sp', 0.10))
     
     if not available_models:
         return ensemble
@@ -682,6 +1126,109 @@ def generate_predictions(
     else:
         fastai_proba = None
     
+    # Generate Logistic Regression predictions (win probability)
+    if 'logistic' in models and 'logistic' in transformed_data:
+        try:
+            X_logistic = transformed_data['logistic']
+            # Logistic regression returns probabilities
+            logistic_proba = models['logistic'].predict_proba(X_logistic)[:, 1]  # Home win probability
+            
+            logger.info(f"✅ Generated Logistic Regression predictions: {len(logistic_proba)} games")
+        except Exception as e:
+            logger.error(f"❌ Logistic Regression prediction failed: {e}")
+            logistic_proba = None
+    else:
+        logistic_proba = None
+    
+    # Generate Random Forest predictions (home_points, away_points -> margin)
+    rf_preds = None
+    rf_home_points = None
+    rf_away_points = None
+    if 'random_forest' in models and 'random_forest' in transformed_data:
+        try:
+            X_rf = transformed_data['random_forest']
+            rf_model = models['random_forest']
+            
+            # Check if it's a RandomForestScorePredictor instance
+            if hasattr(rf_model, 'predict'):
+                # It's a RandomForestScorePredictor - use its predict method
+                rf_results = rf_model.predict(X_rf)
+                rf_home_points = rf_results['predicted_home_points'].values
+                rf_away_points = rf_results['predicted_away_points'].values
+                # Note: RandomForestScorePredictor returns margin as away - home
+                # We need to convert to home - away for consistency
+                rf_preds = rf_home_points - rf_away_points
+            else:
+                # Assume it's a dict with model_home and model_away
+                if isinstance(rf_model, dict) and 'model_home' in rf_model and 'model_away' in rf_model:
+                    rf_home_points = rf_model['model_home'].predict(X_rf)
+                    rf_away_points = rf_model['model_away'].predict(X_rf)
+                    rf_preds = rf_home_points - rf_away_points
+                else:
+                    logger.warning("Random Forest model format not recognized")
+                    rf_preds = None
+            
+            if rf_preds is not None:
+                logger.info(f"✅ Generated Random Forest predictions: {len(rf_preds)} games")
+        except Exception as e:
+            logger.error(f"❌ Random Forest prediction failed: {e}")
+            import traceback
+            traceback.print_exc()
+            rf_preds = None
+            rf_home_points = None
+            rf_away_points = None
+    else:
+        rf_preds = None
+        rf_home_points = None
+        rf_away_points = None
+    
+    # Fetch SP+ ratings and calculate predictions
+    logger.info("📊 Fetching SP+ ratings...")
+    sp_ratings = fetch_sp_fpi_ratings(season=2025, use_csv=True)
+    sp_preds = None
+    if sp_ratings:
+        try:
+            sp_preds = []
+            for idx, (_, game) in enumerate(games_meta.iterrows()):
+                home_team = str(game.get('home_team', ''))
+                away_team = str(game.get('away_team', ''))
+                neutral_site = bool(game.get('neutral_site', False)) if 'neutral_site' in game else False
+                
+                # Normalize team names for matching
+                home_normalized = normalize_team_name(home_team)
+                away_normalized = normalize_team_name(away_team)
+                
+                # Try to find ratings
+                home_rating = None
+                away_rating = None
+                
+                # Try original name first, then normalized
+                for team_name in [home_team, home_normalized]:
+                    if team_name in sp_ratings:
+                        home_rating = sp_ratings[team_name].get('sp')
+                        break
+                
+                for team_name in [away_team, away_normalized]:
+                    if team_name in sp_ratings:
+                        away_rating = sp_ratings[team_name].get('sp')
+                        break
+                
+                # Calculate SP+ margin
+                sp_margin = calculate_sp_predicted_margin(home_rating, away_rating, neutral_site)
+                sp_preds.append(sp_margin if sp_margin is not None else np.nan)
+            
+            sp_preds = np.array(sp_preds)
+            sp_count = (~np.isnan(sp_preds)).sum()
+            logger.info(f"✅ Generated SP+ predictions: {sp_count}/{len(sp_preds)} games")
+        except Exception as e:
+            logger.error(f"❌ SP+ prediction calculation failed: {e}")
+            import traceback
+            traceback.print_exc()
+            sp_preds = None
+    else:
+        logger.warning("⚠️  No SP+ ratings available")
+        sp_preds = None
+    
     # Combine predictions
     for idx, (_, game) in enumerate(games_meta.iterrows()):
         pred = {
@@ -719,6 +1266,42 @@ def generate_predictions(
             pred['fastai_home_win_probability'] = float(fastai_proba[idx])
         else:
             pred['fastai_home_win_probability'] = np.nan
+        
+        # Add Logistic Regression prediction (win probability)
+        if logistic_proba is not None and idx < len(logistic_proba):
+            pred['logistic_home_win_probability'] = float(logistic_proba[idx])
+        else:
+            pred['logistic_home_win_probability'] = np.nan
+        
+        # Add Random Forest prediction (margin)
+        if rf_preds is not None and idx < len(rf_preds):
+            pred['random_forest_predicted_margin'] = float(rf_preds[idx])
+            if rf_home_points is not None and idx < len(rf_home_points):
+                pred['random_forest_home_points'] = float(rf_home_points[idx])
+            if rf_away_points is not None and idx < len(rf_away_points):
+                pred['random_forest_away_points'] = float(rf_away_points[idx])
+            # Convert margin to probability
+            rf_prob = margin_to_probability(rf_preds[idx])
+            pred['random_forest_home_win_probability'] = float(rf_prob) if rf_prob is not None else np.nan
+        else:
+            pred['random_forest_predicted_margin'] = np.nan
+            pred['random_forest_home_points'] = np.nan
+            pred['random_forest_away_points'] = np.nan
+            pred['random_forest_home_win_probability'] = np.nan
+        
+        # Add SP+ prediction (margin)
+        if sp_preds is not None and idx < len(sp_preds):
+            sp_margin_val = sp_preds[idx]
+            if not np.isnan(sp_margin_val):
+                pred['sp_predicted_margin'] = float(sp_margin_val)
+                sp_prob = margin_to_probability(sp_margin_val)
+                pred['sp_home_win_probability'] = float(sp_prob) if sp_prob is not None else np.nan
+            else:
+                pred['sp_predicted_margin'] = np.nan
+                pred['sp_home_win_probability'] = np.nan
+        else:
+            pred['sp_predicted_margin'] = np.nan
+            pred['sp_home_win_probability'] = np.nan
 
         # Get individual predictions for ensemble
         ridge_margin = (
@@ -736,10 +1319,25 @@ def generate_predictions(
             if fastai_proba is not None and idx < len(fastai_proba) 
             else None
         )
+        logistic_prob = (
+            float(logistic_proba[idx])
+            if logistic_proba is not None and idx < len(logistic_proba)
+            else None
+        )
+        rf_margin = (
+            float(rf_preds[idx])
+            if rf_preds is not None and idx < len(rf_preds)
+            else None
+        )
+        sp_margin = (
+            float(sp_preds[idx])
+            if sp_preds is not None and idx < len(sp_preds) and not np.isnan(sp_preds[idx])
+            else None
+        )
 
         # Create ensemble prediction
         ensemble = create_ensemble_prediction(
-            ridge_margin, xgb_prob, fastai_prob
+            ridge_margin, xgb_prob, fastai_prob, logistic_prob, rf_margin, sp_margin
         )
 
         # Add ensemble results
@@ -794,6 +1392,25 @@ def generate_predictions(
                     pred['home_team'] if fastai_prob > 0.5 
                     else pred['away_team']
                 )
+            elif logistic_prob is not None:
+                pred['home_win_probability'] = logistic_prob
+                pred['away_win_probability'] = 1.0 - logistic_prob
+                pred['predicted_winner'] = (
+                    pred['home_team'] if logistic_prob > 0.5 
+                    else pred['away_team']
+                )
+            elif rf_margin is not None:
+                pred['predicted_margin'] = rf_margin
+                pred['predicted_winner'] = (
+                    pred['home_team'] if rf_margin > 0 
+                    else pred['away_team']
+                )
+            elif sp_margin is not None:
+                pred['predicted_margin'] = sp_margin
+                pred['predicted_winner'] = (
+                    pred['home_team'] if sp_margin > 0 
+                    else pred['away_team']
+                )
             else:
                 pred['predicted_winner'] = 'Unknown'
         
@@ -802,20 +1419,16 @@ def generate_predictions(
     return pd.DataFrame(predictions)
 
 
-def main():
-    """Main execution"""
-    import argparse
-    
-    parser = argparse.ArgumentParser(
-        description='Generate Week 14 predictions with optional tuning'
-    )
-    parser.add_argument(
-        '--tune-hyperparameters',
-        action='store_true',
-        help='Run hyperparameter tuning before predictions'
-    )
-    args = parser.parse_args()
-    
+def run_prediction_pipeline(tune_hyperparameters: bool = False) -> int:
+    """
+    Execute the complete Week 14 prediction workflow programmatically.
+
+    Args:
+        tune_hyperparameters: Whether to run model tuning before predictions.
+
+    Returns:
+        Process exit code (0=success, 1=failure)
+    """
     logger.info("=" * 80)
     logger.info("WEEK 14 PREDICTIONS WITH PROPER MODEL ALIGNMENT")
     logger.info("=" * 80)
@@ -830,7 +1443,7 @@ def main():
             return 1
         
         # Optional: Hyperparameter tuning
-        if args.tune_hyperparameters:
+        if tune_hyperparameters:
             logger.info("\n" + "=" * 80)
             logger.info("HYPERPARAMETER TUNING")
             logger.info("=" * 80)
@@ -882,7 +1495,7 @@ def main():
                     "Training data not found. Skipping tuning.",
                     extra={
                         "event": "data_missing",
-                        "path": str(training_data_path),
+                        "path": str(training_path),
                         "error.category": ErrorCategory.DATA.value,
                     },
                 )
@@ -1012,4 +1625,15 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description='Generate Week 14 predictions with optional tuning'
+    )
+    parser.add_argument(
+        '--tune-hyperparameters',
+        action='store_true',
+        help='Run hyperparameter tuning before predictions'
+    )
+    cli_args = parser.parse_args()
+    sys.exit(run_prediction_pipeline(tune_hyperparameters=cli_args.tune_hyperparameters))

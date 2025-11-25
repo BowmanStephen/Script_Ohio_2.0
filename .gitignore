@@ -95,4 +95,13 @@ model_pack/backups/daily/
 model_pack/backups/weekly/
 # Keep critical backups versioned
 !model_pack/backups/critical/
+
+# === Starter Pack Backup Files ===
+starter_pack/*.backup
+starter_pack/*.backup_*
+starter_pack/*_BACKUP_*
+starter_pack/*backup_*
 .vercel
+
+# === MCP Configuration (contains secrets) ===
+.kilocode/

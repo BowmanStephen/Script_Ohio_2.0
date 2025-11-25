@@ -3,12 +3,15 @@
 2025 College Football Data Acquisition Agent - Version 2
 =========================================================
 
+⚠️ DEPRECATED: This file is deprecated. Please use model_pack/data_acquisition_agent.py instead.
+
 This script fetches complete 2025 college football data through Week 11
 from the CollegeFootballData.com API and processes it for compatibility
 with existing training_data.csv structure.
 
 Author: Data Acquisition Agent
 Date: November 7, 2025
+Deprecated: November 19, 2025 - Use data_acquisition_agent.py instead
 """
 
 import argparse

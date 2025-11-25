@@ -74,9 +74,10 @@ const transformApiPrediction = (apiPrediction: any): Game | null => {
     }
 
     const spread = apiPrediction.spread ?? baseGame?.spread ?? 0;
-    const predictedMargin = apiPrediction.ensemble_margin ?? apiPrediction.predicted_margin ?? apiPrediction.ridge_predicted_margin ?? 0;
+    // Prefer calibrated predictions if available, then ensemble, then individual models
+    const predictedMargin = apiPrediction.calibrated_margin ?? apiPrediction.market_adjusted_margin ?? apiPrediction.ensemble_margin ?? apiPrediction.predicted_margin ?? apiPrediction.ridge_predicted_margin ?? 0;
 
-    const homeWinProb = apiPrediction.home_win_probability ?? apiPrediction.ensemble_home_win_probability ?? apiPrediction.ridge_home_win_probability ?? 0.5;
+    const homeWinProb = apiPrediction.calibrated_home_win_prob ?? apiPrediction.home_win_probability ?? apiPrediction.ensemble_home_win_probability ?? apiPrediction.ridge_home_win_probability ?? 0.5;
     const awayWinProb = apiPrediction.away_win_probability ?? apiPrediction.ensemble_away_win_probability ?? (1 - homeWinProb);
 
     const winnerIsHome = predictedMargin >= 0;

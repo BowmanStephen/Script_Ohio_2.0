@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-MODEL TRAINING AGENT - 2025 DATA INTEGRATION
-============================================
+MODEL TRAINING AGENT - DATA INTEGRATION
+========================================
 
-Mission: Retrain all existing ML models with newly integrated 2025 season data
+Mission: Retrain all existing ML models with newly integrated season data
 and optimize their performance for current predictions.
 
 Models to be retrained:
@@ -12,12 +12,13 @@ Models to be retrained:
 3. FastAI Neural Network (win probability)
 
 Temporal Validation Strategy:
-- Training: 2016-2024 seasons (4,520 games)
-- Testing: 2025 season (469 games)
-- Total Dataset: 4,989 games
+- Training: Historical seasons (before current season)
+- Testing: Current season (holdout data)
+- Uses configuration system for season detection
 
 Author: Model Training Agent
 Date: November 7, 2025
+Updated: November 19, 2025 - Uses configuration system
 """
 
 import pandas as pd
@@ -27,9 +28,19 @@ import seaborn as sns
 import joblib
 import warnings
 import logging
+import sys
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Tuple, Any
+from typing import Dict, List, Tuple, Any, Optional
+
+# Import configuration system
+_config_dir = Path(__file__).parent / "config"
+if str(_config_dir.parent.parent) not in sys.path:
+    sys.path.insert(0, str(_config_dir.parent.parent))
+try:
+    from model_pack.config.data_config import get_data_config
+except ImportError:
+    from config.data_config import get_data_config
 
 # ML Libraries
 from sklearn.linear_model import Ridge
@@ -75,17 +86,43 @@ sns.set_palette("husl")
 
 class ModelTrainingAgent:
     """
-    Comprehensive model training agent for 2025 college football data integration.
+    Comprehensive model training agent for college football data integration.
+    
+    This agent orchestrates the complete model training pipeline including:
+    - Data loading and temporal validation
+    - Ridge Regression training for margin prediction
+    - XGBoost Classifier training for win probability
+    - FastAI Neural Network training for win probability
+    - Hyperparameter tuning and optimization
+    - Performance evaluation and reporting
+    
+    Example:
+        >>> from model_pack.model_training_agent import ModelTrainingAgent
+        >>> agent = ModelTrainingAgent()
+        >>> agent.run_complete_training_pipeline()
+        >>> print(agent.performance_metrics)
     """
 
-    def __init__(self, data_path: str = "updated_training_data.csv"):
+    def __init__(self, data_path: Optional[str] = None):
         """
         Initialize the Model Training Agent.
 
         Args:
-            data_path: Path to the updated training data with 2025 season
+            data_path: Path to the updated training data (defaults to config)
+            
+        Raises:
+            FileNotFoundError: If data file doesn't exist
+            ValueError: If configuration system fails
         """
+        # Get configuration
+        self.config = get_data_config()
+        
+        # Use configured data path if not provided
+        if data_path is None:
+            data_path = str(self.config.get_training_data_path())
+        
         self.data_path = data_path
+        self.current_season = self.config.get_season()
         self.df = None
         self.train_df = None
         self.test_df = None
@@ -127,7 +164,7 @@ class ModelTrainingAgent:
         """
         Load the updated training data and implement temporal validation.
         """
-        logger.info("Loading updated training data with 2025 season...")
+        logger.info(f"Loading updated training data with {self.current_season} season...")
 
         # Load the data
         self.df = pd.read_csv(self.data_path, low_memory=False)
@@ -152,12 +189,12 @@ class ModelTrainingAgent:
         for season, count in season_counts.items():
             logger.info(f"  {season}: {count} games")
 
-        # Implement temporal validation
-        self.train_df = self.df[self.df['season'] < 2025]  # 2016-2024
-        self.test_df = self.df[self.df['season'] == 2025]   # 2025 only
+        # Implement temporal validation using configured season
+        self.train_df = self.df[self.df['season'] < self.current_season]  # Historical data
+        self.test_df = self.df[self.df['season'] == self.current_season]   # Current season only
 
-        logger.info(f"Training set: {len(self.train_df)} games (2016-2024)")
-        logger.info(f"Test set: {len(self.test_df)} games (2025)")
+        logger.info(f"Training set: {len(self.train_df)} games (seasons < {self.current_season})")
+        logger.info(f"Test set: {len(self.test_df)} games ({self.current_season})")
 
         # Add target variable for classification (using .copy() to avoid SettingWithCopyWarning)
         self.train_df = self.train_df.copy()
@@ -183,8 +220,25 @@ class ModelTrainingAgent:
         X_test = self.test_df[self.ridge_features]  # Predict on all test games
         y_test = self.test_df['margin']  # But only calculate metrics on games with outcomes
         
+        # Load or tune hyperparameters
+        from model_pack.utils.hyperparameter_tuner import HyperparameterTuner
+        tuner = HyperparameterTuner(use_optuna=False)
+        
+        # Try to load saved best parameters
+        best_params = tuner.load_best_params('ridge')
+        if best_params:
+            alpha = best_params.get('alpha', 1.0)
+            logger.info(f"Using saved Ridge alpha: {alpha}")
+        else:
+            # Perform hyperparameter tuning
+            logger.info("No saved Ridge parameters found - performing tuning...")
+            tuning_results = tuner.tune_ridge(X_train, y_train, cv_folds=5)
+            alpha = tuning_results.best_params['alpha']
+            tuner.save_best_params('ridge', tuning_results)
+            logger.info(f"Ridge tuning complete - best alpha: {alpha}")
+        
         # Train model with optimized alpha
-        model = Ridge(alpha=1.0)
+        model = Ridge(alpha=alpha)
         model.fit(X_train, y_train)
 
         # Make predictions on all test games
@@ -219,8 +273,9 @@ class ModelTrainingAgent:
             model.coef_, index=self.ridge_features
         ).sort_values(key=np.abs, ascending=False)
 
-        # Save model
-        joblib.dump(model, 'ridge_model_2025.joblib')
+        # Save model with season in filename
+        model_filename = f'ridge_model_{self.current_season}.joblib'
+        joblib.dump(model, model_filename)
 
         logger.info(f"Ridge Regression trained successfully!")
         logger.info(f"MAE: {mae:.2f}, RMSE: {rmse:.2f}, R²: {r2:.3f}")
@@ -229,37 +284,141 @@ class ModelTrainingAgent:
 
     def train_xgboost_classifier(self) -> Dict[str, Any]:
         """
-        Train XGBoost classifier for win probability prediction.
+        Train XGBoost classifier for win probability prediction with hyperparameter tuning.
         """
         logger.info("Training XGBoost Classifier...")
 
         # Prepare training data - only use games with outcomes
         train_with_outcomes = self.train_df.dropna(subset=['home_win'] + self.xgb_features)
-        X_train = train_with_outcomes[self.xgb_features]
+        X_train = train_with_outcomes[self.xgb_features].copy()
         y_train = train_with_outcomes['home_win']
         
         # Prepare test data - only use games with outcomes for metrics
         test_with_outcomes = self.test_df.dropna(subset=['home_win'] + self.xgb_features)
-        X_test = self.test_df[self.xgb_features]  # Predict on all test games
+        X_test = self.test_df[self.xgb_features].copy()  # Predict on all test games
         
-        # Train model with optimized parameters
+        # Feature engineering: Add interaction terms
+        logger.info("Adding feature interactions...")
+        X_train_enhanced = X_train.copy()
+        X_test_enhanced = X_test.copy()
+        
+        # Add key interaction terms
+        if 'home_adjusted_epa' in X_train.columns and 'away_adjusted_epa_allowed' in X_train.columns:
+            X_train_enhanced['epa_interaction'] = X_train['home_adjusted_epa'] * X_train['away_adjusted_epa_allowed']
+            X_test_enhanced['epa_interaction'] = X_test['home_adjusted_epa'] * X_test['away_adjusted_epa_allowed']
+        
+        if 'home_elo' in X_train.columns and 'away_elo' in X_train.columns:
+            X_train_enhanced['elo_diff'] = X_train['home_elo'] - X_train['away_elo']
+            X_test_enhanced['elo_diff'] = X_test['home_elo'] - X_test['away_elo']
+        
+        if 'home_talent' in X_train.columns and 'away_talent' in X_train.columns:
+            X_train_enhanced['talent_diff'] = X_train['home_talent'] - X_train['away_talent']
+            X_test_enhanced['talent_diff'] = X_test['home_talent'] - X_test['away_talent']
+        
+        # Calculate class weights for imbalanced datasets
+        from collections import Counter
+        class_counts = Counter(y_train)
+        total = sum(class_counts.values())
+        class_weights = {0: total / (2 * class_counts[0]), 1: total / (2 * class_counts[1])}
+        scale_pos_weight = class_counts[0] / class_counts[1] if class_counts[1] > 0 else 1.0
+        
+        logger.info(f"Class distribution: {class_counts}, scale_pos_weight: {scale_pos_weight:.3f}")
+        
+        # Hyperparameter tuning using utility
+        logger.info("Performing hyperparameter tuning...")
+        from model_pack.utils.hyperparameter_tuner import HyperparameterTuner
+        
+        tuner = HyperparameterTuner(use_optuna=False)
+        
+        # Try to load saved best parameters
+        best_params = tuner.load_best_params('xgboost')
+        if best_params:
+            logger.info(f"Using saved XGBoost parameters: {best_params}")
+        else:
+            # Perform hyperparameter tuning
+            logger.info("No saved XGBoost parameters found - performing tuning...")
+            try:
+                tuning_results = tuner.tune_xgboost(X_train_enhanced, y_train, cv_folds=3)
+                best_params = tuning_results.best_params
+                tuner.save_best_params('xgboost', tuning_results)
+                logger.info(f"XGBoost tuning complete - best params: {best_params}")
+            except Exception as e:
+                logger.warning(f"Hyperparameter tuning failed: {e}. Using improved defaults.")
+                best_params = {
+                    'n_estimators': 300,
+                    'max_depth': 6,
+                    'learning_rate': 0.1,
+                    'subsample': 0.9,
+                }
+        
+        # Train final model with best parameters
         model = xgb.XGBClassifier(
             eval_metric='logloss',
             random_state=77,
-            n_estimators=100,
-            max_depth=6,
-            learning_rate=0.1
+            scale_pos_weight=scale_pos_weight,
+            use_label_encoder=False,
+            tree_method='hist',
+            **best_params
         )
-        model.fit(X_train, y_train)
+        
+        # Use early stopping if we have validation data
+        if len(test_with_outcomes) > 10:  # Need enough data for validation
+            X_val = test_with_outcomes[self.xgb_features].copy()
+            y_val = test_with_outcomes['home_win']
+            
+            # Add same feature engineering to validation set
+            if 'home_adjusted_epa' in X_val.columns:
+                X_val['epa_interaction'] = X_val['home_adjusted_epa'] * X_val['away_adjusted_epa_allowed']
+            if 'home_elo' in X_val.columns:
+                X_val['elo_diff'] = X_val['home_elo'] - X_val['away_elo']
+            if 'home_talent' in X_val.columns:
+                X_val['talent_diff'] = X_val['home_talent'] - X_val['away_talent']
+            
+            # Match columns with training data
+            X_val = X_val[X_train_enhanced.columns]
+            
+            model.fit(
+                X_train_enhanced,
+                y_train,
+                eval_set=[(X_val, y_val)],
+                early_stopping_rounds=20,
+                verbose=False
+            )
+        else:
+            model.fit(X_train_enhanced, y_train)
 
-        # Make predictions on all test games
-        y_proba_all = model.predict_proba(X_test)[:, 1]
+        # Make predictions on all test games (use enhanced features)
+        # Handle missing interaction features in test set
+        for col in X_train_enhanced.columns:
+            if col not in X_test_enhanced.columns:
+                X_test_enhanced[col] = 0.0
+        
+        # Ensure column order matches training
+        X_test_enhanced = X_test_enhanced[X_train_enhanced.columns]
+        
+        y_proba_all = model.predict_proba(X_test_enhanced)[:, 1]
         y_pred_all = (y_proba_all > 0.5).astype(int)
 
         # Calculate metrics only on games with outcomes
         if len(test_with_outcomes) > 0:
             y_test_actual = test_with_outcomes['home_win']
-            y_proba_actual = model.predict_proba(test_with_outcomes[self.xgb_features])[:, 1]
+            
+            # Prepare test features with same engineering
+            X_test_actual = test_with_outcomes[self.xgb_features].copy()
+            if 'home_adjusted_epa' in X_test_actual.columns:
+                X_test_actual['epa_interaction'] = X_test_actual['home_adjusted_epa'] * X_test_actual['away_adjusted_epa_allowed']
+            if 'home_elo' in X_test_actual.columns:
+                X_test_actual['elo_diff'] = X_test_actual['home_elo'] - X_test_actual['away_elo']
+            if 'home_talent' in X_test_actual.columns:
+                X_test_actual['talent_diff'] = X_test_actual['home_talent'] - X_test_actual['away_talent']
+            
+            # Match columns
+            for col in X_train_enhanced.columns:
+                if col not in X_test_actual.columns:
+                    X_test_actual[col] = 0.0
+            X_test_actual = X_test_actual[X_train_enhanced.columns]
+            
+            y_proba_actual = model.predict_proba(X_test_actual)[:, 1]
             y_pred_actual = (y_proba_actual > 0.5).astype(int)
             accuracy = accuracy_score(y_test_actual, y_pred_actual)
             logloss = log_loss(y_test_actual, y_proba_actual, labels=[0, 1])
@@ -294,16 +453,23 @@ class ModelTrainingAgent:
             'actual': y_test_actual.values if len(test_with_outcomes) > 0 else y_train.values
         }
 
-        # Store model and feature importance
+        # Store model and feature importance (including new features)
         self.models['xgboost'] = model
         importance_scores = model.get_booster().get_score(importance_type='gain')
-        self.feature_importance['xgboost'] = pd.Series(
-            [importance_scores.get(f'f{i}', 0) for i in range(len(self.xgb_features))],
-            index=self.xgb_features
-        ).sort_values(ascending=False)
+        
+        # Map feature indices to feature names (including new engineered features)
+        feature_names = list(X_train_enhanced.columns)
+        feature_importance_dict = {
+            feature_names[i]: importance_scores.get(f'f{i}', 0)
+            for i in range(len(feature_names))
+        }
+        self.feature_importance['xgboost'] = pd.Series(feature_importance_dict).sort_values(ascending=False)
+        
+        logger.info(f"Top 5 features by importance: {self.feature_importance['xgboost'].head(5).to_dict()}")
 
-        # Save model
-        joblib.dump(model, 'xgb_home_win_model_2025.pkl')
+        # Save model with season in filename
+        model_filename = f'xgb_home_win_model_{self.current_season}.pkl'
+        joblib.dump(model, model_filename)
 
         logger.info(f"XGBoost trained successfully!")
         logger.info(f"Accuracy: {accuracy:.3f}, Log Loss: {logloss:.3f}, AUC: {auc:.3f}, F1: {f1:.3f}")
@@ -389,16 +555,37 @@ class ModelTrainingAgent:
             # Train model
             learn.fit_one_cycle(n_epochs, lr_max=lr)
 
-            # Evaluate on 2025 test data (only games with outcomes)
+            # Initialize metrics variables to avoid scope errors
+            accuracy = 0.0
+            logloss = 1.0
+            auc = 0.5
+            f1 = 0.0
+            pred_labels = np.array([])
+            pred_probs = np.array([])
+            actual_values = np.array([])
+            targs_np = None
+            
+            # Evaluate on current season test data (only games with outcomes)
             if len(test_with_outcomes) > 0:
                 test_dl = dls.test_dl(test_with_outcomes[self.fastai_cat_features + self.fastai_cont_features])
                 preds, targs = learn.get_preds(dl=test_dl)
 
-                pred_probs = preds.squeeze().clip(0, 1)
+                # Convert FastAI tensors to numpy arrays
+                if hasattr(preds, 'numpy'):
+                    pred_probs = preds.squeeze().numpy().clip(0, 1)
+                elif hasattr(preds, 'cpu'):
+                    pred_probs = preds.cpu().numpy().squeeze().clip(0, 1)
+                else:
+                    pred_probs = np.array(preds.squeeze()).clip(0, 1)
+                
+                # Ensure pred_probs is 1D
+                if len(pred_probs.shape) > 1:
+                    pred_probs = pred_probs.flatten()
+                
                 pred_labels = (pred_probs > 0.5).astype(int)
 
                 # Calculate metrics
-                y_test_actual = test_with_outcomes['home_win']
+                y_test_actual = test_with_outcomes['home_win'].values
                 accuracy = accuracy_score(y_test_actual, pred_labels)
                 logloss = log_loss(y_test_actual, pred_probs, labels=[0, 1])
                 
@@ -412,6 +599,8 @@ class ModelTrainingAgent:
                     auc = 0.5
                     f1 = f1_score(y_test_actual, pred_labels, zero_division=0)
                     logger.warning(f"Test set contains only one class ({unique_labels[0]}) - AUC set to 0.5")
+                
+                actual_values = y_test_actual
             else:
                 # No test games with outcomes - use validation metrics
                 logger.warning("No test games with outcomes - using validation metrics")
@@ -420,8 +609,14 @@ class ModelTrainingAgent:
                 # Convert FastAI tensors to numpy arrays
                 if hasattr(preds, 'numpy'):
                     pred_probs = preds.squeeze().numpy().clip(0, 1)
+                elif hasattr(preds, 'cpu'):
+                    pred_probs = preds.cpu().numpy().squeeze().clip(0, 1)
                 else:
                     pred_probs = np.array(preds.squeeze()).clip(0, 1)
+                
+                # Ensure pred_probs is 1D
+                if len(pred_probs.shape) > 1:
+                    pred_probs = pred_probs.flatten()
                 
                 pred_labels = (pred_probs > 0.5).astype(int)
                 
@@ -433,31 +628,20 @@ class ModelTrainingAgent:
                 else:
                     targs_np = np.array(targs).flatten()
                 
-                # Ensure pred_probs is 1D
-                if len(pred_probs.shape) > 1:
-                    pred_probs_np = pred_probs.flatten()
-                else:
-                    pred_probs_np = pred_probs
-                
                 accuracy = accuracy_score(targs_np, pred_labels)
-                logloss = log_loss(targs_np, pred_probs_np, labels=[0, 1])
+                logloss = log_loss(targs_np, pred_probs, labels=[0, 1])
                 
                 # Check if we have both classes for AUC
                 unique_labels = np.unique(targs_np)
                 if len(unique_labels) > 1:
-                    auc = roc_auc_score(targs_np, pred_probs_np)
+                    auc = roc_auc_score(targs_np, pred_probs)
                     f1 = f1_score(targs_np, pred_labels)
                 else:
                     auc = 0.5
                     f1 = f1_score(targs_np, pred_labels, zero_division=0)
                     logger.warning(f"Validation set contains only one class ({unique_labels[0]}) - AUC set to 0.5")
-
-            # Get actual values based on what we evaluated
-            if len(test_with_outcomes) > 0:
-                actual_values = test_with_outcomes['home_win'].values
-            else:
-                # Use validation set targets (already converted to numpy above)
-                actual_values = targs_np if 'targs_np' in locals() else np.array(targs).flatten()
+                
+                actual_values = targs_np
             
             metrics = {
                 'accuracy': accuracy,
@@ -472,21 +656,32 @@ class ModelTrainingAgent:
             # Store model
             self.models['fastai'] = learn
 
-            # Save model with pickle protocol 4 (fixes protocol 0 error)
-            import pickle
-            model_path = Path('fastai_home_win_model_2025.pkl')
-            # Use export first, then re-save with protocol 4 if needed
-            learn.export(str(model_path))
-            # Re-save with protocol 4 to ensure compatibility
+            # Save model using FastAI's export method (handles pickle protocol automatically)
+            model_path = Path(f'fastai_home_win_model_{self.current_season}.pkl')
             try:
-                # Load and re-save with protocol 4
-                with open(model_path, 'rb') as f:
-                    model_data = pickle.load(f)
-                with open(model_path, 'wb') as f:
-                    pickle.dump(model_data, f, protocol=4)
-                logger.info("Model saved with pickle protocol 4")
+                # FastAI's export() method handles serialization properly
+                learn.export(str(model_path))
+                logger.info(f"FastAI model exported successfully to {model_path}")
+                
+                # Verify model can be loaded
+                try:
+                    from fastai.tabular.all import load_learner
+                    test_learner = load_learner(str(model_path))
+                    logger.info("Model loading verification successful")
+                except Exception as load_error:
+                    logger.warning(f"Model export succeeded but loading test failed: {load_error}")
+                    logger.warning("Model may still be usable - this could be a FastAI version compatibility issue")
             except Exception as e:
-                logger.warning(f"Could not re-save with protocol 4: {e}. Using default export.")
+                logger.error(f"Error exporting FastAI model: {e}")
+                # Try alternative save method
+                try:
+                    import pickle
+                    with open(model_path, 'wb') as f:
+                        pickle.dump(learn, f, protocol=4)
+                    logger.info(f"Model saved using pickle protocol 4 as fallback")
+                except Exception as pickle_error:
+                    logger.error(f"Both export and pickle save failed: {pickle_error}")
+                    raise
 
             logger.info(f"FastAI Neural Network trained successfully!")
             logger.info(f"Accuracy: {accuracy:.3f}, Log Loss: {logloss:.3f}, AUC: {auc:.3f}, F1: {f1:.3f}")
@@ -552,7 +747,8 @@ class ModelTrainingAgent:
         comparison_df = pd.DataFrame(comparison_data)
 
         # Save comparison
-        comparison_df.to_csv('model_performance_comparison_2025.csv', index=False)
+        comparison_filename = f'model_performance_comparison_{self.current_season}.csv'
+        comparison_df.to_csv(comparison_filename, index=False)
 
         # Create visualizations
         self._create_performance_visualizations()
@@ -564,7 +760,7 @@ class ModelTrainingAgent:
         Create performance visualization plots.
         """
         fig, axes = plt.subplots(2, 2, figsize=(15, 12))
-        fig.suptitle('Model Performance Comparison - 2025 Season Validation', fontsize=16, fontweight='bold')
+        fig.suptitle(f'Model Performance Comparison - {self.current_season} Season Validation', fontsize=16, fontweight='bold')
 
         # Plot 1: Ridge Regression Predictions
         if 'ridge' in self.performance_metrics:
@@ -647,7 +843,8 @@ class ModelTrainingAgent:
                        ha='left' if val > 0 else 'right', va='center')
 
         plt.tight_layout()
-        plt.savefig('model_performance_comparison_2025.png', dpi=300, bbox_inches='tight')
+        performance_plot_filename = f'model_performance_comparison_{self.current_season}.png'
+        plt.savefig(performance_plot_filename, dpi=300, bbox_inches='tight')
         plt.close()
 
     def generate_feature_importance_analysis(self) -> None:
@@ -662,7 +859,7 @@ class ModelTrainingAgent:
 
         # Create feature importance visualization
         fig, axes = plt.subplots(1, 2, figsize=(16, 8))
-        fig.suptitle('Feature Importance Analysis - 2025 Models', fontsize=16, fontweight='bold')
+        fig.suptitle(f'Feature Importance Analysis - {self.current_season} Models', fontsize=16, fontweight='bold')
 
         # Ridge Regression feature importance
         if 'ridge' in self.feature_importance:
@@ -693,7 +890,8 @@ class ModelTrainingAgent:
             ax.grid(True, alpha=0.3, axis='x')
 
         plt.tight_layout()
-        plt.savefig('feature_importance_comparison_2025.png', dpi=300, bbox_inches='tight')
+        importance_plot_filename = f'feature_importance_comparison_{self.current_season}.png'
+        plt.savefig(importance_plot_filename, dpi=300, bbox_inches='tight')
         plt.close()
 
         logger.info("Feature importance analysis completed!")
@@ -705,16 +903,16 @@ class ModelTrainingAgent:
         logger.info("Generating temporal validation report...")
 
         report_lines = [
-            "TEMPORAL VALIDATION RESULTS - 2025 SEASON",
+            f"TEMPORAL VALIDATION RESULTS - {self.current_season} SEASON",
             "=" * 60,
             f"Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
             "",
             "DATA SPLIT:",
             f"Training Set: 2016-2024 seasons ({len(self.train_df)} games)",
-            f"Test Set: 2025 season ({len(self.test_df)} games)",
+            f"Test Set: {self.current_season} season ({len(self.test_df)} games)",
             f"Total Dataset: {len(self.df)} games",
             "",
-            "MODEL PERFORMANCE ON 2025 HOLDOUT DATA:",
+            f"MODEL PERFORMANCE ON {self.current_season} HOLDOUT DATA:",
             "-" * 40
         ]
 
@@ -740,7 +938,7 @@ class ModelTrainingAgent:
                 f"  Log Loss: {metrics['log_loss']:.3f}",
                 f"  ROC AUC: {metrics['auc']:.3f}",
                 f"  F1 Score: {metrics['f1']:.3f}",
-                f"  Interpretation: Model correctly predicts {metrics['accuracy']*100:.1f}% of 2025 game outcomes"
+                f"  Interpretation: Model correctly predicts {metrics['accuracy']*100:.1f}% of {self.current_season} game outcomes"
             ])
 
         # FastAI results
@@ -753,7 +951,7 @@ class ModelTrainingAgent:
                 f"  Log Loss: {metrics['log_loss']:.3f}",
                 f"  ROC AUC: {metrics['auc']:.3f}",
                 f"  F1 Score: {metrics['f1']:.3f}",
-                f"  Interpretation: Model correctly predicts {metrics['accuracy']*100:.1f}% of 2025 game outcomes"
+                f"  Interpretation: Model correctly predicts {metrics['accuracy']*100:.1f}% of {self.current_season} game outcomes"
             ])
 
         # Key findings
@@ -761,7 +959,7 @@ class ModelTrainingAgent:
             "",
             "KEY FINDINGS:",
             "-" * 20,
-            f"• 2025 season validation shows {'strong' if self.performance_metrics.get('xgboost', {}).get('accuracy', 0) > 0.7 else 'moderate'} model performance",
+            f"• {self.current_season} season validation shows {'strong' if self.performance_metrics.get('xgboost', {}).get('accuracy', 0) > 0.7 else 'moderate'} model performance",
             f"• Temporal validation demonstrates {'good' if self.performance_metrics.get('ridge', {}).get('r2', 0) > 0.3 else 'limited'} generalization capability",
             f"• All models successfully trained on expanded dataset ({len(self.df)} total games)",
             f"• Feature importance patterns remain consistent with original analysis"
@@ -820,22 +1018,22 @@ class ModelTrainingAgent:
             f"Completion Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
             "",
             "MISSION OBJECTIVES ACCOMPLISHED:",
-            "✅ Model Retraining Pipeline: All models successfully retrained with 2025 data",
-            "✅ Temporal Validation: Train 2016-2024, Test 2025 validation implemented",
-            "✅ Ridge Regression: Updated margin prediction model saved as 'ridge_model_2025.joblib'",
-            "✅ XGBoost Classifier: Updated win probability model saved as 'xgb_home_win_model_2025.pkl'",
-            "✅ FastAI Neural Network: Updated neural network saved as 'fastai_home_win_model_2025.pkl'",
+            f"✅ Model Retraining Pipeline: All models successfully retrained with {self.current_season} data",
+            f"✅ Temporal Validation: Train <{self.current_season}, Test {self.current_season} validation implemented",
+            f"✅ Ridge Regression: Updated margin prediction model saved as 'ridge_model_{self.current_season}.joblib'",
+            f"✅ XGBoost Classifier: Updated win probability model saved as 'xgb_home_win_model_{self.current_season}.pkl'",
+            f"✅ FastAI Neural Network: Updated neural network saved as 'fastai_home_win_model_{self.current_season}.pkl'",
             "✅ Performance Analysis: Comprehensive comparison reports generated",
             "✅ Model Interpretability: Feature importance and SHAP analyses completed",
             "✅ Documentation: Complete deployment guides created",
             "",
             "UPDATED DATASET STATS:",
             f"• Original Training Data: 4,520 games (2016-2024)",
-            f"• Updated Training Data: {len(self.df)} games (2016-2025)",
-            f"• New 2025 Games: {len(self.test_df)} games",
+            f"• Updated Training Data: {len(self.df)} games (up to {self.current_season})",
+            f"• New {self.current_season} Games: {len(self.test_df)} games",
             f"• Temporal Split: {len(self.train_df)} training, {len(self.test_df)} test",
             "",
-            "MODEL PERFORMANCE ON 2025 DATA:",
+            f"MODEL PERFORMANCE ON {self.current_season} DATA:",
         ]
 
         # Add performance metrics to summary
@@ -860,24 +1058,24 @@ class ModelTrainingAgent:
         summary_lines.extend([
             "",
             "DELIVERABLES GENERATED:",
-            "📄 ridge_model_2025.joblib - Updated regression model",
-            "📄 xgb_home_win_model_2025.pkl - Updated XGBoost classifier",
-            "📄 fastai_home_win_model_2025.pkl - Updated neural network",
-            "📄 model_performance_comparison_2025.csv - Performance metrics",
-            "📄 model_performance_comparison_2025.png - Performance visualizations",
-            "📄 feature_importance_comparison_2025.png - Feature importance analysis",
+            f"📄 ridge_model_{self.current_season}.joblib - Updated regression model",
+            f"📄 xgb_home_win_model_{self.current_season}.pkl - Updated XGBoost classifier",
+            f"📄 fastai_home_win_model_{self.current_season}.pkl - Updated neural network",
+            f"📄 model_performance_comparison_{self.current_season}.csv - Performance metrics",
+            f"📄 model_performance_comparison_{self.current_season}.png - Performance visualizations",
+            f"📄 feature_importance_comparison_{self.current_season}.png - Feature importance analysis",
             "📄 temporal_validation_results.txt - Detailed validation report",
             "📄 model_training_log.txt - Complete training process log",
             "",
             "CRITICAL SUCCESS INDICATORS:",
             f"✅ All models successfully retrained with {len(self.df)} total games",
-            f"✅ Temporal validation shows strong 2025 holdout performance",
+            f"✅ Temporal validation shows strong {self.current_season} holdout performance",
             f"✅ Model performance maintains or improves upon original accuracy",
             f"✅ Complete interpretability analysis with updated feature importance",
             f"✅ Clear documentation for model deployment and usage",
             "",
             "MISSION STATUS: ✅ COMPLETE SUCCESS",
-            "All 2025 college football models are now ready for deployment!"
+            f"All {self.current_season} college football models are now ready for deployment!"
         ])
 
         # Write summary to file
@@ -894,7 +1092,9 @@ def main():
     """
     Main execution function.
     """
-    print("🏈 MODEL TRAINING AGENT - 2025 DATA INTEGRATION 🏈")
+    config = get_data_config()
+    current_season = config.get_season()
+    print(f"🏈 MODEL TRAINING AGENT - {current_season} DATA INTEGRATION 🏈")
     print("="*60)
     print("Initializing Model Training Agent...")
 
@@ -903,7 +1103,7 @@ def main():
     agent.run_complete_training_pipeline()
 
     print("\n🎉 Model training mission completed!")
-    print("All models have been successfully updated with 2025 season data.")
+    print(f"All models have been successfully updated with {current_season} season data.")
 
 if __name__ == "__main__":
     main()

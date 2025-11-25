@@ -3,7 +3,42 @@
 from dataclasses import dataclass
 from typing import Dict, List, Optional
 
-from model_features import RIDGE_FEATURES, XGB_FEATURES
+# Try to import from model_features, fallback to direct definitions
+try:
+    from model_features import RIDGE_FEATURES, XGB_FEATURES
+except (ImportError, FileNotFoundError):
+    # Fallback: define features directly if import fails
+    RIDGE_FEATURES = [
+        'home_talent', 'away_talent', 'home_elo', 'away_elo',
+        'home_adjusted_epa', 'home_adjusted_epa_allowed',
+        'away_adjusted_epa', 'away_adjusted_epa_allowed'
+    ]
+    
+    XGB_FEATURES = [
+        'home_talent', 'away_talent', 'spread', 'home_elo', 'away_elo',
+        'home_adjusted_epa', 'home_adjusted_epa_allowed',
+        'away_adjusted_epa', 'away_adjusted_epa_allowed',
+        'home_adjusted_success', 'home_adjusted_success_allowed',
+        'away_adjusted_success', 'away_adjusted_success_allowed'
+    ]
+
+# Feature definitions for additional models
+LOGISTIC_FEATURES = [
+    'home_adjusted_epa', 'home_adjusted_epa_allowed', 
+    'away_adjusted_epa', 'away_adjusted_epa_allowed',
+    'home_talent', 'away_talent', 'home_elo', 'away_elo'
+    # Note: Logistic regression also uses one-hot encoded conference features
+    # (week, home_conference, away_conference) which are dynamically generated
+]
+
+RANDOM_FOREST_FEATURES = [
+    'home_adjusted_success', 'home_adjusted_success_allowed', 
+    'away_adjusted_success', 'away_adjusted_success_allowed',
+    'home_adjusted_rushing_epa', 'home_adjusted_rushing_epa_allowed', 
+    'away_adjusted_rushing_epa', 'away_adjusted_rushing_epa_allowed',
+    'home_adjusted_passing_epa', 'home_adjusted_passing_epa_allowed', 
+    'away_adjusted_passing_epa', 'away_adjusted_passing_epa_allowed'
+]
 
 
 @dataclass(frozen=True)
@@ -38,6 +73,20 @@ MODEL_INFO: Dict[str, ModelConfig] = {
         type="classification",
         target="home_win",
         description="FastAI neural network returning home win probabilities",
+    ),
+    "logistic": ModelConfig(
+        file="model_pack/logistic_regression_model.joblib",
+        features=LOGISTIC_FEATURES,
+        type="classification",
+        target="home_win",
+        description="Logistic regression classifier returning home win probabilities",
+    ),
+    "random_forest": ModelConfig(
+        file="model_pack/random_forest_model_2025.pkl",
+        features=RANDOM_FOREST_FEATURES,
+        type="regression",
+        target="points",  # Predicts both home_points and away_points
+        description="Random Forest regressor predicting home and away team points",
     ),
 }
 

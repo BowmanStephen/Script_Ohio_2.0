@@ -2,7 +2,14 @@
 from __future__ import annotations
 
 import os
+import sys
 from pathlib import Path
+
+# Add project root to sys.path before importing starter_pack
+_script_dir = Path(__file__).resolve().parent
+_project_root = _script_dir.parent
+if str(_project_root) not in sys.path:
+    sys.path.insert(0, str(_project_root))
 
 from starter_pack.utils.bootstrap import ensure_notebook_environment
 

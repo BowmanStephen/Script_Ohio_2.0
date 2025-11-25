@@ -75,7 +75,9 @@ def validate_week14_data():
     model_files = {
         'ridge': PROJECT_ROOT / "model_pack" / "ridge_model_2025.joblib",
         'xgb': PROJECT_ROOT / "model_pack" / "xgb_home_win_model_2025.pkl",
-        'fastai': PROJECT_ROOT / "model_pack" / "fastai_home_win_model_2025.pkl"
+        'fastai': PROJECT_ROOT / "model_pack" / "fastai_home_win_model_2025.pkl",
+        'logistic': PROJECT_ROOT / "model_pack" / "logistic_regression_model.joblib",
+        'random_forest': PROJECT_ROOT / "model_pack" / "random_forest_model_2025.pkl"
     }
     
     models_available = []
@@ -89,7 +91,14 @@ def validate_week14_data():
             validation_results['issues'].append(f"Model file not found: {model_path}")
             print(f"   ❌ {model_name}: Not found")
     
-    validation_results['checks']['models_available'] = {'status': 'passed' if len(models_available) == 3 else 'warning', 'count': len(models_available), 'models': models_available}
+    # Expect 5 models now (3 original + 2 new)
+    expected_models = 5
+    validation_results['checks']['models_available'] = {
+        'status': 'passed' if len(models_available) == expected_models else 'warning', 
+        'count': len(models_available), 
+        'expected': expected_models,
+        'models': models_available
+    }
     
     # Check 3: Predictions files
     print("\n3. Checking predictions files...")

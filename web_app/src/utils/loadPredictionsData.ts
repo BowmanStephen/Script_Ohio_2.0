@@ -79,13 +79,17 @@ const mapPredictionRecord = (raw: RawPredictionRecord): Game | null => {
     }
 
     const spread = numeric(raw.spread) ?? baseGame?.spread ?? 0;
+    // Prefer calibrated predictions if available, then ensemble, then individual models
     const predictedMargin =
+        numeric(raw.calibrated_margin) ??
+        numeric(raw.market_adjusted_margin) ??
         numeric(raw.ensemble_margin) ??
         numeric(raw.predicted_margin) ??
         numeric(raw.ridge_predicted_margin) ??
         0;
 
     const homeWinProb = clampProbability(
+        numeric(raw.calibrated_home_win_prob) ??
         numeric(raw.home_win_probability) ??
         numeric(raw.ensemble_home_win_probability) ??
         numeric(raw.ridge_home_win_probability) ??

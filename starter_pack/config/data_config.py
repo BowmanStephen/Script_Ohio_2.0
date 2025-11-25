@@ -19,12 +19,23 @@ _model_pack_config_dir = Path(__file__).parent.parent.parent / "model_pack" / "c
 if str(_model_pack_config_dir.parent) not in sys.path:
     sys.path.insert(0, str(_model_pack_config_dir.parent))
 
+# Import path utilities for weekly training files
+_model_pack_utils_dir = Path(__file__).parent.parent.parent / "model_pack" / "utils"
+if str(_model_pack_utils_dir.parent) not in sys.path:
+    sys.path.insert(0, str(_model_pack_utils_dir.parent))
+
 try:
     from model_pack.config.data_config import get_data_config as get_model_pack_config
     _model_pack_config = get_model_pack_config()
 except ImportError:
     # Fallback if model pack config not available
     _model_pack_config = None
+
+try:
+    from model_pack.utils.path_utils import get_weekly_training_file
+except ImportError:
+    # Fallback if path utils not available
+    get_weekly_training_file = None
 
 logger = logging.getLogger(__name__)
 
@@ -114,6 +125,36 @@ class StarterPackDataConfig:
         if year is None:
             year = self.current_year
         return self.data_dir / "advanced_season_stats" / f"{year}.csv"
+    
+    def get_weekly_training_file(self, week: int, season: int = 2025) -> Path:
+        """
+        Get weekly training data file path using path utility.
+        
+        This method provides access to weekly training files with automatic
+        fallback support for multiple file locations (canonical, legacy, root).
+        
+        Args:
+            week: Week number (1-16)
+            season: Season year (default: 2025)
+        
+        Returns:
+            Path to weekly training file
+        
+        Raises:
+            FileNotFoundError: If file not found in any location
+            ImportError: If path utility is not available
+        
+        Example:
+            >>> config = get_starter_pack_config()
+            >>> weekly_path = config.get_weekly_training_file(week=1, season=2025)
+            >>> df = pd.read_csv(weekly_path)
+        """
+        if get_weekly_training_file is None:
+            raise ImportError(
+                "get_weekly_training_file utility not available. "
+                "Ensure model_pack.utils.path_utils is accessible."
+            )
+        return get_weekly_training_file(week=week, season=season, base_path=self.project_root)
 
 
 # Global config instance

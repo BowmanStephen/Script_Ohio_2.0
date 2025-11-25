@@ -75,17 +75,26 @@ def initialize_agent_system():
 def get_current_week_data():
     """Load current week data for predictions"""
     try:
-        # Try to load from current predictions file as base data
-        current_file = "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/web_app/public/week14_model_predictions.json"
-
-        if os.path.exists(current_file):
-            with open(current_file, 'r') as f:
-                data = json.load(f)
-            logger.info(f"Loaded {len(data)} games from current predictions file")
-            return data
-        else:
-            logger.warning(f"Predictions file not found: {current_file}")
-            return []
+        # Try enhanced/calibrated predictions first, then fall back to standard
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        web_app_public = os.path.join(project_root, "web_app", "public")
+        
+        # Priority order: enhanced calibrated > unified > standard
+        prediction_files = [
+            os.path.join(web_app_public, "week14_predictions_enhanced_calibrated.json"),
+            os.path.join(web_app_public, "week14_predictions_unified.json"),
+            os.path.join(web_app_public, "week14_model_predictions.json"),
+        ]
+        
+        for current_file in prediction_files:
+            if os.path.exists(current_file):
+                with open(current_file, 'r') as f:
+                    data = json.load(f)
+                logger.info(f"Loaded {len(data)} games from {os.path.basename(current_file)}")
+                return data
+        
+        logger.warning(f"No predictions file found in {web_app_public}")
+        return []
 
     except Exception as e:
         logger.error(f"Error loading current week data: {str(e)}")
