@@ -81,6 +81,11 @@ outputs/
 temp/
 exports/
 model_pack/*.pkl
+# Allow small model files (like ridge_model_2025.joblib ~1KB)
+# but ignore large model files (>5MB)
+model_pack/random_forest_*.joblib
+model_pack/random_forest_*.pkl
+notebook_outputs/
 starter_pack/data/*.csv
 # Documentation builds
 _build/
