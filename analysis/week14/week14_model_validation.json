@@ -1,0 +1,23 @@
+{
+  "week": 14,
+  "season": 2025,
+  "validation_summary": {
+    "data_validation_passed": true,
+    "models_available": 3,
+    "models_total": 3,
+    "models_ready_for_predictions": 3,
+    "overall_validation_passed": "True"
+  },
+  "models_validated": {},
+  "data_quality": {
+    "is_valid": true,
+    "issues": [],
+    "warnings": [
+      "High missing data in: ['home_points', 'away_points', 'margin']"
+    ],
+    "data_quality_score": 97.35632183908046,
+    "feature_completeness": 1.0,
+    "data_consistency": 0.9885057471264368
+  },
+  "overall_status": "True"
+}

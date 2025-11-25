@@ -82,3 +82,14 @@ The Vitest suite (`npm test`) enforces:
 
 Keep the TypeScript types in `src/types.ts` aligned with any backend changes to
 avoid runtime shape drift.
+
+## Current Static Inputs
+
+While the API layer is stubbed, the UI is wired to static assets in
+`web_app/public/` for Week 14:
+
+- `week14_model_predictions.json` (fallback: `week14_model_predictions.csv`)
+- `week14_ats_data.json` (fallback: `week14_ats_full_table.csv`)
+
+Update `APP_CONSTANTS.CURRENT_WEEK` and replace these files to aim the UI at a
+new week until live endpoints are available.

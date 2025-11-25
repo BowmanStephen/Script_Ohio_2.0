@@ -103,6 +103,11 @@ export const predictGame = (game: Game, modelType: string, weights: FeatureWeigh
     const confidence = Math.min(CONFIDENCE_CONSTANTS.MAX, CONFIDENCE_CONSTANTS.BASE + magnitude * CONFIDENCE_CONSTANTS.MULTIPLIER);
 
     // Determine value vs market line
+    // lineValue = predictedMargin - spread
+    // Positive lineValue: model thinks home will win by more than spread suggests → take home
+    // Negative lineValue: model thinks home will win by less than spread suggests → take away
+    // Note: predictedMargin is from home team's perspective (positive = home wins)
+    //       spread is from home team's perspective (positive = home favored, negative = away favored)
     const lineValue = predictedMargin - game.spread;
     const absLineValue = Math.abs(lineValue);
     const valueRating = absLineValue > VALUE_THRESHOLDS.STRONG ? 'Strong Value' :
@@ -110,18 +115,25 @@ export const predictGame = (game: Game, modelType: string, weights: FeatureWeigh
             absLineValue > VALUE_THRESHOLDS.SLIGHT ? 'Slight Value' : 'No Value';
 
     // Determine suggested side with spread information for clarity
+    // Spread convention: positive = home favored, negative = away favored
+    // lineValue = predictedMargin - spread
+    // If lineValue > 0: model thinks home wins by more than spread → take home
+    // If lineValue < 0: model thinks home wins by less than spread (or loses) → take away
     let suggestedSide: string;
     if (Math.abs(lineValue) < 0.5) {
         suggestedSide = 'Pass';
     } else if (lineValue > 0) {
-        // Model thinks home will win by more than spread suggests
-        // Format: "Team Name +spread" or "Team Name spread" if negative
-        const spreadDisplay = game.spread >= 0 ? `+${game.spread}` : `${game.spread}`;
+        // Model thinks home will win by more than spread suggests → take home
+        // If spread >= 0: home is favored, so home gets -spread (or 0)
+        // If spread < 0: home is underdog, so home gets +|spread|
+        const homeSpread = game.spread >= 0 ? -game.spread : Math.abs(game.spread);
+        const spreadDisplay = homeSpread >= 0 ? `+${homeSpread}` : `${homeSpread}`;
         suggestedSide = `${game.home_team} ${spreadDisplay}`;
     } else {
-        // Model thinks away will cover (home wins by less than spread or loses)
-        // Format: "Team Name +spread" where spread is from away team's perspective
-        const awaySpread = -game.spread; // Flip sign for away team perspective
+        // Model thinks home will win by less than spread suggests (or loses) → take away
+        // If spread >= 0: away is underdog, so away gets +spread
+        // If spread < 0: away is favored, so away gets spread (which is negative)
+        const awaySpread = game.spread >= 0 ? game.spread : game.spread;
         const spreadDisplay = awaySpread >= 0 ? `+${awaySpread}` : `${awaySpread}`;
         suggestedSide = `${game.away_team} ${spreadDisplay}`;
     }

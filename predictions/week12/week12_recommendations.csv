@@ -1,4 +1,0 @@
-type,game_id,teams,recommendation,action,confidence
-close_game,2025_week12_002,Ohio State vs Michigan,Very close game expected (2.7 margin),Consider prop bets,0.26444067010239714
-close_game,2025_week12_003,Texas vs LSU,Very close game expected (2.6 margin),Consider prop bets,0.2593550366862253
-close_game,2025_week12_004,Oregon vs Washington,Very close game expected (1.7 margin),Consider prop bets,0.2045395969661998

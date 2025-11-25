@@ -1,0 +1,196 @@
+{
+  "consolidation_metadata": {
+    "timestamp": "2025-11-24T16:47:06.404757",
+    "week": 14,
+    "season": 2025,
+    "agent_id": "week14_consolidation",
+    "total_processing_time": 0.0
+  },
+  "asset_discovery": {
+    "discovered_assets": [
+      {
+        "file_path": "analysis/week14/week14_comprehensive_analysis.json",
+        "asset_type": "analysis",
+        "file_size": 359302,
+        "created_time": "2025-11-24T16:45:17.979628",
+        "modified_time": "2025-11-24T16:45:17.979628",
+        "description": "Week 14 comprehensive_analysis",
+        "quality_score": 0.9
+      },
+      {
+        "file_path": "analysis/week14/week14_matchup_analysis.json",
+        "asset_type": "analysis",
+        "file_size": 262546,
+        "created_time": "2025-11-24T16:46:35.987257",
+        "modified_time": "2025-11-24T16:46:35.987257",
+        "description": "Week 14 matchup_analysis",
+        "quality_score": 0.9
+      },
+      {
+        "file_path": "analysis/week14/week14_model_validation.json",
+        "asset_type": "analysis",
+        "file_size": 566,
+        "created_time": "2025-11-24T16:46:35.987883",
+        "modified_time": "2025-11-24T16:46:35.987883",
+        "description": "Week 14 model_validation",
+        "quality_score": 0.9
+      },
+      {
+        "file_path": "analysis/week14/week14_power_rankings.csv",
+        "asset_type": "analysis",
+        "file_size": 1774,
+        "created_time": "2025-11-24T16:45:17.981801",
+        "modified_time": "2025-11-24T16:45:17.981801",
+        "description": "Week 14 power_rankings",
+        "quality_score": 0.9
+      },
+      {
+        "file_path": "analysis/week14/week14_strategic_recommendations.csv",
+        "asset_type": "analysis",
+        "file_size": 27852,
+        "created_time": "2025-11-24T16:45:17.981243",
+        "modified_time": "2025-11-24T16:45:17.981243",
+        "description": "Week 14 strategic_recommendations",
+        "quality_score": 0.9
+      },
+      {
+        "file_path": "analysis/week14/week14_upset_alerts.csv",
+        "asset_type": "analysis",
+        "file_size": 1491,
+        "created_time": "2025-11-24T16:45:17.982230",
+        "modified_time": "2025-11-24T16:45:17.982230",
+        "description": "Week 14 upset_alerts",
+        "quality_score": 0.9
+      },
+      {
+        "file_path": "analysis/week14/week14_narrative_previews.md",
+        "asset_type": "analysis",
+        "file_size": 37556,
+        "created_time": "2025-11-24T16:46:14.750827",
+        "modified_time": "2025-11-24T16:46:14.750827",
+        "description": "Week 14 narrative_previews",
+        "quality_score": 0.9
+      },
+      {
+        "file_path": "analysis/week14/week14_comprehensive_report.html",
+        "asset_type": "analysis",
+        "file_size": 140,
+        "created_time": "2025-11-24T16:45:18.130490",
+        "modified_time": "2025-11-24T16:45:18.130490",
+        "description": "Week 14 comprehensive_report",
+        "quality_score": 0.9
+      },
+      {
+        "file_path": "predictions/week14/week14_model_predictions.json",
+        "asset_type": "predictions",
+        "file_size": 54488,
+        "created_time": "2025-11-24T15:13:33.914910",
+        "modified_time": "2025-11-24T11:24:46.051030",
+        "description": "Week 14 model_predictions",
+        "quality_score": 0.9
+      },
+      {
+        "file_path": "predictions/week14/week14_model_predictions.csv",
+        "asset_type": "predictions",
+        "file_size": 21625,
+        "created_time": "2025-11-24T11:24:46.050411",
+        "modified_time": "2025-11-24T11:24:46.050411",
+        "description": "Week 14 model_predictions",
+        "quality_score": 0.9
+      },
+      {
+        "file_path": "predictions/week14/week14_predictions_unified.json",
+        "asset_type": "predictions",
+        "file_size": 113917,
+        "created_time": "2025-11-24T16:44:57.463565",
+        "modified_time": "2025-11-24T16:44:57.463565",
+        "description": "Week 14 predictions_unified",
+        "quality_score": 0.9
+      },
+      {
+        "file_path": "predictions/week14/week14_predictions_unified.csv",
+        "asset_type": "predictions",
+        "file_size": 46925,
+        "created_time": "2025-11-24T16:44:57.465445",
+        "modified_time": "2025-11-24T16:44:57.465445",
+        "description": "Week 14 predictions_unified",
+        "quality_score": 0.9
+      },
+      {
+        "file_path": "predictions/week14/week14_ats_full_table.csv",
+        "asset_type": "predictions",
+        "file_size": 21535,
+        "created_time": "2025-11-24T15:17:16.623990",
+        "modified_time": "2025-11-24T15:17:16.623990",
+        "description": "Week 14 ats_full_table",
+        "quality_score": 0.9
+      },
+      {
+        "file_path": "predictions/week14/week14_summary.json",
+        "asset_type": "predictions",
+        "file_size": 2328,
+        "created_time": "2025-11-24T15:03:28.388110",
+        "modified_time": "2025-11-24T15:03:28.388110",
+        "description": "Week 14 summary",
+        "quality_score": 0.9
+      },
+      {
+        "file_path": "predictions/week14/prediction_insights.json",
+        "asset_type": "predictions",
+        "file_size": 461,
+        "created_time": "2025-11-24T16:45:53.726562",
+        "modified_time": "2025-11-24T16:45:53.726562",
+        "description": "Week 14 prediction_insights",
+        "quality_score": 0.9
+      },
+      {
+        "file_path": "predictions/week14/week14_recommendations.csv",
+        "asset_type": "predictions",
+        "file_size": 8027,
+        "created_time": "2025-11-24T16:45:53.729833",
+        "modified_time": "2025-11-24T16:45:53.729833",
+        "description": "Week 14 recommendations",
+        "quality_score": 0.9
+      },
+      {
+        "file_path": "predictions/week14/week14_comprehensive_predictions.csv",
+        "asset_type": "predictions",
+        "file_size": 46925,
+        "created_time": "2025-11-24T16:45:53.731406",
+        "modified_time": "2025-11-24T16:45:53.731406",
+        "description": "Week 14 comprehensive_predictions",
+        "quality_score": 0.9
+      },
+      {
+        "file_path": "predictions/week14/week14_enhanced_analysis_report.json",
+        "asset_type": "predictions",
+        "file_size": 2696,
+        "created_time": "2025-11-24T16:45:53.734570",
+        "modified_time": "2025-11-24T16:45:53.734570",
+        "description": "Week 14 enhanced_analysis_report",
+        "quality_score": 0.9
+      },
+      {
+        "file_path": "predictions/week14/week14_enhanced_analysis.md",
+        "asset_type": "predictions",
+        "file_size": 1927,
+        "created_time": "2025-11-24T16:45:53.734834",
+        "modified_time": "2025-11-24T16:45:53.734834",
+        "description": "Week 14 enhanced_analysis",
+        "quality_score": 0.9
+      }
+    ]
+  },
+  "quality_validation": {},
+  "asset_organization": {},
+  "executive_summary": {
+    "total_games": 65,
+    "high_confidence_games": 0,
+    "moderate_confidence_games": 0,
+    "low_confidence_games": 65,
+    "key_insights": [
+      "Average home win probability: 47.4%",
+      "Average predicted margin: -0.7 points"
+    ]
+  }
+}

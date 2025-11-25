@@ -1,0 +1,83 @@
+{
+  "generated_at": "2025-11-24T15:03:28.383543",
+  "total_games": 65,
+  "high_confidence_games": 0,
+  "moderate_confidence_games": 0,
+  "low_confidence_games": 65,
+  "top_value_games": [
+    {
+      "matchup": "Notre Dame @ Stanford",
+      "spread": 32.5,
+      "predicted_margin": -17.266446386035774,
+      "line_value": 49.766446386035774,
+      "confidence": 0.9539982584076726
+    },
+    {
+      "matchup": "Charlotte @ Tulane",
+      "spread": -30.0,
+      "predicted_margin": 15.065827847906135,
+      "line_value": 45.065827847906135,
+      "confidence": 0.549936360475249
+    },
+    {
+      "matchup": "Indiana @ Purdue",
+      "spread": 28.5,
+      "predicted_margin": -16.500548964837407,
+      "line_value": 45.00054896483741,
+      "confidence": 0.8995759385680855
+    },
+    {
+      "matchup": "Rice @ South Florida",
+      "spread": -27.5,
+      "predicted_margin": 14.891613451297102,
+      "line_value": 42.391613451297104,
+      "confidence": 0.6420462988351805
+    },
+    {
+      "matchup": "Georgia State @ Old Dominion",
+      "spread": -26.5,
+      "predicted_margin": 14.65222395308943,
+      "line_value": 41.15222395308943,
+      "confidence": 0.6517715348363868
+    },
+    {
+      "matchup": "James Madison @ Coastal Carolina",
+      "spread": 22.0,
+      "predicted_margin": -14.28071155115376,
+      "line_value": 36.28071155115376,
+      "confidence": 0.9470709589369728
+    },
+    {
+      "matchup": "UCLA @ USC",
+      "spread": -21.0,
+      "predicted_margin": 12.784645091972164,
+      "line_value": 33.784645091972166,
+      "confidence": 0.6233162196844573
+    },
+    {
+      "matchup": "Texas Tech @ West Virginia",
+      "spread": 21.0,
+      "predicted_margin": -12.516866191716222,
+      "line_value": 33.51686619171622,
+      "confidence": 0.8932466942274547
+    },
+    {
+      "matchup": "Temple @ North Texas",
+      "spread": -19.5,
+      "predicted_margin": 12.21227536185166,
+      "line_value": 31.71227536185166,
+      "confidence": 0.759591622538851
+    },
+    {
+      "matchup": "Ball State @ Miami (OH)",
+      "spread": -17.5,
+      "predicted_margin": 11.481425950820844,
+      "line_value": 28.981425950820842,
+      "confidence": 0.7530710804708269
+    }
+  ],
+  "key_insights": [
+    "Average home win probability: 47.4%",
+    "Average predicted margin: -0.7 points"
+  ]
+}

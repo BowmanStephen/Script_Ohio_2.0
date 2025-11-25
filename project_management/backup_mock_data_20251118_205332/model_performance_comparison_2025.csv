@@ -1,3 +1,0 @@
-Model,Task,MAE,RMSE,R²,Accuracy,AUC,Log Loss
-Ridge Regression,Score Margin Prediction,12.46,15.58,0.311,-,-,-
-XGBoost,Win Probability,-,-,-,0.697,0.766,0.579

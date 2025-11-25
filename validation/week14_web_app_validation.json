@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-11-24T16:48:07.353519",
+  "week": 14,
+  "checks": {
+    "predictions_json": {
+      "status": "passed",
+      "count": 65
+    },
+    "predictions_csv": {
+      "status": "passed",
+      "count": 65
+    },
+    "ats_json": {
+      "status": "passed",
+      "count": 65
+    },
+    "ats_csv": {
+      "status": "passed",
+      "count": 65
+    },
+    "data_consistency": {
+      "status": "passed",
+      "count": 65
+    }
+  },
+  "issues": [],
+  "warnings": [],
+  "status": "passed"
+}

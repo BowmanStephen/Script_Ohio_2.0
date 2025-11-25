@@ -9,6 +9,7 @@ interface ViewSelectorProps {
 export const ViewSelector: React.FC<ViewSelectorProps> = ({ selectedView, onSelectView }) => {
     const views = [
         { id: 'predictions', label: '📊 All Predictions', ariaLabel: 'View all game predictions' },
+        { id: 'ats', label: '🎯 ATS Analysis', ariaLabel: 'View Against The Spread analysis and picks' },
         { id: 'wcfl', label: '🏈 WCFL Strategy', ariaLabel: 'View WCFL strategy and point allocation' },
         { id: 'value', label: '💰 Value Opportunities', ariaLabel: 'View betting value opportunities' },
         { id: 'performance', label: '📈 Model Performance', ariaLabel: 'View model performance metrics' },

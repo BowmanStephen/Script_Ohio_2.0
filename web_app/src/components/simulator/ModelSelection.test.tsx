@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '../../test-utils';
+import { render, screen, within } from '../../test-utils';
 import userEvent from '@testing-library/user-event';
 import { ModelSelection } from './ModelSelection';
 import { modelPerformance } from '../../utils/predictionLogic';
@@ -59,10 +59,13 @@ describe('ModelSelection', () => {
       />
     );
 
-    expect(screen.getByText(/ensemble weights/i)).toBeInTheDocument();
-    expect(screen.getByText(/ridge/i)).toBeInTheDocument();
-    expect(screen.getByText(/xgboost/i)).toBeInTheDocument();
-    expect(screen.getByText(/fastai/i)).toBeInTheDocument();
+    const weightsSection = screen.getByText(/ensemble weights/i).parentElement;
+    expect(weightsSection).toBeTruthy();
+
+    const scoped = within(weightsSection as HTMLElement);
+    expect(scoped.getByText(/^Ridge$/i)).toBeInTheDocument();
+    expect(scoped.getByText(/^XGBoost$/i)).toBeInTheDocument();
+    expect(scoped.getByText(/^FastAI$/i)).toBeInTheDocument();
   });
 
   it('does not display ensemble weights for non-ensemble models', () => {
@@ -77,5 +80,3 @@ describe('ModelSelection', () => {
     expect(screen.queryByText(/ensemble weights/i)).not.toBeInTheDocument();
   });
 });
-
-

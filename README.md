@@ -89,6 +89,7 @@ Automated pipeline for weekly college football analysis:
 4. Creates comprehensive reports
 
 Outputs saved to:
+
 - Predictions: `predictions/week{XX}/`
 - Enhanced data: `data/weekly/week{XX}/enhanced/`
 - Reports: `reports/`
@@ -102,6 +103,8 @@ Outputs saved to:
 - **Architecture & Runbooks**: `docs/ARCHITECTURE_OVERVIEW.md`, `docs/WEEKLY_PIPELINE_RUNBOOK.md`, `docs/AGENT_WORKFLOW_RUNBOOK.md`
 - **Artifact Policy**: `docs/DATA_ASSET_SECURITY.md` - Guidance for large/sensitive assets
 - **Front-End Contract**: `docs/FRONTEND_DATA_CONTRACT.md` - API surface for the React app
+- **Historical Archive**: `docs/archive/` - Consolidated reports, logs, and
+  planning documents retained for reference
 
 ## Development
 
@@ -118,6 +121,27 @@ Outputs saved to:
 2. Run tests before committing: `python3 -m pytest agents/tests -q`
 3. Ensure syntax validation passes
 4. Update documentation for new features
+
+## Repository Cleanup
+
+Use `scripts/cleanup_repository.py` to remove non-essential directories and
+files (duplicate packs, archives, temporary exports, week-specific agents, etc.).
+The script operates from an allowlisted set of patterns grouped by priority and
+defaults to a dry run.
+
+```bash
+# Preview everything (dry-run)
+python3 scripts/cleanup_repository.py
+
+# Limit to high-priority targets
+python3 scripts/cleanup_repository.py --categories high
+
+# Apply deletions after review
+python3 scripts/cleanup_repository.py --categories high medium --apply
+```
+
+Extend the cleanup scope by editing `REMOVAL_GROUPS` inside the script. Always
+run a dry run first to verify the targets before using `--apply`.
 
 ## Status
 
@@ -137,4 +161,5 @@ See LICENSE file for details.
 
 ## Local Development Notes
 
-For local working rhythm and session management, see `README_local.md`.
+For local working rhythm and session management, see
+`docs/archive/2025/README_local.md`.
