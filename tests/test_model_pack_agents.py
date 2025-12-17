@@ -102,13 +102,16 @@ class TestMetricsCalculationAgent:
             'week': [1],
             'home_team': ['Ohio State'],
             'away_team': ['Michigan'],
+            'home_conference': ['Big Ten'],
+            'away_conference': ['Big Ten'],
         })
-        
+
         result = mock_agent._ensure_identifier_columns(df)
-        
+
         assert 'game_key' in result.columns
         assert result['game_key'].iloc[0] == "2025_1_Ohio_State_Michigan"
         assert 'conference_game' in result.columns
+        assert result['conference_game'].iloc[0] == True  # Same conference
 
     def test_ensure_identifier_columns_with_existing(self, mock_agent):
         """Test _ensure_identifier_columns with existing columns"""

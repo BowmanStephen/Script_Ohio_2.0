@@ -59,12 +59,16 @@ class MetricsCalculationAgent:
                 away = str(row.get('away_team', '')).replace(' ', '_')
                 return f"{row.get('season')}_{row.get('week')}_{home}_{away}"
             df['game_key'] = df.apply(_make_key, axis=1)
-        if 'conference_game' not in df.columns and 'home_conference' in df.columns and 'away_conference' in df.columns:
-            df['conference_game'] = (
-                df['home_conference'].notna() &
-                df['away_conference'].notna() &
-                (df['home_conference'] == df['away_conference'])
-            )
+        if 'conference_game' not in df.columns:
+            if 'home_conference' in df.columns and 'away_conference' in df.columns:
+                df['conference_game'] = (
+                    df['home_conference'].notna() &
+                    df['away_conference'].notna() &
+                    (df['home_conference'] == df['away_conference'])
+                )
+            else:
+                # Default to False when conference data is not available
+                df['conference_game'] = False
         return df
 
     def load_and_analyze_data(self):
