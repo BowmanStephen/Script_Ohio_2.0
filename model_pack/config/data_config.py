@@ -102,14 +102,22 @@ class DataConfig:
         self.model_pack_dir = self.project_root / "model_pack"
         self.starter_pack_dir = self.project_root / "starter_pack"
         
+        # Allow environment variable overrides BEFORE auto-calculation
+        if os.environ.get("CFBD_CURRENT_SEASON"):
+            self.current_season = int(os.environ["CFBD_CURRENT_SEASON"])
+        if os.environ.get("CFBD_CURRENT_WEEK"):
+            self.current_week = int(os.environ["CFBD_CURRENT_WEEK"])
+        if os.environ.get("CFBD_DATA_SOURCE"):
+            self.data_source = os.environ["CFBD_DATA_SOURCE"]
+
         # Get current season from environment or auto-detect
         if self.current_season is None:
             self.current_season = self._detect_current_season()
-        
+
         # Get current week from environment or auto-calculate
         if self.current_week is None:
             self.current_week = self._calculate_current_week()
-        
+
         # Resolve training data file
         if self.training_data_file is None:
             try:
@@ -117,18 +125,10 @@ class DataConfig:
             except FileNotFoundError:
                 logger.warning("Training data file not found, will need to be set manually")
                 self.training_data_file = self.model_pack_dir / "updated_training_data.csv"
-        
+
         # Set output directory
         if self.output_dir is None:
             self.output_dir = self.model_pack_dir
-        
-        # Allow environment variable overrides
-        if os.environ.get("CFBD_CURRENT_SEASON"):
-            self.current_season = int(os.environ["CFBD_CURRENT_SEASON"])
-        if os.environ.get("CFBD_CURRENT_WEEK"):
-            self.current_week = int(os.environ["CFBD_CURRENT_WEEK"])
-        if os.environ.get("CFBD_DATA_SOURCE"):
-            self.data_source = os.environ["CFBD_DATA_SOURCE"]
     
     def _detect_current_season(self) -> int:
         """
@@ -151,7 +151,13 @@ class DataConfig:
         """Calculate the current week of the season"""
         if self._week_cache is not None:
             return self._week_cache
-        
+
+        # If current_week is explicitly set (e.g., from environment), use it directly
+        if self.current_week is not None:
+            self._week_cache = self.current_week
+            return self.current_week
+
+        # Otherwise calculate based on current date
         week = calculate_current_week(self.current_season)
         self._week_cache = week
         return week
