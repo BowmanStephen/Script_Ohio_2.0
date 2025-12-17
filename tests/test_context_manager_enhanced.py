@@ -123,8 +123,8 @@ class TestContextManagerEnhanced:
 
             # Validate optimization
             assert 'optimization_metadata' in optimized
-            assert 'original_size' in optimized['optimization_metadata']
-            assert 'optimized_size' in optimized['optimization_metadata']
+            assert 'original_tokens' in optimized['optimization_metadata']
+            assert 'optimized_tokens' in optimized['optimization_metadata']
             assert 'compression_ratio' in optimized['optimization_metadata']
 
             # Size should be reduced
