@@ -1,3 +1,7 @@
+---
+name: Test Agent
+---
+
 # Test Agent
 
 ## Purpose

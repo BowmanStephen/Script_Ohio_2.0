@@ -1,3 +1,7 @@
+---
+name: Comprehensive Test Agent
+---
+
 # Comprehensive Test Agent
 
 ## Purpose

@@ -1,3 +1,7 @@
+---
+name: Prompt Library Generator
+---
+
 # Prompt Library Generator Agent
 
 ## Purpose
