@@ -9,7 +9,7 @@ from typing import List
 
 import pytest
 
-import starter_pack.notebook_bootstrap as nb
+import starter_pack.utils.bootstrap as nb
 
 
 @pytest.fixture()

@@ -343,6 +343,12 @@ class TestStarterPackDataMigrator:
 class TestEdgeCases:
     """Test edge cases and error handling"""
 
+    @pytest.fixture
+    def mock_api_key(self):
+        """Mock API key for edge case tests"""
+        with patch.dict(os.environ, {'CFBD_API_KEY': 'test_key'}):
+            yield 'test_key'
+
     def test_missing_data_handling(self):
         """Test handling of missing data"""
         df = pd.DataFrame({

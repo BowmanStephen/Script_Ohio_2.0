@@ -32,11 +32,21 @@ class TestModelPackDataQuality:
     @pytest.fixture
     def sample_training_data(self):
         """Sample training data that matches the expected structure"""
+        teams = ['Ohio State', 'Michigan', 'Alabama', 'Georgia', 'Notre Dame', 'Penn State', 'Texas', 'Oklahoma']
+        np.random.seed(42)  # For reproducible tests
+
+        # Generate matchups without self-play
+        matchups = []
+        for _ in range(100):
+            home, away = np.random.choice(teams, 2, replace=False)
+            matchups.append((home, away))
+
+        home_teams, away_teams = zip(*matchups)
         return pd.DataFrame({
             'season': np.random.randint(2016, 2026, 100),
             'week': np.random.randint(5, 15, 100),
-            'home_team': np.random.choice(['Ohio State', 'Michigan', 'Alabama', 'Georgia'], 100),
-            'away_team': np.random.choice(['Notre Dame', 'Penn State', 'Texas', 'Oklahoma'], 100),
+            'home_team': list(home_teams),
+            'away_team': list(away_teams),
             'home_points': np.random.randint(10, 60, 100),
             'away_points': np.random.randint(10, 60, 100),
             'home_talent': np.random.uniform(0.80, 0.98, 100),
@@ -707,10 +717,13 @@ class TestModelQualityAssurance:
         actual_outcomes_over_time = []
 
         for period in range(time_periods):
-            # Introduce gradual drift
+            # Introduce gradual drift (make predictions worse over time)
             drift = period * 0.02
-            predictions = np.random.beta(2 + drift, 2, samples_per_period)
-            actual = np.random.binomial(1, predictions)
+            # As drift increases, make predictions more noisy/less accurate
+            base_predictions = np.random.beta(2, 2, samples_per_period)
+            noise = np.random.normal(0, drift, samples_per_period)
+            predictions = np.clip(base_predictions + noise, 0.01, 0.99)  # Keep in valid range
+            actual = np.random.binomial(1, base_predictions)  # True outcomes based on original predictions
 
             predictions_over_time.extend(predictions)
             actual_outcomes_over_time.extend(actual)

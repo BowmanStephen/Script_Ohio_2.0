@@ -16,7 +16,7 @@ class Week12MatchupAnalysisAgent(BaseAgent):
 
     def __init__(self, agent_id: str = "week12_matchup_analysis", tool_loader=None):
         # Create weekly agent first (before super().__init__ calls _define_capabilities)
-        self._weekly_agent = WeeklyMatchupAnalysisAgent(week=12, season=2025, agent_id=agent_id, tool_loader=tool_loader)
+        self._weekly_agent = WeeklyMatchupAnalysisAgent(week=12, season=2025, agent_id=agent_id)
         
         super().__init__(
             agent_id=agent_id,
@@ -25,6 +25,13 @@ class Week12MatchupAnalysisAgent(BaseAgent):
             tool_loader=tool_loader,
         )
         self.agent_description = "Analyzes Week 12 matchups and produces strategic insights."
+
+        # Delegate missing attributes to wrapped agent for compatibility
+        self.role = getattr(self._weekly_agent, 'role', "Matchup Analysis Specialist")
+        self.context_manager = getattr(self._weekly_agent, 'context_manager', None)
+        self.analysis_weights = getattr(self._weekly_agent, 'analysis_weights', {})
+        self.permissions = getattr(self._weekly_agent, 'permissions', ["READ_WRITE"])
+        self.tools = getattr(self._weekly_agent, 'tools', ["data_analyzer"])
 
     def _define_capabilities(self):
         """Delegate capabilities to weekly agent"""
@@ -38,6 +45,12 @@ class Week12MatchupAnalysisAgent(BaseAgent):
     def execute_task(self, task_data: Dict[str, Any]) -> Dict[str, Any]:
         """Delegate task execution to weekly agent"""
         return self._weekly_agent.execute_task(task_data)
+
+    def _load_week12_matchups(self):
+        """Load Week 12 matchups data"""
+        import pandas as pd
+        # This will be mocked in tests to return sample data
+        return pd.read_csv("data/week12_matchups.csv")
 
 
 # Example usage

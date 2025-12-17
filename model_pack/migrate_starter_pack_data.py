@@ -493,7 +493,7 @@ class StarterPackDataMigrator:
         self.processed_current_season = processed
         return True
 
-    def apply_week_filter(self, min_week: int = 5, max_week: Optional[int] = None) -> bool:
+    def apply_week_filter(self, *, min_week: int = 5, max_week: Optional[int] = None) -> bool:
         """Filter out games outside the processed metrics coverage window."""
         if self.processed_current_season is None:
             print("No processed season data found before week filtering.")

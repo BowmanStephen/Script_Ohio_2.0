@@ -157,6 +157,21 @@ def predict_single_game(home_team: str, away_team: str, model_type: str = 'ridge
             "status": "error"
         }
 
+
+# Validated API Request Models
+try:
+    from pydantic import BaseModel, Field, ValidationError
+    
+    class PredictionRequest(BaseModel):
+        home_team: str = Field(..., description="Name of the home team")
+        away_team: str = Field(..., description="Name of the away team")
+        model_type: str = Field("ridge_model_2025", description="Model to use for prediction")
+
+except ImportError:
+    # Fallback if pydantic not available (should be installed)
+    BaseModel = object
+    logger.warning("Pydantic not found, validation disabled")
+
 @app.route('/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
@@ -176,17 +191,35 @@ def predict_game():
         home_team = request.args.get('home_team')
         away_team = request.args.get('away_team')
         model_type = request.args.get('model_type', 'ridge_model_2025')
+        
+        if not home_team or not away_team:
+             return jsonify({
+                "error": "Both home_team and away_team are required",
+                "example": "GET /api/predict?home_team=Ohio%20State&away_team=Michigan"
+            }), 400
+            
     else:  # POST
         data = request.get_json() or {}
-        home_team = data.get('home_team')
-        away_team = data.get('away_team')
-        model_type = data.get('model_type', 'ridge_model_2025')
-
-    if not home_team or not away_team:
-        return jsonify({
-            "error": "Both home_team and away_team are required",
-            "example": "GET /api/predict?home_team=Ohio%20State&away_team=Michigan"
-        }), 400
+        try:
+            # Validate with Pydantic if available
+            if BaseModel != object:
+                pred_request = PredictionRequest(**data)
+                home_team = pred_request.home_team
+                away_team = pred_request.away_team
+                model_type = pred_request.model_type
+            else:
+                home_team = data.get('home_team')
+                away_team = data.get('away_team')
+                model_type = data.get('model_type', 'ridge_model_2025')
+                
+                if not home_team or not away_team:
+                    raise ValueError("Both home_team and away_team are required")
+                    
+        except (ValueError, ValidationError) as e:
+            return jsonify({
+                "error": str(e),
+                "example": {"home_team": "Ohio State", "away_team": "Michigan"}
+            }), 400
 
     logger.info(f"Prediction request: {home_team} vs {away_team} using {model_type}")
 
