@@ -25,7 +25,8 @@ def run_syntax_validation(project_root: Path) -> Dict[str, Any]:
     """Run syntax validation on all Python files"""
     print("🔍 Running syntax validation...")
     
-    results = {
+    # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+    results: Dict[str, Any] = {
         'total_files': 0,
         'valid_files': 0,
         'invalid_files': [],
@@ -76,7 +77,8 @@ def run_test_execution(project_root: Path) -> Dict[str, Any]:
     """Run test suite via pytest"""
     print("🧪 Running test suite...")
     
-    results = {
+    # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+    results: Dict[str, Any] = {
         'success': False,
         'test_count': 0,
         'passed': 0,
@@ -132,7 +134,8 @@ def run_import_validation(project_root: Path) -> Dict[str, Any]:
     """Validate critical imports"""
     print("📦 Validating critical imports...")
     
-    results = {
+    # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+    results: Dict[str, Any] = {
         'total_imports': 0,
         'successful_imports': 0,
         'failed_imports': [],
@@ -180,7 +183,8 @@ def compare_performance(baseline_file: Optional[Path], current_metrics: Dict[str
     """Compare current performance to baseline"""
     print("⏱️  Comparing performance to baseline...")
     
-    comparison = {
+    # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+    comparison: Dict[str, Any] = {
         'baseline_available': False,
         'regressions': [],
         'improvements': [],
@@ -254,7 +258,8 @@ def main():
     print()
     
     # Run validations
-    validation_results = {
+    # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+    validation_results: Dict[str, Any] = {
         'validation_timestamp': time.time(),
         'validation_date': time.strftime('%Y-%m-%d %H:%M:%S'),
         'project_root': str(project_root),

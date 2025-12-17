@@ -42,7 +42,8 @@ class Week13DataVerifier:
         self.week13_predictions_dir = self.project_root / "predictions" / "week13"
         
         # Results storage
-        self.verification_results = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        self.verification_results: Dict[str, Any] = {
             "verification_date": datetime.now().isoformat(),
             "season": 2025,
             "week": 13,

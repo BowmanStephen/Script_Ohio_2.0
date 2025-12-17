@@ -13,7 +13,7 @@ import os
 import sys
 import time
 from pathlib import Path
-from typing import Dict, List, Set
+from typing import Dict, List, Set, Optional, Any
 import pandas as pd
 
 # Add project root to path
@@ -61,7 +61,7 @@ def is_fbs_game(game) -> bool:
     
     return (home_conf in FBS_CONFERENCES) or (away_conf in FBS_CONFERENCES)
 
-def fetch_cfbd_games(year: int, week: int = None) -> List[Dict]:
+def fetch_cfbd_games(year: int, week: Optional[int] = None) -> List[Dict]:
     """Fetch games from CFBD API with rate limiting."""
     try:
         time.sleep(0.17)  # Rate limit: 6 req/sec
@@ -160,8 +160,9 @@ def compare_games(expected: Dict, training_df: pd.DataFrame) -> Dict:
         training_games[season][week].add(game_id)
     
     # Compare
-    missing_games = {}
-    stats = {
+    # Explicitly type as JSON-like dicts to avoid overly-narrow inference in ty.
+    missing_games: Dict[str, Any] = {}
+    stats: Dict[str, Any] = {
         'expected_total': 0,
         'actual_total': len(training_df),
         'missing_total': 0,
@@ -257,7 +258,8 @@ def analyze_training_data_structure(training_df: pd.DataFrame) -> Dict:
     """Analyze training data structure to identify potential gaps."""
     print("\nAnalyzing training data structure...")
     
-    analysis = {
+    # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+    analysis: Dict[str, Any] = {
         'total_games': len(training_df),
         'by_season': {},
         'by_week': {},

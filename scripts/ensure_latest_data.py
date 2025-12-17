@@ -18,7 +18,7 @@ import sys
 import pandas as pd
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 import logging
 import subprocess
 
@@ -31,7 +31,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-def check_training_data_coverage(target_week: int = 13) -> Dict[str, any]:
+def check_training_data_coverage(target_week: int = 13) -> Dict[str, Any]:
     """Check if training data includes target week"""
     training_path = PROJECT_ROOT / "model_pack" / "updated_training_data.csv"
     
@@ -76,7 +76,7 @@ def check_training_data_coverage(target_week: int = 13) -> Dict[str, any]:
             'message': f'Error reading training data: {e}'
         }
 
-def check_model_dates() -> Dict[str, any]:
+def check_model_dates() -> Dict[str, Any]:
     """Check if models are newer than training data"""
     training_path = PROJECT_ROOT / "model_pack" / "updated_training_data.csv"
     
@@ -92,7 +92,8 @@ def check_model_dates() -> Dict[str, any]:
         'random_forest': 'random_forest_model_2025.pkl'
     }
     
-    result = {
+    # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+    result: Dict[str, Any] = {
         'training_data_date': training_date.isoformat(),
         'models': {},
         'needs_retrain': []

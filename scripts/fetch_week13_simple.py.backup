@@ -6,11 +6,11 @@ Simple script to fetch Week 13 games and generate predictions
 import os
 import sys
 import time
-import argparse
 from pathlib import Path
 from datetime import datetime, timezone
 
 import pandas as pd
+import cfbd
 
 # Add project root to path
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -26,14 +26,6 @@ def rate_limit():
 def fetch_week13_games(api_key: str):
     """Fetch Week 13 2025 games from CFBD API"""
     print("Fetching Week 13 2025 games from CFBD API...")
-    
-    # Import CFBD only after environment check and argument parsing
-    try:
-        import cfbd
-    except ImportError as e:
-        print(f"❌ CFBD package not available: {e}")
-        print("Install with: pip install cfbd")
-        return None
     
     # Configure CFBD client
     configuration = cfbd.Configuration()
@@ -97,14 +89,6 @@ def fetch_week13_games(api_key: str):
     return df
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Fetch Week 13 games from CFBD API"
-    )
-    parser.add_argument('--verbose', '-v', action='store_true',
-                       help='Enable verbose output')
-    
-    args = parser.parse_args()
-    
     api_key = os.environ.get("CFBD_API_KEY")
     if not api_key:
         print("❌ ERROR: CFBD_API_KEY environment variable not set")
@@ -138,9 +122,9 @@ def main():
     except Exception as e:
         print(f"\n❌ Error: {e}")
         import traceback
-        if args.verbose:
-            traceback.print_exc()
+        traceback.print_exc()
         return 1
 
 if __name__ == "__main__":
     sys.exit(main())
+

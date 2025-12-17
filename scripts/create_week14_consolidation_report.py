@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 import sys
 from datetime import datetime
+from typing import Any
 
 PROJECT_ROOT = Path(__file__).parent.parent
 
@@ -20,7 +21,8 @@ def create_consolidation_report():
     reports_dir = PROJECT_ROOT / "reports"
     reports_dir.mkdir(parents=True, exist_ok=True)
     
-    consolidation_report = {
+    # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+    consolidation_report: dict[str, Any] = {
         'generated_at': datetime.now().isoformat(),
         'week': 14,
         'season': 2025,

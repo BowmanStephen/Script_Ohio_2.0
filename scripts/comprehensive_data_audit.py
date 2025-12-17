@@ -44,7 +44,8 @@ class ComprehensiveDataAuditor:
         self.migrated_files = list(self.model_pack_path.glob("*2025*weeks*migrated.csv"))
         
         # Results storage
-        self.audit_results = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        self.audit_results: Dict[str, Any] = {
             "audit_date": datetime.now().isoformat(),
             "season": 2025,
             "target_weeks": list(range(1, 13)),  # Weeks 1-12
@@ -311,7 +312,8 @@ class ComprehensiveDataAuditor:
         model_count = self.audit_results["model_pack"].get("total_games", 0)
         training_count = self.audit_results["training_data"].get("weeks_1_12_games", 0)
         
-        gaps_count = len(self.audit_results["gaps"])
+        gaps_raw = self.audit_results.get("gaps", [])
+        gaps_count = len(gaps_raw) if isinstance(gaps_raw, list) else 0
         
         # Determine overall status
         if gaps_count == 0 and starter_count > 0 and model_count > 0 and training_count > 0:
@@ -347,7 +349,10 @@ class ComprehensiveDataAuditor:
         """Generate recommendations based on audit results"""
         recommendations = []
         
-        gaps = self.audit_results.get("gaps", [])
+        gaps_raw = self.audit_results.get("gaps", [])
+        gaps: List[Dict[str, Any]] = []
+        if isinstance(gaps_raw, list):
+            gaps = [g for g in gaps_raw if isinstance(g, dict)]
         
         if any(gap["type"] == "missing_in_model_pack" for gap in gaps):
             recommendations.append("Run migration script to migrate missing games to model pack")

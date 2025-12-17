@@ -23,7 +23,8 @@ class RouterInstrumentationAnalyzer:
     
     def __init__(self, log_file: str = "logs/app.log"):
         self.log_file = Path(log_file)
-        self.metrics = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        self.metrics: Dict[str, Any] = {
             'submit_count': 0,
             'process_count': 0,
             'permission_denials': 0,
@@ -40,7 +41,7 @@ class RouterInstrumentationAnalyzer:
         }
         
         # Decision thresholds
-        self.thresholds = {
+        self.thresholds: Dict[str, Any] = {
             'permission_denials_threshold': 0,
             'priority_sorts_threshold': 0,
             'queue_always_zero': True,
@@ -149,7 +150,7 @@ class RouterInstrumentationAnalyzer:
     
     def evaluate_thresholds(self) -> Dict[str, Any]:
         """Evaluate metrics against decision thresholds"""
-        results = {}
+        results: Dict[str, Any] = {}
         
         # Permission denials threshold
         results['permission_denials'] = {

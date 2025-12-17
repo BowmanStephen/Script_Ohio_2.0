@@ -21,15 +21,14 @@ if str(SRC_DIR) not in sys.path:
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.append(str(PROJECT_ROOT))
 
-# CFBD imports moved to after argument parsing
-# from cfbd_client.unified_client import UnifiedCFBDClient  # noqa: E402
-# from features.cfbd_feature_engineering import (  # noqa: E402
-#     CFBDFeatureEngineer,
-#     FeatureEngineeringConfig,
-# )
-# from model_pack.utils.cfbd_advanced_metrics import (  # noqa: E402
-#     AdvancedMetricsBuilder,
-# )
+from cfbd_client.unified_client import UnifiedCFBDClient  # noqa: E402
+from features.cfbd_feature_engineering import (  # noqa: E402
+    CFBDFeatureEngineer,
+    FeatureEngineeringConfig,
+)
+from model_pack.utils.cfbd_advanced_metrics import (  # noqa: E402
+    AdvancedMetricsBuilder,
+)
 
 # Set up logging with file handler
 LOGGER = logging.getLogger("cfbd_pull")
@@ -79,7 +78,7 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
 
 def fetch_games(
     *,
-    client,  # UnifiedCFBDClient
+    client: UnifiedCFBDClient,
     season: int,
     week: Optional[int],
     team: Optional[str],
@@ -88,7 +87,7 @@ def fetch_games(
 
 
 def fetch_lines(
-    client,  # UnifiedCFBDClient
+    client: UnifiedCFBDClient,
     *,
     season: int,
     weeks: Iterable[int],
@@ -104,18 +103,11 @@ def fetch_lines(
 
 
 def fetch_advanced_metrics(
-    client,  # UnifiedCFBDClient
+    client: UnifiedCFBDClient,
     games_df: pd.DataFrame,
     *,
     include_plays: bool,
 ) -> Dict[Any, Dict[str, Any]]:
-    # Import here to make script resilient to dependency issues
-    try:
-        from model_pack.utils.cfbd_advanced_metrics import AdvancedMetricsBuilder
-    except ImportError as e:
-        LOGGER.error(f"Could not import AdvancedMetricsBuilder: {e}")
-        return {}
-    
     builder = AdvancedMetricsBuilder(api_client=client.api_client, season=int(games_df["season"].iloc[0]))
     plays_df = None
     if include_plays:
@@ -152,15 +144,6 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
         if not api_key:
             LOGGER.error("❌ CFBD_API_KEY environment variable is required")
             raise SystemExit("CFBD_API_KEY environment variable is required.")
-
-        # Import CFBD dependencies only after argument parsing
-        try:
-            from cfbd_client.unified_client import UnifiedCFBDClient
-            from features.cfbd_feature_engineering import CFBDFeatureEngineer, FeatureEngineeringConfig
-        except ImportError as e:
-            LOGGER.error(f"❌ CFBD dependencies not available: {e}")
-            LOGGER.error("Please ensure CFBD client and feature engineering modules are properly installed")
-            raise SystemExit("CFBD dependencies not available")
 
         LOGGER.info("Initializing CFBD client...")
         client = UnifiedCFBDClient()

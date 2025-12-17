@@ -26,7 +26,8 @@ OUTPUT_REPORT_PATH = PROJECT_ROOT / 'reports' / '2025_data_completeness_report.j
 def verify_2025_data_completeness() -> Dict[str, Any]:
     """Verify 2025 season data completeness and generate report."""
     
-    report = {
+    # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+    report: Dict[str, Any] = {
         'timestamp': datetime.now().isoformat(),
         'training_data_file': str(TRAINING_DATA_PATH),
         'weekly_training_dir': str(WEEKLY_TRAINING_DIR),

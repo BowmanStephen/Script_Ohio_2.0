@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 import sys
 from datetime import datetime
+from typing import Any
 
 PROJECT_ROOT = Path(__file__).parent.parent
 
@@ -17,7 +18,8 @@ def validate_week14_data():
     print("🔍 Validating Week 14 data...")
     print("=" * 60)
     
-    validation_results = {
+    # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+    validation_results: dict[str, Any] = {
         'timestamp': datetime.now().isoformat(),
         'week': 14,
         'season': 2025,

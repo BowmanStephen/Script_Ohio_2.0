@@ -31,7 +31,8 @@ class RepositoryHealthValidator:
     
     def validate(self) -> Dict[str, Any]:
         """Run all repository health checks"""
-        results = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        results: Dict[str, Any] = {
             'success': True,
             'checks': {},
             'warnings': [],

@@ -55,7 +55,8 @@ class DataAuditor:
         logger.info("DATA SYNCHRONIZATION AUDIT")
         logger.info("=" * 70)
         
-        results = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        results: Dict[str, Any] = {
             'training_data': self.audit_training_data(),
             'models': self.audit_models(),
             'notebooks': self.audit_notebooks(),
@@ -77,7 +78,8 @@ class DataAuditor:
         training_path = self.model_pack_dir / "updated_training_data.csv"
         fallback_path = self.model_pack_dir / "training_data.csv"
         
-        result = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        result: Dict[str, Any] = {
             'primary_file': str(training_path),
             'exists': training_path.exists(),
             'fallback_exists': fallback_path.exists(),
@@ -140,7 +142,8 @@ class DataAuditor:
             'random_forest': 'random_forest_model_2025.pkl'
         }
         
-        result = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        result: Dict[str, Any] = {
             'models': {},
             'training_data_date': None,
             'issues': []
@@ -195,7 +198,8 @@ class DataAuditor:
         notebooks_dir = self.model_pack_dir
         notebooks = list(notebooks_dir.glob("*.ipynb"))
         
-        result = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        result: Dict[str, Any] = {
             'notebooks_checked': len(notebooks),
             'using_config': [],
             'hardcoded_paths': [],
@@ -232,7 +236,8 @@ class DataAuditor:
         scripts_dir = PROJECT_ROOT / "scripts"
         scripts = list(scripts_dir.glob("*.py"))
         
-        result = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        result: Dict[str, Any] = {
             'scripts_checked': len(scripts),
             'using_updated_data': [],
             'using_old_data': [],
@@ -266,7 +271,8 @@ class DataAuditor:
         
         weekly_files = list(PROJECT_ROOT.glob("training_data_2025_week*.csv"))
         
-        result = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        result: Dict[str, Any] = {
             'files_found': len(weekly_files),
             'weeks_covered': [],
             'latest_week': 0,

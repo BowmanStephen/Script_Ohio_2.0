@@ -48,7 +48,8 @@ class DataSynchronizer:
         self.data_workflows_script = self.project_root / "project_management" / "core_tools" / "data_workflows.py"
         
         # Results storage
-        self.sync_results = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        self.sync_results: Dict[str, Any] = {
             "sync_date": datetime.now().isoformat(),
             "season": 2025,
             "target_weeks": list(range(1, 13)),
@@ -95,7 +96,11 @@ class DataSynchronizer:
         else:
             print("✅ All weeks 1-12 present in starter pack")
         
-        self.sync_results["steps"].append({
+        steps = self.sync_results.get("steps", [])
+        if not isinstance(steps, list):
+            steps = []
+            self.sync_results["steps"] = steps
+        steps.append({
             "step": "check_starter_pack",
             "result": result
         })
@@ -157,7 +162,11 @@ class DataSynchronizer:
             "details": results
         }
         
-        self.sync_results["steps"].append({
+        steps = self.sync_results.get("steps", [])
+        if not isinstance(steps, list):
+            steps = []
+            self.sync_results["steps"] = steps
+        steps.append({
             "step": "fetch_missing_data",
             "result": result
         })
@@ -291,7 +300,11 @@ class DataSynchronizer:
         else:
             print("✅ All games present in training data")
         
-        self.sync_results["steps"].append({
+        steps = self.sync_results.get("steps", [])
+        if not isinstance(steps, list):
+            steps = []
+            self.sync_results["steps"] = steps
+        steps.append({
             "step": "verify_integration",
             "result": result
         })
@@ -326,8 +339,11 @@ class DataSynchronizer:
         )
         
         # Update data coverage if verification passed
-        verification = self.sync_results["steps"][-1]["result"] if self.sync_results["steps"] else None
-        if verification and verification.get("synchronized"):
+        steps = self.sync_results.get("steps", [])
+        verification = None
+        if isinstance(steps, list) and steps and isinstance(steps[-1], dict):
+            verification = steps[-1].get("result")
+        if isinstance(verification, dict) and verification.get("synchronized"):
             content = content.replace(
                 "- **Starter Pack:** Weeks 1-12 (2025 season)",
                 "- **Starter Pack:** Weeks 1-12 (2025 season) ✅ Verified"
@@ -351,22 +367,34 @@ class DataSynchronizer:
         print("SYNCHRONIZATION SUMMARY")
         print("=" * 80)
         
+        steps = self.sync_results.get("steps", [])
+        steps_list = steps if isinstance(steps, list) else []
         all_steps_successful = all(
-            step.get("result", {}).get("status") in ["success", "complete", "skipped", "dry_run"]
-            for step in self.sync_results["steps"]
+            isinstance(step, dict)
+            and isinstance(step.get("result"), dict)
+            and step.get("result", {}).get("status") in ["success", "complete", "skipped", "dry_run"]
+            for step in steps_list
         )
         
         verification = None
-        for step in self.sync_results["steps"]:
-            if step.get("step") == "verify_integration":
-                verification = step.get("result")
+        for step in steps_list:
+            if isinstance(step, dict) and step.get("step") == "verify_integration":
+                verification = step.get("result") if isinstance(step.get("result"), dict) else None
                 break
         
         summary = {
             "overall_status": "success" if all_steps_successful else "partial",
-            "synchronized": verification.get("synchronized", False) if verification else False,
-            "steps_completed": len([s for s in self.sync_results["steps"] if s.get("result", {}).get("status") in ["success", "complete", "skipped"]]),
-            "total_steps": len(self.sync_results["steps"]),
+            "synchronized": verification.get("synchronized", False) if isinstance(verification, dict) else False,
+            "steps_completed": len(
+                [
+                    s
+                    for s in steps_list
+                    if isinstance(s, dict)
+                    and isinstance(s.get("result"), dict)
+                    and s.get("result", {}).get("status") in ["success", "complete", "skipped"]
+                ]
+            ),
+            "total_steps": len(steps_list),
             "dry_run": self.dry_run
         }
         

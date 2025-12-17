@@ -11,7 +11,7 @@ import sys
 import hashlib
 import pandas as pd
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional
+from typing import Any, Dict, List, Tuple, Optional
 from datetime import datetime
 import argparse
 
@@ -30,7 +30,7 @@ def calculate_file_hash(file_path: Path) -> str:
     return hash_md5.hexdigest()
 
 
-def get_file_info(file_path: Path) -> Dict:
+def get_file_info(file_path: Path) -> Optional[Dict[str, Any]]:
     """Get file metadata."""
     if not file_path.exists():
         return None
@@ -66,7 +66,8 @@ def compare_weekly_files(week: int, season: int = 2025) -> Dict:
     root_file = PROJECT_ROOT / filename
     weekly_training_file = PROJECT_ROOT / "data" / "weekly_training" / filename
     
-    result = {
+    # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+    result: Dict[str, Any] = {
         "week": week,
         "filename": filename,
         "root_exists": root_file.exists(),
@@ -92,7 +93,7 @@ def compare_weekly_files(week: int, season: int = 2025) -> Dict:
             result["weekly_training_info"].update(df_info)
     
     # Compare if both exist
-    if root_file.exists() and weekly_training_file.exists():
+    if root_file.exists() and weekly_training_file.exists() and result["root_info"] and result["weekly_training_info"]:
         root_hash = result["root_info"]["hash"]
         weekly_hash = result["weekly_training_info"]["hash"]
         result["equivalent"] = (root_hash == weekly_hash)

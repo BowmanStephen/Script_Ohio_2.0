@@ -68,15 +68,21 @@ def test_encoding_decoding():
         
         # Verify roundtrip (TOON may preserve structure but with minor differences)
         # Check that key data is preserved
-        if (decoded.get('plan', {}).get('title') == test_data['plan']['title'] and
-            len(decoded.get('plan', {}).get('tasks', [])) == len(test_data['plan']['tasks']) and
-            decoded.get('plan', {}).get('tasks', [{}])[0].get('id') == test_data['plan']['tasks'][0]['id']):
+        plan = decoded.get('plan', {}) if isinstance(decoded, dict) else {}
+        tasks = plan.get('tasks', []) if isinstance(plan, dict) else []
+        first_task_id = None
+        if isinstance(tasks, list) and tasks and isinstance(tasks[0], dict):
+            first_task_id = tasks[0].get('id')
+
+        if (isinstance(plan, dict) and plan.get('title') == test_data['plan']['title'] and
+            isinstance(tasks, list) and len(tasks) == len(test_data['plan']['tasks']) and
+            first_task_id == test_data['plan']['tasks'][0]['id']):
             print("✓ Roundtrip verification passed (key data preserved)")
             return True
         else:
             print("✗ Roundtrip verification failed")
             print(f"  Original tasks: {len(test_data['plan']['tasks'])}")
-            print(f"  Decoded tasks: {len(decoded.get('plan', {}).get('tasks', []))}")
+            print(f"  Decoded tasks: {len(tasks) if isinstance(tasks, list) else 0}")
             return False
     except Exception as e:
         print(f"✗ Encoding/decoding failed: {e}")
@@ -91,6 +97,9 @@ def test_markdown_parsing():
         import importlib.util
         plan_to_workflow_path = project_root / "scripts" / "plan_to_workflow.py"
         spec = importlib.util.spec_from_file_location("plan_to_workflow", plan_to_workflow_path)
+        if spec is None or spec.loader is None:
+            print("✗ Unable to load plan_to_workflow module spec")
+            return False
         plan_to_workflow = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(plan_to_workflow)
         parse_markdown_plan = plan_to_workflow.parse_markdown_plan
@@ -163,6 +172,9 @@ def test_plan_validation():
         import importlib.util
         plan_to_workflow_path = project_root / "scripts" / "plan_to_workflow.py"
         spec = importlib.util.spec_from_file_location("plan_to_workflow", plan_to_workflow_path)
+        if spec is None or spec.loader is None:
+            print("✗ Unable to load plan_to_workflow module spec")
+            return False
         plan_to_workflow = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(plan_to_workflow)
         validate_plan_structure = plan_to_workflow.validate_plan_structure
@@ -224,6 +236,9 @@ def test_workflow_conversion():
         import importlib.util
         plan_to_workflow_path = project_root / "scripts" / "plan_to_workflow.py"
         spec = importlib.util.spec_from_file_location("plan_to_workflow", plan_to_workflow_path)
+        if spec is None or spec.loader is None:
+            print("✗ Unable to load plan_to_workflow module spec")
+            return False
         plan_to_workflow = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(plan_to_workflow)
         convert_to_workflow_definition = plan_to_workflow.convert_to_workflow_definition
@@ -292,6 +307,9 @@ def test_end_to_end():
         import importlib.util
         plan_to_workflow_path = project_root / "scripts" / "plan_to_workflow.py"
         spec = importlib.util.spec_from_file_location("plan_to_workflow", plan_to_workflow_path)
+        if spec is None or spec.loader is None:
+            print("✗ Unable to load plan_to_workflow module spec")
+            return False
         plan_to_workflow = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(plan_to_workflow)
         parse_markdown_plan = plan_to_workflow.parse_markdown_plan

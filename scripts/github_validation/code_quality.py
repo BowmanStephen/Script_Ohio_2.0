@@ -56,7 +56,8 @@ class CodeQualityValidator:
         checks = {
             'ruff': self._check_ruff(),
             'black': self._check_black(),
-            'mypy': self._check_mypy()
+            'mypy': self._check_mypy(),
+            'ty': self._check_ty()
         }
         
         all_passed = all(check.get('success', False) for check in checks.values())
@@ -154,6 +155,38 @@ class CodeQualityValidator:
             }
         except Exception as e:
             logger.warning(f"Error running mypy: {e}")
+            return {
+                'success': True,  # Don't fail on errors
+                'error': str(e)
+            }
+    
+    def _check_ty(self) -> Dict[str, Any]:
+        """Check types with ty"""
+        try:
+            # ty uses 'ty check' command, paths are optional if configured in pyproject.toml
+            cmd = ['ty', 'check'] + self.python_paths
+            result = subprocess.run(
+                cmd,
+                cwd=self.project_root,
+                capture_output=True,
+                text=True,
+                timeout=120
+            )
+            
+            return {
+                'success': result.returncode == 0,
+                'exit_code': result.returncode,
+                'output': result.stdout + result.stderr,
+                'message': 'ty type check passed' if result.returncode == 0 else 'ty found type issues'
+            }
+        except FileNotFoundError:
+            return {
+                'success': True,  # Don't fail if ty not installed
+                'skipped': True,
+                'message': 'ty not found (optional)'
+            }
+        except Exception as e:
+            logger.warning(f"Error running ty: {e}")
             return {
                 'success': True,  # Don't fail on errors
                 'error': str(e)

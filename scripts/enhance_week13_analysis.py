@@ -44,7 +44,8 @@ class Week13AnalysisEnhancer:
         self.starter_games = self.project_root / "starter_pack" / "data" / "games.csv"
         
         # Results storage
-        self.enhanced_analysis = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        self.enhanced_analysis: Dict[str, Any] = {
             "analysis_date": datetime.now().isoformat(),
             "week": 13,
             "season": 2025,

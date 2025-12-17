@@ -24,7 +24,8 @@ def collect_loc(project_root: Path) -> Dict[str, Any]:
     """Collect lines of code metrics"""
     print("📊 Collecting lines of code...")
     
-    metrics = {
+    # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+    metrics: Dict[str, Any] = {
         'total_lines': 0,
         'python_files': 0,
         'by_directory': {}
@@ -65,7 +66,8 @@ def collect_cyclomatic_complexity(project_root: Path) -> Dict[str, Any]:
     """Collect cyclomatic complexity metrics"""
     print("🔍 Collecting cyclomatic complexity...")
     
-    complexity_metrics = {
+    # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+    complexity_metrics: Dict[str, Any] = {
         'total_functions': 0,
         'total_classes': 0,
         'high_complexity_functions': [],  # Functions with complexity > 10
@@ -128,7 +130,8 @@ def collect_test_coverage(project_root: Path) -> Dict[str, Any]:
     """Collect test coverage metrics"""
     print("🧪 Collecting test coverage...")
     
-    coverage_metrics = {
+    # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+    coverage_metrics: Dict[str, Any] = {
         'test_files': 0,
         'test_functions': 0,
         'coverage_available': False,
@@ -282,7 +285,8 @@ def main():
     print()
     
     # Collect all metrics
-    baseline_metrics = {
+    # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+    baseline_metrics: Dict[str, Any] = {
         'collection_timestamp': time.time(),
         'collection_date': time.strftime('%Y-%m-%d %H:%M:%S'),
         'project_root': str(project_root),

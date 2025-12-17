@@ -19,7 +19,6 @@ import os
 import sys
 import time
 import logging
-import argparse
 from pathlib import Path
 from typing import Dict, List, Optional
 import pandas as pd
@@ -37,14 +36,13 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-# CFBD imports will be moved to after argument parsing
-# try:
-#     import cfbd
-#     from cfbd import ApiClient, Configuration, GamesApi, PlaysApi, TeamsApi, RatingsApi, BettingApi
-#     from cfbd.rest import ApiException
-# except ImportError:
-#     print("ERROR: cfbd package not installed. Install with: pip install cfbd")
-#     sys.exit(1)
+try:
+    import cfbd
+    from cfbd import ApiClient, Configuration, GamesApi, PlaysApi, TeamsApi, RatingsApi, BettingApi
+    from cfbd.rest import ApiException
+except ImportError:
+    print("ERROR: cfbd package not installed. Install with: pip install cfbd")
+    sys.exit(1)
 
 # Import configuration and utilities
 _config_dir = PROJECT_ROOT / "model_pack" / "config"
@@ -96,38 +94,23 @@ class MissingGamesFiller:
     
     def __init__(self):
         """Initialize the filler."""
-        # Import CFBD only when needed
-        try:
-            import cfbd
-            from cfbd import ApiClient, Configuration, GamesApi, PlaysApi, TeamsApi, RatingsApi, BettingApi
-            from cfbd.rest import ApiException
-            
-            self.cfbd = cfbd
-            self.ApiException = ApiException
-            self.api_client = None
-            self.games_api = None
-            self.plays_api = None
-            self.teams_api = None
-            self.ratings_api = None
-            self.betting_api = None
-            
-            # Configure API
-            configuration = Configuration()
-            configuration.access_token = API_KEY
-            configuration.host = "https://api.collegefootballdata.com"
-            self.api_client = ApiClient(configuration)
-            self.games_api = GamesApi(self.api_client)
-            self.plays_api = PlaysApi(self.api_client)
-            self.teams_api = TeamsApi(self.api_client)
-            self.ratings_api = RatingsApi(self.api_client)
-            self.betting_api = BettingApi(self.api_client)
-        except ImportError as e:
-            logger.error(f"❌ CFBD package not available: {e}")
-            print("ERROR: cfbd package not installed. Install with: pip install cfbd")
-            sys.exit(1)
-        except Exception as e:
-            logger.error(f"❌ Failed to initialize CFBD client: {e}")
-            sys.exit(1)
+        self.api_client = None
+        self.games_api = None
+        self.plays_api = None
+        self.teams_api = None
+        self.ratings_api = None
+        self.betting_api = None
+        
+        # Configure API
+        configuration = Configuration()
+        configuration.access_token = API_KEY
+        configuration.host = "https://api.collegefootballdata.com"
+        self.api_client = ApiClient(configuration)
+        self.games_api = GamesApi(self.api_client)
+        self.plays_api = PlaysApi(self.api_client)
+        self.teams_api = TeamsApi(self.api_client)
+        self.ratings_api = RatingsApi(self.api_client)
+        self.betting_api = BettingApi(self.api_client)
         
         self.rate_limit_delay = 0.17
         self.training_data_path = PROJECT_ROOT / 'model_pack' / 'updated_training_data.csv'
@@ -191,7 +174,7 @@ class MissingGamesFiller:
             
             return games_list
             
-        except self.ApiException as e:
+        except ApiException as e:
             logger.error(f"API error fetching games for {season} Week {week}: {e.status} - {e.reason}")
             return []
         except Exception as e:
@@ -599,20 +582,10 @@ class MissingGamesFiller:
 
 def main():
     """Main execution."""
-    parser = argparse.ArgumentParser(
-        description="Fill missing games in training data from CFBD API"
-    )
-    parser.add_argument('--verbose', '-v', action='store_true',
-                       help='Enable verbose logging')
-    
-    args = parser.parse_args()
-    
-    if args.verbose:
-        logging.getLogger().setLevel(logging.DEBUG)
-    
     filler = MissingGamesFiller()
     success = filler.run()
     sys.exit(0 if success else 1)
 
 if __name__ == "__main__":
     main()
+

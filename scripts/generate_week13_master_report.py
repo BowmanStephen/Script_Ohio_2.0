@@ -271,7 +271,8 @@ class DataLoaderService:
     def validate_data_integrity(self, unified_data: Dict[str, Any]) -> Dict[str, Any]:
         """Validate data integrity and return validation report."""
         games = unified_data['games']
-        validation = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        validation: Dict[str, Any] = {
             'total_games': len(games),
             'games_with_predictions': sum(1 for g in games if g.get('predictions')),
             'games_with_ensemble': sum(1 for g in games if g.get('ensemble')),

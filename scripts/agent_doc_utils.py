@@ -384,7 +384,10 @@ class ExampleExtractor:
         if not relevant_lines:
             # Fallback: extract first few meaningful lines
             func_start = func_node.lineno - 1
-            func_end = min(func_node.end_lineno if hasattr(func_node, 'end_lineno') else func_node.lineno + 10, len(lines))
+            end_lineno = getattr(func_node, "end_lineno", None)
+            if not isinstance(end_lineno, int):
+                end_lineno = func_node.lineno + 10
+            func_end = min(end_lineno, len(lines))
             example_lines = lines[func_start:func_end]
             
             # Dedent

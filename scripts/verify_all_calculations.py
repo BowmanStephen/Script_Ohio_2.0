@@ -42,7 +42,8 @@ class CalculationVerifier:
         self.training_data_path = self.project_root / "model_pack" / "updated_training_data.csv"
         
         # Results storage
-        self.verification_results = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        self.verification_results: Dict[str, Any] = {
             "verification_date": datetime.now().isoformat(),
             "season": 2025,
             "checks": {},
@@ -50,9 +51,10 @@ class CalculationVerifier:
         }
         
         # Load training data
-        self.training_data = None
-        self.historical_data = None
-        self.current_season_data = None
+        # Default to empty DataFrames so downstream checks don't need Optional handling.
+        self.training_data: pd.DataFrame = pd.DataFrame()
+        self.historical_data: pd.DataFrame = pd.DataFrame()
+        self.current_season_data: pd.DataFrame = pd.DataFrame()
     
     def load_data(self) -> bool:
         """Load training data for verification"""
@@ -82,7 +84,7 @@ class CalculationVerifier:
         print("CHECK 1: VERIFYING EPA CALCULATIONS")
         print("=" * 80)
         
-        if self.training_data is None:
+        if self.training_data.empty:
             return {"status": "error", "message": "Data not loaded"}
         
         # Check for EPA columns
@@ -157,7 +159,7 @@ class CalculationVerifier:
         print("CHECK 2: VERIFYING OPPONENT ADJUSTMENTS")
         print("=" * 80)
         
-        if self.training_data is None:
+        if self.training_data.empty:
             return {"status": "error", "message": "Data not loaded"}
         
         # Check for adjusted features
@@ -227,7 +229,7 @@ class CalculationVerifier:
         print("CHECK 3: VERIFYING FEATURE ENGINEERING")
         print("=" * 80)
         
-        if self.training_data is None:
+        if self.training_data.empty:
             return {"status": "error", "message": "Data not loaded"}
         
         # Expected 86 features (plus metadata columns)
@@ -318,7 +320,7 @@ class CalculationVerifier:
         print("CHECK 4: VERIFYING MODEL COMPATIBILITY")
         print("=" * 80)
         
-        if self.training_data is None:
+        if self.training_data.empty:
             return {"status": "error", "message": "Data not loaded"}
         
         # Check model files exist
@@ -367,7 +369,7 @@ class CalculationVerifier:
         print("CHECK 5: VERIFYING TEMPORAL CONSISTENCY")
         print("=" * 80)
         
-        if self.training_data is None:
+        if self.training_data.empty:
             return {"status": "error", "message": "Data not loaded"}
         
         # Check for games before Week 5 in 2025 data
@@ -409,7 +411,7 @@ class CalculationVerifier:
         print("CHECK 6: VERIFYING NO DATA LEAKAGE")
         print("=" * 80)
         
-        if self.training_data is None:
+        if self.training_data.empty:
             return {"status": "error", "message": "Data not loaded"}
         
         # Data leakage check: opponent adjustments should only use past data

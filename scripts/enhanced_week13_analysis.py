@@ -15,7 +15,7 @@ import sys
 import pandas as pd
 import numpy as np
 from pathlib import Path
-from typing import Dict, List, Tuple, Set
+from typing import Any, Dict, List, Tuple, Set
 import json
 from datetime import datetime
 import matplotlib.pyplot as plt
@@ -31,7 +31,8 @@ class EnhancedWeek13Analyzer:
 
     def __init__(self):
         self.project_root = Path(project_root)
-        self.results = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        self.results: Dict[str, Any] = {
             'timestamp': datetime.now().isoformat(),
             'analysis_summary': {},
             'conference_championships': {},
@@ -47,7 +48,8 @@ class EnhancedWeek13Analyzer:
         """Load all Week 13 related data"""
         print("📊 Loading Week 13 data...")
 
-        data = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        data: Dict[str, Any] = {
             'predictions': None,
             'comprehensive': None,
             'training_data': None,

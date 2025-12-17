@@ -23,16 +23,25 @@ class SecurityValidator:
         self.config = config
         self.project_root = Path.cwd()
         self.frontend_path = self.project_root / config['project_structure']['frontend_path']
-        self.thresholds = config.get('security_thresholds', {
-            'high': 0,
-            'medium': 5,
-            'low': 10
-        })
-        self.timeout = config['validation_timeouts'].get('security', 120)
+        default_thresholds: Dict[str, int] = {'high': 0, 'medium': 5, 'low': 10}
+        self.thresholds: Dict[str, int] = default_thresholds.copy()
+        thresholds_raw = config.get('security_thresholds')
+        if isinstance(thresholds_raw, dict):
+            for key in ('high', 'medium', 'low'):
+                if key in thresholds_raw:
+                    try:
+                        self.thresholds[key] = int(thresholds_raw[key])
+                    except Exception:
+                        pass
+
+        timeout_raw = config.get('validation_timeouts', {})
+        timeout_val = timeout_raw.get('security', 120) if isinstance(timeout_raw, dict) else 120
+        self.timeout: int = int(timeout_val)
     
     def validate(self, scope: str = 'full') -> Dict[str, Any]:
         """Run security validation"""
-        results = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        results: Dict[str, Any] = {
             'success': True,
             'python': {},
             'frontend': {},

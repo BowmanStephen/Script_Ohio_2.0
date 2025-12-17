@@ -15,7 +15,7 @@ import sys
 import pandas as pd
 import numpy as np
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 import json
 from datetime import datetime
 
@@ -50,7 +50,8 @@ class Week13ModelPredictor:
 
     def __init__(self):
         self.project_root = Path(project_root)
-        self.results = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        self.results: Dict[str, Any] = {
             'timestamp': datetime.now().isoformat(),
             'predictions': [],
             'model_performance': {},
@@ -250,10 +251,11 @@ class Week13ModelPredictor:
         """Generate predictions using all models"""
         print("\n🎯 Generating predictions...")
 
-        predictions = []
+        predictions: List[Dict[str, Any]] = []
 
         for idx, game in games.iterrows():
-            game_prediction = {
+            # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+            game_prediction: Dict[str, Any] = {
                 'game_id': game.get('id', idx),
                 'season': game.get('season', 2025),
                 'week': game.get('week', 13),
@@ -265,7 +267,7 @@ class Week13ModelPredictor:
             }
 
             # Prepare features for this game
-            game_features = {}
+            game_features: Dict[str, List[float]] = {}
             for model_type, feature_list in features.items():
                 game_features[model_type] = []
                 for feature in feature_list:

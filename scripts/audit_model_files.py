@@ -14,7 +14,7 @@ import json
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Set, Tuple, Any
+from typing import Dict, List, Set, Tuple, Any, Optional
 import sys
 
 # Add project root to path
@@ -174,7 +174,8 @@ class ModelAuditor:
 
     def check_file_existence(self, references: Dict[str, List]) -> Dict[str, Any]:
         """Check if referenced model files actually exist."""
-        existence_report = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        existence_report: Dict[str, Any] = {
             'missing': [],
             'found': [],
             'multiple_locations': {},
@@ -267,7 +268,7 @@ class ModelAuditor:
         
         return report
 
-    def save_report(self, report: Dict[str, Any], output_dir: Path = None):
+    def save_report(self, report: Dict[str, Any], output_dir: Optional[Path] = None):
         """Save audit report in JSON and Markdown formats."""
         if output_dir is None:
             output_dir = self.project_root / 'reports'

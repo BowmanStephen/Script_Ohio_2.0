@@ -14,16 +14,17 @@ Validates:
 import pandas as pd
 import sys
 from pathlib import Path
-from typing import Dict, List
+from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 TRAINING_DATA_PATH = PROJECT_ROOT / 'model_pack' / 'updated_training_data.csv'
 
 
-def validate_combined_dataset() -> Dict[str, any]:
+def validate_combined_dataset() -> dict[str, Any]:
     """Run comprehensive validation on combined dataset."""
     
-    results = {
+    # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+    results: dict[str, Any] = {
         'status': 'unknown',
         'issues': [],
         'warnings': [],
@@ -137,7 +138,7 @@ def validate_combined_dataset() -> Dict[str, any]:
     return results
 
 
-def print_validation_results(results: Dict[str, any]):
+def print_validation_results(results: dict[str, Any]) -> None:
     """Print validation results in human-readable format."""
     print("=" * 80)
     print("COMBINED DATASET VALIDATION REPORT")

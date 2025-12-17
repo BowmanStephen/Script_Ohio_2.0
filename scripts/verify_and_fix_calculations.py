@@ -15,7 +15,7 @@ import sys
 import pandas as pd
 import numpy as np
 from pathlib import Path
-from typing import Dict, List, Tuple, Set
+from typing import Any, Dict, List, Tuple, Set
 import json
 from datetime import datetime
 
@@ -29,7 +29,8 @@ class CalculationVerifier:
 
     def __init__(self):
         self.project_root = Path(project_root)
-        self.results = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        self.results: Dict[str, Any] = {
             'timestamp': datetime.now().isoformat(),
             'verification_results': {},
             'fixes_applied': [],
@@ -49,7 +50,8 @@ class CalculationVerifier:
         """Verify feature count is correct (86 features expected)"""
         print("🔍 Verifying feature count...")
 
-        result = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        result: Dict[str, Any] = {
             'current_count': len(df.columns),
             'expected_count': 86,
             'extra_columns': [],
@@ -79,7 +81,8 @@ class CalculationVerifier:
         """Verify EPA calculations follow expected patterns"""
         print("\n🔍 Verifying EPA calculations...")
 
-        result = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        result: Dict[str, Any] = {
             'epa_columns_found': [],
             'epa_ranges': {},
             'opponent_adjustments': {},
@@ -132,7 +135,8 @@ class CalculationVerifier:
         """Verify opponent adjustments use subtraction methodology"""
         print("\n🔍 Verifying opponent adjustments...")
 
-        result = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        result: Dict[str, Any] = {
             'adjusted_columns': [],
             'raw_columns': [],
             'adjustment_logic': {},
@@ -185,7 +189,8 @@ class CalculationVerifier:
         """Verify Week 5+ filtering is applied correctly"""
         print("\n🔍 Verifying Week 5+ filtering...")
 
-        result = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        result: Dict[str, Any] = {
             'total_games': len(df),
             'pre_week5_games': 0,
             'week5_plus_games': 0,

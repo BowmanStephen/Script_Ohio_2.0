@@ -10,6 +10,7 @@ from pathlib import Path
 import sys
 from datetime import datetime
 import subprocess
+from typing import Any
 
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -97,7 +98,8 @@ class VerificationReportGenerator:
 
     def verify_current_state(self):
         """Verify current system state"""
-        current_state = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        current_state: dict[str, Any] = {
             "data_files": {},
             "model_files": {},
             "prediction_files": {},

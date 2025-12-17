@@ -52,7 +52,8 @@ class AgentIntegration:
                 'message': 'Agent system not available'
             }
         
-        results = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        results: Dict[str, Any] = {
             'success': True,
             'agent_results': {}
         }

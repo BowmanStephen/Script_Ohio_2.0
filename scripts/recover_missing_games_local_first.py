@@ -287,6 +287,8 @@ class LocalFirstGameRecovery:
             import importlib.util
             fill_missing_path = PROJECT_ROOT / 'scripts' / 'fill_missing_games.py'
             spec = importlib.util.spec_from_file_location("fill_missing_games", fill_missing_path)
+            if spec is None or spec.loader is None:
+                raise ValueError(f"Unable to load fill_missing_games module spec: {fill_missing_path}")
             fill_missing_module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(fill_missing_module)
             MissingGamesFiller = fill_missing_module.MissingGamesFiller
@@ -329,6 +331,8 @@ class LocalFirstGameRecovery:
             import importlib.util
             fill_missing_path = PROJECT_ROOT / 'scripts' / 'fill_missing_games.py'
             spec = importlib.util.spec_from_file_location("fill_missing_games", fill_missing_path)
+            if spec is None or spec.loader is None:
+                raise ValueError(f"Unable to load fill_missing_games module spec: {fill_missing_path}")
             fill_missing_module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(fill_missing_module)
             MissingGamesFiller = fill_missing_module.MissingGamesFiller

@@ -10,12 +10,14 @@ from pathlib import Path
 import sys
 from datetime import datetime
 import numpy as np
+from typing import Any
 
 PROJECT_ROOT = Path(__file__).parent.parent
 
 def generate_prediction_insights(unified_df):
     """Generate prediction insights JSON"""
-    insights = {
+    # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+    insights: dict[str, Any] = {
         'total_predictions': len(unified_df),
         'home_win_predictions': int((unified_df.get('home_win_probability', 0) > 0.5).sum()) if 'home_win_probability' in unified_df.columns else 0,
         'away_win_predictions': int((unified_df.get('away_win_probability', 0) > 0.5).sum()) if 'away_win_probability' in unified_df.columns else 0,
@@ -108,7 +110,8 @@ def generate_comprehensive_predictions(unified_df):
 
 def generate_enhanced_analysis_report(unified_df):
     """Generate enhanced analysis report (JSON and markdown)"""
-    report_json = {
+    # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+    report_json: dict[str, Any] = {
         'generated_at': datetime.now().isoformat(),
         'week': 14,
         'season': 2025,

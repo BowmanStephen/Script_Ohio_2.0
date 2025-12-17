@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 import pandas as pd
 import numpy as np
+from typing import Any
 
 # Add project root to path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -38,7 +39,8 @@ class DatasetValidator:
         df = pd.read_csv(self.training_data_path, low_memory=False)
         print(f"Loaded {len(df):,} games")
         
-        results = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        results: dict[str, Any] = {
             'valid': True,
             'total_games': len(df),
             'errors': [],
