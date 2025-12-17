@@ -114,7 +114,7 @@ def test_workflow_automator_cfbd_pipeline(monkeypatch, _games_payload):
     monkeypatch.setattr(agent, "_get_rest_data_source", lambda host: stub_rest)
     monkeypatch.setattr(agent, "_get_feature_engineer", lambda season: stub_engineer)
     monkeypatch.setattr(agent, "_run_ridge_predictions", lambda frame: [{"game_key": "abc", "predicted_margin": 3.2}])
-    monkeypatch.setattr(agent, "_fetch_graphql_summary", lambda season, limit: {"available": True})
+    monkeypatch.setattr(agent, "_fetch_seasonal_summary_via_rest", lambda season, limit: {"available": True})
 
     response = agent._execute_cfbd_pipeline({"season": 2025}, {"detected_role": "analyst"})
     assert response["success"] is True
