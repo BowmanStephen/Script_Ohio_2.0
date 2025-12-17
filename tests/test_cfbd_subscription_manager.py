@@ -66,4 +66,5 @@ def test_subscription_manager_stop():
     assert mgr._handle is not None
     handle = mgr._handle
     mgr.stop()
-    assert handle is not None and handle._handle.stopped
+    # Check that the stop event is set after calling stop()
+    assert handle is not None and handle._stop_event.is_set()
