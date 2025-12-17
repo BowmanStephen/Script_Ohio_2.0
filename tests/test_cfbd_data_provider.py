@@ -71,7 +71,7 @@ def _predictions_df():
 
 def test_team_snapshot_uses_live_data(monkeypatch):
     dummy_graphql = DummyGraphQL()
-    provider = CFBDDataProvider(cfbd_client=object(), graphql_client=dummy_graphql)
+    provider = CFBDDataProvider(cfbd_client=object())
 
     monkeypatch.setattr("cfbd_client.data_provider.fetch_games", lambda *_, **__: _games_df())
     monkeypatch.setattr("cfbd_client.data_provider.fetch_ratings", lambda *_, **__: _ratings_df())
@@ -79,6 +79,8 @@ def test_team_snapshot_uses_live_data(monkeypatch):
         "cfbd_client.data_provider.fetch_predicted_points",
         lambda *_, **__: _predictions_df(),
     )
+    # Mock the adjusted metrics that the snapshot method needs
+    monkeypatch.setattr(provider, "get_adjusted_team_metrics", lambda team, season: {"rating": 10.5})
 
     snapshot = provider.get_team_snapshot(team="ohio_state", season=2025, week=12)
 
