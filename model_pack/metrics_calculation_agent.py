@@ -51,7 +51,13 @@ class MetricsCalculationAgent:
         print(f"Base Path: {self.base_path}")
 
     def _ensure_identifier_columns(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Ensure game_key and conference_game columns exist for downstream validation."""
+        """
+        Ensure stable identifier columns exist for downstream metrics.
+        
+        Contract:
+        - Always creates `game_key` column from season, week, home_team, away_team.
+        - Always creates `conference_game` column (defaults to False when conference info isn't available).
+        """
         df = df.copy()
         if 'game_key' not in df.columns:
             def _make_key(row):

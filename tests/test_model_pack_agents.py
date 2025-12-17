@@ -163,10 +163,19 @@ class TestDataAcquisitionAgent:
     @pytest.fixture
     def mock_agent(self, mock_api_key):
         """Create mock DataAcquisitionAgent"""
-        with patch('model_pack.2025_data_acquisition_v2.API_KEY', mock_api_key):
-            with patch('model_pack.2025_data_acquisition_v2.GQL_AVAILABLE', False):
-                with patch('model_pack.2025_data_acquisition_v2.CFBDGraphQLClient', None):
-                    from model_pack import data_acquisition_v2
+        # Import the module using spec_from_file_location to handle numeric module names
+        import importlib.util
+        import os
+
+        # Get the file path directly
+        file_path = os.path.join(os.path.dirname(__file__), '..', 'model_pack', '2025_data_acquisition_v2.py')
+        spec = importlib.util.spec_from_file_location("data_acquisition_v2", file_path)
+        data_acquisition_v2 = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(data_acquisition_v2)
+
+        with patch.object(data_acquisition_v2, 'API_KEY', mock_api_key):
+            with patch.object(data_acquisition_v2, 'GQL_AVAILABLE', False):
+                with patch.object(data_acquisition_v2, 'CFBDGraphQLClient', None):
                     agent = data_acquisition_v2.DataAcquisitionAgent(use_rest=True)
                     return agent
 
@@ -240,12 +249,16 @@ class TestStarterPackDataMigrator:
     @pytest.fixture
     def mock_config(self):
         """Mock configuration"""
+        from pathlib import Path
         mock_config = MagicMock()
         mock_config.get_season.return_value = 2025
         mock_config.get_week.return_value = 1
-        mock_config.get_starter_pack_data_path.return_value = "/tmp/test_games.csv"
-        mock_config.get_training_data_path.return_value = "/tmp/training_data.csv"
-        mock_config.get_output_path.return_value = "/tmp/output.csv"
+        mock_config.get_starter_pack_data_path.return_value = Path("/tmp/test_games.csv")
+        mock_config.get_training_data_path.return_value = Path("/tmp/training_data.csv")
+        # get_output_path is called with a filename, return Path object
+        # Make it return a non-existent path so _load_processed_week_range returns early
+        mock_output_path = Path("/tmp/nonexistent_output.csv")
+        mock_config.get_output_path.return_value = mock_output_path
         return mock_config
 
     @pytest.fixture
@@ -253,10 +266,11 @@ class TestStarterPackDataMigrator:
         """Create mock StarterPackDataMigrator"""
         with patch('model_pack.migrate_starter_pack_data.config', mock_config):
             with patch('model_pack.migrate_starter_pack_data.API_KEY', 'test_key'):
-                with patch('model_pack.migrate_starter_pack_data.CFBDGraphQLClient', None):
-                    from model_pack.migrate_starter_pack_data import StarterPackDataMigrator
-                    migrator = StarterPackDataMigrator()
-                    return migrator
+                # CFBDGraphQLClient is imported inside __init__, not at module level
+                # The class handles missing GraphQL gracefully, so no need to patch it
+                from model_pack.migrate_starter_pack_data import StarterPackDataMigrator
+                migrator = StarterPackDataMigrator()
+                return migrator
 
     def test_rate_limit(self, mock_migrator):
         """Test rate limiting"""
@@ -330,10 +344,11 @@ class TestEdgeCases:
 
     def test_api_failure_handling(self, mock_api_key):
         """Test API failure handling"""
-        with patch('model_pack.2025_data_acquisition_v2.API_KEY', mock_api_key):
-            with patch('model_pack.2025_data_acquisition_v2.GQL_AVAILABLE', False):
-                with patch('model_pack.2025_data_acquisition_v2.CFBDGraphQLClient', None):
-                    from model_pack import data_acquisition_v2
+        import importlib
+        data_acquisition_v2 = importlib.import_module('model_pack.2025_data_acquisition_v2')
+        with patch.object(data_acquisition_v2, 'API_KEY', mock_api_key):
+            with patch.object(data_acquisition_v2, 'GQL_AVAILABLE', False):
+                with patch.object(data_acquisition_v2, 'CFBDGraphQLClient', None):
                     agent = data_acquisition_v2.DataAcquisitionAgent(use_rest=True)
                     
                     # Should gracefully handle API failures
