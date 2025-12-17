@@ -265,7 +265,8 @@ class TestStarterPackDataMigrator:
     def mock_migrator(self, mock_config):
         """Create mock StarterPackDataMigrator"""
         with patch('model_pack.migrate_starter_pack_data.config', mock_config):
-            with patch('model_pack.migrate_starter_pack_data.API_KEY', 'test_key'):
+            # Ensure GraphQL client is not initialized (no network calls in unit tests)
+            with patch('model_pack.migrate_starter_pack_data.API_KEY', None):
                 # CFBDGraphQLClient is imported inside __init__, not at module level
                 # The class handles missing GraphQL gracefully, so no need to patch it
                 from model_pack.migrate_starter_pack_data import StarterPackDataMigrator
@@ -304,28 +305,39 @@ class TestStarterPackDataMigrator:
 
     def test_apply_week_filter(self, mock_migrator):
         """Test apply_week_filter method"""
-        df = pd.DataFrame({
+        # Set up mock processed_current_season data
+        mock_migrator.processed_current_season = pd.DataFrame({
             'week': [1, 2, 3, 4, 5, 6, 7],
             'season': [2025] * 7,
         })
-        
+        mock_migrator.min_processed_week = 1
+        mock_migrator.max_processed_week = 7
+
         # Test filtering weeks 5+
-        result = mock_migrator.apply_week_filter(df, min_week=5)
-        
-        assert len(result) == 3
-        assert all(result['week'] >= 5)
+        result = mock_migrator.apply_week_filter(min_week=5)
+
+        # Should return True (games remain) and update internal state
+        assert result == True
+        assert len(mock_migrator.processed_current_season) == 3
+        assert all(mock_migrator.processed_current_season['week'] >= 5)
 
     def test_apply_week_filter_with_max(self, mock_migrator):
         """Test apply_week_filter with max_week"""
-        df = pd.DataFrame({
+        # Set up mock processed_current_season data
+        mock_migrator.processed_current_season = pd.DataFrame({
             'week': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             'season': [2025] * 10,
         })
-        
-        result = mock_migrator.apply_week_filter(df, min_week=5, max_week=8)
-        
-        assert len(result) == 4
-        assert all((result['week'] >= 5) & (result['week'] <= 8))
+        mock_migrator.min_processed_week = 1
+        mock_migrator.max_processed_week = 10
+
+        result = mock_migrator.apply_week_filter(min_week=5, max_week=8)
+
+        # Should return True (games remain) and update internal state
+        assert result == True
+        assert len(mock_migrator.processed_current_season) == 4
+        assert all((mock_migrator.processed_current_season['week'] >= 5) &
+                  (mock_migrator.processed_current_season['week'] <= 8))
 
 
 class TestEdgeCases:
