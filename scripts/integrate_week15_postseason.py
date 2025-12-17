@@ -286,6 +286,7 @@ def integrate_week15_postseason(
     hub.emit_event("integration.start", {"files": ["week15", "postseason"], "target": "updated_training_data.csv"})
 
     start_time = datetime.now()
+    backup_path = None  # Initialize for exception handler
 
     try:
         # Step 1: Load week 15 file
