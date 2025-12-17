@@ -1,0 +1,12 @@
+{
+  "best_params": {
+    "learning_rate": 0.05,
+    "max_depth": 4,
+    "n_estimators": 100,
+    "subsample": 1.0
+  },
+  "best_score": 0.7955480797416961,
+  "tuning_method": "GridSearchCV",
+  "cv_scores_mean": 0.7804702642605382,
+  "cv_scores_std": 0.008562965741490972
+}

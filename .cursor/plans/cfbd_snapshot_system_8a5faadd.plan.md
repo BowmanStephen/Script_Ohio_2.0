@@ -72,7 +72,7 @@ Create a deterministic snapshot system for CFBD data to enable offline bowl pred
 
 **File Structure**:
 
-```
+```text
 data/raw/cfbd/
 ├── games_regular_2025.json
 ├── games_regular_2025.metadata.json

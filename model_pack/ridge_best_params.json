@@ -1,0 +1,9 @@
+{
+  "best_params": {
+    "alpha": 0.1
+  },
+  "best_score": 12.885362278735027,
+  "tuning_method": "GridSearchCV",
+  "cv_scores_mean": 12.9136883796349,
+  "cv_scores_std": 0.0268413618541835
+}

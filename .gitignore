@@ -110,3 +110,14 @@ starter_pack/*backup_*
 
 # === MCP Configuration (contains secrets) ===
 .kilocode/
+
+# === Temporary Generated Artifacts ===
+*.pkl
+*.joblib
+!model_pack/ridge_model_2025.joblib
+model_pack/backups/updated_training_data_*.csv
+model_performance_comparison_*.csv
+model_performance_comparison_*.png
+feature_importance_comparison_*.png
+debug_log.txt
+model_pack/backups/*.csv
