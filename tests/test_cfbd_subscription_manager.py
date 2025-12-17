@@ -54,7 +54,7 @@ def test_subscription_manager_collects_events():
             }
         ]
     }
-    mgr._handle_event(sample_event)
+    mgr._process_websocket_event(sample_event)
     events = mgr.latest_events(limit=1)
     assert len(events) == 1
     assert events[0]["homeTeam"] == "Ohio State"
