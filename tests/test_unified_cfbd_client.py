@@ -202,15 +202,15 @@ class TestUnifiedCFBDClient:
             client.get_games(year=2025)
     
     def test_error_taxonomy_404(self, client):
-        """Test that 404 errors raise CFBDNotFoundError and return None"""
+        """Test that 404 errors raise CFBDNotFoundError (not return None)"""
         from cfbd.rest import ApiException
         
         client.games_api = Mock()
         client.games_api.get_games.side_effect = ApiException(status=404, reason="Not Found")
         
-        # 404 errors return None, not raise
-        result = client.get_games(year=2025)
-        assert result is None
+        # 404 errors should raise CFBDNotFoundError, not return None
+        with pytest.raises(CFBDNotFoundError):
+            client.get_games(year=2025)
     
     def test_error_taxonomy_429(self, client):
         """Test that 429 errors raise CFBDRateLimitError with Retry-After"""

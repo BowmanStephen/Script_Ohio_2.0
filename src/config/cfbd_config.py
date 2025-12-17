@@ -58,8 +58,8 @@ class CFBDConfig:
         }
         host = host_map.get(host_env, host_map["production"])
         
-        # Rate limiting
-        max_requests_per_second = int(os.getenv("CFBD_MAX_REQUESTS_PER_SECOND", "6"))
+        # Rate limiting (default 5 req/sec for free tier safety, ~300 req/min)
+        max_requests_per_second = int(os.getenv("CFBD_MAX_REQUESTS_PER_SECOND", "5"))
         rate_limit_delay = 1.0 / max_requests_per_second
         max_retries = int(os.getenv("CFBD_MAX_RETRIES", "3"))
         

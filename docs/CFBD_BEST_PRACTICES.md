@@ -51,7 +51,7 @@ Your `UnifiedCFBDClient` already implements:
 - `CFBD_HOST`: API host selection
   - `production` (default): `https://api.collegefootballdata.com`
   - `next`: `https://apinext.collegefootballdata.com`
-- `CFBD_MAX_REQUESTS_PER_SECOND`: Rate limit (default: 6)
+- `CFBD_MAX_REQUESTS_PER_SECOND`: Rate limit (default: 5, safe for free tier ~300 req/min)
 - `CFBD_MAX_RETRIES`: Max retry attempts (default: 3)
 - `CFBD_PREFERRED_TRANSPORT`: Transport preference
   - `auto` (default): Try GraphQL if available, fallback to REST
@@ -211,6 +211,36 @@ You already track:
 - ✅ Average latency
 
 **Enhancement**: Add monthly quota tracking to avoid exceeding limits.
+
+### Monitoring 429 Rate Limit Errors
+
+**Watch for 429s in Production**:
+- Monitor `CFBDRateLimitError` exceptions in logs
+- Track `rate_limit_hits` metric in `UnifiedCFBDClient.metrics`
+- If 429s are frequent, consider:
+  1. Reducing `CFBD_MAX_REQUESTS_PER_SECOND` (default: 5)
+  2. Increasing cache TTLs to reduce API calls
+  3. Upgrading CFBD tier for higher monthly quota
+
+**Example Monitoring**:
+```python
+from src.cfbd_client.unified_client import UnifiedCFBDClient
+
+client = UnifiedCFBDClient()
+# ... make requests ...
+
+# Check rate limit hits
+if client.metrics.rate_limit_hits > 0:
+    logger.warning(
+        f"Rate limit hit {client.metrics.rate_limit_hits} times. "
+        f"Consider reducing CFBD_MAX_REQUESTS_PER_SECOND"
+    )
+```
+
+**Adjusting Rate Limits**:
+- If 429s occur: Reduce `CFBD_MAX_REQUESTS_PER_SECOND` to 4 or 3
+- If no 429s and tier supports it: Can increase to 6-10 req/sec
+- Default (5 req/sec) is safe for free tier (~300 req/min)
 
 ## Migration to API v2
 

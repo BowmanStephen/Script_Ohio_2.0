@@ -6,7 +6,15 @@ from typing import Any, Dict, List
 import pytest
 import responses
 
-from cfbd_client import CFBDClient
+import sys
+from pathlib import Path
+
+# Add src to path for imports
+src_path = Path(__file__).parent.parent / "src"
+if str(src_path) not in sys.path:
+    sys.path.insert(0, str(src_path))
+
+from cfbd_client.client import CFBDClient
 from cfbd_client import client as client_module
 from cfbd_client.datasets import (
     fetch_games,

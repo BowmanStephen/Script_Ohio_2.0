@@ -19,11 +19,17 @@ from src.config.cfbd_config import CFBDConfig
 
 @pytest.mark.integration
 @pytest.mark.skipif(
-    not os.getenv("CFBD_API_KEY"),
-    reason="CFBD_API_KEY not set - skipping live HTTP test"
+    not os.getenv("CFBD_API_KEY") and not os.getenv("CFBD_LIVE_TESTS"),
+    reason="CFBD_API_KEY not set and CFBD_LIVE_TESTS not enabled - skipping live HTTP test"
 )
 class TestCFBDSmokeLive:
-    """Live HTTP smoke tests for CFBD API"""
+    """Live HTTP smoke tests for CFBD API
+    
+    Behavior:
+    - Skips if CFBD_API_KEY not set (local/dev ergonomics)
+    - If CFBD_LIVE_STRICT_AUTH=1: Fails on 401 (CI/production safety)
+    - Otherwise: Skips on 401 (local/dev ergonomics)
+    """
     
     @pytest.fixture
     def client(self):
@@ -38,10 +44,17 @@ class TestCFBDSmokeLive:
         """Test that conferences endpoint returns valid data"""
         from src.cfbd_client.errors import CFBDAuthenticationError
         
+        strict_auth = os.getenv("CFBD_LIVE_STRICT_AUTH", "0") == "1"
+        
         try:
             conferences = client.get_conferences()
         except CFBDAuthenticationError as e:
-            pytest.skip(f"CFBD API key invalid or expired: {e}. Update CFBD_API_KEY to run this test.")
+            if strict_auth:
+                # In CI/strict mode: fail loudly on invalid key
+                pytest.fail(f"CFBD API key invalid or expired (strict mode): {e}")
+            else:
+                # In local/dev: skip gracefully
+                pytest.skip(f"CFBD API key invalid or expired: {e}. Update CFBD_API_KEY to run this test.")
         
         # Basic shape checks
         assert isinstance(conferences, list)
@@ -57,11 +70,16 @@ class TestCFBDSmokeLive:
         """Test that games endpoint returns valid data for recent season"""
         from src.cfbd_client.errors import CFBDAuthenticationError
         
+        strict_auth = os.getenv("CFBD_LIVE_STRICT_AUTH", "0") == "1"
+        
         try:
             # Use 2024 season (recent, should have data)
             games = client.get_games(year=2024, week=1)
         except CFBDAuthenticationError as e:
-            pytest.skip(f"CFBD API key invalid or expired: {e}. Update CFBD_API_KEY to run this test.")
+            if strict_auth:
+                pytest.fail(f"CFBD API key invalid or expired (strict mode): {e}")
+            else:
+                pytest.skip(f"CFBD API key invalid or expired: {e}. Update CFBD_API_KEY to run this test.")
         
         # Basic shape checks
         assert isinstance(games, list)
@@ -83,6 +101,8 @@ class TestCFBDSmokeLive:
         if not api_key:
             pytest.skip("CFBD_API_KEY not set")
         
+        strict_auth = os.getenv("CFBD_LIVE_STRICT_AUTH", "0") == "1"
+        
         # Test production host
         config_prod = CFBDConfig(
             api_key=api_key,
@@ -94,7 +114,10 @@ class TestCFBDSmokeLive:
             # Should work with production host
             conferences_prod = client_prod.get_conferences()
         except CFBDAuthenticationError as e:
-            pytest.skip(f"CFBD API key invalid or expired: {e}. Update CFBD_API_KEY to run this test.")
+            if strict_auth:
+                pytest.fail(f"CFBD API key invalid or expired (strict mode): {e}")
+            else:
+                pytest.skip(f"CFBD API key invalid or expired: {e}. Update CFBD_API_KEY to run this test.")
         
         assert len(conferences_prod) > 0
         
@@ -109,7 +132,10 @@ class TestCFBDSmokeLive:
             # Should also work with Next host
             conferences_next = client_next.get_conferences()
         except CFBDAuthenticationError as e:
-            pytest.skip(f"CFBD API key invalid or expired: {e}. Update CFBD_API_KEY to run this test.")
+            if strict_auth:
+                pytest.fail(f"CFBD API key invalid or expired (strict mode): {e}")
+            else:
+                pytest.skip(f"CFBD API key invalid or expired: {e}. Update CFBD_API_KEY to run this test.")
         
         assert len(conferences_next) > 0
         
@@ -117,17 +143,26 @@ class TestCFBDSmokeLive:
         assert len(conferences_prod) == len(conferences_next)
     
     def test_error_handling_live(self, client):
-        """Test that 404 errors are handled gracefully"""
-        from src.cfbd_client.errors import CFBDAuthenticationError
+        """Test that 404 errors are raised (not silently ignored)"""
+        from src.cfbd_client.errors import CFBDAuthenticationError, CFBDNotFoundError
+        
+        strict_auth = os.getenv("CFBD_LIVE_STRICT_AUTH", "0") == "1"
         
         try:
             # Request a game that doesn't exist (future season/week)
+            # This should raise CFBDNotFoundError, not return empty
             games = client.get_games(year=2099, week=1)
         except CFBDAuthenticationError as e:
-            pytest.skip(f"CFBD API key invalid or expired: {e}. Update CFBD_API_KEY to run this test.")
-        
-        # Should return empty list or None, not raise
-        assert games is None or games == []
+            if strict_auth:
+                pytest.fail(f"CFBD API key invalid or expired (strict mode): {e}")
+            else:
+                pytest.skip(f"CFBD API key invalid or expired: {e}. Update CFBD_API_KEY to run this test.")
+        except CFBDNotFoundError:
+            # Expected: 404 should raise, not return empty
+            pass
+        else:
+            # If we get here, 404 didn't raise - that's a bug
+            pytest.fail("Expected CFBDNotFoundError for non-existent resource, but got result or no exception")
     
     @pytest.mark.skipif(
         not os.getenv("CFBD_GRAPHQL_TIER3"),

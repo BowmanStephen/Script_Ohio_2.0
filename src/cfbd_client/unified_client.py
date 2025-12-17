@@ -255,8 +255,11 @@ class UnifiedCFBDClient:
                     raise cfbd_error
                     
                 elif isinstance(cfbd_error, CFBDNotFoundError):  # Not found (404)
+                    # Raise 404 errors at client layer - don't silently return None
+                    # This helps catch bugs (wrong paths, API changes, client issues)
+                    # If specific endpoints need "empty on 404", handle it in the endpoint wrapper
                     logger.warning(f"🔍 Resource not found: {cfbd_error.message}")
-                    return None
+                    raise cfbd_error
                     
                 elif isinstance(cfbd_error, CFBDServerError):  # Server error (5xx)
                     if attempt < self.config.max_retries - 1:

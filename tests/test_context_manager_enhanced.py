@@ -103,7 +103,8 @@ class TestContextManagerEnhanced:
         # Validate role-specific content
         assert context['role'] == 'analyst'
         assert len(context['notebooks']) > 0
-        assert any('intro' in nb.lower() for nb in context['notebooks'])
+        # Check for intro notebook in the metadata (notebooks are dicts with 'name' field)
+        assert any('intro' in nb['name'].lower() for nb in context['notebooks'])
 
     def test_token_optimization_algorithms(self, context_manager):
         """Test different token optimization algorithms"""

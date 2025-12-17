@@ -42,7 +42,11 @@ except ImportError as e:
 
 # Initialize Flask app
 app = Flask(__name__)
-CORS(app)  # Enable CORS for web app
+
+# CORS configuration: restrict to frontend origin in production
+# In development, allow all origins for local testing
+cors_origins = os.getenv("CORS_ORIGINS", "*").split(",")
+CORS(app, origins=cors_origins)  # Enable CORS for web app
 
 # Initialize agent system
 agents_orchestrator = None
