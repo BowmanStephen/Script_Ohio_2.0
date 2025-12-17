@@ -228,6 +228,55 @@ def get_week_predictions(week):
 
     return jsonify(response)
 
+
+@app.route('/api/predictions/bowls', methods=['GET'])
+def get_bowls_predictions():
+    """Get predictions for all bowl games"""
+
+    try:
+        # Load bowls predictions from the synced file
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        bowls_file = os.path.join(project_root, "web_app", "public", "bowls_2025_predictions.json")
+
+        if not os.path.exists(bowls_file):
+            return jsonify({
+                "error": "Bowl predictions not found",
+                "message": "Run sync_web_app_data.py to generate bowl predictions"
+            }), 404
+
+        with open(bowls_file, 'r') as f:
+            bowls_data = json.load(f)
+
+        # Extract games list
+        games = bowls_data.get('games', [])
+
+        logger.info(f"Returning {len(games)} bowl predictions")
+
+        # Add API metadata
+        response = {
+            "season": bowls_data.get("season", 2025),
+            "predictions_type": "bowls",
+            "total_games": len(games),
+            "model_info": bowls_data.get("model", {}),
+            "generated_at": bowls_data.get("generated_at"),
+            "predictions": games,
+            "api_metadata": {
+                "timestamp": datetime.now().isoformat(),
+                "source": "bowl_predictions_json",
+                "note": "Bowl game predictions from Ridge + XGBoost ensemble"
+            }
+        }
+
+        return jsonify(response)
+
+    except Exception as e:
+        logger.error(f"Error loading bowl predictions: {str(e)}")
+        return jsonify({
+            "error": "Failed to load bowl predictions",
+            "message": str(e)
+        }), 500
+
+
 @app.route('/api/models', methods=['GET'])
 def get_available_models():
     """Get list of available prediction models"""
