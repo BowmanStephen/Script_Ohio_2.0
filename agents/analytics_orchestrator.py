@@ -17,7 +17,7 @@ import time
 import logging
 import uuid
 from collections import deque
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
@@ -64,15 +64,14 @@ class AnalyticsRequest:
     query_type: str
     parameters: Dict[str, Any]
     context_hints: Dict[str, Any]
-    request_id: str = None
+    request_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     priority: int = 1
-    timestamp: float = None
+    timestamp: float = field(default_factory=time.time)
 
     def __post_init__(self):
-        if self.request_id is None:
+        # Defensive: callers may still pass empty/None in legacy code paths.
+        if not self.request_id:
             self.request_id = str(uuid.uuid4())
-        if self.timestamp is None:
-            self.timestamp = time.time()
 
 @dataclass
 class AnalyticsResponse:
@@ -84,7 +83,7 @@ class AnalyticsResponse:
     visualizations: List[Dict[str, Any]]
     error_message: Optional[str] = None
     execution_time: float = 0.0
-    metadata: Dict[str, Any] = None
+    metadata: Optional[Dict[str, Any]] = None
 
 class AnalyticsOrchestrator:
     """
@@ -94,7 +93,7 @@ class AnalyticsOrchestrator:
     primary interface for intelligent college football analytics.
     """
 
-    def __init__(self, base_path: str = None):
+    def __init__(self, base_path: Optional[str] = None):
         """Initialize the analytics orchestrator"""
         self.base_path = base_path or os.getcwd()
         self.agent_factory = AgentFactory(base_path)
@@ -160,7 +159,9 @@ class AnalyticsOrchestrator:
             return None
 
         try:
-            return CFBDDataProvider(telemetry_hook=self._record_cfbd_event)
+            # UnifiedCFBDClient doesn't accept telemetry_hook parameter
+            # Telemetry can be handled via metrics tracking instead
+            return CFBDDataProvider()
         except Exception as exc:  # pragma: no cover - defensive guard for env issues
             logger.warning("Unable to initialize CFBDDataProvider: %s", exc)
             return None
@@ -195,17 +196,15 @@ class AnalyticsOrchestrator:
             else:
                 self.agent_factory.create_agent("insight_generator", "default_insight_generator")
             
-            # DISABLED: Unused agents for local-only pipeline
-            # These are commented out to reduce surface area and maintenance overhead
-            # Uncomment if needed for specific use cases
-            #
-            # from agents.learning_navigator_agent import LearningNavigatorAgent
+            # ENABLED: Learning navigator for test compatibility
+            # These agents are needed for the test suite to pass
+            from agents.learning_navigator_agent import LearningNavigatorAgent
             # from agents.conversational_ai_agent import ConversationalAIAgent
             # from agents.performance_monitor_agent import PerformanceMonitorAgent
-            # self.agent_factory.register_agent_class(LearningNavigatorAgent, "learning_navigator")
+            self.agent_factory.register_agent_class(LearningNavigatorAgent, "learning_navigator")
             # self.agent_factory.register_agent_class(ConversationalAIAgent, "conversational_ai")
             # self.agent_factory.register_agent_class(PerformanceMonitorAgent, "performance_monitor")
-            # self.agent_factory.create_agent("learning_navigator", "default_learning_nav")
+            self.agent_factory.create_agent("learning_navigator", "default_learning_nav")
             # self.agent_factory.create_agent("conversational_ai", "default_conversational_ai")
             # self.agent_factory.create_agent("performance_monitor", "default_performance_monitor")
 
@@ -223,27 +222,32 @@ class AnalyticsOrchestrator:
             try:
                 from agents.cfbd_integration_agent import CFBDIntegrationAgent
                 from agents.quality_assurance_agent import QualityAssuranceAgent
+                from agents.postseason_projection_agent import PostseasonProjectionAgent
+                from agents.weekly_analysis_orchestrator import WeeklyAnalysisOrchestrator
 
                 self.agent_factory.register_agent_class(CFBDIntegrationAgent, "cfbd_integration")
                 self.agent_factory.register_agent_class(QualityAssuranceAgent, "quality_assurance")
+                self.agent_factory.register_agent_class(
+                    PostseasonProjectionAgent, "postseason_projection"
+                )
+                self.agent_factory.register_agent_class(WeeklyAnalysisOrchestrator, "weekly_analysis_orchestrator")
 
                 try:
+                    # CFBDIntegrationAgent accepts cfbd_client, not cfbd_data_provider
+                    # It creates its own UnifiedCFBDClient if not provided
                     cfbd_kwargs = {}
                     if self.cfbd_provider:
                         cfbd_kwargs = {
-                            "cfbd_data_provider": self.cfbd_provider,
+                            "cfbd_client": self.cfbd_provider,
                             "live_feed_provider": self.subscription_manager,
                         }
-                    # Only create CFBD Integration agent if CFBD provider is available
-                    if self.cfbd_provider:
-                        self.agent_factory.create_agent(
-                            "cfbd_integration",
-                            "default_cfbd_integration",
-                            **cfbd_kwargs,
-                        )
-                        logger.info("Loaded CFBD Integration agent")
-                    else:
-                        logger.info("Skipping CFBD Integration agent - CFBD provider not available")
+                    # Create CFBD Integration agent (it will work without cfbd_client, using its own)
+                    self.agent_factory.create_agent(
+                        "cfbd_integration",
+                        "default_cfbd_integration",
+                        **cfbd_kwargs,
+                    )
+                    logger.info("Loaded CFBD Integration agent")
 
                     # Quality Assurance agent can work without CFBD
                     self.agent_factory.create_agent(
@@ -253,6 +257,13 @@ class AnalyticsOrchestrator:
                         cfbd_data_provider=self.cfbd_provider,
                     )
                     logger.info("Loaded Quality Assurance agent")
+
+                    # Postseason Projection agent is local-only.
+                    self.agent_factory.create_agent(
+                        "postseason_projection",
+                        "default_postseason_projection",
+                    )
+                    logger.info("Loaded Postseason Projection agent")
                 except Exception as exc:
                     logger.warning("Skipping consolidated agent instantiation: %s", exc)
 
@@ -1090,7 +1101,7 @@ class AnalyticsOrchestrator:
         if len(self.session_history) > 100:
             self.session_history = self.session_history[-100:]
 
-    def get_session_summary(self, user_id: str = None) -> Dict[str, Any]:
+    def get_session_summary(self, user_id: Optional[str] = None) -> Dict[str, Any]:
         """Get summary of session interactions"""
         history = self.session_history
         if user_id:
@@ -1148,7 +1159,7 @@ class AnalyticsOrchestrator:
             }
         }
 
-    def start_session(self, user_id: str, user_context: Dict[str, Any] = None) -> str:
+    def start_session(self, user_id: str, user_context: Optional[Dict[str, Any]] = None) -> str:
         """Start a new analytics session"""
         session_id = str(uuid.uuid4())
         self.active_sessions[session_id] = {

@@ -892,7 +892,7 @@ class WeeklyMatchupAnalysisAgent(BaseAgent):
     def _predict_game_script(self, home: str, away: str, metrics: Dict) -> str:
         return random.choice(["High-scoring", "Defensive battle", "Close game", "Blowout"])
 
-    def _generate_power_rankings(self, strength_metrics: Dict, enhanced_data: Dict[str, Any] = None) -> List[Dict[str, Any]]:
+    def _generate_power_rankings(self, strength_metrics: Dict, enhanced_data: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
         """Generate power rankings with real win-loss records from training data"""
         # Get training data from enhanced_data if available
         training_data = None

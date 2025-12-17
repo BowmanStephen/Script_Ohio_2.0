@@ -76,7 +76,7 @@ class PredictionResponse:
     explanation: Optional[str] = None
     cache_hit: bool = False
     error_message: Optional[str] = None
-    metadata: Dict[str, Any] = None
+    metadata: Optional[Dict[str, Any]] = None
 
 class HighPerformanceCache:
     """Lightning-fast LRU cache with TTL and intelligent eviction"""
@@ -117,7 +117,7 @@ class HighPerformanceCache:
         self._misses += 1
         return None
 
-    def set(self, value: Any, *args, ttl: int = None):
+    def set(self, value: Any, *args, ttl: Optional[int] = None):
         """Set value in cache with optional TTL"""
         key = self._generate_key(*args)
         current_time = time.time()
@@ -146,7 +146,9 @@ class HighPerformanceCache:
     def get_stats(self) -> Dict[str, Any]:
         """Get cache performance statistics"""
         total_requests = self._hits + self._misses
-        hit_rate = self._hits / total_requests if total_requests > 0 else 0
+        hit_rate = 0.0
+        if total_requests > 0:
+            hit_rate = self._hits / total_requests
 
         return {
             "hits": self._hits,
@@ -580,6 +582,7 @@ class FastAgent(BaseAgent):
         self._performance_metrics["cache_hit_rate"] = cache_stats["hit_rate"]
 
 # Import numpy for calculations
+np: Any
 try:
     import numpy as np
 except ImportError:

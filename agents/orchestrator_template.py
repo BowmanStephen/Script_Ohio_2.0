@@ -95,8 +95,8 @@ class OrchestratorTemplate(BaseAgent):
         else:
             raise ValueError(f"Unknown action: {action}")
 
-    def run_complete_analysis(self, parameters: Dict[str, Any] = None,
-                             user_context: Dict[str, Any] = None) -> Dict[str, Any]:
+    def run_complete_analysis(self, parameters: Optional[Dict[str, Any]] = None,
+                             user_context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         Run complete analysis pipeline.
 
@@ -175,8 +175,8 @@ class OrchestratorTemplate(BaseAgent):
                 'timestamp': datetime.now().isoformat()
             }
 
-    def run_step1(self, parameters: Dict[str, Any] = None,
-                  user_context: Dict[str, Any] = None) -> Dict[str, Any]:
+    def run_step1(self, parameters: Optional[Dict[str, Any]] = None,
+                  user_context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Run step 1 only"""
         # Direct agent call
         # return self.agent1.execute_task(parameters or {})

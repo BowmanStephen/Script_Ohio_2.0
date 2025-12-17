@@ -131,7 +131,7 @@ class DataStream:
     name: str
     source_connection_id: str
     source_config: Dict[str, Any]
-    target_connection_id: str
+    target_connection_id: Optional[str]
     target_config: Dict[str, Any]
     transformation_rules: List[Dict[str, Any]]
     real_time: bool
@@ -195,11 +195,13 @@ class PluginManager:
         self.security_policies = {}
         self.metrics = defaultdict(list)
 
-    def register_plugin(self, plugin_path: str, config: Dict[str, Any] = None) -> str:
+    def register_plugin(self, plugin_path: str, config: Optional[Dict[str, Any]] = None) -> str:
         """Register and load a plugin"""
         try:
             # Load plugin module
             spec = importlib.util.spec_from_file_location("plugin_module", plugin_path)
+            if spec is None or spec.loader is None:
+                raise ValueError(f"Unable to load plugin module spec: {plugin_path}")
             plugin_module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(plugin_module)
 
@@ -343,8 +345,8 @@ class APIGateway:
 
         logger.info(f"Registered API endpoint: {endpoint.name} ({endpoint.endpoint_id})")
 
-    async def call_endpoint(self, endpoint_id: str, parameters: Dict[str, Any] = None,
-                          data: Any = None) -> Dict[str, Any]:
+    async def call_endpoint(self, endpoint_id: str, parameters: Optional[Dict[str, Any]] = None,
+                          data: Optional[Any] = None) -> Dict[str, Any]:
         """Call an API endpoint"""
         if endpoint_id not in self.endpoints:
             raise ValueError(f"Endpoint {endpoint_id} not found")

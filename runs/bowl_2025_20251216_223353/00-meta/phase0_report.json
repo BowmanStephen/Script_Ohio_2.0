@@ -1,0 +1,36 @@
+{
+  "run_id": "bowl_2025_20251216_223353",
+  "timestamp": "2025-12-16T22:33:53",
+  "phase": 0,
+  "phase_name": "Environment Initialization",
+  "branch": "fix/cfbd-snapshots-bowls-mvp",
+  "git_status": {
+    "clean": false,
+    "modified_files": 43,
+    "untracked_files": 32,
+    "notable_changes": [
+      "agents/postseason_projection_agent.py",
+      "scripts/bowl_guide_utils.py",
+      "scripts/generate_bowl_betting_guide.py",
+      "predictions/bowls_2025_predictions_ml.json",
+      "data/training/weekly/training_data_2025_postseason.csv"
+    ]
+  },
+  "environment": {
+    "python_version": "Python 3.13.1",
+    "working_directory": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0"
+  },
+  "gate_0_status": "PROCEED_WITH_CAUTION",
+  "gate_0_notes": "Working tree not clean but changes appear to be legitimate bowl season developments",
+  "artifacts": [
+    "git_status.txt",
+    "git_commit.txt",
+    "python_version.txt",
+    "pip_freeze.txt"
+  ],
+  "proceed_to_phase_1": true,
+  "warnings": [
+    "Uncommitted changes detected - document all baseline states",
+    "Active development state - ensure backup procedures"
+  ]
+}

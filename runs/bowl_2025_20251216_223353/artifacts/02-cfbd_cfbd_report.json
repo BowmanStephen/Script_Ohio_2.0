@@ -1,0 +1,24 @@
+{
+  "timestamp": "2025-12-16T22:37:19.037082",
+  "data_source": "existing_postseason_file",
+  "postseason_file": "data/training/weekly/training_data_2025_postseason.csv",
+  "total_games": 77,
+  "played_games": 77,
+  "scheduled_games": 0,
+  "games_with_scores": 77,
+  "games_missing_scores": 0,
+  "overlap_with_master": 77,
+  "new_games_to_add": 0,
+  "data_completeness": {
+    "has_home_points": 77,
+    "has_away_points": 77,
+    "has_team_info": 77,
+    "has_week_info": 77
+  },
+  "assumptions": [
+    "All postseason games have scores and are considered played",
+    "Postseason games already integrated into master training data",
+    "No new games need to be added from CFBD API",
+    "Using existing comprehensive postseason dataset"
+  ]
+}

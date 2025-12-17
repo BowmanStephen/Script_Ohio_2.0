@@ -55,6 +55,12 @@ class _StubGraphQLClient:
     def fetch_recruits(self, **kwargs):
         return {"recruit": [{"name": "Five Star QB"}]}
 
+    def get_recruits(self, **kwargs):
+        return {"recruit": [{"name": "Five Star QB", "team": "Ohio State"}]}
+
+    def get_ratings(self, **kwargs):
+        return {"ratings": [{"team": "Ohio State", "rating": 95.5}]}
+
 
 @pytest.fixture
 def _games_payload():
@@ -95,7 +101,8 @@ def test_insight_generator_graphql_scan(monkeypatch):
 
     response = agent._execute_graphql_trend_scan({"season": 2025, "limit": 5}, {"detected_role": "analyst"})
     assert response["success"] is True
-    assert response["talent_sample"][0]["team"] == "Ohio State"
+    # GraphQL version returns recruiting_sample, not talent_sample
+    assert response["recruiting_sample"][0]["team"] == "Ohio State"
 
 
 def test_workflow_automator_cfbd_pipeline(monkeypatch, _games_payload):

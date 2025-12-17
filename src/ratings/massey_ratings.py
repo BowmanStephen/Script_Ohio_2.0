@@ -70,6 +70,7 @@ def load_game_data(config: MasseyConfig) -> pd.DataFrame:
     df = df.copy()
     df = df.dropna(subset=["home_points", "away_points"])
     df["week"] = df["week"].fillna(0).astype(int)
+    df = df[~((df["home_points"] == 0) & (df["away_points"] == 0))].copy()
 
     if "neutral_site" not in df.columns:
         df["neutral_site"] = False
@@ -222,4 +223,3 @@ def generate_massey_ratings(
     if persist:
         save_ratings(ratings_df, output_path)
     return ratings_df, output_path
-

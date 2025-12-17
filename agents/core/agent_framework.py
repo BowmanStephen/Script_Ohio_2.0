@@ -84,7 +84,7 @@ class BaseAgent(ABC):
     All agents must inherit from this class and implement the required methods.
     """
 
-    def __init__(self, agent_id: str, name: str, permission_level: PermissionLevel, tool_loader=None):
+    def __init__(self, agent_id: str, name: str, permission_level: PermissionLevel, tool_loader: Optional['ToolLoader'] = None):
         self.agent_id = agent_id
         self.name = name
         self.permission_level = permission_level
@@ -172,6 +172,15 @@ class BaseAgent(ABC):
         # Handle special case for Legacy Creation Agent (LegacyCreationAgent -> legacy_creation)
         elif 'legacy' in agent_type_from_class and 'creation' in agent_type_from_class:
             agent_type_from_class = 'legacy_creation'
+        # Handle special case for CFBD Integration Agent (CFBDIntegrationAgent -> cfbd_integration)
+        elif 'cfbd' in agent_type_from_class and 'integration' in agent_type_from_class:
+            agent_type_from_class = 'cfbd_integration'
+        # Handle special case for Quality Assurance Agent (QualityAssuranceAgent -> quality_assurance)
+        elif 'quality' in agent_type_from_class and 'assurance' in agent_type_from_class:
+            agent_type_from_class = 'quality_assurance'
+        # Handle special case for Postseason Projection Agent (PostseasonProjectionAgent -> postseason_projection)
+        elif 'postseason' in agent_type_from_class and 'projection' in agent_type_from_class:
+            agent_type_from_class = 'postseason_projection'
 
         if request.agent_type != agent_type_from_class:
             return False
@@ -375,7 +384,7 @@ class AgentFactory:
     Factory for creating and managing agent instances.
     """
 
-    def __init__(self, base_path: str = None):
+    def __init__(self, base_path: Optional[str] = None):
         self.base_path = base_path or os.getcwd()
         self.agents = {}
         self.agent_registry = {}
@@ -391,7 +400,7 @@ class AgentFactory:
         self.agent_registry[agent_type] = agent_class
         logger.info(f"Registered agent class: {agent_type}")
 
-    def create_agent(self, agent_type: str, agent_id: str = None, **kwargs) -> BaseAgent:
+    def create_agent(self, agent_type: str, agent_id: Optional[str] = None, **kwargs) -> BaseAgent:
         """
         Create an instance of a registered agent.
 
@@ -412,8 +421,12 @@ class AgentFactory:
         if agent_id is None:
             agent_id = f"{agent_type}_{int(time.time())}"
 
-        # Ensure tool_loader is passed to agent
-        if 'tool_loader' not in kwargs:
+        # Ensure tool_loader is passed to agent only if it accepts it
+        import inspect
+
+        # Check if agent constructor accepts tool_loader parameter
+        agent_init_signature = inspect.signature(agent_class.__init__)
+        if 'tool_loader' in agent_init_signature.parameters and 'tool_loader' not in kwargs:
             kwargs['tool_loader'] = self.tool_loader
 
         # Create agent instance
@@ -622,13 +635,19 @@ class RequestRouter:
         process_count = metrics['process_count']
         
         # Average queue sizes
+        queue_sizes_at_submit = metrics.get('queue_sizes_at_submit', [])
+        if not isinstance(queue_sizes_at_submit, list):
+            queue_sizes_at_submit = []
         avg_queue_at_submit = (
-            sum(metrics['queue_sizes_at_submit']) / len(metrics['queue_sizes_at_submit'])
-            if metrics['queue_sizes_at_submit'] else 0.0
+            sum(queue_sizes_at_submit) / len(queue_sizes_at_submit)
+            if queue_sizes_at_submit else 0.0
         )
+        queue_sizes_at_process = metrics.get('queue_sizes_at_process', [])
+        if not isinstance(queue_sizes_at_process, list):
+            queue_sizes_at_process = []
         avg_queue_at_process = (
-            sum(metrics['queue_sizes_at_process']) / len(metrics['queue_sizes_at_process'])
-            if metrics['queue_sizes_at_process'] else 0.0
+            sum(queue_sizes_at_process) / len(queue_sizes_at_process)
+            if queue_sizes_at_process else 0.0
         )
         
         # Average overhead per operation
@@ -701,7 +720,7 @@ class RequestRouter:
 class LearningNavigatorAgent(BaseAgent):
     """Agent for educational guidance and learning path navigation"""
 
-    def __init__(self, agent_id: str, tool_loader=None):
+    def __init__(self, agent_id: str, tool_loader: Optional['ToolLoader'] = None):
         super().__init__(agent_id, "Learning Navigator", PermissionLevel.READ_EXECUTE, tool_loader)
 
     def _define_capabilities(self) -> List[AgentCapability]:

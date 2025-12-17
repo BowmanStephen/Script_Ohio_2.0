@@ -82,6 +82,61 @@ top_10[1]{game_id,home_team,away_team,predicted_winner,home_win_probability,away
   401752911,Oregon,USC,USC,0.442,0.558,-1.61,0.201
 ```
 
+### Bowl Predictions Example (New in 2025)
+
+**JSON:**
+```json
+{
+  "generated_at": "2025-12-16T21:47:27.308312",
+  "model": "ml-ensemble-v1",
+  "season": 2025,
+  "method": "ml",
+  "games": [
+    {
+      "game_id": 401755831,
+      "game_type": "playoff-semifinal",
+      "bowl_name": "Rose Bowl",
+      "home_team": "Oregon",
+      "away_team": "Ohio State",
+      "predicted_winner": "Ohio State",
+      "home_win_probability": 0.42,
+      "away_win_probability": 0.58,
+      "predicted_margin": -3.2,
+      "confidence_score": 0.75,
+      "start_time": "2025-01-01T17:00:00",
+      "neutral_site": true,
+      "venue": "Rose Bowl"
+    },
+    {
+      "game_id": 401755832,
+      "game_type": "playoff-semifinal",
+      "bowl_name": "Sugar Bowl",
+      "home_team": "Texas",
+      "away_team": "Washington",
+      "predicted_winner": "Texas",
+      "home_win_probability": 0.61,
+      "away_win_probability": 0.39,
+      "predicted_margin": 2.8,
+      "confidence_score": 0.68,
+      "start_time": "2025-01-01T20:45:00",
+      "neutral_site": true,
+      "venue": "Caesars Superdome"
+    }
+  ]
+}
+```
+
+**TOON (65% token reduction):**
+```yaml
+generated_at: 2025-12-16T21:47:27.308312
+model: ml-ensemble-v1
+season: 2025
+method: ml
+games[2]{game_id,game_type,bowl_name,home_team,away_team,predicted_winner,home_win_probability,away_win_probability,predicted_margin,confidence_score,start_time,neutral_site,venue}:
+  401755831,playoff-semifinal,Rose Bowl,Oregon,Ohio State,Ohio State,0.42,0.58,-3.2,0.75,2025-01-01T17:00:00,true,Rose Bowl
+  401755832,playoff-semifinal,Sugar Bowl,Texas,Washington,Texas,0.61,0.39,2.8,0.68,2025-01-01T20:45:00,true,Caesars Superdome
+```
+
 ## Syntax Reference
 
 ### Array Declaration
@@ -120,6 +175,7 @@ Agents should output TOON when:
 - `analysis/week*/enhanced_*_analysis.toon` - TOON versions of analysis
 - `predictions/week*/*.toon` - TOON prediction files
 - `exports/*.toon` - TOON export format
+- `predictions/bowls_2025_predictions_*.toon` - Bowl predictions in TOON format (when generated with `--toon` flag)
 
 ### Usage in Code
 ```python

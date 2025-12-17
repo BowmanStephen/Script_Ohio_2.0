@@ -176,7 +176,7 @@ class StateManager:
     - Integrity verification and recovery
     """
 
-    def __init__(self, base_path: str = None):
+    def __init__(self, base_path: Optional[str] = None):
         self.base_path = Path(base_path) if base_path else Path.cwd() / "state"
         self.base_path.mkdir(parents=True, exist_ok=True)
 
@@ -210,9 +210,9 @@ class StateManager:
                             state_type: StateType,
                             entity_id: str,
                             state_data: Dict[str, Any],
-                            metadata: Dict[str, Any] = None,
-                            parent_snapshot_id: str = None,
-                            expires_in_hours: int = None) -> str:
+                            metadata: Optional[Dict[str, Any]] = None,
+                            parent_snapshot_id: Optional[str] = None,
+                            expires_in_hours: Optional[int] = None) -> str:
         """Create a new state snapshot with atomic operation"""
 
         snapshot = StateSnapshot(
@@ -619,10 +619,10 @@ class StateManager:
 
     def _record_transition(self,
                           from_snapshot_id: Optional[str] = None,
-                          to_snapshot_id: str = None,
-                          transition_type: str = None,
-                          actor: str = None,
-                          reason: str = None):
+                          to_snapshot_id: Optional[str] = None,
+                          transition_type: Optional[str] = None,
+                          actor: Optional[str] = None,
+                          reason: Optional[str] = None):
         """Record a state transition"""
 
         try:
@@ -662,7 +662,7 @@ class StateManager:
 state_manager = StateManager()
 
 # Utility functions
-def save_session_state(session_id: str, state_data: Dict[str, Any], metadata: Dict[str, Any] = None) -> str:
+def save_session_state(session_id: str, state_data: Dict[str, Any], metadata: Optional[Dict[str, Any]] = None) -> str:
     """Convenient function to save session state"""
     return state_manager.create_state_snapshot(
         state_type=StateType.SESSION_STATE,
@@ -676,7 +676,7 @@ def restore_session_state(session_id: str) -> Optional[Dict[str, Any]]:
     """Convenient function to restore session state"""
     return state_manager.get_latest_state(StateType.SESSION_STATE, session_id)
 
-def save_agent_state(agent_id: str, state_data: Dict[str, Any], metadata: Dict[str, Any] = None) -> str:
+def save_agent_state(agent_id: str, state_data: Dict[str, Any], metadata: Optional[Dict[str, Any]] = None) -> str:
     """Convenient function to save agent state"""
     return state_manager.create_state_snapshot(
         state_type=StateType.AGENT_STATE,
@@ -689,7 +689,7 @@ def restore_agent_state(agent_id: str) -> Optional[Dict[str, Any]]:
     """Convenient function to restore agent state"""
     return state_manager.get_latest_state(StateType.AGENT_STATE, agent_id)
 
-def save_workflow_state(workflow_id: str, state_data: Dict[str, Any], metadata: Dict[str, Any] = None) -> str:
+def save_workflow_state(workflow_id: str, state_data: Dict[str, Any], metadata: Optional[Dict[str, Any]] = None) -> str:
     """Convenient function to save workflow state"""
     return state_manager.create_state_snapshot(
         state_type=StateType.WORKFLOW_STATE,

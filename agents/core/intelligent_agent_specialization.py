@@ -79,7 +79,7 @@ class AgentSpecialization:
     skills: List[str]
     tools: List[str]
     knowledge_domains: List[str]
-    performance_metrics: Dict[str, float]
+    performance_metrics: Dict[str, Dict[str, float]]
     collaboration_preferences: List[CollaborationMode]
     workload_capacity: int
     current_workload: int

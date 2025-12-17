@@ -53,7 +53,7 @@ class ReportGeneratorAgent(BaseAgent):
         else:
             raise ValueError(f"Unknown action: {action}")
 
-    def execute_task(self, parameters: Dict[str, Any], user_context: Dict[str, Any] = None) -> Dict[str, Any]:
+    def execute_task(self, parameters: Dict[str, Any], user_context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Execute the primary task of this agent (generating reports)."""
         return self.generate_weekly_report(parameters, user_context or {})
 

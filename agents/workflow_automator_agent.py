@@ -34,11 +34,6 @@ warnings.warn(
     stacklevel=2
 )
 
-Author: Claude Code Assistant
-Created: 2025-11-10
-Version: 1.0
-"""
-
 import os
 import time
 import logging
@@ -106,12 +101,12 @@ class WorkflowStep:
     description: str
     agent_type: Optional[str] = None
     action: Optional[str] = None
-    parameters: Dict[str, Any] = None
-    conditions: Dict[str, Any] = None
-    dependencies: List[str] = None
+    parameters: Optional[Dict[str, Any]] = None
+    conditions: Optional[Dict[str, Any]] = None
+    dependencies: Optional[List[str]] = None
     timeout: int = 300
     retry_count: int = 3
-    parallel_steps: List['WorkflowStep'] = None
+    parallel_steps: Optional[List['WorkflowStep']] = None
 
 @dataclass
 class Workflow:
@@ -123,9 +118,9 @@ class Workflow:
     created_by: str
     created_at: float
     status: WorkflowStatus = WorkflowStatus.PENDING
-    results: Dict[str, Any] = None
+    results: Optional[Dict[str, Any]] = None
     error_message: Optional[str] = None
-    shared_inputs: Dict[str, Any] = None
+    shared_inputs: Optional[Dict[str, Any]] = None
 
 class WorkflowAutomatorAgent(BaseAgent):
     """
@@ -821,7 +816,15 @@ class WorkflowAutomatorAgent(BaseAgent):
                 logger.warning(f"Failed to load cached games data: {e}")
 
         # Return empty DataFrame with expected structure
-        return pd.DataFrame(columns=['season', 'week', 'home_team', 'away_team', 'home_points', 'away_points'])
+        columns: list[str] = [
+            'season',
+            'week',
+            'home_team',
+            'away_team',
+            'home_points',
+            'away_points',
+        ]
+        return pd.DataFrame(columns=pd.Index(columns))
 
     def _load_cached_talent_data(self) -> pd.DataFrame:
         """Load cached talent data when API is unavailable"""
@@ -833,7 +836,8 @@ class WorkflowAutomatorAgent(BaseAgent):
                 logger.warning(f"Failed to load cached talent data: {e}")
 
         # Return empty DataFrame with expected structure
-        return pd.DataFrame(columns=['team', 'conference', 'talent', 'year'])
+        columns: list[str] = ['team', 'conference', 'talent', 'year']
+        return pd.DataFrame(columns=pd.Index(columns))
 
     def _generate_seasonal_summary(self, games_data: pd.DataFrame,
                                    talent_data: pd.DataFrame) -> Dict[str, Any]:
@@ -921,7 +925,7 @@ class WorkflowAutomatorAgent(BaseAgent):
 
         return True
 
-    def _evaluate_condition(self, condition: Dict[str, Any], results: Dict[str, Any]) -> bool:
+    def _evaluate_condition(self, condition: Optional[Dict[str, Any]], results: Dict[str, Any]) -> bool:
         """Evaluate a workflow condition"""
         if not condition:
             return True
@@ -1154,6 +1158,6 @@ class WorkflowAutomatorAgent(BaseAgent):
         )
 
     def _customize_step(self, template_step: WorkflowStep, parameters: Dict[str, Any]) -> WorkflowStep:
-        """Customize a template step with user parameters"""
+        """Customize a template step with user parameters."""
         # Implementation for customizing template steps
         return template_step

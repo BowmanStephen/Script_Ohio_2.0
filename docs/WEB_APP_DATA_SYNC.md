@@ -109,6 +109,35 @@ After syncing, verify:
 **Issue**: Models not loading
 - **Solution**: Verify model files exist in `model_pack/` and check file permissions
 
+## Bowl Predictions Sync
+
+Bowl predictions are handled differently than weekly predictions:
+
+### Bowl Prediction Files
+- `predictions/bowls_2025_predictions_ml.json` - ML ensemble predictions
+- `predictions/bowls_2025_predictions_massey.json` - Massey ratings predictions
+- `predictions/bowls_2025_predictions_simple.json` - Simple predictions
+
+### Generating Bowl Predictions
+```bash
+# Generate all bowl prediction methods with backup
+python3 scripts/predict_bowls_2025.py --season 2025 --method all --backup-existing --force
+```
+
+### Bowl API Endpoint
+The web app API serves bowl predictions at:
+- `GET /api/predictions/bowls/2025` - Returns all available prediction methods
+
+### Manual Bowl Sync
+Bowl predictions don't require manual sync - the API reads directly from the `predictions/` directory. However, you should verify:
+```bash
+# Verify bowl prediction files exist
+ls predictions/bowls_2025_predictions_*.json
+
+# Test bowl API endpoint
+curl http://localhost:8000/api/predictions/bowls/2025
+```
+
 ## Next Steps
 
 After syncing data:
@@ -116,4 +145,5 @@ After syncing data:
 2. Restart the web app dev server: `cd web_app && npm run dev`
 3. Verify predictions display correctly in the UI
 4. Test API endpoints: `curl http://localhost:5001/api/predictions/week/14`
+5. Test bowl predictions: `curl http://localhost:8000/api/predictions/bowls/2025`
 

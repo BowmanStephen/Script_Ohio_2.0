@@ -37,7 +37,7 @@ class CFBDClientConfig:
 
     api_key: Optional[str] = None
     host: str = "production"
-    telemetry_hook: TelemetryHook = None
+    telemetry_hook: Optional[TelemetryHook] = None
     metrics_log_path: Optional[str] = None
 
     def resolve_api_key(self) -> str:

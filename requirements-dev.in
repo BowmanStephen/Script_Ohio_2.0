@@ -16,6 +16,7 @@ papermill>=2.5.0
 
 # Code Quality & Type Checking
 mypy>=1.5.0
+ty>=0.0.1-alpha.26  # Fast type checker from Astral (alpha, but stable)
 black>=23.0.0
 flake8>=6.0.0
 ruff>=0.7.0

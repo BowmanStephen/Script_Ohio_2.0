@@ -8,7 +8,7 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 from datetime import datetime
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, List, Any, Optional, Tuple, Callable
 import json
 import joblib
 import pickle
@@ -16,6 +16,7 @@ from sklearn.model_selection import cross_val_score
 import warnings
 warnings.filterwarnings('ignore')
 
+fastai_load_learner: Optional[Callable[..., Any]]
 try:
     from fastai.learner import load_learner as fastai_load_learner
 except Exception:  # pragma: no cover - FastAI optional
@@ -500,7 +501,8 @@ class WeeklyModelValidationAgent(BaseAgent):
 
         self.log_info("Checking model availability...")
 
-        availability_results = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        availability_results: Dict[str, Any] = {
             'total_models': len(loaded_models),
             'available_models': 0,
             'unavailable_models': 0,
@@ -938,7 +940,8 @@ class WeeklyModelValidationAgent(BaseAgent):
     def _validate_single_model(self, model_name: str, model_info: Dict[str, Any], features_df: pd.DataFrame) -> Dict[str, Any]:
         """Validate a single model comprehensively"""
 
-        validation_result = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        validation_result: Dict[str, Any] = {
             'validation_status': 'passed',
             'validation_score': 0,
             'tests_performed': [],
@@ -1225,7 +1228,8 @@ class WeeklyModelValidationAgent(BaseAgent):
 
         self.log_info("Validating ensemble performance...")
 
-        ensemble_result = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        ensemble_result: Dict[str, Any] = {
             'ensemble_status': 'tested',
             'available_models': 0,
             'ensemble_methods': {}
@@ -1307,7 +1311,8 @@ class WeeklyModelValidationAgent(BaseAgent):
 
         self.log_info("Analyzing model biases...")
 
-        bias_analysis = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        bias_analysis: Dict[str, Any] = {
             'bias_analysis_status': 'completed',
             'bias_checks': {},
             'potential_biases': []
@@ -1464,7 +1469,7 @@ class WeeklyModelValidationAgent(BaseAgent):
         cross_validation: Dict[str, Any],
         ensemble_validation: Dict[str, Any],
         bias_analysis: Dict[str, Any],
-        previous_week_validation: Dict[str, Any] = None
+        previous_week_validation: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """Generate comprehensive validation report"""
 

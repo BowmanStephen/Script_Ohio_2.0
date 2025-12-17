@@ -43,6 +43,31 @@ class CFBDDataProvider:
         team: Optional[str] = None,
         limit: int = 5,
     ) -> List[Dict[str, Any]]:
+        if week is None:
+            raw_games = self.cfbd_client.get_games(year=season, week=None)
+            records: List[Dict[str, Any]] = []
+            for game in raw_games or []:
+                records.append(
+                    {
+                        "id": game.get("id"),
+                        "home_team": str(game.get("home_team") or "").strip().lower(),
+                        "away_team": str(game.get("away_team") or "").strip().lower(),
+                        "home_points": game.get("home_points"),
+                        "away_points": game.get("away_points"),
+                        "week": game.get("week"),
+                        "season": game.get("season"),
+                    }
+                )
+            if team:
+                team_key = team.lower()
+                records = [
+                    rec
+                    for rec in records
+                    if rec.get("home_team") == team_key or rec.get("away_team") == team_key
+                ]
+            records.sort(key=lambda rec: (int(rec.get("week") or 0), int(rec.get("id") or 0)), reverse=True)
+            return records[:limit]
+
         df = fetch_games(self.cfbd_client, year=season, week=week)
         if team:
             df = df[
@@ -60,6 +85,23 @@ class CFBDDataProvider:
         week: Optional[int] = None,
         team: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
+        if week is None:
+            raw_ratings = self.cfbd_client.get_ratings(year=season, week=None)
+            records: List[Dict[str, Any]] = []
+            for entry in raw_ratings or []:
+                records.append(
+                    {
+                        "team": str(entry.get("team") or "").strip().lower(),
+                        "conference": entry.get("conference"),
+                        "rating_type": entry.get("rating_type"),
+                        "rating_value": entry.get("rating"),
+                    }
+                )
+            if team:
+                team_key = team.lower()
+                records = [rec for rec in records if rec.get("team") == team_key]
+            return records
+
         df = fetch_ratings(self.cfbd_client, year=season, week=week)
         if team:
             df = df[df["team"] == team.lower()]

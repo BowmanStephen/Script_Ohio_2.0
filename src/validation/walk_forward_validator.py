@@ -11,7 +11,7 @@ from __future__ import annotations
 import datetime as dt
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -257,7 +257,7 @@ def _calculate_fold_metrics(
 
 def run_walk_forward_validation(
     config: WalkForwardConfig,
-    model_predictor: callable,
+    model_predictor: Callable,
     games_df: Optional[pd.DataFrame] = None,
 ) -> pd.DataFrame:
     """

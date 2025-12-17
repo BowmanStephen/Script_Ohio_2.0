@@ -4,13 +4,13 @@ Sync All Data Sources
 =====================
 
 This script ensures all data sources across the system are synchronized:
-1. Verifies training data includes latest weeks
-2. Updates any outdated data references
-3. Checks model training dates
-4. Provides comprehensive status report
+1. Audits master training data + weekly inputs
+2. Integrates missing weekly/postseason files into the master dataset
+3. Checks model training dates vs data dates
+4. Optionally retrains models
 
 Usage:
-    python3 scripts/sync_all_data_sources.py [--week WEEK] [--retrain] [--dry-run]
+    python3 scripts/sync_all_data_sources.py [--season SEASON] [--week WEEK|auto] [--retrain] [--dry-run]
 """
 
 import os
@@ -18,7 +18,6 @@ import sys
 import pandas as pd
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Optional
 import logging
 import subprocess
 
@@ -40,8 +39,19 @@ def main():
     import argparse
     
     parser = argparse.ArgumentParser(description="Synchronize all data sources")
-    parser.add_argument('--week', type=int, default=13, help='Target week to ensure')
+    parser.add_argument('--season', type=int, default=2025, help='Target season (default: 2025)')
+    parser.add_argument(
+        '--week',
+        type=str,
+        default="auto",
+        help="Target week to ensure, or 'auto' to infer from weekly files",
+    )
     parser.add_argument('--retrain', action='store_true', help='Retrain models after sync')
+    parser.add_argument(
+        '--skip-fastai',
+        action='store_true',
+        help='Skip FastAI retraining (recommended unless fastai is installed)',
+    )
     parser.add_argument('--dry-run', action='store_true', help='Show what would be done without making changes')
     
     args = parser.parse_args()
@@ -75,26 +85,93 @@ def main():
     
     try:
         df = pd.read_csv(training_path)
-        df_2025 = df[df['season'] == 2025]
-        weeks_covered = sorted(df_2025['week'].unique().tolist())
+        df_season = df[df['season'] == int(args.season)]
+        weeks_covered = sorted(df_season['week'].dropna().unique().tolist())
         max_week = max(weeks_covered) if weeks_covered else 0
         
         logger.info(f"✅ Training data status:")
         logger.info(f"   Total games: {len(df):,}")
-        logger.info(f"   2025 games: {len(df_2025):,}")
+        logger.info(f"   {args.season} games: {len(df_season):,}")
         logger.info(f"   Weeks covered: {weeks_covered}")
         logger.info(f"   Latest week: {max_week}")
-        
-        if max_week < args.week:
-            logger.warning(f"⚠️  Training data only goes to Week {max_week}, need Week {args.week}")
-            if not args.dry_run:
-                logger.info("   Updating training data...")
-                # Run update script
-                update_script = PROJECT_ROOT / "scripts" / "combine_weeks_5_13_and_retrain.py"
-                if update_script.exists():
-                    subprocess.run([sys.executable, str(update_script)], cwd=PROJECT_ROOT)
+
+        # Determine target week from canonical weekly files (auto) or argument.
+        if str(args.week).lower() == "auto":
+            weekly_dir = PROJECT_ROOT / "data" / "training" / "weekly"
+            week_files = sorted(weekly_dir.glob(f"training_data_{int(args.season)}_week*.csv"))
+            detected_weeks: list[int] = []
+            for path in week_files:
+                try:
+                    detected_weeks.append(int(path.stem.split("week")[-1]))
+                except Exception:
+                    continue
+            target_week = max(detected_weeks) if detected_weeks else max_week
         else:
-            logger.info(f"✅ Training data includes Week {args.week}")
+            target_week = int(args.week)
+
+        if max_week < target_week:
+            logger.warning(
+                f"⚠️  Master training data only goes to Week {max_week}, "
+                f"but weekly inputs go to Week {target_week}"
+            )
+        else:
+            logger.info(f"✅ Training data includes Week {target_week}")
+
+        # Check if master dataset contains the game IDs present in weekly/postseason inputs.
+        weekly_inputs_dir = PROJECT_ROOT / "data" / "training" / "weekly"
+        input_paths = sorted(
+            weekly_inputs_dir.glob(f"training_data_{int(args.season)}_week*.csv")
+        )
+        postseason_path = weekly_inputs_dir / f"training_data_{int(args.season)}_postseason.csv"
+        if postseason_path.exists():
+            input_paths.append(postseason_path)
+
+        if input_paths and "id" in df.columns:
+            master_ids = set(df['id'].dropna().astype(int).tolist())
+            missing_weeks: set[int] = set()
+            missing_postseason = False
+
+            for path in input_paths:
+                try:
+                    in_df = pd.read_csv(path, usecols=['id', 'week'], low_memory=False)
+                except Exception:
+                    continue
+                in_ids = set(in_df['id'].dropna().astype(int).tolist())
+                if not in_ids:
+                    continue
+                if in_ids - master_ids:
+                    if "postseason" in path.name:
+                        missing_postseason = True
+                    else:
+                        missing_weeks.update(
+                            in_df['week'].dropna().astype(int).unique().tolist()
+                        )
+
+            if missing_weeks or missing_postseason:
+                parts = []
+                if missing_weeks:
+                    parts.append(f"weeks {sorted(missing_weeks)}")
+                if missing_postseason:
+                    parts.append("postseason")
+                logger.warning(f"⚠️  Master dataset missing IDs from: {', '.join(parts)}")
+
+                if not args.dry_run:
+                    integrate_script = PROJECT_ROOT / "scripts" / "integrate_weekly_files.py"
+                    week_arg = ",".join(str(w) for w in sorted(missing_weeks)) or str(target_week)
+                    cmd = [
+                        sys.executable,
+                        str(integrate_script),
+                        "--season",
+                        str(int(args.season)),
+                        "--weeks",
+                        week_arg,
+                    ]
+                    if missing_postseason:
+                        cmd.append("--include-postseason")
+                    logger.info("Integrating weekly inputs into master dataset...")
+                    subprocess.run(cmd, cwd=PROJECT_ROOT, check=False)
+            else:
+                logger.info("✅ Master dataset already contains all weekly/postseason IDs")
             
     except Exception as e:
         logger.error(f"❌ Error checking training data: {e}")
@@ -126,9 +203,12 @@ def main():
     
     if needs_retrain and args.retrain and not args.dry_run:
         logger.info(f"\nRetraining models: {', '.join(needs_retrain)}")
-        retrain_script = PROJECT_ROOT / "scripts" / "combine_weeks_5_13_and_retrain.py"
+        retrain_script = PROJECT_ROOT / "scripts" / "retrain_models_current.py"
         if retrain_script.exists():
-            subprocess.run([sys.executable, str(retrain_script)], cwd=PROJECT_ROOT)
+            cmd = [sys.executable, str(retrain_script)]
+            if args.skip_fastai:
+                cmd.append("--skip-fastai")
+            subprocess.run(cmd, cwd=PROJECT_ROOT)
     elif needs_retrain:
         logger.warning(f"\n⚠️  Models that may need retraining: {', '.join(needs_retrain)}")
         logger.info("   Run with --retrain to automatically retrain")
@@ -139,7 +219,7 @@ def main():
     logger.info("=" * 70)
     
     all_good = (
-        max_week >= args.week and
+        max_week >= (int(args.week) if str(args.week).lower() != "auto" else max_week) and
         len(needs_retrain) == 0
     )
     
@@ -152,4 +232,3 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
-

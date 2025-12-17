@@ -613,7 +613,7 @@ class AdaptiveWorkflowEngine:
         self.adaptation_engine = WorkflowAdaptationEngine()
 
     def execute_workflow(self, workflow: Dict[str, Any], execution_strategy: ExecutionStrategy,
-                        context: Dict[str, Any] = None) -> str:
+                        context: Optional[Dict[str, Any]] = None) -> str:
         """Execute a workflow with the specified strategy"""
         execution_id = str(uuid.uuid4())
 

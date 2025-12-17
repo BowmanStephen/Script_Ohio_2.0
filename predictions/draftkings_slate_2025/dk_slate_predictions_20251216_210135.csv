@@ -1,0 +1,38 @@
+date,bowl,team_a,team_b,favorite,dk_spread,dk_total,model_margin_fav,model_winprob_fav,edge_vs_spread,pick_against_spread
+2025-12-17,68 Ventures Bowl,Louisiana,Delaware,Louisiana,-3.0,61.5,-1.8,0.9175,-4.8,Delaware
+2025-12-17,Cure Bowl,Old Dominion,South Florida,South Florida,-2.5,52.5,2.53,0.0688,0.03,South Florida
+2025-12-18,Xbox Bowl,Missouri State,Arkansas State,Arkansas State,-1.5,54.5,1.69,0.0715,0.19,Arkansas State
+2025-12-19,CFP First Round,Alabama,Oklahoma,Alabama,-1.5,40.5,-2.33,0.7658,-3.83,Oklahoma
+2025-12-19,Gasparilla Bowl,Memphis,NC State,NC State,-4.5,58.5,2.11,0.1551,-2.39,Memphis
+2025-12-19,Myrtle Beach Bowl,Kennesaw State,Western Michigan,Western Michigan,-3.5,48.5,1.97,0.283,-1.53,Kennesaw State
+2025-12-20,CFP First Round,Miami,Texas A&M,Texas A&M,-3.5,50.5,2.39,0.075,-1.11,Miami
+2025-12-20,CFP First Round,Tulane,Ole Miss,Ole Miss,-17.5,56.5,2.31,0.1335,-15.19,Tulane
+2025-12-20,CFP First Round,James Madison,Oregon,Oregon,-21.0,47.5,2.72,0.1748,-18.28,James Madison
+2025-12-22,Potato Bowl,Washington State,Utah State,Utah State,-2.5,50.5,1.98,0.0632,-0.52,Washington State
+2025-12-23,Boca Raton Bowl,Toledo,Louisville,Louisville,-6.5,45.5,2.44,0.0527,-4.06,Toledo
+2025-12-23,Frisco Bowl,UNLV,Ohio,UNLV,-5.5,65.5,-2.15,0.8634,-7.65,Ohio
+2025-12-23,New Orleans Bowl,Western Kentucky,Southern Miss,Western Kentucky,-4.5,57.5,-2.09,0.7861,-6.59,Southern Miss
+2025-12-24,Hawai'i Bowl,California,Hawai'i,California,-1.5,54.5,-1.89,0.8686,-3.39,Hawai'i
+2025-12-26,First Responder Bowl,Florida International,UTSA,UTSA,-9.5,59.5,2.03,0.1931,-7.47,Florida International
+2025-12-26,GameAbove Sports Bowl,Central Michigan,Northwestern,Northwestern,-10.5,43.5,1.97,0.0639,-8.53,Central Michigan
+2025-12-26,Rate Bowl,New Mexico,Minnesota,Minnesota,-2.5,45.5,1.94,0.122,-0.56,New Mexico
+2025-12-27,Arizona Bowl,Miami (OH),Fresno State,Fresno State,-4.5,42.5,1.98,0.254,-2.52,Miami (OH)
+2025-12-27,Fenway Bowl,UConn,Army,Army,-8.5,44.5,2.08,0.1567,-6.42,UConn
+2025-12-27,Gator Bowl,Virginia,Missouri,Missouri,-7.0,47.5,2.33,0.0471,-4.67,Virginia
+2025-12-27,Military Bowl,Pittsburgh,East Carolina,Pittsburgh,-8.5,57.5,-2.26,0.9435,-10.76,East Carolina
+2025-12-27,New Mexico Bowl,North Texas,San Diego State,North Texas,-3.0,54.5,-2.38,0.8582,-5.38,San Diego State
+2025-12-27,Pinstripe Bowl,Penn State,Clemson,Clemson,-3.5,48.5,2.21,0.0715,-1.29,Penn State
+2025-12-27,Pop-Tarts Bowl,Georgia Tech,BYU,BYU,-4.5,56.5,2.25,0.2414,-2.25,Georgia Tech
+2025-12-27,Texas Bowl,LSU,Houston,Houston,-3.0,41.5,1.94,0.0859,-1.06,LSU
+2025-12-29,Birmingham Bowl,Georgia Southern,App State,Georgia Southern,-7.0,59.5,-1.73,0.9158,-8.73,App State
+2025-12-30,Alamo Bowl,USC,TCU,USC,-4.5,57.5,-2.27,0.8086,-6.77,TCU
+2025-12-30,Independence Bowl,Coastal Carolina,Louisiana Tech,Louisiana Tech,-8.5,50.5,1.87,0.1168,-6.63,Coastal Carolina
+2025-12-30,Music City Bowl,Tennessee,Illinois,Tennessee,-2.5,61.5,-2.18,0.9307,-4.68,Illinois
+2025-12-31,Citrus Bowl,Michigan,Texas,Texas,-7.5,46.5,2.16,0.1816,-5.34,Michigan
+2025-12-31,Las Vegas Bowl,Nebraska,Utah,Utah,-16.5,50.5,2.31,0.0647,-14.19,Nebraska
+2025-12-31,ReliaQuest Bowl,Iowa,Vanderbilt,Vanderbilt,-5.5,47.5,2.38,0.1553,-3.12,Iowa
+2025-12-31,Sun Bowl,Arizona State,Duke,Duke,-2.5,49.5,2.01,0.0589,-0.49,Arizona State
+2026-01-02,Armed Forces Bowl,Rice,Texas State,Texas State,-10.5,59.5,1.87,0.0674,-8.63,Rice
+2026-01-02,Duke's Mayo Bowl,Wake Forest,Mississippi State,Mississippi State,-4.0,56.5,2.02,0.0458,-1.98,Wake Forest
+2026-01-02,Holiday Bowl,Arizona,SMU,Arizona,-3.0,51.5,-2.36,0.8461,-5.36,SMU
+2026-01-02,Liberty Bowl,Navy,Cincinnati,Navy,-6.5,53.5,-2.2,0.8864,-8.7,Cincinnati

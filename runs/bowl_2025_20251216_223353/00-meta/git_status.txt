@@ -1,0 +1,163 @@
+On branch fix/cfbd-snapshots-bowls-mvp
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .cursor/mcp.json
+	modified:   .cursorrules
+	modified:   .github/workflows/quality-security.yml
+	modified:   agents/__init__.py
+	modified:   agents/analytics_orchestrator.py
+	modified:   agents/async_agent_framework.py
+	modified:   agents/collaborative_agent_framework.py
+	modified:   agents/core/advanced_coordination.py
+	modified:   agents/core/advanced_response_generation.py
+	modified:   agents/core/agent_framework.py
+	modified:   agents/core/context_manager.py
+	modified:   agents/core/ecosystem_integration.py
+	modified:   agents/core/intelligent_agent_specialization.py
+	modified:   agents/core/sophisticated_workflow_automation.py
+	modified:   agents/core/state_manager.py
+	modified:   agents/core/tool_loader.py
+	modified:   agents/grade_a_integration_engine.py
+	modified:   agents/insight_generator_agent.py
+	modified:   agents/lean_system/CoreEngine.py
+	modified:   agents/lean_system/FastAgent.py
+	modified:   agents/orchestrator_template.py
+	modified:   agents/performance_monitor_agent.py
+	modified:   agents/report_generator_agent.py
+	modified:   agents/simplified_analytics_orchestrator.py
+	modified:   agents/state_aware_analytics_system.py
+	modified:   agents/week13_consolidation_agent.py
+	modified:   agents/weekly_analysis_orchestrator.py
+	modified:   agents/weekly_matchup_analysis_agent.py
+	modified:   agents/weekly_model_validation_agent.py
+	modified:   agents/workflow_automator_agent.py
+	modified:   config/model_config.py
+	modified:   config/model_features.py
+	modified:   docs/CODE_QUALITY_GUIDELINES.md
+	modified:   docs/DATA_ORGANIZATION.md
+	modified:   docs/TOON_FORMAT_GUIDE.md
+	modified:   docs/WEB_APP_DATA_SYNC.md
+	modified:   model_pack/rf_components/random_forest_away.joblib
+	modified:   model_pack/rf_components/random_forest_home.joblib
+	modified:   model_pack/ridge_model_2025.joblib
+	modified:   model_pack/updated_training_data.csv
+	modified:   model_pack/utils/path_utils.py
+	modified:   mypy.ini
+	modified:   predictions/bowls_2025_predictions.json
+	modified:   pyproject.toml
+	modified:   reports/2025_data_completeness_report.json
+	modified:   requirements-dev.in
+	modified:   requirements-dev.txt
+	modified:   requirements.in
+	modified:   requirements.txt
+	modified:   scripts/cfbd_pull.py
+	modified:   scripts/integrate_week15_postseason.py
+	modified:   scripts/retrain_models_current.py
+	modified:   scripts/sync_all_data_sources.py
+	modified:   src/cfbd_client/data_provider.py
+	modified:   src/cfbd_client/enhanced_client.py
+	modified:   src/data_sources/cfbd_client.py
+	modified:   src/models/execution/engine.py
+	modified:   src/ratings/massey_ratings.py
+	modified:   src/ratings/massey_ratings_2025.csv
+	modified:   src/utils/cache_manager.py
+	modified:   src/utils/data.py
+	modified:   src/utils/error_handling.py
+	modified:   src/validation/walk_forward_validator.py
+	modified:   starter_pack/00_data_dictionary.ipynb
+	modified:   starter_pack/01_intro_to_data.ipynb
+	modified:   web_app/tsconfig.app.json
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.cursor/plans/.template.plan.md
+	.cursor/plans/cfbd_snapshot_system_8a5faadd.plan.md
+	.cursor/ty_postfix10.txt
+	.cursor/ty_postfix11.txt
+	.cursor/ty_postfix12.txt
+	.cursor/ty_postfix13.txt
+	.cursor/ty_postfix4.txt
+	.cursor/ty_postfix5.txt
+	.cursor/ty_postfix6.txt
+	.cursor/ty_postfix7.txt
+	.cursor/ty_postfix8.txt
+	.cursor/ty_postfix9.txt
+	BOWLS_MVP_TEST_REPORT.md
+	CLAUDE.md
+	agents/postseason_projection_agent.py
+	data/training/weekly/training_data_2025_postseason.csv
+	data/training/weekly/training_data_2025_week15.csv
+	docs/BOWLS_MVP_IMPLEMENTATION_SUMMARY.md
+	docs/BOWLS_PREDICTION_SCRIPTS.md
+	docs/CURSOR_GLOBAL_SETUP.md
+	docs/CURSOR_PLAN_TEMPLATE.md
+	docs/DATA_INTEGRATION_GUIDE.md
+	docs/GLOBAL_CURSOR_INSTRUCTIONS.md
+	docs/GLOBAL_CURSOR_INSTRUCTIONS_SHORT.md
+	docs/KEEP_DATA_AND_MODELS_CURRENT.md
+	docs/REMAINING_DEBUG_ITEMS.md
+	docs/TY_ACTION_PLAN.md
+	docs/TY_FIXES_APPLIED.md
+	docs/TY_IMPLEMENTATION_SUMMARY.md
+	docs/TY_TYPE_CHECKER_ANALYSIS.md
+	model_pack/backups/models/fastai_home_win_model_2025.pkl.backup_20251216_195559
+	model_pack/backups/models/fastai_home_win_model_2025.pkl.backup_20251216_200106
+	model_pack/backups/models/fastai_home_win_model_2025.pkl.backup_20251216_205628
+	model_pack/backups/models/fastai_home_win_model_2025.pkl.backup_20251216_210833
+	model_pack/backups/models/ridge_model_2025.joblib.backup_20251216_195559
+	model_pack/backups/models/ridge_model_2025.joblib.backup_20251216_200106
+	model_pack/backups/models/ridge_model_2025.joblib.backup_20251216_205628
+	model_pack/backups/models/ridge_model_2025.joblib.backup_20251216_210833
+	model_pack/backups/models/xgb_home_win_model_2025.pkl.backup_20251216_195559
+	model_pack/backups/models/xgb_home_win_model_2025.pkl.backup_20251216_200106
+	model_pack/backups/models/xgb_home_win_model_2025.pkl.backup_20251216_205628
+	model_pack/backups/models/xgb_home_win_model_2025.pkl.backup_20251216_210833
+	model_pack/backups/updated_training_data_backup_20251216_194825.csv
+	model_pack/backups/updated_training_data_backup_20251216_200106.csv
+	model_pack/backups/updated_training_data_backup_20251216_205618.csv
+	model_training_log.txt
+	predictions/bowls_2025_predictions.json.backup
+	predictions/bowls_2025_predictions_ml.json
+	predictions/bowls_2025_predictions_ml_20251216_214727.json
+	predictions/bowls_2025_predictions_ml_20251216_215052.json
+	predictions/bowls_2025_predictions_ml_backup_20251216_214957.json
+	predictions/bowls_2025_predictions_simple.json
+	predictions/draftkings_slate_2025/
+	predictions/ncaapredictions.csv
+	reports/bowl_betting_guide_20251216_214646.csv
+	reports/bowl_betting_guide_20251216_214646.md
+	reports/bowl_betting_guide_20251216_215537.csv
+	reports/bowl_betting_guide_20251216_215537.md
+	reports/bowl_betting_guide_20251216_215617.csv
+	reports/bowl_betting_guide_20251216_215617.md
+	reports/bowl_betting_guide_20251216_215633.csv
+	reports/bowl_betting_guide_20251216_215633.md
+	reports/bowl_betting_guide_20251216_215726.csv
+	reports/bowl_betting_guide_20251216_215726.md
+	reports/bowl_betting_guide_20251216_221823.csv
+	reports/bowl_betting_guide_20251216_221823.md
+	reports/draftkings_slate_2025_20251216_210155.md
+	reports/draftkings_slate_2025_20251216_212526.md
+	reports/draftkings_slate_2025_20251216_213439.md
+	reports/draftkings_slate_2025_20251216_214139.md
+	reports/draftkings_slate_2025_20251216_214645.md
+	reports/prediction_system_comparison_20251216_214152.csv
+	reports/prediction_system_comparison_20251216_214152.md
+	reports/prediction_system_comparison_20251216_214153.csv
+	reports/prediction_system_comparison_20251216_214153.md
+	reports/prediction_system_comparison_20251216_214230.csv
+	reports/prediction_system_comparison_20251216_214230.md
+	runs/
+	scripts/__init__.py
+	scripts/bowl_guide_utils.py
+	scripts/build_training_data_from_cfbd.py
+	scripts/cfbd_refresh_snapshots.py
+	scripts/compare_predictions_to_systems.py
+	scripts/generate_bowl_betting_guide.py
+	scripts/integrate_weekly_files.py
+	scripts/predict_bowls_2025.py.bak
+	scripts/predict_dk_slate_2025.py
+	tests/test_integrate_week15_postseason.py
+
+no changes added to commit (use "git add" and/or "git commit -a")

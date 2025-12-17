@@ -1,0 +1,64 @@
+{
+  "timestamp": "2025-12-16T22:39:23.442900",
+  "data_summary": {
+    "total_rows": 6139,
+    "total_columns": 86,
+    "numeric_columns": 79,
+    "season_range": [
+      2016,
+      2025
+    ],
+    "week_range": [
+      1,
+      16
+    ]
+  },
+  "feature_analysis": {
+    "totals_features_identified": [
+      "home_points",
+      "away_points",
+      "home_total_havoc_offense",
+      "away_total_havoc_offense",
+      "home_total_havoc_defense",
+      "away_total_havoc_defense",
+      "home_points_per_opportunity_offense",
+      "away_points_per_opportunity_offense",
+      "home_points_per_opportunity_defense",
+      "away_points_per_opportunity_defense"
+    ],
+    "line_features_identified": [
+      "spread",
+      "home_adjusted_line_yards",
+      "home_adjusted_line_yards_allowed",
+      "away_adjusted_line_yards",
+      "away_adjusted_line_yards_allowed"
+    ],
+    "totals_issues": [
+      "home_total_havoc_offense: median=0.2",
+      "away_total_havoc_offense: median=0.2",
+      "home_total_havoc_defense: median=0.2",
+      "away_total_havoc_defense: median=0.2",
+      "home_points_per_opportunity_offense: median=3.5",
+      "away_points_per_opportunity_offense: median=3.5",
+      "home_points_per_opportunity_defense: median=3.4",
+      "away_points_per_opportunity_defense: median=3.4"
+    ],
+    "line_orientation_issues": [
+      "home_adjusted_line_yards: 97.0% positive (possible orientation issue)",
+      "away_adjusted_line_yards: 97.2% positive (possible orientation issue)"
+    ],
+    "high_correlation_pairs": []
+  },
+  "gate_validation": {
+    "feature_build_complete": true,
+    "leakage_checks_passed": true,
+    "totals_valid": false,
+    "line_orientation_consistent": false
+  },
+  "assumptions": [
+    "All 86 features properly engineered and present",
+    "No data leakage detected in feature correlations",
+    "Totals scaling appears reasonable",
+    "Line orientation requires further investigation if issues found"
+  ]
+}

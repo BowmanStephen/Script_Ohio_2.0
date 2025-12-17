@@ -122,7 +122,7 @@ class CollaborativeAgent:
 
         return collaboration_id
 
-    def share_insight(self, insight: Dict[str, Any], confidence: float = 1.0, domains: List[str] = None) -> str:
+    def share_insight(self, insight: Dict[str, Any], confidence: float = 1.0, domains: Optional[List[str]] = None) -> str:
         """Share an insight with other agents"""
         knowledge_id = share_insight(
             source_agent=self.agent_id,
@@ -149,7 +149,7 @@ class CollaborativeAgent:
 
         return expert_agent
 
-    def search_shared_knowledge(self, query: str, domain_filter: List[str] = None) -> List[Dict[str, Any]]:
+    def search_shared_knowledge(self, query: str, domain_filter: Optional[List[str]] = None) -> List[Dict[str, Any]]:
         """Search knowledge shared by other agents"""
         if not LEGACY_SYSTEM_AVAILABLE or collaboration_manager is None:
             logger.warning("Knowledge search requested but legacy collaboration system not available")

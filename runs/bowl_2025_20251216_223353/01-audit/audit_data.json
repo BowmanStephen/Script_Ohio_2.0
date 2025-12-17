@@ -1,0 +1,30 @@
+{
+  "master_rows": 6139,
+  "master_columns": 86,
+  "season_range": [
+    2016,
+    2025
+  ],
+  "week_range": [
+    1,
+    16
+  ],
+  "postseason_games": 2,
+  "missing_required_columns": [
+    "home_score",
+    "away_score",
+    "home_win"
+  ],
+  "duplicate_rows": 0,
+  "total_null_values": 44933,
+  "predictions": {
+    "predictions/bowls_2025_predictions.json": true,
+    "predictions/bowls_2025_predictions_ml.json": true,
+    "predictions/bowls_2025_predictions_simple.json": true
+  },
+  "models": {
+    "model_pack/ridge_model_2025.joblib": true,
+    "model_pack/xgb_home_win_model_2025.pkl": true,
+    "model_pack/fastai_home_win_model_2025.pkl": true
+  }
+}

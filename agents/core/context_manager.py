@@ -135,7 +135,7 @@ class ContextManager:
         Migration: Use direct agent instantiation (see WeeklyAnalysisOrchestrator pattern).
     """
 
-    def __init__(self, base_path: str = None):
+    def __init__(self, base_path: Optional[str] = None):
         """Initialize Context Manager with configuration"""
         import warnings
         warnings.warn(
@@ -720,7 +720,8 @@ class ContextManager:
         recent_turns = memory.recent_turns[-max_turns:] if memory.recent_turns else []
 
         # Build conversation context
-        conversation_context = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        conversation_context: Dict[str, Any] = {
             'user_id': user_id,
             'total_conversations': memory.total_conversations,
             'expert_level_assessment': memory.expert_level_assessment,
@@ -787,7 +788,7 @@ class ContextManager:
         logger.info(f"Enhanced context with conversation memory for user {user_id}")
         return enhanced_context
 
-    def end_conversation_session(self, user_id: str, effectiveness_score: float = None) -> Optional[SessionSummary]:
+    def end_conversation_session(self, user_id: str, effectiveness_score: Optional[float] = None) -> Optional[SessionSummary]:
         """End current conversation session and create summary"""
         if user_id not in self.active_sessions:
             return None
@@ -803,6 +804,8 @@ class ContextManager:
 
         # Create session summary
         summary = self._create_session_summary(session_id, user_id, session_turns, effectiveness_score)
+        if summary is None:
+            return None
 
         # Add to memory
         memory.sessions.append(summary)
@@ -864,8 +867,13 @@ class ContextManager:
 
         return (time_momentum + topic_momentum) / 2
 
-    def _create_session_summary(self, session_id: str, user_id: str,
-                              turns: List[ConversationTurn], effectiveness_score: float) -> SessionSummary:
+    def _create_session_summary(
+        self,
+        session_id: str,
+        user_id: str,
+        turns: List[ConversationTurn],
+        effectiveness_score: Optional[float] = None,
+    ) -> Optional[SessionSummary]:
         """Create summary of conversation session"""
         if not turns:
             return None
@@ -982,7 +990,7 @@ class ContextManager:
             logger.warning(f"Failed to load conversation memory: {e}")
             self.conversation_memory = {}
 
-    def _save_conversation_memory(self, user_id: str = None):
+    def _save_conversation_memory(self, user_id: Optional[str] = None):
         """Save conversation memory to disk"""
         try:
             memory_file = self.memory_path / "conversation_memory.pkl"

@@ -488,6 +488,8 @@ python scripts/plan_to_workflow.py my_plan.toon --execute
 
 **Reference**: See `docs/PLAN_STRUCTURE.md` for complete specification and `docs/TOON_PLAN_SYSTEM.md` for user guide
 
+**Plan Template**: When creating new plans, use `.cursor/plans/.template.plan.md` as a starting point. See `docs/CURSOR_PLAN_TEMPLATE.md` for comprehensive guide on structured plan creation with coordinator + subagent patterns, file scope enforcement, acceptance gates, and success criteria.
+
 ## Plan Creation Validation
 
 **CRITICAL**: When Cursor AI creates or modifies plans in `.cursor/plans/`, it MUST:
@@ -535,6 +537,176 @@ python scripts/plan_to_workflow.py my_plan.toon --execute
 - Report validation results to user (success or specific errors)
 - Only mark plan as complete when both smoke test and validation pass
 - Ensure all array headers use `[N]` format (never `[#N]`) per v2.0 spec
+
+## Default Planning Behavior (Script Ohio 2.0)
+
+**Trigger Phrases**: When the user says "make a plan", "ship MVP", "create a plan",
+"multi-step work", or requests any planning/coordination task, ALWAYS use the
+structured Coordinator + Sandbox format below.
+
+### Reality Check (Always Start Here)
+
+Before creating any plan, ALWAYS start with a short "Reality Check" that lists:
+- **Green (Working)**: What is currently functional and verified
+- **Red (Blocked)**: What is broken, missing, or blocking progress
+- **Unknown**: What needs discovery or verification
+
+Run discovery commands to establish baseline state before planning.
+
+### Planning Format Requirements
+
+**All plans MUST follow the structure in `docs/CURSOR_PLAN_TEMPLATE.md`:**
+
+1. **YAML Frontmatter**: Include todos with status tracking
+   ```yaml
+   ---
+   name: Plan Name
+   overview: "One-sentence overview"
+   todos:
+     - id: phase0_setup
+       content: "Phase 0: Discovery"
+       status: pending
+   ---
+   ```
+
+2. **Architecture Overview**: Explain the approach upfront
+   - Coordinator + subagent pattern (if multi-agent)
+   - Isolation mechanism (git worktrees recommended)
+   - Workflow diagram or description
+
+3. **Phase-by-Phase Structure**:
+   - **Phase 0**: Discovery & Setup (always required)
+   - **Phase 1+**: Implementation phases
+   - **Final Phase**: Verification & Acceptance
+
+4. **Each Phase MUST Include**:
+   - Files to change (exact list)
+   - Commands to run (exact commands)
+   - Expected output / success criteria
+   - Verification commands
+
+5. **File Scope Enforcement**:
+   - Each component/subagent has strict file ownership (no overlap)
+   - List exact files before editing
+   - Set file limits per component
+   - If more than N files needed, STOP and ask for approval
+
+### Coordinator + Sandbox Pattern (Default for Multi-Step Work)
+
+**When to Use**: Any plan with 3+ distinct tasks or components that could
+conflict.
+
+**Pattern**:
+- **Coordinator**: Manages merges, runs verification, coordinates subagents
+- **Subagents/Components**: Each has isolated sandbox and strict file scope
+- **Isolation Mechanism**: Git worktrees (default) or separate branches
+
+**Git Worktree Setup** (Default Sandbox):
+```bash
+# Create feature branch
+git checkout -b feature/plan-name
+
+# Create worktrees for each subagent
+git worktree add ../sandbox-name feature/plan-name
+```
+
+**Coordinator Responsibilities**:
+- Creates worktrees/branches for subagents
+- Merges commits from subagents
+- Runs acceptance gates after each merge
+- Coordinates fixes if verification fails
+
+**Subagent/Component Requirements**:
+- **Sandbox Location**: Explicit isolated location
+- **File Scope**: ONLY specific files (list before editing)
+- **Current State**: Document what exists now
+- **Tasks**: Numbered, specific tasks
+- **Deliverables**: Files touched, unified diff, verification commands
+- **Stop Condition**: When to stop or escalate
+
+**File Scope Rule** (CRITICAL):
+> "Before coding, list the exact files you plan to edit. If it's more than [N]
+> files, stop and ask for approval."
+
+### Change Discipline
+
+**Minimal Changes Principle**:
+- Prefer minimal edits; do NOT refactor unless explicitly requested
+- One commit per phase with clear message
+- No "while I'm here" changes
+- If blocker found outside scope, STOP and ask for approval
+
+**Commit Strategy**:
+- One commit per phase/subagent
+- Clear commit message: "Phase X: [component] - [what changed]"
+- Include verification results in commit message if applicable
+
+### Verification Discipline
+
+**Acceptance Gates** (Required for Every Plan):
+- Define exact verification commands that must pass
+- Run after each phase/component
+- Never assume; run or ask user to run commands and paste results
+- Document expected output for each command
+
+**Example Acceptance Gates**:
+```bash
+python -c "import module; print('ok')"
+python scripts/script.py --flag
+npm -C directory run test
+python -c "import json; json.load(open('output.json')); print('valid')"
+```
+
+### Repository-Specific Rules (MVP Focus)
+
+**For Script Ohio 2.0 specifically**:
+- **Do NOT touch `agents/`** unless explicitly requested or test is failing
+- **Prefer snapshot-based data refresh** for CFBD work (deterministic, offline-capable)
+- **Prefer Massey ratings** for bowls MVP predictions (already tested)
+- **Minimal changes**: No refactors, only additive changes
+- **Deterministic pipeline**: Once snapshots exist, predictions can run offline
+
+**CFBD Integration Defaults**:
+- Use `UnifiedCFBDClient` from `src/cfbd_client/unified_client.py`
+- Prefer snapshots over live API calls when possible
+- Rate limit: 6 req/sec → `time.sleep(0.17)` between requests
+
+### Plan Template Usage
+
+**When creating plans**:
+1. Start with `.cursor/plans/.template.plan.md` as base
+2. Follow structure in `docs/CURSOR_PLAN_TEMPLATE.md`
+3. Fill in plan-specific details
+4. Ensure all sections complete (reality check, phases, scopes, gates, criteria)
+
+**Validation** (Before Finalizing):
+```bash
+# TOON smoke test
+python3 scripts/smoke_test_toon.py
+
+# Plan structure validation
+python3 scripts/plan_to_workflow.py .cursor/plans/[plan_name].plan.md --toon --validate-only
+```
+
+### Success Criteria (Required in Every Plan)
+
+Every plan MUST include measurable success criteria as checkboxes:
+- ✅ [Measurable outcome 1]
+- ✅ [Measurable outcome 2]
+- ✅ [All acceptance gates pass]
+
+### Integration Points Documentation
+
+Every plan MUST document:
+- **Existing Code to Leverage**: Files/components to reuse
+- **New Files Created**: What's being added
+- **Modified Files**: What's being changed
+
+### Risk Mitigation
+
+Every plan MUST identify:
+- **Risk**: Potential issues
+- **Mitigation**: How they're prevented
 
 ## Output Formatting
 

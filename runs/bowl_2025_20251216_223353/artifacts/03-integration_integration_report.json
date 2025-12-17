@@ -1,0 +1,33 @@
+{
+  "timestamp": "2025-12-16T22:38:28.455082",
+  "integration_status": "ALREADY_INTEGRATED",
+  "master_data": {
+    "total_rows": 6139,
+    "total_columns": 86,
+    "season_2025_rows": 1619,
+    "season_2025_postseason_rows": 1
+  },
+  "postseason_data": {
+    "total_rows": 77,
+    "total_columns": 86,
+    "played_games": 77
+  },
+  "integration_metrics": {
+    "overlapping_games": 77,
+    "new_games_to_add": 0,
+    "duplicate_rows_in_master": 0,
+    "scheduled_games_in_master": 0
+  },
+  "gate_validation": {
+    "duplicates_zero": true,
+    "scheduled_games_zero": true,
+    "overlap_count_matches": true,
+    "new_games_zero": true
+  },
+  "assumptions": [
+    "All postseason games already integrated into master dataset",
+    "No new games need to be added from current postseason data",
+    "No scheduled games present (data leak prevention confirmed)",
+    "Integration validation confirms data integrity"
+  ]
+}

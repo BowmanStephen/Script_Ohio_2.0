@@ -1,0 +1,259 @@
+{
+  "timestamp": "2025-12-16T22:47:49.439488",
+  "run_id": "bowl_2025_20251216_223353",
+  "backup_timestamp": "20251216_224749",
+  "qa_status": {
+    "total_pipeline_stages": 7,
+    "stages_completed": 7,
+    "all_outputs_present": true,
+    "all_gates_passed": true,
+    "games_analyzed": 37,
+    "systemic_failures": false,
+    "audit_queue_size": 20,
+    "production_ready": true
+  },
+  "backup_operations": [
+    {
+      "type": "training_data",
+      "original": "model_pack/updated_training_data.csv",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/updated_training_data.csv.backup_20251216_224749",
+      "size": 7010229
+    },
+    {
+      "type": "model",
+      "original": "model_pack/ridge_model_2025.joblib",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/ridge_model_2025.joblib.backup_20251216_224749",
+      "size": 1017
+    },
+    {
+      "type": "model",
+      "original": "model_pack/xgb_home_win_model_2025.pkl",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/xgb_home_win_model_2025.pkl.backup_20251216_224749",
+      "size": 944759
+    },
+    {
+      "type": "model",
+      "original": "model_pack/fastai_home_win_model_2025.pkl",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/fastai_home_win_model_2025.pkl.backup_20251216_224749",
+      "size": 251941
+    },
+    {
+      "type": "prediction",
+      "original": "predictions/bowls_2025_predictions_ml_backup_20251216_214957.json",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/bowls_2025_predictions_ml_backup_20251216_214957.json.backup_20251216_224749",
+      "size": 19206
+    },
+    {
+      "type": "prediction",
+      "original": "predictions/bowls_2025_predictions_ml_20251216_215052.json",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/bowls_2025_predictions_ml_20251216_215052.json.backup_20251216_224749",
+      "size": 19206
+    },
+    {
+      "type": "prediction",
+      "original": "predictions/bowls_2025_predictions_simple.json",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/bowls_2025_predictions_simple.json.backup_20251216_224749",
+      "size": 16968
+    },
+    {
+      "type": "prediction",
+      "original": "predictions/bowls_2025_predictions_ml_20251216_214727.json",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/bowls_2025_predictions_ml_20251216_214727.json.backup_20251216_224749",
+      "size": 19206
+    },
+    {
+      "type": "prediction",
+      "original": "predictions/bowls_2025_predictions_ml.json",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/bowls_2025_predictions_ml.json.backup_20251216_224749",
+      "size": 19206
+    },
+    {
+      "type": "prediction",
+      "original": "reports/bowl_betting_guide_20251216_221823.csv",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/bowl_betting_guide_20251216_221823.csv.backup_20251216_224749",
+      "size": 46020
+    },
+    {
+      "type": "prediction",
+      "original": "reports/bowl_betting_guide_20251216_215617.csv",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/bowl_betting_guide_20251216_215617.csv.backup_20251216_224749",
+      "size": 44156
+    },
+    {
+      "type": "prediction",
+      "original": "reports/bowl_betting_guide_20251216_214646.csv",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/bowl_betting_guide_20251216_214646.csv.backup_20251216_224749",
+      "size": 20477
+    },
+    {
+      "type": "prediction",
+      "original": "reports/bowl_betting_guide_20251216_223413.csv",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/bowl_betting_guide_20251216_223413.csv.backup_20251216_224749",
+      "size": 48112
+    },
+    {
+      "type": "prediction",
+      "original": "reports/bowl_betting_guide_20251216_215633.csv",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/bowl_betting_guide_20251216_215633.csv.backup_20251216_224749",
+      "size": 44156
+    },
+    {
+      "type": "prediction",
+      "original": "reports/bowl_betting_guide_20251216_215537.csv",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/bowl_betting_guide_20251216_215537.csv.backup_20251216_224749",
+      "size": 44156
+    },
+    {
+      "type": "prediction",
+      "original": "reports/bowl_betting_guide_20251216_215726.csv",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/bowl_betting_guide_20251216_215726.csv.backup_20251216_224749",
+      "size": 44013
+    },
+    {
+      "type": "prediction",
+      "original": "reports/bowl_betting_guide_20251216_215537.md",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/bowl_betting_guide_20251216_215537.md.backup_20251216_224749",
+      "size": 65607
+    },
+    {
+      "type": "prediction",
+      "original": "reports/bowl_betting_guide_20251216_221823.md",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/bowl_betting_guide_20251216_221823.md.backup_20251216_224749",
+      "size": 65738
+    },
+    {
+      "type": "prediction",
+      "original": "reports/bowl_betting_guide_20251216_223413.md",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/bowl_betting_guide_20251216_223413.md.backup_20251216_224749",
+      "size": 72730
+    },
+    {
+      "type": "prediction",
+      "original": "reports/bowl_betting_guide_20251216_214646.md",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/bowl_betting_guide_20251216_214646.md.backup_20251216_224749",
+      "size": 37749
+    },
+    {
+      "type": "prediction",
+      "original": "reports/bowl_betting_guide_20251216_215633.md",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/bowl_betting_guide_20251216_215633.md.backup_20251216_224749",
+      "size": 65607
+    },
+    {
+      "type": "prediction",
+      "original": "reports/bowl_betting_guide_20251216_215617.md",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/bowl_betting_guide_20251216_215617.md.backup_20251216_224749",
+      "size": 65607
+    },
+    {
+      "type": "prediction",
+      "original": "reports/bowl_betting_guide_20251216_215726.md",
+      "backup": "runs/bowl_2025_20251216_223353/artifacts/backup/bowl_betting_guide_20251216_215726.md.backup_20251216_224749",
+      "size": 65522
+    }
+  ],
+  "promotion_operations": [
+    {
+      "type": "training_data",
+      "source": "runs/bowl_2025_20251216_223353/03-integration/updated_training_data.csv",
+      "destination": "model_pack/updated_training_data.csv"
+    },
+    {
+      "type": "models",
+      "note": "Models already in production from Phase 5"
+    },
+    {
+      "type": "betting_guide_csv",
+      "source": "runs/bowl_2025_20251216_223353/06-predictions/bowl_betting_evaluation_guide.csv",
+      "destination": "reports/bowl_betting_guide_20251216_224749.csv"
+    }
+  ],
+  "archive_operations": [
+    {
+      "type": "integration_data",
+      "destination": "runs/bowl_2025_20251216_223353/artifacts/updated_training_data_bowl_2025_20251216_223353.csv"
+    },
+    {
+      "type": "betting_guide",
+      "destination": "runs/bowl_2025_20251216_223353/artifacts/bowl_betting_guide_bowl_2025_20251216_223353.csv"
+    },
+    {
+      "type": "report",
+      "destination": "runs/bowl_2025_20251216_223353/artifacts/01-audit_audit_report.json"
+    },
+    {
+      "type": "report",
+      "destination": "runs/bowl_2025_20251216_223353/artifacts/01-audit_audit_data.json"
+    },
+    {
+      "type": "report",
+      "destination": "runs/bowl_2025_20251216_223353/artifacts/01-audit_audit_report.md"
+    },
+    {
+      "type": "report",
+      "destination": "runs/bowl_2025_20251216_223353/artifacts/02-cfbd_cfbd_report.json"
+    },
+    {
+      "type": "report",
+      "destination": "runs/bowl_2025_20251216_223353/artifacts/02-cfbd_cfbd_report.md"
+    },
+    {
+      "type": "report",
+      "destination": "runs/bowl_2025_20251216_223353/artifacts/03-integration_integration_report.json"
+    },
+    {
+      "type": "report",
+      "destination": "runs/bowl_2025_20251216_223353/artifacts/03-integration_integration_report.md"
+    },
+    {
+      "type": "report",
+      "destination": "runs/bowl_2025_20251216_223353/artifacts/04-features_feature_qa_report.md"
+    },
+    {
+      "type": "report",
+      "destination": "runs/bowl_2025_20251216_223353/artifacts/04-features_feature_qa_report.json"
+    },
+    {
+      "type": "report",
+      "destination": "runs/bowl_2025_20251216_223353/artifacts/05-training_training_report.md"
+    },
+    {
+      "type": "report",
+      "destination": "runs/bowl_2025_20251216_223353/artifacts/05-training_training_report.json"
+    },
+    {
+      "type": "report",
+      "destination": "runs/bowl_2025_20251216_223353/artifacts/06-predictions_prediction_report.json"
+    },
+    {
+      "type": "report",
+      "destination": "runs/bowl_2025_20251216_223353/artifacts/06-predictions_prediction_report.md"
+    },
+    {
+      "type": "report",
+      "destination": "runs/bowl_2025_20251216_223353/artifacts/07-qa_qa_report.json"
+    },
+    {
+      "type": "report",
+      "destination": "runs/bowl_2025_20251216_223353/artifacts/07-qa_qa_report.md"
+    }
+  ],
+  "production_assets": {
+    "training_data": "model_pack/updated_training_data.csv",
+    "betting_guide_csv": "reports/bowl_betting_guide_20251216_224749.csv",
+    "betting_guide_md": "reports/bowl_betting_guide_20251216_224749.md"
+  },
+  "rollback_procedures": {
+    "available": true,
+    "backup_directory": "runs/bowl_2025_20251216_223353/artifacts/backup",
+    "backup_timestamp": "20251216_224749",
+    "rollback_command": "Restore from runs/bowl_2025_20251216_223353/artifacts/backup"
+  },
+  "success": true,
+  "notes": [
+    "All QA gates passed successfully",
+    "Production assets backed up before promotion",
+    "New artifacts archived for record keeping",
+    "Rollback procedures documented and available"
+  ]
+}

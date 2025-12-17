@@ -63,7 +63,7 @@ class CircuitBreaker:
     that are consistently failing.
     """
 
-    def __init__(self, name: str, config: CircuitBreakerConfig = None):
+    def __init__(self, name: str, config: Optional[CircuitBreakerConfig] = None):
         self.name = name
         self.config = config or CircuitBreakerConfig()
         self.state = CircuitState.CLOSED
@@ -164,7 +164,7 @@ class RetryHandler:
     Implements OpenAI best practices for handling transient failures
     """
 
-    def __init__(self, config: RetryConfig = None):
+    def __init__(self, config: Optional[RetryConfig] = None):
         self.config = config or RetryConfig()
 
     def __call__(self, func: Callable) -> Callable:
@@ -321,7 +321,7 @@ class ErrorHandler:
         self.error_stats = defaultdict(int)
         self.recovery_stats = defaultdict(int)
 
-    def register_circuit_breaker(self, name: str, config: CircuitBreakerConfig = None):
+    def register_circuit_breaker(self, name: str, config: Optional[CircuitBreakerConfig] = None):
         """Register a circuit breaker for a specific component"""
         self.circuit_breakers[name] = CircuitBreaker(name, config)
         logger.info(f"Registered circuit breaker: {name}")
@@ -400,7 +400,7 @@ class ErrorHandler:
     def create_error_report(error: Exception,
                           error_type: str = "",
                           severity: ErrorSeverity = ErrorSeverity.MEDIUM,
-                          context: Dict[str, Any] = None,
+                          context: Optional[Dict[str, Any]] = None,
                           user_facing_message: str = "") -> ErrorReport:
         """Create a comprehensive error report"""
         return ErrorReport(
@@ -492,7 +492,7 @@ error_handler = ErrorHandler()
 
 # Decorators for easy use
 
-def circuit_breaker(name: str, config: CircuitBreakerConfig = None):
+def circuit_breaker(name: str, config: Optional[CircuitBreakerConfig] = None):
     """Decorator to apply circuit breaker to function"""
     def decorator(func):
         cb = error_handler.circuit_breakers.get(name)

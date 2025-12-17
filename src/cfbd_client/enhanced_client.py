@@ -32,6 +32,7 @@ import hashlib
 from functools import lru_cache
 
 # Enhanced CFBD import with version compatibility
+cfbd: Any
 try:
     import cfbd
     from cfbd.rest import ApiException
@@ -73,7 +74,7 @@ class CFBDCacheManager:
     Follows existing project patterns and integrates with agent system.
     """
 
-    def __init__(self, config: CFBDCacheConfig = None):
+    def __init__(self, config: Optional[CFBDCacheConfig] = None):
         self.config = config or CFBDCacheConfig()
         self.cache_dir = Path(self.config.cache_dir)
         self.cache_dir.mkdir(exist_ok=True)
@@ -115,8 +116,12 @@ class CFBDCacheManager:
         ttl = ttl_map.get(cache_type, self.config.cache_ttl_stats)
         return file_age.total_seconds() < ttl
 
-    def get_cached_data(self, endpoint: str, params: Dict[str, Any],
-                      cache_type: str = 'stats') -> Optional[Dict[str, Any]]:
+    def get_cached_data(
+        self,
+        endpoint: str,
+        params: Dict[str, Any],
+        cache_type: str = 'stats',
+    ) -> Optional[Any]:
         """
         Get cached data if available and valid.
         Integrates with agent system performance monitoring.
@@ -140,18 +145,21 @@ class CFBDCacheManager:
 
             if self._is_cache_valid(cache_file, cache_type):
                 with open(cache_file, 'rb') as f:
-                    cached_data = pickle.load(f)
+                    cached_entry = pickle.load(f)
+                cached_payload: Any = cached_entry
+                if isinstance(cached_entry, dict) and 'data' in cached_entry:
+                    cached_payload = cached_entry.get('data')
 
                 # Load into memory cache for faster access
                 self._memory_cache[cache_key] = {
-                    'data': cached_data,
+                    'data': cached_payload,
                     'file': cache_file,
                     'timestamp': datetime.now()
                 }
 
                 self._cache_stats['hits'] += 1
                 logger.debug(f"💾 File cache hit: {endpoint}")
-                return cached_data
+                return cached_payload
 
             self._cache_stats['misses'] += 1
             return None
@@ -162,7 +170,7 @@ class CFBDCacheManager:
             return None
 
     def cache_data(self, endpoint: str, params: Dict[str, Any],
-                  data: Dict[str, Any], cache_type: str = 'stats') -> None:
+                  data: Any, cache_type: str = 'stats') -> None:
         """Cache API response with appropriate TTL"""
         if not self.config.enable_cache:
             return
@@ -231,8 +239,8 @@ class EnhancedCFBDClient:
     Note: GraphQL support removed - requires Patreon Tier 3+ access
     """
 
-    def __init__(self, api_key: str = None, config: CFBDRateLimitConfig = None,
-                 cache_config: CFBDCacheConfig = None):
+    def __init__(self, api_key: Optional[str] = None, config: Optional[CFBDRateLimitConfig] = None,
+                 cache_config: Optional[CFBDCacheConfig] = None):
         """
         Initialize enhanced CFBD client with optimal configuration.
 
@@ -257,8 +265,8 @@ class EnhancedCFBDClient:
             raise ImportError("❌ CFBD client not available. Install with: pip install cfbd==5.13.2")
 
         # Enhanced configuration for optimal performance
-        self.configuration = cfbd.Configuration()
-        self.configuration.access_token = self.api_key
+        # Prefer constructor injection to avoid type-checker confusion about attribute types.
+        self.configuration = cfbd.Configuration(access_token=self.api_key)
 
         # Support for both standard and Next API
         self.api_host = os.environ.get('CFBD_API_HOST', 'https://api.collegefootballdata.com')
@@ -380,11 +388,23 @@ class EnhancedCFBDClient:
                 return result
 
             except ApiException as e:
+                # Convert to CFBD error taxonomy
+                try:
+                    from src.cfbd_client.errors import convert_api_exception
+                    cfbd_error = convert_api_exception(e)
+                except ImportError:
+                    # Fallback if errors module not available
+                    cfbd_error = None
+                
                 # Handle specific API errors
                 error_msg = str(e)
 
                 if e.status == 429:  # Rate limit exceeded
-                    wait_time = 2 ** attempt + 1  # Exponential backoff
+                    # Use Retry-After if available from converted error
+                    if cfbd_error and hasattr(cfbd_error, 'retry_after') and cfbd_error.retry_after:
+                        wait_time = cfbd_error.retry_after
+                    else:
+                        wait_time = 2 ** attempt + 1  # Exponential backoff
                     logger.warning(f"⏱️ Rate limit hit, waiting {wait_time}s (attempt {attempt + 1})")
                     time.sleep(wait_time)
                     continue
@@ -392,7 +412,16 @@ class EnhancedCFBDClient:
                 elif e.status == 401:  # Authentication error
                     logger.error("🔐 Authentication failed - check API key")
                     self._track_performance(start_time, success=False)
+                    if cfbd_error:
+                        raise cfbd_error
                     raise ValueError("Invalid CFBD API key")
+
+                elif e.status == 403:  # Forbidden
+                    logger.error("🚫 Access forbidden - check API key permissions")
+                    self._track_performance(start_time, success=False)
+                    if cfbd_error:
+                        raise cfbd_error
+                    raise ValueError("CFBD API access forbidden")
 
                 elif e.status == 404:  # Not found
                     logger.warning(f"🔍 Resource not found: {error_msg}")
@@ -401,18 +430,22 @@ class EnhancedCFBDClient:
 
                 elif e.status >= 500:  # Server error
                     if attempt < self.rate_config.max_retries - 1:
-                        wait_time = 2 ** attempt + 1
+                        wait_time = min(2 ** attempt + 1, 60)  # Bounded exponential backoff
                         logger.warning(f"🔄 Server error, retrying in {wait_time}s (attempt {attempt + 1})")
                         time.sleep(wait_time)
                         continue
                     else:
                         logger.error(f"❌ Server error after {attempt + 1} attempts: {error_msg}")
                         self._track_performance(start_time, success=False)
+                        if cfbd_error:
+                            raise cfbd_error
                         raise
 
                 else:  # Other API errors
                     logger.error(f"❌ CFBD API error: {error_msg}")
                     self._track_performance(start_time, success=False)
+                    if cfbd_error:
+                        raise cfbd_error
                     raise
 
             except Exception as e:
@@ -430,8 +463,8 @@ class EnhancedCFBDClient:
         # Should not reach here
         raise RuntimeError("API call failed unexpectedly")
 
-    def get_games(self, year: int, team: str = None, week: int = None,
-                 season_type: str = None, use_cache: bool = True) -> List[Dict[str, Any]]:
+    def get_games(self, year: int, team: Optional[str] = None, week: Optional[int] = None,
+                 season_type: Optional[str] = None, use_cache: bool = True) -> List[Dict[str, Any]]:
         """
         Get games data with caching and performance optimization.
         Enhanced version following established patterns.
@@ -468,7 +501,7 @@ class EnhancedCFBDClient:
 
         return []
 
-    def get_team_stats(self, year: int, team: str = None, use_cache: bool = True) -> List[Dict[str, Any]]:
+    def get_team_stats(self, year: int, team: Optional[str] = None, use_cache: bool = True) -> List[Dict[str, Any]]:
         """Get team statistics with enhanced error handling and caching"""
         # Check cache first
         if use_cache and self.cache_config.enable_cache:
@@ -499,7 +532,7 @@ class EnhancedCFBDClient:
 
         return []
 
-    def get_teams(self, conference: str = None, use_cache: bool = True) -> List[Dict[str, Any]]:
+    def get_teams(self, conference: Optional[str] = None, use_cache: bool = True) -> List[Dict[str, Any]]:
         """Get team information with caching"""
         # Check cache first
         if use_cache and self.cache_config.enable_cache:
@@ -529,7 +562,7 @@ class EnhancedCFBDClient:
 
         return []
 
-    def get_advanced_metrics(self, year: int, team: str = None,
+    def get_advanced_metrics(self, year: int, team: Optional[str] = None,
                            exclude_garbage_time: bool = True) -> List[Dict[str, Any]]:
         """
         Get advanced metrics (EPA, success rates, etc.) using latest CFBD features.
@@ -584,7 +617,7 @@ class EnhancedCFBDClient:
 
 
 # Factory function for easy integration with existing agent system
-def create_enhanced_cfbd_client(api_key: str = None, enable_cache: bool = True) -> EnhancedCFBDClient:
+def create_enhanced_cfbd_client(api_key: Optional[str] = None, enable_cache: bool = True) -> EnhancedCFBDClient:
     """
     Factory function to create enhanced CFBD client with optimal defaults.
     Integrates seamlessly with existing Script Ohio 2.0 agent system.

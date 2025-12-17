@@ -123,7 +123,7 @@ class PredictivePreloader:
         self.sequence_patterns = []
         self.last_accesses = {}
 
-    def record_access(self, key: str, tags: List[str] = None):
+    def record_access(self, key: str, tags: Optional[List[str]] = None):
         """Record cache access for pattern learning"""
         timestamp = int(time.time() / 60)  # Minute-level granularity
         self.access_patterns[key][timestamp] += 1
@@ -333,7 +333,7 @@ class AdvancedCacheManager:
             return value
 
     def put(self, key: str, value: Any, ttl_seconds: Optional[float] = None,
-            tags: List[str] = None, priority: int = 3, cost: float = 1.0) -> bool:
+            tags: Optional[List[str]] = None, priority: int = 3, cost: float = 1.0) -> bool:
         """Put value in cache with intelligent compression"""
         try:
             with self.lock:

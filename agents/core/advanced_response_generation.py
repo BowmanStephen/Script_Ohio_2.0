@@ -568,7 +568,7 @@ class MultiModalContentGenerator:
         }
 
     def generate_multi_modal_content(self, insights: List[Insight], context: ResponseContext,
-                                    preferred_modalities: List[ResponseModality] = None) -> List[MultiModalContent]:
+                                    preferred_modalities: Optional[List[ResponseModality]] = None) -> List[MultiModalContent]:
         """Generate multi-modal content from insights"""
         if preferred_modalities is None:
             preferred_modalities = [ResponseModality.TEXT, ResponseModality.VISUALIZATION]
@@ -1399,7 +1399,7 @@ class AdvancedResponseGenerator:
         self.generation_metrics = defaultdict(list)
 
     def generate_response(self, query: str, agent_results: List[Dict[str, Any]], context: ResponseContext,
-                         preferred_modalities: List[ResponseModality] = None) -> GeneratedResponse:
+                         preferred_modalities: Optional[List[ResponseModality]] = None) -> GeneratedResponse:
         """Generate an advanced multi-modal response"""
         start_time = time.time()
 

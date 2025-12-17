@@ -105,7 +105,7 @@ class GradeAIntegrator:
     intelligent multi-agent system with Grade A performance characteristics.
     """
 
-    def __init__(self, base_path: str = None, config: GradeASystemConfig = None):
+    def __init__(self, base_path: Optional[str] = None, config: Optional[GradeASystemConfig] = None):
         """Initialize the Grade A integration engine"""
         self.base_path = base_path or str(Path(__file__).parent.parent)
         self.config = config or GradeASystemConfig()
@@ -252,9 +252,9 @@ class GradeAIntegrator:
         self.advanced_coordinator.register_agent_capability("model_engine", model_profile)
 
     async def process_request_grade_a(self, user_id: str, query: str, query_type: str,
-                                    parameters: Dict[str, Any] = None,
-                                    context_hints: Dict[str, Any] = None,
-                                    preferred_modalities: List[str] = None) -> Dict[str, Any]:
+                                    parameters: Optional[Dict[str, Any]] = None,
+                                    context_hints: Optional[Dict[str, Any]] = None,
+                                    preferred_modalities: Optional[List[str]] = None) -> Dict[str, Any]:
         """
         Process a request using Grade A capabilities.
 
@@ -273,7 +273,7 @@ class GradeAIntegrator:
             enhanced_context = self.context_manager.load_context_for_role(user_role, context_hints or {})
 
             # 2. Intelligent Task Analysis and Coordination Planning
-            task_analysis = self._analyze_task_requirements(query, query_type, parameters, enhanced_context)
+            task_analysis = self._analyze_task_requirements(query, query_type, parameters or {}, enhanced_context)
 
             # 3. Advanced Agent Coordination
             if task_analysis['requires_coordination']:
@@ -894,7 +894,7 @@ if __name__ == "__main__":
         integrator = GradeAIntegrator(config=config)
 
         # Test requests
-        test_requests = [
+        test_requests: List[Dict[str, Any]] = [
             {
                 'user_id': 'test_user_001',
                 'query': 'I want to learn about college football data analytics with detailed visualizations and real-time data',

@@ -10,5 +10,6 @@ For new code, always use:
 
 from .unified_client import UnifiedCFBDClient
 from .cfbd_cache_manager import CFBDCacheManager, CFBDCacheConfig
+from .client import CFBDClient  # Legacy client - for backward compatibility
 
-__all__ = ["UnifiedCFBDClient", "CFBDCacheManager", "CFBDCacheConfig"]
+__all__ = ["UnifiedCFBDClient", "CFBDCacheManager", "CFBDCacheConfig", "CFBDClient"]

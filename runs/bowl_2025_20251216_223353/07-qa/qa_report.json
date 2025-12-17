@@ -1,0 +1,142 @@
+{
+  "timestamp": "2025-12-16T22:46:28.947753",
+  "run_id": "bowl_2025_20251216_223353",
+  "pipeline_stages": {
+    "00-meta/phase0_report.json": {
+      "exists": true,
+      "size": 1141
+    },
+    "01-audit/audit_report.json": {
+      "exists": true,
+      "size": 2602
+    },
+    "02-cfbd/cfbd_report.json": {
+      "exists": true,
+      "size": 745
+    },
+    "03-integration/integration_report.json": {
+      "exists": true,
+      "size": 919
+    },
+    "04-features/feature_qa_report.json": {
+      "exists": true,
+      "size": 1965
+    },
+    "05-training/training_report.json": {
+      "exists": true,
+      "size": 1233
+    },
+    "06-predictions/prediction_report.json": {
+      "exists": true,
+      "size": 780
+    }
+  },
+  "data_integrity": {},
+  "quality_metrics": {
+    "tier_counts": {
+      "C": "17",
+      "X-REVIEW": "13",
+      "A": "5",
+      "B": "2"
+    }
+  },
+  "risk_assessment": {
+    "move_data_issues": 1,
+    "move_data_percentage": 2.7027027027027026,
+    "outlier_issues": 19,
+    "systemic_failure_detected": false,
+    "gate_7_status": "PASSED"
+  },
+  "audit_queue": [
+    {
+      "priority": 1,
+      "game": "Navy vs Cincinnati",
+      "bowl": "Liberty Bowl",
+      "issue": "MOVE_DATA_ISSUE",
+      "flags": "OUTLIER_MARKET|MOVE_DATA_ISSUE",
+      "tier": "X-REVIEW"
+    },
+    {
+      "priority": 2,
+      "game": "Louisiana vs Delaware",
+      "bowl": "68 Ventures Bowl",
+      "issue": "OUTLIER_DETECTED",
+      "flags": "OUTLIER_MARKET|OUTLIER_RATINGS",
+      "tier": "A"
+    },
+    {
+      "priority": 2,
+      "game": "Old Dominion vs South Florida",
+      "bowl": "Cure Bowl",
+      "issue": "OUTLIER_DETECTED",
+      "flags": "OUTLIER_RATINGS|BIG_MOVE",
+      "tier": "X-REVIEW"
+    },
+    {
+      "priority": 2,
+      "game": "Alabama vs Oklahoma",
+      "bowl": "CFP First Round",
+      "issue": "OUTLIER_DETECTED",
+      "flags": "OUTLIER_MARKET",
+      "tier": "A"
+    },
+    {
+      "priority": 2,
+      "game": "James Madison vs Oregon",
+      "bowl": "CFP First Round",
+      "issue": "OUTLIER_DETECTED",
+      "flags": "OUTLIER_MARKET|OUTLIER_RATINGS|HIGH_STD_RATINGS",
+      "tier": "X-REVIEW"
+    },
+    {
+      "priority": 2,
+      "game": "Washington State vs Utah State",
+      "bowl": "Potato Bowl",
+      "issue": "OUTLIER_DETECTED",
+      "flags": "OUTLIER_RATINGS|BIG_MOVE",
+      "tier": "C"
+    },
+    {
+      "priority": 2,
+      "game": "UNLV vs Ohio",
+      "bowl": "Frisco Bowl",
+      "issue": "OUTLIER_DETECTED",
+      "flags": "OUTLIER_MARKET|OUTLIER_RATINGS",
+      "tier": "X-REVIEW"
+    },
+    {
+      "priority": 2,
+      "game": "Western Kentucky vs Southern Miss",
+      "bowl": "New Orleans Bowl",
+      "issue": "OUTLIER_DETECTED",
+      "flags": "OUTLIER_MARKET",
+      "tier": "X-REVIEW"
+    },
+    {
+      "priority": 2,
+      "game": "California vs Hawai'i",
+      "bowl": "Hawai'i Bowl",
+      "issue": "OUTLIER_DETECTED",
+      "flags": "OUTLIER_MARKET",
+      "tier": "A"
+    },
+    {
+      "priority": 2,
+      "game": "Florida International vs UTSA",
+      "bowl": "First Responder Bowl",
+      "issue": "OUTLIER_DETECTED",
+      "flags": "OUTLIER_MARKET",
+      "tier": "A"
+    }
+  ],
+  "final_assessment": {
+    "total_pipeline_stages": 7,
+    "stages_completed": 7,
+    "all_outputs_present": true,
+    "all_gates_passed": true,
+    "games_analyzed": 37,
+    "systemic_failures": false,
+    "audit_queue_size": 20,
+    "production_ready": true
+  }
+}

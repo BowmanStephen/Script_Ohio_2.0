@@ -70,6 +70,7 @@ GameList: TypeAlias = List[GameData]
 
 **Tools**:
 - `mypy`: Static type checker for Python
+- `ty`: Fast type checker from Astral (10-100x faster than mypy, currently in alpha)
 - `pyright`: Fast type checker (VS Code default)
 - `pyre`: Facebook's type checker
 
@@ -86,7 +87,21 @@ mypy --strict agents/ src/
 
 # Type check with configuration file
 mypy --config-file mypy.ini agents/
+
+# Install ty (alpha version)
+uv add --dev "ty>=0.0.1-alpha.26"
+
+# Type check with ty (uses pyproject.toml config automatically)
+uv run ty check
+
+# Type check specific paths
+uv run ty check agents/ src/ scripts/
+
+# Exclude specific patterns
+uv run ty check --exclude "tests/**" --exclude "**/__pycache__/**"
 ```
+
+**Configuration**: ty reads configuration from `pyproject.toml` under `[tool.ty]` section automatically. No `--config` flag needed.
 
 **Configuration** (`mypy.ini`):
 ```ini

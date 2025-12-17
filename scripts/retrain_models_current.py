@@ -91,8 +91,13 @@ class ModelPaths:
 def _load_training_data(path: Path) -> pd.DataFrame:
     df = pd.read_csv(path, low_memory=False).dropna(how="all")
     df = df.sort_values(["season", "week"]).reset_index(drop=True)
-    # Keep only scored games (exclude future rows).
-    return df[(df["home_points"].notna()) & (df["away_points"].notna())].copy()
+    # Keep only completed games (exclude future/scheduled rows).
+    #
+    # Note: The feature pipeline uses `0` for missing points on scheduled games,
+    # so `notna()` is not sufficient here.
+    scored = (df["home_points"].notna()) & (df["away_points"].notna())
+    not_future = ~((df["home_points"] == 0) & (df["away_points"] == 0))
+    return df[scored & not_future].copy()
 
 
 def _ensure_features(df: pd.DataFrame, features: Sequence[str]) -> pd.DataFrame:

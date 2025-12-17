@@ -15,6 +15,9 @@ import time
 import json
 import threading
 import logging
+from typing import Any
+
+psutil: Any
 try:
     import psutil
 except ImportError:

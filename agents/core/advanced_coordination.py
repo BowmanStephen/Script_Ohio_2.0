@@ -75,7 +75,7 @@ class CoordinationTask:
     primary_goal: str
     subtasks: List[Dict[str, Any]]
     required_agents: List[str]
-    coordination_pattern: CoordinationPattern
+    coordination_pattern: Optional[CoordinationPattern] = None
     dependencies: List[str] = field(default_factory=list)
     priority: int = 1
     deadline: Optional[float] = None
@@ -268,7 +268,8 @@ class AdaptiveWorkflowEngine:
         self.active_workflows = {}
         self.workflow_templates = {}
         self.execution_history = []
-        self.performance_metrics = defaultdict(list)
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        self.performance_metrics: Dict[str, Any] = defaultdict(list)
 
     def create_adaptive_workflow(self, task: CoordinationTask,
                                agent_capabilities: Dict[str, AgentCapabilityProfile]) -> Dict[str, Any]:
@@ -461,7 +462,7 @@ class IntelligentMessageRouter:
             logger.error(f"Failed to send message: {str(e)}")
             return False
 
-    def receive_messages(self, agent_id: str, limit: int = None) -> List[AgentMessage]:
+    def receive_messages(self, agent_id: str, limit: Optional[int] = None) -> List[AgentMessage]:
         """Receive messages for a specific agent"""
         queue = self.message_queues[agent_id]
 
@@ -474,7 +475,7 @@ class IntelligentMessageRouter:
         return messages
 
     def broadcast_message(self, sender_id: str, message_type: str, content: Dict[str, Any],
-                         exclude_receivers: List[str] = None) -> int:
+                         exclude_receivers: Optional[List[str]] = None) -> int:
         """Broadcast a message to all agents except specified exclusions"""
         exclude_receivers = exclude_receivers or []
         sent_count = 0
@@ -571,7 +572,8 @@ class AdvancedAgentCoordinator:
         self.message_router = IntelligentMessageRouter()
         self.agent_capabilities = {}
         self.coordination_history = []
-        self.performance_metrics = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        self.performance_metrics: Dict[str, Any] = {
             'tasks_coordinated': 0,
             'successful_coordination': 0,
             'average_coordination_time': 0.0,
@@ -699,8 +701,12 @@ class AdvancedAgentCoordinator:
             elif task.coordination_pattern == CoordinationPattern.HIERARCHICAL:
                 return self._execute_hierarchical_coordination(task, workflow)
             elif task.coordination_pattern == CoordinationPattern.COLLABORATIVE:
+                if collaboration_session is None:
+                    raise ValueError("Collaboration session required for collaborative coordination")
                 return self._execute_collaborative_coordination(task, workflow, collaboration_session)
             elif task.coordination_pattern == CoordinationPattern.ADAPTIVE:
+                if collaboration_session is None:
+                    raise ValueError("Collaboration session required for adaptive coordination")
                 return self._execute_adaptive_coordination(task, workflow, collaboration_session)
             else:
                 raise ValueError(f"Unknown coordination pattern: {task.coordination_pattern}")
@@ -989,11 +995,14 @@ class AdvancedAgentCoordinator:
                                     collaboration_session: Optional[CollaborationSession]) -> Dict[str, Any]:
         """Execute with adaptive coordination that changes based on performance"""
         # Start with recommended pattern
-        current_pattern = task.coordination_pattern
+        current_pattern = task.coordination_pattern or CoordinationPattern.SEQUENTIAL
+        task.coordination_pattern = current_pattern
         adaptation_log = []
 
         # Execute initial coordination
         if current_pattern == CoordinationPattern.COLLABORATIVE:
+            if collaboration_session is None:
+                raise ValueError("Collaboration session required for collaborative coordination")
             result = self._execute_collaborative_coordination(task, workflow, collaboration_session)
         elif current_pattern == CoordinationPattern.PARALLEL:
             result = self._execute_parallel_coordination(task, workflow)

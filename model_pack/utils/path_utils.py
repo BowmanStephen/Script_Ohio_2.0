@@ -288,6 +288,60 @@ def get_weekly_training_file(week: int, season: int = 2025, base_path: Optional[
     )
 
 
+def get_postseason_training_file(
+    season: int = 2025, base_path: Optional[Path] = None
+) -> Path:
+    """
+    Get postseason training data file path with fallback search.
+
+    This function mirrors get_weekly_training_file() but for the special-case
+    postseason file, which does not follow the week naming convention.
+
+    Search order (preference):
+    1. data/training/weekly/ (canonical location)
+    2. data/weekly_training/ (legacy location)
+    3. data/ (legacy/root-level during migration)
+
+    Args:
+        season: Season year (default: 2025)
+        base_path: Base path for search (defaults to project root)
+
+    Returns:
+        Path to postseason training file
+
+    Raises:
+        FileNotFoundError: If file not found in any location
+    """
+    if base_path is None:
+        base_path = find_project_root()
+
+    filename = f"training_data_{season}_postseason.csv"
+
+    locations = [
+        ("data/training/weekly", "canonical"),
+        ("data/weekly_training", "legacy"),
+        ("data", "legacy_root"),
+    ]
+
+    for rel_dir, location_type in locations:
+        search_path = base_path / rel_dir / filename
+        if search_path.exists():
+            if location_type == "canonical":
+                logger.debug(f"Found postseason training file (canonical): {search_path}")
+            else:
+                logger.warning(
+                    f"Using {location_type} location for postseason training file: "
+                    f"{search_path}. Consider migrating to data/training/weekly/."
+                )
+            return search_path
+
+    searched_paths = [str(base_path / rel_dir / filename) for rel_dir, _ in locations]
+    raise FileNotFoundError(
+        f"Postseason training file (season {season}) not found. "
+        f"Searched locations:\n" + "\n".join(f"  - {path}" for path in searched_paths)
+    )
+
+
 def get_weekly_enhanced_dir(week: int, season: int = 2025, base_path: Optional[Path] = None) -> Path:
     """
     Get weekly enhanced data directory path with fallback support.
@@ -456,4 +510,3 @@ def get_model_file_path(model_name: str, base_path: Optional[Path] = None) -> Pa
     
     logger.debug(f"Found model file: {model_path}")
     return model_path
-

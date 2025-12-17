@@ -35,11 +35,6 @@ warnings.warn(
     stacklevel=2
 )
 
-Author: Claude Code Assistant (Performance Tuning Agent)
-Created: 2025-11-10
-Version: 1.0
-"""
-
 import os
 import time
 import asyncio
@@ -378,7 +373,7 @@ class AsyncAgentOrchestrator:
         Migration: Use synchronous agent execution (see WeeklyAnalysisOrchestrator pattern).
     """
 
-    def __init__(self, base_path: str = None, max_concurrent_requests: int = 1000):
+    def __init__(self, base_path: Optional[str] = None, max_concurrent_requests: int = 1000):
         import warnings
         warnings.warn(
             "AsyncAgentOrchestrator is deprecated and will be removed on 2025-12-19. "

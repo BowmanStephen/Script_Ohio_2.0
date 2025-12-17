@@ -199,7 +199,7 @@ class ToolLoader:
     Dynamic tool loading and management system
     """
 
-    def __init__(self, tools_directory: str = None, base_path: str = None):
+    def __init__(self, tools_directory: Optional[str] = None, base_path: Optional[str] = None):
         import warnings
         warnings.warn(
             "ToolLoader is deprecated and will be removed on 2025-12-19. "
@@ -452,6 +452,8 @@ class ToolLoader:
     def _load_tool_from_file(self, tool_file: Path):
         """Load a tool from a Python file"""
         spec = importlib.util.spec_from_file_location(tool_file.stem, tool_file)
+        if spec is None or spec.loader is None:
+            raise ValueError(f"Unable to load tool module spec: {tool_file}")
         module = importlib.util.module_from_spec(spec)
 
         # Execute the module
@@ -485,7 +487,7 @@ class ToolLoader:
         """Get a tool by name"""
         return self.tools.get(tool_name)
 
-    def list_tools(self, category: ToolCategory = None) -> List[Dict[str, Any]]:
+    def list_tools(self, category: Optional[ToolCategory] = None) -> List[Dict[str, Any]]:
         """List available tools, optionally filtered by category"""
         tools_list = []
 

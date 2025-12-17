@@ -74,7 +74,43 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
         default=PROJECT_ROOT / "outputs" / "cfbd_ingest",
         help="Directory for raw + processed outputs.",
     )
+    parser.add_argument(
+        "--use-snapshots",
+        action="store_true",
+        help="Read from local JSON snapshots first; don't hit network. Requires snapshots to exist.",
+    )
+    parser.add_argument(
+        "--refresh",
+        action="store_true",
+        help="Force refresh snapshots first, then use them. Runs cfbd_refresh_snapshots.py before proceeding.",
+    )
     return parser.parse_args(argv)
+
+
+def load_snapshot(season: int, dataset_type: str, snapshot_dir: Path) -> Optional[List[Dict[str, Any]]]:
+    """
+    Load snapshot data from local JSON file.
+    
+    Args:
+        season: Season year
+        dataset_type: Type of dataset (e.g., 'games_regular', 'games_postseason')
+        snapshot_dir: Directory containing snapshots
+        
+    Returns:
+        List of game records or None if snapshot doesn't exist
+    """
+    snapshot_file = snapshot_dir / f"{dataset_type}_{season}.json"
+    if not snapshot_file.exists():
+        return None
+    
+    try:
+        with open(snapshot_file, "r") as f:
+            data = json.load(f)
+        LOGGER.info(f"📦 Loaded {len(data)} records from snapshot: {snapshot_file}")
+        return data
+    except Exception as e:
+        LOGGER.warning(f"⚠️  Failed to load snapshot {snapshot_file}: {e}")
+        return None
 
 
 def fetch_games(
@@ -83,7 +119,60 @@ def fetch_games(
     season: int,
     week: Optional[int],
     team: Optional[str],
+    use_snapshots: bool = False,
+    snapshot_dir: Optional[Path] = None,
 ) -> List[Dict[str, Any]]:
+    """
+    Fetch games data, optionally from snapshots.
+    
+    Args:
+        client: UnifiedCFBDClient instance
+        season: Season year
+        week: Optional week filter
+        team: Optional team filter
+        use_snapshots: If True, prefer snapshots over API
+        snapshot_dir: Directory containing snapshots
+        
+    Returns:
+        List of game records
+    """
+    # Determine snapshot directory
+    if snapshot_dir is None:
+        snapshot_dir = PROJECT_ROOT / "data" / "raw" / "cfbd"
+    
+    # Try to load from snapshots if requested or if snapshots exist
+    if use_snapshots or (snapshot_dir.exists() and not use_snapshots):
+        # Determine which snapshot to load based on week
+        # For simplicity, try regular season first, then postseason
+        # In a real implementation, you might want to check week ranges
+        dataset_types = ["games_regular", "games_postseason"]
+        
+        for dataset_type in dataset_types:
+            snapshot_data = load_snapshot(season, dataset_type, snapshot_dir)
+            if snapshot_data:
+                # Apply filters if needed
+                if week is not None:
+                    snapshot_data = [g for g in snapshot_data if g.get("week") == week]
+                if team is not None:
+                    team_lower = team.lower()
+                    snapshot_data = [
+                        g for g in snapshot_data
+                        if (g.get("home_team", "").lower() == team_lower or
+                            g.get("away_team", "").lower() == team_lower)
+                    ]
+                
+                if snapshot_data:
+                    LOGGER.info(f"✅ Using snapshot data: {len(snapshot_data)} games")
+                    return snapshot_data
+        
+        # If use_snapshots is True and no snapshots found, error
+        if use_snapshots:
+            LOGGER.error("❌ --use-snapshots specified but snapshots not found")
+            LOGGER.error(f"   Run: python scripts/cfbd_refresh_snapshots.py --season {season} --refresh-all")
+            raise SystemExit("Snapshots not found. Run cfbd_refresh_snapshots.py first.")
+    
+    # Fall back to API
+    LOGGER.info("🌐 Fetching games from CFBD API...")
     return client.get_games(year=season, week=week, team=team)
 
 
@@ -148,12 +237,34 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
         LOGGER.info("=" * 70)
         LOGGER.info("START: Data pull initiated")
         
-        api_key = os.environ.get("CFBD_API_KEY")
-        if not api_key:
-            LOGGER.error("❌ CFBD_API_KEY environment variable is required")
-            raise SystemExit("CFBD_API_KEY environment variable is required.")
+        # Handle --refresh flag: refresh snapshots first
+        if args.refresh:
+            LOGGER.info("🔄 Refreshing snapshots...")
+            import subprocess
+            refresh_script = PROJECT_ROOT / "scripts" / "cfbd_refresh_snapshots.py"
+            if not refresh_script.exists():
+                LOGGER.error(f"❌ Snapshot refresh script not found: {refresh_script}")
+                raise SystemExit("Snapshot refresh script not found")
+            
+            result = subprocess.run(
+                [sys.executable, str(refresh_script), "--season", str(args.season), "--refresh-all"],
+                capture_output=True,
+                text=True,
+            )
+            if result.returncode != 0:
+                LOGGER.error(f"❌ Snapshot refresh failed: {result.stderr}")
+                raise SystemExit("Snapshot refresh failed")
+            LOGGER.info("✅ Snapshots refreshed")
+        
+        # Check API key only if not using snapshots exclusively
+        if not args.use_snapshots:
+            api_key = os.environ.get("CFBD_API_KEY")
+            if not api_key:
+                LOGGER.error("❌ CFBD_API_KEY environment variable is required")
+                raise SystemExit("CFBD_API_KEY environment variable is required.")
 
         # Import CFBD dependencies only after argument parsing
+        # Note: Still need client for feature engineering even if using snapshots
         try:
             from cfbd_client.unified_client import UnifiedCFBDClient
             from features.cfbd_feature_engineering import CFBDFeatureEngineer, FeatureEngineeringConfig
@@ -162,19 +273,30 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
             LOGGER.error("Please ensure CFBD client and feature engineering modules are properly installed")
             raise SystemExit("CFBD dependencies not available")
 
-        LOGGER.info("Initializing CFBD client...")
-        client = UnifiedCFBDClient()
-        LOGGER.info("✅ CFBD client initialized")
+        # Initialize client (needed for feature engineering even if using snapshots)
+        client = None
+        if not args.use_snapshots:
+            LOGGER.info("Initializing CFBD client...")
+            client = UnifiedCFBDClient()
+            LOGGER.info("✅ CFBD client initialized")
+        else:
+            # Still need client for feature engineering, but won't use it for fetching
+            LOGGER.info("Using snapshot mode - initializing minimal client for feature engineering...")
+            client = UnifiedCFBDClient()
+            LOGGER.info("✅ Client initialized (snapshot mode)")
 
         timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
         run_dir = ensure_output_dir(args.output_dir / f"{args.season}_{timestamp}")
 
+        snapshot_dir = PROJECT_ROOT / "data" / "raw" / "cfbd"
         LOGGER.info(f"Fetching games for season {args.season}, week {args.week}")
         raw_games = fetch_games(
             client=client,
             season=args.season,
             week=args.week,
             team=args.team,
+            use_snapshots=args.use_snapshots,
+            snapshot_dir=snapshot_dir,
         )
         LOGGER.info(f"✅ Fetched {len(raw_games)} games")
 

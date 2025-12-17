@@ -15,7 +15,8 @@ Script_Ohio_2.0/
 │   ├── training/
 │   │   ├── master/                    # (Future: symlink to model_pack)
 │   │   └── weekly/                    # Weekly training files (2025)
-│   │       └── training_data_2025_week*.csv
+│   │       ├── training_data_2025_week*.csv
+│   │       └── training_data_2025_postseason.csv
 │   │
 │   ├── weekly/                        # Weekly enhanced features (agents)
 │   │   └── week{XX}/enhanced/
@@ -94,6 +95,34 @@ df = pd.read_csv(week_file)
 
 The utility function automatically searches these locations in order and logs warnings when using non-canonical locations.
 
+### Postseason Training File
+
+Postseason/bowl games are stored in a single season-level file:
+`data/training/weekly/training_data_2025_postseason.csv` (canonical).
+
+**Naming Convention**:
+- Format: `training_data_{season}_postseason.csv`
+- Example: `training_data_2025_postseason.csv`
+- Represents all postseason/bowl games for a season
+
+**Recommended Pattern**:
+```python
+from model_pack.utils.path_utils import get_postseason_training_file
+
+postseason_path = get_postseason_training_file(season=2025)
+df = pd.read_csv(postseason_path)
+```
+
+**Search Order**:
+1. `data/training/weekly/` (canonical location)
+2. `data/weekly_training/` (legacy location)
+3. `data/` (legacy root-level during migration)
+
+The utility function automatically searches these locations in order and logs warnings when using non-canonical locations.
+
+**Integration Workflow**:
+See `docs/DATA_INTEGRATION_GUIDE.md` for comprehensive integration procedures including validation, observability, and rollback support.
+
 ### Weekly Enhanced Data Files
 
 Weekly enhanced data files (features, games, metadata) are in `data/weekly/week{XX}/enhanced/` (canonical) with fallback to `data/week{XX}/enhanced/` (legacy).
@@ -143,6 +172,7 @@ The data organization structure was migrated in November 2025:
 |-----------|-------------------|------------------|---------------|
 | Master training data | `model_pack/updated_training_data.csv` | `model_pack/training_data.csv` | `config.get_training_data_path()` |
 | Weekly training files | `data/training/weekly/training_data_2025_week*.csv` | `data/weekly_training/`, root | `get_weekly_training_file()` |
+| Postseason training file | `data/training/weekly/training_data_2025_postseason.csv` | `data/weekly_training/`, `data/` | `get_postseason_training_file()` |
 | Weekly enhanced features | `data/weekly/week{XX}/enhanced/week{XX}_features_86.csv` | `data/week{XX}/enhanced/` | `get_weekly_enhanced_file(week, 'features')` |
 | Weekly enhanced games | `data/weekly/week{XX}/enhanced/week{XX}_enhanced_games.csv` | `data/week{XX}/enhanced/` | `get_weekly_enhanced_file(week, 'games')` |
 | Weekly enhancement metadata | `data/weekly/week{XX}/enhanced/enhancement_metadata.json` | `data/week{XX}/enhanced/` | `get_weekly_enhanced_file(week, 'metadata')` |
@@ -169,6 +199,7 @@ The `model_pack/utils/path_utils.py` module provides centralized path resolution
 - `find_project_root()`: Find project root directory
 - `get_training_data_file()` / `get_master_training_data_path()`: Get master training data file path
 - `get_weekly_training_file(week, season)`: Get weekly training file path with fallback search
+- `get_postseason_training_file(season)`: Get postseason training file path with fallback search
 - `get_weekly_enhanced_dir(week, season)`: Get canonical directory path for weekly enhanced data
 - `get_weekly_enhanced_file(week, file_type, season)`: Get weekly enhanced file path (features, games, metadata)
 - `get_model_file_path(model_name)`: Get model file path in `model_pack/`
@@ -240,4 +271,3 @@ If files are in wrong locations:
 - Add data versioning system
 - Implement automated validation scripts
 - Add CI/CD checks for file locations
-

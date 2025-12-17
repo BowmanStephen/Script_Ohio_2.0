@@ -40,7 +40,7 @@ class ModelMetadata:
     model_type: str  # 'regression' or 'classification'
     target_feature: str
     features_required: List[str]
-    performance_metrics: Dict[str, float]
+    performance_metrics: Dict[str, Any]
     training_date: str
     version: str
     description: str
@@ -755,10 +755,10 @@ class ModelExecutionEngine(BaseAgent):
                             continue
 
                         metadata = ModelMetadata(
-                            name=model_def['name'],
+                            name=str(model_def['name']),
                             file_path=str(model_def['file_path']),
-                            model_type=model_def['model_type'],
-                            target_feature=model_def['target_feature'],
+                            model_type=str(model_def['model_type']),
+                            target_feature=str(model_def['target_feature']),
                             features_required=features_required,
                             performance_metrics={
                                 'mae': 17.31 if model_def['model_type'] == 'regression' else None,
@@ -767,7 +767,7 @@ class ModelExecutionEngine(BaseAgent):
                             },
                             training_date='2025-11-01',
                             version='2025.1',
-                            description=model_def['description']
+                            description=str(model_def['description'])
                         )
 
                         self.models[model_def['name']] = metadata
@@ -1781,7 +1781,8 @@ class ModelExecutionEngine(BaseAgent):
             else:
                 models_to_check = self.models
 
-            health_results = {}
+            # Explicitly type as JSON-like dicts to avoid overly-narrow inference in ty.
+            health_results: Dict[str, Any] = {}
             overall_status = 'healthy'
             total_models = len(models_to_check)
             healthy_models = 0
@@ -1789,7 +1790,7 @@ class ModelExecutionEngine(BaseAgent):
             critical_models = 0
 
             for check_model_name, metadata in models_to_check.items():
-                model_health = {
+                model_health: Dict[str, Any] = {
                     'model_name': check_model_name,
                     'status': 'healthy',  # healthy, warning, critical
                     'checks': {},

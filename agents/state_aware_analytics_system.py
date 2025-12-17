@@ -82,17 +82,34 @@ class StateAwareAnalyticsSession:
         self.user_id = user_id
 
         # Try to restore existing session state
-        self.state = restore_session_state(session_id) or {
-            'user_id': user_id,
-            'session_id': session_id,
-            'created_at': datetime.now().isoformat(),
-            'last_activity': datetime.now().isoformat(),
-            'conversation_history': [],
-            'analysis_results': [],
-            'user_preferences': {},
-            'active_agents': [],
-            'workflow_state': {}
-        }
+        restored_state = restore_session_state(session_id)
+        self.state: Dict[str, Any]
+        if isinstance(restored_state, dict):
+            self.state = restored_state
+        else:
+            self.state = {
+                'user_id': user_id,
+                'session_id': session_id,
+                'created_at': datetime.now().isoformat(),
+                'last_activity': datetime.now().isoformat(),
+                'conversation_history': [],
+                'analysis_results': [],
+                'user_preferences': {},
+                'active_agents': [],
+                'workflow_state': {},
+            }
+
+        # Normalize restored state to expected container types.
+        if not isinstance(self.state.get('conversation_history'), list):
+            self.state['conversation_history'] = []
+        if not isinstance(self.state.get('analysis_results'), list):
+            self.state['analysis_results'] = []
+        if not isinstance(self.state.get('user_preferences'), dict):
+            self.state['user_preferences'] = {}
+        if not isinstance(self.state.get('active_agents'), list):
+            self.state['active_agents'] = []
+        if not isinstance(self.state.get('workflow_state'), dict):
+            self.state['workflow_state'] = {}
 
         # State change tracking
         self.last_state_save = time.time()
@@ -101,7 +118,7 @@ class StateAwareAnalyticsSession:
 
         logger.info(f"State-aware session initialized: {session_id}")
 
-    def add_conversation_turn(self, query: str, response: str, agent_id: str = None):
+    def add_conversation_turn(self, query: str, response: str, agent_id: Optional[str] = None):
         """Add a conversation turn with state persistence"""
 
         turn = {
@@ -122,7 +139,7 @@ class StateAwareAnalyticsSession:
 
         logger.debug(f"Added conversation turn: {turn['turn_number']} for session {self.session_id}")
 
-    def add_analysis_result(self, analysis_type: str, result: Dict[str, Any], agent_id: str = None):
+    def add_analysis_result(self, analysis_type: str, result: Dict[str, Any], agent_id: Optional[str] = None):
         """Add analysis result with state persistence"""
 
         analysis = {
@@ -143,12 +160,12 @@ class StateAwareAnalyticsSession:
 
         logger.info(f"Added analysis result: {analysis_type} for session {self.session_id}")
 
-    def get_conversation_history(self, limit: int = None) -> List[Dict[str, Any]]:
+    def get_conversation_history(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
         """Get conversation history with optional limit"""
         history = self.state['conversation_history']
         return history[-limit:] if limit else history
 
-    def get_analysis_results(self, analysis_type: str = None, limit: int = None) -> List[Dict[str, Any]]:
+    def get_analysis_results(self, analysis_type: Optional[str] = None, limit: Optional[int] = None) -> List[Dict[str, Any]]:
         """Get analysis results with optional filtering"""
         results = self.state['analysis_results']
 
@@ -169,7 +186,7 @@ class StateAwareAnalyticsSession:
         # Auto-save preferences
         self.save_state()
 
-    def register_active_agent(self, agent_id: str, agent_type: str = None):
+    def register_active_agent(self, agent_id: str, agent_type: Optional[str] = None):
         """Register an active agent in the session"""
         agent_info = {
             'agent_id': agent_id,
@@ -230,7 +247,8 @@ class StateAwareAnalyticsSession:
                 )
 
                 if rolled_back_state:
-                    self.state = rolled_back_state
+                    if isinstance(rolled_back_state, dict):
+                        self.state = rolled_back_state
                     logger.info(f"Session rolled back to: {previous_snapshot_id}")
                     return True
 
@@ -252,20 +270,39 @@ class StateAwareAgent:
         self.agent_type = agent_type
 
         # Try to restore existing agent state
-        self.state = restore_agent_state(agent_id) or {
-            'agent_id': agent_id,
-            'agent_type': agent_type,
-            'created_at': datetime.now().isoformat(),
-            'last_activity': datetime.now().isoformat(),
-            'analysis_history': [],
-            'knowledge_base': [],
-            'preferences': {},
-            'performance_metrics': {
+        restored_state = restore_agent_state(agent_id)
+        self.state: Dict[str, Any]
+        if isinstance(restored_state, dict):
+            self.state = restored_state
+        else:
+            self.state = {
+                'agent_id': agent_id,
+                'agent_type': agent_type,
+                'created_at': datetime.now().isoformat(),
+                'last_activity': datetime.now().isoformat(),
+                'analysis_history': [],
+                'knowledge_base': [],
+                'preferences': {},
+                'performance_metrics': {
+                    'total_analyses': 0,
+                    'successful_analyses': 0,
+                    'average_response_time': 0.0,
+                },
+            }
+
+        # Normalize restored state to expected container types.
+        if not isinstance(self.state.get('analysis_history'), list):
+            self.state['analysis_history'] = []
+        if not isinstance(self.state.get('knowledge_base'), list):
+            self.state['knowledge_base'] = []
+        if not isinstance(self.state.get('preferences'), dict):
+            self.state['preferences'] = {}
+        if not isinstance(self.state.get('performance_metrics'), dict):
+            self.state['performance_metrics'] = {
                 'total_analyses': 0,
                 'successful_analyses': 0,
-                'average_response_time': 0.0
+                'average_response_time': 0.0,
             }
-        }
 
         self.state_changes = 0
 
@@ -404,17 +441,30 @@ class StateAwareWorkflow:
         self.steps = steps
 
         # Try to restore existing workflow state
-        self.state = restore_workflow_state(workflow_id) or {
-            'workflow_id': workflow_id,
-            'workflow_type': workflow_type,
-            'steps': steps,
-            'current_step_index': 0,
-            'step_results': {},
-            'status': 'initialized',
-            'created_at': datetime.now().isoformat(),
-            'updated_at': datetime.now().isoformat(),
-            'error_log': []
-        }
+        restored_state = restore_workflow_state(workflow_id)
+        self.state: Dict[str, Any]
+        if isinstance(restored_state, dict):
+            self.state = restored_state
+        else:
+            self.state = {
+                'workflow_id': workflow_id,
+                'workflow_type': workflow_type,
+                'steps': steps,
+                'current_step_index': 0,
+                'step_results': {},
+                'status': 'initialized',
+                'created_at': datetime.now().isoformat(),
+                'updated_at': datetime.now().isoformat(),
+                'error_log': [],
+            }
+
+        # Normalize restored state to expected container types.
+        if not isinstance(self.state.get('steps'), list):
+            self.state['steps'] = list(steps)
+        if not isinstance(self.state.get('step_results'), dict):
+            self.state['step_results'] = {}
+        if not isinstance(self.state.get('error_log'), list):
+            self.state['error_log'] = []
 
         self.state_changes = 0
 
@@ -454,7 +504,7 @@ class StateAwareWorkflow:
         self.save_state()
         logger.info(f"Completed step: {current_step} in workflow: {self.workflow_id}")
 
-    def add_error(self, error_message: str, step_name: str = None):
+    def add_error(self, error_message: str, step_name: Optional[str] = None):
         """Add error to workflow error log"""
         error_entry = {
             'timestamp': datetime.now().isoformat(),

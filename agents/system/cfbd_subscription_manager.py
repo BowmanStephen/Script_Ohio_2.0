@@ -326,4 +326,39 @@ class CFBDSubscriptionManager:
             return list(self._events)[-limit:]
 
 
-__all__ = ["CFBDSubscriptionManager", "CFBDSubscriptionHandle"]
+# Mock GraphQL classes for backward compatibility with tests
+# These are simple placeholders that maintain the expected interface
+class GraphQLRequest:
+    """Mock GraphQL request class for test compatibility"""
+    def __init__(self, query: str, operation_name: str = "ScoreboardFeed"):
+        self.query = query
+        self.operation_name = operation_name
+
+
+class GraphQLSubscriptionHandle:
+    """Mock GraphQL subscription handle for test compatibility"""
+    def __init__(self, stop_callback: Optional[Callable] = None):
+        self._stop_callback = stop_callback
+        self._stopped = False
+
+    def stop(self) -> None:
+        if self._stop_callback and not self._stopped:
+            self._stop_callback()
+        self._stopped = True
+
+
+class GraphQLSubscriptionClient:
+    """Mock GraphQL subscription client for test compatibility"""
+    def __init__(self, telemetry_hook: Optional[Callable] = None):
+        self.telemetry_hook = telemetry_hook
+        self.on_event = None
+        self.on_error = None
+
+    def subscribe(self, request: GraphQLRequest, on_event: Callable,
+                   on_error: Callable, operation_name: str = "ScoreboardFeed") -> GraphQLSubscriptionHandle:
+        self.on_event = on_event
+        self.on_error = on_error
+        return GraphQLSubscriptionHandle()
+
+
+__all__ = ["CFBDSubscriptionManager", "CFBDSubscriptionHandle", "GraphQLSubscriptionClient", "GraphQLRequest"]

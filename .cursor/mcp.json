@@ -5,6 +5,7 @@
     },
     "github": {
       "command": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/.cursor/bin/github-mcp-server",
+      "args": ["stdio"],
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
       },

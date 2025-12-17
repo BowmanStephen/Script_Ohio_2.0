@@ -31,8 +31,8 @@ __author__ = "Claude Code Assistant"
 try:
     from .analytics_orchestrator import AnalyticsOrchestrator, AnalyticsRequest
 except Exception as exc:  # pylint: disable=broad-except
-    AnalyticsOrchestrator = None  # type: ignore
-    AnalyticsRequest = None  # type: ignore
+    AnalyticsOrchestrator = None
+    AnalyticsRequest = None
     _INIT_ERROR = exc
 else:
     _INIT_ERROR = None

@@ -10,6 +10,7 @@ import json
 import logging
 import hashlib
 import pickle
+import random
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -17,6 +18,15 @@ from typing import Any, Dict, List, Optional, Union, Callable
 
 import cfbd
 from cfbd.rest import ApiException
+
+from .errors import (
+    CFBDClientError,
+    CFBDAuthenticationError,
+    CFBDForbiddenError,
+    CFBDNotFoundError,
+    CFBDRateLimitError,
+    CFBDServerError,
+)
 
 from .cfbd_cache_manager import CFBDCacheManager, CFBDCacheConfig
 try:
@@ -88,9 +98,12 @@ class UnifiedCFBDClient:
     def _init_cfbd_client(self):
         """Initialize CFBD API client with proper authentication"""
         try:
+            # Clean API key - remove "Bearer " prefix if present (CFBD expects raw key)
+            clean_key = self.config.api_key.replace("Bearer ", "").strip() if self.config.api_key else None
+            
             # Configure CFBD client
             configuration = cfbd.Configuration()
-            configuration.access_token = self.config.api_key
+            configuration.access_token = clean_key
             configuration.host = self.config.host
             
             # Create API client
@@ -103,6 +116,10 @@ class UnifiedCFBDClient:
             self.ratings_api = cfbd.RatingsApi(self.api_client)
             self.betting_api = cfbd.BettingApi(self.api_client)
             self.plays_api = cfbd.PlaysApi(self.api_client)
+            self.drives_api = cfbd.DrivesApi(self.api_client)
+            self.players_api = cfbd.PlayersApi(self.api_client)
+            self.conferences_api = cfbd.ConferencesApi(self.api_client)
+            self.metrics_api = cfbd.MetricsApi(self.api_client)
             
         except Exception as e:
             logger.error(f"❌ Failed to initialize CFBD client: {e}")
@@ -134,6 +151,47 @@ class UnifiedCFBDClient:
         
         self.last_request_time = time.time()
     
+    def _parse_retry_after(self, exception: ApiException, attempt: int) -> float:
+        """
+        Parse Retry-After header from API exception.
+        
+        Args:
+            exception: ApiException with potential Retry-After header
+            attempt: Current retry attempt number
+            
+        Returns:
+            Wait time in seconds (uses Retry-After if present, otherwise exponential backoff)
+        """
+        # Try to get Retry-After header
+        retry_after = None
+        if hasattr(exception, 'headers') and exception.headers:
+            # Headers might be a dict or CaseInsensitiveDict
+            headers = exception.headers
+            if isinstance(headers, dict):
+                # Try case-insensitive lookup
+                for key, value in headers.items():
+                    if key.lower() == 'retry-after':
+                        retry_after = value
+                        break
+            elif hasattr(headers, 'get'):
+                retry_after = headers.get('Retry-After') or headers.get('retry-after')
+        
+        if retry_after:
+            try:
+                # Retry-After can be seconds (integer) or HTTP date
+                wait_time = float(retry_after)
+                # Cap at reasonable maximum (5 minutes)
+                wait_time = min(wait_time, 300)
+                logger.info(f"📋 Using Retry-After header: {wait_time}s")
+                return wait_time
+            except (ValueError, TypeError):
+                # If it's a date string, fall back to exponential backoff
+                logger.warning(f"⚠️ Could not parse Retry-After header: {retry_after}")
+        
+        # Fall back to bounded exponential backoff
+        wait_time = min(2 ** attempt + 1, 60)  # Cap at 60 seconds
+        return wait_time
+    
     def _safe_api_call(self, api_function, *args, **kwargs):
         """
         Make API call with comprehensive error handling and retry logic.
@@ -151,6 +209,10 @@ class UnifiedCFBDClient:
         self._rate_limit()
         
         # Retry logic with exponential backoff
+        # Only retry idempotent operations (GET/HEAD)
+        # GraphQL queries are effectively idempotent, but mutations are not
+        import random
+        
         for attempt in range(self.config.max_retries):
             try:
                 # Make API call
@@ -165,37 +227,55 @@ class UnifiedCFBDClient:
                 return result
                 
             except ApiException as e:
+                # Convert to CFBD error taxonomy
+                from .errors import convert_api_exception
+                cfbd_error = convert_api_exception(e)
+                
                 # Handle specific API errors
                 self.metrics.errors += 1
                 self.metrics.total_requests += 1
                 
-                if e.status == 429:  # Rate limit exceeded
-                    wait_time = 2 ** attempt + 1  # Exponential backoff
-                    logger.warning(f"⏱️ Rate limit hit, waiting {wait_time}s (attempt {attempt + 1})")
+                if isinstance(cfbd_error, CFBDRateLimitError):  # Rate limit exceeded (429)
+                    # Use Retry-After if available, otherwise exponential backoff
+                    wait_time = cfbd_error.retry_after if cfbd_error.retry_after else self._parse_retry_after(e, attempt)
+                    # Add jitter to prevent retry storms (random 0-20% of wait time)
+                    jitter = random.uniform(0, wait_time * 0.2)
+                    wait_time += jitter
+                    self.metrics.rate_limit_hits += 1
+                    logger.warning(f"⏱️ Rate limit hit, waiting {wait_time:.2f}s (attempt {attempt + 1}, jitter={jitter:.2f}s)")
                     time.sleep(wait_time)
                     continue
                     
-                elif e.status == 401:  # Authentication error
+                elif isinstance(cfbd_error, CFBDAuthenticationError):  # Authentication error (401)
                     logger.error("🔐 Authentication failed - check API key")
-                    raise ValueError("Invalid CFBD API key")
+                    raise cfbd_error
                     
-                elif e.status == 404:  # Not found
-                    logger.warning(f"🔍 Resource not found: {str(e)}")
+                elif isinstance(cfbd_error, CFBDForbiddenError):  # Forbidden (403)
+                    logger.error("🚫 Access forbidden - check API key permissions")
+                    raise cfbd_error
+                    
+                elif isinstance(cfbd_error, CFBDNotFoundError):  # Not found (404)
+                    logger.warning(f"🔍 Resource not found: {cfbd_error.message}")
                     return None
                     
-                elif e.status >= 500:  # Server error
+                elif isinstance(cfbd_error, CFBDServerError):  # Server error (5xx)
                     if attempt < self.config.max_retries - 1:
-                        wait_time = 2 ** attempt + 1
-                        logger.warning(f"🔄 Server error, retrying in {wait_time}s (attempt {attempt + 1})")
+                        # Bounded exponential backoff for 5xx errors with jitter
+                        wait_time = min(2 ** attempt + 1, 60)  # Cap at 60 seconds
+                        # Add jitter to prevent retry storms (random 0-20% of wait time)
+                        jitter = random.uniform(0, wait_time * 0.2)
+                        wait_time += jitter
+                        logger.warning(f"🔄 Server error, retrying in {wait_time:.2f}s (attempt {attempt + 1}, jitter={jitter:.2f}s)")
                         time.sleep(wait_time)
                         continue
                     else:
-                        logger.error(f"❌ Server error after {attempt + 1} attempts: {str(e)}")
-                        raise
+                        logger.error(f"❌ Server error after {attempt + 1} attempts: {cfbd_error.message}")
+                        raise cfbd_error
                         
                 else:
-                    logger.error(f"❌ API error: {str(e)}")
-                    raise
+                    # Other errors
+                    logger.error(f"❌ API error: {cfbd_error.message}")
+                    raise cfbd_error
                     
             except Exception as e:
                 self.metrics.errors += 1
@@ -204,6 +284,96 @@ class UnifiedCFBDClient:
                 raise
         
         return None
+    
+    def request(self, method: str, path: str, params: Optional[Dict[str, Any]] = None) -> Any:
+        """
+        Generic request method for CFBD API endpoints.
+        
+        This method provides a unified interface for making API requests with
+        automatic rate limiting, error handling, retries, and caching.
+        
+        Args:
+            method: HTTP method (GET, POST, etc.) - currently only GET supported
+            path: API endpoint path (e.g., "/games", "/drives", "/players")
+            params: Query parameters as dictionary
+            
+        Returns:
+            API response data (converted to list of dicts)
+            
+        Raises:
+            CFBDClientError: For API errors (converted to error taxonomy)
+            ValueError: For invalid method or path
+        """
+        if method.upper() != "GET":
+            raise ValueError(f"Unsupported HTTP method: {method}. Only GET is currently supported.")
+        
+        if not path.startswith("/"):
+            path = "/" + path
+        
+        params = params or {}
+        
+        # Map common endpoints to API methods
+        # This allows using the generic request() method while leveraging
+        # existing optimized methods when available
+        endpoint_lower = path.lower().strip("/")
+        
+        if endpoint_lower == "games":
+            return self.get_games(
+                year=params.get("year", params.get("season", 2025)),
+                week=params.get("week"),
+                season_type=params.get("seasonType", params.get("season_type", "regular")),
+                team=params.get("team"),
+            )
+        elif endpoint_lower == "ratings":
+            return self.get_ratings(
+                year=params.get("year", params.get("season", 2025)),
+                week=params.get("week"),
+            )
+        elif endpoint_lower == "lines":
+            return self.get_lines(
+                year=params.get("year", params.get("season", 2025)),
+                week=params.get("week", params.get("week_number")),
+            )
+        elif endpoint_lower == "team_talent" or endpoint_lower == "teams/talent":
+            return self.get_team_talent(
+                year=params.get("year", params.get("season", 2025)),
+            )
+        elif endpoint_lower == "stats" or endpoint_lower == "team_season_stats":
+            return self.get_stats(
+                year=params.get("year", params.get("season", 2025)),
+                team=params.get("team"),
+                category=params.get("category"),
+            )
+        elif endpoint_lower == "drives":
+            return self.get_drives(
+                year=params.get("year", params.get("season", 2025)),
+                week=params.get("week"),
+                season_type=params.get("seasonType", params.get("season_type", "regular")),
+                team=params.get("team"),
+                offense=params.get("offense"),
+                defense=params.get("defense"),
+                conference=params.get("conference"),
+            )
+        elif endpoint_lower == "players" or endpoint_lower == "player/season/stats":
+            return self.get_player_stats(
+                year=params.get("year", params.get("season", 2025)),
+                team=params.get("team"),
+                conference=params.get("conference"),
+                category=params.get("category"),
+            )
+        elif endpoint_lower == "conferences":
+            return self.get_conferences()
+        elif endpoint_lower == "advanced_season_stats" or endpoint_lower == "stats/advanced":
+            return self.get_advanced_stats(
+                year=params.get("year", params.get("season", 2025)),
+                team=params.get("team"),
+            )
+        else:
+            # For unmapped endpoints, use direct API client call
+            # This is a fallback for endpoints not yet explicitly supported
+            logger.warning(f"Using generic request for unmapped endpoint: {path}")
+            # For now, raise an error - can be extended later
+            raise ValueError(f"Endpoint {path} not yet supported. Use specific methods or request implementation.")
     
     def _get_cache_key(self, endpoint: str, params: Dict[str, Any]) -> str:
         """Generate cache key for API call"""
@@ -317,6 +487,71 @@ class UnifiedCFBDClient:
             params,
             lambda: self._to_dict_list(self.stats_api.get_team_season_stats(
                 year=year, team=team, category=category
+            )),
+            "stats"
+        )
+    
+    def get_drives(self, year: int, week: Optional[int] = None,
+                  season_type: str = "regular", team: Optional[str] = None,
+                  offense: Optional[str] = None, defense: Optional[str] = None,
+                  conference: Optional[str] = None) -> List[Dict]:
+        """Get drives data with caching"""
+        params = {
+            "year": year,
+            "week": week,
+            "seasonType": season_type,
+            "team": team,
+            "offense": offense,
+            "defense": defense,
+            "conference": conference,
+        }
+        return self._cached_fetch(
+            "drives",
+            params,
+            lambda: self._to_dict_list(self.drives_api.get_drives(
+                year=year,
+                week=week,
+                season_type=season_type,
+                team=team,
+                offense=offense,
+                defense=defense,
+                conference=conference,
+            )),
+            "stats"  # Drives are statistical data
+        )
+    
+    def get_player_stats(self, year: int, team: Optional[str] = None,
+                        conference: Optional[str] = None,
+                        category: Optional[str] = None) -> List[Dict]:
+        """Get player statistics with caching"""
+        params = {"year": year, "team": team, "conference": conference, "category": category}
+        return self._cached_fetch(
+            "player_stats",
+            params,
+            lambda: self._to_dict_list(self.players_api.get_player_season_stats(
+                year=year, team=team, conference=conference, category=category
+            )),
+            "stats"
+        )
+    
+    def get_conferences(self) -> List[Dict]:
+        """Get conference information with caching"""
+        params = {}
+        return self._cached_fetch(
+            "conferences",
+            params,
+            lambda: self._to_dict_list(self.conferences_api.get_conferences()),
+            "teams"  # Conferences are relatively stable like team data
+        )
+    
+    def get_advanced_stats(self, year: int, team: Optional[str] = None) -> List[Dict]:
+        """Get advanced season statistics with caching"""
+        params = {"year": year, "team": team}
+        return self._cached_fetch(
+            "advanced_stats",
+            params,
+            lambda: self._to_dict_list(self.stats_api.get_advanced_season_stats(
+                year=year, team=team
             )),
             "stats"
         )

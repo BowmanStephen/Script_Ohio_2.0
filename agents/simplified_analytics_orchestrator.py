@@ -14,7 +14,7 @@ import os
 import logging
 import time
 import uuid
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 from pathlib import Path
 
@@ -38,16 +38,15 @@ class AnalyticsRequest:
     query: str
     query_type: str
     parameters: Dict[str, Any]
-    context_hints: Dict[str, Any] = None
-    request_id: str = None
+    context_hints: Dict[str, Any] = field(default_factory=dict)
+    request_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     priority: int = 1
-    timestamp: float = None
+    timestamp: float = field(default_factory=time.time)
 
     def __post_init__(self):
-        if self.request_id is None:
+        # Defensive: callers may still pass empty/None in legacy code paths.
+        if not self.request_id:
             self.request_id = str(uuid.uuid4())
-        if self.timestamp is None:
-            self.timestamp = time.time()
         if self.context_hints is None:
             self.context_hints = {}
 
@@ -61,7 +60,7 @@ class AnalyticsResponse:
     visualizations: List[Dict[str, Any]]
     error_message: Optional[str] = None
     execution_time: float = 0.0
-    metadata: Dict[str, Any] = None
+    metadata: Optional[Dict[str, Any]] = None
 
 class SimplifiedAnalyticsOrchestrator:
     """
@@ -75,7 +74,7 @@ class SimplifiedAnalyticsOrchestrator:
     - No workflow automation
     """
     
-    def __init__(self, base_path: str = None):
+    def __init__(self, base_path: Optional[str] = None):
         """Initialize the simplified orchestrator"""
         self.base_path = base_path or os.getcwd()
         self.agent_factory = AgentFactory(base_path)

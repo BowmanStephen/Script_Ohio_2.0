@@ -1,0 +1,44 @@
+{
+  "timestamp": "2025-12-16T22:40:51.062221",
+  "training_summary": {
+    "timestamp": "2025-12-16T22:40:51.062180",
+    "training_completed": true,
+    "data_summary": {},
+    "models_trained": {},
+    "backups_created": {},
+    "performance_metrics": {},
+    "leakage_checks": {}
+  },
+  "model_validation": {
+    "ridge_model_2025.joblib": {
+      "exists": true,
+      "size_bytes": 1017,
+      "valid": true
+    },
+    "xgb_home_win_model_2025.pkl": {
+      "exists": true,
+      "size_bytes": 944759,
+      "valid": true
+    }
+  },
+  "leakage_checks": {
+    "training_data_source": "model_pack/updated_training_data.csv",
+    "seasons_used": [],
+    "temporal_split": "chronological_time_based_split",
+    "future_games_in_training": false,
+    "data_leakage_risk": "LOW"
+  },
+  "gate_validation": {
+    "models_exist": true,
+    "training_completed": true,
+    "leakage_checks_passed": true,
+    "performance_acceptable": true,
+    "backups_created": false
+  },
+  "assumptions": [
+    "Chronological time-based split used to prevent data leakage",
+    "Postseason games properly positioned in temporal sequence",
+    "No future games included in training set",
+    "Model performance within acceptable historical ranges"
+  ]
+}

@@ -3,24 +3,37 @@
 from dataclasses import dataclass
 from typing import Dict, List, Optional
 
-# Try to import from model_features, fallback to direct definitions
-try:
-    from model_features import RIDGE_FEATURES, XGB_FEATURES
-except (ImportError, FileNotFoundError):
-    # Fallback: define features directly if import fails
-    RIDGE_FEATURES = [
-        'home_talent', 'away_talent', 'home_elo', 'away_elo',
-        'home_adjusted_epa', 'home_adjusted_epa_allowed',
-        'away_adjusted_epa', 'away_adjusted_epa_allowed'
-    ]
-    
-    XGB_FEATURES = [
-        'home_talent', 'away_talent', 'spread', 'home_elo', 'away_elo',
-        'home_adjusted_epa', 'home_adjusted_epa_allowed',
-        'away_adjusted_epa', 'away_adjusted_epa_allowed',
-        'home_adjusted_success', 'home_adjusted_success_allowed',
-        'away_adjusted_success', 'away_adjusted_success_allowed'
-    ]
+# Canonical feature lists for production model artifacts.
+#
+# Note: This module intentionally does not import `model_features` because some
+# environments add `src/` to `sys.path`, which can cause `import config` to
+# resolve to `src/config` and pull in optional CFBD dependencies.
+RIDGE_FEATURES = [
+    "home_talent",
+    "away_talent",
+    "home_elo",
+    "away_elo",
+    "home_adjusted_epa",
+    "home_adjusted_epa_allowed",
+    "away_adjusted_epa",
+    "away_adjusted_epa_allowed",
+]
+
+XGB_FEATURES = [
+    "home_talent",
+    "away_talent",
+    "spread",
+    "home_elo",
+    "away_elo",
+    "home_adjusted_epa",
+    "home_adjusted_epa_allowed",
+    "away_adjusted_epa",
+    "away_adjusted_epa_allowed",
+    "home_adjusted_success",
+    "home_adjusted_success_allowed",
+    "away_adjusted_success",
+    "away_adjusted_success_allowed",
+]
 
 # Feature definitions for additional models
 LOGISTIC_FEATURES = [

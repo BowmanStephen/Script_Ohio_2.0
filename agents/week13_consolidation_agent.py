@@ -413,7 +413,8 @@ class Week13ConsolidationAgent(BaseAgent):
             discovery_result = self._discover_week13_assets({}, user_context)
             assets = [Week13Asset(**asset) for asset in discovery_result['data']['discovered_assets']]
 
-        quality_report = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        quality_report: Dict[str, Any] = {
             'total_assets': len(assets),
             'quality_distribution': {'high': 0, 'medium': 0, 'low': 0},
             'quality_issues': [],
@@ -469,7 +470,8 @@ class Week13ConsolidationAgent(BaseAgent):
             assets = [Week13Asset(**asset) for asset in discovery_result['data']['discovered_assets']]
 
         # Organize by multiple dimensions
-        organization = {
+        # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
+        organization: Dict[str, Any] = {
             'by_type': {},
             'by_quality': {'high': [], 'medium': [], 'low': []},
             'by_importance': {'critical': [], 'important': [], 'supplementary': []},
@@ -750,11 +752,16 @@ if __name__ == "__main__":
 
     print("✅ Week 13 Consolidation Agent Test Results:")
     print(f"Status: {result.status}")
-    if result.status.value == 'success':
-        summary = result.result['summary']
-        print(f"Total Assets: {summary['total_assets']}")
-        print(f"Processing Time: {summary['processing_time']:.2f}s")
-        print(f"Output File: {result.result['output_file']}")
+    if result.status.value == 'success' and isinstance(result.result, dict):
+        summary = result.result.get('summary', {})
+        if isinstance(summary, dict):
+            print(f"Total Assets: {summary.get('total_assets')}")
+            processing_time = summary.get('processing_time', 0.0)
+            try:
+                print(f"Processing Time: {float(processing_time):.2f}s")
+            except Exception:
+                print(f"Processing Time: {processing_time}")
+        print(f"Output File: {result.result.get('output_file')}")
     else:
         print(f"Error: {result.error_message}")
 

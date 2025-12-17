@@ -22,7 +22,9 @@ fastai>=2.7.0; python_version >= "3.8"
 shap>=0.42.0
 
 # Agent System Framework
-pydantic>=2.4.0
+# Note: pydantic v1 required for cfbd compatibility (cfbd requires pydantic<2,>=1.10.5)
+# Pydantic is not directly used in codebase (uses dataclasses instead), but cfbd depends on it
+pydantic>=1.10.5,<2
 
 # Optional: System Monitoring (graceful fallback if not installed)
 psutil>=5.9.0

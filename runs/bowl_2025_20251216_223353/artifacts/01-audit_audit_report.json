@@ -1,0 +1,88 @@
+{
+  "run_id": "bowl_2025_20251216_223353",
+  "timestamp": "2025-12-16T22:34:00",
+  "phase": 1,
+  "phase_name": "Data Audit Specialist Agent",
+  "data_audit": {
+    "master_training_data": {
+      "rows": 6139,
+      "columns": 86,
+      "season_range": [2016, 2025],
+      "week_range": [1, 16],
+      "postseason_games": 2,
+      "null_values": 44933,
+      "null_percentage": 7.3
+    },
+    "column_structure": {
+      "game_id_column": "id",
+      "score_columns": ["home_points", "away_points"],
+      "team_columns": ["home_team", "away_team"],
+      "temporal_columns": ["season", "week", "start_date"],
+      "derived_win_column_needed": true,
+      "notes": "Uses home_points/away_points instead of home_score/away_score"
+    },
+    "data_quality": {
+      "duplicate_rows": 0,
+      "missing_required_columns": [],
+      "column_mapping_understood": true,
+      "schema_consistent": true
+    }
+  },
+  "model_status": {
+    "ridge_model": {
+      "file": "model_pack/ridge_model_2025.joblib",
+      "present": true
+    },
+    "xgb_model": {
+      "file": "model_pack/xgb_home_win_model_2025.pkl",
+      "present": true
+    },
+    "fastai_model": {
+      "file": "model_pack/fastai_home_win_model_2025.pkl",
+      "present": true
+    },
+    "retraining_needed": true,
+    "models_older_than_data": true
+  },
+  "prediction_files": {
+    "ml_predictions": {
+      "file": "predictions/bowls_2025_predictions_ml.json",
+      "present": true
+    },
+    "massey_predictions": {
+      "file": "predictions/bowls_2025_predictions.json",
+      "present": true
+    },
+    "simple_predictions": {
+      "file": "predictions/bowls_2025_predictions_simple.json",
+      "present": true
+    }
+  },
+  "dry_run_sync": {
+    "completed": true,
+    "log_file": "runs/bowl_2025_20251216_223353/01-audit/sync_dry_run.log",
+    "training_data_status": "Current",
+    "weeks_covered": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+    "latest_week": 16
+  },
+  "gate_1_status": "PASSED",
+  "gate_1_criteria": {
+    "duplicate_rows_zero": true,
+    "required_columns_present": true,
+    "no_schema_regressions": true,
+    "models_present": true
+  },
+  "risk_assessment": {
+    "data_leakage_risk": "LOW",
+    "data_quality_risk": "LOW",
+    "schema_consistency_risk": "LOW",
+    "model_freshness_risk": "MEDIUM"
+  },
+  "proceed_to_phase_2": true,
+  "recommendations": [
+    "Use correct column names (home_points/away_points) in subsequent phases",
+    "Plan model retraining in Phase 5",
+    "Derive home_win column: home_points > away_points",
+    "High null count expected for advanced EPA features"
+  ]
+}

@@ -558,7 +558,7 @@ class InsightGeneratorAgent(BaseAgent):
                 "user_role": user_context.get("detected_role", "analyst"),
             }
 
-    def _fetch_talent_via_rest(self, parameters: Dict[str, Any]) -> Optional[pd.DataFrame]:
+    def _fetch_talent_via_rest(self, parameters: Dict[str, Any]) -> pd.DataFrame:
         """Fetch talent data using CFBD REST API"""
 
         try:
@@ -575,7 +575,7 @@ class InsightGeneratorAgent(BaseAgent):
             logger.warning(f"REST API talent fetch failed: {e}")
             return pd.DataFrame()
 
-    def _fetch_recruiting_via_rest(self, parameters: Dict[str, Any]) -> Optional[pd.DataFrame]:
+    def _fetch_recruiting_via_rest(self, parameters: Dict[str, Any]) -> pd.DataFrame:
         """Fetch recruiting data using CFBD REST API"""
 
         try:
@@ -605,7 +605,8 @@ class InsightGeneratorAgent(BaseAgent):
                 logger.warning(f"Failed to load cached talent data: {e}")
 
         # Return empty DataFrame with expected structure
-        return pd.DataFrame(columns=['team', 'conference', 'talent', 'year'])
+        columns: list[str] = ['team', 'conference', 'talent', 'year']
+        return pd.DataFrame(columns=pd.Index(columns))
 
     def _load_cached_recruiting_data(self) -> pd.DataFrame:
         """Load cached recruiting data when API is unavailable"""
@@ -619,7 +620,8 @@ class InsightGeneratorAgent(BaseAgent):
                 logger.warning(f"Failed to load cached recruiting data: {e}")
 
         # Return empty DataFrame with expected structure
-        return pd.DataFrame(columns=['name', 'position', 'stars', 'rating', 'overall_rank', 'college'])
+        columns: list[str] = ['name', 'position', 'stars', 'rating', 'overall_rank', 'college']
+        return pd.DataFrame(columns=pd.Index(columns))
 
     def _analyze_historical_trends(self, talent_data: pd.DataFrame,
                                  recruiting_data: pd.DataFrame) -> Dict[str, Any]:

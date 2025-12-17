@@ -1,0 +1,653 @@
+{
+  "generated_at": "2025-12-16T21:49:57.246867Z",
+  "season": 2025,
+  "model_type": "ml_ensemble",
+  "git": {
+    "sha": "6dfb66f2fc1b56c86b89c2c9826b549dc96ce756",
+    "branch": "fix/cfbd-snapshots-bowls-mvp",
+    "dirty": true,
+    "short_sha": "6dfb66f2"
+  },
+  "model": {
+    "name": "Ridge + XGBoost Ensemble (ML)",
+    "ridge_model": "ridge_model_2025.joblib",
+    "xgb_model": "xgb_home_win_model_2025.pkl",
+    "ridge_version": "2025-12-16T21:08:38.403657",
+    "xgb_version": "2025-12-16T21:08:38.999074"
+  },
+  "data": {
+    "source": "training_data_2025_postseason.csv",
+    "version": "2025-12-16T20:56:02.411494",
+    "include_incomplete": true
+  },
+  "diagnostics": {
+    "margin_distribution": {
+      "count": 77,
+      "min": 2.3432622047987723,
+      "max": 3.6336138202390127,
+      "mean": 2.774207417551209,
+      "std": 0.23958292497691056,
+      "range": 1.2903516154402404
+    },
+    "total_games": 77,
+    "predictions_generated": "2025-12-16T21:49:57.246900Z"
+  },
+  "games": [
+    {
+      "id": 401778123,
+      "date": "2025-12-13 17:00:00+00:00",
+      "home_team": "Prairie View A&M",
+      "away_team": "South Carolina State",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401778302,
+      "date": "2025-12-14 01:00:00+00:00",
+      "home_team": "Washington",
+      "away_team": "Boise State",
+      "home_win_prob": 0.8042024374008179,
+      "predicted_margin": 3.128842232858092
+    },
+    {
+      "id": 401778303,
+      "date": "2025-12-17 02:00:00+00:00",
+      "home_team": "Jacksonville State",
+      "away_team": "Troy",
+      "home_win_prob": 0.5491642951965332,
+      "predicted_margin": 2.649997149198385
+    },
+    {
+      "id": 401778304,
+      "date": "2025-12-17 22:00:00+00:00",
+      "home_team": "South Florida",
+      "away_team": "Old Dominion",
+      "home_win_prob": 0.5635185241699219,
+      "predicted_margin": 3.3959001609954598
+    },
+    {
+      "id": 401778305,
+      "date": "2025-12-18 01:30:00+00:00",
+      "home_team": "Delaware",
+      "away_team": "Louisiana",
+      "home_win_prob": 0.4659249186515808,
+      "predicted_margin": 2.4779407033043537
+    },
+    {
+      "id": 401838053,
+      "date": "2025-12-19 02:00:00+00:00",
+      "home_team": "Arkansas State",
+      "away_team": "Missouri State",
+      "home_win_prob": 0.5764081478118896,
+      "predicted_margin": 2.3432622047987723
+    },
+    {
+      "id": 401778306,
+      "date": "2025-12-19 16:00:00+00:00",
+      "home_team": "Western Michigan",
+      "away_team": "Kennesaw State",
+      "home_win_prob": 0.8404970765113831,
+      "predicted_margin": 2.694151593147745
+    },
+    {
+      "id": 401778307,
+      "date": "2025-12-19 19:30:00+00:00",
+      "home_team": "NC State",
+      "away_team": "Memphis",
+      "home_win_prob": 0.6267053484916687,
+      "predicted_margin": 2.8675661362303835
+    },
+    {
+      "id": 401779840,
+      "date": "2025-12-20 01:00:00+00:00",
+      "home_team": "Oklahoma",
+      "away_team": "Alabama",
+      "home_win_prob": 0.7906408905982971,
+      "predicted_margin": 3.1350391774167976
+    },
+    {
+      "id": 401779841,
+      "date": "2025-12-20 17:00:00+00:00",
+      "home_team": "Texas A&M",
+      "away_team": "Miami",
+      "home_win_prob": 0.7745828628540039,
+      "predicted_margin": 3.22194111160122
+    },
+    {
+      "id": 401840097,
+      "date": "2025-12-20 18:00:00+00:00",
+      "home_team": "Wisconsin-River Falls",
+      "away_team": "Johns Hopkins University",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401779842,
+      "date": "2025-12-20 20:30:00+00:00",
+      "home_team": "Ole Miss",
+      "away_team": "Tulane",
+      "home_win_prob": 0.765876829624176,
+      "predicted_margin": 3.118359980064411
+    },
+    {
+      "id": 401840095,
+      "date": "2025-12-20 21:00:00+00:00",
+      "home_team": "Ferris State",
+      "away_team": "Harding University",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401833989,
+      "date": "2025-12-20 21:00:00+00:00",
+      "home_team": "Montana State",
+      "away_team": "Montana",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401840096,
+      "date": "2025-12-20 21:30:00+00:00",
+      "home_team": "North Central College",
+      "away_team": "John Carroll University",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401779843,
+      "date": "2025-12-21 00:30:00+00:00",
+      "home_team": "Oregon",
+      "away_team": "James Madison",
+      "home_win_prob": 0.5172502398490906,
+      "predicted_margin": 3.6336138202390127
+    },
+    {
+      "id": 401833990,
+      "date": "2025-12-21 00:30:00+00:00",
+      "home_team": "Villanova",
+      "away_team": "Illinois State",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401778308,
+      "date": "2025-12-22 19:00:00+00:00",
+      "home_team": "Utah State",
+      "away_team": "Washington State",
+      "home_win_prob": 0.5125924348831177,
+      "predicted_margin": 2.7082649830279735
+    },
+    {
+      "id": 401778309,
+      "date": "2025-12-23 19:00:00+00:00",
+      "home_team": "Louisville",
+      "away_team": "Toledo",
+      "home_win_prob": 0.47974729537963867,
+      "predicted_margin": 3.28243564112651
+    },
+    {
+      "id": 401778310,
+      "date": "2025-12-23 22:30:00+00:00",
+      "home_team": "Southern Miss",
+      "away_team": "Western Kentucky",
+      "home_win_prob": 0.6720044016838074,
+      "predicted_margin": 2.845434053695804
+    },
+    {
+      "id": 401778311,
+      "date": "2025-12-24 02:00:00+00:00",
+      "home_team": "Ohio",
+      "away_team": "UNLV",
+      "home_win_prob": 0.621322751045227,
+      "predicted_margin": 2.9205970752547663
+    },
+    {
+      "id": 401778312,
+      "date": "2025-12-25 01:00:00+00:00",
+      "home_team": "Hawai'i",
+      "away_team": "California",
+      "home_win_prob": 0.5545165538787842,
+      "predicted_margin": 2.5940784626774285
+    },
+    {
+      "id": 401778313,
+      "date": "2025-12-26 18:00:00+00:00",
+      "home_team": "Northwestern",
+      "away_team": "Central Michigan",
+      "home_win_prob": 0.5213742852210999,
+      "predicted_margin": 2.6922988066606393
+    },
+    {
+      "id": 401778314,
+      "date": "2025-12-26 21:30:00+00:00",
+      "home_team": "Minnesota",
+      "away_team": "New Mexico",
+      "home_win_prob": 0.5480528473854065,
+      "predicted_margin": 2.647253456114653
+    },
+    {
+      "id": 401778315,
+      "date": "2025-12-27 01:00:00+00:00",
+      "home_team": "UTSA",
+      "away_team": "Florida International",
+      "home_win_prob": 0.6594730615615845,
+      "predicted_margin": 2.7703086969776525
+    },
+    {
+      "id": 401778316,
+      "date": "2025-12-27 16:00:00+00:00",
+      "home_team": "East Carolina",
+      "away_team": "Pittsburgh",
+      "home_win_prob": 0.5833075046539307,
+      "predicted_margin": 3.056365571523535
+    },
+    {
+      "id": 401778317,
+      "date": "2025-12-27 17:00:00+00:00",
+      "home_team": "Clemson",
+      "away_team": "Penn State",
+      "home_win_prob": 0.6801546812057495,
+      "predicted_margin": 2.9942514350972944
+    },
+    {
+      "id": 401778318,
+      "date": "2025-12-27 19:15:00+00:00",
+      "home_team": "Army",
+      "away_team": "UConn",
+      "home_win_prob": 0.5439112782478333,
+      "predicted_margin": 2.822759893269086
+    },
+    {
+      "id": 401778319,
+      "date": "2025-12-27 20:30:00+00:00",
+      "home_team": "BYU",
+      "away_team": "Georgia Tech",
+      "home_win_prob": 0.8401201963424683,
+      "predicted_margin": 3.0377947150040914
+    },
+    {
+      "id": 401778320,
+      "date": "2025-12-27 21:30:00+00:00",
+      "home_team": "Fresno State",
+      "away_team": "Miami (OH)",
+      "home_win_prob": 0.6625158190727234,
+      "predicted_margin": 2.698903735029962
+    },
+    {
+      "id": 401778321,
+      "date": "2025-12-27 22:45:00+00:00",
+      "home_team": "San Diego State",
+      "away_team": "North Texas",
+      "home_win_prob": 0.5846264958381653,
+      "predicted_margin": 3.198874615552641
+    },
+    {
+      "id": 401778322,
+      "date": "2025-12-28 00:30:00+00:00",
+      "home_team": "Missouri",
+      "away_team": "Virginia",
+      "home_win_prob": 0.31149113178253174,
+      "predicted_margin": 3.13903553236208
+    },
+    {
+      "id": 401778323,
+      "date": "2025-12-28 02:15:00+00:00",
+      "home_team": "Houston",
+      "away_team": "LSU",
+      "home_win_prob": 0.5478593707084656,
+      "predicted_margin": 2.6539401880420153
+    },
+    {
+      "id": 401778324,
+      "date": "2025-12-29 19:00:00+00:00",
+      "home_team": "App State",
+      "away_team": "Georgia Southern",
+      "home_win_prob": 0.5587775707244873,
+      "predicted_margin": 2.384933296265195
+    },
+    {
+      "id": 401778325,
+      "date": "2025-12-30 19:00:00+00:00",
+      "home_team": "Louisiana Tech",
+      "away_team": "Coastal Carolina",
+      "home_win_prob": 0.579487681388855,
+      "predicted_margin": 2.5670321191310475
+    },
+    {
+      "id": 401778326,
+      "date": "2025-12-30 22:30:00+00:00",
+      "home_team": "Illinois",
+      "away_team": "Tennessee",
+      "home_win_prob": 0.5913106799125671,
+      "predicted_margin": 2.9512008695173364
+    },
+    {
+      "id": 401778327,
+      "date": "2025-12-31 02:00:00+00:00",
+      "home_team": "TCU",
+      "away_team": "USC",
+      "home_win_prob": 0.7885872721672058,
+      "predicted_margin": 3.0669742164764306
+    },
+    {
+      "id": 401778328,
+      "date": "2025-12-31 17:00:00+00:00",
+      "home_team": "Vanderbilt",
+      "away_team": "Iowa",
+      "home_win_prob": 0.5594474077224731,
+      "predicted_margin": 3.2016890565482425
+    },
+    {
+      "id": 401778329,
+      "date": "2025-12-31 19:00:00+00:00",
+      "home_team": "Duke",
+      "away_team": "Arizona State",
+      "home_win_prob": 0.38110122084617615,
+      "predicted_margin": 2.74143646461297
+    },
+    {
+      "id": 401778330,
+      "date": "2025-12-31 20:00:00+00:00",
+      "home_team": "Texas",
+      "away_team": "Michigan",
+      "home_win_prob": 0.7548617720603943,
+      "predicted_margin": 2.927865123695433
+    },
+    {
+      "id": 401778331,
+      "date": "2025-12-31 20:30:00+00:00",
+      "home_team": "Utah",
+      "away_team": "Nebraska",
+      "home_win_prob": 0.6344253420829773,
+      "predicted_margin": 3.1136540437041775
+    },
+    {
+      "id": 401778332,
+      "date": "2026-01-02 18:00:00+00:00",
+      "home_team": "Texas State",
+      "away_team": "Rice",
+      "home_win_prob": 0.5205951929092407,
+      "predicted_margin": 2.5707668983899206
+    },
+    {
+      "id": 401778333,
+      "date": "2026-01-02 21:30:00+00:00",
+      "home_team": "Cincinnati",
+      "away_team": "Navy",
+      "home_win_prob": 0.7980442047119141,
+      "predicted_margin": 2.982635911892395
+    },
+    {
+      "id": 401831583,
+      "date": "2026-01-03 01:00:00+00:00",
+      "home_team": "SMU",
+      "away_team": "Arizona",
+      "home_win_prob": 0.6732645034790039,
+      "predicted_margin": 3.1804219221678487
+    },
+    {
+      "id": 401778334,
+      "date": "2026-01-03 01:00:00+00:00",
+      "home_team": "Mississippi State",
+      "away_team": "Wake Forest",
+      "home_win_prob": 0.4634658694267273,
+      "predicted_margin": 2.760498432120264
+    },
+    {
+      "id": 401834618,
+      "date": "2025-11-22 17:00:00+00:00",
+      "home_team": "Framingham State",
+      "away_team": "Lagrange College",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834615,
+      "date": "2025-11-22 17:00:00+00:00",
+      "home_team": "Muhlenberg",
+      "away_team": "Union (NY)",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834635,
+      "date": "2025-11-22 17:00:00+00:00",
+      "home_team": "Kutztown University",
+      "away_team": "Bentley",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834624,
+      "date": "2025-11-22 17:00:00+00:00",
+      "home_team": "Springfield",
+      "away_team": "Cortland",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834619,
+      "date": "2025-11-22 17:00:00+00:00",
+      "home_team": "Hanover College",
+      "away_team": "Grove City College",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834623,
+      "date": "2025-11-22 17:00:00+00:00",
+      "home_team": "Susquehanna",
+      "away_team": "Washington & Jefferson",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834637,
+      "date": "2025-11-22 18:00:00+00:00",
+      "home_team": "Johnson C Smith",
+      "away_team": "Frostburg State",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834696,
+      "date": "2025-11-22 18:00:00+00:00",
+      "home_team": "Findlay",
+      "away_team": "Minnesota State Mankato",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834639,
+      "date": "2025-11-22 18:00:00+00:00",
+      "home_team": "Albany State GA",
+      "away_team": "Valdosta State",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834636,
+      "date": "2025-11-22 18:00:00+00:00",
+      "home_team": "Indiana-Pennsylvania",
+      "away_team": "Assumption",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834642,
+      "date": "2025-11-22 18:00:00+00:00",
+      "home_team": "Newberry",
+      "away_team": "Kentucky State",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834621,
+      "date": "2025-11-22 18:00:00+00:00",
+      "home_team": "Wheaton",
+      "away_team": "Crown College",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834675,
+      "date": "2025-11-22 18:00:00+00:00",
+      "home_team": "Ferris State",
+      "away_team": "Northwood (MI)",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834620,
+      "date": "2025-11-22 18:00:00+00:00",
+      "home_team": "Concordia-Wisconsin",
+      "away_team": "Coe College",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834695,
+      "date": "2025-11-22 18:00:00+00:00",
+      "home_team": "Ashland",
+      "away_team": "Minnesota Duluth",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834638,
+      "date": "2025-11-22 18:00:00+00:00",
+      "home_team": "Virginia Union",
+      "away_team": "PennWest California",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834715,
+      "date": "2025-11-22 19:00:00+00:00",
+      "home_team": "Harding University",
+      "away_team": "Northwest Missouri St",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834655,
+      "date": "2025-11-22 19:00:00+00:00",
+      "home_team": "Indianapolis",
+      "away_team": "Truman State",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834640,
+      "date": "2025-11-22 19:00:00+00:00",
+      "home_team": "Wingate",
+      "away_team": "Benedict College",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834716,
+      "date": "2025-11-22 19:00:00+00:00",
+      "home_team": "Pittsburg St",
+      "away_team": "Chadron St",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834641,
+      "date": "2025-11-22 19:00:00+00:00",
+      "home_team": "West Florida",
+      "away_team": "North Greenville",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834718,
+      "date": "2025-11-22 20:00:00+00:00",
+      "home_team": "CSU Pueblo",
+      "away_team": "UT Permian Basin",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834622,
+      "date": "2025-11-22 20:00:00+00:00",
+      "home_team": "Whitworth",
+      "away_team": "Chapman",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834717,
+      "date": "2025-11-22 21:00:00+00:00",
+      "home_team": "Central Washington",
+      "away_team": "Western Colorado",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834625,
+      "date": "2025-11-29 17:00:00+00:00",
+      "home_team": "Hope College",
+      "away_team": "Wisconsin-Lacrosse",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834629,
+      "date": "2025-11-29 17:00:00+00:00",
+      "home_team": "Franklin & Marshall",
+      "away_team": "Eastern University",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834630,
+      "date": "2025-11-29 17:00:00+00:00",
+      "home_team": "Salisbury",
+      "away_team": "Endicott College",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834616,
+      "date": "2025-11-29 17:00:00+00:00",
+      "home_team": "John Carroll University",
+      "away_team": "Randolph-Macon",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834628,
+      "date": "2025-11-29 18:00:00+00:00",
+      "home_team": "Saint John's (MN)",
+      "away_team": "Monmouth (IL)",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834626,
+      "date": "2025-11-29 18:00:00+00:00",
+      "home_team": "Wisconsin-Platteville",
+      "away_team": "Alma",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834617,
+      "date": "2025-11-29 18:00:00+00:00",
+      "home_team": "Trinity University TX",
+      "away_team": "Hardin-Simmons",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    },
+    {
+      "id": 401834627,
+      "date": "2025-11-29 18:00:00+00:00",
+      "home_team": "Wisconsin-Whitewater",
+      "away_team": "Depauw",
+      "home_win_prob": 0.5742088556289673,
+      "predicted_margin": 2.6430434648855545
+    }
+  ]
+}

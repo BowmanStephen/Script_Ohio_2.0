@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-19T20:58:14.316456",
+  "timestamp": "2025-12-16T20:48:47.512798",
   "training_data_file": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/updated_training_data.csv",
   "weekly_training_dir": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/data/weekly_training",
   "status": "complete",
@@ -7,164 +7,164 @@
     "week_1": {
       "week": 1,
       "present_in_training_data": true,
-      "games_count": 138,
-      "weekly_file_exists": true,
+      "games_count": 139,
+      "weekly_file_exists": false,
       "has_outcomes": true,
       "missing_features": [],
-      "data_quality_issues": [],
-      "games_with_outcomes": 138,
-      "weekly_file_games": 77,
-      "weekly_file_columns": 86
+      "data_quality_issues": [
+        "Weekly file missing but data present in training data"
+      ],
+      "games_with_outcomes": 139
     },
     "week_2": {
       "week": 2,
       "present_in_training_data": true,
       "games_count": 130,
-      "weekly_file_exists": true,
+      "weekly_file_exists": false,
       "has_outcomes": true,
       "missing_features": [],
-      "data_quality_issues": [],
-      "games_with_outcomes": 130,
-      "weekly_file_games": 71,
-      "weekly_file_columns": 86
+      "data_quality_issues": [
+        "Weekly file missing but data present in training data"
+      ],
+      "games_with_outcomes": 130
     },
     "week_3": {
       "week": 3,
       "present_in_training_data": true,
       "games_count": 124,
-      "weekly_file_exists": true,
+      "weekly_file_exists": false,
       "has_outcomes": true,
       "missing_features": [],
-      "data_quality_issues": [],
-      "games_with_outcomes": 124,
-      "weekly_file_games": 57,
-      "weekly_file_columns": 86
+      "data_quality_issues": [
+        "Weekly file missing but data present in training data"
+      ],
+      "games_with_outcomes": 124
     },
     "week_4": {
       "week": 4,
       "present_in_training_data": true,
       "games_count": 114,
-      "weekly_file_exists": true,
+      "weekly_file_exists": false,
       "has_outcomes": true,
       "missing_features": [],
-      "data_quality_issues": [],
-      "games_with_outcomes": 114,
-      "weekly_file_games": 51,
-      "weekly_file_columns": 86
+      "data_quality_issues": [
+        "Weekly file missing but data present in training data"
+      ],
+      "games_with_outcomes": 114
     },
     "week_5": {
       "week": 5,
       "present_in_training_data": true,
       "games_count": 106,
-      "weekly_file_exists": true,
+      "weekly_file_exists": false,
       "has_outcomes": true,
       "missing_features": [],
-      "data_quality_issues": [],
-      "games_with_outcomes": 106,
-      "weekly_file_games": 40,
-      "weekly_file_columns": 86
+      "data_quality_issues": [
+        "Weekly file missing but data present in training data"
+      ],
+      "games_with_outcomes": 106
     },
     "week_6": {
       "week": 6,
       "present_in_training_data": true,
       "games_count": 107,
-      "weekly_file_exists": true,
+      "weekly_file_exists": false,
       "has_outcomes": true,
       "missing_features": [],
-      "data_quality_issues": [],
-      "games_with_outcomes": 107,
-      "weekly_file_games": 38,
-      "weekly_file_columns": 86
+      "data_quality_issues": [
+        "Weekly file missing but data present in training data"
+      ],
+      "games_with_outcomes": 107
     },
     "week_7": {
       "week": 7,
       "present_in_training_data": true,
       "games_count": 112,
-      "weekly_file_exists": true,
+      "weekly_file_exists": false,
       "has_outcomes": true,
       "missing_features": [],
-      "data_quality_issues": [],
-      "games_with_outcomes": 112,
-      "weekly_file_games": 41,
-      "weekly_file_columns": 86
+      "data_quality_issues": [
+        "Weekly file missing but data present in training data"
+      ],
+      "games_with_outcomes": 112
     },
     "week_8": {
       "week": 8,
       "present_in_training_data": true,
       "games_count": 111,
-      "weekly_file_exists": true,
+      "weekly_file_exists": false,
       "has_outcomes": true,
       "missing_features": [],
-      "data_quality_issues": [],
-      "games_with_outcomes": 111,
-      "weekly_file_games": 44,
-      "weekly_file_columns": 86
+      "data_quality_issues": [
+        "Weekly file missing but data present in training data"
+      ],
+      "games_with_outcomes": 111
     },
     "week_9": {
       "week": 9,
       "present_in_training_data": true,
       "games_count": 111,
-      "weekly_file_exists": true,
+      "weekly_file_exists": false,
       "has_outcomes": true,
       "missing_features": [],
-      "data_quality_issues": [],
-      "games_with_outcomes": 111,
-      "weekly_file_games": 38,
-      "weekly_file_columns": 86
+      "data_quality_issues": [
+        "Weekly file missing but data present in training data"
+      ],
+      "games_with_outcomes": 111
     },
     "week_10": {
       "week": 10,
       "present_in_training_data": true,
       "games_count": 109,
-      "weekly_file_exists": true,
+      "weekly_file_exists": false,
       "has_outcomes": true,
       "missing_features": [],
-      "data_quality_issues": [],
-      "games_with_outcomes": 109,
-      "weekly_file_games": 39,
-      "weekly_file_columns": 86
+      "data_quality_issues": [
+        "Weekly file missing but data present in training data"
+      ],
+      "games_with_outcomes": 109
     },
     "week_11": {
       "week": 11,
       "present_in_training_data": true,
       "games_count": 115,
-      "weekly_file_exists": true,
+      "weekly_file_exists": false,
       "has_outcomes": true,
       "missing_features": [],
-      "data_quality_issues": [],
-      "games_with_outcomes": 115,
-      "weekly_file_games": 35,
-      "weekly_file_columns": 86
+      "data_quality_issues": [
+        "Weekly file missing but data present in training data"
+      ],
+      "games_with_outcomes": 115
     },
     "week_12": {
       "week": 12,
       "present_in_training_data": true,
       "games_count": 120,
-      "weekly_file_exists": true,
+      "weekly_file_exists": false,
       "has_outcomes": true,
       "missing_features": [],
-      "data_quality_issues": [],
-      "games_with_outcomes": 120,
-      "weekly_file_games": 43,
-      "weekly_file_columns": 86
+      "data_quality_issues": [
+        "Weekly file missing but data present in training data"
+      ],
+      "games_with_outcomes": 120
     },
     "week_13": {
       "week": 13,
       "present_in_training_data": true,
       "games_count": 47,
-      "weekly_file_exists": true,
-      "has_outcomes": false,
+      "weekly_file_exists": false,
+      "has_outcomes": true,
       "missing_features": [],
-      "data_quality_issues": [],
-      "games_with_outcomes": 0,
-      "weekly_file_games": 47,
-      "weekly_file_columns": 86
+      "data_quality_issues": [
+        "Weekly file missing but data present in training data"
+      ],
+      "games_with_outcomes": 47
     }
   },
   "summary": {
-    "total_games": 5964,
+    "total_games": 6040,
     "total_columns": 86,
-    "2025_games": 1444,
+    "2025_games": 1520,
     "weeks_present": [
       1,
       2,
@@ -178,13 +178,16 @@
       10,
       11,
       12,
-      13
+      13,
+      14,
+      15,
+      16
     ],
     "weeks_missing": [],
     "total_weeks_expected": 13,
-    "total_weeks_present": 13,
+    "total_weeks_present": 16,
     "game_counts_by_week": {
-      "1": 138,
+      "1": 139,
       "2": 130,
       "3": 124,
       "4": 114,

@@ -263,13 +263,18 @@ class CFBDIntegrationAgent(BaseAgent):
         if season is None:
             raise ValueError("Missing required parameter: season")
         
-        try:
-            season = int(season)
-            week = parameters.get("week")
-            if week is not None:
-                week = int(week)
-        except (ValueError, TypeError) as e:
-            raise ValueError(f"Invalid parameter type: season and week must be integers. {e}")
+        # Validate types BEFORE conversion
+        if not isinstance(season, int):
+            raise ValueError("Invalid parameter type: season must be an integer")
+        
+        week = parameters.get("week")
+        if week is not None and not isinstance(week, int):
+            raise ValueError("Invalid parameter type: week must be an integer")
+        
+        # Convert to int (already validated as int)
+        season = int(season)
+        if week is not None:
+            week = int(week)
         
         # Build cache key
         cache_key = self._build_cache_key(
@@ -313,16 +318,53 @@ class CFBDIntegrationAgent(BaseAgent):
                 "season": season,
                 "week": week,
                 "games": games,
+                "cached": False,
                 "data_source": "GraphQL API",
             }
             
         except Exception as e:
-            logger.error(f"GraphQL scoreboard request failed: {e}")
-            return {
-                "status": "error",
-                "error": f"GraphQL scoreboard request failed: {str(e)}",
-                "games": [],
-            }
+            error_msg = str(e).lower()
+            is_auth_error = any(keyword in error_msg for keyword in ["401", "403", "unauthorized", "forbidden", "tier 3"])
+            
+            # Check if we should fallback to REST
+            should_fallback = False
+            if hasattr(self, 'client') and self.client:
+                # Check config for fallback preference
+                config = getattr(self.client, 'config', None)
+                if config and hasattr(config, 'graphql_fallback_to_rest'):
+                    should_fallback = config.graphql_fallback_to_rest
+                else:
+                    # Default to True if config not available
+                    should_fallback = True
+            
+            if is_auth_error and should_fallback:
+                logger.warning(f"GraphQL access forbidden (Tier 3+ required), falling back to REST: {e}")
+                # Fallback to REST
+                try:
+                    rest_games = self.client.get_games(year=season, week=week) if self.client else []
+                    return {
+                        "status": "success",
+                        "season": season,
+                        "week": week,
+                        "games": rest_games or [],
+                        "cached": False,
+                        "data_source": "REST API (GraphQL fallback)",
+                        "fallback_reason": "GraphQL requires Patreon Tier 3+",
+                    }
+                except Exception as rest_error:
+                    logger.error(f"REST fallback also failed: {rest_error}")
+                    return {
+                        "status": "error",
+                        "error": f"GraphQL failed ({str(e)}) and REST fallback failed ({str(rest_error)})",
+                        "games": [],
+                    }
+            else:
+                logger.error(f"GraphQL scoreboard request failed: {e}")
+                return {
+                    "status": "error",
+                    "error": f"GraphQL scoreboard request failed: {str(e)}",
+                    "games": [],
+                }
 
     def _handle_graphql_recruiting(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -346,12 +388,22 @@ class CFBDIntegrationAgent(BaseAgent):
         if year is None:
             raise ValueError("Missing required parameter: year (or season)")
         
-        try:
-            year = int(year)
-            limit = int(parameters.get("limit", 25))
-            school = parameters.get("school") or parameters.get("team")  # Support both 'school' and 'team'
-        except (ValueError, TypeError) as e:
-            raise ValueError(f"Invalid parameter type: year must be integer, limit must be integer. {e}")
+        # Validate types BEFORE conversion
+        if not isinstance(year, int):
+            raise ValueError("Invalid parameter type: year must be an integer")
+        
+        limit = parameters.get("limit", 25)
+        if limit is not None and not isinstance(limit, int):
+            raise ValueError("Invalid parameter type: limit must be an integer")
+        
+        school = parameters.get("school") or parameters.get("team")  # Support both 'school' and 'team'
+        
+        # Convert to int (already validated as int)
+        year = int(year)
+        if limit is not None:
+            limit = int(limit)
+        else:
+            limit = 25
         
         # Build cache key
         cache_key = self._build_cache_key(
@@ -396,6 +448,7 @@ class CFBDIntegrationAgent(BaseAgent):
                 "year": year,
                 "school": school,
                 "recruits": recruits,
+                "cached": False,
                 "data_source": "GraphQL API",
             }
             

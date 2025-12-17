@@ -187,8 +187,8 @@ class WeeklyAnalysisOrchestrator(BaseAgent):
         
         return validation_result
 
-    def run_complete_analysis(self, parameters: Dict[str, Any] = None,
-                             user_context: Dict[str, Any] = None) -> Dict[str, Any]:
+    def run_complete_analysis(self, parameters: Optional[Dict[str, Any]] = None,
+                             user_context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         Run complete weekly analysis pipeline:
         1. Model validation
@@ -310,13 +310,13 @@ class WeeklyAnalysisOrchestrator(BaseAgent):
                 'timestamp': datetime.now().isoformat()
             }
 
-    def validate_models(self, parameters: Dict[str, Any] = None,
-                       user_context: Dict[str, Any] = None) -> Dict[str, Any]:
+    def validate_models(self, parameters: Optional[Dict[str, Any]] = None,
+                       user_context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Run model validation for the week"""
         return self.validation_agent.execute_task(parameters or {})
 
-    def generate_predictions(self, parameters: Dict[str, Any] = None,
-                            user_context: Dict[str, Any] = None) -> Dict[str, Any]:
+    def generate_predictions(self, parameters: Optional[Dict[str, Any]] = None,
+                            user_context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Generate predictions for the week"""
         return self.prediction_agent.execute_task(parameters or {})
 
@@ -368,8 +368,8 @@ class WeeklyAnalysisOrchestrator(BaseAgent):
         )
         return summary
 
-    def analyze_matchups(self, parameters: Dict[str, Any] = None,
-                        user_context: Dict[str, Any] = None) -> Dict[str, Any]:
+    def analyze_matchups(self, parameters: Optional[Dict[str, Any]] = None,
+                        user_context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Run matchup analysis for the week"""
         return self.matchup_agent.execute_task(parameters or {})
 

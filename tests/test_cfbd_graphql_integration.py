@@ -39,7 +39,7 @@ class TestCFBDGraphQLIntegration:
 
         assert response.status == "success" or response.status == "partial_success"
         # Verify response contains relevant data
-        assert response.data is not None or response.insights is not None
+        assert response.results is not None or response.insights is not None
 
     @pytest.mark.integration
     @pytest.mark.skipif(
@@ -60,7 +60,7 @@ class TestCFBDGraphQLIntegration:
 
         assert response.status == "success" or response.status == "partial_success"
         # Verify response contains relevant data
-        assert response.data is not None or response.insights is not None
+        assert response.results is not None or response.insights is not None
 
     def test_orchestrator_recognizes_graphql_query_patterns(self, orchestrator):
         """Test that orchestrator recognizes GraphQL query patterns"""

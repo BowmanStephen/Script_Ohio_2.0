@@ -22,7 +22,7 @@ def get_current_season() -> int:
     return today.year
 
 
-def calculate_current_week(season: int = None) -> int:
+def calculate_current_week(season: Optional[int] = None) -> int:
     """
     Calculate current week of college football season based on current date.
     

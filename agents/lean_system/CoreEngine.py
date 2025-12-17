@@ -141,7 +141,7 @@ class ModelManager:
             logger.error(f"Prediction failed: {str(e)}")
             return {"error": str(e)}
 
-    def analyze_feature_importance(self, model_name: str = None) -> Dict[str, Any]:
+    def analyze_feature_importance(self, model_name: Optional[str] = None) -> Dict[str, Any]:
         """Analyze feature importance across models"""
         try:
             # For now, return simulated feature importance
@@ -264,7 +264,7 @@ class ContentGenerator:
         logger.info("ContentGenerator initialized")
 
     def generate_explanation(self, concept: str, level: LearningLevel,
-                           context: Dict[str, Any] = None) -> Dict[str, Any]:
+                           context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Generate educational content explanations"""
         explanations = {
             "machine_learning": {
@@ -326,7 +326,7 @@ class ContentGenerator:
         return related_map.get(concept, [])
 
     def generate_matchup_narrative(self, matchup_data: Dict[str, Any],
-                                 predictions: Dict[str, Any] = None) -> Dict[str, Any]:
+                                 predictions: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Generate narrative analysis for team matchups"""
         try:
             if not matchup_data.get("success"):

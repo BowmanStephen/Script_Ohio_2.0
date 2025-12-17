@@ -340,13 +340,70 @@ def get_system_stats():
                 "GET|POST /api/predict - Single game prediction",
                 "GET /api/predictions/week/<week> - Weekly predictions",
                 "GET /api/models - Available models",
-                "GET /api/stats - System stats"
+                "GET /api/stats - System stats",
+                "GET /api/cfbd/scoreboard - CFBD scoreboard data",
+                "GET /api/cfbd/games - CFBD games data",
+                "GET /api/cfbd/advanced-stats - CFBD advanced statistics"
             ]
         },
         "timestamp": datetime.now().isoformat()
     }
 
     return jsonify(stats)
+
+@app.route('/api/cfbd/scoreboard', methods=['GET'])
+def api_cfbd_scoreboard():
+    """Get CFBD scoreboard data (cached, rate-limited)"""
+    try:
+        from src.cfbd_client.unified_client import UnifiedCFBDClient
+        
+        year = request.args.get('year', type=int) or 2025
+        week = request.args.get('week', type=int)
+        season_type = request.args.get('season_type', 'regular')
+        team = request.args.get('team', type=str)
+        
+        client = UnifiedCFBDClient()
+        games = client.get_games(year=year, week=week, season_type=season_type, team=team)
+        
+        return jsonify({
+            "year": year,
+            "week": week,
+            "season_type": season_type,
+            "games": games or [],
+            "total_games": len(games) if games else 0,
+            "timestamp": datetime.now().isoformat()
+        })
+    except Exception as e:
+        logger.error(f"Error fetching CFBD scoreboard: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/cfbd/games', methods=['GET'])
+def api_cfbd_games():
+    """Get CFBD games data (alias for scoreboard)"""
+    return api_cfbd_scoreboard()
+
+@app.route('/api/cfbd/advanced-stats', methods=['GET'])
+def api_cfbd_advanced_stats():
+    """Get CFBD advanced season statistics (cached, rate-limited)"""
+    try:
+        from src.cfbd_client.unified_client import UnifiedCFBDClient
+        
+        year = request.args.get('year', type=int) or 2025
+        team = request.args.get('team', type=str)
+        
+        client = UnifiedCFBDClient()
+        stats = client.get_advanced_stats(year=year, team=team)
+        
+        return jsonify({
+            "year": year,
+            "team": team,
+            "stats": stats or [],
+            "total_teams": len(stats) if stats else 0,
+            "timestamp": datetime.now().isoformat()
+        })
+    except Exception as e:
+        logger.error(f"Error fetching CFBD advanced stats: {str(e)}")
+        return jsonify({"error": str(e)}), 500
 
 # Initialize agent system on startup
 initialize_agent_system()
@@ -361,6 +418,8 @@ if __name__ == '__main__':
     logger.info("  GET  http://localhost:5000/api/predictions/week/14")
     logger.info("  GET  http://localhost:5000/api/models")
     logger.info("  GET  http://localhost:5000/api/stats")
+    logger.info("  GET  http://localhost:5000/api/cfbd/scoreboard?year=2025&week=12")
+    logger.info("  GET  http://localhost:5000/api/cfbd/advanced-stats?year=2025")
 
     port = int(os.environ.get('FLASK_PORT', 5001))  # Use 5001 to avoid conflicts
     app.run(

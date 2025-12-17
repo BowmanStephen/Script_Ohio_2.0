@@ -22,8 +22,8 @@ class CFBDConfig:
     host: str = "https://api.collegefootballdata.com"
     
     # Rate Limiting
-    max_requests_per_second: int = 6
-    rate_limit_delay: float = 0.17  # 1/6 = 0.17s for exactly 6 req/sec
+    max_requests_per_second: int = 5  # Default to 5 req/sec for free tier safety (300 req/min)
+    rate_limit_delay: float = 0.2  # 1/5 = 0.2s for exactly 5 req/sec
     max_retries: int = 3
     
     # Caching
@@ -32,6 +32,10 @@ class CFBDConfig:
     # Feature Flags
     enable_metrics: bool = True
     enable_logging: bool = True
+    
+    # Transport Preference
+    preferred_transport: str = "auto"  # "auto", "graphql", "rest"
+    graphql_fallback_to_rest: bool = True  # If GraphQL fails (403/401), fallback to REST
     
     @classmethod
     def from_env(cls) -> 'CFBDConfig':
@@ -73,6 +77,13 @@ class CFBDConfig:
         enable_metrics = os.getenv("CFBD_ENABLE_METRICS", "true").lower() != "false"
         enable_logging = os.getenv("CFBD_ENABLE_LOGGING", "true").lower() != "false"
         
+        # Transport preference
+        preferred_transport = os.getenv("CFBD_PREFERRED_TRANSPORT", "auto").lower()
+        if preferred_transport not in ["auto", "graphql", "rest"]:
+            preferred_transport = "auto"
+        
+        graphql_fallback_to_rest = os.getenv("CFBD_GRAPHQL_FALLBACK_TO_REST", "true").lower() != "false"
+        
         if not api_key:
              # The plan says raise error here.
              raise ValueError("CFBD_API_KEY or CFBD_API_TOKEN environment variable required")
@@ -86,6 +97,8 @@ class CFBDConfig:
             cache_config=cache_config,
             enable_metrics=enable_metrics,
             enable_logging=enable_logging,
+            preferred_transport=preferred_transport,
+            graphql_fallback_to_rest=graphql_fallback_to_rest,
         )
     
     def validate(self) -> None:
