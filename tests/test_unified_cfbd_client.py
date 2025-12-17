@@ -225,4 +225,178 @@ class TestUnifiedCFBDClient:
             result = client.get_games(year=2025)
             # Should have retried and succeeded
             assert result is not None
+    
+    def test_get_plays(self, client):
+        """Test get_plays method"""
+        client.plays_api = Mock()
+        mock_play = Mock()
+        mock_play.to_dict.return_value = {'id': 1, 'play_type': 'rush', 'yards': 5}
+        client.plays_api.get_plays.return_value = [mock_play]
+        
+        plays = client.get_plays(year=2025, week=12)
+        client.plays_api.get_plays.assert_called_once_with(
+            year=2025, week=12, season_type="regular", team=None
+        )
+        assert len(plays) == 1
+        assert plays[0]['play_type'] == 'rush'
+    
+    def test_get_recruiting(self, client):
+        """Test get_recruiting method"""
+        client.recruiting_api = Mock()
+        mock_recruit = Mock()
+        mock_recruit.to_dict.return_value = {'team': 'Ohio State', 'rank': 1, 'year': 2025}
+        client.recruiting_api.get_team_recruiting_rankings.return_value = [mock_recruit]
+        
+        recruiting = client.get_recruiting(year=2025)
+        client.recruiting_api.get_team_recruiting_rankings.assert_called_once_with(year=2025)
+        assert len(recruiting) == 1
+        assert recruiting[0]['rank'] == 1
+    
+    def test_get_venues(self, client):
+        """Test get_venues method"""
+        client.venues_api = Mock()
+        mock_venue = Mock()
+        mock_venue.to_dict.return_value = {'name': 'Ohio Stadium', 'capacity': 102780}
+        client.venues_api.get_venues.return_value = [mock_venue]
+        
+        venues = client.get_venues()
+        client.venues_api.get_venues.assert_called_once()
+        assert len(venues) == 1
+        assert venues[0]['name'] == 'Ohio Stadium'
+    
+    def test_get_coaches(self, client):
+        """Test get_coaches method"""
+        client.coaches_api = Mock()
+        mock_coach = Mock()
+        mock_coach.to_dict.return_value = {'first_name': 'Ryan', 'last_name': 'Day', 'team': 'Ohio State'}
+        client.coaches_api.get_coaches.return_value = [mock_coach]
+        
+        coaches = client.get_coaches(year=2025, team="Ohio State")
+        # Matches existing implementation signature
+        client.coaches_api.get_coaches.assert_called_once_with(
+            first_name=None, last_name=None, team='Ohio State', year=2025
+        )
+        assert len(coaches) == 1
+        assert coaches[0]['last_name'] == 'Day'
+    
+    def test_get_game_media(self, client):
+        """Test get_game_media method"""
+        client.games_api = Mock()
+        mock_media = Mock()
+        mock_media.to_dict.return_value = {'id': 1, 'outlet': 'ESPN'}
+        client.games_api.get_game_media.return_value = [mock_media]
+        
+        media = client.get_game_media(year=2025, week=12)
+        client.games_api.get_game_media.assert_called_once_with(
+            year=2025, week=12, season_type="regular", team=None, conference=None
+        )
+        assert len(media) == 1
+        assert media[0]['outlet'] == 'ESPN'
 
+    def test_get_calendar(self, client):
+        """Test get_calendar method"""
+        client.games_api = Mock()
+        mock_week = Mock()
+        mock_week.to_dict.return_value = {'season': 2025, 'week': 1, 'season_type': 'regular'}
+        client.games_api.get_calendar.return_value = [mock_week]
+        
+        calendar = client.get_calendar(year=2025)
+        client.games_api.get_calendar.assert_called_once_with(year=2025)
+        assert len(calendar) == 1
+        assert calendar[0]['week'] == 1
+
+    def test_get_rankings(self, client):
+        """Test get_rankings method"""
+        client.rankings_api = Mock()
+        mock_poll = Mock()
+        mock_poll.to_dict.return_value = {'season': 2025, 'week': 1, 'polls': [{'poll': 'AP', 'ranks': []}]}
+        client.rankings_api.get_rankings.return_value = [mock_poll]
+        
+        rankings = client.get_rankings(year=2025, week=1)
+        client.rankings_api.get_rankings.assert_called_once_with(
+            year=2025, week=1, season_type="regular"
+        )
+        assert len(rankings) == 1
+        assert rankings[0]['polls'][0]['poll'] == 'AP'
+
+    def test_get_box_score(self, client):
+        """Test get_box_score method"""
+        client.games_api = Mock()
+        mock_box = Mock()
+        mock_box.to_dict.return_value = {'teams': {'home': {'stats': []}}}
+        client.games_api.get_game_box_score.return_value = mock_box
+        
+        box = client.get_box_score(game_id=12345)
+        client.games_api.get_game_box_score.assert_called_once_with(game_id=12345)
+        assert 'teams' in box
+
+    def test_get_team_matchup(self, client):
+        """Test get_team_matchup method"""
+        client.teams_api = Mock()
+        mock_matchup = Mock()
+        mock_matchup.to_dict.return_value = {'team1': 'Ohio State', 'team2': 'Michigan', 'games': []}
+        client.teams_api.get_team_matchup.return_value = mock_matchup
+        
+        matchup = client.get_team_matchup(team1="Ohio State", team2="Michigan")
+        client.teams_api.get_team_matchup.assert_called_once_with(
+            team1="Ohio State", team2="Michigan", min_year=None, max_year=None
+        )
+        assert matchup['team1'] == 'Ohio State'
+
+    def test_get_roster(self, client):
+        """Test get_roster method"""
+        client.teams_api = Mock()
+        mock_player = Mock()
+        mock_player.to_dict.return_value = {'first_name': 'C.J.', 'last_name': 'Stroud', 'position': 'QB'}
+        client.teams_api.get_roster.return_value = [mock_player]
+        
+        roster = client.get_roster(year=2025, team="Ohio State")
+        client.teams_api.get_roster.assert_called_once_with(year=2025, team="Ohio State")
+        assert len(roster) == 1
+        assert roster[0]['last_name'] == 'Stroud'
+
+    def test_get_win_probabilities(self, client):
+        """Test get_win_probabilities method"""
+        client.metrics_api = Mock()
+        mock_wp = Mock()
+        mock_wp.to_dict.return_value = {'gameId': 1, 'homeWinProb': 0.75}
+        client.metrics_api.get_pregame_win_probabilities.return_value = [mock_wp]
+        
+        wps = client.get_win_probabilities(year=2025, week=12)
+        client.metrics_api.get_pregame_win_probabilities.assert_called_once_with(
+            year=2025, week=12, team=None
+        )
+        assert len(wps) == 1
+        assert wps[0]['homeWinProb'] == 0.75
+
+    def test_get_scoreboard_graphql(self, client):
+        """Test get_scoreboard_graphql method"""
+        # Case 1: GraphQL client not available
+        client.graphql_client = None
+        result = client.get_scoreboard_graphql(year=2025, week=12)
+        assert result is None
+        
+        # Case 2: GraphQL client available
+        client.graphql_client = Mock()
+        mock_result = {'data': {'game': []}}
+        client.graphql_client.get_scoreboard.return_value = mock_result
+        
+        result = client.get_scoreboard_graphql(year=2025, week=12)
+        client.graphql_client.get_scoreboard.assert_called_once_with(season=2025, week=12)
+        assert result == mock_result
+
+    def test_get_recruiting_graphql(self, client):
+        """Test get_recruiting_graphql method"""
+        # Case 1: GraphQL client not available
+        client.graphql_client = None
+        result = client.get_recruiting_graphql(year=2025)
+        assert result is None
+        
+        # Case 2: GraphQL client available
+        client.graphql_client = Mock()
+        mock_result = {'data': {'recruit': []}}
+        client.graphql_client.get_recruits.return_value = mock_result
+        
+        result = client.get_recruiting_graphql(year=2025, team="Ohio State")
+        client.graphql_client.get_recruits.assert_called_once_with(season=2025, team="Ohio State", limit=50)
+        assert result == mock_result

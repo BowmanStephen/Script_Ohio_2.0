@@ -120,6 +120,32 @@ class UnifiedCFBDClient:
             self.players_api = cfbd.PlayersApi(self.api_client)
             self.conferences_api = cfbd.ConferencesApi(self.api_client)
             self.metrics_api = cfbd.MetricsApi(self.api_client)
+            self.rankings_api = cfbd.RankingsApi(self.api_client)
+            self.coaches_api = cfbd.CoachesApi(self.api_client)
+            self.recruiting_api = cfbd.RecruitingApi(self.api_client)
+            self.venues_api = cfbd.VenuesApi(self.api_client)
+            
+            # Initialize GraphQL client if available and enabled
+            self.graphql_client = None
+            try:
+                from src.data_sources.cfbd_graphql import CFBDGraphQLClient, GQL_AVAILABLE
+                if GQL_AVAILABLE and not self.config.graphql_disabled:
+                    # Determine host type from URL if not explicitly set
+                    host_type = "production"
+                    if "apinext" in self.config.host:
+                        host_type = "next"
+                        
+                    self.graphql_client = CFBDGraphQLClient(
+                        api_key=self.config.api_key,
+                        host=host_type
+                    )
+                    logger.info("✅ Unified Client: GraphQL enabled")
+            except ImportError:
+                logger.debug("GraphQL dependencies not present")
+            except Exception as e:
+                logger.warning(f"Failed to initialize GraphQL client: {e}")
+
+            self.rankings_api = cfbd.RankingsApi(self.api_client)
             
         except Exception as e:
             logger.error(f"❌ Failed to initialize CFBD client: {e}")
@@ -471,6 +497,16 @@ class UnifiedCFBDClient:
             "lines"
         )
     
+    def get_teams(self, conference: Optional[str] = None) -> List[Dict]:
+        """Get teams data with caching"""
+        params = {"conference": conference}
+        return self._cached_fetch(
+            "teams",
+            params,
+            lambda: self._to_dict_list(self.teams_api.get_teams(conference=conference)),
+            "teams"
+        )
+    
     def get_team_talent(self, year: int) -> List[Dict]:
         """Get team talent ratings with caching"""
         params = {"year": year}
@@ -559,6 +595,69 @@ class UnifiedCFBDClient:
             "stats"
         )
     
+    def get_plays(self, year: int, week: Optional[int] = None,
+                 season_type: str = "regular", team: Optional[str] = None) -> List[Dict]:
+        """Get play-by-play data with caching"""
+        params = {"year": year, "week": week, "seasonType": season_type, "team": team}
+        return self._cached_fetch(
+            "plays",
+            params,
+            lambda: self._to_dict_list(self.plays_api.get_plays(
+                year=year, week=week, season_type=season_type, team=team
+            )),
+            "stats"  # Plays are statistical data
+        )
+    
+    def get_recruiting(self, year: int, team: Optional[str] = None) -> List[Dict]:
+        """Get recruiting information with caching"""
+        params = {"year": year, "team": team}
+        return self._cached_fetch(
+            "recruiting",
+            params,
+            lambda: self._to_dict_list(self.recruiting_api.get_team_recruiting_rankings(
+                year=year
+            )),
+            "teams"  # Recruiting data is relatively stable
+        )
+    
+    def get_venues(self) -> List[Dict]:
+        """Get venue data with caching"""
+        params = {}
+        return self._cached_fetch(
+            "venues",
+            params,
+            lambda: self._to_dict_list(self.venues_api.get_venues()),
+            "teams"  # Venues are relatively stable
+        )
+    
+    def get_coaches(self, first_name: Optional[str] = None,
+                   last_name: Optional[str] = None,
+                   team: Optional[str] = None,
+                   year: Optional[int] = None) -> List[Dict]:
+        """Get coach information with caching"""
+        params = {"first_name": first_name, "last_name": last_name, "team": team, "year": year}
+        return self._cached_fetch(
+            "coaches",
+            params,
+            lambda: self._to_dict_list(self.coaches_api.get_coaches(
+                first_name=first_name, last_name=last_name, team=team, year=year
+            )),
+            "teams"  # Coach data is relatively stable
+        )
+    
+    def get_rankings(self, year: int, week: Optional[int] = None,
+                    season_type: str = "regular") -> List[Dict]:
+        """Get poll rankings with caching"""
+        params = {"year": year, "week": week, "seasonType": season_type}
+        return self._cached_fetch(
+            "rankings",
+            params,
+            lambda: self._to_dict_list(self.rankings_api.get_rankings(
+                year=year, week=week, season_type=season_type
+            )),
+            "ratings"  # Rankings are similar to ratings data
+        )
+    
     def get_metrics(self) -> Dict[str, Any]:
         """Get performance metrics"""
         cache_stats = self.cache_manager.get_cache_stats()
@@ -573,3 +672,121 @@ class UnifiedCFBDClient:
             }
         }
 
+    def get_game_media(self, year: int, week: Optional[int] = None, 
+                      season_type: str = "regular", team: Optional[str] = None, 
+                      conference: Optional[str] = None) -> List[Dict]:
+        """Get game media information with caching"""
+        params = {
+            "year": year,
+            "week": week,
+            "seasonType": season_type,
+            "team": team,
+            "conference": conference
+        }
+        return self._cached_fetch(
+            "media",
+            params,
+            lambda: self._to_dict_list(self.games_api.get_game_media(
+                year=year,
+                week=week,
+                season_type=season_type,
+                team=team,
+                conference=conference
+            )),
+            "games"
+        )
+
+    def get_calendar(self, year: int) -> List[Dict]:
+        """Get season calendar with caching"""
+        params = {"year": year}
+        return self._cached_fetch(
+            "calendar",
+            params,
+            lambda: self._to_dict_list(self.games_api.get_calendar(year=year)),
+            "games"
+        )
+
+    def get_box_score(self, game_id: int) -> Dict:
+        """Get box score for a specific game"""
+        params = {"gameId": game_id}
+        # Box score returns a single object
+        return self._cached_fetch(
+            "box_score",
+            params,
+            lambda: self.games_api.get_game_box_score(game_id=game_id).to_dict(),
+            "games"
+        )
+    
+    def get_team_matchup(self, team1: str, team2: str, 
+                        min_year: Optional[int] = None, max_year: Optional[int] = None) -> Dict:
+        """Get matchup history between two teams"""
+        params = {
+            "team1": team1, 
+            "team2": team2,
+            "minYear": min_year, 
+            "maxYear": max_year
+        }
+        return self._cached_fetch(
+            "matchup",
+            params,
+            lambda: self.teams_api.get_team_matchup(
+                team1=team1, 
+                team2=team2,
+                min_year=min_year,
+                max_year=max_year
+            ).to_dict(),
+            "teams"
+        )
+
+    def get_roster(self, year: int, team: Optional[str] = None) -> List[Dict]:
+        """Get team roster with caching"""
+        params = {"year": year, "team": team}
+        return self._cached_fetch(
+            "roster",
+            params,
+            lambda: self._to_dict_list(self.teams_api.get_roster(year=year, team=team)),
+            "teams"
+        )
+
+    def get_win_probabilities(self, year: int, week: Optional[int] = None, 
+                             team: Optional[str] = None) -> List[Dict]:
+        """Get pregame win probabilities with caching"""
+        params = {"year": year, "week": week, "team": team}
+        return self._cached_fetch(
+            "win_probs",
+            params,
+            lambda: self._to_dict_list(self.metrics_api.get_pregame_win_probabilities(
+                year=year, week=week, team=team
+            )),
+            "metrics"
+        )
+
+    def get_scoreboard_graphql(self, year: int, week: Optional[int] = None) -> Optional[Dict[str, Any]]:
+        """
+        Get scoreboard data via GraphQL (efficient batch fetch).
+        Returns None if GraphQL is unavailable.
+        """
+        if not self.graphql_client:
+            return None
+            
+        return self._cached_fetch(
+            "gql_scoreboard",
+            {"year": year, "week": week},
+            lambda: self.graphql_client.get_scoreboard(season=year, week=week),
+            "games"
+        )
+        
+    def get_recruiting_graphql(self, year: int, team: Optional[str] = None, limit: int = 50) -> Optional[Dict[str, Any]]:
+        """
+        Get recruiting data via GraphQL (richer data than REST).
+        Returns None if GraphQL is unavailable.
+        """
+        if not self.graphql_client:
+            return None
+            
+        return self._cached_fetch(
+            "gql_recruiting",
+            {"year": year, "team": team, "limit": limit},
+            lambda: self.graphql_client.get_recruits(season=year, team=team, limit=limit),
+            "recruiting"
+        )

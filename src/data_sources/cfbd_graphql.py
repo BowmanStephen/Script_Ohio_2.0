@@ -309,4 +309,158 @@ class CFBDGraphQLClient:
             variables["team"] = team
         
         return self.query(query, variables)
+    
+    def get_plays(
+        self,
+        season: int,
+        week: Optional[int] = None,
+        game_id: Optional[int] = None,
+    ) -> Dict[str, Any]:
+        """
+        Get play-by-play data via GraphQL.
+        
+        Args:
+            season: Season year (e.g., 2025)
+            week: Optional week number
+            game_id: Optional specific game ID
+        
+        Returns:
+            Play-by-play data dictionary
+        """
+        query = """
+        query Plays($season: Int!, $week: smallint, $gameId: Int) {
+          play(
+            where: {
+              game: {
+                season: { _eq: $season }
+                week: { _eq: $week }
+                id: { _eq: $gameId }
+              }
+            }
+            order_by: { playNumber: asc }
+          ) {
+            id
+            gameId
+            driveId
+            playNumber
+            offense
+            defense
+            offenseConference
+            defenseConference
+            home
+            period
+            clock
+            yardLine
+            distance
+            yardsGained
+            down
+            playType
+            playText
+            ppa
+            wallclock
+          }
+        }
+        """
+        variables: Dict[str, Any] = {"season": season}
+        if week is not None:
+            variables["week"] = week
+        if game_id is not None:
+            variables["gameId"] = game_id
+        
+        return self.query(query, variables)
+    
+    def _normalize_betting_line(self, line_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Normalize GraphQL betting line data to match REST API shape.
+        
+        Args:
+            line_data: Raw GraphQL betting line data
+        
+        Returns:
+            Normalized betting line dictionary matching REST API format
+        """
+        # Extract nested game data if present
+        game = line_data.get("game", {})
+        if isinstance(game, dict):
+            game_id = game.get("id")
+            home_team = game.get("homeTeam")
+            away_team = game.get("awayTeam")
+            start_date = game.get("startDate")
+        else:
+            game_id = line_data.get("gameId")
+            home_team = None
+            away_team = None
+            start_date = None
+        
+        # Normalize to REST API shape
+        normalized = {
+            "id": line_data.get("id"),
+            "gameId": game_id or line_data.get("gameId"),
+            "season": None,  # Will be filled from context
+            "week": None,    # Will be filled from context
+            "seasonType": "regular",
+            "startDate": start_date,
+            "homeTeam": home_team,
+            "awayTeam": away_team,
+            "provider": line_data.get("provider"),
+            "spread": line_data.get("spread"),
+            "formattedSpread": line_data.get("formattedSpread"),
+            "overUnder": line_data.get("overUnder"),
+            "formattedOverUnder": line_data.get("formattedOverUnder"),
+            "homeMoneyline": line_data.get("homeMoneyline"),
+            "awayMoneyline": line_data.get("awayMoneyline"),
+        }
+        
+        # Remove None values to match REST API behavior
+        return {k: v for k, v in normalized.items() if v is not None}
+    
+    def get_betting_lines(
+        self,
+        season: int,
+        week: Optional[int] = None,
+    ) -> Dict[str, Any]:
+        """
+        Get betting lines via GraphQL.
+        
+        Args:
+            season: Season year (e.g., 2025)
+            week: Optional week number
+        
+        Returns:
+            Betting lines data dictionary
+        """
+        query = """
+        query BettingLines($season: Int!, $week: smallint) {
+          bettingLine(
+            where: {
+              game: {
+                season: { _eq: $season }
+                week: { _eq: $week }
+              }
+            }
+            order_by: { game: { startDate: asc } }
+          ) {
+            id
+            gameId
+            game {
+              id
+              homeTeam
+              awayTeam
+              startDate
+            }
+            provider
+            spread
+            overUnder
+            homeMoneyline
+            awayMoneyline
+            formattedSpread
+            formattedOverUnder
+          }
+        }
+        """
+        variables: Dict[str, Any] = {"season": season}
+        if week is not None:
+            variables["week"] = week
+        
+        return self.query(query, variables)
 

@@ -1,0 +1,38 @@
+TEMPORAL VALIDATION RESULTS - 2025 SEASON
+============================================================
+Generated on: 2025-12-17 01:24:56
+
+DATA SPLIT:
+Training Set: 2016-2024 seasons (4520 games)
+Test Set: 2025 season (647 games)
+Total Dataset: 5167 games
+
+MODEL PERFORMANCE ON 2025 HOLDOUT DATA:
+----------------------------------------
+
+RIDGE REGRESSION (Score Margin Prediction):
+  Mean Absolute Error: 11.79 points
+  Root Mean Squared Error: 14.80 points
+  R-squared: 0.450
+  Interpretation: Model explains 45.0% of variance in score margins
+
+XGBOOST CLASSIFIER (Win Probability):
+  Accuracy: 0.704 (70.4%)
+  Log Loss: 0.558
+  ROC AUC: 0.798
+  F1 Score: 0.717
+  Interpretation: Model correctly predicts 70.4% of 2025 game outcomes
+
+FASTAI NEURAL NETWORK (Win Probability):
+  Accuracy: 0.741 (74.1%)
+  Log Loss: 0.613
+  ROC AUC: 0.830
+  F1 Score: 0.757
+  Interpretation: Model correctly predicts 74.1% of 2025 game outcomes
+
+KEY FINDINGS:
+--------------------
+• 2025 season validation shows strong model performance
+• Temporal validation demonstrates good generalization capability
+• All models successfully trained on expanded dataset (5167 total games)
+• Feature importance patterns remain consistent with original analysis

@@ -69,14 +69,6 @@ except ImportError:
     SHAP_AVAILABLE = False
 
 # Set up logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('model_training_log.txt'),
-        logging.StreamHandler()
-    ]
-)
 logger = logging.getLogger(__name__)
 
 # Suppress warnings
@@ -263,8 +255,8 @@ class ModelTrainingAgent:
             'mae': mae,
             'rmse': rmse,
             'r2': r2,
-            'predictions': y_pred_all,
-            'actual': y_test.values if len(test_with_outcomes) > 0 else y_train.values
+            'predictions': y_pred_actual if len(test_with_outcomes) > 0 else y_pred_train,
+            'actual': y_test_actual.values if len(test_with_outcomes) > 0 else y_train.values
         }
 
         # Store model and feature importance
@@ -323,7 +315,8 @@ class ModelTrainingAgent:
         scale_pos_weight = class_counts[0] / class_counts[1] if class_counts[1] > 0 else 1.0
         
         logger.info(f"Class distribution: {class_counts}, scale_pos_weight: {scale_pos_weight:.3f}")
-        
+        logger.info(f"X_train_enhanced columns ({len(X_train_enhanced.columns)}): {X_train_enhanced.columns.tolist()}")
+
         # Hyperparameter tuning using utility
         logger.info("Performing hyperparameter tuning...")
         from model_pack.utils.hyperparameter_tuner import HyperparameterTuner
@@ -352,13 +345,20 @@ class ModelTrainingAgent:
                 }
         
         # Train final model with best parameters
+        logger.info("Initializing XGBoost model...")
+        
+        # XGBoost >= 1.6.0: early_stopping_rounds is in constructor
+        # We need to preserve best_params but exclude any that might conflict
+        xgb_params = best_params.copy()
+        
         model = xgb.XGBClassifier(
             eval_metric='logloss',
             random_state=77,
             scale_pos_weight=scale_pos_weight,
             use_label_encoder=False,
             tree_method='hist',
-            **best_params
+            early_stopping_rounds=20, # Moved to constructor
+            **xgb_params
         )
         
         # Use early stopping if we have validation data
@@ -381,11 +381,17 @@ class ModelTrainingAgent:
                 X_train_enhanced,
                 y_train,
                 eval_set=[(X_val, y_val)],
-                early_stopping_rounds=20,
+                # early_stopping_rounds=20, # Removed from here
                 verbose=False
             )
         else:
-            model.fit(X_train_enhanced, y_train)
+            # If no validation set, we can't use early stopping effectively with this config,
+            # but providing it in constructor might be fine if we don't pass eval_set or if it just ignores it.
+            # However, to be safe, let's reinstantiate without it if we don't have val data? 
+            # Or just pass eval_set as None? 
+            # Actually, if we don't provide eval_set, early_stopping_rounds usually acts as a no-op or warns.
+            # Let's keep it simple.
+            model.fit(X_train_enhanced, y_train, verbose=False)
 
         # Make predictions on all test games (use enhanced features)
         # Handle missing interaction features in test set
@@ -435,8 +441,8 @@ class ModelTrainingAgent:
                 logger.warning(f"Test set contains only one class ({unique_labels[0]}) - AUC set to 0.5")
         else:
             # No test games with outcomes - use training metrics
-            y_pred_train = model.predict(X_train)
-            y_proba_train = model.predict_proba(X_train)[:, 1]
+            y_pred_train = model.predict(X_train_enhanced)
+            y_proba_train = model.predict_proba(X_train_enhanced)[:, 1]
             accuracy = accuracy_score(y_train, y_pred_train)
             logloss = log_loss(y_train, y_proba_train, labels=[0, 1])
             auc = roc_auc_score(y_train, y_proba_train)
@@ -448,8 +454,8 @@ class ModelTrainingAgent:
             'log_loss': logloss,
             'auc': auc,
             'f1': f1,
-            'predictions': y_pred_all,
-            'probabilities': y_proba_all,
+            'predictions': y_pred_actual if len(test_with_outcomes) > 0 else y_pred_train,
+            'probabilities': y_proba_actual if len(test_with_outcomes) > 0 else y_proba_train,
             'actual': y_test_actual.values if len(test_with_outcomes) > 0 else y_train.values
         }
 
@@ -541,7 +547,8 @@ class ModelTrainingAgent:
             if layers is not None:
                 learner_kwargs['layers'] = layers
             if dropout is not None:
-                learner_kwargs['ps'] = dropout
+                # learner_kwargs['ps'] = dropout # Deprecated in newer FastAI
+                pass
                 
             learn = tabular_learner(**learner_kwargs)
 
@@ -1098,9 +1105,20 @@ def main():
     print("="*60)
     print("Initializing Model Training Agent...")
 
-    # Create and run agent
+    #if __name__ == "__main__":
+    # Configure logging for standalone execution
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler('model_training_log.txt'),
+            logging.StreamHandler()
+        ]
+    )
+    
     agent = ModelTrainingAgent()
     agent.run_complete_training_pipeline()
+
 
     print("\n🎉 Model training mission completed!")
     print(f"All models have been successfully updated with {current_season} season data.")

@@ -49,8 +49,8 @@ Create a deterministic snapshot system for CFBD data to enable offline bowl pred
 **Key Features**:
 
 - Fetch games (regular + postseason), teams, talent data
-- Write JSON files: `games_{season}_regular.json`, `games_{season}_postseason.json`, `teams_{season}.json`, `talent_{season}.json`
-- Write metadata JSON per dataset: `games_{season}_regular.metadata.json`
+- Write JSON files: `games_regular_{season}.json`, `games_postseason_{season}.json`, `teams_{season}.json`, `talent_{season}.json`
+- Write metadata JSON per dataset: `games_regular_{season}.metadata.json`
 - Metadata includes: `fetched_at`, `season`, `endpoint_name`, `record_count`, `git_sha`, `cfbd_sdk_version`
 
 **Command-line Flags**:
@@ -65,7 +65,7 @@ Create a deterministic snapshot system for CFBD data to enable offline bowl pred
 - Use `UnifiedCFBDClient` from `src/cfbd_client/unified_client.py`
 - Call `client.get_games(year=season, season_type="regular")` and `season_type="postseason"`
 - Call `client.get_team_talent(year=season)` for talent
-- For teams: Use `client.teams_api.get_teams()` (may need to add wrapper method)
+- For teams: Use `client.get_teams()` (add wrapper method to UnifiedCFBDClient)
 - Write JSON with `json.dump(data, handle, indent=2, default=str)`
 - Create `data/raw/cfbd/` directory if missing
 - Handle API errors gracefully with logging
@@ -74,10 +74,10 @@ Create a deterministic snapshot system for CFBD data to enable offline bowl pred
 
 ```
 data/raw/cfbd/
-├── games_2025_regular.json
-├── games_2025_regular.metadata.json
-├── games_2025_postseason.json
-├── games_2025_postseason.metadata.json
+├── games_regular_2025.json
+├── games_regular_2025.metadata.json
+├── games_postseason_2025.json
+├── games_postseason_2025.metadata.json
 ├── teams_2025.json
 ├── teams_2025.metadata.json
 ├── talent_2025.json
@@ -188,10 +188,10 @@ python -c "import json; json.load(open('predictions/bowls_2025_predictions.json'
 
 **Generated Files** (after running refresh):
 
-- `data/raw/cfbd/games_2025_regular.json`
-- `data/raw/cfbd/games_2025_regular.metadata.json`
-- `data/raw/cfbd/games_2025_postseason.json`
-- `data/raw/cfbd/games_2025_postseason.metadata.json`
+- `data/raw/cfbd/games_regular_2025.json`
+- `data/raw/cfbd/games_regular_2025.metadata.json`
+- `data/raw/cfbd/games_postseason_2025.json`
+- `data/raw/cfbd/games_postseason_2025.metadata.json`
 - `data/raw/cfbd/teams_2025.json` (optional)
 - `data/raw/cfbd/teams_2025.metadata.json` (optional)
 - `data/raw/cfbd/talent_2025.json` (optional)

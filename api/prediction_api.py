@@ -44,13 +44,34 @@ except ImportError as e:
 app = Flask(__name__)
 
 # CORS configuration: restrict to frontend origin in production
-# In development, allow all origins for local testing
-cors_origins = os.getenv("CORS_ORIGINS", "*").split(",")
+# In development, allow localhost origins; in production, require explicit config
+is_production = os.getenv("FLASK_ENV") == "production"
+cors_origins_env = os.getenv("CORS_ORIGINS")
+
+if is_production:
+    if not cors_origins_env:
+        logger.warning("⚠️  CORS_ORIGINS not set in production! Defaulting to empty (no CORS).")
+        cors_origins = []
+    else:
+        cors_origins = cors_origins_env.split(",")
+        if "*" in cors_origins:
+            raise ValueError(
+                "CORS_ORIGINS cannot be '*' in production. "
+                "Set specific origins (e.g., CORS_ORIGINS=https://yourdomain.com)"
+            )
+else:
+    # Development: default to localhost origins
+    cors_origins = cors_origins_env.split(",") if cors_origins_env else ["http://localhost:5173", "http://localhost:3000"]
+    if "*" in cors_origins:
+        logger.warning("⚠️  CORS_ORIGINS='*' in development - this is insecure for production!")
+
 CORS(app, origins=cors_origins)  # Enable CORS for web app
 
 # Initialize agent system
 agents_orchestrator = None
 model_agent = None
+
+
 
 def initialize_agent_system():
     """Initialize the agent system for predictions"""
@@ -380,7 +401,14 @@ def get_system_stats():
                 "GET /api/stats - System stats",
                 "GET /api/cfbd/scoreboard - CFBD scoreboard data",
                 "GET /api/cfbd/games - CFBD games data",
-                "GET /api/cfbd/advanced-stats - CFBD advanced statistics"
+                "GET /api/cfbd/advanced-stats - CFBD advanced statistics",
+                "GET /api/cfbd/media - CFBD game media",
+                "GET /api/cfbd/calendar - CFBD calendar",
+                "GET /api/cfbd/box-score - CFBD box score",
+                "GET /api/cfbd/matchup - Team matchup",
+                "GET /api/cfbd/roster - Team roster",
+                "GET /api/cfbd/win-probabilities - Win probabilities",
+                "GET /api/cfbd/recruiting - Recruiting data"
             ]
         },
         "timestamp": datetime.now().isoformat()
@@ -388,9 +416,44 @@ def get_system_stats():
 
     return jsonify(stats)
 
+@app.route('/api/cfbd/games', methods=['GET'])
+def api_cfbd_games():
+    """Proxy CFBD games endpoint - secure BFF pattern (no API keys exposed)"""
+    try:
+        from src.cfbd_client.unified_client import UnifiedCFBDClient
+        
+        year = request.args.get('year', type=int)
+        week = request.args.get('week', type=int)
+        season_type = request.args.get('season_type', 'regular')
+        team = request.args.get('team', type=str)
+        
+        if not year:
+            return jsonify({
+                "status": "error",
+                "message": "year parameter is required"
+            }), 400
+        
+        # Use unified client (CFBD_API_KEY from backend env, never exposed)
+        client = UnifiedCFBDClient()
+        games = client.get_games(year=year, week=week, season_type=season_type, team=team)
+        
+        return jsonify({
+            "status": "success",
+            "data": games,
+            "count": len(games),
+            "year": year,
+            "week": week,
+        })
+    except Exception as e:
+        logger.error(f"CFBD games proxy error: {e}")
+        return jsonify({
+            "status": "error",
+            "message": "Failed to fetch games"
+        }), 500
+
 @app.route('/api/cfbd/scoreboard', methods=['GET'])
 def api_cfbd_scoreboard():
-    """Get CFBD scoreboard data (cached, rate-limited)"""
+    """Proxy CFBD scoreboard endpoint - secure BFF pattern (no API keys exposed)"""
     try:
         from src.cfbd_client.unified_client import UnifiedCFBDClient
         
@@ -398,52 +461,286 @@ def api_cfbd_scoreboard():
         week = request.args.get('week', type=int)
         season_type = request.args.get('season_type', 'regular')
         team = request.args.get('team', type=str)
+        use_graphql = request.args.get('use_graphql', 'true').lower() == 'true'
         
+        # Use unified client (CFBD_API_KEY from backend env, never exposed)
         client = UnifiedCFBDClient()
-        games = client.get_games(year=year, week=week, season_type=season_type, team=team)
+        
+        # Try GraphQL if requested, available, and week is present (GraphQL scoreboard needs week usually, or inefficient)
+        data = None
+        source = "rest"
+        
+        if use_graphql:
+            # Note: get_scoreboard_graphql returns {'data': {'game': [...]}} structure from GQL
+            gql_result = client.get_scoreboard_graphql(year=year, week=week)
+            if gql_result and 'data' in gql_result:
+                data = gql_result['data'].get('game', [])
+                source = "graphql"
+        
+        # Fallback to REST
+        if data is None:
+            data = client.get_games(year=year, week=week, season_type=season_type, team=team)
+            source = "rest"
         
         return jsonify({
+            "status": "success",
+            "data": data or [],
+            "count": len(data) if data else 0,
             "year": year,
             "week": week,
             "season_type": season_type,
-            "games": games or [],
-            "total_games": len(games) if games else 0,
-            "timestamp": datetime.now().isoformat()
+            "source": source
         })
     except Exception as e:
-        logger.error(f"Error fetching CFBD scoreboard: {str(e)}")
-        return jsonify({"error": str(e)}), 500
+        logger.error(f"CFBD scoreboard proxy error: {e}")
+        return jsonify({
+            "status": "error",
+            "message": "Failed to fetch scoreboard"
+        }), 500
 
-@app.route('/api/cfbd/games', methods=['GET'])
-def api_cfbd_games():
-    """Get CFBD games data (alias for scoreboard)"""
-    return api_cfbd_scoreboard()
-
-@app.route('/api/cfbd/advanced-stats', methods=['GET'])
-def api_cfbd_advanced_stats():
-    """Get CFBD advanced season statistics (cached, rate-limited)"""
+@app.route('/api/cfbd/ratings', methods=['GET'])
+def api_cfbd_ratings():
+    """Proxy CFBD ratings endpoint - secure BFF pattern"""
     try:
         from src.cfbd_client.unified_client import UnifiedCFBDClient
         
-        year = request.args.get('year', type=int) or 2025
+        year = request.args.get('year', type=int)
+        week = request.args.get('week', type=int)
+        
+        if not year:
+            return jsonify({
+                "status": "error",
+                "message": "year parameter is required"
+            }), 400
+        
+        # Use unified client (CFBD_API_KEY from backend env, never exposed)
+        client = UnifiedCFBDClient()
+        ratings = client.get_ratings(year=year, week=week)
+        
+        return jsonify({
+            "status": "success",
+            "data": ratings,
+            "count": len(ratings),
+            "year": year,
+            "week": week,
+        })
+    except Exception as e:
+        logger.error(f"CFBD ratings proxy error: {e}")
+        return jsonify({
+            "status": "error",
+            "message": "Failed to fetch ratings"
+        }), 500
+
+@app.route('/api/cfbd/advanced-stats', methods=['GET'])
+def api_cfbd_advanced_stats():
+    """Proxy CFBD advanced stats endpoint - secure BFF pattern"""
+    try:
+        from src.cfbd_client.unified_client import UnifiedCFBDClient
+        
+        year = request.args.get('year', type=int)
         team = request.args.get('team', type=str)
         
+        if not year:
+            return jsonify({
+                "status": "error",
+                "message": "year parameter is required"
+            }), 400
+        
+        # Use unified client (CFBD_API_KEY from backend env, never exposed)
         client = UnifiedCFBDClient()
         stats = client.get_advanced_stats(year=year, team=team)
         
         return jsonify({
+            "status": "success",
+            "data": stats or [],
+            "count": len(stats) if stats else 0,
             "year": year,
             "team": team,
-            "stats": stats or [],
-            "total_teams": len(stats) if stats else 0,
-            "timestamp": datetime.now().isoformat()
         })
     except Exception as e:
-        logger.error(f"Error fetching CFBD advanced stats: {str(e)}")
-        return jsonify({"error": str(e)}), 500
+        logger.error(f"CFBD advanced stats proxy error: {e}")
+        return jsonify({
+            "status": "error",
+            "message": "Failed to fetch advanced stats"
+        }), 500
 
-# Initialize agent system on startup
-initialize_agent_system()
+@app.route('/api/cfbd/media', methods=['GET'])
+def api_cfbd_media():
+    """Proxy CFBD game media endpoint"""
+    try:
+        from src.cfbd_client.unified_client import UnifiedCFBDClient
+        
+        year = request.args.get('year', type=int) or 2025
+        week = request.args.get('week', type=int)
+        team = request.args.get('team', type=str)
+        conference = request.args.get('conference', type=str)
+        
+        client = UnifiedCFBDClient()
+        media = client.get_game_media(year=year, week=week, team=team, conference=conference)
+        
+        return jsonify({
+            "status": "success",
+            "data": media,
+            "count": len(media),
+            "year": year
+        })
+    except Exception as e:
+        logger.error(f"CFBD media proxy error: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/api/cfbd/calendar', methods=['GET'])
+def api_cfbd_calendar():
+    """Proxy CFBD calendar endpoint"""
+    try:
+        from src.cfbd_client.unified_client import UnifiedCFBDClient
+        year = request.args.get('year', type=int) or 2025
+        
+        client = UnifiedCFBDClient()
+        calendar = client.get_calendar(year=year)
+        
+        return jsonify({
+            "status": "success",
+            "data": calendar,
+            "count": len(calendar),
+            "year": year
+        })
+    except Exception as e:
+        logger.error(f"CFBD calendar proxy error: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/api/cfbd/box-score', methods=['GET'])
+def api_cfbd_box_score():
+    """Proxy CFBD box score endpoint"""
+    try:
+        from src.cfbd_client.unified_client import UnifiedCFBDClient
+        game_id = request.args.get('game_id', type=int)
+        
+        if not game_id:
+            return jsonify({"status": "error", "message": "game_id required"}), 400
+            
+        client = UnifiedCFBDClient()
+        box = client.get_box_score(game_id=game_id)
+        
+        return jsonify({
+            "status": "success",
+            "data": box
+        })
+    except Exception as e:
+        logger.error(f"CFBD box score proxy error: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/api/cfbd/matchup', methods=['GET'])
+def api_cfbd_matchup():
+    """Proxy CFBD matchup endpoint"""
+    try:
+        from src.cfbd_client.unified_client import UnifiedCFBDClient
+        team1 = request.args.get('team1', type=str)
+        team2 = request.args.get('team2', type=str)
+        min_year = request.args.get('min_year', type=int)
+        max_year = request.args.get('max_year', type=int)
+        
+        if not team1 or not team2:
+            return jsonify({"status": "error", "message": "team1 and team2 required"}), 400
+            
+        client = UnifiedCFBDClient()
+        matchup = client.get_team_matchup(team1=team1, team2=team2, min_year=min_year, max_year=max_year)
+        
+        return jsonify({
+            "status": "success",
+            "data": matchup,
+            "team1": team1,
+            "team2": team2
+        })
+    except Exception as e:
+        logger.error(f"CFBD matchup proxy error: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/api/cfbd/roster', methods=['GET'])
+def api_cfbd_roster():
+    """Proxy CFBD roster endpoint"""
+    try:
+        from src.cfbd_client.unified_client import UnifiedCFBDClient
+        year = request.args.get('year', type=int) or 2025
+        team = request.args.get('team', type=str)
+        
+        if not team:
+            return jsonify({"status": "error", "message": "team required"}), 400
+            
+        client = UnifiedCFBDClient()
+        roster = client.get_roster(year=year, team=team)
+        
+        return jsonify({
+            "status": "success",
+            "data": roster,
+            "count": len(roster),
+            "year": year,
+            "team": team
+        })
+    except Exception as e:
+        logger.error(f"CFBD roster proxy error: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/api/cfbd/win-probabilities', methods=['GET'])
+def api_cfbd_win_probs():
+    """Proxy CFBD win probabilities endpoint"""
+    try:
+        from src.cfbd_client.unified_client import UnifiedCFBDClient
+        year = request.args.get('year', type=int) or 2025
+        week = request.args.get('week', type=int)
+        team = request.args.get('team', type=str)
+        
+        client = UnifiedCFBDClient()
+        probs = client.get_win_probabilities(year=year, week=week, team=team)
+        
+        return jsonify({
+            "status": "success",
+            "data": probs,
+            "count": len(probs),
+            "year": year
+        })
+    except Exception as e:
+        logger.error(f"CFBD win probs proxy error: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/api/cfbd/recruiting', methods=['GET'])
+def api_cfbd_recruiting():
+    """Proxy CFBD recruiting endpoint (supports optional GraphQL)"""
+    try:
+        from src.cfbd_client.unified_client import UnifiedCFBDClient
+        year = request.args.get('year', type=int) or 2025
+        team = request.args.get('team', type=str)
+        use_graphql = request.args.get('use_graphql', 'true').lower() == 'true'
+        
+        client = UnifiedCFBDClient()
+        
+        # Try GraphQL if requested and available
+        data = None
+        source = "rest"
+        
+        if use_graphql:
+            data = client.get_recruiting_graphql(year=year, team=team)
+            if data:
+                source = "graphql"
+        
+        # Fallback to REST
+        if not data:
+            data = client.get_recruiting(year=year, team=team)
+            source = "rest"
+        
+        return jsonify({
+            "status": "success",
+            "data": data,
+            "source": source,
+            "year": year,
+            "team": team
+        })
+    except Exception as e:
+        logger.error(f"CFBD recruiting proxy error: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+# Initialize agent system on startup (skip during testing)
+if os.environ.get("FLASK_TESTING") != "true":
+    initialize_agent_system()
 
 if __name__ == '__main__':
     # Run the Flask app

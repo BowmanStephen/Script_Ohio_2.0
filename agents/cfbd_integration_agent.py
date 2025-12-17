@@ -132,7 +132,7 @@ class CFBDIntegrationAgent(BaseAgent):
             capabilities.extend([
                 AgentCapability(
                     name="graphql_scoreboard",
-                    description="Fetch scoreboard data via GraphQL API (requires Patreon Tier 3+ access)",
+                    description="Fetch scoreboard data via GraphQL API (requires Patreon Tier 3+ access). Falls back to REST if GraphQL unavailable.",
                     permission_required=PermissionLevel.READ_EXECUTE,
                     tools_required=["cfbd_graphql_client", "gql"],
                     data_access=["graphql.collegefootballdata.com"],
@@ -140,11 +140,27 @@ class CFBDIntegrationAgent(BaseAgent):
                 ),
                 AgentCapability(
                     name="graphql_recruiting",
-                    description="Fetch recruiting data via GraphQL API (requires Patreon Tier 3+ access)",
+                    description="Fetch recruiting data via GraphQL API (requires Patreon Tier 3+ access). Falls back to REST if GraphQL unavailable.",
                     permission_required=PermissionLevel.READ_EXECUTE,
                     tools_required=["cfbd_graphql_client", "gql"],
                     data_access=["graphql.collegefootballdata.com"],
                     execution_time_estimate=2.0,
+                ),
+                AgentCapability(
+                    name="graphql_plays",
+                    description="Fetch play-by-play data via GraphQL API (requires Patreon Tier 3+ access). Falls back to REST if GraphQL unavailable.",
+                    permission_required=PermissionLevel.READ_EXECUTE,
+                    tools_required=["cfbd_graphql_client", "gql"],
+                    data_access=["graphql.collegefootballdata.com"],
+                    execution_time_estimate=2.5,
+                ),
+                AgentCapability(
+                    name="graphql_betting_lines",
+                    description="Fetch betting lines via GraphQL API (requires Patreon Tier 3+ access). Falls back to REST if GraphQL unavailable.",
+                    permission_required=PermissionLevel.READ_EXECUTE,
+                    tools_required=["cfbd_graphql_client", "gql"],
+                    data_access=["graphql.collegefootballdata.com"],
+                    execution_time_estimate=1.5,
                 ),
             ])
         
@@ -164,6 +180,10 @@ class CFBDIntegrationAgent(BaseAgent):
             return self._handle_graphql_scoreboard(parameters)
         if action == "graphql_recruiting":
             return self._handle_graphql_recruiting(parameters)
+        if action == "graphql_plays":
+            return self._handle_graphql_plays(parameters)
+        if action == "graphql_betting_lines":
+            return self._handle_graphql_betting_lines(parameters)
         raise ValueError(f"Unknown action {action}")
 
     def _team_snapshot(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
@@ -339,29 +359,40 @@ class CFBDIntegrationAgent(BaseAgent):
                 if config and hasattr(config, 'graphql_fallback_to_rest'):
                     should_fallback = config.graphql_fallback_to_rest
                 else:
-                    # Default to True if config not available
-                    should_fallback = True
+                    # Check environment variable
+                    fallback_env = os.getenv("CFBD_GRAPHQL_FALLBACK_TO_REST", "true").lower()
+                    should_fallback = fallback_env != "false"
             
-            if is_auth_error and should_fallback:
-                logger.warning(f"GraphQL access forbidden (Tier 3+ required), falling back to REST: {e}")
-                # Fallback to REST
-                try:
-                    rest_games = self.client.get_games(year=season, week=week) if self.client else []
-                    return {
-                        "status": "success",
-                        "season": season,
-                        "week": week,
-                        "games": rest_games or [],
-                        "cached": False,
-                        "data_source": "REST API (GraphQL fallback)",
-                        "fallback_reason": "GraphQL requires Patreon Tier 3+",
-                    }
-                except Exception as rest_error:
-                    logger.error(f"REST fallback also failed: {rest_error}")
+            if is_auth_error:
+                if should_fallback:
+                    logger.warning(f"GraphQL access forbidden (Tier 3+ required), falling back to REST: {e}")
+                    # Fallback to REST
+                    try:
+                        rest_games = self.client.get_games(year=season, week=week) if self.client else []
+                        return {
+                            "status": "success",
+                            "season": season,
+                            "week": week,
+                            "games": rest_games or [],
+                            "cached": False,
+                            "data_source": "REST API (GraphQL fallback)",
+                            "fallback_reason": "GraphQL requires Patreon Tier 3+",
+                        }
+                    except Exception as rest_error:
+                        logger.error(f"REST fallback also failed: {rest_error}")
+                        return {
+                            "status": "error",
+                            "error": f"GraphQL failed ({str(e)}) and REST fallback failed ({str(rest_error)})",
+                            "games": [],
+                        }
+                else:
+                    # Fallback disabled - fail loudly
+                    logger.error(f"GraphQL access forbidden (Tier 3+ required) and fallback disabled: {e}")
                     return {
                         "status": "error",
-                        "error": f"GraphQL failed ({str(e)}) and REST fallback failed ({str(rest_error)})",
+                        "error": f"GraphQL requires Patreon Tier 3+ access. Set CFBD_GRAPHQL_FALLBACK_TO_REST=true to enable REST fallback.",
                         "games": [],
+                        "requires_tier": "Patreon Tier 3+",
                     }
             else:
                 logger.error(f"GraphQL scoreboard request failed: {e}")
@@ -463,6 +494,208 @@ class CFBDIntegrationAgent(BaseAgent):
                 "status": "error",
                 "error": f"GraphQL recruiting request failed: {str(e)}",
                 "recruits": [],
+            }
+    
+    def _handle_graphql_plays(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Handle GraphQL plays request.
+        
+        Args:
+            parameters: Must contain 'season' (int) and optionally 'week' (int) and 'game_id' (int)
+        
+        Returns:
+            Dictionary with play-by-play data from GraphQL API
+        """
+        if not GRAPHQL_AVAILABLE or self._graphql_client is None:
+            # Fallback to REST
+            if hasattr(self, 'client') and self.client:
+                try:
+                    season = int(parameters.get("season", parameters.get("year", datetime.utcnow().year)))
+                    week = parameters.get("week")
+                    team = parameters.get("team")
+                    plays = self.client.get_plays(year=season, week=week, team=team)
+                    return {
+                        "status": "success",
+                        "season": season,
+                        "week": week,
+                        "plays": plays,
+                        "cached": False,
+                        "data_source": "REST API (GraphQL unavailable)",
+                    }
+                except Exception as e:
+                    logger.error(f"REST fallback for plays failed: {e}")
+            
+            return {
+                "status": "error",
+                "error": "GraphQL client not available. Falling back to REST.",
+                "plays": [],
+            }
+        
+        season = int(parameters.get("season", parameters.get("year", datetime.utcnow().year)))
+        week = parameters.get("week")
+        game_id = parameters.get("game_id")
+        
+        cache_key = self._build_cache_key(
+            "graphql_plays",
+            season=season,
+            week=week or "all",
+            game_id=game_id or "all",
+        )
+        
+        if self.cache:
+            cached_data = self.cache.get(cache_key)
+            if cached_data:
+                return {
+                    "status": "success",
+                    "season": season,
+                    "week": week,
+                    "plays": cached_data.get("plays", []),
+                    "cached": True,
+                    "data_source": "GraphQL API (cached)",
+                }
+        
+        try:
+            result = self._graphql_client.get_plays(season=season, week=week, game_id=game_id)
+            plays = result.get("play", [])
+            
+            if self.cache and plays:
+                self.cache.put(
+                    cache_key,
+                    {"plays": plays},
+                    ttl_seconds=3600,
+                    tags=["cfbd", "graphql", "plays"],
+                )
+            
+            return {
+                "status": "success",
+                "season": season,
+                "week": week,
+                "plays": plays,
+                "cached": False,
+                "data_source": "GraphQL API",
+            }
+        except Exception as e:
+            # Fallback to REST
+            if hasattr(self, 'client') and self.client:
+                try:
+                    plays = self.client.get_plays(year=season, week=week)
+                    return {
+                        "status": "success",
+                        "season": season,
+                        "week": week,
+                        "plays": plays,
+                        "cached": False,
+                        "data_source": "REST API (GraphQL fallback)",
+                        "fallback_reason": str(e),
+                    }
+                except Exception as rest_error:
+                    logger.error(f"REST fallback for plays failed: {rest_error}")
+            
+            return {
+                "status": "error",
+                "error": f"GraphQL plays request failed: {str(e)}",
+                "plays": [],
+            }
+    
+    def _handle_graphql_betting_lines(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Handle GraphQL betting lines request.
+        
+        Args:
+            parameters: Must contain 'season' (int) and optionally 'week' (int)
+        
+        Returns:
+            Dictionary with betting lines data from GraphQL API
+        """
+        if not GRAPHQL_AVAILABLE or self._graphql_client is None:
+            # Fallback to REST
+            if hasattr(self, 'client') and self.client:
+                try:
+                    season = int(parameters.get("season", parameters.get("year", datetime.utcnow().year)))
+                    week = parameters.get("week")
+                    if week:
+                        lines = self.client.get_lines(year=season, week=week)
+                    else:
+                        lines = []
+                    return {
+                        "status": "success",
+                        "season": season,
+                        "week": week,
+                        "lines": lines,
+                        "cached": False,
+                        "data_source": "REST API (GraphQL unavailable)",
+                    }
+                except Exception as e:
+                    logger.error(f"REST fallback for betting lines failed: {e}")
+            
+            return {
+                "status": "error",
+                "error": "GraphQL client not available. Falling back to REST.",
+                "lines": [],
+            }
+        
+        season = int(parameters.get("season", parameters.get("year", datetime.utcnow().year)))
+        week = parameters.get("week")
+        
+        cache_key = self._build_cache_key(
+            "graphql_betting_lines",
+            season=season,
+            week=week or "all",
+        )
+        
+        if self.cache:
+            cached_data = self.cache.get(cache_key)
+            if cached_data:
+                return {
+                    "status": "success",
+                    "season": season,
+                    "week": week,
+                    "lines": cached_data.get("lines", []),
+                    "cached": True,
+                    "data_source": "GraphQL API (cached)",
+                }
+        
+        try:
+            result = self._graphql_client.get_betting_lines(season=season, week=week)
+            lines = result.get("bettingLine", [])
+            
+            if self.cache and lines:
+                self.cache.put(
+                    cache_key,
+                    {"lines": lines},
+                    ttl_seconds=1800,  # 30 min cache for betting lines
+                    tags=["cfbd", "graphql", "betting"],
+                )
+            
+            return {
+                "status": "success",
+                "season": season,
+                "week": week,
+                "lines": lines,
+                "cached": False,
+                "data_source": "GraphQL API",
+            }
+        except Exception as e:
+            # Fallback to REST
+            if hasattr(self, 'client') and self.client and week:
+                try:
+                    lines = self.client.get_lines(year=season, week=week)
+                    return {
+                        "status": "success",
+                        "season": season,
+                        "week": week,
+                        "lines": lines,
+                        "cached": False,
+                        "data_source": "REST API (GraphQL fallback)",
+                        "fallback_reason": str(e),
+                    }
+                except Exception as rest_error:
+                    logger.error(f"REST fallback for betting lines failed: {rest_error}")
+            
+            return {
+                "status": "error",
+                "error": f"GraphQL betting lines request failed: {str(e)}",
+                "lines": [],
             }
 
     def _build_cache_key(self, prefix: str, **parts: Any) -> str:

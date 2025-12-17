@@ -18,7 +18,8 @@ class TestCFBDGraphQLIntegration:
     @pytest.fixture
     def orchestrator(self):
         """Create orchestrator instance"""
-        return AnalyticsOrchestrator()
+        with patch("agents.analytics_orchestrator.CFBDSubscriptionManager", None):
+            return AnalyticsOrchestrator()
 
     @pytest.mark.integration
     @pytest.mark.skipif(

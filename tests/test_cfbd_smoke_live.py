@@ -19,8 +19,8 @@ from src.config.cfbd_config import CFBDConfig
 
 @pytest.mark.integration
 @pytest.mark.skipif(
-    not os.getenv("CFBD_API_KEY") and not os.getenv("CFBD_LIVE_TESTS"),
-    reason="CFBD_API_KEY not set and CFBD_LIVE_TESTS not enabled - skipping live HTTP test"
+    not (os.getenv("CFBD_API_KEY") and os.getenv("CFBD_LIVE_TESTS") == "1"),
+    reason="Requires CFBD_API_KEY and CFBD_LIVE_TESTS=1"
 )
 class TestCFBDSmokeLive:
     """Live HTTP smoke tests for CFBD API
