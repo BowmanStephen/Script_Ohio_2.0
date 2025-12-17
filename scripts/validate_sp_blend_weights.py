@@ -244,9 +244,14 @@ def fetch_sp_fpi_ratings(season: int = 2025) -> Dict[str, Dict[str, float]]:
         logger.error("❌ GraphQL client not available. Cannot fetch SP+/FPI ratings.")
         return {}
     
-    api_key = os.getenv("CFBD_API_KEY")
+    # Check if GraphQL is explicitly disabled
+    if os.getenv("CFBD_GRAPHQL_DISABLED", "false").lower() == "true":
+        logger.info("GraphQL explicitly disabled via CFBD_GRAPHQL_DISABLED - skipping GraphQL fetch")
+        return {}
+    
+    api_key = os.getenv("CFBD_API_KEY") or os.getenv("CFBD_API_TOKEN")
     if not api_key:
-        logger.error("❌ CFBD_API_KEY not set. Cannot fetch SP+/FPI ratings.")
+        logger.error("❌ CFBD_API_KEY or CFBD_API_TOKEN not set. Cannot fetch SP+/FPI ratings.")
         return {}
     
     logger.info(f"📡 Fetching SP+/FPI ratings for {season} season...")

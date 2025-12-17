@@ -63,6 +63,12 @@ class DataAcquisitionUtils:
         """
         if force_rest:
             return None
+        
+        # Check if GraphQL is explicitly disabled
+        import os
+        if os.getenv("CFBD_GRAPHQL_DISABLED", "false").lower() == "true":
+            logger.info("GraphQL explicitly disabled via CFBD_GRAPHQL_DISABLED - skipping initialization")
+            return None
             
         try:
             from src.data_sources.cfbd_graphql import CFBDGraphQLClient

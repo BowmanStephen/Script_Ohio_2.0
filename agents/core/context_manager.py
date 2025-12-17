@@ -41,7 +41,7 @@ warnings.warn(
 
 import json
 import os
-from typing import Dict, List, Optional, Any, Tuple
+from typing import Dict, List, Optional, Any, Tuple, Union
 from dataclasses import dataclass, asdict
 from enum import Enum
 import logging
@@ -288,18 +288,35 @@ class ContextManager:
         logger.info(f"Detected user role: {detected_role.value} (scores: {role_scores})")
         return detected_role
 
-    def load_context_for_role(self, role: UserRole, request_context: Dict[str, Any]) -> Dict[str, Any]:
+    def load_context_for_role(self, role: Union[UserRole, str], request_context: Dict[str, Any]) -> Dict[str, Any]:
         """
         Load optimized context for a specific user role.
 
         Args:
-            role: User role
+            role: User role (enum or string)
             request_context: Context of the user's request
 
         Returns:
             Optimized context dictionary
+
+        Raises:
+            ValueError: If role is not recognized
+            TypeError: If role is of invalid type
         """
-        profile = self.profiles[role]
+        # Handle role validation and conversion
+        if isinstance(role, str):
+            try:
+                # Convert string to enum
+                role = UserRole(role.lower())
+            except ValueError:
+                raise ValueError(f"Invalid role '{role}'. Valid roles are: {[r.value for r in UserRole]}")
+        elif not isinstance(role, UserRole):
+            raise TypeError(f"Role must be a string or UserRole enum, got {type(role)}")
+
+        try:
+            profile = self.profiles[role]
+        except KeyError:
+            raise ValueError(f"Role '{role.value}' is not configured. Available roles: {list(self.profiles.keys())}")
         token_budget = self.token_budgets[role]
 
         # Check cache first
@@ -658,15 +675,27 @@ class ContextManager:
         # Create a simple cache key based on role and key context elements
         key_elements = [role.value]
 
-        # Add relevant context elements
+        # Add relevant context elements with defensive programming
         if 'notebooks' in request_context:
-            key_elements.extend(sorted(request_context['notebooks'][:3]))  # Limit to prevent long keys
+            notebooks = request_context['notebooks']
+            if isinstance(notebooks, list) and notebooks:
+                key_elements.extend(sorted(str(nb) for nb in notebooks[:3]))  # Limit to prevent long keys
+            else:
+                key_elements.append('malformed_notebooks')
 
         if 'models' in request_context:
-            key_elements.extend(sorted(request_context['models'][:2]))
+            models = request_context['models']
+            if isinstance(models, list) and models:
+                key_elements.extend(sorted(str(m) for m in models[:2]))
+            else:
+                key_elements.append('malformed_models')
 
         if 'query_type' in request_context:
-            key_elements.append(request_context['query_type'])
+            query_type = request_context['query_type']
+            if isinstance(query_type, str):
+                key_elements.append(query_type)
+            else:
+                key_elements.append('malformed_query_type')
 
         return '_'.join(key_elements)
 

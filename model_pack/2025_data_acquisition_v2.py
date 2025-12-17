@@ -156,7 +156,11 @@ class DataAcquisitionAgent:
         # Determine GraphQL usage based on args and availability
         should_try_graphql = False
         
-        if use_rest:
+        # Check if GraphQL is explicitly disabled via environment variable
+        if os.getenv("CFBD_GRAPHQL_DISABLED", "false").lower() == "true":
+            logger.info("GraphQL explicitly disabled via CFBD_GRAPHQL_DISABLED environment variable")
+            should_try_graphql = False
+        elif use_rest:
             logger.info("REST API forced via CLI argument")
             should_try_graphql = False
         elif use_graphql is not None:

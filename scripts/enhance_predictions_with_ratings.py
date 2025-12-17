@@ -270,47 +270,50 @@ def fetch_sp_fpi_ratings(season: int = 2025, use_csv: bool = True) -> Dict[str, 
     
     # Fetch from API for FPI (and supplement SP+ if CSV missing some teams)
     if GQL_AVAILABLE:
-        api_key = os.getenv("CFBD_API_KEY")
-        if api_key:
-            try:
-                logger.info(f"📡 Fetching SP+/FPI ratings from CFBD GraphQL API...")
-                client = CFBDGraphQLClient(api_key=api_key)
-                result = client.get_ratings(season=season)
-                
-                # Handle both response formats
-                if 'ratings' in result:
-                    api_ratings = result['ratings']
-                elif 'data' in result and 'ratings' in result['data']:
-                    api_ratings = result['data']['ratings']
-                else:
-                    logger.warning("⚠️  No ratings data in GraphQL response")
-                    api_ratings = []
-                
-                if api_ratings:
-                    # Merge API ratings (prefer CSV for SP+, use API for FPI)
-                    for rating in api_ratings:
-                        team = rating.get('team')
-                        if team:
-                            normalized = normalize_team_name(team)
-                            
-                            # Initialize if not exists
-                            if normalized not in ratings:
-                                ratings[normalized] = {'sp': None, 'fpi': None}
-                            
-                            # Use API SP+ only if CSV didn't have it
-                            if ratings[normalized]['sp'] is None:
-                                ratings[normalized]['sp'] = rating.get('spOverall')
-                            
-                            # Always use API FPI (CSV doesn't have it)
-                            fpi_rating = rating.get('fpi')
-                            if fpi_rating is not None:
-                                ratings[normalized]['fpi'] = fpi_rating
+        # Check if GraphQL is explicitly disabled
+        if os.getenv("CFBD_GRAPHQL_DISABLED", "false").lower() == "true":
+            logger.info("GraphQL explicitly disabled via CFBD_GRAPHQL_DISABLED - skipping GraphQL fetch")
+        else:
+            api_key = os.getenv("CFBD_API_KEY") or os.getenv("CFBD_API_TOKEN")
+            if api_key:
+                try:
+                    logger.info(f"📡 Fetching SP+/FPI ratings from CFBD GraphQL API...")
+                    client = CFBDGraphQLClient(api_key=api_key)
+                    result = client.get_ratings(season=season)
                     
-                    logger.info(f"  ✅ Merged API ratings for {len(api_ratings)} teams")
-                
-            except Exception as e:
-                logger.warning(f"⚠️  Failed to fetch from API: {e}")
-                # Continue with CSV data only
+                    # Handle both response formats
+                    if 'ratings' in result:
+                        api_ratings = result['ratings']
+                    elif 'data' in result and 'ratings' in result['data']:
+                        api_ratings = result['data']['ratings']
+                    else:
+                        logger.warning("⚠️  No ratings data in GraphQL response")
+                        api_ratings = []
+                    
+                    if api_ratings:
+                        # Merge API ratings (prefer CSV for SP+, use API for FPI)
+                        for rating in api_ratings:
+                            team = rating.get('team')
+                            if team:
+                                normalized = normalize_team_name(team)
+                                
+                                # Initialize if not exists
+                                if normalized not in ratings:
+                                    ratings[normalized] = {'sp': None, 'fpi': None}
+                                
+                                # Use API SP+ only if CSV didn't have it
+                                if ratings[normalized]['sp'] is None:
+                                    ratings[normalized]['sp'] = rating.get('spOverall')
+                                
+                                # Always use API FPI (CSV doesn't have it)
+                                fpi_rating = rating.get('fpi')
+                                if fpi_rating is not None:
+                                    ratings[normalized]['fpi'] = fpi_rating
+                        
+                        logger.info(f"  ✅ Merged API ratings for {len(api_ratings)} teams")
+                except Exception as e:
+                    logger.warning(f"⚠️  Failed to fetch from API: {e}")
+                    # Continue with CSV data only
     
     # Filter out entries with no ratings at all
     ratings = {k: v for k, v in ratings.items() if v.get('sp') is not None or v.get('fpi') is not None}

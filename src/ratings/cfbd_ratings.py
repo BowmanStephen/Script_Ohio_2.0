@@ -39,15 +39,20 @@ def _normalize_team_name(team_name: Optional[str]) -> Optional[str]:
 
 def _fetch_graphql_ratings(season: int) -> pd.DataFrame:
     """Fetch SP+, FPI, SRS, Elo via GraphQL."""
+    # Check if GraphQL is explicitly disabled
+    if os.getenv("CFBD_GRAPHQL_DISABLED", "false").lower() == "true":
+        logger.debug("GraphQL explicitly disabled via CFBD_GRAPHQL_DISABLED; skipping SP+/FPI fetch.")
+        return pd.DataFrame()
+    
     try:
         from src.data_sources.cfbd_graphql import CFBDGraphQLClient  # type: ignore
     except ImportError:
         logger.debug("GraphQL client not available; skipping SP+/FPI fetch.")
         return pd.DataFrame()
 
-    api_key = os.getenv("CFBD_API_KEY")
+    api_key = os.getenv("CFBD_API_KEY") or os.getenv("CFBD_API_TOKEN")
     if not api_key:
-        logger.debug("CFBD_API_KEY not set; skipping GraphQL fetch.")
+        logger.debug("CFBD_API_KEY or CFBD_API_TOKEN not set; skipping GraphQL fetch.")
         return pd.DataFrame()
 
     try:
