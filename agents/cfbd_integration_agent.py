@@ -76,17 +76,22 @@ class CFBDIntegrationAgent(BaseAgent):
         # _define_capabilities() is called during super().__init__() and needs _graphql_client
         self._graphql_client = graphql_client
         if GRAPHQL_AVAILABLE and self._graphql_client is None:
-            try:
-                api_key = os.getenv("CFBD_API_KEY")
-                if api_key:
-                    self._graphql_client = CFBDGraphQLClient(api_key=api_key)
-                    logger.info("GraphQL client initialized successfully")
-                else:
-                    logger.warning("CFBD_API_KEY not set - GraphQL features disabled")
-                    self._graphql_client = None
-            except Exception as e:
-                logger.warning(f"Failed to initialize GraphQL client: {e}")
+            # Check if GraphQL is explicitly disabled
+            if os.getenv("CFBD_GRAPHQL_DISABLED", "false").lower() == "true":
+                logger.info("GraphQL explicitly disabled via CFBD_GRAPHQL_DISABLED - skipping initialization")
                 self._graphql_client = None
+            else:
+                try:
+                    api_key = os.getenv("CFBD_API_KEY") or os.getenv("CFBD_API_TOKEN")
+                    if api_key:
+                        self._graphql_client = CFBDGraphQLClient(api_key=api_key)
+                        logger.info("GraphQL client initialized successfully")
+                    else:
+                        logger.warning("CFBD_API_KEY or CFBD_API_TOKEN not set - GraphQL features disabled")
+                        self._graphql_client = None
+                except Exception as e:
+                    logger.warning(f"Failed to initialize GraphQL client: {e}")
+                    self._graphql_client = None
         elif not GRAPHQL_AVAILABLE:
             self._graphql_client = None
         

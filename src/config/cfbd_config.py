@@ -36,6 +36,7 @@ class CFBDConfig:
     # Transport Preference
     preferred_transport: str = "auto"  # "auto", "graphql", "rest"
     graphql_fallback_to_rest: bool = True  # If GraphQL fails (403/401), fallback to REST
+    graphql_disabled: bool = False  # If True, GraphQL features are disabled
     
     @classmethod
     def from_env(cls) -> 'CFBDConfig':
@@ -84,6 +85,9 @@ class CFBDConfig:
         
         graphql_fallback_to_rest = os.getenv("CFBD_GRAPHQL_FALLBACK_TO_REST", "true").lower() != "false"
         
+        # GraphQL disabled flag
+        graphql_disabled = os.getenv("CFBD_GRAPHQL_DISABLED", "false").lower() == "true"
+        
         if not api_key:
              # The plan says raise error here.
              raise ValueError("CFBD_API_KEY or CFBD_API_TOKEN environment variable required")
@@ -99,6 +103,7 @@ class CFBDConfig:
             enable_logging=enable_logging,
             preferred_transport=preferred_transport,
             graphql_fallback_to_rest=graphql_fallback_to_rest,
+            graphql_disabled=graphql_disabled,
         )
     
     def validate(self) -> None:

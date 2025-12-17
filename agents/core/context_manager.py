@@ -322,8 +322,11 @@ class ContextManager:
             'optimization_applied': True
         }
 
+        # Apply personalization if user preferences are provided
+        personalized_context = self._apply_personalization(context, request_context)
+
         # Apply token optimization
-        optimized_context = self._optimize_context(context, token_budget)
+        optimized_context = self._optimize_context(personalized_context, token_budget)
 
         # Cache the result
         self.context_cache[cache_key] = optimized_context
@@ -331,6 +334,52 @@ class ContextManager:
 
         logger.info(f"Loaded optimized context for {role.value}: {len(str(optimized_context))} chars")
         return optimized_context
+
+    def _apply_personalization(self, context: Dict[str, Any], request_context: Dict[str, Any]) -> Dict[str, Any]:
+        """Apply personalization based on user preferences"""
+        user_preferences = request_context.get('user_preferences')
+        if not user_preferences:
+            context['personalization_applied'] = False
+            return context
+
+        personalized_context = context.copy()
+        personalization_applied = False
+
+        # Apply model preferences
+        if 'preferred_models' in user_preferences:
+            preferred_models = user_preferences['preferred_models']
+            # Add recommended models based on preferences
+            recommended_models = []
+            for model in preferred_models:
+                if any(model_file.endswith(model) for model_file in self._get_available_models()):
+                    recommended_models.append(model)
+                    personalization_applied = True
+
+            if recommended_models:
+                personalized_context['recommended_models'] = recommended_models
+
+        # Apply focus area preferences
+        if 'focus_areas' in user_preferences:
+            focus_areas = user_preferences['focus_areas']
+            # Could customize content based on focus areas, but for now just track personalization
+            if focus_areas:
+                personalization_applied = True
+
+        # Store user preferences for reference
+        personalized_context['user_preferences'] = user_preferences
+        personalized_context['personalization_applied'] = personalization_applied
+
+        return personalized_context
+
+    def _get_available_models(self) -> List[str]:
+        """Get list of available model files"""
+        try:
+            model_path = Path(self.base_path) / "model_pack"
+            if model_path.exists():
+                return [f.name for f in model_path.glob("*.joblib") or f in model_path.glob("*.pkl")]
+        except Exception:
+            pass
+        return []
 
     def _load_data_for_role(self, profile: ContextProfile) -> Dict[str, Any]:
         """Load data appropriate for the user role"""

@@ -948,12 +948,17 @@ class InsightGeneratorAgent(BaseAgent):
             CFBDGraphQLClient instance if available, None otherwise.
         """
         try:
+            # Check if GraphQL is explicitly disabled
+            if os.getenv("CFBD_GRAPHQL_DISABLED", "false").lower() == "true":
+                logger.info("GraphQL explicitly disabled via CFBD_GRAPHQL_DISABLED")
+                return None
+            
             if CFBDGraphQLClient is None:
                 logger.warning("CFBDGraphQLClient not available - GraphQL features disabled")
                 return None
             
             if not hasattr(self, '_graphql_client') or self._graphql_client is None:
-                api_key = os.getenv("CFBD_API_KEY")
+                api_key = os.getenv("CFBD_API_KEY") or os.getenv("CFBD_API_TOKEN")
                 if api_key:
                     try:
                         self._graphql_client = CFBDGraphQLClient(api_key=api_key)
@@ -962,7 +967,7 @@ class InsightGeneratorAgent(BaseAgent):
                         logger.warning(f"Failed to initialize GraphQL client: {e}")
                         self._graphql_client = None
                 else:
-                    logger.warning("CFBD_API_KEY not set - GraphQL features disabled")
+                    logger.warning("CFBD_API_KEY or CFBD_API_TOKEN not set - GraphQL features disabled")
                     self._graphql_client = None
             
             return self._graphql_client

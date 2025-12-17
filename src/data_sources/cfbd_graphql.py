@@ -70,11 +70,17 @@ class CFBDGraphQLClient:
                 "Install with: pip install gql[all] requests"
             )
         
-        # Get API key
-        self.api_key = api_key or os.getenv("CFBD_API_KEY")
+        # Check if GraphQL is explicitly disabled
+        if os.getenv("CFBD_GRAPHQL_DISABLED", "false").lower() == "true":
+            raise ValueError(
+                "GraphQL is explicitly disabled via CFBD_GRAPHQL_DISABLED environment variable"
+            )
+        
+        # Get API key (support both CFBD_API_KEY and CFBD_API_TOKEN)
+        self.api_key = api_key or os.getenv("CFBD_API_KEY") or os.getenv("CFBD_API_TOKEN")
         if not self.api_key:
             raise ValueError(
-                "CFBD_API_KEY is required for GraphQL access. "
+                "CFBD_API_KEY or CFBD_API_TOKEN is required for GraphQL access. "
                 "Set environment variable or pass api_key parameter."
             )
         
