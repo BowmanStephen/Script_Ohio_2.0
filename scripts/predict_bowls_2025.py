@@ -1,0 +1,225 @@
+#!/usr/bin/env python3
+"""
+Minimal bowls 2025 prediction script that outputs JSON.
+
+This script:
+1. Fetches 2025 bowl games via CFBD API  
+2. Computes simple predictions using Massey ratings
+3. Outputs JSON to predictions/bowls_2025_predictions.json
+
+Requirements:
+- CFBD_API_KEY environment variable
+
+Output format:
+{
+  "generated_at": "2025-12-16T...",
+  "model": "simple-rating-diff-v1",
+  "season": 2025,
+  "games": [...]
+}
+"""
+
+import json
+import os
+import sys
+from datetime import datetime
+from pathlib import Path
+
+import pandas as pd
+
+# Add project root to Python path
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+try:
+    import cfbd
+    from cfbd.rest import ApiException
+    from src.ratings.massey_ratings import MasseyConfig, generate_massey_ratings
+except ImportError as e:
+    print(f"❌ Import error: {e}")
+    print("Make sure dependencies are installed and project structure is intact")
+    sys.exit(1)
+
+
+def get_bowl_games_2025():
+    """Fetch 2025 bowl games using CFBD API directly."""
+    try:
+        # Check for API key
+        api_key = os.getenv("CFBD_API_KEY")
+        if not api_key:
+            raise ValueError("CFBD_API_KEY environment variable required")
+        
+        # Configure CFBD client
+        configuration = cfbd.Configuration(access_token=api_key)
+        api_client = cfbd.ApiClient(configuration)
+        games_api = cfbd.GamesApi(api_client)
+        
+        # Get bowl games - use season_type="postseason"
+        print("📡 Fetching 2025 bowl games...")
+        bowl_games = games_api.get_games(year=2025, season_type="postseason")
+        
+        if not bowl_games:
+            print("❌ No bowl games found for 2025")
+            return []
+            
+        # Convert to list of dictionaries
+        games_list = [game.to_dict() for game in bowl_games]
+        print(f"✅ Found {len(games_list)} bowl games for 2025")
+        return games_list
+        
+    except ApiException as e:
+        if e.status == 401:
+            print("❌ Invalid CFBD API key")
+        else:
+            print(f"❌ CFBD API error: {e}")
+        return []
+    except Exception as e:
+        print(f"❌ Error fetching bowl games: {e}")
+        return []
+
+
+def load_or_generate_massey_ratings():
+    """Load existing Massey ratings or generate new ones."""
+    ratings_path = PROJECT_ROOT / "src" / "ratings" / "massey_ratings_2025.csv"
+    
+    if ratings_path.exists():
+        print(f"✅ Loading existing Massey ratings from {ratings_path}")
+        ratings_df = pd.read_csv(ratings_path)
+        print(f"✅ Loaded ratings for {len(ratings_df)} teams")
+        return ratings_df
+    else:
+        print("⚠️ No existing Massey ratings found, generating new ones...")
+        try:
+            config = MasseyConfig(season=2025)
+            ratings_df, _ = generate_massey_ratings(config, persist=True)
+            print(f"✅ Generated and saved ratings for {len(ratings_df)} teams")
+            return ratings_df
+        except Exception as e:
+            print(f"❌ Error generating Massey ratings: {e}")
+            return pd.DataFrame()
+
+
+def predict_game_outcome(home_team, away_team, ratings_df, home_field_advantage=2.3):
+    """
+    Simple prediction using Massey rating difference.
+    
+    Args:
+        home_team: Home team name
+        away_team: Away team name  
+        ratings_df: DataFrame with team ratings
+        home_field_advantage: Points to add for home field
+        
+    Returns:
+        tuple: (home_win_prob, predicted_margin)
+    """
+    # Get team ratings
+    home_rating = ratings_df[ratings_df['team'] == home_team]['rating']
+    away_rating = ratings_df[ratings_df['team'] == away_team]['rating']
+    
+    if home_rating.empty or away_rating.empty:
+        # Default prediction if we don't have ratings
+        print(f"⚠️ No ratings found for {home_team} vs {away_team}, using default")
+        return 0.5, 0.0
+    
+    home_rating = float(home_rating.iloc[0])
+    away_rating = float(away_rating.iloc[0])
+    
+    # Simple prediction: rating difference + home field advantage
+    predicted_margin = (home_rating - away_rating) + home_field_advantage
+    
+    # Convert margin to win probability using simple logistic function
+    # Scale factor roughly calibrated to typical college football margins
+    scale_factor = 15.0
+    home_win_prob = 1 / (1 + pow(10, -predicted_margin / scale_factor))
+    
+    return home_win_prob, predicted_margin
+
+
+def main():
+    """Main function to generate bowl predictions."""
+    print("🏈 Starting bowls 2025 prediction script")
+    
+    # Check for CFBD API key
+    if not os.getenv("CFBD_API_KEY"):
+        print("❌ CFBD_API_KEY environment variable not set")
+        print("Please set your CFBD API key:")
+        print("export CFBD_API_KEY=your_api_key")
+        return 1
+    
+    # Fetch bowl games
+    bowl_games = get_bowl_games_2025()
+    if not bowl_games:
+        return 1
+    
+    # Load or generate Massey ratings
+    ratings_df = load_or_generate_massey_ratings()
+    if ratings_df.empty:
+        print("❌ Could not load or generate team ratings")
+        return 1
+    
+    # Get home field advantage from ratings if available
+    if not ratings_df.empty and 'hfa' in ratings_df.columns:
+        home_field_advantage = float(ratings_df['hfa'].iloc[0])
+        print(f"✅ Using computed home field advantage: {home_field_advantage:.2f}")
+    else:
+        home_field_advantage = 2.3  # Default value
+        print(f"⚠️ Using default home field advantage: {home_field_advantage}")
+    
+    # Generate predictions for each bowl game
+    predictions = []
+    for game in bowl_games:
+        home_team = game.get('home_team')
+        away_team = game.get('away_team')
+        
+        if not home_team or not away_team:
+            print(f"⚠️ Skipping game with missing teams: {game}")
+            continue
+        
+        # Generate prediction
+        win_prob, margin = predict_game_outcome(
+            home_team, away_team, ratings_df, home_field_advantage
+        )
+        
+        prediction = {
+            "id": game.get('id'),
+            "date": game.get('start_date') or game.get('game_date', ''),
+            "home_team": home_team,
+            "away_team": away_team,
+            "home_win_prob": round(win_prob, 6),
+            "predicted_margin": round(margin, 6)
+        }
+        predictions.append(prediction)
+    
+    # Create output JSON
+    output_data = {
+        "generated_at": datetime.now().isoformat() + "Z",
+        "model": "simple-rating-diff-v1",
+        "season": 2025,
+        "games": predictions
+    }
+    
+    # Write output
+    output_path = PROJECT_ROOT / "predictions" / "bowls_2025_predictions.json"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    
+    with open(output_path, 'w') as f:
+        json.dump(output_data, f, indent=2)
+    
+    print(f"✅ Generated {len(predictions)} bowl predictions")
+    print(f"✅ Output saved to: {output_path}")
+    
+    # Show sample predictions
+    if predictions:
+        print("\n📊 Sample predictions:")
+        for i, pred in enumerate(predictions[:3]):
+            margin_dir = "wins" if pred["predicted_margin"] > 0 else "loses" 
+            print(f"  {i+1}. {pred['away_team']} @ {pred['home_team']}: "
+                  f"{pred['home_win_prob']:.1%} home win, "
+                  f"{pred['home_team']} {margin_dir} by {abs(pred['predicted_margin']):.1f}")
+    
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
