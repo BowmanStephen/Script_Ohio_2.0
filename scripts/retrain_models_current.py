@@ -52,6 +52,7 @@ from src.observability import (  # noqa: E402
     get_logger,
 )
 
+
 def _load_feature_lists() -> tuple[list[str], list[str]]:
     """
     Load feature lists from `config/model_config.py` without importing `config.*`.
@@ -73,8 +74,15 @@ def _load_feature_lists() -> tuple[list[str], list[str]]:
 RIDGE_FEATURES, XGB_FEATURES = _load_feature_lists()
 
 try:
-    from fastai.tabular.all import Categorify, FillMissing, Normalize, TabularDataLoaders, tabular_learner, accuracy  # type: ignore
     from fastai.metrics import RocAucBinary  # type: ignore
+    from fastai.tabular.all import (  # type: ignore
+        Categorify,
+        FillMissing,
+        Normalize,
+        TabularDataLoaders,
+        accuracy,
+        tabular_learner,
+    )
 
     FASTAI_AVAILABLE = True
 except ImportError:

@@ -6,13 +6,13 @@ This script orchestrates the file organization process using our specialized age
 It demonstrates a practical multi-agent workflow for organizing project files.
 """
 
+import logging
 import os
 import sys
-import logging
 import time
-from pathlib import Path
 from datetime import datetime
-from typing import Dict, Any
+from pathlib import Path
+from typing import Any, Dict
 
 # Add current directory to Python path
 current_dir = Path.cwd()
@@ -21,8 +21,7 @@ if str(current_dir) not in sys.path:
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -43,8 +42,10 @@ class FileOrganizationOrchestrator:
             from agents.file_organization_agent import create_file_organization_agent
             from agents.validation_agent import create_validation_agent
 
-            self.file_org_agent = create_file_organization_agent('orchestrator_file_org')
-            self.validation_agent = create_validation_agent('orchestrator_validation')
+            self.file_org_agent = create_file_organization_agent(
+                "orchestrator_file_org"
+            )
+            self.validation_agent = create_validation_agent("orchestrator_validation")
 
             logger.info("✅ All agents initialized successfully")
 
@@ -64,22 +65,22 @@ class FileOrganizationOrchestrator:
         try:
             # Phase 1: Create missing directories
             logger.info("📁 Phase 1: Creating missing directory structure...")
-            workflow_results['directories'] = self._create_directories()
+            workflow_results["directories"] = self._create_directories()
 
             # Phase 2: Organize files
             logger.info("📋 Phase 2: Organizing files into proper directories...")
-            workflow_results['file_organization'] = self._organize_files()
+            workflow_results["file_organization"] = self._organize_files()
 
             # Phase 3: Validate organization
             logger.info("✅ Phase 3: Validating organization integrity...")
-            workflow_results['validation'] = self._validate_organization()
+            workflow_results["validation"] = self._validate_organization()
 
             # Phase 4: System maintenance
             logger.info("🔧 Phase 4: System maintenance and cleanup...")
-            workflow_results['maintenance'] = self._system_maintenance()
+            workflow_results["maintenance"] = self._system_maintenance()
 
             # Generate final report
-            workflow_results['workflow_summary'] = self._generate_workflow_summary(
+            workflow_results["workflow_summary"] = self._generate_workflow_summary(
                 time.time() - workflow_start
             )
 
@@ -88,17 +89,17 @@ class FileOrganizationOrchestrator:
             self._log_completion_summary(workflow_results)
 
             return {
-                'status': 'success',
-                'results': workflow_results,
-                'execution_time': time.time() - workflow_start
+                "status": "success",
+                "results": workflow_results,
+                "execution_time": time.time() - workflow_start,
             }
 
         except Exception as e:
             logger.error(f"❌ Workflow failed: {e}")
             return {
-                'status': 'error',
-                'error': str(e),
-                'execution_time': time.time() - workflow_start
+                "status": "error",
+                "error": str(e),
+                "execution_time": time.time() - workflow_start,
             }
 
     def _create_directories(self) -> Dict[str, Any]:
@@ -108,22 +109,26 @@ class FileOrganizationOrchestrator:
             result = self.file_org_agent._execute_action(
                 action="create_missing_directories",
                 parameters={},
-                user_context={"workflow_phase": "directory_creation"}
+                user_context={"workflow_phase": "directory_creation"},
             )
 
-            self.organization_log.append({
-                "phase": "directory_creation",
-                "result": result,
-                "timestamp": datetime.now().isoformat()
-            })
+            self.organization_log.append(
+                {
+                    "phase": "directory_creation",
+                    "result": result,
+                    "timestamp": datetime.now().isoformat(),
+                }
+            )
 
-            if result['status'] == 'success':
-                created = result['result']['total_created']
+            if result["status"] == "success":
+                created = result["result"]["total_created"]
                 logger.info(f"✅ Created {created} missing directories")
                 return {"success": True, "directories_created": created}
             else:
-                logger.error(f"❌ Directory creation failed: {result.get('error', 'Unknown error')}")
-                return {"success": False, "error": result.get('error')}
+                logger.error(
+                    f"❌ Directory creation failed: {result.get('error', 'Unknown error')}"
+                )
+                return {"success": False, "error": result.get("error")}
 
         except Exception as e:
             logger.error(f"❌ Directory creation error: {e}")
@@ -137,27 +142,29 @@ class FileOrganizationOrchestrator:
             classification_result = self.file_org_agent._execute_action(
                 action="classify_root_files",
                 parameters={},
-                user_context={"workflow_phase": "file_classification"}
+                user_context={"workflow_phase": "file_classification"},
             )
 
-            if classification_result['status'] != 'success':
-                raise Exception(f"File classification failed: {classification_result.get('error')}")
+            if classification_result["status"] != "success":
+                raise Exception(
+                    f"File classification failed: {classification_result.get('error')}"
+                )
 
-            total_files = classification_result['result']['total_files']
+            total_files = classification_result["result"]["total_files"]
             logger.info(f"📊 Found {total_files} files to organize")
 
             # Then organize them
             organization_result = self.file_org_agent._execute_action(
                 action="organize_into_directories",
                 parameters={},
-                user_context={"workflow_phase": "file_organization"}
+                user_context={"workflow_phase": "file_organization"},
             )
 
             self.organization_log.extend(self.file_org_agent.organization_log)
 
-            if organization_result['status'] == 'success':
-                moved = organization_result['result']['total_moved']
-                failed = organization_result['result']['total_failed']
+            if organization_result["status"] == "success":
+                moved = organization_result["result"]["total_moved"]
+                failed = organization_result["result"]["total_failed"]
 
                 logger.info(f"✅ Moved {moved} files successfully")
                 if failed > 0:
@@ -168,10 +175,12 @@ class FileOrganizationOrchestrator:
                     "files_moved": moved,
                     "files_failed": failed,
                     "total_found": total_files,
-                    "moved_files": organization_result['result']['moved_files']
+                    "moved_files": organization_result["result"]["moved_files"],
                 }
             else:
-                raise Exception(f"File organization failed: {organization_result.get('error')}")
+                raise Exception(
+                    f"File organization failed: {organization_result.get('error')}"
+                )
 
         except Exception as e:
             logger.error(f"❌ File organization error: {e}")
@@ -184,44 +193,51 @@ class FileOrganizationOrchestrator:
             validation_results = {}
 
             # Validate file moves
-            moved_files = (self.organization_log[-1] if self.organization_log
-                          else {}).get('result', {}).get('moved_files', {})
+            moved_files = (
+                (self.organization_log[-1] if self.organization_log else {})
+                .get("result", {})
+                .get("moved_files", {})
+            )
 
             if moved_files:
                 file_validation = self.validation_agent._execute_action(
                     action="validate_file_moves",
                     parameters={"moved_files": moved_files},
-                    user_context={"workflow_phase": "validation"}
+                    user_context={"workflow_phase": "validation"},
                 )
 
-                validation_results['file_moves'] = file_validation
-                if file_validation['status'] == 'success':
-                    success_rate = file_validation['result']['success_rate']
+                validation_results["file_moves"] = file_validation
+                if file_validation["status"] == "success":
+                    success_rate = file_validation["result"]["success_rate"]
                     logger.info(f"✅ File validation: {success_rate:.1%} success rate")
 
             # Validate import integrity
             import_validation = self.validation_agent._execute_action(
                 action="validate_import_integrity",
                 parameters={},
-                user_context={"workflow_phase": "validation"}
+                user_context={"workflow_phase": "validation"},
             )
 
-            validation_results['import_integrity'] = import_validation
-            if import_validation['status'] == 'success':
-                success_rate = import_validation['result']['import_success_rate']
+            validation_results["import_integrity"] = import_validation
+            if import_validation["status"] == "success":
+                success_rate = import_validation["result"]["import_success_rate"]
                 logger.info(f"✅ Import validation: {success_rate:.1%} success rate")
 
             self.validation_results.extend(self.validation_agent.validation_results)
 
             return {
                 "success": True,
-                "file_validation": validation_results.get('file_moves', {}).get('result', {}),
-                "import_validation": validation_results.get('import_integrity', {}).get('result', {}),
+                "file_validation": validation_results.get("file_moves", {}).get(
+                    "result", {}
+                ),
+                "import_validation": validation_results.get("import_integrity", {}).get(
+                    "result", {}
+                ),
                 "overall_success": all(
-                    result.get('result', {}).get('success_rate', 0) >= 0.9
+                    result.get("result", {}).get("success_rate", 0) >= 0.9
                     for result in validation_results.values()
-                    if result.get('status') == 'success'
-                )
+                    if result.get("status") == "success"
+                ),
             }
 
         except Exception as e:
@@ -238,18 +254,20 @@ class FileOrganizationOrchestrator:
             gitignore_result = self.validation_agent._execute_action(
                 action="update_gitignore",
                 parameters={},
-                user_context={"workflow_phase": "maintenance"}
+                user_context={"workflow_phase": "maintenance"},
             )
 
-            maintenance_results['gitignore'] = gitignore_result
-            if gitignore_result['status'] == 'success':
-                updated = gitignore_result['result']['gitignore_updated']
+            maintenance_results["gitignore"] = gitignore_result
+            if gitignore_result["status"] == "success":
+                updated = gitignore_result["result"]["gitignore_updated"]
                 logger.info(f"✅ .gitignore updated: {updated}")
 
             return {
                 "success": True,
-                "gitignore_updated": gitignore_result['result'].get('gitignore_updated', False),
-                "maintenance_details": maintenance_results
+                "gitignore_updated": gitignore_result["result"].get(
+                    "gitignore_updated", False
+                ),
+                "maintenance_details": maintenance_results,
             }
 
         except Exception as e:
@@ -270,26 +288,30 @@ class FileOrganizationOrchestrator:
                 "file_classification",
                 "file_organization",
                 "validation",
-                "system_maintenance"
-            ]
+                "system_maintenance",
+            ],
         }
 
     def _log_completion_summary(self, workflow_results: Dict[str, Any]):
         """Log final completion summary."""
 
         logger.info("📊 Workflow Summary:")
-        logger.info(f"   Execution Time: {workflow_results['workflow_summary']['execution_time']:.2f}s")
-        logger.info(f"   Organization Actions: {workflow_results['workflow_summary']['total_organization_actions']}")
+        logger.info(
+            f"   Execution Time: {workflow_results['workflow_summary']['execution_time']:.2f}s"
+        )
+        logger.info(
+            f"   Organization Actions: {workflow_results['workflow_summary']['total_organization_actions']}"
+        )
 
-        if workflow_results.get('file_organization', {}).get('success'):
-            moved = workflow_results['file_organization']['files_moved']
+        if workflow_results.get("file_organization", {}).get("success"):
+            moved = workflow_results["file_organization"]["files_moved"]
             logger.info(f"   Files Organized: {moved}")
 
-        if workflow_results.get('validation', {}).get('success'):
+        if workflow_results.get("validation", {}).get("success"):
             logger.info(f"   Validation Status: ✅ PASSED")
 
-        if workflow_results.get('maintenance', {}).get('success'):
-            gitignore_updated = workflow_results['maintenance']['gitignore_updated']
+        if workflow_results.get("maintenance", {}).get("success"):
+            gitignore_updated = workflow_results["maintenance"]["gitignore_updated"]
             logger.info(f"   .gitignore Updated: {gitignore_updated}")
 
 
@@ -302,8 +324,10 @@ def main():
     print()
 
     # Confirm with user before proceeding
-    response = input("Do you want to proceed with file organization? (y/N): ").strip().lower()
-    if response not in ['y', 'yes']:
+    response = (
+        input("Do you want to proceed with file organization? (y/N): ").strip().lower()
+    )
+    if response not in ["y", "yes"]:
         print("File organization cancelled.")
         return
 
@@ -315,11 +339,13 @@ def main():
         orchestrator = FileOrganizationOrchestrator()
         result = orchestrator.run_organization_workflow()
 
-        if result['status'] == 'success':
+        if result["status"] == "success":
             print("\n🎉 File organization completed successfully!")
             print(f"Total execution time: {result['execution_time']:.2f}s")
         else:
-            print(f"\n❌ File organization failed: {result.get('error', 'Unknown error')}")
+            print(
+                f"\n❌ File organization failed: {result.get('error', 'Unknown error')}"
+            )
             return 1
 
     except Exception as e:

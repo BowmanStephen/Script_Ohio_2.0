@@ -18,14 +18,16 @@ import warnings
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, Optional
 
-from src.cfbd_client.client import CFBDClient as _LegacyCFBDClient, RequestConfig
-from .cfbd_cache_manager import CFBDCacheManager, CFBDCacheConfig
+from src.cfbd_client.client import CFBDClient as _LegacyCFBDClient
+from src.cfbd_client.client import RequestConfig
+
+from .cfbd_cache_manager import CFBDCacheConfig, CFBDCacheManager
 
 warnings.warn(
     "src.data_sources.cfbd_client is deprecated. "
     "Use UnifiedCFBDClient from src.cfbd_client.unified_client instead.",
     DeprecationWarning,
-    stacklevel=2
+    stacklevel=2,
 )
 
 TelemetryHook = Optional[Callable[[Dict[str, Any]], None]]
@@ -72,7 +74,11 @@ class CFBDRESTDataSource:
     ) -> None:
         self._config = config or CFBDClientConfig()
         self._client = client or build_cfbd_rest_client(self._config)
-        cache_disabled = os.getenv("CFBD_CACHE_DISABLED", "").lower() in {"1", "true", "yes"}
+        cache_disabled = os.getenv("CFBD_CACHE_DISABLED", "").lower() in {
+            "1",
+            "true",
+            "yes",
+        }
         if cache_disabled:
             self._cache: Optional[CFBDCacheManager] = None
         else:
@@ -188,4 +194,3 @@ class CFBDRESTDataSource:
         if not self._cache:
             return fetcher()
         return self._cache.get_or_fetch(label, params, fetcher)
-

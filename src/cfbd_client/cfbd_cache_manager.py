@@ -8,7 +8,6 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, Optional
 
-
 CacheFetcher = Callable[[], Any]
 ClockFn = Callable[[], float]
 
@@ -66,8 +65,10 @@ DEFAULT_TTL_SECONDS: Dict[str, int] = {
 class CFBDCacheConfig:
     enable_cache: bool = True
     default_ttl_seconds: int = 15 * 60
-    ttl_overrides: Dict[str, int] = field(default_factory=lambda: dict(DEFAULT_TTL_SECONDS))
-    
+    ttl_overrides: Dict[str, int] = field(
+        default_factory=lambda: dict(DEFAULT_TTL_SECONDS)
+    )
+
     # Add fields used in cfbd_config.py from the plan if they differ from the existing class
     # The plan uses: cache_ttl_games, cache_ttl_stats, cache_ttl_teams, cache_ttl_predictions
     # I should adapt the config to support these or map them.
@@ -77,33 +78,38 @@ class CFBDCacheConfig:
     #     cache_ttl_games=int(os.getenv("CFBD_CACHE_TTL_GAMES", "86400")),  # 24 hours
     #     ...
     # )
-    # The existing class uses a dict `ttl_overrides`. 
+    # The existing class uses a dict `ttl_overrides`.
     # I will update the class to include the specific fields the plan uses or update the plan's usage.
     # It is safer to update the class to be compatible with what the plan expects OR update the plan implementation in my head.
     # I will stick to the plan's implementation of CFBDConfig which instantiates CFBDCacheConfig.
     # I will modify CFBDCacheConfig to match the plan's usage or use kwargs.
-    
+
     # Let's add the fields the plan seems to expect as arguments, but map them to ttl_overrides or keep them separate.
     # The plan implementation of CFBDConfig passes: enable_cache, cache_ttl_games, etc.
     # I will add these as optional init args that populate ttl_overrides.
-    
-    def __init__(self, enable_cache: bool = True, 
-                 cache_ttl_games: int = 86400,
-                 cache_ttl_stats: int = 3600,
-                 cache_ttl_teams: int = 604800,
-                 cache_ttl_predictions: int = 300,
-                 default_ttl_seconds: int = 900,
-                 ttl_overrides: Optional[Dict[str, int]] = None):
+
+    def __init__(
+        self,
+        enable_cache: bool = True,
+        cache_ttl_games: int = 86400,
+        cache_ttl_stats: int = 3600,
+        cache_ttl_teams: int = 604800,
+        cache_ttl_predictions: int = 300,
+        default_ttl_seconds: int = 900,
+        ttl_overrides: Optional[Dict[str, int]] = None,
+    ):
         self.enable_cache = enable_cache
         self.default_ttl_seconds = default_ttl_seconds
         self.ttl_overrides = ttl_overrides or dict(DEFAULT_TTL_SECONDS)
-        
+
         # Update overrides with specific args
-        self.ttl_overrides['games'] = cache_ttl_games
-        self.ttl_overrides['stats'] = cache_ttl_stats
-        self.ttl_overrides['teams'] = cache_ttl_teams
-        self.ttl_overrides['predictions'] = cache_ttl_predictions
-        self.ttl_overrides['ratings'] = cache_ttl_stats # map ratings to stats ttl roughly
+        self.ttl_overrides["games"] = cache_ttl_games
+        self.ttl_overrides["stats"] = cache_ttl_stats
+        self.ttl_overrides["teams"] = cache_ttl_teams
+        self.ttl_overrides["predictions"] = cache_ttl_predictions
+        self.ttl_overrides["ratings"] = (
+            cache_ttl_stats  # map ratings to stats ttl roughly
+        )
 
 
 class CFBDCacheManager:
@@ -141,11 +147,15 @@ class CFBDCacheManager:
                     self._backend.delete(key)
 
     # Updated to match the plan's usage which calls get_cached_data and cache_data
-    def get_cached_data(self, endpoint: str, params: Dict[str, Any], cache_type: str) -> Any:
-         # endpoint is the label
-         return self.get_or_fetch(endpoint, params, lambda: None, only_read=True)
+    def get_cached_data(
+        self, endpoint: str, params: Dict[str, Any], cache_type: str
+    ) -> Any:
+        # endpoint is the label
+        return self.get_or_fetch(endpoint, params, lambda: None, only_read=True)
 
-    def cache_data(self, endpoint: str, params: Dict[str, Any], data: Any, cache_type: str) -> None:
+    def cache_data(
+        self, endpoint: str, params: Dict[str, Any], data: Any, cache_type: str
+    ) -> None:
         # We need to write to cache manually
         key = self._build_key(endpoint, params)
         now = self._clock()
@@ -159,10 +169,11 @@ class CFBDCacheManager:
         label: str,
         params: Optional[Dict[str, Any]],
         fetcher: CacheFetcher,
-        only_read: bool = False
+        only_read: bool = False,
     ) -> Any:
         if not self.enabled:
-            if only_read: return None
+            if only_read:
+                return None
             return fetcher()
 
         key = self._build_key(label, params)
@@ -189,4 +200,3 @@ class CFBDCacheManager:
 
     def get_cache_stats(self) -> Dict[str, int]:
         return dict(self._stats)
-

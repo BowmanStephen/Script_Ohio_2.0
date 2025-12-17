@@ -10,6 +10,7 @@ Migration:
 
 This legacy client is kept for backward compatibility only.
 """
+
 from __future__ import annotations
 
 import warnings
@@ -18,7 +19,7 @@ warnings.warn(
     "src.cfbd_client.client.CFBDClient is deprecated. "
     "Use UnifiedCFBDClient from src.cfbd_client.unified_client instead.",
     DeprecationWarning,
-    stacklevel=2
+    stacklevel=2,
 )
 
 import json
@@ -31,7 +32,6 @@ from pathlib import Path
 from typing import Any, Callable, Dict, Final, Optional
 
 import requests
-
 
 HOST_MAP: Final[Dict[str, str]] = {
     "production": "https://api.collegefootballdata.com",
@@ -193,9 +193,7 @@ class CFBDClient:
 
             latency_ms = (time.monotonic() - request_start) * 1000
             status = response.status_code
-            log_message = (
-                f"{config.method} {endpoint} (status={status}, latency_ms={latency_ms:.0f}, attempt={attempt})"
-            )
+            log_message = f"{config.method} {endpoint} (status={status}, latency_ms={latency_ms:.0f}, attempt={attempt})"
 
             if 200 <= status < 300:
                 self._log(logging.INFO, log_message)
@@ -239,7 +237,9 @@ class CFBDClient:
                 )
 
             if status == 429:
-                self._log(logging.WARNING, log_message + " -- rate limit hit, waiting 60s")
+                self._log(
+                    logging.WARNING, log_message + " -- rate limit hit, waiting 60s"
+                )
                 self._record_metrics(
                     status=status,
                     latency_ms=latency_ms,
@@ -318,7 +318,8 @@ class CFBDClient:
             )
 
         raise CFBDClientError(
-            "CFBD request exhausted retries. Last error: " + (str(last_error) if last_error else "Unknown error")
+            "CFBD request exhausted retries. Last error: "
+            + (str(last_error) if last_error else "Unknown error")
         )
 
     def _apply_backoff(self, attempt: int) -> None:
@@ -333,7 +334,9 @@ class CFBDClient:
         try:
             return response.json()
         except json.JSONDecodeError as exc:  # pragma: no cover - extremely rare
-            raise CFBDClientError(f"Failed to decode CFBD response JSON: {exc}") from exc
+            raise CFBDClientError(
+                f"Failed to decode CFBD response JSON: {exc}"
+            ) from exc
 
     def get_metrics(self) -> Dict[str, Any]:
         """Return a snapshot of client metrics."""
@@ -411,7 +414,9 @@ class CFBDClient:
     def get_recruiting(self, *, year: int) -> Any:
         """Fetch team recruiting rankings for a season."""
 
-        config = RequestConfig(method="GET", endpoint="/recruiting/teams", params={"year": year})
+        config = RequestConfig(
+            method="GET", endpoint="/recruiting/teams", params={"year": year}
+        )
         return self._request(config)
 
     def get_game_weather(
@@ -459,7 +464,9 @@ class CFBDClient:
         if week is not None:
             params["week"] = week
 
-        config = RequestConfig(method="GET", endpoint="/ratings/predicted", params=params)
+        config = RequestConfig(
+            method="GET", endpoint="/ratings/predicted", params=params
+        )
         return self._request(config)
 
     def _record_metrics(

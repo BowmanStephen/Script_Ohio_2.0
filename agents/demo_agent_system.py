@@ -38,8 +38,9 @@ def _print_response(label: str, response) -> None:
         print("Result keys:", list(response.results.keys()))
 
 
-def build_request(user_id: str, query: str, query_type: str,
-                  parameters: Dict, context_hints: Dict) -> AnalyticsRequest:
+def build_request(
+    user_id: str, query: str, query_type: str, parameters: Dict, context_hints: Dict
+) -> AnalyticsRequest:
     """Helper to create consistent requests."""
     return AnalyticsRequest(
         user_id=user_id,
@@ -109,7 +110,10 @@ def run_demo() -> bool:
 
     print("\n=== SUMMARY ===")
     print(f"Completed {successes}/{len(scenarios)} scenarios successfully.")
-    print("Agent types available:", sorted(orchestrator.agent_factory.agent_registry.keys()))
+    print(
+        "Agent types available:",
+        sorted(orchestrator.agent_factory.agent_registry.keys()),
+    )
     print("Agent instances created:", sorted(orchestrator.agent_factory.agents.keys()))
 
     # Persist raw responses for debugging/reference

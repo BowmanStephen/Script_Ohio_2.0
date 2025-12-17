@@ -19,27 +19,29 @@ Performance Targets:
 - Memory Usage: <30MB per instance
 """
 
-import time
-import logging
-import json
 import asyncio
-from typing import Dict, List, Any, Optional, Union, Tuple
-from dataclasses import dataclass, asdict
-from enum import Enum
 import hashlib
-from pathlib import Path
+import json
+import logging
 import sys
+import time
+from dataclasses import asdict, dataclass
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 # Add parent directories to path
 sys.path.append(str(Path(__file__).parent.parent.parent))
 sys.path.append(str(Path(__file__).parent.parent))
 
-from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
+from agents.core.agent_framework import AgentCapability, BaseAgent, PermissionLevel
 
 logger = logging.getLogger(__name__)
 
+
 class PredictionType(Enum):
     """Types of predictions FastAgent can generate"""
+
     WIN_PROBABILITY = "win_probability"
     SCORE_PREDICTION = "score_prediction"
     MARGIN_PREDICTION = "margin_prediction"
@@ -48,15 +50,19 @@ class PredictionType(Enum):
     MONEYLINE = "moneyline"
     PLAYER_PROPS = "player_props"
 
+
 class CacheLevel(Enum):
     """Cache levels for different performance requirements"""
+
     LIGHTNING = "lightning"  # <5ms responses, highly cached
-    FAST = "fast"           # <25ms responses, moderately cached
-    STANDARD = "standard"   # <100ms responses, minimal caching
+    FAST = "fast"  # <25ms responses, moderately cached
+    STANDARD = "standard"  # <100ms responses, minimal caching
+
 
 @dataclass
 class PredictionRequest:
     """Optimized prediction request for production use"""
+
     prediction_type: PredictionType
     team1: str
     team2: str
@@ -65,9 +71,11 @@ class PredictionRequest:
     include_explanation: bool = False
     timeout_ms: int = 100  # Maximum response time
 
+
 @dataclass
 class PredictionResponse:
     """Optimized prediction response for production use"""
+
     success: bool
     prediction_type: str
     predictions: Dict[str, Any]
@@ -77,6 +85,7 @@ class PredictionResponse:
     cache_hit: bool = False
     error_message: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = None
+
 
 class HighPerformanceCache:
     """Lightning-fast LRU cache with TTL and intelligent eviction"""
@@ -92,7 +101,7 @@ class HighPerformanceCache:
 
     def _generate_key(self, *args) -> str:
         """Generate consistent cache key"""
-        key_data = str(args).encode('utf-8')
+        key_data = str(args).encode("utf-8")
         return hashlib.md5(key_data).hexdigest()
 
     def get(self, *args) -> Optional[Any]:
@@ -155,7 +164,7 @@ class HighPerformanceCache:
             "misses": self._misses,
             "hit_rate": hit_rate,
             "size": len(self._cache),
-            "max_size": self.max_size
+            "max_size": self.max_size,
         }
 
     def clear(self):
@@ -163,6 +172,7 @@ class HighPerformanceCache:
         self._cache.clear()
         self._access_times.clear()
         self._timestamps.clear()
+
 
 class PredictionOptimizer:
     """Optimize predictions for speed and accuracy"""
@@ -173,7 +183,7 @@ class PredictionOptimizer:
             "ridge": 0.25,
             "xgboost": 0.35,
             "fastai": 0.30,
-            "random_forest": 0.10
+            "random_forest": 0.10,
         }
         logger.info("PredictionOptimizer initialized")
 
@@ -201,10 +211,12 @@ class PredictionOptimizer:
             "prediction": prediction,
             "processing_time_ms": processing_time,
             "strategy": strategy,
-            "cache_key": cache_key
+            "cache_key": cache_key,
         }
 
-    def _generate_fast_prediction(self, request: PredictionRequest, strategy: str) -> Dict[str, Any]:
+    def _generate_fast_prediction(
+        self, request: PredictionRequest, strategy: str
+    ) -> Dict[str, Any]:
         """Generate prediction using optimized strategy"""
         team1, team2 = request.team1, request.team2
 
@@ -224,9 +236,18 @@ class PredictionOptimizer:
         # In production, this would use pre-computed team ratings
 
         team_ratings = {
-            "Ohio State": 95.2, "Alabama": 94.8, "Georgia": 94.5, "Michigan": 93.7,
-            "Clemson": 92.3, "Oklahoma": 91.8, "Texas": 90.4, "Florida": 89.7,
-            "LSU": 88.9, "Notre Dame": 88.2, "USC": 87.6, "Oklahoma State": 86.9
+            "Ohio State": 95.2,
+            "Alabama": 94.8,
+            "Georgia": 94.5,
+            "Michigan": 93.7,
+            "Clemson": 92.3,
+            "Oklahoma": 91.8,
+            "Texas": 90.4,
+            "Florida": 89.7,
+            "LSU": 88.9,
+            "Notre Dame": 88.2,
+            "USC": 87.6,
+            "Oklahoma State": 86.9,
         }
 
         rating1 = team_ratings.get(team1, 75.0)  # Default rating for unknown teams
@@ -246,11 +267,11 @@ class PredictionOptimizer:
             "win_probability": max(0.1, min(0.9, win_prob)),
             "predicted_score": {
                 team1: max(10, min(70, round(team1_score))),
-                team2: max(10, min(70, round(team2_score)))
+                team2: max(10, min(70, round(team2_score))),
             },
             "predicted_margin": abs(round(team1_score - team2_score)),
             "confidence": 0.75,  # Fixed confidence for simplified prediction
-            "model_type": "simplified"
+            "model_type": "simplified",
         }
 
     def _balanced_prediction(self, team1: str, team2: str) -> Dict[str, Any]:
@@ -277,6 +298,7 @@ class PredictionOptimizer:
 
         return balanced
 
+
 class APILayer:
     """Frontend API integration layer"""
 
@@ -284,12 +306,13 @@ class APILayer:
         self.response_formats = {
             "web": self._format_web_response,
             "mobile": self._format_mobile_response,
-            "api": self._format_api_response
+            "api": self._format_api_response,
         }
         logger.info("APILayer initialized")
 
-    def format_response(self, prediction_response: PredictionResponse,
-                       format_type: str = "web") -> Dict[str, Any]:
+    def format_response(
+        self, prediction_response: PredictionResponse, format_type: str = "web"
+    ) -> Dict[str, Any]:
         """Format prediction response for different client types"""
         formatter = self.response_formats.get(format_type, self._format_web_response)
         return formatter(prediction_response)
@@ -305,9 +328,9 @@ class APILayer:
                 "metadata": {
                     "processing_time": response.processing_time_ms,
                     "cache_hit": response.cache_hit,
-                    "prediction_type": response.prediction_type
-                }
-            }
+                    "prediction_type": response.prediction_type,
+                },
+            },
         }
 
     def _format_mobile_response(self, response: PredictionResponse) -> Dict[str, Any]:
@@ -319,12 +342,13 @@ class APILayer:
             "score": response.predictions.get("predicted_score"),
             "margin": response.predictions.get("predicted_margin"),
             "confidence": response.confidence,
-            "time": response.processing_time_ms
+            "time": response.processing_time_ms,
         }
 
     def _format_api_response(self, response: PredictionResponse) -> Dict[str, Any]:
         """Format response for API consumers"""
         return asdict(response)
+
 
 class FastAgent(BaseAgent):
     """
@@ -338,7 +362,7 @@ class FastAgent(BaseAgent):
         super().__init__(
             agent_id=agent_id,
             name="Fast Agent",
-            permission_level=PermissionLevel.READ_EXECUTE
+            permission_level=PermissionLevel.READ_EXECUTE,
         )
 
         # Initialize high-performance components
@@ -353,7 +377,7 @@ class FastAgent(BaseAgent):
             "cache_hit_rate": 0,
             "sub_50ms_count": 0,
             "sub_100ms_count": 0,
-            "timeout_count": 0
+            "timeout_count": 0,
         }
 
         logger.info(f"FastAgent initialized with high-performance cache")
@@ -367,7 +391,7 @@ class FastAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE,
                 tools_required=["numpy", "scikit-learn"],
                 data_access=["team_ratings", "quick_stats"],
-                execution_time_estimate=0.02  # 20ms target
+                execution_time_estimate=0.02,  # 20ms target
             ),
             AgentCapability(
                 name="high_performance_cache",
@@ -375,7 +399,7 @@ class FastAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_ONLY,
                 tools_required=["caching", "memory_management"],
                 data_access=["cached_predictions"],
-                execution_time_estimate=0.005  # 5ms target
+                execution_time_estimate=0.005,  # 5ms target
             ),
             AgentCapability(
                 name="api_optimization",
@@ -383,7 +407,7 @@ class FastAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE,
                 tools_required=["serialization", "formatting"],
                 data_access=["api_responses"],
-                execution_time_estimate=0.01  # 10ms target
+                execution_time_estimate=0.01,  # 10ms target
             ),
             AgentCapability(
                 name="real_time_monitoring",
@@ -391,12 +415,13 @@ class FastAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_ONLY,
                 tools_required=["metrics", "monitoring"],
                 data_access=["performance_data"],
-                execution_time_estimate=0.001  # 1ms target
-            )
+                execution_time_estimate=0.001,  # 1ms target
+            ),
         ]
 
-    def _execute_action(self, action: str, parameters: Dict[str, Any],
-                       user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_action(
+        self, action: str, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Execute fast agent actions"""
         start_time = time.time()
 
@@ -426,10 +451,12 @@ class FastAgent(BaseAgent):
             return {
                 "success": False,
                 "error": str(e),
-                "execution_time_ms": execution_time_ms
+                "execution_time_ms": execution_time_ms,
             }
 
-    def _handle_prediction(self, parameters: Dict[str, Any], user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _handle_prediction(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Handle single prediction request"""
         # Parse request parameters
         prediction_type_str = parameters.get("prediction_type", "win_probability")
@@ -454,7 +481,7 @@ class FastAgent(BaseAgent):
             cache_level=cache_level,
             include_confidence=parameters.get("include_confidence", False),
             include_explanation=parameters.get("include_explanation", False),
-            timeout_ms=parameters.get("timeout_ms", 100)
+            timeout_ms=parameters.get("timeout_ms", 100),
         )
 
         # Check cache first
@@ -467,7 +494,9 @@ class FastAgent(BaseAgent):
             return cached_result
 
         # Generate prediction
-        optimization_result = self.prediction_optimizer.optimize_prediction_request(request)
+        optimization_result = self.prediction_optimizer.optimize_prediction_request(
+            request
+        )
 
         # Create response
         response = PredictionResponse(
@@ -478,8 +507,8 @@ class FastAgent(BaseAgent):
             cache_hit=False,
             metadata={
                 "strategy": optimization_result["strategy"],
-                "cache_key": optimization_result["cache_key"]
-            }
+                "cache_key": optimization_result["cache_key"],
+            },
         )
 
         # Format response for API
@@ -492,7 +521,9 @@ class FastAgent(BaseAgent):
 
         return formatted_response
 
-    def _handle_batch_prediction(self, parameters: Dict[str, Any], user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _handle_batch_prediction(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Handle batch prediction requests"""
         matchups = parameters.get("matchups", [])
         if not matchups:
@@ -506,12 +537,17 @@ class FastAgent(BaseAgent):
             team2 = matchup.get("team2")
 
             if team1 and team2:
-                result = self._handle_prediction({
-                    "team1": team1,
-                    "team2": team2,
-                    "prediction_type": parameters.get("prediction_type", "win_probability"),
-                    "cache_level": parameters.get("cache_level", "fast")
-                }, user_context)
+                result = self._handle_prediction(
+                    {
+                        "team1": team1,
+                        "team2": team2,
+                        "prediction_type": parameters.get(
+                            "prediction_type", "win_probability"
+                        ),
+                        "cache_level": parameters.get("cache_level", "fast"),
+                    },
+                    user_context,
+                )
                 results.append(result)
 
         total_time_ms = (time.time() - total_start_time) * 1000
@@ -521,7 +557,7 @@ class FastAgent(BaseAgent):
             "results": results,
             "total_matchups": len(matchups),
             "total_processing_time_ms": total_time_ms,
-            "avg_time_per_prediction": total_time_ms / len(matchups) if matchups else 0
+            "avg_time_per_prediction": total_time_ms / len(matchups) if matchups else 0,
         }
 
     def _get_performance_metrics(self) -> Dict[str, Any]:
@@ -533,19 +569,19 @@ class FastAgent(BaseAgent):
             "cache_metrics": cache_stats,
             "performance_summary": {
                 "sub_50ms_rate": (
-                    self._performance_metrics["sub_50ms_count"] /
-                    max(1, self._performance_metrics["total_predictions"])
+                    self._performance_metrics["sub_50ms_count"]
+                    / max(1, self._performance_metrics["total_predictions"])
                 ),
                 "sub_100ms_rate": (
-                    self._performance_metrics["sub_100ms_count"] /
-                    max(1, self._performance_metrics["total_predictions"])
+                    self._performance_metrics["sub_100ms_count"]
+                    / max(1, self._performance_metrics["total_predictions"])
                 ),
                 "cache_hit_rate": cache_stats["hit_rate"],
                 "timeout_rate": (
-                    self._performance_metrics["timeout_count"] /
-                    max(1, self._performance_metrics["total_predictions"])
-                )
-            }
+                    self._performance_metrics["timeout_count"]
+                    / max(1, self._performance_metrics["total_predictions"])
+                ),
+            },
         }
 
     def _clear_cache(self) -> Dict[str, Any]:
@@ -554,10 +590,12 @@ class FastAgent(BaseAgent):
         return {
             "success": True,
             "message": "Cache cleared successfully",
-            "timestamp": time.time()
+            "timestamp": time.time(),
         }
 
-    def _update_performance_metrics(self, execution_time_ms: float, error: bool = False):
+    def _update_performance_metrics(
+        self, execution_time_ms: float, error: bool = False
+    ):
         """Update internal performance metrics"""
         self._performance_metrics["total_predictions"] += 1
 
@@ -568,8 +606,8 @@ class FastAgent(BaseAgent):
         current_avg = self._performance_metrics["avg_response_time_ms"]
         total = self._performance_metrics["total_predictions"]
         self._performance_metrics["avg_response_time_ms"] = (
-            (current_avg * (total - 1) + execution_time_ms) / total
-        )
+            current_avg * (total - 1) + execution_time_ms
+        ) / total
 
         # Track fast response counts
         if execution_time_ms < 50:
@@ -581,6 +619,7 @@ class FastAgent(BaseAgent):
         cache_stats = self.cache.get_stats()
         self._performance_metrics["cache_hit_rate"] = cache_stats["hit_rate"]
 
+
 # Import numpy for calculations
 np: Any
 try:
@@ -591,13 +630,16 @@ except ImportError:
         @staticmethod
         def exp(x):
             # Simple exponential approximation
-            return 2.718281828 ** x
+            return 2.718281828**x
+
     np = MockNumPy()
+
 
 # Factory function for easy instantiation
 def create_fast_agent(agent_id: str = "fast_agent") -> FastAgent:
     """Create and return FastAgent instance"""
     return FastAgent(agent_id)
+
 
 # Quick test function
 def test_fast_agent():
@@ -619,13 +661,15 @@ def test_fast_agent():
                 "team1": "Ohio State",
                 "team2": "Michigan",
                 "prediction_type": "win_probability",
-                "cache_level": "lightning"
+                "cache_level": "lightning",
             },
-            {"user_id": "test"}
+            {"user_id": "test"},
         )
         print(f"🎯 Prediction success: {prediction_result.get('success', False)}")
         if prediction_result.get("success"):
-            print(f"⚡ Response time: {prediction_result.get('data', {}).get('metadata', {}).get('processing_time', 0):.1f}ms")
+            print(
+                f"⚡ Response time: {prediction_result.get('data', {}).get('metadata', {}).get('processing_time', 0):.1f}ms"
+            )
 
         # Test batch prediction
         print("📦 Testing batch prediction...")
@@ -633,30 +677,37 @@ def test_fast_agent():
             {
                 "matchups": [
                     {"team1": "Ohio State", "team2": "Michigan"},
-                    {"team1": "Alabama", "team2": "Georgia"}
+                    {"team1": "Alabama", "team2": "Georgia"},
                 ],
-                "cache_level": "fast"
+                "cache_level": "fast",
             },
-            {"user_id": "test"}
+            {"user_id": "test"},
         )
         print(f"📦 Batch success: {batch_result.get('success', False)}")
-        if batch_result.get('success'):
-            print(f"⚡ Avg time per prediction: {batch_result.get('avg_time_per_prediction', 0):.1f}ms")
+        if batch_result.get("success"):
+            print(
+                f"⚡ Avg time per prediction: {batch_result.get('avg_time_per_prediction', 0):.1f}ms"
+            )
 
         # Final performance check
         final_metrics = agent._get_performance_metrics()
         cache_hit_rate = final_metrics.get("cache_metrics", {}).get("hit_rate", 0)
-        avg_response_time = final_metrics.get("agent_metrics", {}).get("avg_response_time_ms", 0)
+        avg_response_time = final_metrics.get("agent_metrics", {}).get(
+            "avg_response_time_ms", 0
+        )
 
         print(f"🚀 Final Performance:")
         print(f"   Cache Hit Rate: {cache_hit_rate:.1%}")
         print(f"   Avg Response Time: {avg_response_time:.1f}ms")
-        print(f"   Total Predictions: {final_metrics.get('agent_metrics', {}).get('total_predictions', 0)}")
+        print(
+            f"   Total Predictions: {final_metrics.get('agent_metrics', {}).get('total_predictions', 0)}"
+        )
 
         print("✅ FastAgent test completed successfully")
 
     except Exception as e:
         print(f"❌ FastAgent test failed: {str(e)}")
+
 
 if __name__ == "__main__":
     test_fast_agent()

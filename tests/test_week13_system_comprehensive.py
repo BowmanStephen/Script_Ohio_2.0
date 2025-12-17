@@ -4,19 +4,25 @@ Comprehensive test suite for Week 13 consolidation and legacy system.
 Validates all functionality, performance, and integration requirements.
 """
 
-import pytest
 import sys
 import time
-import pandas as pd
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any, Dict, List
+
+import pandas as pd
+import pytest
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from agents.week13_consolidation_agent import Week13ConsolidationAgent
+from agents.analytics_orchestrator import (
+    AnalyticsOrchestrator,
+    AnalyticsRequest,
+    AnalyticsResponse,
+)
 from agents.legacy_creation_agent import LegacyCreationAgent
-from agents.analytics_orchestrator import AnalyticsOrchestrator, AnalyticsRequest, AnalyticsResponse
+from agents.week13_consolidation_agent import Week13ConsolidationAgent
+
 
 @pytest.mark.xfail(
     reason=(
@@ -94,9 +100,7 @@ class TestWeek13System:
 
         # Execute asset discovery
         result = consolidation_agent._execute_action(
-            "asset_discovery",
-            {"test_mode": True},
-            {"user_id": "test_user"}
+            "asset_discovery", {"test_mode": True}, {"user_id": "test_user"}
         )
 
         execution_time = time.time() - start_time
@@ -104,7 +108,9 @@ class TestWeek13System:
         # Validate results
         assert result["status"] == "success"
         assert "data" in result
-        assert execution_time < 2.0, f"Asset discovery took {execution_time:.2f}s (target: <2s)"
+        assert execution_time < 2.0, (
+            f"Asset discovery took {execution_time:.2f}s (target: <2s)"
+        )
 
         week13_assets = result["data"]["discovered_assets"]
         assert len(week13_assets) >= 10, "Should find at least 10 Week 13 assets"
@@ -114,7 +120,9 @@ class TestWeek13System:
         assert "analysis" in asset_summary["asset_types"]
         assert "data" in asset_summary["asset_types"]
 
-        print(f"✅ Discovered {asset_summary['total_count']} Week 13 assets in {execution_time:.2f}s")
+        print(
+            f"✅ Discovered {asset_summary['total_count']} Week 13 assets in {execution_time:.2f}s"
+        )
 
     def test_legacy_template_extraction(self, legacy_agent):
         """Test Legacy template extraction functionality"""
@@ -126,7 +134,7 @@ class TestWeek13System:
         result = legacy_agent._execute_action(
             "template_extraction",
             {"test_mode": True, "max_templates": 5},
-            {"user_id": "test_user"}
+            {"user_id": "test_user"},
         )
 
         execution_time = time.time() - start_time
@@ -134,7 +142,9 @@ class TestWeek13System:
         # Validate results
         assert result["status"] == "success"
         assert "data" in result
-        assert execution_time < 2.0, f"Template extraction took {execution_time:.2f}s (target: <2s)"
+        assert execution_time < 2.0, (
+            f"Template extraction took {execution_time:.2f}s (target: <2s)"
+        )
 
         templates = result["data"]["templates"]
         assert len(templates) >= 1, "Should extract at least 1 template"
@@ -143,7 +153,9 @@ class TestWeek13System:
         assert extraction_summary["total_count"] >= 1
         assert "data_pipeline" in extraction_summary["template_types"]
 
-        print(f"✅ Extracted {extraction_summary['total_count']} templates in {execution_time:.2f}s")
+        print(
+            f"✅ Extracted {extraction_summary['total_count']} templates in {execution_time:.2f}s"
+        )
 
     def test_orchestrator_week13_routing(self, orchestrator):
         """Test Analytics Orchestrator Week 13 routing"""
@@ -155,7 +167,7 @@ class TestWeek13System:
             query="Please consolidate all Week 13 analytics work",
             query_type="analysis",
             parameters={},
-            context_hints={}
+            context_hints={},
         )
 
         start_time = time.time()
@@ -163,9 +175,13 @@ class TestWeek13System:
         execution_time = time.time() - start_time
 
         # Validate routing
-        assert response.status in ["success", "partial_success"], f"Routing failed: {response.error_message}"
+        assert response.status in ["success", "partial_success"], (
+            f"Routing failed: {response.error_message}"
+        )
         assert execution_time < 2.0, f"Routing took {execution_time:.2f}s (target: <2s)"
-        assert response.metadata.get("agent_type") == "week13_consolidation", "Incorrect routing"
+        assert response.metadata.get("agent_type") == "week13_consolidation", (
+            "Incorrect routing"
+        )
 
         print(f"✅ Week 13 consolidation routing successful in {execution_time:.2f}s")
 
@@ -175,7 +191,7 @@ class TestWeek13System:
             query="Create templates from Week 13 work for future weeks",
             query_type="analysis",
             parameters={},
-            context_hints={}
+            context_hints={},
         )
 
         start_time = time.time()
@@ -183,8 +199,12 @@ class TestWeek13System:
         execution_time = time.time() - start_time
 
         # Validate routing
-        assert response.status in ["success", "partial_success"], f"Legacy routing failed: {response.error_message}"
-        assert execution_time < 2.0, f"Legacy routing took {execution_time:.2f}s (target: <2s)"
+        assert response.status in ["success", "partial_success"], (
+            f"Legacy routing failed: {response.error_message}"
+        )
+        assert execution_time < 2.0, (
+            f"Legacy routing took {execution_time:.2f}s (target: <2s)"
+        )
 
         print(f"✅ Week 13 legacy routing successful in {execution_time:.2f}s")
 
@@ -197,15 +217,15 @@ class TestWeek13System:
         for i in range(3):
             start_time = time.time()
             result = consolidation_agent._execute_action(
-                "asset_discovery",
-                {"test_mode": True},
-                {"user_id": "test_user"}
+                "asset_discovery", {"test_mode": True}, {"user_id": "test_user"}
             )
             consolidation_times.append(time.time() - start_time)
             assert result["status"] == "success"
 
         avg_consolidation_time = sum(consolidation_times) / len(consolidation_times)
-        assert avg_consolidation_time < 2.0, f"Average consolidation time: {avg_consolidation_time:.2f}s (target: <2s)"
+        assert avg_consolidation_time < 2.0, (
+            f"Average consolidation time: {avg_consolidation_time:.2f}s (target: <2s)"
+        )
 
         # Test legacy performance
         legacy_times = []
@@ -214,13 +234,15 @@ class TestWeek13System:
             result = legacy_agent._execute_action(
                 "template_extraction",
                 {"test_mode": True, "max_templates": 3},
-                {"user_id": "test_user"}
+                {"user_id": "test_user"},
             )
             legacy_times.append(time.time() - start_time)
             assert result["status"] == "success"
 
         avg_legacy_time = sum(legacy_times) / len(legacy_times)
-        assert avg_legacy_time < 2.0, f"Average legacy time: {avg_legacy_time:.2f}s (target: <2s)"
+        assert avg_legacy_time < 2.0, (
+            f"Average legacy time: {avg_legacy_time:.2f}s (target: <2s)"
+        )
 
         print(f"✅ Performance requirements met:")
         print(f"   - Consolidation: {avg_consolidation_time:.2f}s average")
@@ -238,10 +260,12 @@ class TestWeek13System:
             query="Show me all Week 13 analytics and consolidate them",
             query_type="analysis",
             parameters={},
-            context_hints={}
+            context_hints={},
         )
 
-        consolidation_response = orchestrator.process_analytics_request(consolidation_request)
+        consolidation_response = orchestrator.process_analytics_request(
+            consolidation_request
+        )
         assert consolidation_response.status in ["success", "partial_success"]
 
         # Step 2: Extract templates from consolidated work
@@ -250,14 +274,16 @@ class TestWeek13System:
             query="Based on Week 13 work, create templates for future weeks",
             query_type="analysis",
             parameters={},
-            context_hints={}
+            context_hints={},
         )
 
         legacy_response = orchestrator.process_analytics_request(legacy_request)
         assert legacy_response.status in ["success", "partial_success"]
 
         workflow_time = time.time() - workflow_start_time
-        assert workflow_time < 5.0, f"Complete workflow took {workflow_time:.2f}s (target: <5s)"
+        assert workflow_time < 5.0, (
+            f"Complete workflow took {workflow_time:.2f}s (target: <5s)"
+        )
 
         print(f"✅ Complete workflow successful in {workflow_time:.2f}s")
 
@@ -267,9 +293,7 @@ class TestWeek13System:
 
         # Test consolidation error handling
         result = consolidation_agent._execute_action(
-            "invalid_action",
-            {"test_mode": True},
-            {"user_id": "test_user"}
+            "invalid_action", {"test_mode": True}, {"user_id": "test_user"}
         )
 
         assert result["status"] == "error"
@@ -277,9 +301,7 @@ class TestWeek13System:
 
         # Test legacy error handling
         result = legacy_agent._execute_action(
-            "invalid_action",
-            {"test_mode": True},
-            {"user_id": "test_user"}
+            "invalid_action", {"test_mode": True}, {"user_id": "test_user"}
         )
 
         assert result["status"] == "error"
@@ -295,9 +317,7 @@ class TestWeek13System:
 
         # Execute quality validation
         result = consolidation_agent._execute_action(
-            "quality_validation",
-            {"test_mode": True},
-            {"user_id": "test_user"}
+            "quality_validation", {"test_mode": True}, {"user_id": "test_user"}
         )
 
         execution_time = time.time() - start_time
@@ -305,13 +325,18 @@ class TestWeek13System:
         # Validate results
         assert result["status"] == "success"
         assert "validation_report" in result
-        assert execution_time < 2.0, f"Quality validation took {execution_time:.2f}s (target: <2s)"
+        assert execution_time < 2.0, (
+            f"Quality validation took {execution_time:.2f}s (target: <2s)"
+        )
 
         validation_report = result["validation_report"]
         assert "assets_validated" in validation_report
         assert "quality_score" in validation_report
 
-        print(f"✅ Validated {validation_report['assets_validated']} assets in {execution_time:.2f}s")
+        print(
+            f"✅ Validated {validation_report['assets_validated']} assets in {execution_time:.2f}s"
+        )
+
 
 if __name__ == "__main__":
     print("🚀 Starting Week 13 System Comprehensive Testing")

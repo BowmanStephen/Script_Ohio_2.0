@@ -2,14 +2,14 @@
 Ratings package initialization.
 """
 
+from .cfbd_ratings import load_cfbd_ratings
+from .coleman_metamodel import ColemanConfig, load_coleman_ratings
 from .massey_ratings import (
     MasseyConfig,
     compute_massey_ratings,
     generate_massey_ratings,
     save_ratings,
 )
-from .cfbd_ratings import load_cfbd_ratings
-from .coleman_metamodel import ColemanConfig, load_coleman_ratings
 from .ridge_rating_solver import (
     RidgeRatingConfig,
     compute_ridge_ratings,

@@ -6,16 +6,15 @@ A simplified version to test the validation workflow components.
 """
 
 import logging
-import time
-import sys
 import os
+import sys
+import time
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -52,7 +51,7 @@ def test_validation_components():
         "discovery": discovery_result,
         "architecture": arch_result,
         "documentation": docs_result,
-        "report": report_result
+        "report": report_result,
     }
 
 
@@ -64,7 +63,7 @@ def test_system_discovery() -> Dict[str, Any]:
         if not activation_fix_path.exists():
             return {
                 "status": "not_found",
-                "message": "Activation fix directory not found"
+                "message": "Activation fix directory not found",
             }
 
         files = list(activation_fix_path.rglob("*.py"))
@@ -72,14 +71,11 @@ def test_system_discovery() -> Dict[str, Any]:
         return {
             "status": "success",
             "files_found": len(files),
-            "files": [f.name for f in files[:10]]  # First 10 files
+            "files": [f.name for f in files[:10]],  # First 10 files
         }
 
     except Exception as e:
-        return {
-            "status": "error",
-            "error": str(e)
-        }
+        return {"status": "error", "error": str(e)}
 
 
 def test_architecture_analysis() -> Dict[str, Any]:
@@ -90,7 +86,7 @@ def test_architecture_analysis() -> Dict[str, Any]:
         if not activation_fix_path.exists():
             return {
                 "status": "not_found",
-                "message": "Activation fix directory not found"
+                "message": "Activation fix directory not found",
             }
 
         components = {
@@ -99,7 +95,7 @@ def test_architecture_analysis() -> Dict[str, Any]:
             "shell_tester": False,
             "regression_guard": False,
             "doc_updater": False,
-            "observability": False
+            "observability": False,
         }
 
         for py_file in activation_fix_path.glob("*.py"):
@@ -120,14 +116,11 @@ def test_architecture_analysis() -> Dict[str, Any]:
         return {
             "status": "success",
             "components": components,
-            "completeness": sum(components.values())
+            "completeness": sum(components.values()),
         }
 
     except Exception as e:
-        return {
-            "status": "error",
-            "error": str(e)
-        }
+        return {"status": "error", "error": str(e)}
 
 
 def test_documentation_creation(output_dir: Path) -> Dict[str, Any]:
@@ -139,7 +132,7 @@ def test_documentation_creation(output_dir: Path) -> Dict[str, Any]:
         # Create a simple test document
         test_doc_content = f"""# Test Validation Report
 
-Generated: {time.strftime('%Y-%m-%d %H:%M:%S')}
+Generated: {time.strftime("%Y-%m-%d %H:%M:%S")}
 
 ## Test Results
 This is a test document to validate the documentation generation system.
@@ -154,20 +147,17 @@ This is a test document to validate the documentation generation system.
 """
 
         doc_path = docs_dir / "test_validation_report.md"
-        with open(doc_path, 'w') as f:
+        with open(doc_path, "w") as f:
             f.write(test_doc_content)
 
         return {
             "status": "success",
             "document_path": str(doc_path),
-            "document_size": len(test_doc_content)
+            "document_size": len(test_doc_content),
         }
 
     except Exception as e:
-        return {
-            "status": "error",
-            "error": str(e)
-        }
+        return {"status": "error", "error": str(e)}
 
 
 def test_final_report_generation(output_dir: Path) -> Dict[str, Any]:
@@ -179,22 +169,16 @@ def test_final_report_generation(output_dir: Path) -> Dict[str, Any]:
             "comprehensive_validation": {"status": "success", "execution_time": 0.3},
             "documentation_creation": {"status": "success", "execution_time": 0.2},
             "quality_assurance": {"status": "success", "execution_time": 0.4},
-            "synthesis": {"status": "success", "execution_time": 0.1}
+            "synthesis": {"status": "success", "execution_time": 0.1},
         }
 
         # Generate final report
         report_content = generate_simple_report(test_workflow_results, output_dir)
 
-        return {
-            "status": "success",
-            "report_length": len(report_content)
-        }
+        return {"status": "success", "report_length": len(report_content)}
 
     except Exception as e:
-        return {
-            "status": "error",
-            "error": str(e)
-        }
+        return {"status": "error", "error": str(e)}
 
 
 def generate_simple_report(workflow_results: Dict[str, Any], output_dir: Path) -> str:
@@ -207,24 +191,28 @@ def generate_simple_report(workflow_results: Dict[str, Any], output_dir: Path) -
         f"**Generated**: {time.strftime('%Y-%m-%d %H:%M:%S')}\n",
         "## Executive Summary\n",
         "This report presents the comprehensive validation and documentation of the activation fix system in Script Ohio 2.0.\n",
-        "## Phase Results\n"
+        "## Phase Results\n",
     ]
 
     # Add phase results
     for phase_name, phase_result in workflow_results.items():
         report_sections.append(f"### {phase_name.replace('_', ' ').title()} Phase\n")
         report_sections.append(f"- Status: {phase_result.get('status', 'unknown')}\n")
-        report_sections.append(f"- Execution Time: {phase_result.get('execution_time', 0):.2f}s\n\n")
+        report_sections.append(
+            f"- Execution Time: {phase_result.get('execution_time', 0):.2f}s\n\n"
+        )
 
     report_sections.append("## Overall Assessment\n")
-    report_sections.append("The activation fix system demonstrates excellent architecture, comprehensive implementation, and robust quality assurance.\n")
+    report_sections.append(
+        "The activation fix system demonstrates excellent architecture, comprehensive implementation, and robust quality assurance.\n"
+    )
 
     # Combine all sections
     final_report = "".join(report_sections)
 
     # Save the report
     final_report_path = output_dir / "final_validation_report.md"
-    with open(final_report_path, 'w') as f:
+    with open(final_report_path, "w") as f:
         f.write(final_report)
 
     logger.info(f"✅ Final report saved to: {final_report_path}")
@@ -243,10 +231,14 @@ def main():
         logger.info("📊 Test Summary:")
         for component, result in results.items():
             status_icon = "✅" if result.get("status") == "success" else "❌"
-            logger.info(f"  {status_icon} {component.title()}: {result.get('status', 'unknown')}")
+            logger.info(
+                f"  {status_icon} {component.title()}: {result.get('status', 'unknown')}"
+            )
 
         # Overall success
-        all_success = all(result.get("status") == "success" for result in results.values())
+        all_success = all(
+            result.get("status") == "success" for result in results.values()
+        )
 
         if all_success:
             logger.info("🎉 All validation components working correctly!")
@@ -258,6 +250,7 @@ def main():
     except Exception as e:
         logger.error(f"❌ Critical error in validation test: {e}")
         import traceback
+
         logger.error(traceback.format_exc())
         return {"status": "error", "error": str(e)}
 

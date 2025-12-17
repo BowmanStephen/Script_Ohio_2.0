@@ -41,8 +41,12 @@ class ModelRegistry:
     """Registry of all model metadata."""
 
     registry_version: str = METADATA_VERSION
-    created_at: str = field(default_factory=lambda: dt.datetime.now(dt.timezone.utc).isoformat())
-    last_updated: str = field(default_factory=lambda: dt.datetime.now(dt.timezone.utc).isoformat())
+    created_at: str = field(
+        default_factory=lambda: dt.datetime.now(dt.timezone.utc).isoformat()
+    )
+    last_updated: str = field(
+        default_factory=lambda: dt.datetime.now(dt.timezone.utc).isoformat()
+    )
     models: Dict[str, ModelMetadata] = field(default_factory=dict)
 
 
@@ -65,8 +69,12 @@ class MetadataRegistry:
                 }
                 return ModelRegistry(
                     registry_version=data.get("registry_version", METADATA_VERSION),
-                    created_at=data.get("created_at", dt.datetime.now(dt.timezone.utc).isoformat()),
-                    last_updated=data.get("last_updated", dt.datetime.now(dt.timezone.utc).isoformat()),
+                    created_at=data.get(
+                        "created_at", dt.datetime.now(dt.timezone.utc).isoformat()
+                    ),
+                    last_updated=data.get(
+                        "last_updated", dt.datetime.now(dt.timezone.utc).isoformat()
+                    ),
                     models=models,
                 )
             except Exception as e:
@@ -232,4 +240,3 @@ __all__ = [
     "MetadataRegistry",
     "get_registry",
 ]
-

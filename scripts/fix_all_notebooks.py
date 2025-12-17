@@ -45,7 +45,7 @@ STARTER_PACK_AUTO_SETUP = [
     "_current = Path().resolve()\n",
     "_auto_setup_path = None\n",
     "for parent in [_current] + list(_current.parents):\n",
-    "    candidate = parent / \"starter_pack\" / \"_auto_setup.py\"\n",
+    '    candidate = parent / "starter_pack" / "_auto_setup.py"\n',
     "    if candidate.exists():\n",
     "        _auto_setup_path = candidate\n",
     "        # Add project root to sys.path (auto_setup.py will also do this)\n",
@@ -63,7 +63,7 @@ STARTER_PACK_AUTO_SETUP = [
     "        with open(\"./_auto_setup.py\", 'r') as f:\n",
     "            exec(f.read(), {'__file__': './_auto_setup.py'})\n",
     "    except FileNotFoundError:\n",
-    "        print(\"⚠️  Could not find _auto_setup.py. Please run from starter_pack directory.\")\n",
+    '        print("⚠️  Could not find _auto_setup.py. Please run from starter_pack directory.")\n',
 ]
 
 MODEL_PACK_AUTO_SETUP = [
@@ -76,7 +76,7 @@ MODEL_PACK_AUTO_SETUP = [
     "_current = Path().resolve()\n",
     "_auto_setup_path = None\n",
     "for parent in [_current] + list(_current.parents):\n",
-    "    candidate = parent / \"model_pack\" / \"_auto_setup.py\"\n",
+    '    candidate = parent / "model_pack" / "_auto_setup.py"\n',
     "    if candidate.exists():\n",
     "        _auto_setup_path = candidate\n",
     "        # Add project root to sys.path (auto_setup.py will also do this)\n",
@@ -94,13 +94,13 @@ MODEL_PACK_AUTO_SETUP = [
     "        with open(\"./_auto_setup.py\", 'r') as f:\n",
     "            exec(f.read(), {'__file__': './_auto_setup.py'})\n",
     "    except FileNotFoundError:\n",
-    "        print(\"⚠️  Could not find _auto_setup.py. Please run from model_pack directory.\")\n",
+    '        print("⚠️  Could not find _auto_setup.py. Please run from model_pack directory.")\n',
 ]
 
 
 def fix_notebook(notebook_path: Path, pack_type: str) -> Tuple[bool, str]:
     """Fix auto-setup cell in a notebook.
-    
+
     Returns:
         (modified, message) tuple
     """
@@ -128,7 +128,7 @@ def fix_notebook(notebook_path: Path, pack_type: str) -> Tuple[bool, str]:
                 or "os.chdir" in source_str
                 or "Find _auto_setup.py regardless" not in source_str
             )
-            
+
             if needs_fix:
                 # Determine which auto-setup template to use
                 if pack_type == "starter_pack":
@@ -203,4 +203,3 @@ if __name__ == "__main__":
     import os
 
     main()
-

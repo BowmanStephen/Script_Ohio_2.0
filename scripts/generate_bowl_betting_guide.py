@@ -66,8 +66,12 @@ def _parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
         default=PROJECT_ROOT / "reports",
         help="Output directory (default: reports/).",
     )
-    parser.add_argument("--out-md", type=Path, default=None, help="Optional output markdown path.")
-    parser.add_argument("--out-csv", type=Path, default=None, help="Optional output CSV path.")
+    parser.add_argument(
+        "--out-md", type=Path, default=None, help="Optional output markdown path."
+    )
+    parser.add_argument(
+        "--out-csv", type=Path, default=None, help="Optional output CSV path."
+    )
     return parser.parse_args(argv)
 
 
@@ -77,10 +81,22 @@ def _format_md_table(df: pd.DataFrame) -> str:
     headers = [str(c) for c in df.columns]
     rows = df.astype(object).where(pd.notna(df), "").values.tolist()
     rows = [[str(v).replace("|", "\\|") for v in row] for row in rows]
-    widths = [max(len(h), max((len(r[i]) for r in rows), default=0)) for i, h in enumerate(headers)]
-    header = "| " + " | ".join(headers[i].ljust(widths[i]) for i in range(len(headers))) + " |"
+    widths = [
+        max(len(h), max((len(r[i]) for r in rows), default=0))
+        for i, h in enumerate(headers)
+    ]
+    header = (
+        "| "
+        + " | ".join(headers[i].ljust(widths[i]) for i in range(len(headers)))
+        + " |"
+    )
     sep = "| " + " | ".join("-" * widths[i] for i in range(len(headers))) + " |"
-    body = ["| " + " | ".join(rows[r][i].ljust(widths[i]) for i in range(len(headers))) + " |" for r in range(len(rows))]
+    body = [
+        "| "
+        + " | ".join(rows[r][i].ljust(widths[i]) for i in range(len(headers)))
+        + " |"
+        for r in range(len(rows))
+    ]
     return "\n".join([header, sep, *body])
 
 
@@ -143,11 +159,11 @@ def _vet_consensus_sources(
                 )[0, 1]
             )
             mae = float(
-                np.mean(
-                    np.abs(series[mask].astype(float) - market[mask].astype(float))
-                )
+                np.mean(np.abs(series[mask].astype(float) - market[mask].astype(float)))
             )
-            keep = (not np.isnan(corr)) and corr >= corr_threshold and mae <= mae_threshold
+            keep = (
+                (not np.isnan(corr)) and corr >= corr_threshold and mae <= mae_threshold
+            )
         rows.append({"source": base, "n": n, "corr": corr, "mae": mae, "keep": keep})
         if keep:
             kept_home_cols.append(col)
@@ -171,7 +187,9 @@ def _vet_consensus_sources(
     return kept_home_cols, kept_bases
 
 
-def generate_bowl_guide(*, slate_path: Path, systems_path: Path, output_dir: Path) -> tuple[Path, Path]:
+def generate_bowl_guide(
+    *, slate_path: Path, systems_path: Path, output_dir: Path
+) -> tuple[Path, Path]:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     slate = pd.read_csv(slate_path, low_memory=False).dropna(how="all")
     systems = pd.read_csv(systems_path, low_memory=False).dropna(how="all")
@@ -187,7 +205,9 @@ def generate_bowl_guide(*, slate_path: Path, systems_path: Path, output_dir: Pat
     slate = slate.copy()
     slate["away_norm"] = slate["away_team"].astype(str).map(normalize_team_name)
     slate["home_norm"] = slate["home_team"].astype(str).map(normalize_team_name)
-    slate["your_home_spread"] = -pd.to_numeric(slate["model_home_margin"], errors="coerce")
+    slate["your_home_spread"] = -pd.to_numeric(
+        slate["model_home_margin"], errors="coerce"
+    )
     slate["dk_home_spread"] = slate.apply(_dk_home_spread, axis=1)
     slate["dk_total"] = pd.to_numeric(slate.get("dk_total"), errors="coerce")
     slate["rf_total"] = pd.to_numeric(slate.get("rf_total"), errors="coerce")
@@ -197,14 +217,18 @@ def generate_bowl_guide(*, slate_path: Path, systems_path: Path, output_dir: Pat
     systems["home_norm"] = systems["home"].astype(str).map(normalize_team_name)
 
     # Infer orientation of system columns relative to current road line and compute *_home_spread.
-    candidate_cols = [c for c in systems.columns if c.startswith("line") and c not in {"linestd"}]
+    candidate_cols = [
+        c for c in systems.columns if c.startswith("line") and c not in {"linestd"}
+    ]
     systems, _ = infer_and_normalize_system_columns(
         systems,
         market_road_col="line",
         candidates=candidate_cols,
     )
 
-    merged = slate.merge(systems, on=["away_norm", "home_norm"], how="left", suffixes=("", "_sys"))
+    merged = slate.merge(
+        systems, on=["away_norm", "home_norm"], how="left", suffixes=("", "_sys")
+    )
 
     merged["edge_vs_dk"] = merged["your_home_spread"] - merged["dk_home_spread"]
     merged["abs_edge_vs_dk"] = merged["edge_vs_dk"].abs()
@@ -212,7 +236,9 @@ def generate_bowl_guide(*, slate_path: Path, systems_path: Path, output_dir: Pat
     merged["open_home_spread"] = -pd.to_numeric(merged.get("lineopen"), errors="coerce")
     merged["current_home_spread"] = -pd.to_numeric(merged.get("line"), errors="coerce")
 
-    merged["edge_vs_market"] = merged["your_home_spread"] - merged["current_home_spread"]
+    merged["edge_vs_market"] = (
+        merged["your_home_spread"] - merged["current_home_spread"]
+    )
     merged["abs_edge_vs_market"] = merged["edge_vs_market"].abs()
 
     kept_sources_home, kept_sources_base = _vet_consensus_sources(
@@ -237,9 +263,8 @@ def generate_bowl_guide(*, slate_path: Path, systems_path: Path, output_dir: Pat
     valid_z = merged["ratings_std"].notna() & (merged["ratings_std"] > 0)
     merged["ratings_z"] = np.nan
     merged.loc[valid_z, "ratings_z"] = (
-        (merged["your_home_spread"] - merged["ratings_mean_home"])
-        / merged["ratings_std"]
-    )
+        merged["your_home_spread"] - merged["ratings_mean_home"]
+    ) / merged["ratings_std"]
 
     merged["dk_vs_market_conflict"] = (
         (merged["dk_home_spread"] * merged["current_home_spread"] < 0)
@@ -247,12 +272,16 @@ def generate_bowl_guide(*, slate_path: Path, systems_path: Path, output_dir: Pat
         & (merged["current_home_spread"].abs() >= 2)
     )
     merged["flag_high_dispersion"] = merged["ratings_std"] >= 4.0
-    
+
     # Market-based outlier (betting-relevant)
     merged["flag_outlier_market"] = merged["abs_edge_vs_market"] >= 4.0
-    
+
     # Ratings-based outlier (informational only)
-    valid_ratings_z = merged["ratings_std"].notna() & (merged["ratings_std"] > 0) & (merged["ratings_count"] >= 3)
+    valid_ratings_z = (
+        merged["ratings_std"].notna()
+        & (merged["ratings_std"] > 0)
+        & (merged["ratings_count"] >= 3)
+    )
     merged["flag_outlier_ratings"] = False
     merged.loc[valid_ratings_z, "flag_outlier_ratings"] = (
         merged.loc[valid_ratings_z, "ratings_z"].abs() >= 2.0
@@ -272,14 +301,16 @@ def generate_bowl_guide(*, slate_path: Path, systems_path: Path, output_dir: Pat
             f"{large_diff.sum()} games have DK vs market spread difference > 7.0 "
             f"(possible data mismatch)"
         )
-    
+
     # Warning: Missing current_home_spread but dk_home_spread exists
-    missing_mkt = merged["current_home_spread"].isna() & merged["dk_home_spread"].notna()
+    missing_mkt = (
+        merged["current_home_spread"].isna() & merged["dk_home_spread"].notna()
+    )
     if missing_mkt.any():
         logging.warning(
             f"{missing_mkt.sum()} games missing current_home_spread but have dk_home_spread"
         )
-    
+
     # Warning: Ratings std too tight
     tight_std = (merged["ratings_std"] < 0.75) & (merged["ratings_count"] >= 3)
     if tight_std.any():
@@ -312,7 +343,9 @@ def generate_bowl_guide(*, slate_path: Path, systems_path: Path, output_dir: Pat
         else:
             agreement_rates.append(rate)
             agreement_ns.append(n)
-            disagree_sources_list.append([d.replace("_home_spread", "") for d in disagree])
+            disagree_sources_list.append(
+                [d.replace("_home_spread", "") for d in disagree]
+            )
 
     merged["agreement_rate"] = agreement_rates
     merged["agreement_n"] = agreement_ns
@@ -332,7 +365,9 @@ def generate_bowl_guide(*, slate_path: Path, systems_path: Path, output_dir: Pat
     merged.loc[clv_valid & (clv < 0), "clv_direction"] = "AWAY_FROM_YOU"
     merged.loc[clv_valid & (clv == 0), "clv_direction"] = "NEUTRAL"
 
-    merged["your_vs_median"] = merged["your_home_spread"] - merged["ratings_median_home"]
+    merged["your_vs_median"] = (
+        merged["your_home_spread"] - merged["ratings_median_home"]
+    )
     for base in kept_sources_base:
         col_home = f"{base}_home_spread"
         if col_home in merged.columns:
@@ -457,7 +492,9 @@ def generate_bowl_guide(*, slate_path: Path, systems_path: Path, output_dir: Pat
     lines.append(f"- Slate: `{slate_path}`")
     lines.append(f"- Systems: `{systems_path}`\n")
     lines.append("## Spread Orientation\n")
-    lines.append("- Canonical: `home_spread < 0` home favored; `home_spread > 0` home underdog")
+    lines.append(
+        "- Canonical: `home_spread < 0` home favored; `home_spread > 0` home underdog"
+    )
     lines.append(
         "- Systems lines normalized to canonical home spreads via per-column polarity inference.\n"
     )
@@ -482,8 +519,12 @@ def generate_bowl_guide(*, slate_path: Path, systems_path: Path, output_dir: Pat
         | merged["flag_big_move"].fillna(False)
     ].copy()
     if not audit.empty:
-        audit["abs_edge_mkt"] = pd.to_numeric(audit["abs_edge_vs_market"], errors="coerce")
-        audit["abs_move"] = pd.to_numeric(audit["move_from_open"], errors="coerce").abs()
+        audit["abs_edge_mkt"] = pd.to_numeric(
+            audit["abs_edge_vs_market"], errors="coerce"
+        )
+        audit["abs_move"] = pd.to_numeric(
+            audit["move_from_open"], errors="coerce"
+        ).abs()
         # Sort by severity: MOVE_DATA_ISSUE > DK_VS_MKT_CONFLICT > abs_edge_mkt > abs_move
         audit["severity"] = (
             audit["flag_move_data_issue"].fillna(False).astype(int) * 1000
@@ -536,8 +577,12 @@ def generate_bowl_guide(*, slate_path: Path, systems_path: Path, output_dir: Pat
         edge_mkt = float(row.get("edge_vs_market", np.nan))
 
         lines.append(f"### {date} — {away} @ {home} ({bowl})")
-        lines.append(f"- Neutral: `{neutral}` | Tier: `{tier}` | Reasons: `{row.get('tier_reasons','')}`")
-        lines.append(f"- DK (home spread): `{dk_home:.2f}` | Your (home spread): `{your_home:.2f}`")
+        lines.append(
+            f"- Neutral: `{neutral}` | Tier: `{tier}` | Reasons: `{row.get('tier_reasons', '')}`"
+        )
+        lines.append(
+            f"- DK (home spread): `{dk_home:.2f}` | Your (home spread): `{your_home:.2f}`"
+        )
         lines.append(f"- DK edge: `{edge_dk:.2f}` | Market edge: `{edge_mkt:.2f}`")
 
         # Ratings consensus separately
@@ -571,7 +616,7 @@ def generate_bowl_guide(*, slate_path: Path, systems_path: Path, output_dir: Pat
 
         robust_val = row.get("robust_edge", np.nan)
         robust_str = "NA" if pd.isna(robust_val) else f"{float(robust_val):.2f}"
-        lines.append(f"- Flags: `{row.get('flags','')}` | Robust edge: `{robust_str}`")
+        lines.append(f"- Flags: `{row.get('flags', '')}` | Robust edge: `{robust_str}`")
 
         # Totals (only when validated)
         if totals_meta["valid"]:
@@ -587,7 +632,12 @@ def generate_bowl_guide(*, slate_path: Path, systems_path: Path, output_dir: Pat
 
         # Panel line table (small, readable)
         panel_table: dict[str, object] = {}
-        for base_col in ["lineopen_home_spread", "line_home_spread", "lineavg_home_spread", "linemedian_home_spread"]:
+        for base_col in [
+            "lineopen_home_spread",
+            "line_home_spread",
+            "lineavg_home_spread",
+            "linemedian_home_spread",
+        ]:
             if base_col in merged.columns:
                 panel_table[base_col.replace("_home_spread", "")] = row.get(base_col)
         for col in panel_cols_home_all:
@@ -603,7 +653,9 @@ def generate_bowl_guide(*, slate_path: Path, systems_path: Path, output_dir: Pat
                 decomp_cols.append(base)
         if decomp_cols:
             lines.append("")
-            lines.append(_format_md_table(pd.DataFrame([{c: row.get(c) for c in decomp_cols}])))
+            lines.append(
+                _format_md_table(pd.DataFrame([{c: row.get(c) for c in decomp_cols}]))
+            )
 
         lines.append("")
         lines.append("- Notes: _opt-outs / injuries / motivation / weather_")
@@ -618,29 +670,47 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     slate_path = _resolve_latest(str(args.slate))
     systems_path = Path(args.systems).resolve()
     md_path, csv_path = generate_bowl_guide(
-        slate_path=slate_path, systems_path=systems_path, output_dir=Path(args.output_dir)
+        slate_path=slate_path,
+        systems_path=systems_path,
+        output_dir=Path(args.output_dir),
     )
 
     if args.out_md:
         Path(args.out_md).parent.mkdir(parents=True, exist_ok=True)
-        Path(args.out_md).write_text(Path(md_path).read_text(encoding="utf-8"), encoding="utf-8")
+        Path(args.out_md).write_text(
+            Path(md_path).read_text(encoding="utf-8"), encoding="utf-8"
+        )
         md_path = Path(args.out_md).resolve()
     if args.out_csv:
         Path(args.out_csv).parent.mkdir(parents=True, exist_ok=True)
-        Path(args.out_csv).write_text(Path(csv_path).read_text(encoding="utf-8"), encoding="utf-8")
+        Path(args.out_csv).write_text(
+            Path(csv_path).read_text(encoding="utf-8"), encoding="utf-8"
+        )
         csv_path = Path(args.out_csv).resolve()
 
     print(f"✅ Wrote {md_path}")
     print(f"✅ Wrote {csv_path}")
 
     df = pd.read_csv(csv_path, low_memory=False).dropna(how="all")
-    tier_counts = df["tier"].value_counts(dropna=False).to_dict() if "tier" in df.columns else {}
+    tier_counts = (
+        df["tier"].value_counts(dropna=False).to_dict() if "tier" in df.columns else {}
+    )
     flags = {
-        "outlier_market": int(df.get("flag_outlier_market", pd.Series(dtype=bool)).fillna(False).sum()),
-        "outlier_ratings": int(df.get("flag_outlier_ratings", pd.Series(dtype=bool)).fillna(False).sum()),
-        "big_move": int(df.get("flag_big_move", pd.Series(dtype=bool)).fillna(False).sum()),
-        "dk_vs_market_conflict": int(df.get("dk_vs_market_conflict", pd.Series(dtype=bool)).fillna(False).sum()),
-        "high_dispersion": int(df.get("flag_high_dispersion", pd.Series(dtype=bool)).fillna(False).sum()),
+        "outlier_market": int(
+            df.get("flag_outlier_market", pd.Series(dtype=bool)).fillna(False).sum()
+        ),
+        "outlier_ratings": int(
+            df.get("flag_outlier_ratings", pd.Series(dtype=bool)).fillna(False).sum()
+        ),
+        "big_move": int(
+            df.get("flag_big_move", pd.Series(dtype=bool)).fillna(False).sum()
+        ),
+        "dk_vs_market_conflict": int(
+            df.get("dk_vs_market_conflict", pd.Series(dtype=bool)).fillna(False).sum()
+        ),
+        "high_dispersion": int(
+            df.get("flag_high_dispersion", pd.Series(dtype=bool)).fillna(False).sum()
+        ),
     }
     print(f"Tiers: {tier_counts}")
     print(f"Audit flags: {flags}")

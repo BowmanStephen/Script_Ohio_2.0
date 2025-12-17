@@ -24,7 +24,9 @@ if str(REPO_ROOT) not in sys.path:
 from agents.demo_agent_system import run_demo as run_modern_demo
 
 
-def _resolve_optional_runner(module_path: str, attr: str) -> Optional[Callable[[], bool]]:
+def _resolve_optional_runner(
+    module_path: str, attr: str
+) -> Optional[Callable[[], bool]]:
     """
     Attempt to import an optional Week 12 analysis runner.
 
@@ -109,4 +111,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

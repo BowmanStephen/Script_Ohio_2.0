@@ -111,7 +111,9 @@ def _build_team_index(df: pd.DataFrame) -> Tuple[Dict[str, int], List[str]]:
 def _compute_sample_weights(df: pd.DataFrame, config: RidgeRatingConfig) -> np.ndarray:
     if config.sample_weight_column and config.sample_weight_column in df.columns:
         weights = (
-            df[config.sample_weight_column].astype(float).clip(lower=config.min_sample_weight)
+            df[config.sample_weight_column]
+            .astype(float)
+            .clip(lower=config.min_sample_weight)
         )
         return weights.to_numpy()
 
@@ -140,9 +142,9 @@ def _build_design_matrix(
     targets = np.zeros(num_games)
 
     for row_idx, game in enumerate(
-        df[["home_team", "away_team", "home_points", "away_points", "neutral_site"]].itertuples(
-            index=False
-        )
+        df[
+            ["home_team", "away_team", "home_points", "away_points", "neutral_site"]
+        ].itertuples(index=False)
     ):
         home_idx = team_index[game.home_team]
         away_idx = team_index[game.away_team]
@@ -249,7 +251,9 @@ def compute_ridge_ratings(
     prior_series = priors_df.set_index("team")["prior_rating"]
     design, targets = _build_design_matrix(df, team_index, config)
     weights = _compute_sample_weights(df, config)
-    design, targets, weights = _append_zero_sum_constraint(design, targets, weights, config)
+    design, targets, weights = _append_zero_sum_constraint(
+        design, targets, weights, config
+    )
     design, targets, weights = _append_priors(
         design, targets, weights, team_index, prior_series, config
     )
@@ -267,7 +271,8 @@ def compute_ridge_ratings(
         ratings -= ratings.mean()
 
     games_played = (
-        df["home_team"].value_counts()
+        df["home_team"]
+        .value_counts()
         .add(df["away_team"].value_counts(), fill_value=0)
         .astype(int)
     )
@@ -326,4 +331,3 @@ __all__ = [
     "generate_ridge_ratings",
     "save_ridge_ratings",
 ]
-

@@ -14,48 +14,50 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 # Add project root to path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 from src.infographics import (
-    get_component,
     AgentArchitectureVisualizer,
+    DataFlowExplorer,
+    LearningPathNavigator,
     ModelComparisonDashboard,
     PredictionConfidenceAnalyzer,
-    DataFlowExplorer,
-    LearningPathNavigator
+    get_component,
 )
 
 
 def load_data_from_file(data_path: Path) -> Dict[str, Any]:
     """
     Load data from JSON file.
-    
+
     Args:
         data_path: Path to JSON file
-        
+
     Returns:
         Dictionary with loaded data
     """
     if not data_path.exists():
         raise FileNotFoundError(f"Data file not found: {data_path}")
-    
-    with open(data_path, 'r', encoding='utf-8') as f:
+
+    with open(data_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
-def generate_component(component_type: str,
-                      output_path: Path,
-                      data: Optional[Dict[str, Any]] = None,
-                      data_file: Optional[Path] = None,
-                      title: Optional[str] = None,
-                      description: Optional[str] = None) -> Path:
+def generate_component(
+    component_type: str,
+    output_path: Path,
+    data: Optional[Dict[str, Any]] = None,
+    data_file: Optional[Path] = None,
+    title: Optional[str] = None,
+    description: Optional[str] = None,
+) -> Path:
     """
     Generate an infographic component.
-    
+
     Args:
         component_type: Type of component to generate
         output_path: Path where HTML should be written
@@ -63,7 +65,7 @@ def generate_component(component_type: str,
         data_file: Optional path to JSON data file
         title: Optional custom title
         description: Optional custom description
-        
+
     Returns:
         Path to generated HTML file
     """
@@ -72,7 +74,7 @@ def generate_component(component_type: str,
         data = load_data_from_file(data_file)
     elif data is None:
         data = {}  # Empty dict triggers demo mode in components
-    
+
     # Get component class
     try:
         component_class = get_component(component_type)
@@ -82,16 +84,16 @@ def generate_component(component_type: str,
     except ImportError as e:
         print(f"❌ Error: Components not available: {e}", file=sys.stderr)
         sys.exit(1)
-    
+
     # Create component instance
     component_kwargs = {}
     if title:
-        component_kwargs['title'] = title
+        component_kwargs["title"] = title
     if description:
-        component_kwargs['description'] = description
-    
+        component_kwargs["description"] = description
+
     component = component_class(**component_kwargs)
-    
+
     # Generate HTML
     try:
         html_path = component.generate_html(data, output_path)
@@ -116,42 +118,39 @@ Examples:
   
   # Generate prediction analyzer with custom title
   python scripts/generate_infographics.py --component prediction_analyzer --output outputs/ --title "Week 13 Predictions"
-        """
+        """,
     )
-    
+
     parser.add_argument(
-        '--component',
+        "--component",
         required=True,
-        choices=['agent_architecture', 'model_comparison', 'prediction_analyzer', 
-                 'data_flow', 'learning_path'],
-        help='Type of component to generate'
+        choices=[
+            "agent_architecture",
+            "model_comparison",
+            "prediction_analyzer",
+            "data_flow",
+            "learning_path",
+        ],
+        help="Type of component to generate",
     )
-    
+
     parser.add_argument(
-        '--output',
+        "--output",
         type=Path,
-        default=Path('outputs/infographics/'),
-        help='Output directory or file path (default: outputs/infographics/)'
+        default=Path("outputs/infographics/"),
+        help="Output directory or file path (default: outputs/infographics/)",
     )
-    
+
     parser.add_argument(
-        '--data',
-        type=Path,
-        help='Path to JSON file containing component data'
+        "--data", type=Path, help="Path to JSON file containing component data"
     )
-    
-    parser.add_argument(
-        '--title',
-        help='Custom title for the component'
-    )
-    
-    parser.add_argument(
-        '--description',
-        help='Custom description for the component'
-    )
-    
+
+    parser.add_argument("--title", help="Custom title for the component")
+
+    parser.add_argument("--description", help="Custom description for the component")
+
     args = parser.parse_args()
-    
+
     # Generate component
     try:
         html_path = generate_component(
@@ -159,12 +158,12 @@ Examples:
             output_path=args.output,
             data_file=args.data,
             title=args.title,
-            description=args.description
+            description=args.description,
         )
-        
+
         print(f"✅ Generated {args.component} component: {html_path}")
         print(f"   Open in browser: file://{html_path.absolute()}")
-        
+
     except Exception as e:
         print(f"❌ Error: {e}", file=sys.stderr)
         sys.exit(1)
@@ -172,4 +171,3 @@ Examples:
 
 if __name__ == "__main__":
     main()
-

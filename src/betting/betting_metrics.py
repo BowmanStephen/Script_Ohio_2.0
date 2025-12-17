@@ -220,7 +220,15 @@ def simulate_betting_strategy(
             raise FileNotFoundError(f"Data not found at {config.data_path}")
         games_df = pd.read_csv(config.data_path)
 
-    required_cols = {"id", "season", "week", "home_team", "away_team", "home_points", "away_points"}
+    required_cols = {
+        "id",
+        "season",
+        "week",
+        "home_team",
+        "away_team",
+        "home_points",
+        "away_points",
+    }
     missing = required_cols - set(games_df.columns)
     if missing:
         raise ValueError(f"Missing required columns: {sorted(missing)}")
@@ -245,9 +253,13 @@ def simulate_betting_strategy(
 
     for _, game in merged.iterrows():
         predicted_margin = float(game["predicted_margin"])
-        confidence = float(game.get("confidence", 1.0)) if "confidence" in game else None
+        confidence = (
+            float(game.get("confidence", 1.0)) if "confidence" in game else None
+        )
 
-        bet_result = _simulate_single_bet(game, predicted_margin, bankroll, config, confidence)
+        bet_result = _simulate_single_bet(
+            game, predicted_margin, bankroll, config, confidence
+        )
 
         if bet_result is not None:
             bankroll += bet_result.profit
@@ -262,12 +274,20 @@ def simulate_betting_strategy(
     # Calculate performance metrics
     total_bets = len(bet_results)
     wins = sum(1 for b in bet_results if b.won)
-    losses = sum(1 for b in bet_results if not b.won and not (abs(b.actual_margin - b.spread) < 0.5))
+    losses = sum(
+        1
+        for b in bet_results
+        if not b.won and not (abs(b.actual_margin - b.spread) < 0.5)
+    )
     pushes = total_bets - wins - losses
 
     total_profit = sum(b.profit for b in bet_results)
     final_bankroll = bankroll
-    roi = (total_profit / sum(b.bet_amount for b in bet_results)) * 100.0 if bet_results else 0.0
+    roi = (
+        (total_profit / sum(b.bet_amount for b in bet_results)) * 100.0
+        if bet_results
+        else 0.0
+    )
 
     # Drawdown calculation
     running_profit_array = np.array(running_profit)
@@ -281,7 +301,9 @@ def simulate_betting_strategy(
     # Sharpe ratio (simplified, using profit volatility)
     if len(running_profit_array) > 1:
         returns = np.diff(running_profit_array) / (running_profit_array[:-1] + 1e-6)
-        sharpe = float(np.mean(returns) / (np.std(returns) + 1e-6) * np.sqrt(252))  # Annualized
+        sharpe = float(
+            np.mean(returns) / (np.std(returns) + 1e-6) * np.sqrt(252)
+        )  # Annualized
     else:
         sharpe = 0.0
 
@@ -318,4 +340,3 @@ __all__ = [
     "BettingPerformance",
     "simulate_betting_strategy",
 ]
-

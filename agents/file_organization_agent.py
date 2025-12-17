@@ -5,15 +5,15 @@ Extends BaseAgent to provide intelligent file organization capabilities
 following Script Ohio 2.0 project structure standards.
 """
 
+import logging
 import os
 import shutil
 import time
-import logging
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
-from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
+from agents.core.agent_framework import AgentCapability, BaseAgent, PermissionLevel
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -38,7 +38,7 @@ class FileOrganizationAgent(BaseAgent):
             agent_id=agent_id,
             name="File Organization Agent",
             permission_level=PermissionLevel.READ_EXECUTE_WRITE,
-            tool_loader=tool_loader
+            tool_loader=tool_loader,
         )
 
         self.project_root = Path.cwd()
@@ -53,7 +53,7 @@ class FileOrganizationAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_ONLY,
                 tools_required=["pathlib", "os"],
                 data_access=["root_directory"],
-                execution_time_estimate=1.0
+                execution_time_estimate=1.0,
             ),
             AgentCapability(
                 name="create_missing_directories",
@@ -61,7 +61,7 @@ class FileOrganizationAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE_WRITE,
                 tools_required=["pathlib", "os"],
                 data_access=["filesystem"],
-                execution_time_estimate=0.5
+                execution_time_estimate=0.5,
             ),
             AgentCapability(
                 name="organize_into_directories",
@@ -69,12 +69,13 @@ class FileOrganizationAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE_WRITE,
                 tools_required=["shutil", "pathlib", "os"],
                 data_access=["filesystem", "root_directory"],
-                execution_time_estimate=2.0
-            )
+                execution_time_estimate=2.0,
+            ),
         ]
 
-    def _execute_action(self, action: str, parameters: Dict[str, Any],
-                       user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_action(
+        self, action: str, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Execute agent actions with proper error handling and logging."""
 
         try:
@@ -95,7 +96,7 @@ class FileOrganizationAgent(BaseAgent):
                 "status": "success",
                 "result": result,
                 "execution_time": execution_time,
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
             }
 
         except Exception as e:
@@ -103,7 +104,7 @@ class FileOrganizationAgent(BaseAgent):
             return {
                 "status": "error",
                 "error": str(e),
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
             }
 
     def _classify_root_files(self) -> Dict[str, List[str]]:
@@ -116,30 +117,33 @@ class FileOrganizationAgent(BaseAgent):
             "config_files": {
                 "files": [],
                 "destination": "project_management/config/",
-                "patterns": ["requirements*.txt", ".env", "Makefile", "Dockerfile"]
+                "patterns": ["requirements*.txt", ".env", "Makefile", "Dockerfile"],
             },
             "python_scripts": {
                 "files": [],
                 "destination": "project_management/core_tools/SCRIPTS/",
-                "patterns": ["*.py"]
+                "patterns": ["*.py"],
             },
             "documentation": {
                 "files": [],
                 "destination": "documentation/",
-                "patterns": ["*.md", "*.txt", "*.rst"]
+                "patterns": ["*.md", "*.txt", "*.rst"],
             },
             "images": {
                 "files": [],
                 "destination": "documentation/images/",
-                "patterns": ["*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg"]
-            }
+                "patterns": ["*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg"],
+            },
         }
 
         # Skip these files in root
         skip_files = {".git", ".gitignore", "CLAUDE.md", ".DS_Store", "__pycache__"}
 
-        root_files = [f for f in self.project_root.iterdir()
-                     if f.is_file() and f.name not in skip_files]
+        root_files = [
+            f
+            for f in self.project_root.iterdir()
+            if f.is_file() and f.name not in skip_files
+        ]
 
         classified_files = {}
 
@@ -154,7 +158,7 @@ class FileOrganizationAgent(BaseAgent):
                         classified_files[str(file_path)] = {
                             "category": category,
                             "destination": info["destination"],
-                            "original_path": str(file_path)
+                            "original_path": str(file_path),
                         }
                         break
                 else:
@@ -170,26 +174,30 @@ class FileOrganizationAgent(BaseAgent):
                         "category": "images",
                         "destination": "documentation/images/",
                         "original_path": str(file_path),
-                        "is_desktop_screenshot": True
+                        "is_desktop_screenshot": True,
                     }
                     classified_files[str(file_path)] = screenshot_info
                     file_categories["images"]["files"].append(file_path)
                     logger.info(f"Found Desktop screenshot: {file_path.name}")
 
         # Log classification results
-        self.organization_log.append({
-            "action": "classify",
-            "files_found": len(classified_files),
-            "categories": {cat: len(info["files"]) for cat, info in file_categories.items()},
-            "timestamp": datetime.now().isoformat()
-        })
+        self.organization_log.append(
+            {
+                "action": "classify",
+                "files_found": len(classified_files),
+                "categories": {
+                    cat: len(info["files"]) for cat, info in file_categories.items()
+                },
+                "timestamp": datetime.now().isoformat(),
+            }
+        )
 
         logger.info(f"Classified {len(classified_files)} files")
 
         return {
             "classified_files": classified_files,
             "file_categories": file_categories,
-            "total_files": len(classified_files)
+            "total_files": len(classified_files),
         }
 
     def _create_missing_directories(self) -> Dict[str, bool]:
@@ -201,7 +209,7 @@ class FileOrganizationAgent(BaseAgent):
             "project_management/CONFIG",
             "project_management/core_tools/SCRIPTS",
             "documentation/images",
-            "project_management/quality_assurance/REPORTS"
+            "project_management/quality_assurance/REPORTS",
         ]
 
         created_directories = {}
@@ -218,12 +226,14 @@ class FileOrganizationAgent(BaseAgent):
                     created_directories[dir_path] = True
                     logger.info(f"Created directory: {dir_path}")
 
-                    self.organization_log.append({
-                        "action": "create_directory",
-                        "directory": dir_path,
-                        "success": True,
-                        "timestamp": datetime.now().isoformat()
-                    })
+                    self.organization_log.append(
+                        {
+                            "action": "create_directory",
+                            "directory": dir_path,
+                            "success": True,
+                            "timestamp": datetime.now().isoformat(),
+                        }
+                    )
 
                 except Exception as e:
                     logger.error(f"Failed to create directory {dir_path}: {e}")
@@ -231,7 +241,7 @@ class FileOrganizationAgent(BaseAgent):
 
         return {
             "created_directories": created_directories,
-            "total_created": sum(created_directories.values())
+            "total_created": sum(created_directories.values()),
         }
 
     def _organize_into_directories(self) -> Dict[str, Any]:
@@ -277,17 +287,21 @@ class FileOrganizationAgent(BaseAgent):
                 moved_files[str(file_path)] = {
                     "destination": str(destination_path),
                     "category": file_info["category"],
-                    "original_size": file_path.stat().st_size if file_path.exists() else 0
+                    "original_size": file_path.stat().st_size
+                    if file_path.exists()
+                    else 0,
                 }
 
-                self.organization_log.append({
-                    "action": "move_file",
-                    "source": str(file_path),
-                    "destination": str(destination_path),
-                    "category": file_info["category"],
-                    "success": True,
-                    "timestamp": datetime.now().isoformat()
-                })
+                self.organization_log.append(
+                    {
+                        "action": "move_file",
+                        "source": str(file_path),
+                        "destination": str(destination_path),
+                        "category": file_info["category"],
+                        "success": True,
+                        "timestamp": datetime.now().isoformat(),
+                    }
+                )
 
                 logger.info(f"Moved: {file_path.name} → {file_info['destination']}")
 
@@ -295,14 +309,14 @@ class FileOrganizationAgent(BaseAgent):
                 logger.error(f"Failed to move {file_path}: {e}")
                 failed_moves[str(file_path)] = {
                     "error": str(e),
-                    "category": file_info["category"]
+                    "category": file_info["category"],
                 }
 
         return {
             "moved_files": moved_files,
             "failed_moves": failed_moves,
             "total_moved": len(moved_files),
-            "total_failed": len(failed_moves)
+            "total_failed": len(failed_moves),
         }
 
     def get_organization_summary(self) -> Dict[str, Any]:
@@ -312,16 +326,24 @@ class FileOrganizationAgent(BaseAgent):
             "agent_id": self.agent_id,
             "total_actions": len(self.organization_log),
             "actions_by_type": {
-                action_type: len([log for log in self.organization_log if log["action"] == action_type])
+                action_type: len(
+                    [
+                        log
+                        for log in self.organization_log
+                        if log["action"] == action_type
+                    ]
+                )
                 for action_type in set(log["action"] for log in self.organization_log)
             },
             "detailed_log": self.organization_log,
             "project_root": str(self.project_root),
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
 
 
-def create_file_organization_agent(agent_id: str = "file_org_agent") -> FileOrganizationAgent:
+def create_file_organization_agent(
+    agent_id: str = "file_org_agent",
+) -> FileOrganizationAgent:
     """Factory function to create a FileOrganizationAgent instance."""
     return FileOrganizationAgent(agent_id=agent_id)
 
@@ -339,6 +361,6 @@ if __name__ == "__main__":
     result = agent.process_request("classify_root_files", {})
     print(f"Classification result: {result['status']}")
 
-    if result['status'] == 'success':
-        classified = result['result']['total_files']
+    if result["status"] == "success":
+        classified = result["result"]["total_files"]
         print(f"Found {classified} files to organize")

@@ -8,8 +8,8 @@ For new code, always use:
     from src.cfbd_client.unified_client import UnifiedCFBDClient
 """
 
-from .unified_client import UnifiedCFBDClient
-from .cfbd_cache_manager import CFBDCacheManager, CFBDCacheConfig
+from .cfbd_cache_manager import CFBDCacheConfig, CFBDCacheManager
 from .client import CFBDClient  # Legacy client - for backward compatibility
+from .unified_client import UnifiedCFBDClient
 
 __all__ = ["UnifiedCFBDClient", "CFBDCacheManager", "CFBDCacheConfig", "CFBDClient"]

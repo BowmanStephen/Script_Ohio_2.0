@@ -12,30 +12,33 @@ Version: 2.0 (Grade A Enhancement)
 """
 
 import asyncio
+import hashlib
+import importlib.util
+import inspect
 import json
-import time
 import logging
-import requests
-import aiohttp
-from typing import Dict, List, Optional, Any, Set, Tuple, Union, Callable, Type
-from dataclasses import dataclass, field, asdict
-from enum import Enum
-from pathlib import Path
+import time
 import uuid
 from abc import ABC, abstractmethod
 from collections import defaultdict
-import inspect
-import importlib.util
-import hashlib
-import jwt
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta
+from enum import Enum
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Type, Union
+
+import aiohttp
+import jwt
+import requests
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 class IntegrationType(Enum):
     """Types of ecosystem integrations"""
+
     API_REST = "api_rest"
     # API_GRAPHQL = "api_graphql"  # ❌ DEPRECATED - GraphQL not available
     WEBHOOK = "webhook"
@@ -45,8 +48,10 @@ class IntegrationType(Enum):
     STREAMING = "streaming"
     CLOUD_SERVICE = "cloud_service"
 
+
 class PluginType(Enum):
     """Types of plugins"""
+
     DATA_SOURCE = "data_source"
     DATA_PROCESSOR = "data_processor"
     VISUALIZATION = "visualization"
@@ -56,8 +61,10 @@ class PluginType(Enum):
     STORAGE = "storage"
     CUSTOM_AGENT = "custom_agent"
 
+
 class DataFormat(Enum):
     """Supported data formats"""
+
     JSON = "json"
     CSV = "csv"
     XML = "xml"
@@ -67,8 +74,10 @@ class DataFormat(Enum):
     PROTOBUF = "protobuf"
     MSGPACK = "msgpack"
 
+
 class AuthType(Enum):
     """Authentication types"""
+
     NONE = "none"
     API_KEY = "api_key"
     OAUTH2 = "oauth2"
@@ -77,9 +86,11 @@ class AuthType(Enum):
     BEARER_TOKEN = "bearer_token"
     CUSTOM = "custom"
 
+
 @dataclass
 class APIEndpoint:
     """API endpoint configuration"""
+
     endpoint_id: str
     name: str
     url: str
@@ -94,9 +105,11 @@ class APIEndpoint:
     data_format: DataFormat
     description: str
 
+
 @dataclass
 class PluginManifest:
     """Plugin manifest definition"""
+
     plugin_id: str
     name: str
     version: str
@@ -111,9 +124,11 @@ class PluginManifest:
     supported_formats: List[DataFormat]
     metadata: Dict[str, Any]
 
+
 @dataclass
 class IntegrationConnection:
     """Connection configuration for external integrations"""
+
     connection_id: str
     integration_type: IntegrationType
     name: str
@@ -124,9 +139,11 @@ class IntegrationConnection:
     metrics: Dict[str, Any]
     error_log: List[Dict[str, Any]]
 
+
 @dataclass
 class DataStream:
     """Data stream configuration"""
+
     stream_id: str
     name: str
     source_connection_id: str
@@ -137,6 +154,7 @@ class DataStream:
     real_time: bool
     batch_size: int
     processing_interval: float
+
 
 class BasePlugin(ABC):
     """Base class for all plugins"""
@@ -165,17 +183,20 @@ class BasePlugin(ABC):
     async def health_check(self) -> Dict[str, Any]:
         """Perform health check"""
         return {
-            'plugin_id': self.plugin_id,
-            'status': 'healthy' if self.is_initialized else 'unhealthy',
-            'timestamp': time.time(),
-            'metrics': dict(self.metrics)
+            "plugin_id": self.plugin_id,
+            "status": "healthy" if self.is_initialized else "unhealthy",
+            "timestamp": time.time(),
+            "metrics": dict(self.metrics),
         }
+
 
 class DataSourcePlugin(BasePlugin):
     """Base class for data source plugins"""
 
     @abstractmethod
-    async def fetch_data(self, query: Dict[str, Any], limit: Optional[int] = None) -> Dict[str, Any]:
+    async def fetch_data(
+        self, query: Dict[str, Any], limit: Optional[int] = None
+    ) -> Dict[str, Any]:
         """Fetch data from the source"""
         pass
 
@@ -183,6 +204,7 @@ class DataSourcePlugin(BasePlugin):
     async def test_connection(self) -> bool:
         """Test connection to data source"""
         pass
+
 
 class PluginManager:
     """Manages plugin lifecycle and operations"""
@@ -195,7 +217,9 @@ class PluginManager:
         self.security_policies = {}
         self.metrics = defaultdict(list)
 
-    def register_plugin(self, plugin_path: str, config: Optional[Dict[str, Any]] = None) -> str:
+    def register_plugin(
+        self, plugin_path: str, config: Optional[Dict[str, Any]] = None
+    ) -> str:
         """Register and load a plugin"""
         try:
             # Load plugin module
@@ -206,7 +230,7 @@ class PluginManager:
             spec.loader.exec_module(plugin_module)
 
             # Get plugin class
-            plugin_class = getattr(plugin_module, 'Plugin')
+            plugin_class = getattr(plugin_module, "Plugin")
 
             # Instantiate plugin
             plugin_id = str(uuid.uuid4())
@@ -224,7 +248,9 @@ class PluginManager:
             self.plugin_manifests[plugin_id] = manifest
             self.plugin_registry[manifest.plugin_type.value] = plugin_id
 
-            logger.info(f"Successfully registered plugin: {manifest.name} ({plugin_id})")
+            logger.info(
+                f"Successfully registered plugin: {manifest.name} ({plugin_id})"
+            )
             return plugin_id
 
         except Exception as e:
@@ -288,14 +314,18 @@ class PluginManager:
         plugins = []
         for plugin_id, manifest in self.plugin_manifests.items():
             plugin = self.loaded_plugins.get(plugin_id)
-            plugins.append({
-                'plugin_id': plugin_id,
-                'name': manifest.name,
-                'version': manifest.version,
-                'type': manifest.plugin_type.value,
-                'status': 'initialized' if plugin and plugin.is_initialized else 'loaded',
-                'dependencies': manifest.dependencies
-            })
+            plugins.append(
+                {
+                    "plugin_id": plugin_id,
+                    "name": manifest.name,
+                    "version": manifest.version,
+                    "type": manifest.plugin_type.value,
+                    "status": "initialized"
+                    if plugin and plugin.is_initialized
+                    else "loaded",
+                    "dependencies": manifest.dependencies,
+                }
+            )
         return plugins
 
     def _check_dependencies(self, manifest: PluginManifest):
@@ -306,6 +336,7 @@ class PluginManager:
 
         # Build dependency graph
         self.dependency_graph[manifest.plugin_id] = set(manifest.dependencies)
+
 
 class APIGateway:
     """Gateway for managing API integrations"""
@@ -340,13 +371,19 @@ class APIGateway:
             )
             self.connection_pool[endpoint.endpoint_id] = aiohttp.ClientSession(
                 connector=connector,
-                timeout=aiohttp.ClientTimeout(total=endpoint.timeout)
+                timeout=aiohttp.ClientTimeout(total=endpoint.timeout),
             )
 
-        logger.info(f"Registered API endpoint: {endpoint.name} ({endpoint.endpoint_id})")
+        logger.info(
+            f"Registered API endpoint: {endpoint.name} ({endpoint.endpoint_id})"
+        )
 
-    async def call_endpoint(self, endpoint_id: str, parameters: Optional[Dict[str, Any]] = None,
-                          data: Optional[Any] = None) -> Dict[str, Any]:
+    async def call_endpoint(
+        self,
+        endpoint_id: str,
+        parameters: Optional[Dict[str, Any]] = None,
+        data: Optional[Any] = None,
+    ) -> Dict[str, Any]:
         """Call an API endpoint"""
         if endpoint_id not in self.endpoints:
             raise ValueError(f"Endpoint {endpoint_id} not found")
@@ -378,43 +415,49 @@ class APIGateway:
                 method=endpoint.method,
                 url=url,
                 headers=headers,
-                params=params if endpoint.method.upper() in ['GET', 'DELETE'] else None,
-                json=data if endpoint.method.upper() in ['POST', 'PUT', 'PATCH'] and isinstance(data, dict) else None,
-                data=data if endpoint.method.upper() in ['POST', 'PUT', 'PATCH'] and not isinstance(data, dict) else None
+                params=params if endpoint.method.upper() in ["GET", "DELETE"] else None,
+                json=data
+                if endpoint.method.upper() in ["POST", "PUT", "PATCH"]
+                and isinstance(data, dict)
+                else None,
+                data=data
+                if endpoint.method.upper() in ["POST", "PUT", "PATCH"]
+                and not isinstance(data, dict)
+                else None,
             ) as response:
                 response_time = time.time() - start_time
 
                 # Record metrics
-                self.metrics[f'{endpoint_id}_response_times'].append(response_time)
-                self.metrics[f'{endpoint_id}_status_codes'].append(response.status)
+                self.metrics[f"{endpoint_id}_response_times"].append(response_time)
+                self.metrics[f"{endpoint_id}_status_codes"].append(response.status)
 
                 if response.status == 200:
-                    result_data = await self._parse_response(response, endpoint.data_format)
+                    result_data = await self._parse_response(
+                        response, endpoint.data_format
+                    )
                     return {
-                        'success': True,
-                        'data': result_data,
-                        'status_code': response.status,
-                        'response_time': response_time
+                        "success": True,
+                        "data": result_data,
+                        "status_code": response.status,
+                        "response_time": response_time,
                     }
                 else:
                     error_text = await response.text()
                     return {
-                        'success': False,
-                        'error': error_text,
-                        'status_code': response.status,
-                        'response_time': response_time
+                        "success": False,
+                        "error": error_text,
+                        "status_code": response.status,
+                        "response_time": response_time,
                     }
 
         except Exception as e:
             response_time = time.time() - start_time
             logger.error(f"API call failed for endpoint {endpoint_id}: {str(e)}")
-            return {
-                'success': False,
-                'error': str(e),
-                'response_time': response_time
-            }
+            return {"success": False, "error": str(e), "response_time": response_time}
 
-    async def _parse_response(self, response: aiohttp.ClientResponse, data_format: DataFormat) -> Any:
+    async def _parse_response(
+        self, response: aiohttp.ClientResponse, data_format: DataFormat
+    ) -> Any:
         """Parse response based on data format"""
         if data_format == DataFormat.JSON:
             return await response.json()
@@ -433,8 +476,8 @@ class APIGateway:
             return True
 
         current_time = time.time()
-        window_size = rate_limit.get('window', 60)  # Default 60 seconds
-        max_requests = rate_limit.get('max_requests', 100)
+        window_size = rate_limit.get("window", 60)  # Default 60 seconds
+        max_requests = rate_limit.get("max_requests", 100)
 
         # Clean old requests
         if endpoint.endpoint_id not in self.rate_limiters:
@@ -453,44 +496,48 @@ class APIGateway:
 
     async def _handle_api_key_auth(self, auth_config: Dict[str, Any]) -> Dict[str, str]:
         """Handle API key authentication"""
-        api_key = auth_config.get('api_key')
-        header_name = auth_config.get('header_name', 'X-API-Key')
+        api_key = auth_config.get("api_key")
+        header_name = auth_config.get("header_name", "X-API-Key")
         return {header_name: api_key}
 
     async def _handle_oauth2_auth(self, auth_config: Dict[str, Any]) -> Dict[str, str]:
         """Handle OAuth2 authentication"""
         # Simplified OAuth2 implementation
-        token = auth_config.get('access_token')
+        token = auth_config.get("access_token")
         if not token:
             # Would implement OAuth2 flow here
             raise ValueError("OAuth2 access token not available")
-        return {'Authorization': f'Bearer {token}'}
+        return {"Authorization": f"Bearer {token}"}
 
     async def _handle_jwt_auth(self, auth_config: Dict[str, Any]) -> Dict[str, str]:
         """Handle JWT authentication"""
-        token = auth_config.get('jwt_token')
+        token = auth_config.get("jwt_token")
         if not token:
             # Would generate JWT token here
             raise ValueError("JWT token not available")
-        return {'Authorization': f'Bearer {token}'}
+        return {"Authorization": f"Bearer {token}"}
 
     async def _handle_basic_auth(self, auth_config: Dict[str, Any]) -> Dict[str, str]:
         """Handle basic authentication"""
         import base64
-        username = auth_config.get('username')
-        password = auth_config.get('password')
-        credentials = base64.b64encode(f"{username}:{password}".encode()).decode()
-        return {'Authorization': f'Basic {credentials}'}
 
-    async def _handle_bearer_token_auth(self, auth_config: Dict[str, Any]) -> Dict[str, str]:
+        username = auth_config.get("username")
+        password = auth_config.get("password")
+        credentials = base64.b64encode(f"{username}:{password}".encode()).decode()
+        return {"Authorization": f"Basic {credentials}"}
+
+    async def _handle_bearer_token_auth(
+        self, auth_config: Dict[str, Any]
+    ) -> Dict[str, str]:
         """Handle bearer token authentication"""
-        token = auth_config.get('bearer_token')
-        return {'Authorization': f'Bearer {token}'}
+        token = auth_config.get("bearer_token")
+        return {"Authorization": f"Bearer {token}"}
 
     async def cleanup(self):
         """Cleanup resources"""
         for session in self.connection_pool.values():
             await session.close()
+
 
 class DataStreamManager:
     """Manages data streams between systems"""
@@ -504,15 +551,15 @@ class DataStreamManager:
         """Create a new data stream"""
         stream = DataStream(
             stream_id=str(uuid.uuid4()),
-            name=stream_config['name'],
-            source_connection_id=stream_config['source_connection_id'],
-            source_config=stream_config.get('source_config', {}),
-            target_connection_id=stream_config.get('target_connection_id'),
-            target_config=stream_config.get('target_config', {}),
-            transformation_rules=stream_config.get('transformation_rules', []),
-            real_time=stream_config.get('real_time', False),
-            batch_size=stream_config.get('batch_size', 100),
-            processing_interval=stream_config.get('processing_interval', 1.0)
+            name=stream_config["name"],
+            source_connection_id=stream_config["source_connection_id"],
+            source_config=stream_config.get("source_config", {}),
+            target_connection_id=stream_config.get("target_connection_id"),
+            target_config=stream_config.get("target_config", {}),
+            transformation_rules=stream_config.get("transformation_rules", []),
+            real_time=stream_config.get("real_time", False),
+            batch_size=stream_config.get("batch_size", 100),
+            processing_interval=stream_config.get("processing_interval", 1.0),
         )
 
         self.active_streams[stream.stream_id] = stream
@@ -574,7 +621,7 @@ class DataStreamManager:
         """Fetch data from source system"""
         # This would integrate with the actual source system
         # For now, return mock data
-        return {'timestamp': time.time(), 'data': 'sample_data'}
+        return {"timestamp": time.time(), "data": "sample_data"}
 
     async def _apply_transformations(self, data: Any, stream: DataStream) -> Any:
         """Apply transformation rules to data"""
@@ -582,11 +629,11 @@ class DataStreamManager:
 
         for rule in stream.transformation_rules:
             # Apply transformation logic
-            if rule.get('type') == 'filter':
+            if rule.get("type") == "filter":
                 transformed_data = self._apply_filter(transformed_data, rule)
-            elif rule.get('type') == 'map':
+            elif rule.get("type") == "map":
                 transformed_data = self._apply_map(transformed_data, rule)
-            elif rule.get('type') == 'aggregate':
+            elif rule.get("type") == "aggregate":
                 transformed_data = self._apply_aggregation(transformed_data, rule)
 
         return transformed_data
@@ -611,6 +658,7 @@ class DataStreamManager:
         # Simplified aggregation implementation
         return data
 
+
 class ExternalDataSourceManager:
     """Manages external data source connections"""
 
@@ -626,14 +674,14 @@ class ExternalDataSourceManager:
 
         connection = IntegrationConnection(
             connection_id=connection_id,
-            integration_type=IntegrationType(connection_config['type']),
-            name=connection_config['name'],
-            config=connection_config.get('config', {}),
-            status='pending',
-            health_check_url=connection_config.get('health_check_url'),
+            integration_type=IntegrationType(connection_config["type"]),
+            name=connection_config["name"],
+            config=connection_config.get("config", {}),
+            status="pending",
+            health_check_url=connection_config.get("health_check_url"),
             last_health_check=None,
-            metrics={'created_at': time.time()},
-            error_log=[]
+            metrics={"created_at": time.time()},
+            error_log=[],
         )
 
         self.connections[connection_id] = connection
@@ -647,16 +695,20 @@ class ExternalDataSourceManager:
             elif connection.integration_type == IntegrationType.FILE_SYSTEM:
                 await self._init_file_system_connection(connection)
 
-            connection.status = 'active'
-            logger.info(f"Created external connection: {connection.name} ({connection_id})")
+            connection.status = "active"
+            logger.info(
+                f"Created external connection: {connection.name} ({connection_id})"
+            )
 
         except Exception as e:
-            connection.status = 'failed'
-            connection.error_log.append({
-                'timestamp': time.time(),
-                'error': str(e),
-                'context': 'connection_creation'
-            })
+            connection.status = "failed"
+            connection.error_log.append(
+                {
+                    "timestamp": time.time(),
+                    "error": str(e),
+                    "context": "connection_creation",
+                }
+            )
             logger.error(f"Failed to create connection {connection_id}: {str(e)}")
 
         return connection_id
@@ -665,32 +717,32 @@ class ExternalDataSourceManager:
         """Initialize API connection"""
         # Test API connectivity
         api_config = connection.config
-        test_url = api_config.get('test_url', connection.health_check_url)
+        test_url = api_config.get("test_url", connection.health_check_url)
 
         if test_url:
             async with aiohttp.ClientSession() as session:
                 try:
                     async with session.get(test_url, timeout=10) as response:
                         if response.status == 200:
-                            connection.metrics['api_test_success'] = True
+                            connection.metrics["api_test_success"] = True
                         else:
-                            connection.metrics['api_test_success'] = False
+                            connection.metrics["api_test_success"] = False
                 except Exception as e:
                     raise Exception(f"API connection test failed: {str(e)}")
 
     async def _init_database_connection(self, connection: IntegrationConnection):
         """Initialize database connection"""
         # Would implement database connection logic here
-        connection.metrics['database_test_success'] = True
+        connection.metrics["database_test_success"] = True
 
     async def _init_file_system_connection(self, connection: IntegrationConnection):
         """Initialize file system connection"""
         # Test file system access
-        path = connection.config.get('path', '.')
+        path = connection.config.get("path", ".")
         test_path = Path(path)
 
         if test_path.exists() and test_path.is_dir():
-            connection.metrics['filesystem_test_success'] = True
+            connection.metrics["filesystem_test_success"] = True
         else:
             raise Exception(f"File system path not accessible: {path}")
 
@@ -701,9 +753,9 @@ class ExternalDataSourceManager:
 
         connection = self.connections[connection_id]
         test_result = {
-            'connection_id': connection_id,
-            'timestamp': time.time(),
-            'status': 'unknown'
+            "connection_id": connection_id,
+            "timestamp": time.time(),
+            "status": "unknown",
         }
 
         try:
@@ -715,28 +767,28 @@ class ExternalDataSourceManager:
                 test_result = await self._test_file_system_connection(connection)
 
             connection.last_health_check = time.time()
-            if test_result['status'] == 'success':
-                connection.status = 'active'
+            if test_result["status"] == "success":
+                connection.status = "active"
             else:
-                connection.status = 'degraded'
+                connection.status = "degraded"
 
         except Exception as e:
-            test_result['status'] = 'failed'
-            test_result['error'] = str(e)
-            connection.status = 'failed'
-            connection.error_log.append({
-                'timestamp': time.time(),
-                'error': str(e),
-                'context': 'health_check'
-            })
+            test_result["status"] = "failed"
+            test_result["error"] = str(e)
+            connection.status = "failed"
+            connection.error_log.append(
+                {"timestamp": time.time(), "error": str(e), "context": "health_check"}
+            )
 
         return test_result
 
-    async def _test_api_connection(self, connection: IntegrationConnection) -> Dict[str, Any]:
+    async def _test_api_connection(
+        self, connection: IntegrationConnection
+    ) -> Dict[str, Any]:
         """Test API connection"""
         health_url = connection.health_check_url
         if not health_url:
-            return {'status': 'success', 'message': 'No health check URL configured'}
+            return {"status": "success", "message": "No health check URL configured"}
 
         start_time = time.time()
         async with aiohttp.ClientSession() as session:
@@ -744,43 +796,46 @@ class ExternalDataSourceManager:
                 async with session.get(health_url, timeout=10) as response:
                     response_time = time.time() - start_time
                     return {
-                        'status': 'success' if response.status == 200 else 'failed',
-                        'response_code': response.status,
-                        'response_time': response_time,
-                        'message': f'Health check returned {response.status}'
+                        "status": "success" if response.status == 200 else "failed",
+                        "response_code": response.status,
+                        "response_time": response_time,
+                        "message": f"Health check returned {response.status}",
                     }
             except Exception as e:
                 return {
-                    'status': 'failed',
-                    'error': str(e),
-                    'response_time': time.time() - start_time
+                    "status": "failed",
+                    "error": str(e),
+                    "response_time": time.time() - start_time,
                 }
 
-    async def _test_database_connection(self, connection: IntegrationConnection) -> Dict[str, Any]:
+    async def _test_database_connection(
+        self, connection: IntegrationConnection
+    ) -> Dict[str, Any]:
         """Test database connection"""
         # Would implement actual database test
-        return {
-            'status': 'success',
-            'message': 'Database connection test successful'
-        }
+        return {"status": "success", "message": "Database connection test successful"}
 
-    async def _test_file_system_connection(self, connection: IntegrationConnection) -> Dict[str, Any]:
+    async def _test_file_system_connection(
+        self, connection: IntegrationConnection
+    ) -> Dict[str, Any]:
         """Test file system connection"""
-        path = connection.config.get('path', '.')
+        path = connection.config.get("path", ".")
         test_path = Path(path)
 
         if test_path.exists() and test_path.is_dir():
             return {
-                'status': 'success',
-                'message': f'File system path accessible: {path}'
+                "status": "success",
+                "message": f"File system path accessible: {path}",
             }
         else:
             return {
-                'status': 'failed',
-                'error': f'File system path not accessible: {path}'
+                "status": "failed",
+                "error": f"File system path not accessible: {path}",
             }
 
-    async def fetch_data(self, connection_id: str, query: Dict[str, Any]) -> Dict[str, Any]:
+    async def fetch_data(
+        self, connection_id: str, query: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Fetch data from external source"""
         if connection_id not in self.connections:
             raise ValueError(f"Connection {connection_id} not found")
@@ -796,20 +851,20 @@ class ExternalDataSourceManager:
                 return await self._fetch_from_file_system(connection, query)
 
         except Exception as e:
-            connection.error_log.append({
-                'timestamp': time.time(),
-                'error': str(e),
-                'context': 'data_fetch'
-            })
+            connection.error_log.append(
+                {"timestamp": time.time(), "error": str(e), "context": "data_fetch"}
+            )
             raise
 
-    async def _fetch_from_api(self, connection: IntegrationConnection, query: Dict[str, Any]) -> Dict[str, Any]:
+    async def _fetch_from_api(
+        self, connection: IntegrationConnection, query: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Fetch data from API"""
         api_config = connection.config
-        url = api_config.get('base_url', '') + query.get('endpoint', '')
+        url = api_config.get("base_url", "") + query.get("endpoint", "")
 
-        headers = api_config.get('headers', {})
-        params = query.get('parameters', {})
+        headers = api_config.get("headers", {})
+        params = query.get("parameters", {})
 
         async with aiohttp.ClientSession() as session:
             async with session.get(url, headers=headers, params=params) as response:
@@ -818,22 +873,27 @@ class ExternalDataSourceManager:
                 else:
                     raise Exception(f"API request failed with status {response.status}")
 
-    async def _fetch_from_database(self, connection: IntegrationConnection, query: Dict[str, Any]) -> Dict[str, Any]:
+    async def _fetch_from_database(
+        self, connection: IntegrationConnection, query: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Fetch data from database"""
         # Would implement actual database query
-        return {'data': 'sample_database_data', 'query': query}
+        return {"data": "sample_database_data", "query": query}
 
-    async def _fetch_from_file_system(self, connection: IntegrationConnection, query: Dict[str, Any]) -> Dict[str, Any]:
+    async def _fetch_from_file_system(
+        self, connection: IntegrationConnection, query: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Fetch data from file system"""
-        path = Path(connection.config.get('path', '.'))
-        file_path = path / query.get('filename', '')
+        path = Path(connection.config.get("path", "."))
+        file_path = path / query.get("filename", "")
 
         if file_path.exists():
-            with open(file_path, 'r') as f:
+            with open(file_path, "r") as f:
                 content = f.read()
-            return {'content': content, 'file_path': str(file_path)}
+            return {"content": content, "file_path": str(file_path)}
         else:
             raise Exception(f"File not found: {file_path}")
+
 
 class EcosystemIntegrationFramework:
     """Main framework for ecosystem integration"""
@@ -863,10 +923,10 @@ class EcosystemIntegrationFramework:
         """Load built-in plugins"""
         # Would scan for built-in plugins and load them
         builtin_plugin_paths = [
-            'plugins/data_sources/csv_plugin.py',
-            'plugins/data_sources/json_plugin.py',
-            'plugins/processors/cleaner_plugin.py',
-            'plugins/visualizations/chart_plugin.py'
+            "plugins/data_sources/csv_plugin.py",
+            "plugins/data_sources/json_plugin.py",
+            "plugins/processors/cleaner_plugin.py",
+            "plugins/visualizations/chart_plugin.py",
         ]
 
         for plugin_path in builtin_plugin_paths:
@@ -894,11 +954,9 @@ class EcosystemIntegrationFramework:
         for plugin_id, plugin in self.plugin_manager.loaded_plugins.items():
             try:
                 health = await plugin.health_check()
-                self.integration_metrics['plugin_health'].append({
-                    'plugin_id': plugin_id,
-                    'health': health,
-                    'timestamp': time.time()
-                })
+                self.integration_metrics["plugin_health"].append(
+                    {"plugin_id": plugin_id, "health": health, "timestamp": time.time()}
+                )
             except Exception as e:
                 logger.error(f"Health check failed for plugin {plugin_id}: {str(e)}")
 
@@ -906,13 +964,17 @@ class EcosystemIntegrationFramework:
         for connection_id in self.data_source_manager.connections:
             try:
                 health = await self.data_source_manager.test_connection(connection_id)
-                self.integration_metrics['connection_health'].append({
-                    'connection_id': connection_id,
-                    'health': health,
-                    'timestamp': time.time()
-                })
+                self.integration_metrics["connection_health"].append(
+                    {
+                        "connection_id": connection_id,
+                        "health": health,
+                        "timestamp": time.time(),
+                    }
+                )
             except Exception as e:
-                logger.error(f"Health check failed for connection {connection_id}: {str(e)}")
+                logger.error(
+                    f"Health check failed for connection {connection_id}: {str(e)}"
+                )
 
     async def register_webhook(self, webhook_config: Dict[str, Any]) -> str:
         """Register a webhook endpoint"""
@@ -920,13 +982,13 @@ class EcosystemIntegrationFramework:
 
         # Store webhook configuration
         self.webhook_handlers[webhook_id] = {
-            'id': webhook_id,
-            'url': webhook_config['url'],
-            'events': webhook_config.get('events', []),
-            'auth': webhook_config.get('auth', {}),
-            'headers': webhook_config.get('headers', {}),
-            'active': True,
-            'created_at': time.time()
+            "id": webhook_id,
+            "url": webhook_config["url"],
+            "events": webhook_config.get("events", []),
+            "auth": webhook_config.get("auth", {}),
+            "headers": webhook_config.get("headers", {}),
+            "active": True,
+            "created_at": time.time(),
         }
 
         logger.info(f"Registered webhook: {webhook_id}")
@@ -939,33 +1001,28 @@ class EcosystemIntegrationFramework:
 
         webhook = self.webhook_handlers[webhook_id]
 
-        if not webhook['active'] or event not in webhook['events']:
+        if not webhook["active"] or event not in webhook["events"]:
             return
 
         try:
-            headers = webhook['headers'].copy()
+            headers = webhook["headers"].copy()
 
             # Add authentication
-            if webhook['auth'].get('type') == 'api_key':
-                headers['X-API-Key'] = webhook['auth']['api_key']
+            if webhook["auth"].get("type") == "api_key":
+                headers["X-API-Key"] = webhook["auth"]["api_key"]
 
-            payload = {
-                'event': event,
-                'data': data,
-                'timestamp': time.time()
-            }
+            payload = {"event": event, "data": data, "timestamp": time.time()}
 
             async with aiohttp.ClientSession() as session:
                 async with session.post(
-                    webhook['url'],
-                    headers=headers,
-                    json=payload,
-                    timeout=10
+                    webhook["url"], headers=headers, json=payload, timeout=10
                 ) as response:
                     if response.status == 200:
                         logger.info(f"Webhook {webhook_id} triggered successfully")
                     else:
-                        logger.warning(f"Webhook {webhook_id} returned status {response.status}")
+                        logger.warning(
+                            f"Webhook {webhook_id} returned status {response.status}"
+                        )
 
         except Exception as e:
             logger.error(f"Failed to trigger webhook {webhook_id}: {str(e)}")
@@ -988,26 +1045,36 @@ class EcosystemIntegrationFramework:
     def get_system_status(self) -> Dict[str, Any]:
         """Get comprehensive system status"""
         return {
-            'plugin_manager': {
-                'loaded_plugins': len(self.plugin_manager.loaded_plugins),
-                'initialized_plugins': sum(1 for p in self.plugin_manager.loaded_plugins.values() if p.is_initialized)
+            "plugin_manager": {
+                "loaded_plugins": len(self.plugin_manager.loaded_plugins),
+                "initialized_plugins": sum(
+                    1
+                    for p in self.plugin_manager.loaded_plugins.values()
+                    if p.is_initialized
+                ),
             },
-            'api_gateway': {
-                'registered_endpoints': len(self.api_gateway.endpoints),
-                'active_connections': len(self.api_gateway.connection_pool)
+            "api_gateway": {
+                "registered_endpoints": len(self.api_gateway.endpoints),
+                "active_connections": len(self.api_gateway.connection_pool),
             },
-            'stream_manager': {
-                'active_streams': len(self.stream_manager.active_streams)
+            "stream_manager": {
+                "active_streams": len(self.stream_manager.active_streams)
             },
-            'data_source_manager': {
-                'total_connections': len(self.data_source_manager.connections),
-                'active_connections': sum(1 for c in self.data_source_manager.connections.values() if c.status == 'active')
+            "data_source_manager": {
+                "total_connections": len(self.data_source_manager.connections),
+                "active_connections": sum(
+                    1
+                    for c in self.data_source_manager.connections.values()
+                    if c.status == "active"
+                ),
             },
-            'integration_metrics': dict(self.integration_metrics),
-            'webhooks': {
-                'registered_webhooks': len(self.webhook_handlers),
-                'active_webhooks': sum(1 for w in self.webhook_handlers.values() if w['active'])
-            }
+            "integration_metrics": dict(self.integration_metrics),
+            "webhooks": {
+                "registered_webhooks": len(self.webhook_handlers),
+                "active_webhooks": sum(
+                    1 for w in self.webhook_handlers.values() if w["active"]
+                ),
+            },
         }
 
     async def cleanup(self):
@@ -1026,8 +1093,10 @@ class EcosystemIntegrationFramework:
 
         logger.info("Ecosystem Integration Framework cleanup completed")
 
+
 # Example usage
 if __name__ == "__main__":
+
     async def main():
         # Initialize framework
         framework = EcosystemIntegrationFramework()
@@ -1047,7 +1116,7 @@ if __name__ == "__main__":
             timeout=30.0,
             retry_config={"max_retries": 3, "backoff_factor": 2},
             data_format=DataFormat.JSON,
-            description="Fetch college football games data"
+            description="Fetch college football games data",
         )
 
         framework.api_gateway.register_endpoint(cfbd_endpoint)
@@ -1059,12 +1128,14 @@ if __name__ == "__main__":
             "config": {
                 "base_url": "https://api.collegefootballdata.com",
                 "headers": {"Accept": "application/json"},
-                "test_url": "https://api.collegefootballdata.com/games?year=2025&limit=1"
+                "test_url": "https://api.collegefootballdata.com/games?year=2025&limit=1",
             },
-            "health_check_url": "https://api.collegefootballdata.com/games?year=2025&limit=1"
+            "health_check_url": "https://api.collegefootballdata.com/games?year=2025&limit=1",
         }
 
-        connection_id = await framework.data_source_manager.create_connection(connection_config)
+        connection_id = await framework.data_source_manager.create_connection(
+            connection_config
+        )
         print(f"Created connection: {connection_id}")
 
         # Test the connection
@@ -1073,8 +1144,7 @@ if __name__ == "__main__":
 
         # Call API endpoint
         api_result = await framework.api_gateway.call_endpoint(
-            "cfbd_games",
-            parameters={"year": 2025, "week": 10}
+            "cfbd_games", parameters={"year": 2025, "week": 10}
         )
         print(f"API call result: {api_result}")
 

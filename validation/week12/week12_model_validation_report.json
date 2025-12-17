@@ -1,0 +1,413 @@
+{
+  "report_metadata": {
+    "generation_time": "2025-12-17T02:10:52.612742",
+    "week": 12,
+    "season": 2025,
+    "overall_score": 95.79775280898876
+  },
+  "summary": {
+    "data_validation_passed": true,
+    "models_available": 3,
+    "models_total": 3,
+    "models_ready_for_predictions": 3,
+    "overall_validation_passed": "True"
+  },
+  "detailed_results": {
+    "data_validation": {
+      "is_valid": true,
+      "issues": [],
+      "warnings": [
+        "Low feature overlap: 9.0%"
+      ],
+      "data_quality_score": 99.32584269662922,
+      "feature_completeness": 1.0,
+      "data_consistency": 0.0898876404494382
+    },
+    "model_availability": {
+      "total_models": 3,
+      "available_models": 3,
+      "unavailable_models": 0,
+      "model_details": {
+        "ridge_regression": {
+          "status": "available",
+          "prediction_type": "margin",
+          "load_status": "success"
+        },
+        "xgboost_win_probability": {
+          "status": "available",
+          "prediction_type": "probability",
+          "load_status": "success"
+        },
+        "fastai_neural_network": {
+          "status": "available",
+          "prediction_type": "probability",
+          "load_status": "success"
+        }
+      }
+    },
+    "compatibility_results": {
+      "ridge_regression": {
+        "compatible": true,
+        "feature_count_used": 8,
+        "prediction_successful": true,
+        "prediction_shape": [
+          1
+        ],
+        "prediction_type": "margin",
+        "test_passed": true
+      },
+      "xgboost_win_probability": {
+        "compatible": true,
+        "feature_count_used": 16,
+        "prediction_successful": true,
+        "prediction_shape": [
+          1
+        ],
+        "prediction_type": "probability",
+        "test_passed": true
+      },
+      "fastai_neural_network": {
+        "compatible": true,
+        "feature_count_used": 27,
+        "prediction_successful": true,
+        "prediction_shape": [
+          1
+        ],
+        "prediction_type": "probability",
+        "test_passed": true
+      }
+    },
+    "individual_validations": {
+      "ridge_regression": {
+        "validation_status": "passed",
+        "validation_score": 100.0,
+        "tests_performed": [
+          "basic_prediction",
+          "consistency_check",
+          "sanity_check"
+        ],
+        "issues_found": [],
+        "performance_metrics": {
+          "prediction_range": {
+            "min": 4.5951428933959875,
+            "max": 4.771711046706564,
+            "mean": 4.683426970051276,
+            "std": 0.08828407665528815
+          }
+        }
+      },
+      "xgboost_win_probability": {
+        "validation_status": "warning",
+        "validation_score": 60.0,
+        "tests_performed": [
+          "basic_prediction",
+          "consistency_check",
+          "feature_importance",
+          "sanity_check"
+        ],
+        "issues_found": [
+          "All predictions identical - potential overfitting"
+        ],
+        "performance_metrics": {
+          "prediction_range": {
+            "min": 0.4532510042190552,
+            "max": 0.4532510042190552,
+            "mean": 0.4532510042190552,
+            "std": 0.0
+          },
+          "top_features": {
+            "indices": [
+              6,
+              10,
+              8,
+              14,
+              2
+            ],
+            "importances": [
+              0.04070719704031944,
+              0.04181589558720589,
+              0.0432463102042675,
+              0.049447037279605865,
+              0.44842132925987244
+            ],
+            "feature_names": [
+              "home_adjusted_epa_allowed",
+              "home_adjusted_success_allowed",
+              "away_adjusted_epa_allowed",
+              "elo_diff",
+              "spread"
+            ]
+          }
+        }
+      },
+      "fastai_neural_network": {
+        "validation_status": "passed",
+        "validation_score": 100.0,
+        "tests_performed": [
+          "basic_prediction",
+          "consistency_check",
+          "sanity_check"
+        ],
+        "issues_found": [],
+        "performance_metrics": {
+          "prediction_range": {
+            "min": 0.9951744079589844,
+            "max": 0.9969403743743896,
+            "mean": 0.996057391166687,
+            "std": 0.0008829832077026367
+          }
+        }
+      }
+    },
+    "performance_tests": {
+      "ridge_regression": {
+        "performance_status": "tested",
+        "prediction_count": 2,
+        "prediction_stats": {
+          "count": 2,
+          "mean": 4.683426970051276,
+          "std": 0.08828407665528815,
+          "min": 4.5951428933959875,
+          "max": 4.771711046706564,
+          "median": 4.683426970051276,
+          "prediction_type": "margin"
+        },
+        "performance_indicators": {
+          "positive_margin_rate": 1.0,
+          "blowout_rate": 0.0,
+          "close_game_rate": 1.0
+        }
+      },
+      "xgboost_win_probability": {
+        "performance_status": "tested",
+        "prediction_count": 2,
+        "prediction_stats": {
+          "count": 2,
+          "mean": 0.4532510042190552,
+          "std": 0.0,
+          "min": 0.4532510042190552,
+          "max": 0.4532510042190552,
+          "median": 0.4532510042190552,
+          "prediction_type": "probability"
+        },
+        "performance_indicators": {
+          "home_win_rate": 0.0,
+          "close_games_rate": 1.0,
+          "high_confidence_rate": 0.0
+        }
+      },
+      "fastai_neural_network": {
+        "performance_status": "tested",
+        "prediction_count": 2,
+        "prediction_stats": {
+          "count": 2,
+          "mean": 0.996057391166687,
+          "std": 0.0008829832077026367,
+          "min": 0.9951744079589844,
+          "max": 0.9969403743743896,
+          "median": 0.996057391166687,
+          "prediction_type": "probability"
+        },
+        "performance_indicators": {
+          "home_win_rate": 1.0,
+          "close_games_rate": 0.0,
+          "high_confidence_rate": 1.0
+        }
+      }
+    },
+    "cross_validation": {
+      "ridge_regression": {
+        "cv_status": "completed",
+        "cv_folds": 5,
+        "cv_scores": {
+          "scoring_metric": "neg_mean_absolute_error",
+          "mean_score": NaN,
+          "std_score": NaN,
+          "fold_scores": [
+            NaN,
+            NaN,
+            NaN,
+            NaN,
+            NaN
+          ]
+        }
+      },
+      "xgboost_win_probability": {
+        "cv_status": "completed",
+        "cv_folds": 5,
+        "cv_scores": {
+          "scoring_metric": "accuracy",
+          "mean_score": 0.9782857142857143,
+          "std_score": 0.01611072796479277,
+          "fold_scores": [
+            0.981904761904762,
+            0.9847619047619047,
+            0.9914285714285714,
+            0.9866666666666667,
+            0.9466666666666667
+          ]
+        }
+      },
+      "fastai_neural_network": {
+        "cv_status": "error",
+        "cv_folds": 5,
+        "cv_scores": {},
+        "error": "__sklearn_tags__"
+      }
+    },
+    "ensemble_validation": {
+      "ensemble_status": "error",
+      "available_models": 3,
+      "ensemble_methods": {},
+      "error": "The feature names should match those that were passed during fit.\nFeature names unseen at fit time:\n- away_adjusted_success\n- away_motivation_factor\n- championship_implication_adjustment\n- feature_10\n- feature_11\n- ...\nFeature names seen at fit time, yet now missing:\n- away_adjusted_epa_allowed\n- away_elo\n- home_adjusted_epa_allowed\n- home_elo\n"
+    },
+    "bias_analysis": {
+      "bias_analysis_status": "completed",
+      "bias_checks": {
+        "home_team_bias": {
+          "significant_bias": false,
+          "bias_magnitude": 0
+        },
+        "talent_bias": {
+          "significant_bias": false,
+          "bias_magnitude": 0
+        }
+      },
+      "potential_biases": []
+    },
+    "previous_week_validation": {
+      "validation_status": "skipped",
+      "previous_week": 11,
+      "predictions_available": false,
+      "actuals_available": false,
+      "model_performance": {},
+      "accuracy_metrics": {},
+      "reason": "Week 11 predictions not available"
+    },
+    "model_feature_schemas": {
+      "ridge_regression": {
+        "source_feature_count": 89,
+        "derived_feature_count": 8,
+        "prepared_feature_count": 8,
+        "missing_features": [
+          "home_elo",
+          "away_elo",
+          "home_adjusted_epa_allowed",
+          "away_adjusted_epa_allowed"
+        ],
+        "derived_features": [
+          "home_talent",
+          "away_talent",
+          "home_elo",
+          "away_elo",
+          "home_adjusted_epa",
+          "home_adjusted_epa_allowed",
+          "away_adjusted_epa",
+          "away_adjusted_epa_allowed"
+        ]
+      },
+      "xgboost_win_probability": {
+        "source_feature_count": 89,
+        "derived_feature_count": 16,
+        "prepared_feature_count": 16,
+        "missing_features": [
+          "spread",
+          "home_elo",
+          "away_elo",
+          "home_adjusted_epa_allowed",
+          "away_adjusted_epa_allowed",
+          "home_adjusted_success_allowed",
+          "away_adjusted_success_allowed",
+          "epa_interaction",
+          "elo_diff",
+          "talent_diff"
+        ],
+        "derived_features": [
+          "home_talent",
+          "away_talent",
+          "spread",
+          "home_elo",
+          "away_elo",
+          "home_adjusted_epa",
+          "home_adjusted_epa_allowed",
+          "away_adjusted_epa",
+          "away_adjusted_epa_allowed",
+          "home_adjusted_success",
+          "home_adjusted_success_allowed",
+          "away_adjusted_success",
+          "away_adjusted_success_allowed",
+          "epa_interaction",
+          "elo_diff",
+          "talent_diff"
+        ]
+      },
+      "fastai_neural_network": {
+        "source_feature_count": 89,
+        "derived_feature_count": 27,
+        "prepared_feature_count": 27,
+        "missing_features": [
+          "week",
+          "home_conference",
+          "away_conference",
+          "neutral_site",
+          "spread",
+          "home_adjusted_epa_allowed",
+          "away_adjusted_epa_allowed",
+          "home_adjusted_success_allowed",
+          "away_adjusted_success_allowed",
+          "home_elo",
+          "away_elo",
+          "home_adjusted_explosiveness",
+          "away_adjusted_explosiveness",
+          "home_adjusted_line_yards",
+          "away_adjusted_line_yards",
+          "home_adjusted_open_field_yards",
+          "away_adjusted_open_field_yards",
+          "home_avg_start_offense",
+          "away_avg_start_offense",
+          "home_avg_start_defense",
+          "away_avg_start_defense"
+        ],
+        "derived_features": [
+          "week",
+          "home_conference",
+          "away_conference",
+          "neutral_site",
+          "spread",
+          "home_adjusted_epa",
+          "home_adjusted_epa_allowed",
+          "away_adjusted_epa",
+          "away_adjusted_epa_allowed",
+          "home_adjusted_success",
+          "home_adjusted_success_allowed",
+          "away_adjusted_success",
+          "away_adjusted_success_allowed",
+          "home_talent",
+          "away_talent",
+          "home_elo",
+          "away_elo",
+          "home_adjusted_explosiveness",
+          "away_adjusted_explosiveness",
+          "home_adjusted_line_yards",
+          "away_adjusted_line_yards",
+          "home_adjusted_open_field_yards",
+          "away_adjusted_open_field_yards",
+          "home_avg_start_offense",
+          "away_avg_start_offense",
+          "home_avg_start_defense",
+          "away_avg_start_defense"
+        ]
+      }
+    }
+  },
+  "models_ready": [
+    "ridge_regression",
+    "xgboost_win_probability",
+    "fastai_neural_network"
+  ],
+  "recommendations": [],
+  "next_steps": [
+    "\u2705 Models are ready for Week 12 predictions",
+    "\ud83d\ude80 Proceed with prediction generation"
+  ]
+}

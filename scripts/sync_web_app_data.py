@@ -6,12 +6,12 @@ This script copies the latest prediction files from predictions/week14/
 to web_app/public/ and ensures the API can access the latest models.
 """
 
+import csv
+import json
 import os
 import shutil
-import json
-import csv
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any, Dict, List
 
 # Project root
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -26,7 +26,7 @@ def copy_file_if_exists(source: Path, dest: Path, description: str) -> bool:
     if not source.exists():
         print(f"⚠️  {description} not found: {source}")
         return False
-    
+
     dest.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source, dest)
     print(f"✅ Copied {description}: {dest.name}")
@@ -40,12 +40,12 @@ def convert_bowls_predictions_schema(source_path: Path, dest_path: Path) -> bool
         return False
 
     try:
-        with open(source_path, 'r', encoding='utf-8') as f:
+        with open(source_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
         # Convert schema to match web app expectations
         web_app_data = []
-        for game in data.get('games', []):
+        for game in data.get("games", []):
             web_game = {
                 "game_id": game.get("id"),
                 "season": data.get("season", 2025),
@@ -69,7 +69,9 @@ def convert_bowls_predictions_schema(source_path: Path, dest_path: Path) -> bool
                 "model_agreement": "high",  # Default
                 "home_win_probability": game.get("home_win_prob"),
                 "away_win_probability": 1 - game.get("home_win_prob", 0.5),
-                "predicted_winner": game.get("home_team") if game.get("home_win_prob", 0.5) > 0.5 else game.get("away_team")
+                "predicted_winner": game.get("home_team")
+                if game.get("home_win_prob", 0.5) > 0.5
+                else game.get("away_team"),
             }
             web_app_data.append(web_game)
 
@@ -79,13 +81,15 @@ def convert_bowls_predictions_schema(source_path: Path, dest_path: Path) -> bool
             "model": data.get("model", {}),
             "season": data.get("season", 2025),
             "predictions_type": "bowls",
-            "games": web_app_data
+            "games": web_app_data,
         }
 
-        with open(dest_path, 'w', encoding='utf-8') as f:
+        with open(dest_path, "w", encoding="utf-8") as f:
             json.dump(output_data, f, indent=2)
 
-        print(f"✅ Converted bowls predictions to web app schema: {dest_path.name} ({len(web_app_data)} games)")
+        print(
+            f"✅ Converted bowls predictions to web app schema: {dest_path.name} ({len(web_app_data)} games)"
+        )
         return True
     except Exception as e:
         print(f"❌ Error converting bowls predictions: {e}")
@@ -96,29 +100,29 @@ def convert_csv_to_json(csv_path: Path, json_path: Path) -> bool:
     """Convert CSV predictions to JSON format for web app"""
     if not csv_path.exists():
         return False
-    
+
     try:
-        with open(csv_path, 'r', encoding='utf-8') as f:
+        with open(csv_path, "r", encoding="utf-8") as f:
             reader = csv.DictReader(f)
             data = list(reader)
-        
+
         # Convert numeric strings to numbers where appropriate
         for row in data:
             for key, value in row.items():
-                if value == '':
+                if value == "":
                     continue
                 # Try to convert to number
                 try:
-                    if '.' in value:
+                    if "." in value:
                         row[key] = float(value)
                     else:
                         row[key] = int(value)
                 except ValueError:
                     pass  # Keep as string
-        
-        with open(json_path, 'w', encoding='utf-8') as f:
+
+        with open(json_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
-        
+
         print(f"✅ Converted CSV to JSON: {json_path.name} ({len(data)} games)")
         return True
     except Exception as e:
@@ -132,8 +136,16 @@ def sync_predictions():
 
     # Primary prediction files
     files_to_sync = [
-        ("week14_model_predictions.json", "week14_model_predictions.json", "Model predictions (JSON)"),
-        ("week14_model_predictions.csv", "week14_model_predictions.csv", "Model predictions (CSV)"),
+        (
+            "week14_model_predictions.json",
+            "week14_model_predictions.json",
+            "Model predictions (JSON)",
+        ),
+        (
+            "week14_model_predictions.csv",
+            "week14_model_predictions.csv",
+            "Model predictions (CSV)",
+        ),
         ("week14_ats_full_table.csv", "week14_ats_full_table.csv", "ATS full table"),
     ]
 
@@ -149,27 +161,35 @@ def sync_predictions():
         print("✅ Bowls predictions synced successfully")
     else:
         print("⚠️  Bowls predictions sync failed")
-    
+
     # Enhanced/calibrated predictions (optional, for future use)
     enhanced_files = [
-        ("week14_predictions_enhanced_calibrated.csv", "week14_predictions_enhanced_calibrated.csv", "Enhanced calibrated predictions"),
-        ("week14_predictions_unified.json", "week14_predictions_unified.json", "Unified predictions"),
+        (
+            "week14_predictions_enhanced_calibrated.csv",
+            "week14_predictions_enhanced_calibrated.csv",
+            "Enhanced calibrated predictions",
+        ),
+        (
+            "week14_predictions_unified.json",
+            "week14_predictions_unified.json",
+            "Unified predictions",
+        ),
     ]
-    
+
     for source_name, dest_name, description in enhanced_files:
         source = PREDICTIONS_DIR / source_name
         dest = WEB_APP_PUBLIC / dest_name
         if copy_file_if_exists(source, dest, description):
             # Also convert CSV to JSON if needed
-            if source_name.endswith('.csv'):
-                json_name = dest_name.replace('.csv', '.json')
+            if source_name.endswith(".csv"):
+                json_name = dest_name.replace(".csv", ".json")
                 json_path = WEB_APP_PUBLIC / json_name
                 convert_csv_to_json(source, json_path)
-    
+
     # ATS data JSON (convert from CSV if JSON doesn't exist)
     ats_csv = WEB_APP_PUBLIC / "week14_ats_full_table.csv"
     ats_json = WEB_APP_PUBLIC / "week14_ats_data.json"
-    
+
     if ats_csv.exists() and not ats_json.exists():
         print("📝 Converting ATS CSV to JSON...")
         convert_csv_to_json(ats_csv, ats_json)
@@ -178,13 +198,13 @@ def sync_predictions():
 def verify_models():
     """Verify that model files exist and are accessible"""
     print("\n🤖 Verifying model files...")
-    
+
     models = [
         ("ridge_model_2025.joblib", "Ridge Regression"),
         ("xgb_home_win_model_2025.pkl", "XGBoost"),
         ("fastai_home_win_model_2025.pkl", "FastAI"),
     ]
-    
+
     all_present = True
     for model_file, model_name in models:
         model_path = MODEL_PACK / model_file
@@ -194,7 +214,7 @@ def verify_models():
         else:
             print(f"❌ {model_name}: {model_file} NOT FOUND")
             all_present = False
-    
+
     return all_present
 
 
@@ -208,7 +228,7 @@ def update_api_config():
         return
 
     # Check if bowls API endpoint was added
-    with open(api_file, 'r', encoding='utf-8') as f:
+    with open(api_file, "r", encoding="utf-8") as f:
         content = f.read()
 
     if "/api/predictions/bowls" in content:
@@ -229,22 +249,22 @@ def main():
     print(f"📁 Project root: {PROJECT_ROOT}")
     print(f"📁 Predictions source: {PREDICTIONS_DIR}")
     print(f"📁 Web app public: {WEB_APP_PUBLIC}")
-    
+
     # Sync predictions
     sync_predictions()
-    
+
     # Verify models
     models_ok = verify_models()
-    
+
     # Update API config
     update_api_config()
-    
-    print("\n" + "="*60)
+
+    print("\n" + "=" * 60)
     if models_ok:
         print("✅ Sync complete! All models verified.")
     else:
         print("⚠️  Sync complete, but some models are missing.")
-    print("="*60)
+    print("=" * 60)
     print("\n📝 Next steps:")
     print("  1. Restart the API server if running")
     print("  2. Refresh the web app to see new data")
@@ -253,4 +273,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

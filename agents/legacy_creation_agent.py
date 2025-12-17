@@ -18,45 +18,53 @@ Version: 1.0
 """
 
 import json
-import os
-import time
 import logging
-import shutil
-import pandas as pd
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
-from datetime import datetime
-from dataclasses import dataclass, asdict
+import os
 import re
+import shutil
+import time
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+
+import pandas as pd
 
 # Import base agent framework
 try:
-    from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
+    from agents.core.agent_framework import AgentCapability, BaseAgent, PermissionLevel
 except ImportError:
     # Try importing from current directory structure
     import sys
     from pathlib import Path
+
     sys.path.append(str(Path(__file__).parent))
-    from core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
+    from core.agent_framework import AgentCapability, BaseAgent, PermissionLevel
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class TemplatePattern:
     """Represents a reusable template pattern extracted from Week 13"""
+
     pattern_name: str
-    pattern_type: str  # 'data_pipeline', 'analysis_workflow', 'visualization', 'prediction'
+    pattern_type: (
+        str  # 'data_pipeline', 'analysis_workflow', 'visualization', 'prediction'
+    )
     description: str
     week13_example: str
     generic_template: Dict[str, Any]
     applicability_score: float
     reuse_potential: str  # 'high', 'medium', 'low'
 
+
 @dataclass
 class LegacyAsset:
     """Represents a legacy asset created from Week 13 work"""
+
     asset_name: str
     asset_type: str  # 'template', 'documentation', 'best_practice', 'automation'
     file_path: str
@@ -64,6 +72,7 @@ class LegacyAsset:
     week13_source: str
     future_week_applicability: List[str]
     creation_timestamp: str
+
 
 class LegacyCreationAgent(BaseAgent):
     """
@@ -78,7 +87,7 @@ class LegacyCreationAgent(BaseAgent):
             agent_id=agent_id,
             name="Legacy Creation Agent",
             permission_level=PermissionLevel.READ_EXECUTE_WRITE,
-            tool_loader=tool_loader
+            tool_loader=tool_loader,
         )
 
     def _define_capabilities(self) -> List[AgentCapability]:
@@ -90,7 +99,7 @@ class LegacyCreationAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE,
                 tools_required=["pandas", "json", "pathlib", "re"],
                 data_access=["analysis/week13/", "scripts/", "predictions/week13/"],
-                execution_time_estimate=3.0
+                execution_time_estimate=3.0,
             ),
             AgentCapability(
                 name="automated_documentation",
@@ -98,7 +107,7 @@ class LegacyCreationAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE_WRITE,
                 tools_required=["pandas", "json", "pathlib"],
                 data_access=["analysis/week13/", "agents/"],
-                execution_time_estimate=4.0
+                execution_time_estimate=4.0,
             ),
             AgentCapability(
                 name="best_practices_capture",
@@ -106,7 +115,7 @@ class LegacyCreationAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE,
                 tools_required=["pandas", "json"],
                 data_access=["analysis/week13/", "scripts/", "agents/"],
-                execution_time_estimate=2.5
+                execution_time_estimate=2.5,
             ),
             AgentCapability(
                 name="future_week_planning",
@@ -114,20 +123,26 @@ class LegacyCreationAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE_WRITE,
                 tools_required=["pandas", "json", "pathlib"],
                 data_access=["analysis/week13/", "scripts/"],
-                execution_time_estimate=3.5
+                execution_time_estimate=3.5,
             ),
             AgentCapability(
                 name="full_legacy_creation",
                 description="Execute complete legacy creation process including all capabilities",
                 permission_required=PermissionLevel.READ_EXECUTE_WRITE,
                 tools_required=["pandas", "json", "pathlib", "re"],
-                data_access=["analysis/week13/", "scripts/", "predictions/week13/", "agents/"],
-                execution_time_estimate=13.0
-            )
+                data_access=[
+                    "analysis/week13/",
+                    "scripts/",
+                    "predictions/week13/",
+                    "agents/",
+                ],
+                execution_time_estimate=13.0,
+            ),
         ]
 
-    def _execute_action(self, action: str, parameters: Dict[str, Any],
-                      user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_action(
+        self, action: str, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Execute legacy creation actions"""
         start_time = time.time()
 
@@ -150,11 +165,12 @@ class LegacyCreationAgent(BaseAgent):
             return {
                 "status": "error",
                 "error_message": str(e),
-                "execution_time": time.time() - start_time
+                "execution_time": time.time() - start_time,
             }
 
-    def _extract_reusable_templates(self, parameters: Dict[str, Any],
-                                  user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _extract_reusable_templates(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Extract reusable templates from Week 13 workflows"""
         start_time = time.time()
         project_root = Path("/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0")
@@ -178,17 +194,21 @@ class LegacyCreationAgent(BaseAgent):
         templates.extend(prediction_patterns)
 
         execution_time = time.time() - start_time
-        logger.info(f"Extracted {len(templates)} reusable templates in {execution_time:.2f}s")
+        logger.info(
+            f"Extracted {len(templates)} reusable templates in {execution_time:.2f}s"
+        )
 
         return {
             "status": "success",
             "data": {
                 "templates": [asdict(template) for template in templates],
                 "total_count": len(templates),
-                "template_types": list(set(template.pattern_type for template in templates)),
-                "extraction_time": execution_time
+                "template_types": list(
+                    set(template.pattern_type for template in templates)
+                ),
+                "extraction_time": execution_time,
             },
-            "execution_time": execution_time
+            "execution_time": execution_time,
         }
 
     def _analyze_script_patterns(self, project_root: Path) -> List[TemplatePattern]:
@@ -199,29 +219,35 @@ class LegacyCreationAgent(BaseAgent):
 
         for script_path in week13_scripts:
             try:
-                with open(script_path, 'r') as f:
+                with open(script_path, "r") as f:
                     content = f.read()
 
                 # Extract patterns based on filename and content
                 script_name = script_path.name.lower()
 
-                if 'prediction' in script_name:
-                    pattern = self._extract_prediction_script_pattern(script_path, content)
+                if "prediction" in script_name:
+                    pattern = self._extract_prediction_script_pattern(
+                        script_path, content
+                    )
                     if pattern:
                         templates.append(pattern)
 
-                elif 'analysis' in script_name:
-                    pattern = self._extract_analysis_script_pattern(script_path, content)
+                elif "analysis" in script_name:
+                    pattern = self._extract_analysis_script_pattern(
+                        script_path, content
+                    )
                     if pattern:
                         templates.append(pattern)
 
-                elif 'feature' in script_name:
+                elif "feature" in script_name:
                     pattern = self._extract_feature_script_pattern(script_path, content)
                     if pattern:
                         templates.append(pattern)
 
-                elif 'dashboard' in script_name or 'report' in script_name:
-                    pattern = self._extract_visualization_script_pattern(script_path, content)
+                elif "dashboard" in script_name or "report" in script_name:
+                    pattern = self._extract_visualization_script_pattern(
+                        script_path, content
+                    )
                     if pattern:
                         templates.append(pattern)
 
@@ -230,7 +256,9 @@ class LegacyCreationAgent(BaseAgent):
 
         return templates
 
-    def _extract_prediction_script_pattern(self, script_path: Path, content: str) -> Optional[TemplatePattern]:
+    def _extract_prediction_script_pattern(
+        self, script_path: Path, content: str
+    ) -> Optional[TemplatePattern]:
         """Extract prediction script pattern"""
         return TemplatePattern(
             pattern_name="Weekly Prediction Generation",
@@ -241,7 +269,7 @@ class LegacyCreationAgent(BaseAgent):
                 "script_template": "predict_week{N}_games.py",
                 "required_inputs": [
                     "model_pack/{model}_model_2025.{ext}",
-                    "data/week{N}/enhanced/week{N}_features_86_model_compatible.csv"
+                    "data/week{N}/enhanced/week{N}_features_86_model_compatible.csv",
                 ],
                 "processing_steps": [
                     "Load trained models (Ridge, XGBoost, FastAI)",
@@ -249,26 +277,28 @@ class LegacyCreationAgent(BaseAgent):
                     "Generate predictions for all matchups",
                     "Calculate confidence intervals",
                     "Save predictions in multiple formats (CSV, JSON)",
-                    "Generate ensemble predictions"
+                    "Generate ensemble predictions",
                 ],
                 "outputs": [
                     "predictions/week{N}/week{N}_predictions_*.csv",
                     "predictions/week{N}/week{N}_predictions_*.json",
-                    "predictions/week{N}/week{N}_model_predictions.csv"
+                    "predictions/week{N}/week{N}_model_predictions.csv",
                 ],
                 "key_libraries": ["pandas", "numpy", "joblib", "json"],
                 "configuration_points": {
                     "week_number": "Week number for analysis",
                     "season_year": "Season year (default: 2025)",
                     "models_to_use": "List of models to use for predictions",
-                    "confidence_threshold": "Threshold for high confidence predictions"
-                }
+                    "confidence_threshold": "Threshold for high confidence predictions",
+                },
             },
             applicability_score=0.95,
-            reuse_potential="high"
+            reuse_potential="high",
         )
 
-    def _extract_analysis_script_pattern(self, script_path: Path, content: str) -> Optional[TemplatePattern]:
+    def _extract_analysis_script_pattern(
+        self, script_path: Path, content: str
+    ) -> Optional[TemplatePattern]:
         """Extract comprehensive analysis script pattern"""
         return TemplatePattern(
             pattern_name="Weekly Comprehensive Analysis",
@@ -280,7 +310,7 @@ class LegacyCreationAgent(BaseAgent):
                 "required_inputs": [
                     "predictions/week{N}/week{N}_predictions_*.csv",
                     "data/week{N}/enhanced/week{N}_features_86.csv",
-                    "model_pack/training_data_history.csv"
+                    "model_pack/training_data_history.csv",
                 ],
                 "processing_steps": [
                     "Load all prediction data and features",
@@ -289,7 +319,7 @@ class LegacyCreationAgent(BaseAgent):
                     "Identify upset opportunities and alerts",
                     "Create strategic recommendations",
                     "Generate narrative previews",
-                    "Save analysis in multiple formats (JSON, CSV, MD)"
+                    "Save analysis in multiple formats (JSON, CSV, MD)",
                 ],
                 "outputs": [
                     "analysis/week{N}/week{N}_comprehensive_analysis_{timestamp}.json",
@@ -297,7 +327,7 @@ class LegacyCreationAgent(BaseAgent):
                     "analysis/week{N}/week{N}_narrative_previews_{timestamp}.md",
                     "analysis/week{N}/week{N}_strategic_recommendations.csv",
                     "analysis/week{N}/week{N}_power_rankings.csv",
-                    "analysis/week{N}/week{N}_upset_alerts.csv"
+                    "analysis/week{N}/week{N}_upset_alerts.csv",
                 ],
                 "key_libraries": ["pandas", "numpy", "json", "datetime"],
                 "analysis_components": [
@@ -306,14 +336,16 @@ class LegacyCreationAgent(BaseAgent):
                     "matchup_insights",
                     "situational_factors",
                     "advanced_statistics",
-                    "strategic_recommendations"
-                ]
+                    "strategic_recommendations",
+                ],
             },
             applicability_score=0.90,
-            reuse_potential="high"
+            reuse_potential="high",
         )
 
-    def _extract_feature_script_pattern(self, script_path: Path, content: str) -> Optional[TemplatePattern]:
+    def _extract_feature_script_pattern(
+        self, script_path: Path, content: str
+    ) -> Optional[TemplatePattern]:
         """Extract feature generation script pattern"""
         return TemplatePattern(
             pattern_name="Weekly Feature Engineering",
@@ -325,18 +357,18 @@ class LegacyCreationAgent(BaseAgent):
                 "required_inputs": [
                     "CFBD API access",
                     "Historical training data",
-                    "Current season games data"
+                    "Current season games data",
                 ],
                 "processing_steps": [
                     "Fetch current week games from CFBD API",
                     "Extract opponent-adjusted statistics",
                     "Calculate 86 features for each matchup",
                     "Validate feature integrity and completeness",
-                    "Save features in model-compatible format"
+                    "Save features in model-compatible format",
                 ],
                 "outputs": [
                     "data/week{N}/enhanced/week{N}_features_86.csv",
-                    "data/week{N}/enhanced/week{N}_features_86_model_compatible.csv"
+                    "data/week{N}/enhanced/week{N}_features_86_model_compatible.csv",
                 ],
                 "feature_categories": [
                     "offensive_efficiency",
@@ -344,20 +376,22 @@ class LegacyCreationAgent(BaseAgent):
                     "explosiveness_metrics",
                     "situational_performance",
                     "opponent_adjusted_stats",
-                    "strength_of_schedule_factors"
+                    "strength_of_schedule_factors",
                 ],
                 "quality_checks": [
                     "Verify 86 columns present",
                     "Check for missing values",
                     "Validate opponent adjustments",
-                    "Confirm model compatibility"
-                ]
+                    "Confirm model compatibility",
+                ],
             },
             applicability_score=0.95,
-            reuse_potential="high"
+            reuse_potential="high",
         )
 
-    def _extract_visualization_script_pattern(self, script_path: Path, content: str) -> Optional[TemplatePattern]:
+    def _extract_visualization_script_pattern(
+        self, script_path: Path, content: str
+    ) -> Optional[TemplatePattern]:
         """Extract dashboard and visualization pattern"""
         return TemplatePattern(
             pattern_name="Weekly Dashboard Generation",
@@ -369,7 +403,7 @@ class LegacyCreationAgent(BaseAgent):
                 "required_inputs": [
                     "analysis/week{N}/week{N}_comprehensive_analysis.json",
                     "predictions/week{N}/week{N}_predictions_*.csv",
-                    "Team logos and assets"
+                    "Team logos and assets",
                 ],
                 "processing_steps": [
                     "Load comprehensive analysis data",
@@ -377,23 +411,23 @@ class LegacyCreationAgent(BaseAgent):
                     "Generate team rankings visualization",
                     "Add upset alerts and confidence indicators",
                     "Include narrative summaries and insights",
-                    "Optimize for different user roles"
+                    "Optimize for different user roles",
                 ],
                 "outputs": [
                     "analysis/week{N}/week{N}_dashboard.html",
                     "analysis/week{N}/week{N}_master_report.html",
-                    "reports/week{N}_dashboard_summary.json"
+                    "reports/week{N}_dashboard_summary.json",
                 ],
                 "dashboard_components": [
                     "team_rankings",
                     "prediction_confidence",
                     "upset_alerts",
                     "strategic_insights",
-                    "interactive_filters"
-                ]
+                    "interactive_filters",
+                ],
             },
             applicability_score=0.85,
-            reuse_potential="high"
+            reuse_potential="high",
         )
 
     def _analyze_data_workflows(self, project_root: Path) -> List[TemplatePattern]:
@@ -401,25 +435,31 @@ class LegacyCreationAgent(BaseAgent):
         templates = []
 
         # Feature engineering workflow
-        templates.append(TemplatePattern(
-            pattern_name="Data Pipeline Orchestration",
-            pattern_type="data_pipeline",
-            description="Orchestrate complete data pipeline from API to model-ready features",
-            week13_example="Week 13 data integration workflow",
-            generic_template={
-                "workflow_steps": [
-                    "data_acquisition",
-                    "feature_engineering",
-                    "quality_validation",
-                    "model_compatibility",
-                    "backup_creation"
-                ],
-                "data_sources": ["CFBD_API", "historical_data", "current_season"],
-                "quality_gates": ["completeness_check", "accuracy_validation", "consistency_verification"]
-            },
-            applicability_score=0.90,
-            reuse_potential="high"
-        ))
+        templates.append(
+            TemplatePattern(
+                pattern_name="Data Pipeline Orchestration",
+                pattern_type="data_pipeline",
+                description="Orchestrate complete data pipeline from API to model-ready features",
+                week13_example="Week 13 data integration workflow",
+                generic_template={
+                    "workflow_steps": [
+                        "data_acquisition",
+                        "feature_engineering",
+                        "quality_validation",
+                        "model_compatibility",
+                        "backup_creation",
+                    ],
+                    "data_sources": ["CFBD_API", "historical_data", "current_season"],
+                    "quality_gates": [
+                        "completeness_check",
+                        "accuracy_validation",
+                        "consistency_verification",
+                    ],
+                },
+                applicability_score=0.90,
+                reuse_potential="high",
+            )
+        )
 
         return templates
 
@@ -428,45 +468,76 @@ class LegacyCreationAgent(BaseAgent):
         templates = []
 
         # Multi-model analysis workflow
-        templates.append(TemplatePattern(
-            pattern_name="Multi-Model Analysis Framework",
-            pattern_type="analysis_workflow",
-            description="Comprehensive analysis using multiple prediction models and ensemble methods",
-            week13_example="Week 13 comprehensive analysis with Ridge, XGBoost, FastAI",
-            generic_template={
-                "models": ["ridge_regression", "xgboost_classifier", "fastai_neural_network"],
-                "ensemble_methods": ["weighted_average", "confidence_based", "majority_vote"],
-                "analysis_depths": ["basic_predictions", "detailed_insights", "comprehensive_reports"]
-            },
-            applicability_score=0.95,
-            reuse_potential="high"
-        ))
+        templates.append(
+            TemplatePattern(
+                pattern_name="Multi-Model Analysis Framework",
+                pattern_type="analysis_workflow",
+                description="Comprehensive analysis using multiple prediction models and ensemble methods",
+                week13_example="Week 13 comprehensive analysis with Ridge, XGBoost, FastAI",
+                generic_template={
+                    "models": [
+                        "ridge_regression",
+                        "xgboost_classifier",
+                        "fastai_neural_network",
+                    ],
+                    "ensemble_methods": [
+                        "weighted_average",
+                        "confidence_based",
+                        "majority_vote",
+                    ],
+                    "analysis_depths": [
+                        "basic_predictions",
+                        "detailed_insights",
+                        "comprehensive_reports",
+                    ],
+                },
+                applicability_score=0.95,
+                reuse_potential="high",
+            )
+        )
 
         return templates
 
-    def _analyze_prediction_workflows(self, project_root: Path) -> List[TemplatePattern]:
+    def _analyze_prediction_workflows(
+        self, project_root: Path
+    ) -> List[TemplatePattern]:
         """Analyze Week 13 prediction workflows for patterns"""
         templates = []
 
         # Confidence quantification workflow
-        templates.append(TemplatePattern(
-            pattern_name="Confidence Quantification System",
-            pattern_type="prediction",
-            description="Generate predictions with calibrated confidence intervals and uncertainty communication",
-            week13_example="Week 13 confidence scoring and uncertainty analysis",
-            generic_template={
-                "confidence_methods": ["model_agreement", "historical_accuracy", "feature_stability"],
-                "uncertainty_communication": ["visual_indicators", "confidence_scores", "risk_categories"],
-                "validation_approaches": ["backtesting", "calibration_plots", "reliability_diagrams"]
-            },
-            applicability_score=0.85,
-            reuse_potential="medium"
-        ))
+        templates.append(
+            TemplatePattern(
+                pattern_name="Confidence Quantification System",
+                pattern_type="prediction",
+                description="Generate predictions with calibrated confidence intervals and uncertainty communication",
+                week13_example="Week 13 confidence scoring and uncertainty analysis",
+                generic_template={
+                    "confidence_methods": [
+                        "model_agreement",
+                        "historical_accuracy",
+                        "feature_stability",
+                    ],
+                    "uncertainty_communication": [
+                        "visual_indicators",
+                        "confidence_scores",
+                        "risk_categories",
+                    ],
+                    "validation_approaches": [
+                        "backtesting",
+                        "calibration_plots",
+                        "reliability_diagrams",
+                    ],
+                },
+                applicability_score=0.85,
+                reuse_potential="medium",
+            )
+        )
 
         return templates
 
-    def _generate_automated_documentation(self, parameters: Dict[str, Any],
-                                        user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _generate_automated_documentation(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Generate comprehensive documentation from Week 13 work"""
         start_time = time.time()
         project_root = Path("/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0")
@@ -489,23 +560,29 @@ class LegacyCreationAgent(BaseAgent):
             documentation_assets.append(api_doc)
 
         execution_time = time.time() - start_time
-        logger.info(f"Generated {len(documentation_assets)} documentation assets in {execution_time:.2f}s")
+        logger.info(
+            f"Generated {len(documentation_assets)} documentation assets in {execution_time:.2f}s"
+        )
 
         return {
             "status": "success",
             "data": {
-                "documentation_assets": [asdict(asset) for asset in documentation_assets],
+                "documentation_assets": [
+                    asdict(asset) for asset in documentation_assets
+                ],
                 "total_count": len(documentation_assets),
-                "generation_time": execution_time
+                "generation_time": execution_time,
             },
-            "execution_time": execution_time
+            "execution_time": execution_time,
         }
 
-    def _create_template_documentation(self, project_root: Path) -> Optional[LegacyAsset]:
+    def _create_template_documentation(
+        self, project_root: Path
+    ) -> Optional[LegacyAsset]:
         """Create comprehensive template documentation"""
         doc_content = f"""# Week N Analysis Templates
 
-Generated from Week 13 comprehensive analysis - {datetime.now().strftime('%Y-%m-%d')}
+Generated from Week 13 comprehensive analysis - {datetime.now().strftime("%Y-%m-%d")}
 
 ## Overview
 
@@ -575,10 +652,15 @@ For any week N, replace all instances of "13" with your target week number and f
 """
 
         # Save documentation
-        doc_path = project_root / "documentation" / "templates" / "Week_N_Analysis_Templates.md"
+        doc_path = (
+            project_root
+            / "documentation"
+            / "templates"
+            / "Week_N_Analysis_Templates.md"
+        )
         doc_path.parent.mkdir(parents=True, exist_ok=True)
 
-        with open(doc_path, 'w') as f:
+        with open(doc_path, "w") as f:
             f.write(doc_content)
 
         return LegacyAsset(
@@ -587,15 +669,21 @@ For any week N, replace all instances of "13" with your target week number and f
             file_path=str(doc_path.relative_to(project_root)),
             description="Comprehensive templates for weekly football analysis derived from Week 13",
             week13_source="Week 13 comprehensive analysis and prediction workflows",
-            future_week_applicability=["All weeks", "Future seasons", "Different sports"],
-            creation_timestamp=datetime.now().isoformat()
+            future_week_applicability=[
+                "All weeks",
+                "Future seasons",
+                "Different sports",
+            ],
+            creation_timestamp=datetime.now().isoformat(),
         )
 
-    def _create_process_documentation(self, project_root: Path) -> Optional[LegacyAsset]:
+    def _create_process_documentation(
+        self, project_root: Path
+    ) -> Optional[LegacyAsset]:
         """Create process documentation for weekly analysis"""
         doc_content = f"""# Weekly Analysis Process Guide
 
-Automated documentation from Week 13 execution - {datetime.now().strftime('%Y-%m-%d')}
+Automated documentation from Week 13 execution - {datetime.now().strftime("%Y-%m-%d")}
 
 ## Process Overview
 
@@ -738,10 +826,15 @@ Based on Week 13 performance:
 *Process documentation automatically generated from Week 13 execution experience.*
 """
 
-        doc_path = project_root / "documentation" / "processes" / "Weekly_Analysis_Process_Guide.md"
+        doc_path = (
+            project_root
+            / "documentation"
+            / "processes"
+            / "Weekly_Analysis_Process_Guide.md"
+        )
         doc_path.parent.mkdir(parents=True, exist_ok=True)
 
-        with open(doc_path, 'w') as f:
+        with open(doc_path, "w") as f:
             f.write(doc_content)
 
         return LegacyAsset(
@@ -750,15 +843,19 @@ Based on Week 13 performance:
             file_path=str(doc_path.relative_to(project_root)),
             description="Step-by-step process guide for weekly football analysis workflow",
             week13_source="Week 13 complete execution experience and optimization",
-            future_week_applicability=["All weeks", "Training material", "Process improvement"],
-            creation_timestamp=datetime.now().isoformat()
+            future_week_applicability=[
+                "All weeks",
+                "Training material",
+                "Process improvement",
+            ],
+            creation_timestamp=datetime.now().isoformat(),
         )
 
     def _create_api_documentation(self, project_root: Path) -> Optional[LegacyAsset]:
         """Create API documentation for Week 13 workflows"""
         doc_content = f"""# Week N Analysis API Reference
 
-Generated from Week 13 implementation - {datetime.now().strftime('%Y-%m-%d')}
+Generated from Week 13 implementation - {datetime.now().strftime("%Y-%m-%d")}
 
 ## Overview
 
@@ -989,10 +1086,12 @@ Based on Week 13 execution:
 *API documentation automatically generated from Week 13 implementation patterns.*
 """
 
-        doc_path = project_root / "documentation" / "api" / "Week_N_Analysis_API_Reference.md"
+        doc_path = (
+            project_root / "documentation" / "api" / "Week_N_Analysis_API_Reference.md"
+        )
         doc_path.parent.mkdir(parents=True, exist_ok=True)
 
-        with open(doc_path, 'w') as f:
+        with open(doc_path, "w") as f:
             f.write(doc_content)
 
         return LegacyAsset(
@@ -1002,11 +1101,12 @@ Based on Week 13 execution:
             description="Complete API reference for Week N analysis system",
             week13_source="Week 13 agent system and API implementation",
             future_week_applicability=["Development", "Integration", "API users"],
-            creation_timestamp=datetime.now().isoformat()
+            creation_timestamp=datetime.now().isoformat(),
         )
 
-    def _capture_best_practices(self, parameters: Dict[str, Any],
-                              user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _capture_best_practices(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Identify and document best practices from Week 13 development"""
         start_time = time.time()
 
@@ -1015,7 +1115,7 @@ Based on Week 13 execution:
             "data_quality_practices": self._extract_data_quality_practices(),
             "analysis_practices": self._extract_analysis_practices(),
             "automation_practices": self._extract_automation_practices(),
-            "performance_practices": self._extract_performance_practices()
+            "performance_practices": self._extract_performance_practices(),
         }
 
         execution_time = time.time() - start_time
@@ -1026,9 +1126,9 @@ Based on Week 13 execution:
             "data": {
                 "best_practices": best_practices,
                 "total_categories": len(best_practices),
-                "capture_time": execution_time
+                "capture_time": execution_time,
             },
-            "execution_time": execution_time
+            "execution_time": execution_time,
         }
 
     def _extract_development_practices(self) -> Dict[str, Any]:
@@ -1037,23 +1137,23 @@ Based on Week 13 execution:
             "code_organization": {
                 "practice": "Modular script organization with clear naming conventions",
                 "week13_example": "Scripts follow pattern: *week13*.py with descriptive names",
-                "guideline": "Use week-specific naming with descriptive functionality indicators"
+                "guideline": "Use week-specific naming with descriptive functionality indicators",
             },
             "error_handling": {
                 "practice": "Comprehensive error handling with graceful degradation",
                 "week13_example": "All scripts include try-catch blocks with meaningful error messages",
-                "guideline": "Implement robust error handling for all external dependencies"
+                "guideline": "Implement robust error handling for all external dependencies",
             },
             "testing_integration": {
                 "practice": "Automated testing integrated into development workflow",
                 "week13_example": "Test scripts validate outputs and data quality",
-                "guideline": "Create automated tests for all critical functionality"
+                "guideline": "Create automated tests for all critical functionality",
             },
             "documentation_generation": {
                 "practice": "Self-generating documentation from code and analysis",
                 "week13_example": "Automated report generation with comprehensive insights",
-                "guideline": "Automate documentation creation to ensure consistency"
-            }
+                "guideline": "Automate documentation creation to ensure consistency",
+            },
         }
 
     def _extract_data_quality_practices(self) -> Dict[str, Any]:
@@ -1062,23 +1162,23 @@ Based on Week 13 execution:
             "feature_validation": {
                 "practice": "Strict validation of 86 opponent-adjusted features",
                 "week13_example": "All feature files validated for column count and data types",
-                "guideline": "Implement schema validation for all data inputs"
+                "guideline": "Implement schema validation for all data inputs",
             },
             "opponent_adjustments": {
                 "practice": "Consistent opponent-adjusted statistics for fair comparison",
                 "week13_example": "All features include opponent strength adjustments",
-                "guideline": "Always use opponent-adjusted metrics for team comparisons"
+                "guideline": "Always use opponent-adjusted metrics for team comparisons",
             },
             "model_compatibility": {
                 "practice": "Ensure all data formats match trained model requirements",
                 "week13_example": "Feature generation creates model-compatible CSV format",
-                "guideline": "Validate data compatibility before model predictions"
+                "guideline": "Validate data compatibility before model predictions",
             },
             "quality_gates": {
                 "practice": "Multiple quality checkpoints throughout the pipeline",
                 "week13_example": "Validation at feature, prediction, and output stages",
-                "guideline": "Implement quality gates at each processing stage"
-            }
+                "guideline": "Implement quality gates at each processing stage",
+            },
         }
 
     def _extract_analysis_practices(self) -> Dict[str, Any]:
@@ -1087,23 +1187,23 @@ Based on Week 13 execution:
             "multi_model_approach": {
                 "practice": "Use multiple prediction models for robust analysis",
                 "week13_example": "Ridge, XGBoost, and FastAI models used in ensemble",
-                "guideline": "Combine different model types for comprehensive coverage"
+                "guideline": "Combine different model types for comprehensive coverage",
             },
             "confidence_quantification": {
                 "practice": "Provide confidence intervals with all predictions",
                 "week13_example": "Confidence scores calculated and displayed",
-                "guideline": "Always quantify uncertainty in predictions"
+                "guideline": "Always quantify uncertainty in predictions",
             },
             "comprehensive_coverage": {
                 "practice": "Complete coverage of all games in analysis",
                 "week13_example": "47 games analyzed with full prediction set",
-                "guideline": "Ensure no games are missed in weekly analysis"
+                "guideline": "Ensure no games are missed in weekly analysis",
             },
             "strategic_insights": {
                 "practice": "Generate actionable strategic recommendations",
                 "week13_example": "Upset alerts and betting recommendations provided",
-                "guideline": "Transform analysis into actionable insights"
-            }
+                "guideline": "Transform analysis into actionable insights",
+            },
         }
 
     def _extract_automation_practices(self) -> Dict[str, Any]:
@@ -1112,23 +1212,23 @@ Based on Week 13 execution:
             "pipeline_automation": {
                 "practice": "Complete automation of data processing pipeline",
                 "week13_example": "End-to-end pipeline from API to predictions",
-                "guideline": "Automate repetitive tasks for consistency"
+                "guideline": "Automate repetitive tasks for consistency",
             },
             "agent_orchestration": {
                 "practice": "Use intelligent agents for task coordination",
                 "week13_example": "Multiple agents coordinate different analysis aspects",
-                "guideline": "Implement agent-based architecture for complex workflows"
+                "guideline": "Implement agent-based architecture for complex workflows",
             },
             "template_generation": {
                 "practice": "Create reusable templates from specific implementations",
                 "week13_example": "Week 13 patterns extracted into reusable templates",
-                "guideline": "Generalize specific solutions for broader applicability"
+                "guideline": "Generalize specific solutions for broader applicability",
             },
             "self_documenting": {
                 "practice": "Systems that generate their own documentation",
                 "week13_example": "Automated report and documentation generation",
-                "guideline": "Build self-documenting capabilities into all systems"
-            }
+                "guideline": "Build self-documenting capabilities into all systems",
+            },
         }
 
     def _extract_performance_practices(self) -> Dict[str, Any]:
@@ -1137,27 +1237,28 @@ Based on Week 13 execution:
             "response_time_targets": {
                 "practice": "Maintain <2 second response times for all operations",
                 "week13_example": "All agent responses under 2 seconds",
-                "guideline": "Set and monitor performance targets for all components"
+                "guideline": "Set and monitor performance targets for all components",
             },
             "memory_optimization": {
                 "practice": "Efficient memory usage for large datasets",
                 "week13_example": "Chunked processing of large feature sets",
-                "guideline": "Optimize memory usage for scalability"
+                "guideline": "Optimize memory usage for scalability",
             },
             "caching_strategies": {
                 "practice": "Intelligent caching to reduce redundant computations",
                 "week13_example": "API responses and model predictions cached",
-                "guideline": "Cache expensive computations for performance"
+                "guideline": "Cache expensive computations for performance",
             },
             "parallel_processing": {
                 "practice": "Use parallel processing for independent tasks",
                 "week13_example": "Feature generation and prediction parallelization",
-                "guideline": "Identify and parallelize independent operations"
-            }
+                "guideline": "Identify and parallelize independent operations",
+            },
         }
 
-    def _create_future_week_templates(self, parameters: Dict[str, Any],
-                                    user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _create_future_week_templates(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Create repeatable templates for future week analysis"""
         start_time = time.time()
         project_root = Path("/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0")
@@ -1180,19 +1281,25 @@ Based on Week 13 execution:
             templates_created.append(config_template)
 
         execution_time = time.time() - start_time
-        logger.info(f"Created {len(templates_created)} future week templates in {execution_time:.2f}s")
+        logger.info(
+            f"Created {len(templates_created)} future week templates in {execution_time:.2f}s"
+        )
 
         return {
             "status": "success",
             "data": {
-                "templates_created": [asdict(template) for template in templates_created],
+                "templates_created": [
+                    asdict(template) for template in templates_created
+                ],
                 "total_count": len(templates_created),
-                "creation_time": execution_time
+                "creation_time": execution_time,
             },
-            "execution_time": execution_time
+            "execution_time": execution_time,
         }
 
-    def _create_directory_structure_template(self, project_root: Path) -> Optional[LegacyAsset]:
+    def _create_directory_structure_template(
+        self, project_root: Path
+    ) -> Optional[LegacyAsset]:
         """Create directory structure template for future weeks"""
         template_content = """#!/bin/bash
 # Week N Directory Structure Template
@@ -1223,12 +1330,12 @@ echo "Ready for data collection and analysis..."
 # analysis/week$WEEK/week$WEEK_comprehensive_analysis_*.json
 # analysis/week$WEEK/week$WEEK_dashboard.html
 # validation/week$WEEK/week$WEEK_validation_report.json
-""".format(timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+""".format(timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
         template_path = project_root / "templates" / "weekN_structure.sh"
         template_path.parent.mkdir(parents=True, exist_ok=True)
 
-        with open(template_path, 'w') as f:
+        with open(template_path, "w") as f:
             f.write(template_content)
 
         # Make executable
@@ -1240,59 +1347,71 @@ echo "Ready for data collection and analysis..."
             file_path=str(template_path.relative_to(project_root)),
             description="Automated directory structure creation for Week N analysis",
             week13_source="Week 13 directory organization and file structure",
-            future_week_applicability=["All weeks", "Automation", "Infrastructure setup"],
-            creation_timestamp=datetime.now().isoformat()
+            future_week_applicability=[
+                "All weeks",
+                "Automation",
+                "Infrastructure setup",
+            ],
+            creation_timestamp=datetime.now().isoformat(),
         )
 
-    def _create_script_template_generator(self, project_root: Path) -> Optional[LegacyAsset]:
+    def _create_script_template_generator(
+        self, project_root: Path
+    ) -> Optional[LegacyAsset]:
         """Create script template generator for future weeks - write directly"""
         generator_path = project_root / "templates" / "weekN_script_generator.py"
         generator_path.parent.mkdir(parents=True, exist_ok=True)
 
         # Write the template generator line by line to avoid f-string nesting
-        with open(generator_path, 'w') as f:
-            f.write('#!/usr/bin/env python3\n')
+        with open(generator_path, "w") as f:
+            f.write("#!/usr/bin/env python3\n")
             f.write('"""\n')
-            f.write(f'Week N Script Template Generator\n')
-            f.write(f'Generated from Week 13 patterns - {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\n')
+            f.write(f"Week N Script Template Generator\n")
+            f.write(
+                f"Generated from Week 13 patterns - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+            )
             f.write('"""\n\n')
-            f.write('import sys\n')
-            f.write('import os\n')
-            f.write('from pathlib import Path\n')
-            f.write('from datetime import datetime\n\n')
-            f.write('def generate_script(week: int, script_type: str):\n')
+            f.write("import sys\n")
+            f.write("import os\n")
+            f.write("from pathlib import Path\n")
+            f.write("from datetime import datetime\n\n")
+            f.write("def generate_script(week: int, script_type: str):\n")
             f.write('    """Generate a script for the specified week and type"""\n')
-            f.write('    week_str = str(week)\n')
+            f.write("    week_str = str(week)\n")
             f.write('    filename = f"week{week}_{script_type}.py"\n\n')
-            f.write('    # Basic template structure\n')
+            f.write("    # Basic template structure\n")
             f.write('    content = f"""#!/usr/bin/env python3\n')
             f.write('"""\n')
-            f.write('Generated for Week {week_str} {script_type}\n')
-            f.write('Based on Week 13 patterns\n')
+            f.write("Generated for Week {week_str} {script_type}\n")
+            f.write("Based on Week 13 patterns\n")
             f.write('"""\n\n')
-            f.write('import pandas as pd\n')
-            f.write('import numpy as np\n')
-            f.write('from datetime import datetime\n\n')
-            f.write('def main():\n')
-            f.write('    print(f"Week {week_str} {script_type} - TODO: Implement based on Week 13 patterns")\n\n')
+            f.write("import pandas as pd\n")
+            f.write("import numpy as np\n")
+            f.write("from datetime import datetime\n\n")
+            f.write("def main():\n")
+            f.write(
+                '    print(f"Week {week_str} {script_type} - TODO: Implement based on Week 13 patterns")\n\n'
+            )
             f.write('if __name__ == "__main__":\n')
-            f.write('    main()\n')
+            f.write("    main()\n")
             f.write('"""\n\n')
-            f.write('    # Save script\n')
+            f.write("    # Save script\n")
             f.write('    with open(filename, "w") as script_file:\n')
-            f.write('        script_file.write(content)\n\n')
-            f.write('    # Make executable\n')
-            f.write('    os.chmod(filename, 0o755)\n')
+            f.write("        script_file.write(content)\n\n")
+            f.write("    # Make executable\n")
+            f.write("    os.chmod(filename, 0o755)\n")
             f.write('    print(f"Generated {filename}")\n')
-            f.write('    return 0\n\n')
+            f.write("    return 0\n\n")
             f.write('if __name__ == "__main__":\n')
-            f.write('    if len(sys.argv) != 3:\n')
-            f.write('        print("Usage: python weekN_script_generator.py <week_number> <script_type>")\n')
+            f.write("    if len(sys.argv) != 3:\n")
+            f.write(
+                '        print("Usage: python weekN_script_generator.py <week_number> <script_type>")\n'
+            )
             f.write('        print("Script types: features, predictions, analysis")\n')
-            f.write('        sys.exit(1)\n\n')
-            f.write('    week = int(sys.argv[1])\n')
-            f.write('    script_type = sys.argv[2]\n\n')
-            f.write('    sys.exit(generate_script(week, script_type))\n')
+            f.write("        sys.exit(1)\n\n")
+            f.write("    week = int(sys.argv[1])\n")
+            f.write("    script_type = sys.argv[2]\n\n")
+            f.write("    sys.exit(generate_script(week, script_type))\n")
 
         # Make executable
         os.chmod(generator_path, 0o755)
@@ -1304,10 +1423,12 @@ echo "Ready for data collection and analysis..."
             description="Automated script generation for Week N analysis following Week 13 patterns",
             week13_source="Week 13 script patterns and organization",
             future_week_applicability=["All weeks", "Development", "Rapid prototyping"],
-            creation_timestamp=datetime.now().isoformat()
+            creation_timestamp=datetime.now().isoformat(),
         )
 
-    def _create_configuration_template(self, project_root: Path) -> Optional[LegacyAsset]:
+    def _create_configuration_template(
+        self, project_root: Path
+    ) -> Optional[LegacyAsset]:
         """Create configuration template for future weeks"""
         config_content = """# Week N Configuration Template
 # Generated from Week 13 configuration - {timestamp}
@@ -1411,10 +1532,10 @@ WEEK13_REFERENCE = {{
     "data_quality_score": 0.95,
     "user_satisfaction": 4.6
 }}
-""".format(timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+""".format(timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
         config_path = project_root / "templates" / "weekN_config.py"
-        with open(config_path, 'w') as f:
+        with open(config_path, "w") as f:
             f.write(config_content)
 
         return LegacyAsset(
@@ -1423,12 +1544,17 @@ WEEK13_REFERENCE = {{
             file_path=str(config_path.relative_to(project_root)),
             description="Comprehensive configuration template for Week N analysis with Week 13 reference settings",
             week13_source="Week 13 configuration parameters and performance metrics",
-            future_week_applicability=["All weeks", "Configuration management", "Performance tuning"],
-            creation_timestamp=datetime.now().isoformat()
+            future_week_applicability=[
+                "All weeks",
+                "Configuration management",
+                "Performance tuning",
+            ],
+            creation_timestamp=datetime.now().isoformat(),
         )
 
-    def _perform_full_legacy_creation(self, parameters: Dict[str, Any],
-                                    user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _perform_full_legacy_creation(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Execute complete legacy creation process"""
         start_time = time.time()
 
@@ -1436,64 +1562,72 @@ WEEK13_REFERENCE = {{
 
         # Step 1: Template Extraction
         template_result = self._extract_reusable_templates({}, user_context)
-        templates = template_result['data']['templates']
+        templates = template_result["data"]["templates"]
 
         # Step 2: Automated Documentation
         documentation_result = self._generate_automated_documentation({}, user_context)
-        documentation_assets = documentation_result['data']['documentation_assets']
+        documentation_assets = documentation_result["data"]["documentation_assets"]
 
         # Step 3: Best Practices Capture
         practices_result = self._capture_best_practices({}, user_context)
-        best_practices = practices_result['data']['best_practices']
+        best_practices = practices_result["data"]["best_practices"]
 
         # Step 4: Future Week Templates
         templates_result = self._create_future_week_templates({}, user_context)
-        future_templates = templates_result['data']['templates_created']
+        future_templates = templates_result["data"]["templates_created"]
 
         # Create final legacy report
         legacy_report = {
-            'legacy_creation_metadata': {
-                'timestamp': datetime.now().isoformat(),
-                'total_processing_time': time.time() - start_time,
-                'agent_id': self.agent_id,
-                'source_week': 13,
-                'target_applicability': 'Week N (any week)'
+            "legacy_creation_metadata": {
+                "timestamp": datetime.now().isoformat(),
+                "total_processing_time": time.time() - start_time,
+                "agent_id": self.agent_id,
+                "source_week": 13,
+                "target_applicability": "Week N (any week)",
             },
-            'template_extraction': {
-                'templates_extracted': len(templates),
-                'template_types': list(set(template['pattern_type'] for template in templates)),
-                'high_reuse_templates': [t for t in templates if t['reuse_potential'] == 'high']
+            "template_extraction": {
+                "templates_extracted": len(templates),
+                "template_types": list(
+                    set(template["pattern_type"] for template in templates)
+                ),
+                "high_reuse_templates": [
+                    t for t in templates if t["reuse_potential"] == "high"
+                ],
             },
-            'documentation_created': {
-                'total_assets': len(documentation_assets),
-                'asset_types': list(set(asset['asset_type'] for asset in documentation_assets)),
-                'documentation_coverage': 'comprehensive'
+            "documentation_created": {
+                "total_assets": len(documentation_assets),
+                "asset_types": list(
+                    set(asset["asset_type"] for asset in documentation_assets)
+                ),
+                "documentation_coverage": "comprehensive",
             },
-            'best_practices_captured': {
-                'categories': len(best_practices),
-                'practice_types': list(best_practices.keys()),
-                'total_practices': sum(len(practices) for practices in best_practices.values())
+            "best_practices_captured": {
+                "categories": len(best_practices),
+                "practice_types": list(best_practices.keys()),
+                "total_practices": sum(
+                    len(practices) for practices in best_practices.values()
+                ),
             },
-            'future_week_templates': {
-                'templates_created': len(future_templates),
-                'automation_level': 'high',
-                'reuse_potential': 'excellent'
+            "future_week_templates": {
+                "templates_created": len(future_templates),
+                "automation_level": "high",
+                "reuse_potential": "excellent",
             },
-            'legacy_value': {
-                'immediate_benefits': [
+            "legacy_value": {
+                "immediate_benefits": [
                     f"Created {len(templates)} reusable templates",
                     f"Generated {len(documentation_assets)} documentation assets",
                     f"Captured {sum(len(practices) for practices in best_practices.values())} best practices",
-                    f"Created {len(future_templates)} automation templates"
+                    f"Created {len(future_templates)} automation templates",
                 ],
-                'long_term_value': [
+                "long_term_value": [
                     "Week N analysis capabilities for any future week",
                     "Automated template generation for rapid development",
                     "Comprehensive best practices library",
-                    "Self-documenting system architecture"
+                    "Self-documenting system architecture",
                 ],
-                'knowledge_preservation': "Week 13 methodologies and patterns preserved for future use"
-            }
+                "knowledge_preservation": "Week 13 methodologies and patterns preserved for future use",
+            },
         }
 
         # Save legacy report
@@ -1502,7 +1636,7 @@ WEEK13_REFERENCE = {{
         # Ensure directory exists
         Path(output_path).parent.mkdir(parents=True, exist_ok=True)
 
-        with open(output_path, 'w') as f:
+        with open(output_path, "w") as f:
             json.dump(legacy_report, f, indent=2)
 
         logger.info(f"Full legacy creation completed and saved to {output_path}")
@@ -1515,13 +1649,16 @@ WEEK13_REFERENCE = {{
                 "summary": {
                     "templates_extracted": len(templates),
                     "documentation_created": len(documentation_assets),
-                    "best_practices_captured": sum(len(practices) for practices in best_practices.values()),
+                    "best_practices_captured": sum(
+                        len(practices) for practices in best_practices.values()
+                    ),
                     "future_week_templates": len(future_templates),
-                    "processing_time": time.time() - start_time
-                }
+                    "processing_time": time.time() - start_time,
+                },
             },
-            "execution_time": time.time() - start_time
+            "execution_time": time.time() - start_time,
         }
+
 
 # Register the agent with the factory
 if __name__ == "__main__":
@@ -1530,6 +1667,7 @@ if __name__ == "__main__":
     except ImportError:
         import sys
         from pathlib import Path
+
         sys.path.append(str(Path(__file__).parent))
         from core.agent_framework import AgentFactory
 
@@ -1541,8 +1679,9 @@ if __name__ == "__main__":
     agent = factory.create_agent("legacy_creation", "legacy_creation_001")
 
     # Create a proper agent request
-    from core.agent_framework import AgentRequest
     import time
+
+    from core.agent_framework import AgentRequest
 
     request = AgentRequest(
         request_id="legacy_test_001",
@@ -1551,7 +1690,7 @@ if __name__ == "__main__":
         parameters={},
         user_context={"user_id": "test_user"},
         timestamp=time.time(),
-        priority=2
+        priority=2,
     )
 
     # Test full legacy creation
@@ -1559,8 +1698,8 @@ if __name__ == "__main__":
 
     print("✅ Legacy Creation Agent Test Results:")
     print(f"Status: {result.status}")
-    if result.status.value == 'success':
-        summary = result.result['summary']
+    if result.status.value == "success":
+        summary = result.result["summary"]
         print(f"Templates Extracted: {summary['templates_extracted']}")
         print(f"Documentation Created: {summary['documentation_created']}")
         print(f"Best Practices Captured: {summary['best_practices_captured']}")

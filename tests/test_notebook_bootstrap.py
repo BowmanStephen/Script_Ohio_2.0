@@ -8,7 +8,6 @@ from types import SimpleNamespace
 from typing import List
 
 import pytest
-
 import starter_pack.utils.bootstrap as nb
 
 
@@ -24,10 +23,14 @@ def _mock_project_root(monkeypatch: pytest.MonkeyPatch, path: Path) -> None:
 
 
 def _mock_requirements(monkeypatch: pytest.MonkeyPatch, req_file: Path) -> None:
-    monkeypatch.setattr(nb, "_resolve_requirements_file", lambda project_root, override: req_file)
+    monkeypatch.setattr(
+        nb, "_resolve_requirements_file", lambda project_root, override: req_file
+    )
 
 
-def test_env_flag_disables_auto_install(monkeypatch: pytest.MonkeyPatch, req_file: Path) -> None:
+def test_env_flag_disables_auto_install(
+    monkeypatch: pytest.MonkeyPatch, req_file: Path
+) -> None:
     """CFB_AUTO_INSTALL=0 should skip pip installs even when modules are missing."""
     _mock_project_root(monkeypatch, req_file.parent)
     _mock_requirements(monkeypatch, req_file)
@@ -45,7 +48,9 @@ def test_env_flag_disables_auto_install(monkeypatch: pytest.MonkeyPatch, req_fil
     assert result.missing_modules == ["pandas"]
 
 
-def test_auto_install_runs_when_missing(monkeypatch: pytest.MonkeyPatch, req_file: Path) -> None:
+def test_auto_install_runs_when_missing(
+    monkeypatch: pytest.MonkeyPatch, req_file: Path
+) -> None:
     """When modules are missing and auto install allowed, pip should be invoked."""
     _mock_project_root(monkeypatch, req_file.parent)
     _mock_requirements(monkeypatch, req_file)
@@ -64,7 +69,9 @@ def test_auto_install_runs_when_missing(monkeypatch: pytest.MonkeyPatch, req_fil
     assert len(calls) == 1
 
 
-def test_project_root_added_to_sys_path(monkeypatch: pytest.MonkeyPatch, req_file: Path) -> None:
+def test_project_root_added_to_sys_path(
+    monkeypatch: pytest.MonkeyPatch, req_file: Path
+) -> None:
     """Project root should be appended to sys.path exactly once."""
     _mock_project_root(monkeypatch, req_file.parent)
     _mock_requirements(monkeypatch, req_file)

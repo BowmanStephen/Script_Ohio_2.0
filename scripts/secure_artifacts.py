@@ -83,20 +83,42 @@ def decrypt(bundle: Path, key_file: Path, output_dir: Path) -> Path:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Encrypt/decrypt model and cache artifacts.")
+    parser = argparse.ArgumentParser(
+        description="Encrypt/decrypt model and cache artifacts."
+    )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     subparsers.add_parser("generate-key", help="Emit a new Fernet key to stdout.")
 
-    encrypt_parser = subparsers.add_parser("encrypt", help="Encrypt a file or directory into outputs/secure.")
-    encrypt_parser.add_argument("--target", required=True, type=Path, help="File or directory to encrypt.")
-    encrypt_parser.add_argument("--key-file", required=True, type=Path, help="Path to a file containing the Fernet key.")
-    encrypt_parser.add_argument("--output-dir", default=Path("outputs/secure"), type=Path)
+    encrypt_parser = subparsers.add_parser(
+        "encrypt", help="Encrypt a file or directory into outputs/secure."
+    )
+    encrypt_parser.add_argument(
+        "--target", required=True, type=Path, help="File or directory to encrypt."
+    )
+    encrypt_parser.add_argument(
+        "--key-file",
+        required=True,
+        type=Path,
+        help="Path to a file containing the Fernet key.",
+    )
+    encrypt_parser.add_argument(
+        "--output-dir", default=Path("outputs/secure"), type=Path
+    )
 
-    decrypt_parser = subparsers.add_parser("decrypt", help="Decrypt an encrypted bundle.")
-    decrypt_parser.add_argument("--bundle", required=True, type=Path, help="Encrypted .enc file.")
+    decrypt_parser = subparsers.add_parser(
+        "decrypt", help="Decrypt an encrypted bundle."
+    )
+    decrypt_parser.add_argument(
+        "--bundle", required=True, type=Path, help="Encrypted .enc file."
+    )
     decrypt_parser.add_argument("--key-file", required=True, type=Path)
-    decrypt_parser.add_argument("--output-dir", required=True, type=Path, help="Destination directory for decrypted data.")
+    decrypt_parser.add_argument(
+        "--output-dir",
+        required=True,
+        type=Path,
+        help="Destination directory for decrypted data.",
+    )
 
     return parser
 
@@ -124,4 +146,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

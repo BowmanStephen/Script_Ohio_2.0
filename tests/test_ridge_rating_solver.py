@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
-
 from src.ratings.ridge_rating_solver import (
     RidgeRatingConfig,
     compute_ridge_ratings,
@@ -141,4 +140,3 @@ def test_ridge_solver_respects_priors():
     osu_rating = ratings.loc[ratings["team"] == "Ohio State", "rating"].iloc[0]
     texas_rating = ratings.loc[ratings["team"] == "Texas", "rating"].iloc[0]
     assert texas_rating > osu_rating
-

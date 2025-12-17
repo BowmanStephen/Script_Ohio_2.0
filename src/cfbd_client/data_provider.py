@@ -1,10 +1,11 @@
 """Shared CFBD data provider for agents."""
+
 from __future__ import annotations
 
+import os
 import time
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
-import os
 
 from .client import CFBDClient
 from .datasets import (
@@ -29,7 +30,7 @@ class CFBDDataProvider:
     def __init__(
         self,
         cfbd_client: Optional[CFBDClient] = None,
-        telemetry_hook = None,
+        telemetry_hook=None,
     ) -> None:
         self.telemetry_hook = telemetry_hook
         self.cfbd_client = cfbd_client or CFBDClient(telemetry_hook=telemetry_hook)
@@ -63,16 +64,19 @@ class CFBDDataProvider:
                 records = [
                     rec
                     for rec in records
-                    if rec.get("home_team") == team_key or rec.get("away_team") == team_key
+                    if rec.get("home_team") == team_key
+                    or rec.get("away_team") == team_key
                 ]
-            records.sort(key=lambda rec: (int(rec.get("week") or 0), int(rec.get("id") or 0)), reverse=True)
+            records.sort(
+                key=lambda rec: (int(rec.get("week") or 0), int(rec.get("id") or 0)),
+                reverse=True,
+            )
             return records[:limit]
 
         df = fetch_games(self.cfbd_client, year=season, week=week)
         if team:
             df = df[
-                (df["home_team"] == team.lower())
-                | (df["away_team"] == team.lower())
+                (df["home_team"] == team.lower()) | (df["away_team"] == team.lower())
             ]
         if df.empty:
             return []
@@ -203,5 +207,6 @@ class CFBDDataProvider:
     def _game_ids_for_team(self, season: int, week: int, team: str) -> List[Any]:
         games = self.get_recent_games(season=season, week=week, team=team, limit=20)
         return [game.get("id") for game in games if game.get("id") is not None]
+
 
 __all__ = ["CFBDDataProvider"]

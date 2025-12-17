@@ -19,18 +19,24 @@ __version__ = "1.0.0"
 __author__ = "Claude Code Assistant"
 
 # Import core classes for easy access
-from .agent_framework import AgentFactory, RequestRouter, BaseAgent, AgentRequest, PermissionLevel
+from .agent_framework import (
+    AgentFactory,
+    AgentRequest,
+    BaseAgent,
+    PermissionLevel,
+    RequestRouter,
+)
 from .context_manager import ContextManager, UserRole
-from .tool_loader import ToolLoader, ToolCategory
+from .tool_loader import ToolCategory, ToolLoader
 
 __all__ = [
-    'AgentFactory',
-    'RequestRouter',
-    'BaseAgent',
-    'AgentRequest',
-    'PermissionLevel',
-    'ContextManager',
-    'UserRole',
-    'ToolLoader',
-    'ToolCategory'
+    "AgentFactory",
+    "RequestRouter",
+    "BaseAgent",
+    "AgentRequest",
+    "PermissionLevel",
+    "ContextManager",
+    "UserRole",
+    "ToolLoader",
+    "ToolCategory",
 ]

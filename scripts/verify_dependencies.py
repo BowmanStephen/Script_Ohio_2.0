@@ -3,19 +3,21 @@
 Dependency Verification Script for Script Ohio 2.0
 Verifies that all required packages are installed and match version requirements.
 """
+
 import sys
+
 import pkg_resources
 from pkg_resources import DistributionNotFound, VersionConflict
 
-def verify_dependencies(requirements_file='requirements.txt'):
+
+def verify_dependencies(requirements_file="requirements.txt"):
     """Verify that all dependencies in requirements_file are installed."""
     print(f"Verifying dependencies from {requirements_file}...")
-    
+
     try:
-        with open(requirements_file, 'r') as f:
+        with open(requirements_file, "r") as f:
             requirements = [
-                line.strip() for line in f 
-                if line.strip() and not line.startswith('#')
+                line.strip() for line in f if line.strip() and not line.startswith("#")
             ]
     except FileNotFoundError:
         print(f"Error: {requirements_file} not found.")
@@ -59,7 +61,7 @@ def verify_dependencies(requirements_file='requirements.txt'):
     if missing or conflicting:
         # Filter out known conflicts
         critical_failures = False
-        
+
         if missing:
             print("\nMissing Packages:")
             for pkg in missing:
@@ -71,7 +73,9 @@ def verify_dependencies(requirements_file='requirements.txt'):
             for pkg, reason in conflicting:
                 # Known conflict: fastai/thinc requires pydantic>=2, cfbd requires pydantic<2
                 if "fastai" in pkg and "pydantic" in reason:
-                    print(f" - {pkg}: {reason} (KNOWN ISSUE: FastAI/CFBD Pydantic conflict - Proceeding)")
+                    print(
+                        f" - {pkg}: {reason} (KNOWN ISSUE: FastAI/CFBD Pydantic conflict - Proceeding)"
+                    )
                 else:
                     print(f" - {pkg}: {reason}")
                     critical_failures = True
@@ -80,12 +84,12 @@ def verify_dependencies(requirements_file='requirements.txt'):
             print("\nFAILURE: Please run 'pip install -r requirements.txt'")
             sys.exit(1)
         else:
-             print("\nSUCCESS: All dependencies verified (with known issues).")
-             sys.exit(0)
+            print("\nSUCCESS: All dependencies verified (with known issues).")
+            sys.exit(0)
     else:
         print("\nSUCCESS: All dependencies verified.")
         sys.exit(0)
 
+
 if __name__ == "__main__":
     verify_dependencies()
-

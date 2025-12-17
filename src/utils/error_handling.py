@@ -11,16 +11,16 @@ Implements OpenAI best practices for error handling:
 - Automatic recovery and self-healing
 """
 
-import time
-import uuid
-import traceback
 import asyncio
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional, Callable, Union
-from dataclasses import dataclass, field
-from functools import wraps
-from collections import defaultdict
 import json
+import time
+import traceback
+import uuid
+from collections import defaultdict
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from functools import wraps
+from typing import Any, Callable, Dict, List, Optional, Union
 
 from src.observability import (
     ErrorCategory,
@@ -32,28 +32,37 @@ from src.observability import (
 
 logger = get_logger("error_handling")
 
+
 class CircuitState(Enum):
     """States for circuit breaker"""
-    CLOSED = "closed"                     # Normal operation
-    OPEN = "open"                         # Failing, reject requests
-    HALF_OPEN = "half_open"               # Testing if failures are resolved
+
+    CLOSED = "closed"  # Normal operation
+    OPEN = "open"  # Failing, reject requests
+    HALF_OPEN = "half_open"  # Testing if failures are resolved
+
 
 @dataclass
 class RetryConfig:
     """Configuration for retry mechanisms"""
+
     max_attempts: int = 3
     base_delay: float = 1.0
     max_delay: float = 60.0
     backoff_factor: float = 2.0
     jitter: bool = True
-    retry_on: List[ErrorCategory] = field(default_factory=lambda: [ErrorCategory.NETWORK, ErrorCategory.TIMEOUT])
+    retry_on: List[ErrorCategory] = field(
+        default_factory=lambda: [ErrorCategory.NETWORK, ErrorCategory.TIMEOUT]
+    )
+
 
 class CircuitBreakerConfig:
     """Configuration for circuit breaker"""
+
     failure_threshold: int = 5
     recovery_timeout: float = 60.0
     expected_exception: type = Exception
     success_threshold: int = 3  # Successes needed to close circuit
+
 
 class CircuitBreaker:
     """
@@ -79,9 +88,11 @@ class CircuitBreaker:
 
     def __call__(self, func: Callable) -> Callable:
         """Decorator to wrap functions with circuit breaker"""
+
         @wraps(func)
         def wrapper(*args, **kwargs):
             return self.execute(func, *args, **kwargs)
+
         return wrapper
 
     def execute(self, func: Callable, *args, **kwargs):
@@ -135,27 +146,34 @@ class CircuitBreaker:
         """Open the circuit to prevent further failures"""
         self.state = CircuitState.OPEN
         self.failure_count = 0
-        logger.warning(f"Circuit breaker {self.name} OPENED after {self.config.failure_threshold} failures")
+        logger.warning(
+            f"Circuit breaker {self.name} OPENED after {self.config.failure_threshold} failures"
+        )
 
     def _close_circuit(self):
         """Close the circuit to resume normal operation"""
         self.state = CircuitState.CLOSED
         self.success_count = 0
         self.failure_count = 0
-        logger.info(f"Circuit breaker {self.name} CLOSED after {self.config.success_threshold} successes")
+        logger.info(
+            f"Circuit breaker {self.name} CLOSED after {self.config.success_threshold} successes"
+        )
 
     def get_metrics(self) -> Dict[str, Any]:
         """Get circuit breaker metrics"""
         return {
-            'name': self.name,
-            'state': self.state.value,
-            'total_requests': self.total_requests,
-            'total_failures': self.total_failures,
-            'total_successes': self.total_successes,
-            'failure_rate': self.total_failures / self.total_requests if self.total_requests > 0 else 0,
-            'last_failure_time': self.last_failure_time,
-            'last_success_time': self.last_success_time
+            "name": self.name,
+            "state": self.state.value,
+            "total_requests": self.total_requests,
+            "total_failures": self.total_failures,
+            "total_successes": self.total_successes,
+            "failure_rate": self.total_failures / self.total_requests
+            if self.total_requests > 0
+            else 0,
+            "last_failure_time": self.last_failure_time,
+            "last_success_time": self.last_success_time,
         }
+
 
 class RetryHandler:
     """
@@ -169,9 +187,11 @@ class RetryHandler:
 
     def __call__(self, func: Callable) -> Callable:
         """Decorator to wrap functions with retry mechanism"""
+
         @wraps(func)
         def wrapper(*args, **kwargs):
             return self.execute(func, *args, **kwargs)
+
         return wrapper
 
     def execute(self, func: Callable, *args, **kwargs):
@@ -205,11 +225,11 @@ class RetryHandler:
             error_type=f"RetryExhausted_{func.__name__}",
             severity=ErrorSeverity.HIGH,
             context={
-                'attempts': self.config.max_attempts,
-                'function': func.__name__,
-                'args_count': len(args),
-                'kwargs_keys': list(kwargs.keys())
-            }
+                "attempts": self.config.max_attempts,
+                "function": func.__name__,
+                "args_count": len(args),
+                "kwargs_keys": list(kwargs.keys()),
+            },
         )
 
         ErrorHandler.handle_error(error_report)
@@ -225,15 +245,17 @@ class RetryHandler:
 
     def _calculate_delay(self, attempt: int) -> float:
         """Calculate delay with exponential backoff and jitter"""
-        delay = self.config.base_delay * (self.config.backoff_factor ** attempt)
+        delay = self.config.base_delay * (self.config.backoff_factor**attempt)
         delay = min(delay, self.config.max_delay)
 
         if self.config.jitter:
             # Add jitter to prevent thundering herd
             import random
-            delay *= (0.5 + random.random() * 0.5)
+
+            delay *= 0.5 + random.random() * 0.5
 
         return delay
+
 
 class FallbackSystem:
     """
@@ -246,14 +268,17 @@ class FallbackSystem:
         self.fallback_strategies: Dict[str, List[Callable]] = defaultdict(list)
         self.fallback_usage_stats: Dict[str, int] = defaultdict(int)
 
-    def register_fallback(self, primary_method: str, fallback_strategy: Callable, priority: int = 0):
+    def register_fallback(
+        self, primary_method: str, fallback_strategy: Callable, priority: int = 0
+    ):
         """Register a fallback strategy for a primary method"""
         self.fallback_strategies[primary_method].append((priority, fallback_strategy))
         # Sort by priority (lower = higher priority)
         self.fallback_strategies[primary_method].sort(key=lambda x: x[0])
 
-    def execute_with_fallback(self, primary_method: str, primary_func: Callable,
-                            *args, **kwargs) -> Any:
+    def execute_with_fallback(
+        self, primary_method: str, primary_func: Callable, *args, **kwargs
+    ) -> Any:
         """Execute function with fallback strategies"""
         try:
             # Try primary method first
@@ -261,14 +286,18 @@ class FallbackSystem:
             return result
 
         except Exception as primary_error:
-            logger.warning(f"Primary method {primary_method} failed: {str(primary_error)}")
+            logger.warning(
+                f"Primary method {primary_method} failed: {str(primary_error)}"
+            )
 
             # Try fallback strategies
             fallbacks = self.fallback_strategies.get(primary_method, [])
 
             for priority, fallback in fallbacks:
                 try:
-                    logger.info(f"Trying fallback strategy (priority {priority}) for {primary_method}")
+                    logger.info(
+                        f"Trying fallback strategy (priority {priority}) for {primary_method}"
+                    )
                     result = fallback(*args, **kwargs, primary_error=primary_error)
                     self.fallback_usage_stats[primary_method] += 1
                     logger.info(f"Fallback strategy succeeded for {primary_method}")
@@ -288,10 +317,11 @@ class FallbackSystem:
         """Get fallback system metrics"""
         total_fallbacks = sum(self.fallback_usage_stats.values())
         return {
-            'registered_fallbacks': len(self.fallback_strategies),
-            'fallback_usage_stats': dict(self.fallback_usage_stats),
-            'total_fallbacks_used': total_fallbacks
+            "registered_fallbacks": len(self.fallback_strategies),
+            "fallback_usage_stats": dict(self.fallback_usage_stats),
+            "total_fallbacks_used": total_fallbacks,
         }
+
 
 class ErrorHandler:
     """
@@ -314,14 +344,16 @@ class ErrorHandler:
             ErrorCategory.MODEL: self._handle_model_error,
             ErrorCategory.TIMEOUT: self._handle_timeout_error,
             ErrorCategory.RATE_LIMIT: self._handle_rate_limit_error,
-            ErrorCategory.RESOURCE: self._handle_resource_error
+            ErrorCategory.RESOURCE: self._handle_resource_error,
         }
 
         # Error statistics
         self.error_stats = defaultdict(int)
         self.recovery_stats = defaultdict(int)
 
-    def register_circuit_breaker(self, name: str, config: Optional[CircuitBreakerConfig] = None):
+    def register_circuit_breaker(
+        self, name: str, config: Optional[CircuitBreakerConfig] = None
+    ):
         """Register a circuit breaker for a specific component"""
         self.circuit_breakers[name] = CircuitBreaker(name, config)
         logger.info(f"Registered circuit breaker: {name}")
@@ -334,7 +366,10 @@ class ErrorHandler:
         """
         try:
             # Log the error
-            logger.error(f"Handling error: {error_report.error_message}", extra=error_report.__dict__)
+            logger.error(
+                f"Handling error: {error_report.error_message}",
+                extra=error_report.__dict__,
+            )
 
             # Update statistics
             self.error_stats[error_report.category.value] += 1
@@ -342,7 +377,9 @@ class ErrorHandler:
             ObservabilityHub.instance().emit_error(error_report)
 
             # Categorize and handle the error
-            strategy = self.error_strategies.get(error_report.category, self._handle_unknown_error)
+            strategy = self.error_strategies.get(
+                error_report.category, self._handle_unknown_error
+            )
             recovery_success = strategy(error_report)
 
             # Record recovery attempt
@@ -351,7 +388,9 @@ class ErrorHandler:
 
             if recovery_success:
                 self.recovery_stats[error_report.category.value] += 1
-                logger.info(f"Successfully recovered from error: {error_report.error_id}")
+                logger.info(
+                    f"Successfully recovered from error: {error_report.error_id}"
+                )
             else:
                 logger.error(f"Failed to recover from error: {error_report.error_id}")
 
@@ -368,40 +407,52 @@ class ErrorHandler:
         exception_type = type(exception).__name__.lower()
 
         # Network errors
-        if any(keyword in error_message or exception_type for keyword in
-               ['connection', 'timeout', 'network', 'socket', 'http']):
-            if 'timeout' in error_message:
+        if any(
+            keyword in error_message or exception_type
+            for keyword in ["connection", "timeout", "network", "socket", "http"]
+        ):
+            if "timeout" in error_message:
                 return ErrorCategory.TIMEOUT
             return ErrorCategory.NETWORK
 
         # Data errors
-        if any(keyword in error_message or exception_type for keyword in
-               ['value', 'type', 'key', 'data', 'json', 'parse']):
+        if any(
+            keyword in error_message or exception_type
+            for keyword in ["value", "type", "key", "data", "json", "parse"]
+        ):
             return ErrorCategory.DATA
 
         # Model errors
-        if any(keyword in error_message or exception_type for keyword in
-               ['model', 'prediction', 'inference', 'torch', 'tensorflow']):
+        if any(
+            keyword in error_message or exception_type
+            for keyword in ["model", "prediction", "inference", "torch", "tensorflow"]
+        ):
             return ErrorCategory.MODEL
 
         # Resource errors
-        if any(keyword in error_message or exception_type for keyword in
-               ['memory', 'disk', 'resource', 'space', 'quota']):
+        if any(
+            keyword in error_message or exception_type
+            for keyword in ["memory", "disk", "resource", "space", "quota"]
+        ):
             return ErrorCategory.RESOURCE
 
         # Rate limit errors
-        if any(keyword in error_message or exception_type for keyword in
-               ['rate', 'limit', 'quota', 'throttle']):
+        if any(
+            keyword in error_message or exception_type
+            for keyword in ["rate", "limit", "quota", "throttle"]
+        ):
             return ErrorCategory.RATE_LIMIT
 
         return ErrorCategory.UNKNOWN
 
     @staticmethod
-    def create_error_report(error: Exception,
-                          error_type: str = "",
-                          severity: ErrorSeverity = ErrorSeverity.MEDIUM,
-                          context: Optional[Dict[str, Any]] = None,
-                          user_facing_message: str = "") -> ErrorReport:
+    def create_error_report(
+        error: Exception,
+        error_type: str = "",
+        severity: ErrorSeverity = ErrorSeverity.MEDIUM,
+        context: Optional[Dict[str, Any]] = None,
+        user_facing_message: str = "",
+    ) -> ErrorReport:
         """Create a comprehensive error report"""
         return ErrorReport(
             error_type=error_type or type(error).__name__,
@@ -410,11 +461,12 @@ class ErrorHandler:
             category=ErrorHandler.classify_error(error),
             context=context or {},
             stack_trace=traceback.format_exc(),
-            user_facing_message=user_facing_message or "An unexpected error occurred. Please try again.",
+            user_facing_message=user_facing_message
+            or "An unexpected error occurred. Please try again.",
             technical_details={
-                'exception_type': type(error).__name__,
-                'exception_args': str(error.args) if error.args else None
-            }
+                "exception_type": type(error).__name__,
+                "exception_args": str(error.args) if error.args else None,
+            },
         )
 
     def get_error_metrics(self) -> Dict[str, Any]:
@@ -424,16 +476,15 @@ class ErrorHandler:
         recovery_rate = recovered_errors / total_errors if total_errors > 0 else 0
 
         return {
-            'total_errors': total_errors,
-            'recovered_errors': recovered_errors,
-            'recovery_rate': round(recovery_rate, 3),
-            'error_by_category': dict(self.error_stats),
-            'recovery_by_category': dict(self.recovery_stats),
-            'circuit_breakers': {
-                name: cb.get_metrics()
-                for name, cb in self.circuit_breakers.items()
+            "total_errors": total_errors,
+            "recovered_errors": recovered_errors,
+            "recovery_rate": round(recovery_rate, 3),
+            "error_by_category": dict(self.error_stats),
+            "recovery_by_category": dict(self.recovery_stats),
+            "circuit_breakers": {
+                name: cb.get_metrics() for name, cb in self.circuit_breakers.items()
             },
-            'fallback_metrics': self.fallback_system.get_fallback_metrics()
+            "fallback_metrics": self.fallback_system.get_fallback_metrics(),
         }
 
     # Error handling strategies
@@ -479,45 +530,58 @@ class ErrorHandler:
         logger.warning(f"Handling unknown error: {error_report.error_message}")
         return False
 
+
 class CircuitBreakerOpenError(Exception):
     """Raised when circuit breaker is open"""
+
     pass
+
 
 class FallbackExhaustedError(Exception):
     """Raised when all fallback strategies have failed"""
+
     pass
+
 
 # Global error handler instance
 error_handler = ErrorHandler()
 
 # Decorators for easy use
 
+
 def circuit_breaker(name: str, config: Optional[CircuitBreakerConfig] = None):
     """Decorator to apply circuit breaker to function"""
+
     def decorator(func):
         cb = error_handler.circuit_breakers.get(name)
         if cb is None:
             cb = CircuitBreaker(name, config)
             error_handler.register_circuit_breaker(name, config)
         return cb(func)
+
     return decorator
+
 
 def retry(max_attempts: int = 3, base_delay: float = 1.0, max_delay: float = 60.0):
     """Decorator to apply retry mechanism to function"""
+
     def decorator(func):
         config = RetryConfig(
-            max_attempts=max_attempts,
-            base_delay=base_delay,
-            max_delay=max_delay
+            max_attempts=max_attempts, base_delay=base_delay, max_delay=max_delay
         )
         retry_handler = RetryHandler(config)
         return retry_handler(func)
+
     return decorator
 
-def handle_errors(error_type: str = "",
-                 severity: ErrorSeverity = ErrorSeverity.MEDIUM,
-                 user_facing_message: str = ""):
+
+def handle_errors(
+    error_type: str = "",
+    severity: ErrorSeverity = ErrorSeverity.MEDIUM,
+    user_facing_message: str = "",
+):
     """Decorator to handle errors in functions"""
+
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -529,23 +593,31 @@ def handle_errors(error_type: str = "",
                     error_type=error_type or func.__name__,
                     severity=severity,
                     context={
-                        'function': func.__name__,
-                        'args_count': len(args),
-                        'kwargs_keys': list(kwargs.keys())
+                        "function": func.__name__,
+                        "args_count": len(args),
+                        "kwargs_keys": list(kwargs.keys()),
                     },
-                    user_facing_message=user_facing_message
+                    user_facing_message=user_facing_message,
                 )
                 error_handler.handle_error(error_report)
                 raise
+
         return wrapper
+
     return decorator
+
 
 def fallback_for(primary_method: str, priority: int = 0):
     """Decorator to register function as fallback for primary method"""
+
     def decorator(fallback_func):
-        error_handler.fallback_system.register_fallback(primary_method, fallback_func, priority)
+        error_handler.fallback_system.register_fallback(
+            primary_method, fallback_func, priority
+        )
         return fallback_func
+
     return decorator
+
 
 # Utility functions
 def safe_execute(func: Callable, *args, default_value=None, **kwargs) -> Any:

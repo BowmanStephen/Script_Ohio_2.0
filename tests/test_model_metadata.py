@@ -89,4 +89,3 @@ def test_update_performance():
         updated = registry.update_performance("test_model", {"mae": 10.5, "rmse": 13.2})
         assert updated is not None
         assert updated.performance_metrics["mae"] == 10.5
-

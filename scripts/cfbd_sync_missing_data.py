@@ -73,7 +73,9 @@ def build_transport(base_url: str) -> CFBDTransport:
 
             # Map common endpoints to UnifiedCFBDClient methods
             if path == "/games" or path == "games":
-                season_type = params.get("seasonType", params.get("season_type", "regular"))
+                season_type = params.get(
+                    "seasonType", params.get("season_type", "regular")
+                )
                 return client.get_games(
                     year=params.get("year", params.get("season", 2025)),
                     week=params.get("week"),
@@ -101,7 +103,9 @@ def build_transport(base_url: str) -> CFBDTransport:
                 pass
 
             # For endpoints not directly supported, fall through to requests
-            raise NotImplementedError(f"Endpoint {path} not directly supported by UnifiedCFBDClient")
+            raise NotImplementedError(
+                f"Endpoint {path} not directly supported by UnifiedCFBDClient"
+            )
 
         # Try to use it, but fall back if methods don't match
         try:
@@ -114,7 +118,9 @@ def build_transport(base_url: str) -> CFBDTransport:
     except ImportError:
         pass
     except Exception as e:
-        print(f"UnifiedCFBDClient available but test failed: {e}, falling back to requests")
+        print(
+            f"UnifiedCFBDClient available but test failed: {e}, falling back to requests"
+        )
 
     # 2) requests fallback
     tok = token_from_env()
@@ -243,6 +249,7 @@ def sync_postseason_games(
     except NotImplementedError:
         # Fall back to direct HTTP
         import requests
+
         tok = token_from_env()
         if not tok:
             return 0
@@ -254,7 +261,10 @@ def sync_postseason_games(
         url = base_url.rstrip("/") + "/games"
         headers = {"Authorization": f"Bearer {tok}"}
         resp = requests.get(
-            url, headers=headers, params={"year": season, "seasonType": "postseason"}, timeout=120
+            url,
+            headers=headers,
+            params={"year": season, "seasonType": "postseason"},
+            timeout=120,
         )
         resp.raise_for_status()
         payload = resp.json()
@@ -266,17 +276,28 @@ def sync_postseason_games(
     if games_csv_path.exists():
         existing = pd.read_csv(games_csv_path)
         # Best-effort id col detection
-        id_col = "id" if "id" in existing.columns else ("gameId" if "gameId" in existing.columns else "game_id")
+        id_col = (
+            "id"
+            if "id" in existing.columns
+            else ("gameId" if "gameId" in existing.columns else "game_id")
+        )
 
         if id_col in existing.columns:
             existing_ids = set(
-                pd.to_numeric(existing[id_col], errors="coerce").dropna().astype(int).tolist()
+                pd.to_numeric(existing[id_col], errors="coerce")
+                .dropna()
+                .astype(int)
+                .tolist()
             )
         else:
             existing_ids = set()
 
         # Figure out id column in df
-        df_id_col = "id" if "id" in df.columns else ("gameId" if "gameId" in df.columns else None)
+        df_id_col = (
+            "id"
+            if "id" in df.columns
+            else ("gameId" if "gameId" in df.columns else None)
+        )
         if not df_id_col:
             return 0
 
@@ -359,38 +380,59 @@ def main() -> None:
             games_csv_path=games_csv,
             dry_run=args.dry_run,
         )
-        print(f"✅ Postseason games appended to games.csv: {n} (dry_run={args.dry_run})")
+        print(
+            f"✅ Postseason games appended to games.csv: {n} (dry_run={args.dry_run})"
+        )
 
     # Reload games index (so missing weeks/postseason can be derived downstream)
     if games_csv.exists():
         games_df = pd.read_csv(games_csv)
-        gid_col = "id" if "id" in games_df.columns else ("gameId" if "gameId" in games_df.columns else "game_id")
+        gid_col = (
+            "id"
+            if "id" in games_df.columns
+            else ("gameId" if "gameId" in games_df.columns else "game_id")
+        )
         if gid_col not in games_df.columns:
-            raise RuntimeError("Could not find a gameId column in games.csv after reload.")
+            raise RuntimeError(
+                "Could not find a gameId column in games.csv after reload."
+            )
         all_game_ids = set(
-            pd.to_numeric(games_df[gid_col], errors="coerce").dropna().astype(int).tolist()
+            pd.to_numeric(games_df[gid_col], errors="coerce")
+            .dropna()
+            .astype(int)
+            .tolist()
         )
     else:
         all_game_ids = set()
 
     # 2) Sync missing game team stats by missing gameId
-    missing_game_stats_ids = set(datasets.get("game_stats", {}).get("missing_game_ids", []))
+    missing_game_stats_ids = set(
+        datasets.get("game_stats", {}).get("missing_game_ids", [])
+    )
     if missing_game_stats_ids:
         rows_written = 0
         for game_id in sorted(missing_game_stats_ids):
             try:
                 # Try UnifiedCFBDClient first, then fall back to direct HTTP
                 try:
-                    payload = t.get_json("/games/teams", {"year": args.season, "gameId": game_id})
+                    payload = t.get_json(
+                        "/games/teams", {"year": args.season, "gameId": game_id}
+                    )
                 except (NotImplementedError, AttributeError):
                     # Fall back to direct HTTP
                     import requests
+
                     tok = token_from_env()
                     if not tok:
                         continue
                     url = args.base_url.rstrip("/") + "/games/teams"
                     headers = {"Authorization": f"Bearer {tok}"}
-                    resp = requests.get(url, headers=headers, params={"year": args.season, "gameId": game_id}, timeout=120)
+                    resp = requests.get(
+                        url,
+                        headers=headers,
+                        params={"year": args.season, "gameId": game_id},
+                        timeout=120,
+                    )
                     resp.raise_for_status()
                     payload = resp.json()
 
@@ -426,23 +468,33 @@ def main() -> None:
         print("ℹ️  game_stats: no missing gameIds in manifest.")
 
     # 3) Sync missing advanced game stats by missing gameId
-    missing_adv_ids = set(datasets.get("advanced_game_stats", {}).get("missing_game_ids", []))
+    missing_adv_ids = set(
+        datasets.get("advanced_game_stats", {}).get("missing_game_ids", [])
+    )
     if missing_adv_ids:
         rows_written = 0
         for game_id in sorted(missing_adv_ids):
             try:
                 # Try UnifiedCFBDClient first, then fall back to direct HTTP
                 try:
-                    payload = t.get_json("/game/box/advanced", {"year": args.season, "gameId": game_id})
+                    payload = t.get_json(
+                        "/game/box/advanced", {"year": args.season, "gameId": game_id}
+                    )
                 except (NotImplementedError, AttributeError):
                     # Fall back to direct HTTP
                     import requests
+
                     tok = token_from_env()
                     if not tok:
                         continue
                     url = args.base_url.rstrip("/") + "/game/box/advanced"
                     headers = {"Authorization": f"Bearer {tok}"}
-                    resp = requests.get(url, headers=headers, params={"year": args.season, "gameId": game_id}, timeout=120)
+                    resp = requests.get(
+                        url,
+                        headers=headers,
+                        params={"year": args.season, "gameId": game_id},
+                        timeout=120,
+                    )
                     resp.raise_for_status()
                     payload = resp.json()
 
@@ -458,7 +510,9 @@ def main() -> None:
 
                 time.sleep(args.sleep_seconds)
             except Exception as e:
-                print(f"⚠️  Failed to fetch advanced_game_stats for gameId {game_id}: {e}")
+                print(
+                    f"⚠️  Failed to fetch advanced_game_stats for gameId {game_id}: {e}"
+                )
                 continue
 
         print(
@@ -477,6 +531,7 @@ def main() -> None:
             try:
                 # For plays by week, use direct HTTP (UnifiedCFBDClient doesn't expose this easily)
                 import requests
+
                 tok = token_from_env()
                 if not tok:
                     continue
@@ -485,7 +540,11 @@ def main() -> None:
                 resp = requests.get(
                     url,
                     headers=headers,
-                    params={"year": args.season, "week": int(week), "seasonType": "regular"},
+                    params={
+                        "year": args.season,
+                        "week": int(week),
+                        "seasonType": "regular",
+                    },
                     timeout=120,
                 )
                 resp.raise_for_status()

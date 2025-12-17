@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any, Dict
 
 import pytest
-
 from agents.system import cfbd_subscription_manager as manager_module
 
 
@@ -21,7 +20,9 @@ class FakeClient:
         self.on_event = None
         self.on_error = None
 
-    def subscribe(self, request, on_event, on_error, operation_name: str = "ScoreboardFeed") -> FakeHandle:
+    def subscribe(
+        self, request, on_event, on_error, operation_name: str = "ScoreboardFeed"
+    ) -> FakeHandle:
         self.on_event = on_event
         self.on_error = on_error
         return FakeHandle()

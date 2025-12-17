@@ -10,23 +10,25 @@ Created: 2025-11-07
 Version: 1.0
 """
 
-import os
 import importlib.util
 import inspect
+import json
 import logging
-from typing import Dict, List, Optional, Any, Callable, Union
+import os
+import time
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-import json
-import time
+from typing import Any, Callable, Dict, List, Optional, Union
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 class ToolCategory(Enum):
     """Categories of tools for organization"""
+
     DATA_LOADING = "data_loading"
     MODEL_EXECUTION = "model_execution"
     VISUALIZATION = "visualization"
@@ -34,16 +36,20 @@ class ToolCategory(Enum):
     UTILITY = "utility"
     EXPORT = "export"
 
+
 class ToolStatus(Enum):
     """Status of loaded tools"""
+
     ACTIVE = "active"
     INACTIVE = "inactive"
     ERROR = "error"
     LOADING = "loading"
 
+
 @dataclass
 class ToolMetadata:
     """Metadata for a loaded tool"""
+
     name: str
     description: str
     category: ToolCategory
@@ -56,14 +62,17 @@ class ToolMetadata:
     version: str
     file_path: str
 
+
 @dataclass
 class ToolExecutionResult:
     """Result of tool execution"""
+
     success: bool
     result: Any
     error_message: Optional[str]
     execution_time: float
     metadata: Dict[str, Any]
+
 
 class Tool:
     """
@@ -81,7 +90,9 @@ class Tool:
 
         logger.info(f"Loaded tool: {metadata.name} ({metadata.category.value})")
 
-    def execute(self, parameters: Dict[str, Any], user_context: Dict[str, Any]) -> ToolExecutionResult:
+    def execute(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> ToolExecutionResult:
         """
         Execute the tool with given parameters
 
@@ -114,10 +125,10 @@ class Tool:
                 error_message=None,
                 execution_time=execution_time,
                 metadata={
-                    'tool_name': self.metadata.name,
-                    'category': self.metadata.category.value,
-                    'execution_count': self.execution_count
-                }
+                    "tool_name": self.metadata.name,
+                    "category": self.metadata.category.value,
+                    "execution_count": self.execution_count,
+                },
             )
 
         except Exception as e:
@@ -133,12 +144,12 @@ class Tool:
                 result=None,
                 error_message=error_message,
                 execution_time=execution_time,
-                metadata={'tool_name': self.metadata.name}
+                metadata={"tool_name": self.metadata.name},
             )
 
     def _validate_parameters(self, parameters: Dict[str, Any]):
         """Validate parameters against input schema"""
-        required_params = self.metadata.input_schema.get('required', [])
+        required_params = self.metadata.input_schema.get("required", [])
 
         # Check required parameters
         for param in required_params:
@@ -146,22 +157,24 @@ class Tool:
                 raise ValueError(f"Required parameter missing: {param}")
 
         # Type validation
-        param_types = self.metadata.input_schema.get('properties', {})
+        param_types = self.metadata.input_schema.get("properties", {})
         for param_name, param_value in parameters.items():
             if param_name in param_types:
-                expected_type = param_types[param_name].get('type')
+                expected_type = param_types[param_name].get("type")
                 if expected_type and not self._check_type(param_value, expected_type):
-                    raise TypeError(f"Parameter {param_name} should be of type {expected_type}")
+                    raise TypeError(
+                        f"Parameter {param_name} should be of type {expected_type}"
+                    )
 
     def _check_type(self, value: Any, expected_type: str) -> bool:
         """Check if value matches expected type"""
         type_map = {
-            'string': str,
-            'number': (int, float),
-            'integer': int,
-            'boolean': bool,
-            'array': list,
-            'object': dict
+            "string": str,
+            "number": (int, float),
+            "integer": int,
+            "boolean": bool,
+            "array": list,
+            "object": dict,
         }
 
         expected_python_type = type_map.get(expected_type)
@@ -179,14 +192,16 @@ class Tool:
     def get_status(self) -> Dict[str, Any]:
         """Get current tool status and metrics"""
         return {
-            'name': self.metadata.name,
-            'category': self.metadata.category.value,
-            'status': self.status.value,
-            'execution_count': self.execution_count,
-            'average_execution_time': self.total_execution_time / max(1, self.execution_count),
-            'error_rate': self.error_count / max(1, self.execution_count),
-            'last_execution': self.last_execution_time
+            "name": self.metadata.name,
+            "category": self.metadata.category.value,
+            "status": self.status.value,
+            "execution_count": self.execution_count,
+            "average_execution_time": self.total_execution_time
+            / max(1, self.execution_count),
+            "error_rate": self.error_count / max(1, self.execution_count),
+            "last_execution": self.last_execution_time,
         }
+
 
 class ToolLoader:
     """
@@ -195,20 +210,26 @@ class ToolLoader:
         Agents perform work directly without tool abstraction.
         Migration: Agents should perform work directly (see WeeklyAnalysisOrchestrator pattern).
     """
+
     """
     Dynamic tool loading and management system
     """
 
-    def __init__(self, tools_directory: Optional[str] = None, base_path: Optional[str] = None):
+    def __init__(
+        self, tools_directory: Optional[str] = None, base_path: Optional[str] = None
+    ):
         import warnings
+
         warnings.warn(
             "ToolLoader is deprecated and will be removed on 2025-12-19. "
             "Agents should perform work directly (see WeeklyAnalysisOrchestrator pattern).",
             DeprecationWarning,
-            stacklevel=2
+            stacklevel=2,
         )
         self.base_path = base_path or os.getcwd()
-        self.tools_directory = tools_directory or os.path.join(self.base_path, "agents", "tools")
+        self.tools_directory = tools_directory or os.path.join(
+            self.base_path, "agents", "tools"
+        )
         self.tools: Dict[str, Tool] = {}
         self.tool_registry: Dict[str, ToolMetadata] = {}
 
@@ -237,18 +258,18 @@ class ToolLoader:
                 "type": "object",
                 "properties": {
                     "notebook_paths": {"type": "array", "items": {"type": "string"}},
-                    "include_content": {"type": "boolean", "default": False}
+                    "include_content": {"type": "boolean", "default": False},
                 },
-                "required": ["notebook_paths"]
+                "required": ["notebook_paths"],
             },
             output_schema={
                 "type": "object",
                 "properties": {
                     "metadata": {"type": "array"},
-                    "summary": {"type": "object"}
-                }
+                    "summary": {"type": "object"},
+                },
             },
-            function=self._load_notebook_metadata
+            function=self._load_notebook_metadata,
         )
 
         self._register_builtin_tool(
@@ -261,18 +282,18 @@ class ToolLoader:
                 "type": "object",
                 "properties": {
                     "model_files": {"type": "array", "items": {"type": "string"}},
-                    "include_metrics": {"type": "boolean", "default": True}
+                    "include_metrics": {"type": "boolean", "default": True},
                 },
-                "required": ["model_files"]
+                "required": ["model_files"],
             },
             output_schema={
                 "type": "object",
                 "properties": {
                     "models": {"type": "array"},
-                    "total_models": {"type": "number"}
-                }
+                    "total_models": {"type": "number"},
+                },
             },
-            function=self._load_model_info
+            function=self._load_model_info,
         )
 
         # Model execution tools
@@ -287,20 +308,23 @@ class ToolLoader:
                 "properties": {
                     "home_team": {"type": "string"},
                     "away_team": {"type": "string"},
-                    "model_type": {"type": "string", "enum": ["ridge", "xgboost", "fastai", "ensemble"]},
-                    "features": {"type": "object"}
+                    "model_type": {
+                        "type": "string",
+                        "enum": ["ridge", "xgboost", "fastai", "ensemble"],
+                    },
+                    "features": {"type": "object"},
                 },
-                "required": ["home_team", "away_team"]
+                "required": ["home_team", "away_team"],
             },
             output_schema={
                 "type": "object",
                 "properties": {
                     "prediction": {"type": "object"},
                     "confidence": {"type": "number"},
-                    "model_used": {"type": "string"}
-                }
+                    "model_used": {"type": "string"},
+                },
             },
-            function=self._predict_game_outcome
+            function=self._predict_game_outcome,
         )
 
         # Visualization tools
@@ -314,19 +338,26 @@ class ToolLoader:
                 "type": "object",
                 "properties": {
                     "path_data": {"type": "array"},
-                    "chart_type": {"type": "string", "enum": ["flowchart", "timeline", "progress"]},
-                    "format": {"type": "string", "enum": ["json", "html", "png"], "default": "json"}
+                    "chart_type": {
+                        "type": "string",
+                        "enum": ["flowchart", "timeline", "progress"],
+                    },
+                    "format": {
+                        "type": "string",
+                        "enum": ["json", "html", "png"],
+                        "default": "json",
+                    },
                 },
-                "required": ["path_data"]
+                "required": ["path_data"],
             },
             output_schema={
                 "type": "object",
                 "properties": {
                     "chart_url": {"type": "string"},
-                    "chart_data": {"type": "object"}
-                }
+                    "chart_data": {"type": "object"},
+                },
             },
-            function=self._create_learning_path_chart
+            function=self._create_learning_path_chart,
         )
 
         # Analysis tools
@@ -341,18 +372,18 @@ class ToolLoader:
                 "properties": {
                     "model_path": {"type": "string"},
                     "feature_names": {"type": "array"},
-                    "sample_data": {"type": "array"}
+                    "sample_data": {"type": "array"},
                 },
-                "required": ["model_path", "feature_names"]
+                "required": ["model_path", "feature_names"],
             },
             output_schema={
                 "type": "object",
                 "properties": {
                     "importance_scores": {"type": "object"},
-                    "summary_insights": {"type": "array"}
-                }
+                    "summary_insights": {"type": "array"},
+                },
             },
-            function=self._analyze_feature_importance
+            function=self._analyze_feature_importance,
         )
 
         # Export tools
@@ -366,20 +397,23 @@ class ToolLoader:
                 "type": "object",
                 "properties": {
                     "data": {"type": "object"},
-                    "format": {"type": "string", "enum": ["json", "csv", "pdf", "html"]},
-                    "filename": {"type": "string"}
+                    "format": {
+                        "type": "string",
+                        "enum": ["json", "csv", "pdf", "html"],
+                    },
+                    "filename": {"type": "string"},
                 },
-                "required": ["data", "format"]
+                "required": ["data", "format"],
             },
             output_schema={
                 "type": "object",
                 "properties": {
                     "export_path": {"type": "string"},
                     "file_size": {"type": "number"},
-                    "success": {"type": "boolean"}
-                }
+                    "success": {"type": "boolean"},
+                },
             },
-            function=self._export_analysis_results
+            function=self._export_analysis_results,
         )
 
         # TOON format conversion tool
@@ -394,9 +428,9 @@ class ToolLoader:
                 "properties": {
                     "data": {"type": "object"},
                     "output_path": {"type": "string"},
-                    "estimate_savings": {"type": "boolean", "default": False}
+                    "estimate_savings": {"type": "boolean", "default": False},
                 },
-                "required": ["data"]
+                "required": ["data"],
             },
             output_schema={
                 "type": "object",
@@ -405,15 +439,23 @@ class ToolLoader:
                     "token_savings_percent": {"type": "number"},
                     "output_path": {"type": "string"},
                     "success": {"type": "boolean"},
-                    "error": {"type": "string"}
-                }
+                    "error": {"type": "string"},
+                },
             },
-            function=self._convert_to_toon
+            function=self._convert_to_toon,
         )
 
-    def _register_builtin_tool(self, name: str, description: str, category: ToolCategory,
-                              permission_required: int, execution_time_estimate: float,
-                              input_schema: Dict, output_schema: Dict, function: Callable):
+    def _register_builtin_tool(
+        self,
+        name: str,
+        description: str,
+        category: ToolCategory,
+        permission_required: int,
+        execution_time_estimate: float,
+        input_schema: Dict,
+        output_schema: Dict,
+        function: Callable,
+    ):
         """Register a built-in tool"""
         metadata = ToolMetadata(
             name=name,
@@ -426,7 +468,7 @@ class ToolLoader:
             dependencies=[],
             author="System",
             version="1.0",
-            file_path="builtin"
+            file_path="builtin",
         )
 
         tool = Tool(metadata, function)
@@ -460,24 +502,24 @@ class ToolLoader:
         spec.loader.exec_module(module)
 
         # Look for tool registration functions
-        if hasattr(module, 'register_tool'):
+        if hasattr(module, "register_tool"):
             tool_data = module.register_tool()
 
             metadata = ToolMetadata(
-                name=tool_data['name'],
-                description=tool_data['description'],
-                category=ToolCategory(tool_data['category']),
-                permission_required=tool_data['permission_required'],
-                execution_time_estimate=tool_data['execution_time_estimate'],
-                input_schema=tool_data['input_schema'],
-                output_schema=tool_data['output_schema'],
-                dependencies=tool_data.get('dependencies', []),
-                author=tool_data.get('author', 'External'),
-                version=tool_data.get('version', '1.0'),
-                file_path=str(tool_file)
+                name=tool_data["name"],
+                description=tool_data["description"],
+                category=ToolCategory(tool_data["category"]),
+                permission_required=tool_data["permission_required"],
+                execution_time_estimate=tool_data["execution_time_estimate"],
+                input_schema=tool_data["input_schema"],
+                output_schema=tool_data["output_schema"],
+                dependencies=tool_data.get("dependencies", []),
+                author=tool_data.get("author", "External"),
+                version=tool_data.get("version", "1.0"),
+                file_path=str(tool_file),
             )
 
-            tool = Tool(metadata, tool_data['function'])
+            tool = Tool(metadata, tool_data["function"])
             self.tools[metadata.name] = tool
             self.tool_registry[metadata.name] = metadata
 
@@ -487,25 +529,30 @@ class ToolLoader:
         """Get a tool by name"""
         return self.tools.get(tool_name)
 
-    def list_tools(self, category: Optional[ToolCategory] = None) -> List[Dict[str, Any]]:
+    def list_tools(
+        self, category: Optional[ToolCategory] = None
+    ) -> List[Dict[str, Any]]:
         """List available tools, optionally filtered by category"""
         tools_list = []
 
         for tool in self.tools.values():
             if category is None or tool.metadata.category == category:
-                tools_list.append({
-                    'name': tool.metadata.name,
-                    'description': tool.metadata.description,
-                    'category': tool.metadata.category.value,
-                    'permission_required': tool.metadata.permission_required,
-                    'execution_time_estimate': tool.metadata.execution_time_estimate,
-                    'status': tool.status.value
-                })
+                tools_list.append(
+                    {
+                        "name": tool.metadata.name,
+                        "description": tool.metadata.description,
+                        "category": tool.metadata.category.value,
+                        "permission_required": tool.metadata.permission_required,
+                        "execution_time_estimate": tool.metadata.execution_time_estimate,
+                        "status": tool.status.value,
+                    }
+                )
 
-        return sorted(tools_list, key=lambda x: x['name'])
+        return sorted(tools_list, key=lambda x: x["name"])
 
-    def execute_tool(self, tool_name: str, parameters: Dict[str, Any],
-                    user_context: Dict[str, Any]) -> ToolExecutionResult:
+    def execute_tool(
+        self, tool_name: str, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> ToolExecutionResult:
         """Execute a tool by name"""
         tool = self.get_tool(tool_name)
         if not tool:
@@ -514,7 +561,7 @@ class ToolLoader:
                 result=None,
                 error_message=f"Tool not found: {tool_name}",
                 execution_time=0.0,
-                metadata={'tool_name': tool_name}
+                metadata={"tool_name": tool_name},
             )
 
         return tool.execute(parameters, user_context)
@@ -532,8 +579,12 @@ class ToolLoader:
     def get_tool_status_report(self) -> Dict[str, Any]:
         """Get comprehensive status report for all tools"""
         total_tools = len(self.tools)
-        active_tools = len([t for t in self.tools.values() if t.status == ToolStatus.ACTIVE])
-        error_tools = len([t for t in self.tools.values() if t.status == ToolStatus.ERROR])
+        active_tools = len(
+            [t for t in self.tools.values() if t.status == ToolStatus.ACTIVE]
+        )
+        error_tools = len(
+            [t for t in self.tools.values() if t.status == ToolStatus.ERROR]
+        )
 
         category_counts = {}
         total_executions = 0
@@ -546,23 +597,33 @@ class ToolLoader:
             total_execution_time += tool.total_execution_time
 
         return {
-            'total_tools': total_tools,
-            'active_tools': active_tools,
-            'error_tools': error_tools,
-            'categories': category_counts,
-            'total_executions': total_executions,
-            'average_execution_time': total_execution_time / max(1, total_executions),
-            'tools_by_status': {
-                'active': [t.get_status() for t in self.tools.values() if t.status == ToolStatus.ACTIVE],
-                'error': [t.get_status() for t in self.tools.values() if t.status == ToolStatus.ERROR]
-            }
+            "total_tools": total_tools,
+            "active_tools": active_tools,
+            "error_tools": error_tools,
+            "categories": category_counts,
+            "total_executions": total_executions,
+            "average_execution_time": total_execution_time / max(1, total_executions),
+            "tools_by_status": {
+                "active": [
+                    t.get_status()
+                    for t in self.tools.values()
+                    if t.status == ToolStatus.ACTIVE
+                ],
+                "error": [
+                    t.get_status()
+                    for t in self.tools.values()
+                    if t.status == ToolStatus.ERROR
+                ],
+            },
         }
 
     # Built-in tool implementations
-    def _load_notebook_metadata(self, parameters: Dict[str, Any], user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _load_notebook_metadata(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Load metadata from Jupyter notebooks"""
-        notebook_paths = parameters.get('notebook_paths', [])
-        include_content = parameters.get('include_content', False)
+        notebook_paths = parameters.get("notebook_paths", [])
+        include_content = parameters.get("include_content", False)
 
         metadata_list = []
 
@@ -571,40 +632,50 @@ class ToolLoader:
 
             if full_path.exists():
                 metadata = {
-                    'path': notebook_path,
-                    'name': full_path.stem,
-                    'exists': True,
-                    'size_bytes': full_path.stat().st_size if full_path.is_file() else 0,
-                    'last_modified': full_path.stat().st_mtime if full_path.is_file() else None
+                    "path": notebook_path,
+                    "name": full_path.stem,
+                    "exists": True,
+                    "size_bytes": full_path.stat().st_size
+                    if full_path.is_file()
+                    else 0,
+                    "last_modified": full_path.stat().st_mtime
+                    if full_path.is_file()
+                    else None,
                 }
 
                 if include_content:
                     # Could load and parse notebook content here
-                    metadata['cell_count'] = 0  # Would parse actual notebook
-                    metadata['has_code'] = True
-                    metadata['has_markdown'] = True
+                    metadata["cell_count"] = 0  # Would parse actual notebook
+                    metadata["has_code"] = True
+                    metadata["has_markdown"] = True
 
                 metadata_list.append(metadata)
             else:
-                metadata_list.append({
-                    'path': notebook_path,
-                    'name': Path(notebook_path).stem,
-                    'exists': False
-                })
+                metadata_list.append(
+                    {
+                        "path": notebook_path,
+                        "name": Path(notebook_path).stem,
+                        "exists": False,
+                    }
+                )
 
         return {
-            'metadata': metadata_list,
-            'summary': {
-                'total_notebooks': len(metadata_list),
-                'existing_notebooks': len([m for m in metadata_list if m.get('exists', False)]),
-                'total_size_bytes': sum(m.get('size_bytes', 0) for m in metadata_list)
-            }
+            "metadata": metadata_list,
+            "summary": {
+                "total_notebooks": len(metadata_list),
+                "existing_notebooks": len(
+                    [m for m in metadata_list if m.get("exists", False)]
+                ),
+                "total_size_bytes": sum(m.get("size_bytes", 0) for m in metadata_list),
+            },
         }
 
-    def _load_model_info(self, parameters: Dict[str, Any], user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _load_model_info(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Load information about trained ML models"""
-        model_files = parameters.get('model_files', [])
-        include_metrics = parameters.get('include_metrics', True)
+        model_files = parameters.get("model_files", [])
+        include_metrics = parameters.get("include_metrics", True)
 
         model_info = []
         model_pack_path = Path(self.base_path) / "model_pack"
@@ -614,94 +685,100 @@ class ToolLoader:
 
             if full_path.exists():
                 info = {
-                    'file': model_file,
-                    'name': model_file.replace('.joblib', '').replace('.pkl', ''),
-                    'exists': True,
-                    'size_bytes': full_path.stat().st_size,
-                    'type': 'regression' if 'ridge' in model_file else 'classification'
+                    "file": model_file,
+                    "name": model_file.replace(".joblib", "").replace(".pkl", ""),
+                    "exists": True,
+                    "size_bytes": full_path.stat().st_size,
+                    "type": "regression" if "ridge" in model_file else "classification",
                 }
 
                 if include_metrics:
                     # Would load actual model metrics here
-                    info['metrics'] = {
-                        'accuracy': 0.85,  # Placeholder
-                        'features_count': 86,
-                        'training_date': '2025-11-01'
+                    info["metrics"] = {
+                        "accuracy": 0.85,  # Placeholder
+                        "features_count": 86,
+                        "training_date": "2025-11-01",
                     }
 
                 model_info.append(info)
             else:
-                model_info.append({
-                    'file': model_file,
-                    'name': model_file.replace('.joblib', '').replace('.pkl', ''),
-                    'exists': False
-                })
+                model_info.append(
+                    {
+                        "file": model_file,
+                        "name": model_file.replace(".joblib", "").replace(".pkl", ""),
+                        "exists": False,
+                    }
+                )
 
         return {
-            'models': model_info,
-            'total_models': len(model_info),
-            'existing_models': len([m for m in model_info if m.get('exists', False)])
+            "models": model_info,
+            "total_models": len(model_info),
+            "existing_models": len([m for m in model_info if m.get("exists", False)]),
         }
 
-    def _predict_game_outcome(self, parameters: Dict[str, Any], user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _predict_game_outcome(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Predict game outcome using trained models"""
-        home_team = parameters.get('home_team')
-        away_team = parameters.get('away_team')
-        model_type = parameters.get('model_type', 'ensemble')
+        home_team = parameters.get("home_team")
+        away_team = parameters.get("away_team")
+        model_type = parameters.get("model_type", "ensemble")
 
         # This would integrate with actual ML models
         # For now, return a mock prediction
 
         prediction = {
-            'home_team': home_team,
-            'away_team': away_team,
-            'predicted_margin': 7.5,
-            'predicted_winner': home_team,
-            'confidence': 0.72,
-            'probability': {
-                'home_win': 0.72,
-                'away_win': 0.28
-            }
+            "home_team": home_team,
+            "away_team": away_team,
+            "predicted_margin": 7.5,
+            "predicted_winner": home_team,
+            "confidence": 0.72,
+            "probability": {"home_win": 0.72, "away_win": 0.28},
         }
 
         return {
-            'prediction': prediction,
-            'confidence': prediction['confidence'],
-            'model_used': model_type,
-            'features_used': ['team_strength', 'recent_performance', 'home_field_advantage']
+            "prediction": prediction,
+            "confidence": prediction["confidence"],
+            "model_used": model_type,
+            "features_used": [
+                "team_strength",
+                "recent_performance",
+                "home_field_advantage",
+            ],
         }
 
-    def _create_learning_path_chart(self, parameters: Dict[str, Any], user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _create_learning_path_chart(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Create visualization for learning paths"""
-        path_data = parameters.get('path_data', [])
-        chart_type = parameters.get('chart_type', 'flowchart')
-        format_type = parameters.get('format', 'json')
+        path_data = parameters.get("path_data", [])
+        chart_type = parameters.get("chart_type", "flowchart")
+        format_type = parameters.get("format", "json")
 
         # Generate mock chart data
         chart_data = {
-            'type': chart_type,
-            'nodes': path_data,
-            'edges': [],
-            'layout': 'hierarchical'
+            "type": chart_type,
+            "nodes": path_data,
+            "edges": [],
+            "layout": "hierarchical",
         }
 
         # Create edges (connections between nodes)
         for i in range(len(path_data) - 1):
-            chart_data['edges'].append({
-                'from': path_data[i],
-                'to': path_data[i + 1]
-            })
+            chart_data["edges"].append({"from": path_data[i], "to": path_data[i + 1]})
 
         return {
-            'chart_data': chart_data,
-            'chart_url': f'/charts/{hash(str(path_data))}',  # Mock URL
-            'format': format_type
+            "chart_data": chart_data,
+            "chart_url": f"/charts/{hash(str(path_data))}",  # Mock URL
+            "format": format_type,
         }
 
-    def _analyze_feature_importance(self, parameters: Dict[str, Any], user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _analyze_feature_importance(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Analyze feature importance using SHAP values"""
-        model_path = parameters.get('model_path')
-        feature_names = parameters.get('feature_names', [])
+        model_path = parameters.get("model_path")
+        feature_names = parameters.get("feature_names", [])
 
         # Mock SHAP analysis results
         importance_scores = {
@@ -710,36 +787,41 @@ class ToolLoader:
         }
 
         # Sort by importance
-        sorted_features = sorted(importance_scores.items(), key=lambda x: x[1], reverse=True)
+        sorted_features = sorted(
+            importance_scores.items(), key=lambda x: x[1], reverse=True
+        )
 
         insights = [
             f"Most important feature: {sorted_features[0][0]} ({sorted_features[0][1]:.3f})",
             f"Top 3 features account for {sum(score for _, score in sorted_features[:3]):.1%} of predictive power",
-            f"Consider feature engineering for lower-importance variables"
+            f"Consider feature engineering for lower-importance variables",
         ]
 
         return {
-            'importance_scores': dict(sorted_features),
-            'summary_insights': insights,
-            'total_features_analyzed': len(feature_names)
+            "importance_scores": dict(sorted_features),
+            "summary_insights": insights,
+            "total_features_analyzed": len(feature_names),
         }
 
-    def _export_analysis_results(self, parameters: Dict[str, Any], user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _export_analysis_results(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Export analysis results to various formats"""
-        data = parameters.get('data', {})
-        format_type = parameters.get('format', 'json')
-        filename = parameters.get('filename', f'analysis_export.{format_type}')
+        data = parameters.get("data", {})
+        format_type = parameters.get("format", "json")
+        filename = parameters.get("filename", f"analysis_export.{format_type}")
 
-        export_path = Path(self.base_path) / 'exports' / filename
+        export_path = Path(self.base_path) / "exports" / filename
         export_path.parent.mkdir(exist_ok=True)
 
         try:
-            if format_type == 'json':
-                with open(export_path, 'w') as f:
+            if format_type == "json":
+                with open(export_path, "w") as f:
                     json.dump(data, f, indent=2, default=str)
-            elif format_type == 'csv':
+            elif format_type == "csv":
                 # Simplified CSV export
                 import pandas as pd
+
                 if isinstance(data, dict):
                     df = pd.DataFrame([data])
                 else:
@@ -749,78 +831,82 @@ class ToolLoader:
             file_size = export_path.stat().st_size if export_path.exists() else 0
 
             return {
-                'export_path': str(export_path),
-                'file_size': file_size,
-                'success': True,
-                'format': format_type
+                "export_path": str(export_path),
+                "file_size": file_size,
+                "success": True,
+                "format": format_type,
             }
 
         except Exception as e:
             return {
-                'export_path': str(export_path),
-                'file_size': 0,
-                'success': False,
-                'error': str(e),
-                'format': format_type
+                "export_path": str(export_path),
+                "file_size": 0,
+                "success": False,
+                "error": str(e),
+                "format": format_type,
             }
 
-    def _convert_to_toon(self, parameters: Dict[str, Any], user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _convert_to_toon(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Convert JSON data to TOON format for token optimization"""
         try:
             # Import TOON format module
             import sys
             from pathlib import Path
+
             project_root = Path(self.base_path).resolve()
             if str(project_root / "src") not in sys.path:
                 sys.path.insert(0, str(project_root / "src"))
-            
+
             from toon_format import encode, estimate_token_savings
-            
-            data = parameters.get('data', {})
-            output_path = parameters.get('output_path')
-            estimate_savings = parameters.get('estimate_savings', False)
-            
+
+            data = parameters.get("data", {})
+            output_path = parameters.get("output_path")
+            estimate_savings = parameters.get("estimate_savings", False)
+
             # Encode to TOON
             toon_output = encode(data)
-            
+
             # Estimate token savings if requested
             token_savings = 0.0
             if estimate_savings:
                 savings_data = estimate_token_savings(data, toon_output)
-                token_savings = savings_data.get('token_savings_percent', 0.0)
-            
+                token_savings = savings_data.get("token_savings_percent", 0.0)
+
             # Write to file if output_path provided
             if output_path:
                 output_file = Path(self.base_path) / output_path
                 output_file.parent.mkdir(parents=True, exist_ok=True)
                 output_file.write_text(toon_output)
                 logger.info(f"TOON output written to {output_file}")
-            
+
             return {
-                'toon_output': toon_output,
-                'token_savings_percent': token_savings,
-                'output_path': str(output_path) if output_path else None,
-                'success': True
+                "toon_output": toon_output,
+                "token_savings_percent": token_savings,
+                "output_path": str(output_path) if output_path else None,
+                "success": True,
             }
-            
+
         except ImportError as e:
             logger.error(f"TOON format module not available: {e}")
             return {
-                'toon_output': '',
-                'token_savings_percent': 0.0,
-                'output_path': None,
-                'success': False,
-                'error': f"TOON format module not available: {str(e)}. Install with: npm install -g @toon-format/cli"
+                "toon_output": "",
+                "token_savings_percent": 0.0,
+                "output_path": None,
+                "success": False,
+                "error": f"TOON format module not available: {str(e)}. Install with: npm install -g @toon-format/cli",
             }
         except Exception as e:
             logger.error(f"Error converting to TOON: {e}")
             return {
-                'toon_output': '',
-                'token_savings_percent': 0.0,
-                'output_path': None,
-                'success': False,
-                'error': str(e)
+                "toon_output": "",
+                "token_savings_percent": 0.0,
+                "output_path": None,
+                "success": False,
+                "error": str(e),
             }
+
 
 # Example usage
 if __name__ == "__main__":
@@ -842,11 +928,11 @@ if __name__ == "__main__":
         {
             "notebook_paths": [
                 "starter_pack/01_intro_to_data.ipynb",
-                "model_pack/03_xgboost_win_probability.ipynb"
+                "model_pack/03_xgboost_win_probability.ipynb",
             ],
-            "include_content": False
+            "include_content": False,
         },
-        {"role": "analyst"}
+        {"role": "analyst"},
     )
 
     print(f"Tool execution result: {result.success}")

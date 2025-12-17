@@ -4,31 +4,35 @@ Performance benchmark suite for Week 13 system.
 Tests response times, memory usage, and throughput under load.
 """
 
-import pytest
 import sys
-import time
-import psutil
 import threading
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from pathlib import Path
-from typing import Dict, List, Any
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, List
+
+import psutil
+import pytest
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from agents.week13_consolidation_agent import Week13ConsolidationAgent
-from agents.legacy_creation_agent import LegacyCreationAgent
 from agents.analytics_orchestrator import AnalyticsOrchestrator, AnalyticsRequest
+from agents.legacy_creation_agent import LegacyCreationAgent
+from agents.week13_consolidation_agent import Week13ConsolidationAgent
+
 
 @dataclass
 class PerformanceMetrics:
     """Performance metrics container"""
+
     execution_time: float
     memory_usage_mb: float
     cpu_percent: float
     success: bool
     error_message: str = ""
+
 
 class Week13PerformanceBenchmark:
     """Performance benchmark suite for Week 13 system"""
@@ -61,7 +65,7 @@ class Week13PerformanceBenchmark:
                 execution_time=execution_time,
                 memory_usage_mb=final_memory - initial_memory,
                 cpu_percent=final_cpu - initial_cpu,
-                success=True
+                success=True,
             )
         except Exception as e:
             execution_time = time.time() - start_time
@@ -70,7 +74,7 @@ class Week13PerformanceBenchmark:
                 memory_usage_mb=0,
                 cpu_percent=0,
                 success=False,
-                error_message=str(e)
+                error_message=str(e),
             )
 
     def test_consolidation_performance(self):
@@ -82,7 +86,7 @@ class Week13PerformanceBenchmark:
             self.consolidation_agent._execute_action,
             "asset_discovery",
             {"test_mode": True},
-            {"user_id": "perf_test"}
+            {"user_id": "perf_test"},
         )
 
         print(f"   Single execution: {metrics.execution_time:.3f}s")
@@ -101,7 +105,7 @@ class Week13PerformanceBenchmark:
                     self.consolidation_agent._execute_action,
                     "asset_discovery",
                     {"test_mode": True},
-                    {"user_id": f"perf_test_{i}"}
+                    {"user_id": f"perf_test_{i}"},
                 )
                 for i in range(10)
             ]
@@ -110,8 +114,12 @@ class Week13PerformanceBenchmark:
                 metrics = future.result()
                 concurrent_metrics.append(metrics)
 
-        avg_time = sum(m.execution_time for m in concurrent_metrics) / len(concurrent_metrics)
-        success_rate = sum(1 for m in concurrent_metrics if m.success) / len(concurrent_metrics)
+        avg_time = sum(m.execution_time for m in concurrent_metrics) / len(
+            concurrent_metrics
+        )
+        success_rate = sum(1 for m in concurrent_metrics if m.success) / len(
+            concurrent_metrics
+        )
 
         print(f"   Concurrent avg: {avg_time:.3f}s")
         print(f"   Success rate: {success_rate:.1%}")
@@ -128,7 +136,7 @@ class Week13PerformanceBenchmark:
             self.legacy_agent._execute_action,
             "template_extraction",
             {"test_mode": True, "max_templates": 3},
-            {"user_id": "perf_test"}
+            {"user_id": "perf_test"},
         )
 
         print(f"   Single execution: {metrics.execution_time:.3f}s")
@@ -145,10 +153,12 @@ class Week13PerformanceBenchmark:
                 self.legacy_agent._execute_action,
                 "template_extraction",
                 {"test_mode": True, "max_templates": 2},
-                {"user_id": f"perf_test_{i}"}
+                {"user_id": f"perf_test_{i}"},
             )
             batch_times.append(metrics.execution_time)
-            assert metrics.success, f"Batch operation {i} failed: {metrics.error_message}"
+            assert metrics.success, (
+                f"Batch operation {i} failed: {metrics.error_message}"
+            )
 
         avg_batch_time = sum(batch_times) / len(batch_times)
         print(f"   Batch avg: {avg_batch_time:.3f}s")
@@ -161,10 +171,12 @@ class Week13PerformanceBenchmark:
         requests = [
             AnalyticsRequest(
                 user_id=f"perf_user_{i}",
-                query=f"Consolidate Week {i % 2 + 13} analytics" if i % 2 == 0 else "Extract templates from Week 13",
+                query=f"Consolidate Week {i % 2 + 13} analytics"
+                if i % 2 == 0
+                else "Extract templates from Week 13",
                 request_type="analysis",
                 parameters={},
-                user_context={}
+                user_context={},
             )
             for i in range(20)
         ]
@@ -184,7 +196,9 @@ class Week13PerformanceBenchmark:
 
         total_time = time.time() - start_time
         throughput = len(requests) / total_time
-        success_rate = sum(1 for r in results if r.status in ["success", "partial_success"]) / len(results)
+        success_rate = sum(
+            1 for r in results if r.status in ["success", "partial_success"]
+        ) / len(results)
         avg_response_time = sum(r.execution_time for r in results) / len(results)
 
         print(f"   Total requests: {len(requests)}")
@@ -195,7 +209,9 @@ class Week13PerformanceBenchmark:
 
         assert success_rate >= 0.8, f"Low success rate: {success_rate:.1%}"
         assert throughput >= 2.0, f"Low throughput: {throughput:.1f} req/s"
-        assert avg_response_time < 3.0, f"High avg response time: {avg_response_time:.3f}s"
+        assert avg_response_time < 3.0, (
+            f"High avg response time: {avg_response_time:.3f}s"
+        )
 
     def test_memory_efficiency(self):
         """Test memory usage and efficiency"""
@@ -211,7 +227,7 @@ class Week13PerformanceBenchmark:
             result = self.consolidation_agent._execute_action(
                 "asset_discovery",
                 {"test_mode": True},
-                {"user_id": f"memory_test_{operations}"}
+                {"user_id": f"memory_test_{operations}"},
             )
 
             if result["status"] == "success":
@@ -222,10 +238,14 @@ class Week13PerformanceBenchmark:
                 current_memory = process.memory_info().rss / 1024 / 1024
                 memory_increase = current_memory - initial_memory
 
-                print(f"   Operations: {operations}, Memory increase: {memory_increase:.1f}MB")
+                print(
+                    f"   Operations: {operations}, Memory increase: {memory_increase:.1f}MB"
+                )
 
                 # Memory shouldn't grow excessively
-                assert memory_increase < 100, f"Memory leak detected: {memory_increase:.1f}MB increase"
+                assert memory_increase < 100, (
+                    f"Memory leak detected: {memory_increase:.1f}MB increase"
+                )
 
     def test_stress_load(self):
         """Test system under stress load"""
@@ -242,14 +262,14 @@ class Week13PerformanceBenchmark:
                         self.consolidation_agent._execute_action,
                         "asset_discovery",
                         {"test_mode": True},
-                        {"user_id": f"stress_user_{worker_id}_{i}"}
+                        {"user_id": f"stress_user_{worker_id}_{i}"},
                     )
                 else:
                     metrics = self.measure_performance(
                         self.legacy_agent._execute_action,
                         "template_extraction",
                         {"test_mode": True, "max_templates": 2},
-                        {"user_id": f"stress_user_{worker_id}_{i}"}
+                        {"user_id": f"stress_user_{worker_id}_{i}"},
                     )
 
                 results.append(metrics)
@@ -284,12 +304,15 @@ class Week13PerformanceBenchmark:
         print(f"   Stress test completed:")
         print(f"   - Total operations: {total_operations}")
         print(f"   - Total time: {total_time:.2f}s")
-        print(f"   - Operations/sec: {total_operations/total_time:.1f}")
+        print(f"   - Operations/sec: {total_operations / total_time:.1f}")
         print(f"   - Success rate: {success_rate:.1%}")
         print(f"   - Avg time per operation: {avg_time:.3f}s")
 
-        assert success_rate >= 0.7, f"Stress test success rate too low: {success_rate:.1%}"
+        assert success_rate >= 0.7, (
+            f"Stress test success rate too low: {success_rate:.1%}"
+        )
         assert avg_time < 5.0, f"Stress test operations too slow: {avg_time:.3f}s"
+
 
 def run_performance_benchmark():
     """Run complete performance benchmark suite"""
@@ -329,6 +352,7 @@ def run_performance_benchmark():
     except Exception as e:
         print(f"❌ Performance benchmark failed: {str(e)}")
         raise
+
 
 if __name__ == "__main__":
     run_performance_benchmark()

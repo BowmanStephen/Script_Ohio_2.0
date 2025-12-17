@@ -87,7 +87,9 @@ def _build_team_game_records(games_df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame.from_records(records)
 
 
-def _compute_team_features(team_games: pd.DataFrame, config: ColemanConfig) -> pd.DataFrame:
+def _compute_team_features(
+    team_games: pd.DataFrame, config: ColemanConfig
+) -> pd.DataFrame:
     grouped = team_games.groupby("team")
     team_stats = grouped["margin"].agg(
         avg_margin="mean",
@@ -96,11 +98,17 @@ def _compute_team_features(team_games: pd.DataFrame, config: ColemanConfig) -> p
 
     home_margin = team_games[team_games["is_home"]].groupby("team")["margin"].mean()
     away_margin = team_games[~team_games["is_home"]].groupby("team")["margin"].mean()
-    early_games = team_games[team_games["week"] <= config.early_week_threshold].groupby("team")["margin"].count()
+    early_games = (
+        team_games[team_games["week"] <= config.early_week_threshold]
+        .groupby("team")["margin"]
+        .count()
+    )
 
     team_stats["home_margin"] = home_margin
     team_stats["away_margin"] = away_margin
-    team_stats["home_road_split"] = team_stats["home_margin"].fillna(0) - team_stats["away_margin"].fillna(0)
+    team_stats["home_road_split"] = team_stats["home_margin"].fillna(0) - team_stats[
+        "away_margin"
+    ].fillna(0)
     team_stats["early_games"] = early_games.reindex(team_stats.index).fillna(0)
 
     team_stats = team_stats.reset_index()
@@ -113,7 +121,9 @@ def _merge_rating_sources(
     massey_df: pd.DataFrame,
     cfbd_df: pd.DataFrame,
 ) -> pd.DataFrame:
-    massey_subset = massey_df[["team", "rating"]].rename(columns={"rating": "massey_rating"})
+    massey_subset = massey_df[["team", "rating"]].rename(
+        columns={"rating": "massey_rating"}
+    )
     merged = team_stats.merge(massey_subset, on="team", how="left")
 
     if not cfbd_df.empty:
@@ -126,7 +136,13 @@ def _merge_rating_sources(
 
     merged["disagreement_sp_massey"] = merged["massey_rating"] - merged["sp_rating"]
     merged["disagreement_fpi_massey"] = merged["massey_rating"] - merged["fpi_rating"]
-    rating_cols = ["massey_rating", "sp_rating", "fpi_rating", "elo_rating", "srs_rating"]
+    rating_cols = [
+        "massey_rating",
+        "sp_rating",
+        "fpi_rating",
+        "elo_rating",
+        "srs_rating",
+    ]
     merged["rating_disagreement_std"] = merged[rating_cols].std(axis=1)
     return merged
 
@@ -255,4 +271,3 @@ def load_coleman_ratings(
 
 
 __all__ = ["ColemanConfig", "load_coleman_ratings", "train_coleman_metamodel"]
-

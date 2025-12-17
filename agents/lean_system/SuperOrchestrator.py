@@ -12,25 +12,27 @@ Performance Targets:
 - Response Time: <100ms total
 """
 
-import time
+import asyncio
 import logging
-from typing import Dict, List, Any, Optional, Union
+import sys
+import time
 from dataclasses import dataclass
 from enum import Enum
-import asyncio
 from pathlib import Path
-import sys
+from typing import Any, Dict, List, Optional, Union
 
 # Add parent directories to path
 sys.path.append(str(Path(__file__).parent.parent.parent))
 sys.path.append(str(Path(__file__).parent.parent))
 
-from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
+from agents.core.agent_framework import AgentCapability, BaseAgent, PermissionLevel
 
 logger = logging.getLogger(__name__)
 
+
 class RequestType(Enum):
     """Request types for intelligent routing"""
+
     ANALYSIS = "analysis"
     PREDICTION = "prediction"
     LEARNING = "learning"
@@ -40,9 +42,11 @@ class RequestType(Enum):
     PERFORMANCE = "performance"
     WEEKLY = "weekly"
 
+
 @dataclass
 class AnalyticsRequest:
     """Simplified request structure"""
+
     user_id: str
     query: str
     request_type: RequestType
@@ -51,14 +55,17 @@ class AnalyticsRequest:
     priority: int = 1
     session_id: Optional[str] = None
 
+
 @dataclass
 class AnalyticsResponse:
     """Simplified response structure"""
+
     status: str
     data: Any
     metadata: Dict[str, Any]
     execution_time: float
     error_message: Optional[str] = None
+
 
 class ModelPool:
     """Shared model pool to prevent duplicate loading"""
@@ -75,23 +82,26 @@ class ModelPool:
             try:
                 # Import and load model only when needed
                 from src.models.execution.engine import ModelExecutionEngine
+
                 engine = ModelExecutionEngine()
 
-                if hasattr(engine, f'_{model_name}'):
-                    self._models[model_name] = getattr(engine, f'_{model_name}')
+                if hasattr(engine, f"_{model_name}"):
+                    self._models[model_name] = getattr(engine, f"_{model_name}")
                 else:
                     # Try to load from model_pack
-                    import joblib
                     import pickle
+
+                    import joblib
+
                     model_path = f"model_pack/{model_name}.joblib"
                     if not Path(model_path).exists():
                         model_path = f"model_pack/{model_name}.pkl"
 
                     if Path(model_path).exists():
-                        if model_path.endswith('.joblib'):
+                        if model_path.endswith(".joblib"):
                             self._models[model_name] = joblib.load(model_path)
                         else:
-                            with open(model_path, 'rb') as f:
+                            with open(model_path, "rb") as f:
                                 self._models[model_name] = pickle.load(f)
                     else:
                         raise FileNotFoundError(f"Model {model_name} not found")
@@ -111,8 +121,9 @@ class ModelPool:
         return {
             "loaded_models": list(self._models.keys()),
             "model_count": len(self._models),
-            "load_times": self._load_times
+            "load_times": self._load_times,
         }
+
 
 class SuperOrchestrator(BaseAgent):
     """
@@ -126,7 +137,7 @@ class SuperOrchestrator(BaseAgent):
         super().__init__(
             agent_id=agent_id,
             name="Super Orchestrator",
-            permission_level=PermissionLevel.ADMIN
+            permission_level=PermissionLevel.ADMIN,
         )
 
         # Performance optimizations
@@ -137,14 +148,16 @@ class SuperOrchestrator(BaseAgent):
             "total_requests": 0,
             "avg_response_time": 0,
             "cache_hits": 0,
-            "cache_misses": 0
+            "cache_misses": 0,
         }
 
         # Direct agent references (no factory pattern)
         self._core_agents = {}
         self._initialize_agents()
 
-        logger.info(f"SuperOrchestrator initialized with {len(self._core_agents)} agents")
+        logger.info(
+            f"SuperOrchestrator initialized with {len(self._core_agents)} agents"
+        )
 
     def _define_capabilities(self) -> List[AgentCapability]:
         """Define super orchestrator capabilities"""
@@ -155,7 +168,7 @@ class SuperOrchestrator(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE,
                 tools_required=["routing", "caching", "monitoring"],
                 data_access=["all"],
-                execution_time_estimate=0.05  # 50ms target
+                execution_time_estimate=0.05,  # 50ms target
             ),
             AgentCapability(
                 name="intelligent_routing",
@@ -163,7 +176,7 @@ class SuperOrchestrator(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE,
                 tools_required=["routing", "optimization"],
                 data_access=["all"],
-                execution_time_estimate=0.01  # 10ms routing
+                execution_time_estimate=0.01,  # 10ms routing
             ),
             AgentCapability(
                 name="performance_monitoring",
@@ -171,7 +184,7 @@ class SuperOrchestrator(BaseAgent):
                 permission_required=PermissionLevel.READ_ONLY,
                 tools_required=["monitoring", "metrics"],
                 data_access=["performance"],
-                execution_time_estimate=0.001
+                execution_time_estimate=0.001,
             ),
             AgentCapability(
                 name="legacy_compatibility",
@@ -179,20 +192,22 @@ class SuperOrchestrator(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE_WRITE,
                 tools_required=["compatibility", "translation"],
                 data_access=["all"],
-                execution_time_estimate=0.02
-            )
+                execution_time_estimate=0.02,
+            ),
         ]
 
     def _initialize_agents(self):
         """Initialize core agents with lazy loading"""
         try:
             # Import agent classes
-            from agents.learning_navigator_agent import LearningNavigatorAgent
             from agents.insight_generator_agent import InsightGeneratorAgent
-            from agents.weekly_prediction_generation_agent import WeeklyPredictionGenerationAgent
-            from agents.weekly_matchup_analysis_agent import WeeklyMatchupAnalysisAgent
-            from agents.quality_assurance_agent import QualityAssuranceAgent
+            from agents.learning_navigator_agent import LearningNavigatorAgent
             from agents.performance_monitor_agent import PerformanceMonitorAgent
+            from agents.quality_assurance_agent import QualityAssuranceAgent
+            from agents.weekly_matchup_analysis_agent import WeeklyMatchupAnalysisAgent
+            from agents.weekly_prediction_generation_agent import (
+                WeeklyPredictionGenerationAgent,
+            )
 
             # Store classes for lazy instantiation
             self._agent_classes = {
@@ -201,7 +216,7 @@ class SuperOrchestrator(BaseAgent):
                 "prediction": WeeklyPredictionGenerationAgent,
                 "matchup": WeeklyMatchupAnalysisAgent,
                 "quality": QualityAssuranceAgent,
-                "performance": PerformanceMonitorAgent
+                "performance": PerformanceMonitorAgent,
             }
 
             logger.info(f"Agent classes loaded: {list(self._agent_classes.keys())}")
@@ -234,10 +249,10 @@ class SuperOrchestrator(BaseAgent):
             RequestType.INSIGHT: "insight",
             RequestType.PREDICTION: "prediction",
             RequestType.WEEKLY: "prediction",  # Weekly predictions
-            RequestType.ANALYSIS: "insight",   # Analysis -> insights
+            RequestType.ANALYSIS: "insight",  # Analysis -> insights
             RequestType.VALIDATION: "quality",
             RequestType.PERFORMANCE: "performance",
-            RequestType.DATA: "prediction"     # Data access through prediction agent
+            RequestType.DATA: "prediction",  # Data access through prediction agent
         }
 
         agent_type = route_map.get(request.request_type)
@@ -246,8 +261,9 @@ class SuperOrchestrator(BaseAgent):
 
         return agent_type
 
-    def _execute_action(self, action: str, parameters: Dict[str, Any],
-                       user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_action(
+        self, action: str, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Execute super orchestrator actions"""
         try:
             if action == "process_request":
@@ -260,13 +276,11 @@ class SuperOrchestrator(BaseAgent):
                 raise ValueError(f"Unknown action: {action}")
         except Exception as e:
             logger.error(f"Error in {self.__class__.__name__}: {str(e)}")
-            return {
-                "status": "error",
-                "error_message": str(e),
-                "execution_time": 0
-            }
+            return {"status": "error", "error_message": str(e), "execution_time": 0}
 
-    def _process_request(self, parameters: Dict[str, Any], user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _process_request(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Process analytics request with performance tracking"""
         start_time = time.time()
 
@@ -277,7 +291,7 @@ class SuperOrchestrator(BaseAgent):
                 query=parameters.get("query", ""),
                 request_type=RequestType(parameters.get("request_type", "analysis")),
                 parameters=parameters,
-                context=user_context
+                context=user_context,
             )
 
             # Check cache first
@@ -299,7 +313,7 @@ class SuperOrchestrator(BaseAgent):
                     data=None,
                     metadata={"error": "No suitable agent found"},
                     execution_time=time.time() - start_time,
-                    error_message="Request routing failed"
+                    error_message="Request routing failed",
                 ).__dict__
 
             # Get agent and execute
@@ -310,18 +324,24 @@ class SuperOrchestrator(BaseAgent):
                     data=None,
                     metadata={"error": f"Failed to initialize {agent_type} agent"},
                     execution_time=time.time() - start_time,
-                    error_message="Agent initialization failed"
+                    error_message="Agent initialization failed",
                 ).__dict__
 
             # Execute request on agent
             try:
-                if hasattr(agent, 'process_request'):
-                    result = agent.process_request(request.query, request.parameters, request.context)
-                elif hasattr(agent, '_execute_action'):
-                    result = agent._execute_action('handle_request', request.parameters, request.context)
+                if hasattr(agent, "process_request"):
+                    result = agent.process_request(
+                        request.query, request.parameters, request.context
+                    )
+                elif hasattr(agent, "_execute_action"):
+                    result = agent._execute_action(
+                        "handle_request", request.parameters, request.context
+                    )
                 else:
                     # Fallback to main capability
-                    result = agent._execute_action(request.request_type.value, request.parameters, request.context)
+                    result = agent._execute_action(
+                        request.request_type.value, request.parameters, request.context
+                    )
 
                 # Create response
                 response = AnalyticsResponse(
@@ -330,9 +350,9 @@ class SuperOrchestrator(BaseAgent):
                     metadata={
                         "agent_used": agent_type,
                         "request_type": request.request_type.value,
-                        "performance": self.model_pool.get_memory_usage()
+                        "performance": self.model_pool.get_memory_usage(),
                     },
-                    execution_time=time.time() - start_time
+                    execution_time=time.time() - start_time,
                 ).__dict__
 
             except Exception as e:
@@ -340,9 +360,12 @@ class SuperOrchestrator(BaseAgent):
                 response = AnalyticsResponse(
                     status="error",
                     data=None,
-                    metadata={"agent_used": agent_type, "error_type": "agent_execution"},
+                    metadata={
+                        "agent_used": agent_type,
+                        "error_type": "agent_execution",
+                    },
                     execution_time=time.time() - start_time,
-                    error_message=str(e)
+                    error_message=str(e),
                 ).__dict__
 
             # Cache successful responses
@@ -352,9 +375,10 @@ class SuperOrchestrator(BaseAgent):
             # Update metrics
             self._performance_metrics["total_requests"] += 1
             self._performance_metrics["avg_response_time"] = (
-                (self._performance_metrics["avg_response_time"] * (self._performance_metrics["total_requests"] - 1) +
-                 response["execution_time"]) / self._performance_metrics["total_requests"]
-            )
+                self._performance_metrics["avg_response_time"]
+                * (self._performance_metrics["total_requests"] - 1)
+                + response["execution_time"]
+            ) / self._performance_metrics["total_requests"]
 
             return response
 
@@ -365,7 +389,7 @@ class SuperOrchestrator(BaseAgent):
                 data=None,
                 metadata={"error_type": "orchestration_failure"},
                 execution_time=time.time() - start_time,
-                error_message=str(e)
+                error_message=str(e),
             ).__dict__
 
     def _get_performance_metrics(self) -> Dict[str, Any]:
@@ -376,9 +400,17 @@ class SuperOrchestrator(BaseAgent):
             "agent_cache_size": len(self._agent_cache),
             "response_cache_size": len(self._response_cache),
             "cache_hit_rate": (
-                self._performance_metrics["cache_hits"] /
-                max(1, self._performance_metrics["cache_hits"] + self._performance_metrics["cache_misses"])
-            ) if self._performance_metrics["cache_hits"] + self._performance_metrics["cache_misses"] > 0 else 0
+                self._performance_metrics["cache_hits"]
+                / max(
+                    1,
+                    self._performance_metrics["cache_hits"]
+                    + self._performance_metrics["cache_misses"],
+                )
+            )
+            if self._performance_metrics["cache_hits"]
+            + self._performance_metrics["cache_misses"]
+            > 0
+            else 0,
         }
 
     def _clear_cache(self) -> Dict[str, Any]:
@@ -391,33 +423,42 @@ class SuperOrchestrator(BaseAgent):
         return {
             "status": "success",
             "message": "Caches cleared",
-            "timestamp": time.time()
+            "timestamp": time.time(),
         }
 
     # Legacy compatibility methods
-    def process_analytics_request(self, user_id: str, query: str, request_type: str,
-                                 parameters: Dict[str, Any], context: Dict[str, Any]) -> AnalyticsResponse:
+    def process_analytics_request(
+        self,
+        user_id: str,
+        query: str,
+        request_type: str,
+        parameters: Dict[str, Any],
+        context: Dict[str, Any],
+    ) -> AnalyticsResponse:
         """Legacy compatibility method"""
         request = AnalyticsRequest(
             user_id=user_id,
             query=query,
             request_type=RequestType(request_type),
             parameters=parameters,
-            context=context
+            context=context,
         )
 
-        result = self._process_request({
-            "query": query,
-            "request_type": request_type,
-            "parameters": parameters
-        }, {"user_id": user_id})
+        result = self._process_request(
+            {"query": query, "request_type": request_type, "parameters": parameters},
+            {"user_id": user_id},
+        )
 
         return AnalyticsResponse(**result)
 
+
 # Factory function for easy instantiation
-def create_super_orchestrator(agent_id: str = "super_orchestrator") -> SuperOrchestrator:
+def create_super_orchestrator(
+    agent_id: str = "super_orchestrator",
+) -> SuperOrchestrator:
     """Create and return SuperOrchestrator instance"""
     return SuperOrchestrator(agent_id)
+
 
 # Quick test function
 def test_super_orchestrator():
@@ -438,7 +479,7 @@ def test_super_orchestrator():
             query="test request",
             request_type="analysis",
             parameters={"test": True},
-            context={}
+            context={},
         )
         print(f"📝 Response: {response}")
 
@@ -446,6 +487,7 @@ def test_super_orchestrator():
 
     except Exception as e:
         print(f"❌ SuperOrchestrator test failed: {str(e)}")
+
 
 if __name__ == "__main__":
     test_super_orchestrator()

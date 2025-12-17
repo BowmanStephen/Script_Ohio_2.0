@@ -1,17 +1,19 @@
 """CFBD Subscription Manager (Polling Implementation)."""
+
 from __future__ import annotations
 
+import asyncio
+import logging
+import os
 import threading
 import time
-import logging
-import asyncio
-import os
 from collections import deque
 from typing import Any, Callable, Deque, Dict, List, Optional
 
 from src.cfbd_client.unified_client import UnifiedCFBDClient
 
 logger = logging.getLogger(__name__)
+
 
 class CFBDSubscriptionHandle:
     """Wraps polling state so callers can stop feeds cleanly."""
@@ -42,12 +44,13 @@ class CFBDSubscriptionManager:
         self._lock = threading.Lock()
         self._polling_interval = polling_interval
         self._use_websockets = use_websockets
-        
+
         # Try to import WebSocket client if requested
         self._ws_client = None
         if use_websockets:
             try:
                 from src.data_sources.cfbd_websocket import CFBDWebSocketClient
+
                 api_key = os.getenv("CFBD_API_KEY")
                 if api_key:
                     self._ws_client = CFBDWebSocketClient(api_key)
@@ -55,13 +58,15 @@ class CFBDSubscriptionManager:
                     logger.warning("CFBD_API_KEY missing, cannot use WebSockets")
                     self._use_websockets = False
             except ImportError:
-                logger.warning("WebSocket dependencies missing, falling back to polling")
+                logger.warning(
+                    "WebSocket dependencies missing, falling back to polling"
+                )
                 self._use_websockets = False
             except Exception as e:
                 logger.warning(f"WebSocket client init failed: {e}")
                 self._use_websockets = False
 
-        # Track seen game states to only emit changes if needed, 
+        # Track seen game states to only emit changes if needed,
         # or just emit all as events? GraphQL usually emits updates.
         # For now, we'll emit the current state as "events".
         self._last_states: Dict[int, Dict[str, Any]] = {}
@@ -72,20 +77,16 @@ class CFBDSubscriptionManager:
 
         stop_event = threading.Event()
         self._handle = CFBDSubscriptionHandle(stop_event)
-        
+
         if self._use_websockets and self._ws_client:
             logger.info("Starting WebSocket scoreboard feed")
             self._thread = threading.Thread(
-                target=self._websocket_loop_wrapper,
-                args=(stop_event,),
-                daemon=True
+                target=self._websocket_loop_wrapper, args=(stop_event,), daemon=True
             )
         else:
             logger.info("Starting REST polling scoreboard feed")
             self._thread = threading.Thread(
-                target=self._poll_scoreboard,
-                args=(stop_event,),
-                daemon=True
+                target=self._poll_scoreboard, args=(stop_event,), daemon=True
             )
         self._thread.start()
 
@@ -103,8 +104,8 @@ class CFBDSubscriptionManager:
         """Async WebSocket subscription loop."""
         # Query for all active games (simplified)
         # Real query should probably filter by current week, but let's grab updates
-        current_season = 2025 # Should come from config
-        
+        current_season = 2025  # Should come from config
+
         # Use subscription query from CFBD_GRAPHQL_GUIDE.md
         # Note: CFBD subscription schema may vary; this is a standard pattern
         query = """
@@ -122,7 +123,7 @@ class CFBDSubscriptionManager:
           }
         }
         """
-        
+
         # Alternative query with filtering (if CFBD supports it):
         # subscription LiveScoreboard($season: Int!) {
         #     game(where: {season: {_eq: $season}, status: {_eq: "in_progress"}}) {
@@ -136,16 +137,16 @@ class CFBDSubscriptionManager:
         #         status
         #     }
         # }
-        
+
         try:
             # Run subscription (no variables needed for ScoreboardFeed)
             async for event in self._ws_client.subscribe(query, None):
                 if stop_event.is_set():
                     break
-                
+
                 # Process event
                 self._process_websocket_event(event)
-                
+
         except Exception as e:
             logger.error(f"WebSocket subscription error: {e}")
             # Re-raise to trigger fallback to REST polling in wrapper
@@ -156,7 +157,7 @@ class CFBDSubscriptionManager:
         # GraphQL subscription payload structure depends on CFBD schema
         # ScoreboardFeed subscription typically returns a "scoreboard" key with game data
         # Handle both "scoreboard" and "game" keys for flexibility
-        
+
         games = []
         if "scoreboard" in payload:
             scoreboard_data = payload["scoreboard"]
@@ -170,37 +171,39 @@ class CFBDSubscriptionManager:
                 games = game_data
             elif isinstance(game_data, dict):
                 games = [game_data]
-        
+
         if not games:
             logger.debug(f"No game data in WebSocket payload: {payload}")
             return
-            
+
         timestamp = time.time()
-        
+
         with self._lock:
             for game in games:
                 # Map to internal format
                 internal_event = {
-                    "gameId": game.get('id'),
-                    "season": game.get('season'),
-                    "week": game.get('week'),
-                    "homeTeam": game.get('homeTeam'),
-                    "awayTeam": game.get('awayTeam'),
-                    "homePoints": game.get('homePoints'),
-                    "awayPoints": game.get('awayPoints'),
-                    "status": game.get('status'),
+                    "gameId": game.get("id"),
+                    "season": game.get("season"),
+                    "week": game.get("week"),
+                    "homeTeam": game.get("homeTeam"),
+                    "awayTeam": game.get("awayTeam"),
+                    "homePoints": game.get("homePoints"),
+                    "awayPoints": game.get("awayPoints"),
+                    "status": game.get("status"),
                     "received_at": timestamp,
-                    "source": "websocket"
+                    "source": "websocket",
                 }
                 self._events.append(internal_event)
-                
+
                 if self._telemetry_hook:
-                    self._telemetry_hook({
-                        "timestamp": timestamp,
-                        "client": "websocket",
-                        "operation": "ScoreboardUpdate",
-                        "gameId": game.get('id')
-                    })
+                    self._telemetry_hook(
+                        {
+                            "timestamp": timestamp,
+                            "client": "websocket",
+                            "operation": "ScoreboardUpdate",
+                            "gameId": game.get("id"),
+                        }
+                    )
 
     def stop(self) -> None:
         if self._handle:
@@ -216,7 +219,7 @@ class CFBDSubscriptionManager:
                 self._fetch_and_process_scoreboard()
             except Exception as e:
                 self._handle_error(e)
-            
+
             # Sleep in chunks to respond to stop_event faster
             for _ in range(int(self._polling_interval)):
                 if stop_event.is_set():
@@ -224,74 +227,77 @@ class CFBDSubscriptionManager:
                 time.sleep(1)
             # Handle remainder
             if not stop_event.is_set():
-                 time.sleep(self._polling_interval % 1)
+                time.sleep(self._polling_interval % 1)
 
     def _fetch_and_process_scoreboard(self) -> None:
-        # Determine current week/season. 
+        # Determine current week/season.
         # Ideally this comes from config or intelligent logic.
         # For 2025, assuming Week 13 as per context or just current date logic.
         # I'll use 2025 and try to guess week or fetch all for 2025 if week not specified.
-        # Fetching all for 2025 might be heavy? 
+        # Fetching all for 2025 might be heavy?
         # `get_games` allows filtering by season.
         # Let's assume 2025 for now.
-        
+
         # Note: client.get_games is cached. We might want to bypass cache or have short TTL.
         # UnifiedClient treats "games" with a specific TTL.
-        # We can't easily bypass cache in `get_games` without modifying it, 
+        # We can't easily bypass cache in `get_games` without modifying it,
         # but if we rely on TTL it's fine.
         # Or we can access api directly.
         # `UnifiedCFBDClient` hides API.
-        
+
         # For polling, we want fresh data.
         # But `UnifiedCFBDClient` caches "games" for 15 mins (default).
         # We might need `get_games(..., cache_ttl=0)`.
         # For now, I will use the client as is. The polling interval is 60s.
         # If cache is 15m, polling every 60s is useless unless cache TTL is low.
-        # I should assume the user configured cache TTL for games/scoreboard appropriately or 
+        # I should assume the user configured cache TTL for games/scoreboard appropriately or
         # `UnifiedCFBDClient` handles "live" data differently.
         # The plan didn't specify adding `use_cache` flag.
         # I'll proceed.
-        
-        games = self._client.get_games(year=2025) # This might be cached!
-        
+
+        games = self._client.get_games(year=2025)  # This might be cached!
+
         events = []
         timestamp = time.time()
-        
+
         # Filter for games that are "in progress" or changed?
         # CFBD doesn't always give "in progress" efficiently without week.
-        
+
         current_games = [g for g in games if self._is_relevant(g)]
-        
+
         with self._lock:
             for game in current_games:
-                gid = game.get('id')
-                if not gid: continue
-                
+                gid = game.get("id")
+                if not gid:
+                    continue
+
                 # Detect change?
                 # Simple approach: just treat every poll result as an "update" event for now,
                 # or only if score changed.
                 last = self._last_states.get(gid)
-                current_score = (game.get('home_points'), game.get('away_points'))
-                
+                current_score = (game.get("home_points"), game.get("away_points"))
+
                 if last:
-                     last_score = (last.get('home_points'), last.get('away_points'))
-                     if current_score != last_score:
-                         events.append(self._make_event(game, timestamp))
+                    last_score = (last.get("home_points"), last.get("away_points"))
+                    if current_score != last_score:
+                        events.append(self._make_event(game, timestamp))
                 else:
-                     events.append(self._make_event(game, timestamp))
-                
+                    events.append(self._make_event(game, timestamp))
+
                 self._last_states[gid] = game
-            
+
             self._events.extend(events)
 
         if self._telemetry_hook and events:
-            self._telemetry_hook({
-                "timestamp": timestamp,
-                "client": "rest_polling",
-                "operation": "ScoreboardFeed",
-                "outcome": "polling_event",
-                "event_count": len(events),
-            })
+            self._telemetry_hook(
+                {
+                    "timestamp": timestamp,
+                    "client": "rest_polling",
+                    "operation": "ScoreboardFeed",
+                    "outcome": "polling_event",
+                    "event_count": len(events),
+                }
+            )
 
     def _is_relevant(self, game: Dict[str, Any]) -> bool:
         # Check if game is likely live or recently finished?
@@ -300,26 +306,28 @@ class CFBDSubscriptionManager:
 
     def _make_event(self, game: Dict[str, Any], timestamp: float) -> Dict[str, Any]:
         return {
-            "gameId": game.get('id'),
-            "season": game.get('season'),
-            "week": game.get('week'),
-            "homeTeam": game.get('home_team'),
-            "awayTeam": game.get('away_team'),
-            "homePoints": game.get('home_points'),
-            "awayPoints": game.get('away_points'),
-            "status": "in_progress", # approximation
-            "received_at": timestamp
+            "gameId": game.get("id"),
+            "season": game.get("season"),
+            "week": game.get("week"),
+            "homeTeam": game.get("home_team"),
+            "awayTeam": game.get("away_team"),
+            "homePoints": game.get("home_points"),
+            "awayPoints": game.get("away_points"),
+            "status": "in_progress",  # approximation
+            "received_at": timestamp,
         }
 
     def _handle_error(self, error: Exception) -> None:
         if self._telemetry_hook:
-            self._telemetry_hook({
-                "timestamp": time.time(),
-                "client": "rest_polling",
-                "operation": "ScoreboardFeed",
-                "outcome": "polling_error",
-                "detail": str(error),
-            })
+            self._telemetry_hook(
+                {
+                    "timestamp": time.time(),
+                    "client": "rest_polling",
+                    "operation": "ScoreboardFeed",
+                    "outcome": "polling_error",
+                    "detail": str(error),
+                }
+            )
 
     def latest_events(self, limit: int = 10) -> List[Dict[str, Any]]:
         with self._lock:
@@ -330,6 +338,7 @@ class CFBDSubscriptionManager:
 # These are simple placeholders that maintain the expected interface
 class GraphQLRequest:
     """Mock GraphQL request class for test compatibility"""
+
     def __init__(self, query: str, operation_name: str = "ScoreboardFeed"):
         self.query = query
         self.operation_name = operation_name
@@ -337,6 +346,7 @@ class GraphQLRequest:
 
 class GraphQLSubscriptionHandle:
     """Mock GraphQL subscription handle for test compatibility"""
+
     def __init__(self, stop_callback: Optional[Callable] = None):
         self._stop_callback = stop_callback
         self._stopped = False
@@ -349,16 +359,27 @@ class GraphQLSubscriptionHandle:
 
 class GraphQLSubscriptionClient:
     """Mock GraphQL subscription client for test compatibility"""
+
     def __init__(self, telemetry_hook: Optional[Callable] = None):
         self.telemetry_hook = telemetry_hook
         self.on_event = None
         self.on_error = None
 
-    def subscribe(self, request: GraphQLRequest, on_event: Callable,
-                   on_error: Callable, operation_name: str = "ScoreboardFeed") -> GraphQLSubscriptionHandle:
+    def subscribe(
+        self,
+        request: GraphQLRequest,
+        on_event: Callable,
+        on_error: Callable,
+        operation_name: str = "ScoreboardFeed",
+    ) -> GraphQLSubscriptionHandle:
         self.on_event = on_event
         self.on_error = on_error
         return GraphQLSubscriptionHandle()
 
 
-__all__ = ["CFBDSubscriptionManager", "CFBDSubscriptionHandle", "GraphQLSubscriptionClient", "GraphQLRequest"]
+__all__ = [
+    "CFBDSubscriptionManager",
+    "CFBDSubscriptionHandle",
+    "GraphQLSubscriptionClient",
+    "GraphQLRequest",
+]

@@ -84,7 +84,11 @@ class CFBDFeatureEngineer:
         """Normalize raw REST payloads into a pandas DataFrame."""
 
         records = self._unwrap_payload(games_payload, source=source)
-        normalized = [self._normalize_record(record, source=source) for record in records if record]
+        normalized = [
+            self._normalize_record(record, source=source)
+            for record in records
+            if record
+        ]
         games_df = pd.DataFrame(normalized)
 
         if games_df.empty:
@@ -98,19 +102,21 @@ class CFBDFeatureEngineer:
             if column not in games_df.columns:
                 games_df[column] = 0.0
             games_df[column] = (
-                pd.to_numeric(games_df[column], errors="coerce")
-                .fillna(0)
-                .astype(float)
+                pd.to_numeric(games_df[column], errors="coerce").fillna(0).astype(float)
             )
         games_df["margin"] = (games_df["home_points"] - games_df["away_points"]).abs()
         if "conference_game" not in games_df.columns:
             games_df["conference_game"] = False
         else:
-            games_df["conference_game"] = games_df["conference_game"].fillna(False).astype(bool)
+            games_df["conference_game"] = (
+                games_df["conference_game"].fillna(False).astype(bool)
+            )
 
         return games_df
 
-    def merge_spreads(self, games_df: pd.DataFrame, lines_payload: Iterable[Dict[str, Any]]) -> pd.DataFrame:
+    def merge_spreads(
+        self, games_df: pd.DataFrame, lines_payload: Iterable[Dict[str, Any]]
+    ) -> pd.DataFrame:
         """Merge betting spread data from the lines endpoint into the games frame."""
 
         if games_df.empty:
@@ -160,7 +166,9 @@ class CFBDFeatureEngineer:
         if metrics_by_game:
             metrics_df = pd.DataFrame.from_dict(metrics_by_game, orient="index")
             metrics_df.index.name = "id"
-            working = working.merge(metrics_df, how="left", left_on="id", right_index=True)
+            working = working.merge(
+                metrics_df, how="left", left_on="id", right_index=True
+            )
 
         if "spread" not in working.columns:
             working["spread"] = pd.NA
@@ -223,7 +231,7 @@ class CFBDFeatureEngineer:
                         pass
             return [self._object_to_dict(payload)]
         return [payload] if isinstance(payload, dict) else []
-    
+
     def _object_to_dict(self, obj: Any) -> Dict[str, Any]:
         """Convert object with attributes to dictionary."""
         result = {}
@@ -244,7 +252,9 @@ class CFBDFeatureEngineer:
                 continue
         return result
 
-    def _normalize_record(self, record: Dict[str, Any], *, source: str) -> Dict[str, Any]:
+    def _normalize_record(
+        self, record: Dict[str, Any], *, source: str
+    ) -> Dict[str, Any]:
         """Normalize REST API record into standard format."""
         normalized = {
             "id": _extract(record, "id", "game_id", "gameId"),
@@ -252,7 +262,9 @@ class CFBDFeatureEngineer:
             "season": _extract(record, "season"),
             "season_type": _extract(record, "season_type", "seasonType"),
             "week": _extract(record, "week"),
-            "neutral_site": _coerce_bool(_extract(record, "neutral_site", "neutralSite")),
+            "neutral_site": _coerce_bool(
+                _extract(record, "neutral_site", "neutralSite")
+            ),
             "home_team": _extract(record, "home_team", "homeTeam"),
             "away_team": _extract(record, "away_team", "awayTeam"),
             "home_conference": _extract(record, "home_conference", "homeConference"),
@@ -264,14 +276,18 @@ class CFBDFeatureEngineer:
             "home_talent": _extract(record, "home_talent", "homeTalent"),
             "away_talent": _extract(record, "away_talent", "awayTalent"),
             "spread": _extract(record, "spread"),
-            "conference_game": _coerce_bool(_extract(record, "conference_game", "conferenceGame")),
+            "conference_game": _coerce_bool(
+                _extract(record, "conference_game", "conferenceGame")
+            ),
         }
 
         media = record.get("media")
         if isinstance(media, list) and media:
             normalized["media"] = media
 
-        normalized["game_key"] = normalized.get("game_key") or self._build_game_key(normalized)
+        normalized["game_key"] = normalized.get("game_key") or self._build_game_key(
+            normalized
+        )
         return normalized
 
     def _build_game_key(self, record: Dict[str, Any]) -> Optional[str]:
@@ -313,43 +329,45 @@ class CFBDFeatureEngineer:
 def calculate_points_per_drive(drives_df: pd.DataFrame) -> float:
     """
     Calculate Points Per Drive (PPD) from drive data.
-    
+
     Args:
         drives_df: DataFrame containing drive data with columns:
                   'start_offense_score', 'end_offense_score'
-                  
+
     Returns:
         Points per drive value
     """
     if drives_df.empty:
         return 0.0
-        
+
     # Calculate points gained by offense per drive
-    points = drives_df['end_offense_score'] - drives_df['start_offense_score']
+    points = drives_df["end_offense_score"] - drives_df["start_offense_score"]
     return points.mean()
 
 
-def calculate_explosive_drive_rate(drives_df: pd.DataFrame, yards_threshold: float = 10.0) -> float:
+def calculate_explosive_drive_rate(
+    drives_df: pd.DataFrame, yards_threshold: float = 10.0
+) -> float:
     """
     Calculate Explosive Drive Rate.
     Defined as percentage of drives averaging >= yards_threshold yards per play.
-    
+
     Args:
         drives_df: DataFrame containing drive data
         yards_threshold: Yards per play threshold for explosive drive
-        
+
     Returns:
         Explosive drive rate (0.0 to 1.0)
     """
     if drives_df.empty:
         return 0.0
-        
+
     # Avoid division by zero
-    valid_drives = drives_df[drives_df['plays'] > 0].copy()
+    valid_drives = drives_df[drives_df["plays"] > 0].copy()
     if valid_drives.empty:
         return 0.0
-        
-    valid_drives['ypp'] = valid_drives['yards'] / valid_drives['plays']
-    explosive_count = (valid_drives['ypp'] >= yards_threshold).sum()
-    
+
+    valid_drives["ypp"] = valid_drives["yards"] / valid_drives["plays"]
+    explosive_count = (valid_drives["ypp"] >= yards_threshold).sum()
+
     return explosive_count / len(drives_df)

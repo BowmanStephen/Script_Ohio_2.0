@@ -20,9 +20,13 @@ try:
     if not _PROJECT_FEATURES_PATH.exists():
         raise FileNotFoundError(str(_PROJECT_FEATURES_PATH))
 
-    _spec = _import_util.spec_from_file_location("project_model_features", _PROJECT_FEATURES_PATH)
+    _spec = _import_util.spec_from_file_location(
+        "project_model_features", _PROJECT_FEATURES_PATH
+    )
     if _spec is None or _spec.loader is None:  # pragma: no cover - defensive
-        raise ImportError(f"Unable to load model features from {_PROJECT_FEATURES_PATH}")
+        raise ImportError(
+            f"Unable to load model features from {_PROJECT_FEATURES_PATH}"
+        )
 
     _module = _import_util.module_from_spec(_spec)
     _spec.loader.exec_module(_module)
@@ -57,7 +61,9 @@ def get_model_features(model_name: str) -> List[str]:
     return []
 
 
-def validate_features(available_features: Iterable[str], expected_features: Sequence[str]) -> Dict[str, Any]:
+def validate_features(
+    available_features: Iterable[str], expected_features: Sequence[str]
+) -> Dict[str, Any]:
     """Validate that expected features exist in the provided feature set."""
 
     available = set(available_features)
@@ -70,4 +76,11 @@ def validate_features(available_features: Iterable[str], expected_features: Sequ
     }
 
 
-__all__ = ["RIDGE_FEATURES", "XGB_FEATURES", "SHARED_FEATURES", "describe_features", "get_model_features", "validate_features"]
+__all__ = [
+    "RIDGE_FEATURES",
+    "XGB_FEATURES",
+    "SHARED_FEATURES",
+    "describe_features",
+    "get_model_features",
+    "validate_features",
+]

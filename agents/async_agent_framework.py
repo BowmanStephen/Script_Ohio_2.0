@@ -25,6 +25,7 @@ This module implements asynchronous processing patterns, connection pooling,
 and concurrent execution for the Script Ohio 2.0 agent system to achieve
 sub-second response times and handle 1000+ concurrent users.
 """
+
 import warnings
 
 warnings.warn(
@@ -32,36 +33,45 @@ warnings.warn(
     "Use synchronous execution pattern from WeeklyAnalysisOrchestrator instead. "
     "See agents/weekly_analysis_orchestrator.py for the recommended pattern.",
     DeprecationWarning,
-    stacklevel=2
+    stacklevel=2,
 )
 
-import os
-import time
 import asyncio
-import logging
-import threading
-import queue
+import inspect
 import json
+import logging
+import multiprocessing as mp
+import os
+import queue
+import threading
+import time
 import weakref
-from typing import Dict, List, Optional, Any, Callable, Union, Awaitable
-from dataclasses import dataclass, asdict
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, as_completed
 from collections import defaultdict, deque
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
+from contextlib import asynccontextmanager
+from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
-import inspect
-import multiprocessing as mp
-from contextlib import asynccontextmanager
+from typing import Any, Awaitable, Callable, Dict, List, Optional, Union
 
-from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel, AgentRequest, AgentResponse, AgentStatus, PermissionLevel
+from agents.core.agent_framework import (
+    AgentCapability,
+    AgentRequest,
+    AgentResponse,
+    AgentStatus,
+    BaseAgent,
+    PermissionLevel,
+)
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class AsyncAgentRequest:
     """Asynchronous agent request with enhanced metadata"""
+
     request_id: str
     agent_type: str
     action: str
@@ -75,9 +85,11 @@ class AsyncAgentRequest:
     retry_count: int = 0
     max_retries: int = 3
 
+
 @dataclass
 class AsyncAgentResponse:
     """Asynchronous agent response"""
+
     request_id: str
     agent_type: str
     status: AgentStatus
@@ -88,12 +100,19 @@ class AsyncAgentResponse:
     completed_at: float
     worker_id: Optional[str] = None
 
+
 class WorkerPool:
     """High-performance worker pool with dynamic scaling"""
 
-    def __init__(self, min_workers: int = 2, max_workers: int = 20,
-                 worker_type: str = 'thread', scale_up_threshold: float = 0.8,
-                 scale_down_threshold: float = 0.3, idle_timeout: int = 300):
+    def __init__(
+        self,
+        min_workers: int = 2,
+        max_workers: int = 20,
+        worker_type: str = "thread",
+        scale_up_threshold: float = 0.8,
+        scale_down_threshold: float = 0.3,
+        idle_timeout: int = 300,
+    ):
         self.min_workers = min_workers
         self.max_workers = max_workers
         self.worker_type = worker_type
@@ -119,25 +138,26 @@ class WorkerPool:
 
     def _initialize_pool(self):
         """Initialize worker pool"""
-        if self.worker_type == 'thread':
+        if self.worker_type == "thread":
             self.executor = ThreadPoolExecutor(
-                max_workers=self.max_workers,
-                thread_name_prefix="async_agent"
+                max_workers=self.max_workers, thread_name_prefix="async_agent"
             )
         else:
-            self.executor = ProcessPoolExecutor(
-                max_workers=self.max_workers
-            )
+            self.executor = ProcessPoolExecutor(max_workers=self.max_workers)
 
         # Create initial workers
         for i in range(self.min_workers):
             self._add_worker()
 
         self.monitoring_active = True
-        self.monitoring_thread = threading.Thread(target=self._monitoring_loop, daemon=True)
+        self.monitoring_thread = threading.Thread(
+            target=self._monitoring_loop, daemon=True
+        )
         self.monitoring_thread.start()
 
-        logger.info(f"Worker pool initialized: {self.min_workers} {self.worker_type} workers")
+        logger.info(
+            f"Worker pool initialized: {self.min_workers} {self.worker_type} workers"
+        )
 
     def _add_worker(self):
         """Add a new worker to the pool"""
@@ -146,11 +166,11 @@ class WorkerPool:
 
         worker_id = f"worker_{len(self.workers)}_{int(time.time())}"
         worker_info = {
-            'id': worker_id,
-            'created_at': time.time(),
-            'tasks_completed': 0,
-            'last_activity': time.time(),
-            'busy': False
+            "id": worker_id,
+            "created_at": time.time(),
+            "tasks_completed": 0,
+            "last_activity": time.time(),
+            "busy": False,
         }
 
         self.workers.append(worker_info)
@@ -166,7 +186,7 @@ class WorkerPool:
 
         try:
             worker_id = self.available_workers.get_nowait()
-            self.workers = [w for w in self.workers if w['id'] != worker_id]
+            self.workers = [w for w in self.workers if w["id"] != worker_id]
             logger.debug(f"Removed worker {worker_id} from pool")
             return True
         except queue.Empty:
@@ -177,12 +197,12 @@ class WorkerPool:
         task_id = f"task_{int(time.time() * 1000000)}"
 
         task_info = {
-            'id': task_id,
-            'func': func,
-            'args': args,
-            'kwargs': kwargs,
-            'submitted_at': time.time(),
-            'status': 'pending'
+            "id": task_id,
+            "func": func,
+            "args": args,
+            "kwargs": kwargs,
+            "submitted_at": time.time(),
+            "status": "pending",
         }
 
         self.pending_tasks.put(task_info)
@@ -197,35 +217,41 @@ class WorkerPool:
                 task_info = self.pending_tasks.get_nowait()
 
                 # Execute task asynchronously
-                future = self.executor.submit(task_info['func'], *task_info['args'], **task_info['kwargs'])
+                future = self.executor.submit(
+                    task_info["func"], *task_info["args"], **task_info["kwargs"]
+                )
 
                 # Mark worker as busy
-                worker = next(w for w in self.workers if w['id'] == worker_id)
-                worker['busy'] = True
-                worker['last_activity'] = time.time()
+                worker = next(w for w in self.workers if w["id"] == worker_id)
+                worker["busy"] = True
+                worker["last_activity"] = time.time()
                 self.busy_workers.add(worker_id)
 
                 # Setup completion callback
-                future.add_done_callback(lambda f, w=worker_id, t=task_info: self._task_completed(f, w, t))
+                future.add_done_callback(
+                    lambda f, w=worker_id, t=task_info: self._task_completed(f, w, t)
+                )
 
                 logger.debug(f"Assigned task {task_info['id']} to worker {worker_id}")
 
             except queue.Empty:
                 break  # No available workers
 
-    def _task_completed(self, future: 'Future', worker_id: str, task_info: Dict[str, Any]):
+    def _task_completed(
+        self, future: "Future", worker_id: str, task_info: Dict[str, Any]
+    ):
         """Handle task completion"""
         try:
             result = future.result()
-            task_info['result'] = result
-            task_info['status'] = 'completed'
-            task_info['completed_at'] = time.time()
+            task_info["result"] = result
+            task_info["status"] = "completed"
+            task_info["completed_at"] = time.time()
 
             # Update worker info
-            worker = next(w for w in self.workers if w['id'] == worker_id)
-            worker['busy'] = False
-            worker['tasks_completed'] += 1
-            worker['last_activity'] = time.time()
+            worker = next(w for w in self.workers if w["id"] == worker_id)
+            worker["busy"] = False
+            worker["tasks_completed"] += 1
+            worker["last_activity"] = time.time()
 
             # Move worker back to available pool
             if worker_id in self.busy_workers:
@@ -233,21 +259,23 @@ class WorkerPool:
             self.available_workers.put(worker_id)
 
             # Record task completion
-            execution_time = task_info['completed_at'] - task_info['submitted_at']
-            self.task_history.append({
-                'task_id': task_info['id'],
-                'worker_id': worker_id,
-                'execution_time': execution_time,
-                'completed_at': task_info['completed_at']
-            })
+            execution_time = task_info["completed_at"] - task_info["submitted_at"]
+            self.task_history.append(
+                {
+                    "task_id": task_info["id"],
+                    "worker_id": worker_id,
+                    "execution_time": execution_time,
+                    "completed_at": task_info["completed_at"],
+                }
+            )
 
             self.completed_tasks.put(task_info)
 
         except Exception as e:
             logger.error(f"Task {task_info['id']} failed: {str(e)}")
-            task_info['error'] = str(e)
-            task_info['status'] = 'failed'
-            task_info['completed_at'] = time.time()
+            task_info["error"] = str(e)
+            task_info["status"] = "failed"
+            task_info["completed_at"] = time.time()
 
             # Return worker to available pool even on error
             if worker_id in self.busy_workers:
@@ -264,29 +292,41 @@ class WorkerPool:
                 utilization = busy_count / total_count if total_count > 0 else 0
 
                 # Check for scaling
-                if utilization > self.scale_up_threshold and total_count < self.max_workers:
+                if (
+                    utilization > self.scale_up_threshold
+                    and total_count < self.max_workers
+                ):
                     if self._add_worker():
-                        self.scale_events.append({
-                            'action': 'scale_up',
-                            'worker_count': total_count + 1,
-                            'utilization': utilization,
-                            'timestamp': time.time()
-                        })
+                        self.scale_events.append(
+                            {
+                                "action": "scale_up",
+                                "worker_count": total_count + 1,
+                                "utilization": utilization,
+                                "timestamp": time.time(),
+                            }
+                        )
 
-                elif utilization < self.scale_down_threshold and total_count > self.min_workers:
+                elif (
+                    utilization < self.scale_down_threshold
+                    and total_count > self.min_workers
+                ):
                     # Check for idle workers
                     idle_workers = [
-                        w for w in self.workers
-                        if not w['busy'] and (time.time() - w['last_activity']) > self.idle_timeout
+                        w
+                        for w in self.workers
+                        if not w["busy"]
+                        and (time.time() - w["last_activity"]) > self.idle_timeout
                     ]
 
                     if idle_workers and self._remove_worker():
-                        self.scale_events.append({
-                            'action': 'scale_down',
-                            'worker_count': total_count - 1,
-                            'utilization': utilization,
-                            'timestamp': time.time()
-                        })
+                        self.scale_events.append(
+                            {
+                                "action": "scale_down",
+                                "worker_count": total_count - 1,
+                                "utilization": utilization,
+                                "timestamp": time.time(),
+                            }
+                        )
 
                 time.sleep(10)  # Check every 10 seconds
 
@@ -302,28 +342,30 @@ class WorkerPool:
 
         # Calculate average execution time
         if self.task_history:
-            avg_execution_time = sum(t['execution_time'] for t in self.task_history) / len(self.task_history)
+            avg_execution_time = sum(
+                t["execution_time"] for t in self.task_history
+            ) / len(self.task_history)
         else:
             avg_execution_time = 0
 
         return {
-            'total_workers': total_workers,
-            'busy_workers': busy_workers,
-            'available_workers': total_workers - busy_workers,
-            'pending_tasks': pending_tasks,
-            'utilization': busy_workers / total_workers if total_workers > 0 else 0,
-            'avg_execution_time': avg_execution_time,
-            'tasks_completed': sum(w['tasks_completed'] for w in self.workers),
-            'scale_events_count': len(self.scale_events),
-            'worker_details': [
+            "total_workers": total_workers,
+            "busy_workers": busy_workers,
+            "available_workers": total_workers - busy_workers,
+            "pending_tasks": pending_tasks,
+            "utilization": busy_workers / total_workers if total_workers > 0 else 0,
+            "avg_execution_time": avg_execution_time,
+            "tasks_completed": sum(w["tasks_completed"] for w in self.workers),
+            "scale_events_count": len(self.scale_events),
+            "worker_details": [
                 {
-                    'id': w['id'],
-                    'tasks_completed': w['tasks_completed'],
-                    'busy': w['busy'],
-                    'last_activity': w['last_activity']
+                    "id": w["id"],
+                    "tasks_completed": w["tasks_completed"],
+                    "busy": w["busy"],
+                    "last_activity": w["last_activity"],
                 }
                 for w in self.workers
-            ]
+            ],
         }
 
     def _define_capabilities(self) -> List[AgentCapability]:
@@ -333,12 +375,13 @@ class WorkerPool:
                 name="base_capability",
                 description="Base agent capability",
                 permission_required=PermissionLevel.READ_EXECUTE_WRITE,
-                tools_required=[]
+                tools_required=[],
             )
         ]
 
-    def _execute_action(self, action: str, parameters: Dict[str, Any],
-                      user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_action(
+        self, action: str, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Execute agent action with proper routing"""
         if action == "validate_models":
             return self._validate_models(parameters, user_context)
@@ -349,11 +392,10 @@ class WorkerPool:
         else:
             raise ValueError(f"Unknown action: {action}")
 
-
     def shutdown(self):
         """Shutdown worker pool"""
         self.monitoring_active = False
-        if hasattr(self, 'monitoring_thread'):
+        if hasattr(self, "monitoring_thread"):
             self.monitoring_thread.join(timeout=5)
 
         if self.executor:
@@ -373,22 +415,27 @@ class AsyncAgentOrchestrator:
         Migration: Use synchronous agent execution (see WeeklyAnalysisOrchestrator pattern).
     """
 
-    def __init__(self, base_path: Optional[str] = None, max_concurrent_requests: int = 1000):
+    def __init__(
+        self, base_path: Optional[str] = None, max_concurrent_requests: int = 1000
+    ):
         import warnings
+
         warnings.warn(
             "AsyncAgentOrchestrator is deprecated and will be removed on 2025-12-19. "
             "Use synchronous agent execution instead (see WeeklyAnalysisOrchestrator pattern).",
             DeprecationWarning,
-            stacklevel=2
+            stacklevel=2,
         )
         self.base_path = base_path or os.getcwd()
         self.max_concurrent_requests = max_concurrent_requests
 
         # Worker pools for different agent types
         self.worker_pools = {
-            'learning_navigator': WorkerPool(min_workers=2, max_workers=10),
-            'model_engine': WorkerPool(min_workers=2, max_workers=8, worker_type='process'),
-            'default': WorkerPool(min_workers=4, max_workers=20)
+            "learning_navigator": WorkerPool(min_workers=2, max_workers=10),
+            "model_engine": WorkerPool(
+                min_workers=2, max_workers=8, worker_type="process"
+            ),
+            "default": WorkerPool(min_workers=4, max_workers=20),
         }
 
         # Request management
@@ -414,7 +461,9 @@ class AsyncAgentOrchestrator:
         self.running = False
         self.processing_loop = None
 
-        logger.info(f"Async Agent Orchestrator initialized: max_concurrent={max_concurrent_requests}")
+        logger.info(
+            f"Async Agent Orchestrator initialized: max_concurrent={max_concurrent_requests}"
+        )
 
     async def start(self):
         """Start the async orchestrator"""
@@ -446,7 +495,7 @@ class AsyncAgentOrchestrator:
         """Submit request for asynchronous processing"""
         try:
             # Check rate limits
-            user_id = request.user_context.get('user_id', 'anonymous')
+            user_id = request.user_context.get("user_id", "anonymous")
             if not await self._check_rate_limit(user_id, request.agent_type):
                 raise Exception(f"Rate limit exceeded for user {user_id}")
 
@@ -458,16 +507,22 @@ class AsyncAgentOrchestrator:
                 # Add to processing queue
                 await self.request_queue.put(request)
 
-                logger.debug(f"Submitted request {request.request_id} for async processing")
+                logger.debug(
+                    f"Submitted request {request.request_id} for async processing"
+                )
                 return request.request_id
             else:
-                raise Exception(f"Circuit breaker open for agent type {request.agent_type}")
+                raise Exception(
+                    f"Circuit breaker open for agent type {request.agent_type}"
+                )
 
         except Exception as e:
             logger.error(f"Failed to submit request {request.request_id}: {str(e)}")
             raise
 
-    async def get_response(self, request_id: str, timeout_seconds: float = 30.0) -> Optional[AsyncAgentResponse]:
+    async def get_response(
+        self, request_id: str, timeout_seconds: float = 30.0
+    ) -> Optional[AsyncAgentResponse]:
         """Get response for completed request"""
         start_time = time.time()
 
@@ -488,11 +543,15 @@ class AsyncAgentOrchestrator:
             if request.retry_count <= request.max_retries:
                 # Retry the request
                 await self.request_queue.put(request)
-                logger.warning(f"Retrying request {request_id} (attempt {request.retry_count})")
+                logger.warning(
+                    f"Retrying request {request_id} (attempt {request.retry_count})"
+                )
             else:
                 # Max retries exceeded
                 del self.active_requests[request_id]
-                logger.error(f"Request {request_id} failed after {request.max_retries} retries")
+                logger.error(
+                    f"Request {request_id} failed after {request.max_retries} retries"
+                )
 
         return None
 
@@ -521,37 +580,36 @@ class AsyncAgentOrchestrator:
 
         try:
             # Get appropriate worker pool
-            pool = self.worker_pools.get(request.agent_type, self.worker_pools['default'])
+            pool = self.worker_pools.get(
+                request.agent_type, self.worker_pools["default"]
+            )
 
             # Submit task to worker pool
-            task_id = pool.submit_task(
-                self._execute_agent_task,
-                request
-            )
+            task_id = pool.submit_task(self._execute_agent_task, request)
 
             # Wait for completion (with timeout)
             while True:
                 # Check completed tasks
                 try:
                     task_info = pool.completed_tasks.get_nowait()
-                    if task_info['id'] == task_id:
+                    if task_info["id"] == task_id:
                         # Task completed
                         execution_time = time.time() - start_time
 
-                        if 'result' in task_info:
+                        if "result" in task_info:
                             response = AsyncAgentResponse(
                                 request_id=request.request_id,
                                 agent_type=request.agent_type,
                                 status=AgentStatus.COMPLETED,
-                                result=task_info['result'],
+                                result=task_info["result"],
                                 error_message=None,
                                 execution_time=execution_time,
                                 metadata={
-                                    'worker_id': task_info.get('worker_id'),
-                                    'processed_async': True
+                                    "worker_id": task_info.get("worker_id"),
+                                    "processed_async": True,
                                 },
                                 completed_at=time.time(),
-                                worker_id=task_info.get('worker_id')
+                                worker_id=task_info.get("worker_id"),
                             )
 
                             # Record metrics
@@ -561,7 +619,9 @@ class AsyncAgentOrchestrator:
                             self.completed_responses[request.request_id] = response
 
                             # Update circuit breaker
-                            self._update_circuit_breaker(request.agent_type, success=True)
+                            self._update_circuit_breaker(
+                                request.agent_type, success=True
+                            )
 
                             # Call callback if provided
                             if request.callback:
@@ -571,12 +631,16 @@ class AsyncAgentOrchestrator:
                                     else:
                                         request.callback(response)
                                 except Exception as e:
-                                    logger.error(f"Error in callback for request {request.request_id}: {str(e)}")
+                                    logger.error(
+                                        f"Error in callback for request {request.request_id}: {str(e)}"
+                                    )
 
-                            logger.debug(f"Completed async request {request.request_id} in {execution_time:.3f}s")
+                            logger.debug(
+                                f"Completed async request {request.request_id} in {execution_time:.3f}s"
+                            )
                             break
 
-                        elif 'error' in task_info:
+                        elif "error" in task_info:
                             # Task failed
                             execution_time = time.time() - start_time
                             response = AsyncAgentResponse(
@@ -584,18 +648,22 @@ class AsyncAgentOrchestrator:
                                 agent_type=request.agent_type,
                                 status=AgentStatus.ERROR,
                                 result=None,
-                                error_message=task_info['error'],
+                                error_message=task_info["error"],
                                 execution_time=execution_time,
-                                metadata={'worker_id': task_info.get('worker_id')},
+                                metadata={"worker_id": task_info.get("worker_id")},
                                 completed_at=time.time(),
-                                worker_id=task_info.get('worker_id')
+                                worker_id=task_info.get("worker_id"),
                             )
 
                             self._record_request_metrics(request, response, False)
                             self.completed_responses[request.request_id] = response
-                            self._update_circuit_breaker(request.agent_type, success=False)
+                            self._update_circuit_breaker(
+                                request.agent_type, success=False
+                            )
 
-                            logger.error(f"Request {request.request_id} failed: {task_info['error']}")
+                            logger.error(
+                                f"Request {request.request_id} failed: {task_info['error']}"
+                            )
                             break
 
                 except queue.Empty:
@@ -612,8 +680,8 @@ class AsyncAgentOrchestrator:
                             result=None,
                             error_message="Request timed out",
                             execution_time=request.timeout_seconds,
-                            metadata={'timeout': True},
-                            completed_at=time.time()
+                            metadata={"timeout": True},
+                            completed_at=time.time(),
                         )
 
                         self.completed_responses[request.request_id] = response
@@ -631,8 +699,8 @@ class AsyncAgentOrchestrator:
                 result=None,
                 error_message=str(e),
                 execution_time=time.time() - start_time,
-                metadata={'processing_error': True},
-                completed_at=time.time()
+                metadata={"processing_error": True},
+                completed_at=time.time(),
             )
 
             self.completed_responses[request.request_id] = response
@@ -645,40 +713,35 @@ class AsyncAgentOrchestrator:
             # For now, simulate agent execution
 
             # Simulate work based on agent type
-            if request.agent_type == 'model_engine':
+            if request.agent_type == "model_engine":
                 time.sleep(0.1)  # Model predictions are fast
                 result = {
-                    'prediction': 0.75,
-                    'confidence': 0.85,
-                    'model_used': 'ridge_model_2025',
-                    'agent_type': request.agent_type
+                    "prediction": 0.75,
+                    "confidence": 0.85,
+                    "model_used": "ridge_model_2025",
+                    "agent_type": request.agent_type,
                 }
-            elif request.agent_type == 'learning_navigator':
+            elif request.agent_type == "learning_navigator":
                 time.sleep(0.2)  # Learning navigation takes moderate time
                 result = {
-                    'recommended_path': ['01_intro_to_data.ipynb', '02_build_simple_rankings.ipynb'],
-                    'next_steps': ['Explore data structure', 'Build rankings'],
-                    'agent_type': request.agent_type
+                    "recommended_path": [
+                        "01_intro_to_data.ipynb",
+                        "02_build_simple_rankings.ipynb",
+                    ],
+                    "next_steps": ["Explore data structure", "Build rankings"],
+                    "agent_type": request.agent_type,
                 }
             else:
                 time.sleep(0.15)  # Default processing time
                 result = {
-                    'message': f"Processed {request.action} for {request.agent_type}",
-                    'agent_type': request.agent_type
+                    "message": f"Processed {request.action} for {request.agent_type}",
+                    "agent_type": request.agent_type,
                 }
 
-            return {
-                'success': True,
-                'result': result,
-                'processing_time': time.time()
-            }
+            return {"success": True, "result": result, "processing_time": time.time()}
 
         except Exception as e:
-            return {
-                'success': False,
-                'error': str(e),
-                'processing_time': time.time()
-            }
+            return {"success": False, "error": str(e), "processing_time": time.time()}
 
     async def _check_rate_limit(self, user_id: str, agent_type: str) -> bool:
         """Check if user is within rate limits"""
@@ -699,7 +762,8 @@ class AsyncAgentOrchestrator:
         # Clean old rate limit data
         cutoff_time = current_minute - 5  # Keep last 5 minutes
         self.rate_limiters[user_id] = {
-            minute: count for minute, count in self.rate_limiters[user_id].items()
+            minute: count
+            for minute, count in self.rate_limiters[user_id].items()
             if minute >= cutoff_time
         }
 
@@ -709,19 +773,19 @@ class AsyncAgentOrchestrator:
         """Check if circuit breaker is open for agent type"""
         if agent_type not in self.circuit_breakers:
             self.circuit_breakers[agent_type] = {
-                'failure_count': 0,
-                'last_failure': 0,
-                'state': 'closed',  # closed, open, half_open
-                'success_count': 0
+                "failure_count": 0,
+                "last_failure": 0,
+                "state": "closed",  # closed, open, half_open
+                "success_count": 0,
             }
 
         breaker = self.circuit_breakers[agent_type]
 
-        if breaker['state'] == 'open':
+        if breaker["state"] == "open":
             # Check if we should try half-open
-            if time.time() - breaker['last_failure'] > 60:  # 1 minute timeout
-                breaker['state'] = 'half_open'
-                breaker['success_count'] = 0
+            if time.time() - breaker["last_failure"] > 60:  # 1 minute timeout
+                breaker["state"] = "half_open"
+                breaker["success_count"] = 0
                 return False
             else:
                 return True
@@ -736,30 +800,34 @@ class AsyncAgentOrchestrator:
         breaker = self.circuit_breakers[agent_type]
 
         if success:
-            breaker['failure_count'] = max(0, breaker['failure_count'] - 1)
-            breaker['success_count'] += 1
+            breaker["failure_count"] = max(0, breaker["failure_count"] - 1)
+            breaker["success_count"] += 1
 
-            if breaker['state'] == 'half_open' and breaker['success_count'] >= 3:
-                breaker['state'] = 'closed'
+            if breaker["state"] == "half_open" and breaker["success_count"] >= 3:
+                breaker["state"] = "closed"
         else:
-            breaker['failure_count'] += 1
-            breaker['last_failure'] = time.time()
+            breaker["failure_count"] += 1
+            breaker["last_failure"] = time.time()
 
-            if breaker['failure_count'] >= 5:  # Open after 5 failures
-                breaker['state'] = 'open'
+            if breaker["failure_count"] >= 5:  # Open after 5 failures
+                breaker["state"] = "open"
 
-    def _record_request_metrics(self, request: AsyncAgentRequest, response: AsyncAgentResponse, success: bool):
+    def _record_request_metrics(
+        self, request: AsyncAgentRequest, response: AsyncAgentResponse, success: bool
+    ):
         """Record request metrics for performance monitoring"""
-        self.request_metrics.append({
-            'request_id': request.request_id,
-            'agent_type': request.agent_type,
-            'action': request.action,
-            'priority': request.priority,
-            'success': success,
-            'execution_time': response.execution_time,
-            'timestamp': time.time(),
-            'user_id': request.user_context.get('user_id', 'anonymous')
-        })
+        self.request_metrics.append(
+            {
+                "request_id": request.request_id,
+                "agent_type": request.agent_type,
+                "action": request.action,
+                "priority": request.priority,
+                "success": success,
+                "execution_time": response.execution_time,
+                "timestamp": time.time(),
+                "user_id": request.user_context.get("user_id", "anonymous"),
+            }
+        )
 
         self.response_time_history.append(response.execution_time)
 
@@ -768,10 +836,12 @@ class AsyncAgentOrchestrator:
         # Calculate request metrics
         if self.request_metrics:
             total_requests = len(self.request_metrics)
-            successful_requests = sum(1 for m in self.request_metrics if m['success'])
+            successful_requests = sum(1 for m in self.request_metrics if m["success"])
             success_rate = (successful_requests / total_requests) * 100
 
-            avg_execution_time = sum(m['execution_time'] for m in self.request_metrics) / total_requests
+            avg_execution_time = (
+                sum(m["execution_time"] for m in self.request_metrics) / total_requests
+            )
 
             # Calculate percentiles for response times
             sorted_times = sorted(self.response_time_history)
@@ -782,7 +852,9 @@ class AsyncAgentOrchestrator:
 
             # Requests per second (last minute)
             one_minute_ago = time.time() - 60
-            recent_requests = [m for m in self.request_metrics if m['timestamp'] > one_minute_ago]
+            recent_requests = [
+                m for m in self.request_metrics if m["timestamp"] > one_minute_ago
+            ]
             requests_per_second = len(recent_requests) / 60
 
         else:
@@ -798,38 +870,38 @@ class AsyncAgentOrchestrator:
             worker_stats[pool_name] = pool.get_stats()
 
         return {
-            'async_orchestrator': {
-                'active_requests': len(self.active_requests),
-                'completed_responses': len(self.completed_responses),
-                'queue_size': self.request_queue.qsize(),
-                'max_concurrent': self.max_concurrent_requests
+            "async_orchestrator": {
+                "active_requests": len(self.active_requests),
+                "completed_responses": len(self.completed_responses),
+                "queue_size": self.request_queue.qsize(),
+                "max_concurrent": self.max_concurrent_requests,
             },
-            'request_metrics': {
-                'total_requests': total_requests,
-                'success_rate': success_rate,
-                'avg_execution_time': avg_execution_time,
-                'requests_per_second': requests_per_second,
-                'response_time_percentiles': {
-                    'p50': p50,
-                    'p95': p95,
-                    'p99': p99
-                }
+            "request_metrics": {
+                "total_requests": total_requests,
+                "success_rate": success_rate,
+                "avg_execution_time": avg_execution_time,
+                "requests_per_second": requests_per_second,
+                "response_time_percentiles": {"p50": p50, "p95": p95, "p99": p99},
             },
-            'worker_pools': worker_stats,
-            'circuit_breakers': {
+            "worker_pools": worker_stats,
+            "circuit_breakers": {
                 agent_type: {
-                    'state': breaker['state'],
-                    'failure_count': breaker['failure_count']
+                    "state": breaker["state"],
+                    "failure_count": breaker["failure_count"],
                 }
                 for agent_type, breaker in self.circuit_breakers.items()
             },
-            'rate_limiters': {
+            "rate_limiters": {
                 user_id: dict(requests)
-                for user_id, requests in list(self.rate_limiters.items())[:10]  # Top 10 users
-            }
+                for user_id, requests in list(self.rate_limiters.items())[
+                    :10
+                ]  # Top 10 users
+            },
         }
 
-    async def wait_for_completion(self, request_ids: List[str], timeout_seconds: float = 30.0) -> Dict[str, AsyncAgentResponse]:
+    async def wait_for_completion(
+        self, request_ids: List[str], timeout_seconds: float = 30.0
+    ) -> Dict[str, AsyncAgentResponse]:
         """Wait for multiple requests to complete"""
         responses = {}
         start_time = time.time()
@@ -874,7 +946,7 @@ async def test_async_orchestrator():
                 parameters={"test_param": i},
                 user_context={"user_id": f"test_user_{i % 3}"},
                 timestamp=time.time(),
-                priority=1
+                priority=1,
             )
             requests.append(request)
 
@@ -887,7 +959,9 @@ async def test_async_orchestrator():
         print(f"Submitted {len(submitted_ids)} requests")
 
         # Wait for responses
-        responses = await orchestrator.wait_for_completion(submitted_ids, timeout_seconds=10)
+        responses = await orchestrator.wait_for_completion(
+            submitted_ids, timeout_seconds=10
+        )
 
         print(f"Received {len(responses)} responses")
 
@@ -895,9 +969,15 @@ async def test_async_orchestrator():
         stats = orchestrator.get_performance_stats()
         print(f"\n=== Performance Statistics ===")
         print(f"Success rate: {stats['request_metrics']['success_rate']:.1f}%")
-        print(f"Avg execution time: {stats['request_metrics']['avg_execution_time']:.3f}s")
-        print(f"Requests per second: {stats['request_metrics']['requests_per_second']:.1f}")
-        print(f"Response time p95: {stats['request_metrics']['response_time_percentiles']['p95']:.3f}s")
+        print(
+            f"Avg execution time: {stats['request_metrics']['avg_execution_time']:.3f}s"
+        )
+        print(
+            f"Requests per second: {stats['request_metrics']['requests_per_second']:.1f}"
+        )
+        print(
+            f"Response time p95: {stats['request_metrics']['response_time_percentiles']['p95']:.3f}s"
+        )
 
     finally:
         await orchestrator.stop()

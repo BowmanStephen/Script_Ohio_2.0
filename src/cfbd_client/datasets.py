@@ -1,4 +1,5 @@
 """High-level dataset helpers that wrap the CFBD client."""
+
 from __future__ import annotations
 
 import re
@@ -191,10 +192,13 @@ def fetch_weather(
             "home_team": _normalize_team(entry.get("home_team")),
             "away_team": _normalize_team(entry.get("away_team")),
             "temperature": entry.get("temperature"),
-            "temperature_high": entry.get("temperatureHigh") or entry.get("temperature_high"),
-            "temperature_low": entry.get("temperatureLow") or entry.get("temperature_low"),
+            "temperature_high": entry.get("temperatureHigh")
+            or entry.get("temperature_high"),
+            "temperature_low": entry.get("temperatureLow")
+            or entry.get("temperature_low"),
             "wind_speed": entry.get("windSpeed") or entry.get("wind_speed"),
-            "weather_condition": entry.get("condition") or entry.get("weather_condition"),
+            "weather_condition": entry.get("condition")
+            or entry.get("weather_condition"),
             "fetched_at": fetched_at,
         }
         for entry in (raw or [])
@@ -248,9 +252,13 @@ def fetch_predicted_points(
         {
             "team": _normalize_team(entry.get("team")),
             "opponent": _normalize_team(entry.get("opponent")),
-            "predicted_margin": entry.get("predictedMargin") or entry.get("predicted_margin"),
-            "win_probability": entry.get("winProbability") or entry.get("win_probability"),
-            "is_home": entry.get("isHome") if "isHome" in entry else entry.get("is_home"),
+            "predicted_margin": entry.get("predictedMargin")
+            or entry.get("predicted_margin"),
+            "win_probability": entry.get("winProbability")
+            or entry.get("win_probability"),
+            "is_home": entry.get("isHome")
+            if "isHome" in entry
+            else entry.get("is_home"),
             "fetched_at": fetched_at,
         }
         for entry in (raw or [])

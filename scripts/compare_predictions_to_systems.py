@@ -37,6 +37,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+
 def normalize_team_name(team_name: str) -> str:
     """Normalize team names to improve cross-source matching."""
     if pd.isna(team_name) or not team_name:
@@ -284,8 +285,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         # Keep market column separate; it is treated as "truth" for edge calcs.
         pass
 
-    merged["market_home_margin"] = pd.to_numeric(merged.get(market_column), errors="coerce")
-    merged["edge_vs_market"] = merged["model_home_margin"] - merged["market_home_margin"]
+    merged["market_home_margin"] = pd.to_numeric(
+        merged.get(market_column), errors="coerce"
+    )
+    merged["edge_vs_market"] = (
+        merged["model_home_margin"] - merged["market_home_margin"]
+    )
 
     summaries = _summarize_systems(merged, system_columns, market_column=market_column)
 
@@ -301,8 +306,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     lines.append(f"- Systems: `{systems_path}`")
     lines.append(f"- Market column: `{market_column}`\n")
 
-    matched = int(merged["market_home_margin"].notna().sum()) if market_column in merged.columns else int(
-        merged["home_team_norm"].notna().sum()
+    matched = (
+        int(merged["market_home_margin"].notna().sum())
+        if market_column in merged.columns
+        else int(merged["home_team_norm"].notna().sum())
     )
     lines.append(f"Matched rows: {matched} / {len(merged)}\n")
 
@@ -310,8 +317,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         lines.append("## Your Model vs Market")
         edges = merged["edge_vs_market"].dropna()
         if not edges.empty:
-            lines.append(f"- Mean edge (home margin): {_format_float(float(edges.mean()))}")
-            lines.append(f"- Mean abs edge: {_format_float(float(edges.abs().mean()))}\n")
+            lines.append(
+                f"- Mean edge (home margin): {_format_float(float(edges.mean()))}"
+            )
+            lines.append(
+                f"- Mean abs edge: {_format_float(float(edges.abs().mean()))}\n"
+            )
 
     if summaries:
         lines.append("## System Agreement (vs your model)")
@@ -330,7 +341,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     lines.append("## Biggest Disagreements (vs market)")
     if market_column in merged.columns:
-        biggest = merged.loc[merged["edge_vs_market"].abs().sort_values(ascending=False).head(15).index]
+        biggest = merged.loc[
+            merged["edge_vs_market"].abs().sort_values(ascending=False).head(15).index
+        ]
         view_cols = [
             c
             for c in [
@@ -375,10 +388,14 @@ def _format_markdown_table(df: pd.DataFrame) -> str:
         for i, h in enumerate(headers)
     ]
 
-    header_line = "| " + " | ".join(h.ljust(widths[i]) for i, h in enumerate(headers)) + " |"
+    header_line = (
+        "| " + " | ".join(h.ljust(widths[i]) for i, h in enumerate(headers)) + " |"
+    )
     sep_line = "| " + " | ".join("-" * widths[i] for i in range(len(headers))) + " |"
     body_lines = [
-        "| " + " | ".join(str_rows[r][i].ljust(widths[i]) for i in range(len(headers))) + " |"
+        "| "
+        + " | ".join(str_rows[r][i].ljust(widths[i]) for i in range(len(headers)))
+        + " |"
         for r in range(len(str_rows))
     ]
     return "\n".join([header_line, sep_line, *body_lines])

@@ -32,7 +32,10 @@ if str(PROJECT_ROOT) not in sys.path:
 load_dotenv(PROJECT_ROOT / ".env")
 
 from src.ratings.massey_ratings import MasseyConfig  # noqa: E402
-from src.ratings.rating_library import load_massey_ratings, load_rating_library  # noqa: E402
+from src.ratings.rating_library import (  # noqa: E402
+    load_massey_ratings,
+    load_rating_library,
+)
 
 
 def _load_feature_lists() -> tuple[list[str], list[str]]:
@@ -81,43 +84,255 @@ class DKGame:
 
 def _dk_slate() -> list[DKGame]:
     return [
-        DKGame("2025-12-17", "Cure Bowl", "Old Dominion", "South Florida", "South Florida", -2.5, 52.5),
-        DKGame("2025-12-17", "68 Ventures Bowl", "Louisiana", "Delaware", "Louisiana", -3.0, 61.5),
-        DKGame("2025-12-18", "Xbox Bowl", "Missouri State", "Arkansas State", "Arkansas State", -1.5, 54.5),
-        DKGame("2025-12-19", "Myrtle Beach Bowl", "Kennesaw State", "Western Michigan", "Western Michigan", -3.5, 48.5),
-        DKGame("2025-12-19", "Gasparilla Bowl", "Memphis", "NC State", "NC State", -4.5, 58.5),
-        DKGame("2025-12-19", "CFP First Round", "Alabama", "Oklahoma", "Alabama", -1.5, 40.5),
-        DKGame("2025-12-20", "CFP First Round", "Miami", "Texas A&M", "Texas A&M", -3.5, 50.5),
-        DKGame("2025-12-20", "CFP First Round", "Tulane", "Ole Miss", "Ole Miss", -17.5, 56.5),
-        DKGame("2025-12-20", "CFP First Round", "James Madison", "Oregon", "Oregon", -21.0, 47.5),
-        DKGame("2025-12-22", "Potato Bowl", "Washington State", "Utah State", "Utah State", -2.5, 50.5),
-        DKGame("2025-12-23", "Boca Raton Bowl", "Toledo", "Louisville", "Louisville", -6.5, 45.5),
-        DKGame("2025-12-23", "New Orleans Bowl", "Western Kentucky", "Southern Miss", "Western Kentucky", -4.5, 57.5),
+        DKGame(
+            "2025-12-17",
+            "Cure Bowl",
+            "Old Dominion",
+            "South Florida",
+            "South Florida",
+            -2.5,
+            52.5,
+        ),
+        DKGame(
+            "2025-12-17",
+            "68 Ventures Bowl",
+            "Louisiana",
+            "Delaware",
+            "Louisiana",
+            -3.0,
+            61.5,
+        ),
+        DKGame(
+            "2025-12-18",
+            "Xbox Bowl",
+            "Missouri State",
+            "Arkansas State",
+            "Arkansas State",
+            -1.5,
+            54.5,
+        ),
+        DKGame(
+            "2025-12-19",
+            "Myrtle Beach Bowl",
+            "Kennesaw State",
+            "Western Michigan",
+            "Western Michigan",
+            -3.5,
+            48.5,
+        ),
+        DKGame(
+            "2025-12-19",
+            "Gasparilla Bowl",
+            "Memphis",
+            "NC State",
+            "NC State",
+            -4.5,
+            58.5,
+        ),
+        DKGame(
+            "2025-12-19",
+            "CFP First Round",
+            "Alabama",
+            "Oklahoma",
+            "Alabama",
+            -1.5,
+            40.5,
+        ),
+        DKGame(
+            "2025-12-20",
+            "CFP First Round",
+            "Miami",
+            "Texas A&M",
+            "Texas A&M",
+            -3.5,
+            50.5,
+        ),
+        DKGame(
+            "2025-12-20",
+            "CFP First Round",
+            "Tulane",
+            "Ole Miss",
+            "Ole Miss",
+            -17.5,
+            56.5,
+        ),
+        DKGame(
+            "2025-12-20",
+            "CFP First Round",
+            "James Madison",
+            "Oregon",
+            "Oregon",
+            -21.0,
+            47.5,
+        ),
+        DKGame(
+            "2025-12-22",
+            "Potato Bowl",
+            "Washington State",
+            "Utah State",
+            "Utah State",
+            -2.5,
+            50.5,
+        ),
+        DKGame(
+            "2025-12-23",
+            "Boca Raton Bowl",
+            "Toledo",
+            "Louisville",
+            "Louisville",
+            -6.5,
+            45.5,
+        ),
+        DKGame(
+            "2025-12-23",
+            "New Orleans Bowl",
+            "Western Kentucky",
+            "Southern Miss",
+            "Western Kentucky",
+            -4.5,
+            57.5,
+        ),
         DKGame("2025-12-23", "Frisco Bowl", "UNLV", "Ohio", "UNLV", -5.5, 65.5),
-        DKGame("2025-12-24", "Hawai'i Bowl", "California", "Hawai'i", "California", -1.5, 54.5),
-        DKGame("2025-12-26", "GameAbove Sports Bowl", "Central Michigan", "Northwestern", "Northwestern", -10.5, 43.5),
-        DKGame("2025-12-26", "Rate Bowl", "New Mexico", "Minnesota", "Minnesota", -2.5, 45.5),
-        DKGame("2025-12-26", "First Responder Bowl", "Florida International", "UTSA", "UTSA", -9.5, 59.5),
-        DKGame("2025-12-27", "Military Bowl", "Pittsburgh", "East Carolina", "Pittsburgh", -8.5, 57.5),
-        DKGame("2025-12-27", "Pinstripe Bowl", "Penn State", "Clemson", "Clemson", -3.5, 48.5),
+        DKGame(
+            "2025-12-24",
+            "Hawai'i Bowl",
+            "California",
+            "Hawai'i",
+            "California",
+            -1.5,
+            54.5,
+        ),
+        DKGame(
+            "2025-12-26",
+            "GameAbove Sports Bowl",
+            "Central Michigan",
+            "Northwestern",
+            "Northwestern",
+            -10.5,
+            43.5,
+        ),
+        DKGame(
+            "2025-12-26",
+            "Rate Bowl",
+            "New Mexico",
+            "Minnesota",
+            "Minnesota",
+            -2.5,
+            45.5,
+        ),
+        DKGame(
+            "2025-12-26",
+            "First Responder Bowl",
+            "Florida International",
+            "UTSA",
+            "UTSA",
+            -9.5,
+            59.5,
+        ),
+        DKGame(
+            "2025-12-27",
+            "Military Bowl",
+            "Pittsburgh",
+            "East Carolina",
+            "Pittsburgh",
+            -8.5,
+            57.5,
+        ),
+        DKGame(
+            "2025-12-27",
+            "Pinstripe Bowl",
+            "Penn State",
+            "Clemson",
+            "Clemson",
+            -3.5,
+            48.5,
+        ),
         DKGame("2025-12-27", "Fenway Bowl", "UConn", "Army", "Army", -8.5, 44.5),
-        DKGame("2025-12-27", "Pop-Tarts Bowl", "Georgia Tech", "BYU", "BYU", -4.5, 56.5),
-        DKGame("2025-12-27", "Arizona Bowl", "Miami (OH)", "Fresno State", "Fresno State", -4.5, 42.5),
-        DKGame("2025-12-27", "New Mexico Bowl", "North Texas", "San Diego State", "North Texas", -3.0, 54.5),
-        DKGame("2025-12-27", "Gator Bowl", "Virginia", "Missouri", "Missouri", -7.0, 47.5),
+        DKGame(
+            "2025-12-27", "Pop-Tarts Bowl", "Georgia Tech", "BYU", "BYU", -4.5, 56.5
+        ),
+        DKGame(
+            "2025-12-27",
+            "Arizona Bowl",
+            "Miami (OH)",
+            "Fresno State",
+            "Fresno State",
+            -4.5,
+            42.5,
+        ),
+        DKGame(
+            "2025-12-27",
+            "New Mexico Bowl",
+            "North Texas",
+            "San Diego State",
+            "North Texas",
+            -3.0,
+            54.5,
+        ),
+        DKGame(
+            "2025-12-27", "Gator Bowl", "Virginia", "Missouri", "Missouri", -7.0, 47.5
+        ),
         DKGame("2025-12-27", "Texas Bowl", "LSU", "Houston", "Houston", -3.0, 41.5),
-        DKGame("2025-12-29", "Birmingham Bowl", "Georgia Southern", "App State", "Georgia Southern", -7.0, 59.5),
-        DKGame("2025-12-30", "Independence Bowl", "Coastal Carolina", "Louisiana Tech", "Louisiana Tech", -8.5, 50.5),
-        DKGame("2025-12-30", "Music City Bowl", "Tennessee", "Illinois", "Tennessee", -2.5, 61.5),
+        DKGame(
+            "2025-12-29",
+            "Birmingham Bowl",
+            "Georgia Southern",
+            "App State",
+            "Georgia Southern",
+            -7.0,
+            59.5,
+        ),
+        DKGame(
+            "2025-12-30",
+            "Independence Bowl",
+            "Coastal Carolina",
+            "Louisiana Tech",
+            "Louisiana Tech",
+            -8.5,
+            50.5,
+        ),
+        DKGame(
+            "2025-12-30",
+            "Music City Bowl",
+            "Tennessee",
+            "Illinois",
+            "Tennessee",
+            -2.5,
+            61.5,
+        ),
         DKGame("2025-12-30", "Alamo Bowl", "USC", "TCU", "USC", -4.5, 57.5),
-        DKGame("2025-12-31", "ReliaQuest Bowl", "Iowa", "Vanderbilt", "Vanderbilt", -5.5, 47.5),
+        DKGame(
+            "2025-12-31",
+            "ReliaQuest Bowl",
+            "Iowa",
+            "Vanderbilt",
+            "Vanderbilt",
+            -5.5,
+            47.5,
+        ),
         DKGame("2025-12-31", "Sun Bowl", "Arizona State", "Duke", "Duke", -2.5, 49.5),
         DKGame("2025-12-31", "Citrus Bowl", "Michigan", "Texas", "Texas", -7.5, 46.5),
         DKGame("2025-12-31", "Las Vegas Bowl", "Nebraska", "Utah", "Utah", -16.5, 50.5),
-        DKGame("2026-01-02", "Armed Forces Bowl", "Rice", "Texas State", "Texas State", -10.5, 59.5),
+        DKGame(
+            "2026-01-02",
+            "Armed Forces Bowl",
+            "Rice",
+            "Texas State",
+            "Texas State",
+            -10.5,
+            59.5,
+        ),
         DKGame("2026-01-02", "Liberty Bowl", "Navy", "Cincinnati", "Navy", -6.5, 53.5),
         DKGame("2026-01-02", "Holiday Bowl", "Arizona", "SMU", "Arizona", -3.0, 51.5),
-        DKGame("2026-01-02", "Duke's Mayo Bowl", "Wake Forest", "Mississippi State", "Mississippi State", -4.0, 56.5),
+        DKGame(
+            "2026-01-02",
+            "Duke's Mayo Bowl",
+            "Wake Forest",
+            "Mississippi State",
+            "Mississippi State",
+            -4.0,
+            56.5,
+        ),
     ]
 
 
@@ -201,7 +416,13 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             except Exception:
                 fastai_learner = None
 
-    postseason_path = PROJECT_ROOT / "data" / "training" / "weekly" / "training_data_2025_postseason.csv"
+    postseason_path = (
+        PROJECT_ROOT
+        / "data"
+        / "training"
+        / "weekly"
+        / "training_data_2025_postseason.csv"
+    )
     df = pd.read_csv(postseason_path, low_memory=False).dropna(how="all")
     df = _ensure_features(df, sorted(set(RIDGE_FEATURES) | set(XGB_FEATURES)))
 
@@ -226,7 +447,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if present_rf_features:
         df["adv_stats_coverage"] = (
             1.0
-            - df[present_rf_features].isna().sum(axis=1).astype(float) / float(len(present_rf_features))
+            - df[present_rf_features].isna().sum(axis=1).astype(float)
+            / float(len(present_rf_features))
         ).round(3)
     else:
         df["adv_stats_coverage"] = pd.NA
@@ -241,9 +463,15 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             for col in cat_names:
                 if col not in working.columns:
                     working[col] = "Unknown"
-            working["week"] = pd.to_numeric(working["week"], errors="coerce").fillna(0).astype(int)
-            working["home_conference"] = working["home_conference"].fillna("Unknown").astype(str)
-            working["away_conference"] = working["away_conference"].fillna("Unknown").astype(str)
+            working["week"] = (
+                pd.to_numeric(working["week"], errors="coerce").fillna(0).astype(int)
+            )
+            working["home_conference"] = (
+                working["home_conference"].fillna("Unknown").astype(str)
+            )
+            working["away_conference"] = (
+                working["away_conference"].fillna("Unknown").astype(str)
+            )
             working["neutral_site"] = working["neutral_site"].fillna(False).astype(bool)
             working = _ensure_features(working, cont_names)
             # Force single-process dataloading; avoids hangs on some macOS setups.
@@ -257,13 +485,17 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 preds, _ = fastai_learner.get_preds(dl=dl)
             if preds.ndim == 2 and preds.shape[1] == 1:
                 # BCEWithLogitsLoss path: single logit -> sigmoid probability.
-                df["fastai_home_win_prob"] = (1.0 / (1.0 + np.exp(-preds[:, 0].numpy()))).astype(float)
+                df["fastai_home_win_prob"] = (
+                    1.0 / (1.0 + np.exp(-preds[:, 0].numpy()))
+                ).astype(float)
             elif preds.ndim == 2 and preds.shape[1] >= 2:
                 df["fastai_home_win_prob"] = preds[:, 1].numpy().astype(float)
         except Exception:
             df["fastai_home_win_prob"] = pd.NA
 
-    df["ensemble_home_win_prob"] = pd.to_numeric(df["home_win_prob"], errors="coerce").astype(float)
+    df["ensemble_home_win_prob"] = pd.to_numeric(
+        df["home_win_prob"], errors="coerce"
+    ).astype(float)
     fastai_numeric = pd.to_numeric(df["fastai_home_win_prob"], errors="coerce")
     df.loc[fastai_numeric.notna(), "ensemble_home_win_prob"] = (
         df.loc[fastai_numeric.notna(), "home_win_prob"].astype(float)
@@ -283,8 +515,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 rf_pred = rf_predictor.predict(rf_input)
                 df["rf_home_points"] = rf_pred["predicted_home_points"]
                 df["rf_away_points"] = rf_pred["predicted_away_points"]
-                df["rf_total"] = rf_pred["predicted_home_points"] + rf_pred["predicted_away_points"]
-                df["rf_margin"] = rf_pred["predicted_home_points"] - rf_pred["predicted_away_points"]
+                df["rf_total"] = (
+                    rf_pred["predicted_home_points"] + rf_pred["predicted_away_points"]
+                )
+                df["rf_margin"] = (
+                    rf_pred["predicted_home_points"] - rf_pred["predicted_away_points"]
+                )
         except Exception:
             pass
 
@@ -298,7 +534,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         )
         massey_map = {
             _norm_team(str(team)): float(rating)
-            for team, rating in zip(massey_df["team"], massey_df["rating"], strict=False)
+            for team, rating in zip(
+                massey_df["team"], massey_df["rating"], strict=False
+            )
         }
         massey_hfa = float(massey_df["hfa"].iloc[0])
     except Exception:
@@ -333,9 +571,15 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
         fav_margin, fav_win_prob = _favorite_view(row, favorite=game.favorite)
         edge = fav_margin - abs(float(game.spread))
-        recommendation = game.favorite if edge >= 0 else ("{}/{}".format(game.team_a, game.team_b))
+        recommendation = (
+            game.favorite if edge >= 0 else ("{}/{}".format(game.team_a, game.team_b))
+        )
         if recommendation == "{}/{}".format(game.team_a, game.team_b):
-            underdog = game.team_b if _norm_team(game.favorite) == _norm_team(game.team_a) else game.team_a
+            underdog = (
+                game.team_b
+                if _norm_team(game.favorite) == _norm_team(game.team_a)
+                else game.team_a
+            )
             recommendation = underdog
 
         ens_prob = _favorite_prob(row, "ensemble_home_win_prob", favorite=game.favorite)
@@ -356,7 +600,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         rating_diffs: dict[str, object] = {}
         for system, mapping in rating_maps.items():
             if fav_norm in mapping and other_norm in mapping:
-                rating_diffs[f"{system}_diff"] = round(float(mapping[fav_norm] - mapping[other_norm]), 2)
+                rating_diffs[f"{system}_diff"] = round(
+                    float(mapping[fav_norm] - mapping[other_norm]), 2
+                )
             else:
                 rating_diffs[f"{system}_diff"] = pd.NA
 
@@ -378,7 +624,11 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 "model_margin_fav": round(float(fav_margin), 2),
                 "model_winprob_fav": round(float(fav_win_prob), 4),
                 "fastai_winprob_fav": round(
-                    float(_favorite_prob(row, "fastai_home_win_prob", favorite=game.favorite)),
+                    float(
+                        _favorite_prob(
+                            row, "fastai_home_win_prob", favorite=game.favorite
+                        )
+                    ),
                     4,
                 )
                 if pd.notna(row.get("fastai_home_win_prob", pd.NA))
@@ -418,10 +668,16 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     lines.append("")
     lines.append("Columns:")
     lines.append("- `model_margin_fav`: model predicted margin for the favorite")
-    lines.append("- `edge_vs_spread`: `model_margin_fav - abs(dk_spread)` (positive favors favorite)\n")
-    lines.append("- `adv_stats_coverage`: fraction of core EPA/success features present\n")
+    lines.append(
+        "- `edge_vs_spread`: `model_margin_fav - abs(dk_spread)` (positive favors favorite)\n"
+    )
+    lines.append(
+        "- `adv_stats_coverage`: fraction of core EPA/success features present\n"
+    )
     lines.append("- `fastai_winprob_fav`: FastAI home-win model (if available)\n")
-    lines.append("- `ensemble_winprob_fav`: avg(XGB, FastAI) when FastAI is available\n")
+    lines.append(
+        "- `ensemble_winprob_fav`: avg(XGB, FastAI) when FastAI is available\n"
+    )
     lines.append("- `massey_*`: ratings-based margin/edge (regular season only)\n")
 
     if missing:
@@ -467,10 +723,14 @@ def _format_markdown_table(df: pd.DataFrame) -> str:
         for i, h in enumerate(headers)
     ]
 
-    header_line = "| " + " | ".join(h.ljust(widths[i]) for i, h in enumerate(headers)) + " |"
+    header_line = (
+        "| " + " | ".join(h.ljust(widths[i]) for i, h in enumerate(headers)) + " |"
+    )
     sep_line = "| " + " | ".join("-" * widths[i] for i in range(len(headers))) + " |"
     body_lines = [
-        "| " + " | ".join(str_rows[r][i].ljust(widths[i]) for i in range(len(headers))) + " |"
+        "| "
+        + " | ".join(str_rows[r][i].ljust(widths[i]) for i in range(len(headers)))
+        + " |"
         for r in range(len(str_rows))
     ]
     return "\n".join([header_line, sep_line, *body_lines])

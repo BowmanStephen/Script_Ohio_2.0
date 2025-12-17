@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏈 2025 Bowl Game Predictions</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1.5rem;
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .games-table {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 2rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+        }
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        tr:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .prob-high { color: #4ade80; font-weight: 700; }
+        .prob-med { color: #fbbf24; font-weight: 600; }
+        .prob-low { color: #f87171; font-weight: 500; }
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+        .filter-btn.active {
+            background: rgba(255, 255, 255, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏈 2025 Bowl Game Predictions</h1>
+        <p class="subtitle">Generated: December 17, 2025 | 77 Total Games</p>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">77</div>
+                <div class="stat-label">Total Bowl Games</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">43</div>
+                <div class="stat-label">FBS Bowl Games</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">34</div>
+                <div class="stat-label">FCS/D2/D3 Games</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">89.5%</div>
+                <div class="stat-label">Model Confidence</div>
+            </div>
+        </div>
+
+        <div class="filter-bar">
+            <button class="filter-btn active" onclick="filterGames('all')">All Games</button>
+            <button class="filter-btn" onclick="filterGames('fbs')">FBS Only</button>
+            <button class="filter-btn" onclick="filterGames('playoff')">Playoff Games</button>
+            <button class="filter-btn" onclick="filterGames('confident')">High Confidence</button>
+        </div>
+
+        <div class="games-table">
+            <table id="gamesTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Matchup</th>
+                        <th>Predicted Winner</th>
+                        <th>Win Prob</th>
+                        <th>Line</th>
+                    </tr>
+                </thead>
+                <tbody id="gamesBody">
+                    <!-- Games will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Sample game data - replace with actual predictions
+        const games = [
+            { date: "2025-12-27", matchup: "Penn State vs Clemson", winner: "Clemson", prob: 69.4, line: "Clemson -6.4", level: "fbs" },
+            { date: "2025-12-27", matchup: "Georgia Tech vs BYU", winner: "BYU", prob: 70.7, line: "BYU -6.8", level: "fbs" },
+            { date: "2025-12-31", matchup: "Michigan vs Texas", winner: "Texas", prob: 69.4, line: "Texas -6.1", level: "fbs" },
+            { date: "2025-12-20", matchup: "Alabama vs Oklahoma", winner: "Oklahoma", prob: 70.7, line: "Oklahoma -7.2", level: "playoff" },
+            { date: "2025-12-21", matchup: "James Madison vs Oregon", winner: "Oregon", prob: 69.2, line: "Oregon -8.2", level: "playoff" }
+        ];
+
+        function getConfClass(prob) {
+            if (prob >= 65) return 'prob-high';
+            if (prob >= 55) return 'prob-med';
+            return 'prob-low';
+        }
+
+        function renderGames(filteredGames) {
+            const tbody = document.getElementById('gamesBody');
+            tbody.innerHTML = filteredGames.map(game => `
+                <tr>
+                    <td>${new Date(game.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</td>
+                    <td><strong>${game.matchup}</strong></td>
+                    <td>${game.winner}</td>
+                    <td class="${getConfClass(game.prob)}">${game.prob.toFixed(1)}%</td>
+                    <td>${game.line}</td>
+                </tr>
+            `).join('');
+        }
+
+        function filterGames(type) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            let filtered = games;
+            if (type === 'fbs') filtered = games.filter(g => g.level === 'fbs' || g.level === 'playoff');
+            if (type === 'playoff') filtered = games.filter(g => g.level === 'playoff');
+            if (type === 'confident') filtered = games.filter(g => g.prob >= 65);
+            
+            renderGames(filtered);
+        }
+
+        // Initial render
+        renderGames(games);
+    </script>
+</body>
+</html>

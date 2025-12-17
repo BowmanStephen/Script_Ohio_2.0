@@ -3,8 +3,8 @@ Validation package initialization.
 """
 
 from .walk_forward_validator import (
-    WalkForwardConfig,
     ValidationFold,
+    WalkForwardConfig,
     run_walk_forward_validation,
 )
 
@@ -13,4 +13,3 @@ __all__ = [
     "ValidationFold",
     "run_walk_forward_validation",
 ]
-

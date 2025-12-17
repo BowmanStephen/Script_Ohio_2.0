@@ -74,7 +74,9 @@ def _prepare_games_df(
 
     missing = PRIOR_REQUIRED_COLUMNS - set(df.columns)
     if missing:
-        raise ValueError(f"Missing required columns for talent priors: {sorted(missing)}")
+        raise ValueError(
+            f"Missing required columns for talent priors: {sorted(missing)}"
+        )
 
     df["week"] = df["week"].fillna(0).astype(int)
     df = df[df["season"] <= config.season]
@@ -193,4 +195,3 @@ __all__ = [
     "generate_talent_priors",
     "save_talent_priors",
 ]
-

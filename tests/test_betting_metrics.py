@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
-
 from src.betting.betting_metrics import (
     BettingSimConfig,
     simulate_betting_strategy,
@@ -51,7 +50,9 @@ def test_betting_simulation_basic():
         min_confidence=0.0,
     )
 
-    results_df, performance = simulate_betting_strategy(config, predictions, games_df=games)
+    results_df, performance = simulate_betting_strategy(
+        config, predictions, games_df=games
+    )
 
     assert not results_df.empty
     assert performance.total_bets > 0
@@ -70,8 +71,9 @@ def test_betting_simulation_with_confidence_filter():
         min_confidence=0.75,  # Higher threshold
     )
 
-    results_df, performance = simulate_betting_strategy(config, predictions, games_df=games)
+    results_df, performance = simulate_betting_strategy(
+        config, predictions, games_df=games
+    )
 
     # Should have fewer bets due to confidence filter
     assert performance.total_bets <= len(predictions)
-

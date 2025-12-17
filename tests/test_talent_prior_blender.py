@@ -7,7 +7,6 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 import pytest
-
 from src.ratings.talent_prior_blender import (
     TalentPriorConfig,
     compute_talent_priors,
@@ -83,4 +82,3 @@ def test_missing_columns_raise_error():
 
     with pytest.raises(ValueError):
         compute_talent_priors(config, games_df=games)
-

@@ -74,7 +74,14 @@ def build_rating_library(
     """
     Assemble the rating library, aggregating multiple rating systems.
     """
-    include_systems = include_systems or ["massey", "sp_plus", "fpi", "elo", "srs", "coleman"]
+    include_systems = include_systems or [
+        "massey",
+        "sp_plus",
+        "fpi",
+        "elo",
+        "srs",
+        "coleman",
+    ]
     frames: List[pd.DataFrame] = []
 
     config = massey_config or MasseyConfig(season=season)
@@ -88,9 +95,18 @@ def build_rating_library(
     base_massey_df = massey_df.copy()
 
     if "massey" in include_systems:
-        frames.append(_format_system_frame(base_massey_df, "massey", "rating", ["hfa", "solver_version"]))
+        frames.append(
+            _format_system_frame(
+                base_massey_df, "massey", "rating", ["hfa", "solver_version"]
+            )
+        )
 
-    cfbd_systems = {"sp_plus": "sp_rating", "fpi": "fpi_rating", "elo": "elo_rating", "srs": "srs_rating"}
+    cfbd_systems = {
+        "sp_plus": "sp_rating",
+        "fpi": "fpi_rating",
+        "elo": "elo_rating",
+        "srs": "srs_rating",
+    }
     requested_cfbd = [sys for sys in cfbd_systems if sys in include_systems]
     if requested_cfbd:
         if cfbd_df is None:
@@ -100,7 +116,9 @@ def build_rating_library(
                 continue
             if cfbd_df[column].notna().sum() == 0:
                 continue
-            frames.append(_format_system_frame(cfbd_df, system_name, column, ["source"]))
+            frames.append(
+                _format_system_frame(cfbd_df, system_name, column, ["source"])
+            )
 
     if "coleman" in include_systems:
         coleman_config = coleman_config or ColemanConfig(season=season)
@@ -112,7 +130,9 @@ def build_rating_library(
                 cfbd_df=cfbd_df if cfbd_df is not None else pd.DataFrame(),
                 games_df=games_df,
             )
-        frames.append(_format_system_frame(coleman_df, "coleman", "rating", ["model_version"]))
+        frames.append(
+            _format_system_frame(coleman_df, "coleman", "rating", ["model_version"])
+        )
 
     if not frames:
         raise ValueError("No rating systems selected for library build.")
@@ -144,4 +164,3 @@ def load_rating_library(
             coleman_config=coleman_config,
         )
     return pd.read_csv(path)
-

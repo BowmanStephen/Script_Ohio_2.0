@@ -6,9 +6,8 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-
-from src.ratings.massey_ratings import MasseyConfig, compute_massey_ratings
 from src.ratings import rating_library
+from src.ratings.massey_ratings import MasseyConfig, compute_massey_ratings
 
 FIXTURE_PATH = (
     Path(__file__).parent / "fixtures" / "massey_sample_games.csv"
@@ -97,7 +96,13 @@ def test_rating_library_with_multiple_systems(tmp_path):
         include_systems=["massey", "sp_plus", "fpi", "elo", "srs", "coleman"],
     )
 
-    assert set(library_df["system"]) == {"massey", "sp_plus", "fpi", "elo", "srs", "coleman"}
+    assert set(library_df["system"]) == {
+        "massey",
+        "sp_plus",
+        "fpi",
+        "elo",
+        "srs",
+        "coleman",
+    }
     assert library_df.groupby("system")["team"].nunique().loc["coleman"] == 4
     assert library_path.exists()
-

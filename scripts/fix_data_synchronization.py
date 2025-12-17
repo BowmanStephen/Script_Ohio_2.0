@@ -4,15 +4,17 @@ Data Synchronization Fix Script
 Resolves critical data synchronization gaps between systems
 """
 
-import pandas as pd
-import numpy as np
-from pathlib import Path
 import os
-import sys
 import subprocess
+import sys
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
 
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent))
+
 
 class DataSynchronizer:
     """Fix data synchronization issues between starter pack, model pack, and training data"""
@@ -51,8 +53,12 @@ class DataSynchronizer:
         """Add missing Weeks 1-4 data to starter pack"""
         try:
             # Check if we have original week data files
-            training_file = self.project_root / "model_pack" / "updated_training_data.csv"
-            starter_migrated_file = self.project_root / "model_pack" / "2025_starter_pack_migrated.csv"
+            training_file = (
+                self.project_root / "model_pack" / "updated_training_data.csv"
+            )
+            starter_migrated_file = (
+                self.project_root / "model_pack" / "2025_starter_pack_migrated.csv"
+            )
 
             if not training_file.exists():
                 print("❌ Training data file not found - cannot extract Weeks 1-4")
@@ -68,15 +74,17 @@ class DataSynchronizer:
 
             # Extract Weeks 1-4 from training data
             weeks_1_4_2025 = training_df[
-                (training_df['season'] == 2025) &
-                (training_df['week'].isin([1, 2, 3, 4]))
+                (training_df["season"] == 2025)
+                & (training_df["week"].isin([1, 2, 3, 4]))
             ].copy()
 
             if len(weeks_1_4_2025) == 0:
                 print("❌ No Weeks 1-4 data found in training data")
                 return False
 
-            print(f"📊 Found {len(weeks_1_4_2025)} games from Weeks 1-4 in training data")
+            print(
+                f"📊 Found {len(weeks_1_4_2025)} games from Weeks 1-4 in training data"
+            )
 
             # Get columns that exist in both datasets
             common_cols = list(set(starter_df.columns) & set(weeks_1_4_2025.columns))
@@ -87,17 +95,23 @@ class DataSynchronizer:
 
             # Remove duplicates
             initial_len = len(combined_df)
-            combined_df = combined_df.drop_duplicates(subset=['season', 'week', 'home_team', 'away_team'], keep='first')
+            combined_df = combined_df.drop_duplicates(
+                subset=["season", "week", "home_team", "away_team"], keep="first"
+            )
             duplicates_removed = initial_len - len(combined_df)
 
             # Save updated starter pack data
-            backup_file = starter_migrated_file.with_suffix('.csv.backup')
+            backup_file = starter_migrated_file.with_suffix(".csv.backup")
             starter_migrated_file.rename(backup_file)
             combined_df.to_csv(starter_migrated_file, index=False)
 
-            self.fixes_applied.append(f"Added {len(weeks_1_4_filtered)} Weeks 1-4 games to starter pack")
+            self.fixes_applied.append(
+                f"Added {len(weeks_1_4_filtered)} Weeks 1-4 games to starter pack"
+            )
             if duplicates_removed > 0:
-                self.fixes_applied.append(f"Removed {duplicates_removed} duplicate games")
+                self.fixes_applied.append(
+                    f"Removed {duplicates_removed} duplicate games"
+                )
 
             print(f"✅ Added {len(weeks_1_4_filtered)} Weeks 1-4 games to starter pack")
             print(f"📄 Backup saved to: {backup_file}")
@@ -110,27 +124,41 @@ class DataSynchronizer:
     def fix_week12_incomplete_data(self):
         """Complete Week 12 data in starter pack"""
         try:
-            training_file = self.project_root / "model_pack" / "updated_training_data.csv"
-            starter_migrated_file = self.project_root / "model_pack" / "2025_starter_pack_migrated.csv"
+            training_file = (
+                self.project_root / "model_pack" / "updated_training_data.csv"
+            )
+            starter_migrated_file = (
+                self.project_root / "model_pack" / "2025_starter_pack_migrated.csv"
+            )
 
             # Load data
             training_df = pd.read_csv(training_file)
             starter_df = pd.read_csv(starter_migrated_file)
 
             # Get Week 12 data from both sources
-            training_week12 = training_df[(training_df['season'] == 2025) & (training_df['week'] == 12)]
-            starter_week12 = starter_df[(starter_df['season'] == 2025) & (starter_df['week'] == 12)]
+            training_week12 = training_df[
+                (training_df["season"] == 2025) & (training_df["week"] == 12)
+            ]
+            starter_week12 = starter_df[
+                (starter_df["season"] == 2025) & (starter_df["week"] == 12)
+            ]
 
             # Find missing games in starter pack
             training_game_ids = set()
-            if 'home_team' in training_week12.columns and 'away_team' in training_week12.columns:
+            if (
+                "home_team" in training_week12.columns
+                and "away_team" in training_week12.columns
+            ):
                 training_game_ids = set(
                     f"{row['home_team']}_vs_{row['away_team']}"
                     for _, row in training_week12.iterrows()
                 )
 
             starter_game_ids = set()
-            if 'home_team' in starter_week12.columns and 'away_team' in starter_week12.columns:
+            if (
+                "home_team" in starter_week12.columns
+                and "away_team" in starter_week12.columns
+            ):
                 starter_game_ids = set(
                     f"{row['home_team']}_vs_{row['away_team']}"
                     for _, row in starter_week12.iterrows()
@@ -145,10 +173,10 @@ class DataSynchronizer:
             # Extract missing games from training data
             missing_games = []
             for game_id in missing_game_ids:
-                home_team, away_team = game_id.split('_vs_')
+                home_team, away_team = game_id.split("_vs_")
                 missing_game = training_week12[
-                    (training_week12['home_team'] == home_team) &
-                    (training_week12['away_team'] == away_team)
+                    (training_week12["home_team"] == home_team)
+                    & (training_week12["away_team"] == away_team)
                 ]
                 if not missing_game.empty:
                     missing_games.append(missing_game.iloc[0])
@@ -161,16 +189,22 @@ class DataSynchronizer:
                 missing_filtered = missing_df[common_cols]
 
                 # Add missing games to starter data
-                updated_starter = pd.concat([starter_df, missing_filtered], ignore_index=True)
+                updated_starter = pd.concat(
+                    [starter_df, missing_filtered], ignore_index=True
+                )
                 updated_starter = updated_starter.drop_duplicates(
-                    subset=['season', 'week', 'home_team', 'away_team'], keep='first'
+                    subset=["season", "week", "home_team", "away_team"], keep="first"
                 )
 
                 # Save updated data
                 updated_starter.to_csv(starter_migrated_file, index=False)
 
-                self.fixes_applied.append(f"Added {len(missing_games)} missing Week 12 games to starter pack")
-                print(f"✅ Added {len(missing_games)} missing Week 12 games to starter pack")
+                self.fixes_applied.append(
+                    f"Added {len(missing_games)} missing Week 12 games to starter pack"
+                )
+                print(
+                    f"✅ Added {len(missing_games)} missing Week 12 games to starter pack"
+                )
                 return True
             else:
                 print("⚠️ Could not extract missing Week 12 games")
@@ -183,7 +217,12 @@ class DataSynchronizer:
     def fix_week13_prediction_columns(self):
         """Fix missing prediction columns in Week 13 data"""
         try:
-            pred_file = self.project_root / "predictions" / "week13" / "week13_comprehensive_predictions.csv"
+            pred_file = (
+                self.project_root
+                / "predictions"
+                / "week13"
+                / "week13_comprehensive_predictions.csv"
+            )
 
             if not pred_file.exists():
                 print("❌ Week 13 comprehensive predictions file not found")
@@ -193,7 +232,7 @@ class DataSynchronizer:
             pred_df = pd.read_csv(pred_file)
 
             # Check for required columns
-            required_cols = ['home_team', 'away_team']
+            required_cols = ["home_team", "away_team"]
             missing_cols = [col for col in required_cols if col not in pred_df.columns]
 
             if missing_cols:
@@ -201,29 +240,31 @@ class DataSynchronizer:
                 return False
 
             # Add missing prediction columns if they don't exist
-            if 'predicted_home_score' not in pred_df.columns:
+            if "predicted_home_score" not in pred_df.columns:
                 # Generate predicted scores if they don't exist
-                if 'home_win_probability' in pred_df.columns:
+                if "home_win_probability" in pred_df.columns:
                     # Simple score estimation from win probability
-                    pred_df['predicted_home_score'] = np.where(
-                        pred_df['home_win_probability'] > 0.5,
+                    pred_df["predicted_home_score"] = np.where(
+                        pred_df["home_win_probability"] > 0.5,
                         np.random.normal(35, 10, len(pred_df)),
-                        np.random.normal(25, 10, len(pred_df))
+                        np.random.normal(25, 10, len(pred_df)),
                     ).astype(int)
-                    pred_df['predicted_away_score'] = np.where(
-                        pred_df['home_win_probability'] <= 0.5,
+                    pred_df["predicted_away_score"] = np.where(
+                        pred_df["home_win_probability"] <= 0.5,
                         np.random.normal(35, 10, len(pred_df)),
-                        np.random.normal(25, 10, len(pred_df))
+                        np.random.normal(25, 10, len(pred_df)),
                     ).astype(int)
                 else:
                     # Default scores
-                    pred_df['predicted_home_score'] = 30
-                    pred_df['predicted_away_score'] = 28
+                    pred_df["predicted_home_score"] = 30
+                    pred_df["predicted_away_score"] = 28
 
                 # Save updated predictions
                 pred_df.to_csv(pred_file, index=False)
 
-                self.fixes_applied.append("Added predicted_home_score and predicted_away_score columns to Week 13 predictions")
+                self.fixes_applied.append(
+                    "Added predicted_home_score and predicted_away_score columns to Week 13 predictions"
+                )
                 print(f"✅ Added prediction columns to Week 13 data")
                 return True
             else:
@@ -240,11 +281,15 @@ class DataSynchronizer:
             print("🔄 Running data migration process...")
 
             # Use existing migration script if it exists
-            migration_script = self.project_root / "model_pack" / "migrate_starter_pack_data.py"
+            migration_script = (
+                self.project_root / "model_pack" / "migrate_starter_pack_data.py"
+            )
             if migration_script.exists():
-                result = subprocess.run([
-                    sys.executable, str(migration_script), "--weeks", "1-12"
-                ], capture_output=True, text=True)
+                result = subprocess.run(
+                    [sys.executable, str(migration_script), "--weeks", "1-12"],
+                    capture_output=True,
+                    text=True,
+                )
 
                 if result.returncode == 0:
                     self.fixes_applied.append("Successfully re-ran data migration")
@@ -255,14 +300,23 @@ class DataSynchronizer:
                 print("⚠️ Migration script not found - manual sync required")
 
             # Run integration workflow
-            workflow_script = self.project_root / "project_management" / "core_tools" / "data_workflows.py"
+            workflow_script = (
+                self.project_root
+                / "project_management"
+                / "core_tools"
+                / "data_workflows.py"
+            )
             if workflow_script.exists():
-                result = subprocess.run([
-                    sys.executable, str(workflow_script), "refresh-training"
-                ], capture_output=True, text=True)
+                result = subprocess.run(
+                    [sys.executable, str(workflow_script), "refresh-training"],
+                    capture_output=True,
+                    text=True,
+                )
 
                 if result.returncode == 0:
-                    self.fixes_applied.append("Successfully re-ran training data integration")
+                    self.fixes_applied.append(
+                        "Successfully re-ran training data integration"
+                    )
                     print("✅ Training data integration completed successfully")
                 else:
                     print(f"⚠️ Integration script issues: {result.stderr}")
@@ -283,13 +337,15 @@ class DataSynchronizer:
             # Run our audit script again
             audit_script = self.project_root / "scripts" / "comprehensive_data_audit.py"
             if audit_script.exists():
-                result = subprocess.run([
-                    sys.executable, str(audit_script)
-                ], capture_output=True, text=True)
+                result = subprocess.run(
+                    [sys.executable, str(audit_script)], capture_output=True, text=True
+                )
 
                 # Count issues in output
-                output_lines = result.stdout.split('\n')
-                issues_line = next((line for line in output_lines if "Total Issues:" in line), "")
+                output_lines = result.stdout.split("\n")
+                issues_line = next(
+                    (line for line in output_lines if "Total Issues:" in line), ""
+                )
                 if issues_line:
                     try:
                         remaining_issues = int(issues_line.split(":")[1].strip())
@@ -297,11 +353,15 @@ class DataSynchronizer:
 
                         if remaining_issues == 0:
                             print("🎉 All synchronization issues resolved!")
-                            self.fixes_applied.append("All synchronization issues successfully resolved")
+                            self.fixes_applied.append(
+                                "All synchronization issues successfully resolved"
+                            )
                             return "✅ RESOLVED"
                         elif remaining_issues < 3:
                             print("✅ Most synchronization issues resolved")
-                            self.fixes_applied.append(f"Reduced issues to {remaining_issues}")
+                            self.fixes_applied.append(
+                                f"Reduced issues to {remaining_issues}"
+                            )
                             return "⚠️ MOSTLY_RESOLVED"
                         else:
                             print("⚠️ Some issues remain - manual review needed")
@@ -317,9 +377,9 @@ class DataSynchronizer:
 
     def print_fixes_summary(self):
         """Print summary of fixes applied"""
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("🔧 SYNCHRONIZATION FIXES SUMMARY")
-        print("="*60)
+        print("=" * 60)
 
         if self.fixes_applied:
             print(f"\n✅ Fixes Applied ({len(self.fixes_applied)}):")
@@ -328,7 +388,8 @@ class DataSynchronizer:
         else:
             print("\n⚠️ No fixes were applied")
 
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
+
 
 def main():
     """Main execution function"""
@@ -347,6 +408,7 @@ def main():
         return 1
     else:
         return 2
+
 
 if __name__ == "__main__":
     exit_code = main()

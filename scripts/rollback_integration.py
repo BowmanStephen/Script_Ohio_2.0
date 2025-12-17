@@ -15,8 +15,8 @@ from __future__ import annotations
 import argparse
 import hashlib
 import os
-import sys
 import shutil
+import sys
 import traceback
 from dataclasses import dataclass
 from pathlib import Path
@@ -62,7 +62,9 @@ def _find_latest_backup(project_root: Path) -> Path:
 
     if backups_dir.exists():
         candidates.extend(backups_dir.glob("updated_training_data_backup_*.csv"))
-    candidates.extend((project_root / "model_pack").glob("updated_training_data.csv.backup_*"))
+    candidates.extend(
+        (project_root / "model_pack").glob("updated_training_data.csv.backup_*")
+    )
 
     if not candidates:
         raise FileNotFoundError("No backups found for updated_training_data.csv")

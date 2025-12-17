@@ -1,6 +1,5 @@
 """Observability utilities shared by agents and scripts."""
 
-from .logging_config import configure_logging, get_logger, ObservabilityConfig
 from .error_taxonomy import (
     ErrorCategory,
     ErrorEvent,
@@ -10,6 +9,7 @@ from .error_taxonomy import (
     summarize_exception,
 )
 from .hub import ObservabilityHub
+from .logging_config import ObservabilityConfig, configure_logging, get_logger
 
 __all__ = [
     "configure_logging",

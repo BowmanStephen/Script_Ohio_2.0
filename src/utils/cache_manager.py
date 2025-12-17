@@ -11,32 +11,34 @@ Created: 2025-11-10
 Version: 1.0
 """
 
-import os
-import time
-import json
-import hashlib
-import threading
-import logging
-import pickle
-import zlib
-from typing import Dict, List, Optional, Any, Tuple, Union, Callable
-from dataclasses import dataclass, asdict
-from collections import OrderedDict, defaultdict, deque
-from pathlib import Path
 import asyncio
-from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timedelta
-import weakref
 import gc
+import hashlib
+import json
+import logging
+import os
+import pickle
+import threading
+import time
+import weakref
+import zlib
 from abc import ABC, abstractmethod
+from collections import OrderedDict, defaultdict, deque
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class CacheEntry:
     """Cache entry with metadata"""
+
     key: str
     value: Any
     size_bytes: int
@@ -49,9 +51,11 @@ class CacheEntry:
     tags: List[str]
     priority: int  # 1=low, 5=high
 
+
 @dataclass
 class CacheStats:
     """Cache performance statistics"""
+
     hits: int = 0
     misses: int = 0
     evictions: int = 0
@@ -61,12 +65,17 @@ class CacheStats:
     compression_ratio: float = 1.0
     hit_rate: float = 0.0
 
+
 class EvictionPolicy(ABC):
     """Abstract base class for cache eviction policies"""
 
     @abstractmethod
-    def should_evict(self, cache_entries: Dict[str, CacheEntry], new_entry_size: int,
-                    max_size_bytes: int) -> Optional[str]:
+    def should_evict(
+        self,
+        cache_entries: Dict[str, CacheEntry],
+        new_entry_size: int,
+        max_size_bytes: int,
+    ) -> Optional[str]:
         """Determine if an entry should be evicted and return key to evict"""
         pass
 
@@ -75,6 +84,7 @@ class EvictionPolicy(ABC):
         """Update entry access information"""
         pass
 
+
 class LRUWithCostEviction(EvictionPolicy):
     """LRU eviction policy that considers computational cost"""
 
@@ -82,8 +92,12 @@ class LRUWithCostEviction(EvictionPolicy):
         self.cost_weight = cost_weight
         self.access_order = OrderedDict()
 
-    def should_evict(self, cache_entries: Dict[str, CacheEntry], new_entry_size: int,
-                    max_size_bytes: int) -> Optional[str]:
+    def should_evict(
+        self,
+        cache_entries: Dict[str, CacheEntry],
+        new_entry_size: int,
+        max_size_bytes: int,
+    ) -> Optional[str]:
         """Evict based on LRU with cost consideration"""
         total_size = sum(entry.size_bytes for entry in cache_entries.values())
 
@@ -92,7 +106,9 @@ class LRUWithCostEviction(EvictionPolicy):
 
         # Calculate eviction score: lower score = higher eviction priority
         def eviction_score(key: str, entry: CacheEntry) -> float:
-            recent_access = (time.time() - entry.last_accessed) / 3600  # Hours since access
+            recent_access = (
+                time.time() - entry.last_accessed
+            ) / 3600  # Hours since access
             frequency = entry.access_count / max(1, time.time() - entry.created_at)
             cost_factor = entry.cost * self.cost_weight
             return recent_access / (frequency + 0.1) + cost_factor
@@ -105,7 +121,9 @@ class LRUWithCostEviction(EvictionPolicy):
                     return key
 
         # Fallback to cost-based eviction
-        return min(cache_entries.keys(), key=lambda k: eviction_score(k, cache_entries[k]))
+        return min(
+            cache_entries.keys(), key=lambda k: eviction_score(k, cache_entries[k])
+        )
 
     def update_access(self, entry: CacheEntry):
         """Update LRU access order"""
@@ -113,6 +131,7 @@ class LRUWithCostEviction(EvictionPolicy):
             self.access_order.move_to_end(entry.key)
         else:
             self.access_order[entry.key] = True
+
 
 class PredictivePreloader:
     """Predictive cache preloading based on access patterns"""
@@ -143,7 +162,8 @@ class PredictivePreloader:
         """Update access sequence patterns"""
         current_time = time.time()
         recent_keys = [
-            k for k, t in self.last_accesses.items()
+            k
+            for k, t in self.last_accesses.items()
             if current_time - t < 300  # Last 5 minutes
         ]
 
@@ -194,6 +214,7 @@ class PredictivePreloader:
 
         return overlap / union if union > 0 else 0.0
 
+
 class CompressionStrategy(ABC):
     """Abstract base class for compression strategies"""
 
@@ -206,6 +227,7 @@ class CompressionStrategy(ABC):
     def decompress(self, compressed_data: bytes) -> Any:
         """Decompress data"""
         pass
+
 
 class ZlibCompression(CompressionStrategy):
     """Zlib compression strategy"""
@@ -225,6 +247,7 @@ class ZlibCompression(CompressionStrategy):
         decompressed = zlib.decompress(compressed_data)
         return pickle.loads(decompressed)
 
+
 class NoCompression(CompressionStrategy):
     """No compression strategy for small/fast data"""
 
@@ -237,14 +260,20 @@ class NoCompression(CompressionStrategy):
         """Return data as-is"""
         return pickle.loads(compressed_data)
 
+
 class AdvancedCacheManager:
     """
     Advanced multi-level cache manager with intelligent eviction,
     predictive preloading, and adaptive compression.
     """
 
-    def __init__(self, max_size_mb: int = 100, max_entries: int = 10000,
-                 compression_threshold: int = 1024, enable_preloading: bool = True):
+    def __init__(
+        self,
+        max_size_mb: int = 100,
+        max_entries: int = 10000,
+        compression_threshold: int = 1024,
+        enable_preloading: bool = True,
+    ):
         # Cache configuration
         self.max_size_bytes = max_size_mb * 1024 * 1024
         self.max_entries = max_entries
@@ -258,13 +287,15 @@ class AdvancedCacheManager:
         # Eviction and compression
         self.eviction_policy = LRUWithCostEviction(cost_weight=0.3)
         self.compression_strategies = {
-            'zlib': ZlibCompression(),
-            'none': NoCompression()
+            "zlib": ZlibCompression(),
+            "none": NoCompression(),
         }
 
         # Predictive preloading
         self.preloader = PredictivePreloader() if enable_preloading else None
-        self.preload_executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="cache_preload")
+        self.preload_executor = ThreadPoolExecutor(
+            max_workers=2, thread_name_prefix="cache_preload"
+        )
 
         # Statistics and monitoring
         self.stats = CacheStats()
@@ -275,7 +306,9 @@ class AdvancedCacheManager:
         self.maintenance_active = False
         self.maintenance_thread = None
 
-        logger.info(f"Advanced Cache Manager initialized: {max_size_mb}MB, {max_entries} entries")
+        logger.info(
+            f"Advanced Cache Manager initialized: {max_size_mb}MB, {max_entries} entries"
+        )
 
     def get(self, key: str, default: Any = None) -> Any:
         """Get value from cache with decompression if needed"""
@@ -290,7 +323,10 @@ class AdvancedCacheManager:
             entry = self.cache_entries[key]
 
             # Check TTL
-            if entry.ttl_seconds and (time.time() - entry.created_at) > entry.ttl_seconds:
+            if (
+                entry.ttl_seconds
+                and (time.time() - entry.created_at) > entry.ttl_seconds
+            ):
                 self._remove_entry(key)
                 self.stats.misses += 1
                 self._update_hit_rate()
@@ -332,8 +368,15 @@ class AdvancedCacheManager:
 
             return value
 
-    def put(self, key: str, value: Any, ttl_seconds: Optional[float] = None,
-            tags: Optional[List[str]] = None, priority: int = 3, cost: float = 1.0) -> bool:
+    def put(
+        self,
+        key: str,
+        value: Any,
+        ttl_seconds: Optional[float] = None,
+        tags: Optional[List[str]] = None,
+        priority: int = 3,
+        cost: float = 1.0,
+    ) -> bool:
         """Put value in cache with intelligent compression"""
         try:
             with self.lock:
@@ -343,11 +386,13 @@ class AdvancedCacheManager:
 
                 # Determine if compression should be used
                 use_compression = size_bytes > self.compression_threshold
-                compression_strategy = 'zlib' if use_compression else 'none'
+                compression_strategy = "zlib" if use_compression else "none"
 
                 # Apply compression if needed
                 if use_compression:
-                    compressed_data, compression_ratio = self.compression_strategies[compression_strategy].compress(value)
+                    compressed_data, compression_ratio = self.compression_strategies[
+                        compression_strategy
+                    ].compress(value)
                     final_size = len(compressed_data)
                     stored_value = None  # Value stored in compressed cache
                 else:
@@ -358,12 +403,16 @@ class AdvancedCacheManager:
 
                 # Check if eviction is needed
                 if final_size > self.max_size_bytes:
-                    logger.warning(f"Cache entry {key} ({final_size} bytes) exceeds max cache size")
+                    logger.warning(
+                        f"Cache entry {key} ({final_size} bytes) exceeds max cache size"
+                    )
                     return False
 
                 # Evict entries if necessary
-                while (self._get_total_size() + final_size > self.max_size_bytes or
-                       len(self.cache_entries) >= self.max_entries):
+                while (
+                    self._get_total_size() + final_size > self.max_size_bytes
+                    or len(self.cache_entries) >= self.max_entries
+                ):
                     evict_key = self.eviction_policy.should_evict(
                         self.cache_entries, final_size, self.max_size_bytes
                     )
@@ -388,7 +437,7 @@ class AdvancedCacheManager:
                     compression_ratio=compression_ratio,
                     cost=cost,
                     tags=tags or [],
-                    priority=priority
+                    priority=priority,
                 )
 
                 # Store entry
@@ -399,7 +448,9 @@ class AdvancedCacheManager:
                 # Update statistics
                 self._update_stats()
 
-                logger.debug(f"Cached {key}: {final_size} bytes (compression: {compression_ratio:.2f})")
+                logger.debug(
+                    f"Cached {key}: {final_size} bytes (compression: {compression_ratio:.2f})"
+                )
                 return True
 
         except Exception as e:
@@ -431,26 +482,28 @@ class AdvancedCacheManager:
             self._update_avg_access_time()
 
             return {
-                'entries': len(self.cache_entries),
-                'size_bytes': self._get_total_size(),
-                'size_mb': self._get_total_size() / (1024 * 1024),
-                'hits': self.stats.hits,
-                'misses': self.stats.misses,
-                'hit_rate': self.stats.hit_rate,
-                'evictions': self.stats.evictions,
-                'avg_access_time_ms': self.stats.avg_access_time_ms,
-                'compression_ratio': self.stats.compression_ratio,
-                'compression_enabled': len(self.compressed_cache) > 0,
-                'predictive_preloading': self.enable_preloading and self.preloader is not None,
-                'memory_efficiency': self._calculate_memory_efficiency(),
-                'cache_utilization': self._get_total_size() / self.max_size_bytes,
-                'top_entries_by_access': self._get_top_entries_by_access(5),
-                'entries_by_priority': self._get_entries_by_priority(),
-                'ttl_expired_count': self._count_expired_entries()
+                "entries": len(self.cache_entries),
+                "size_bytes": self._get_total_size(),
+                "size_mb": self._get_total_size() / (1024 * 1024),
+                "hits": self.stats.hits,
+                "misses": self.stats.misses,
+                "hit_rate": self.stats.hit_rate,
+                "evictions": self.stats.evictions,
+                "avg_access_time_ms": self.stats.avg_access_time_ms,
+                "compression_ratio": self.stats.compression_ratio,
+                "compression_enabled": len(self.compressed_cache) > 0,
+                "predictive_preloading": self.enable_preloading
+                and self.preloader is not None,
+                "memory_efficiency": self._calculate_memory_efficiency(),
+                "cache_utilization": self._get_total_size() / self.max_size_bytes,
+                "top_entries_by_access": self._get_top_entries_by_access(5),
+                "entries_by_priority": self._get_entries_by_priority(),
+                "ttl_expired_count": self._count_expired_entries(),
             }
 
-    def preload_predicted_entries(self, current_key: str, loader_func: Callable[[str], Any],
-                                 max_preloads: int = 5):
+    def preload_predicted_entries(
+        self, current_key: str, loader_func: Callable[[str], Any], max_preloads: int = 5
+    ):
         """Preload predicted cache entries"""
         if not self.preloader:
             return
@@ -464,7 +517,7 @@ class AdvancedCacheManager:
                     value = loader_func(key)
                     if value is not None:
                         # Use lower priority for preloaded entries
-                        self.put(key, value, priority=1, tags=['preloaded'])
+                        self.put(key, value, priority=1, tags=["preloaded"])
                         logger.debug(f"Preloaded predicted cache entry: {key}")
                 except Exception as e:
                     logger.warning(f"Failed to preload {key}: {str(e)}")
@@ -480,7 +533,9 @@ class AdvancedCacheManager:
             return
 
         self.maintenance_active = True
-        self.maintenance_thread = threading.Thread(target=self._maintenance_loop, daemon=True)
+        self.maintenance_thread = threading.Thread(
+            target=self._maintenance_loop, daemon=True
+        )
         self.maintenance_thread.start()
         logger.info("Cache maintenance started")
 
@@ -489,7 +544,7 @@ class AdvancedCacheManager:
         self.maintenance_active = False
         if self.maintenance_thread:
             self.maintenance_thread.join(timeout=5)
-        if hasattr(self, 'preload_executor'):
+        if hasattr(self, "preload_executor"):
             self.preload_executor.shutdown(wait=True)
         logger.info("Cache maintenance stopped")
 
@@ -525,7 +580,7 @@ class AdvancedCacheManager:
         """Decompress cache entry"""
         if key in self.compressed_cache:
             compressed_data = self.compressed_cache[key]
-            return self.compression_strategies['zlib'].decompress(compressed_data)
+            return self.compression_strategies["zlib"].decompress(compressed_data)
         else:
             return self.cache_entries[key].value
 
@@ -546,17 +601,23 @@ class AdvancedCacheManager:
                     total_compression_ratio += entry.compression_ratio
 
             if self.compressed_cache:
-                self.stats.compression_ratio = total_compression_ratio / len(self.compressed_cache)
+                self.stats.compression_ratio = total_compression_ratio / len(
+                    self.compressed_cache
+                )
 
     def _update_hit_rate(self):
         """Update cache hit rate"""
         total_requests = self.stats.hits + self.stats.misses
-        self.stats.hit_rate = (self.stats.hits / total_requests * 100) if total_requests > 0 else 0
+        self.stats.hit_rate = (
+            (self.stats.hits / total_requests * 100) if total_requests > 0 else 0
+        )
 
     def _update_avg_access_time(self):
         """Update average access time"""
         if self.access_times:
-            self.stats.avg_access_time_ms = sum(self.access_times) / len(self.access_times)
+            self.stats.avg_access_time_ms = sum(self.access_times) / len(
+                self.access_times
+            )
 
     def _trigger_preload(self, key: str):
         """Trigger predictive preloading for a key"""
@@ -571,7 +632,10 @@ class AdvancedCacheManager:
         expired_keys = []
 
         for key, entry in self.cache_entries.items():
-            if entry.ttl_seconds and (current_time - entry.created_at) > entry.ttl_seconds:
+            if (
+                entry.ttl_seconds
+                and (current_time - entry.created_at) > entry.ttl_seconds
+            ):
                 expired_keys.append(key)
 
         for key in expired_keys:
@@ -593,28 +657,33 @@ class AdvancedCacheManager:
 
         # Factors: hit rate, compression ratio, cache utilization
         hit_rate_factor = self.stats.hit_rate / 100
-        compression_factor = (2 - self.stats.compression_ratio) if self.stats.compression_ratio > 0 else 1
+        compression_factor = (
+            (2 - self.stats.compression_ratio)
+            if self.stats.compression_ratio > 0
+            else 1
+        )
         utilization_factor = self._get_total_size() / self.max_size_bytes
 
-        efficiency = (hit_rate_factor * 0.5 + compression_factor * 0.3 +
-                     (1 - abs(utilization_factor - 0.7)) * 0.2) * 100
+        efficiency = (
+            hit_rate_factor * 0.5
+            + compression_factor * 0.3
+            + (1 - abs(utilization_factor - 0.7)) * 0.2
+        ) * 100
 
         return min(100, max(0, efficiency))
 
     def _get_top_entries_by_access(self, limit: int) -> List[Dict[str, Any]]:
         """Get top entries by access count"""
         sorted_entries = sorted(
-            self.cache_entries.values(),
-            key=lambda e: e.access_count,
-            reverse=True
+            self.cache_entries.values(), key=lambda e: e.access_count, reverse=True
         )[:limit]
 
         return [
             {
-                'key': entry.key,
-                'access_count': entry.access_count,
-                'size_bytes': entry.size_bytes,
-                'last_accessed': entry.last_accessed
+                "key": entry.key,
+                "access_count": entry.access_count,
+                "size_bytes": entry.size_bytes,
+                "last_accessed": entry.last_accessed,
             }
             for entry in sorted_entries
         ]
@@ -632,7 +701,10 @@ class AdvancedCacheManager:
         expired_count = 0
 
         for entry in self.cache_entries.values():
-            if entry.ttl_seconds and (current_time - entry.created_at) > entry.ttl_seconds:
+            if (
+                entry.ttl_seconds
+                and (current_time - entry.created_at) > entry.ttl_seconds
+            ):
                 expired_count += 1
 
         return expired_count
@@ -641,17 +713,18 @@ class AdvancedCacheManager:
         """Export cache state for persistence"""
         with self.lock:
             return {
-                'cache_entries': {
-                    key: asdict(entry) for key, entry in self.cache_entries.items()
+                "cache_entries": {
+                    key: asdict(entry)
+                    for key, entry in self.cache_entries.items()
                     if key not in self.compressed_cache  # Only uncompressed entries
                 },
-                'compressed_cache_keys': list(self.compressed_cache.keys()),
-                'stats': asdict(self.stats),
-                'config': {
-                    'max_size_bytes': self.max_size_bytes,
-                    'max_entries': self.max_entries,
-                    'compression_threshold': self.compression_threshold
-                }
+                "compressed_cache_keys": list(self.compressed_cache.keys()),
+                "stats": asdict(self.stats),
+                "config": {
+                    "max_size_bytes": self.max_size_bytes,
+                    "max_entries": self.max_entries,
+                    "compression_threshold": self.compression_threshold,
+                },
             }
 
     def __del__(self):
@@ -662,7 +735,10 @@ class AdvancedCacheManager:
 # Singleton cache manager instance for the application
 _cache_manager_instance = None
 
-def get_cache_manager(max_size_mb: int = 100, max_entries: int = 10000) -> AdvancedCacheManager:
+
+def get_cache_manager(
+    max_size_mb: int = 100, max_entries: int = 10000
+) -> AdvancedCacheManager:
     """Get singleton cache manager instance"""
     global _cache_manager_instance
 

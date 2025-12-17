@@ -24,7 +24,11 @@ class ObservabilityConfig:
     service_name: str = os.getenv("SERVICE_NAME", "script_ohio")
     environment: str = os.getenv("APP_ENV", "development")
     log_level: str = os.getenv("LOG_LEVEL", "INFO")
-    structured: bool = os.getenv("STRUCTURED_LOGGING", "1").lower() not in {"0", "false", "no"}
+    structured: bool = os.getenv("STRUCTURED_LOGGING", "1").lower() not in {
+        "0",
+        "false",
+        "no",
+    }
 
 
 class StructuredLogFormatter(logging.Formatter):

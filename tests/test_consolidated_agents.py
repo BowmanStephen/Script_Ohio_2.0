@@ -4,13 +4,14 @@ from collections import deque
 from typing import Any, Dict
 
 import pytest
-
 from agents.cfbd_integration_agent import CFBDIntegrationAgent
 from agents.quality_assurance_agent import QualityAssuranceAgent
 
 
 class FakeProvider:
-    def get_team_snapshot(self, team: str, season: int, week: int | None = None) -> Dict[str, Any]:
+    def get_team_snapshot(
+        self, team: str, season: int, week: int | None = None
+    ) -> Dict[str, Any]:
         return {
             "team": team,
             "season": season,
@@ -24,13 +25,12 @@ class FakeProvider:
             ],
         }
 
-    def get_games(self, year: int, week: int | None = None, team: str | None = None) -> list:
-        return [{
-            "opponent": "michigan",
-            "home_points": 35,
-            "away_points": 28,
-            "week": 12
-        }]
+    def get_games(
+        self, year: int, week: int | None = None, team: str | None = None
+    ) -> list:
+        return [
+            {"opponent": "michigan", "home_points": 35, "away_points": 28, "week": 12}
+        ]
 
     def get_ratings(self, year: int, week: int | None = None) -> list:
         return [{"team": "Ohio State", "rating": 90.0}]

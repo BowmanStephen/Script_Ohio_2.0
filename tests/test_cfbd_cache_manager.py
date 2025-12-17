@@ -1,7 +1,6 @@
 import pytest
-
-from src.data_sources.cfbd_cache_manager import CFBDCacheManager, CFBDCacheConfig
-from src.data_sources.cfbd_client import CFBDRESTDataSource, CFBDClientConfig
+from src.data_sources.cfbd_cache_manager import CFBDCacheConfig, CFBDCacheManager
+from src.data_sources.cfbd_client import CFBDClientConfig, CFBDRESTDataSource
 
 
 class _FakeClock:
@@ -62,7 +61,9 @@ def test_rest_data_source_uses_cache(monkeypatch):
     cache = CFBDCacheManager(clock=clock.now)
     client = _FakeClient()
 
-    ds = CFBDRESTDataSource(client=client, config=CFBDClientConfig(api_key="token"), cache_manager=cache)
+    ds = CFBDRESTDataSource(
+        client=client, config=CFBDClientConfig(api_key="token"), cache_manager=cache
+    )
 
     result_one = ds.fetch_games(year=2025, week=1)
     result_two = ds.fetch_games(year=2025, week=1)
@@ -83,4 +84,3 @@ def test_cache_can_be_disabled(monkeypatch):
     ds.fetch_games(year=2025, week=1)
     ds.fetch_games(year=2025, week=1)
     assert client.calls == 2
-

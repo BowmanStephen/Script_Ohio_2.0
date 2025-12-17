@@ -4,41 +4,43 @@ Import Week 13 predictions from external source
 Parses the provided predictions data and integrates with our Week 13 analysis
 """
 
-import pandas as pd
 import json
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+
+import pandas as pd
+
 
 def parse_predictions_text(text_data):
     """
     Parse the predictions text data into a DataFrame
     Format: Home | Road | Line Open | Line | Midweek Line | Prediction Avg | etc.
     """
-    lines = text_data.strip().split('\n')
-    
+    lines = text_data.strip().split("\n")
+
     # Skip header lines and parse data
     games = []
     data_started = False
-    
+
     for line in lines:
         line = line.strip()
         if not line:
             continue
-        
+
         # Skip header rows
-        if 'Prediction' in line or 'Home' in line and 'Road' in line:
+        if "Prediction" in line or "Home" in line and "Road" in line:
             data_started = True
             continue
-        
+
         if not data_started:
             continue
-        
+
         # Split by tabs (preserving empty fields)
-        parts = line.split('\t')
-        
+        parts = line.split("\t")
+
         # Clean up parts
         parts = [p.strip() if p.strip() else None for p in parts]
-        
+
         # Need at least 11 fields (midweek line may be empty)
         if len(parts) >= 11:
             try:
@@ -47,48 +49,48 @@ def parse_predictions_text(text_data):
                     if val is None:
                         return None
                     val = str(val).strip()
-                    if not val or val == '' or val == '-':
+                    if not val or val == "" or val == "-":
                         return None
                     try:
                         return float(val)
                     except ValueError:
                         return None
-                
+
                 # Map fields: Home, Away, Line Open, Line Current, Midweek (empty), Avg, Median, Std, Min, Max, Home Win Prob, Home Covers Prob
                 # When midweek is empty, fields shift: [0:Home, 1:Away, 2:LineOpen, 3:LineCurrent, 4:Avg, 5:Median, 6:Std, 7:Min, 8:Max, 9:HomeWin, 10:HomeCovers]
-                
+
                 # Check if we have 11 or 12 fields
                 if len(parts) == 11:
                     # No midweek line - shift fields
                     game = {
-                        'home_team': parts[0] if parts[0] else '',
-                        'away_team': parts[1] if parts[1] else '',
-                        'line_open': parse_float(parts[2]),
-                        'line_current': parse_float(parts[3]),
-                        'midweek_line': None,
-                        'prediction_avg': parse_float(parts[4]),
-                        'prediction_median': parse_float(parts[5]),
-                        'prediction_std': parse_float(parts[6]),
-                        'prediction_min': parse_float(parts[7]),
-                        'prediction_max': parse_float(parts[8]),
-                        'home_win_probability': parse_float(parts[9]),
-                        'home_covers_probability': parse_float(parts[10]),
+                        "home_team": parts[0] if parts[0] else "",
+                        "away_team": parts[1] if parts[1] else "",
+                        "line_open": parse_float(parts[2]),
+                        "line_current": parse_float(parts[3]),
+                        "midweek_line": None,
+                        "prediction_avg": parse_float(parts[4]),
+                        "prediction_median": parse_float(parts[5]),
+                        "prediction_std": parse_float(parts[6]),
+                        "prediction_min": parse_float(parts[7]),
+                        "prediction_max": parse_float(parts[8]),
+                        "home_win_probability": parse_float(parts[9]),
+                        "home_covers_probability": parse_float(parts[10]),
                     }
                 elif len(parts) >= 12:
                     # Has midweek line
                     game = {
-                        'home_team': parts[0] if parts[0] else '',
-                        'away_team': parts[1] if parts[1] else '',
-                        'line_open': parse_float(parts[2]),
-                        'line_current': parse_float(parts[3]),
-                        'midweek_line': parse_float(parts[4]),
-                        'prediction_avg': parse_float(parts[5]),
-                        'prediction_median': parse_float(parts[6]),
-                        'prediction_std': parse_float(parts[7]),
-                        'prediction_min': parse_float(parts[8]),
-                        'prediction_max': parse_float(parts[9]),
-                        'home_win_probability': parse_float(parts[10]),
-                        'home_covers_probability': parse_float(parts[11]),
+                        "home_team": parts[0] if parts[0] else "",
+                        "away_team": parts[1] if parts[1] else "",
+                        "line_open": parse_float(parts[2]),
+                        "line_current": parse_float(parts[3]),
+                        "midweek_line": parse_float(parts[4]),
+                        "prediction_avg": parse_float(parts[5]),
+                        "prediction_median": parse_float(parts[6]),
+                        "prediction_std": parse_float(parts[7]),
+                        "prediction_min": parse_float(parts[8]),
+                        "prediction_max": parse_float(parts[9]),
+                        "home_win_probability": parse_float(parts[10]),
+                        "home_covers_probability": parse_float(parts[11]),
                     }
                 else:
                     continue
@@ -96,8 +98,9 @@ def parse_predictions_text(text_data):
             except (ValueError, IndexError) as e:
                 print(f"Warning: Could not parse line: {line[:80]}... Error: {e}")
                 continue
-    
+
     return pd.DataFrame(games)
+
 
 def load_predictions_from_text():
     """Load predictions from the provided text data"""
@@ -226,17 +229,18 @@ Wisconsin 	Illinois 	-9 	-9.5 		-8.55 	-9.31 	2.92 	-15.29 	-3.17 	0.2988 	0.516
 
 Wyoming 	Nevada 	7.5 	7 		7.85 	8.04 	2.91 	-0.05 	14.65 	0.686 	0.5149
 """
-    
+
     return parse_predictions_text(predictions_text)
+
 
 def integrate_predictions():
     """Integrate external predictions with our Week 13 analysis"""
     print("📥 Loading external Week 13 predictions...")
-    
+
     # Load external predictions
     external_preds = load_predictions_from_text()
     print(f"✅ Loaded {len(external_preds)} external predictions")
-    
+
     # Load our predictions
     our_preds_path = Path("predictions/week13/week13_comprehensive_predictions.csv")
     if our_preds_path.exists():
@@ -245,7 +249,7 @@ def integrate_predictions():
     else:
         our_preds = pd.DataFrame()
         print("⚠️  No existing predictions found")
-    
+
     # Normalize team names for matching
     def normalize_team_name(name):
         """Normalize team names for matching"""
@@ -255,31 +259,35 @@ def integrate_predictions():
         name = name.replace(" (", " ").replace(")", "")
         name = name.replace(".", "")
         return name.upper()
-    
+
     # Add normalized team names for matching
-    external_preds['home_team_norm'] = external_preds['home_team'].apply(normalize_team_name)
-    external_preds['away_team_norm'] = external_preds['away_team'].apply(normalize_team_name)
-    
+    external_preds["home_team_norm"] = external_preds["home_team"].apply(
+        normalize_team_name
+    )
+    external_preds["away_team_norm"] = external_preds["away_team"].apply(
+        normalize_team_name
+    )
+
     if len(our_preds) > 0:
-        our_preds['home_team_norm'] = our_preds['home_team'].apply(normalize_team_name)
-        our_preds['away_team_norm'] = our_preds['away_team'].apply(normalize_team_name)
-    
+        our_preds["home_team_norm"] = our_preds["home_team"].apply(normalize_team_name)
+        our_preds["away_team_norm"] = our_preds["away_team"].apply(normalize_team_name)
+
     # Merge external predictions with our data
     merged = external_preds.copy()
-    merged['season'] = 2025
-    merged['week'] = 13
-    merged['source'] = 'external'
-    merged['imported_at'] = datetime.now().isoformat()
-    
+    merged["season"] = 2025
+    merged["week"] = 13
+    merged["source"] = "external"
+    merged["imported_at"] = datetime.now().isoformat()
+
     # Save integrated predictions
     output_dir = Path("predictions/week13")
     output_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Save external predictions
     external_path = output_dir / "week13_external_predictions.csv"
     merged.to_csv(external_path, index=False)
     print(f"✅ Saved external predictions to: {external_path}")
-    
+
     # Create comparison if we have our predictions
     if len(our_preds) > 0:
         # Try to match games
@@ -287,52 +295,66 @@ def integrate_predictions():
         for idx, ext_row in external_preds.iterrows():
             # Try to find matching game in our predictions
             match = our_preds[
-                (our_preds['home_team_norm'] == ext_row['home_team_norm']) &
-                (our_preds['away_team_norm'] == ext_row['away_team_norm'])
+                (our_preds["home_team_norm"] == ext_row["home_team_norm"])
+                & (our_preds["away_team_norm"] == ext_row["away_team_norm"])
             ]
-            
+
             if len(match) > 0:
                 our_row = match.iloc[0]
-                matches.append({
-                    'home_team': ext_row['home_team'],
-                    'away_team': ext_row['away_team'],
-                    'external_home_win_prob': ext_row['home_win_probability'],
-                    'our_home_win_prob': our_row.get('home_win_probability', None),
-                    'external_margin': ext_row['prediction_avg'],
-                    'our_margin': our_row.get('predicted_margin', None),
-                    'line_current': ext_row['line_current'],
-                    'difference_home_prob': (ext_row['home_win_probability'] - our_row.get('home_win_probability', 0.5)) if 'home_win_probability' in our_row else None,
-                    'difference_margin': (ext_row['prediction_avg'] - our_row.get('predicted_margin', 0)) if 'predicted_margin' in our_row else None,
-                })
-        
+                matches.append(
+                    {
+                        "home_team": ext_row["home_team"],
+                        "away_team": ext_row["away_team"],
+                        "external_home_win_prob": ext_row["home_win_probability"],
+                        "our_home_win_prob": our_row.get("home_win_probability", None),
+                        "external_margin": ext_row["prediction_avg"],
+                        "our_margin": our_row.get("predicted_margin", None),
+                        "line_current": ext_row["line_current"],
+                        "difference_home_prob": (
+                            ext_row["home_win_probability"]
+                            - our_row.get("home_win_probability", 0.5)
+                        )
+                        if "home_win_probability" in our_row
+                        else None,
+                        "difference_margin": (
+                            ext_row["prediction_avg"]
+                            - our_row.get("predicted_margin", 0)
+                        )
+                        if "predicted_margin" in our_row
+                        else None,
+                    }
+                )
+
         if matches:
             comparison_df = pd.DataFrame(matches)
             comparison_path = output_dir / "week13_prediction_comparison.csv"
             comparison_df.to_csv(comparison_path, index=False)
-            print(f"✅ Created comparison with {len(matches)} matched games: {comparison_path}")
-    
+            print(
+                f"✅ Created comparison with {len(matches)} matched games: {comparison_path}"
+            )
+
     # Create summary
     summary = {
-        'total_external_predictions': len(external_preds),
-        'total_our_predictions': len(our_preds) if len(our_preds) > 0 else 0,
-        'matched_games': len(matches) if len(our_preds) > 0 else 0,
-        'imported_at': datetime.now().isoformat(),
-        'week': 13,
-        'season': 2025
+        "total_external_predictions": len(external_preds),
+        "total_our_predictions": len(our_preds) if len(our_preds) > 0 else 0,
+        "matched_games": len(matches) if len(our_preds) > 0 else 0,
+        "imported_at": datetime.now().isoformat(),
+        "week": 13,
+        "season": 2025,
     }
-    
+
     summary_path = output_dir / "week13_import_summary.json"
-    with open(summary_path, 'w') as f:
+    with open(summary_path, "w") as f:
         json.dump(summary, f, indent=2)
     print(f"✅ Saved import summary to: {summary_path}")
-    
+
     print(f"\n📊 Summary:")
     print(f"   External predictions: {len(external_preds)}")
     print(f"   Our predictions: {len(our_preds) if len(our_preds) > 0 else 0}")
     print(f"   Matched games: {len(matches) if len(our_preds) > 0 else 0}")
-    
+
     return merged
+
 
 if __name__ == "__main__":
     integrate_predictions()
-

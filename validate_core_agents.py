@@ -3,6 +3,7 @@
 Validate All Core Agents
 Tests the functionality of the 8 core agents in the Script Ohio 2.0 system
 """
+
 import sys
 import time
 import traceback
@@ -12,19 +13,23 @@ from pathlib import Path
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
+
 def test_analytics_orchestrator():
     """Test Analytics Orchestrator"""
     print("\n🔍 Testing Analytics Orchestrator...")
     try:
-        from agents.analytics_orchestrator import AnalyticsOrchestrator, AnalyticsRequest
+        from agents.analytics_orchestrator import (
+            AnalyticsOrchestrator,
+            AnalyticsRequest,
+        )
 
         orchestrator = AnalyticsOrchestrator()
         request = AnalyticsRequest(
-            user_id='test_user',
-            query='test query',
-            query_type='analysis',
+            user_id="test_user",
+            query="test query",
+            query_type="analysis",
             parameters={},
-            context_hints={}
+            context_hints={},
         )
 
         start_time = time.time()
@@ -43,12 +48,16 @@ def test_analytics_orchestrator():
         print(f"❌ Analytics Orchestrator: Failed - {e}")
         return False
 
+
 def test_context_manager():
     """Test Context Manager (deprecated - kept for backward compatibility)"""
     print("\n🔍 Testing Context Manager...")
     print("⚠️  Context Manager is deprecated and will be removed on 2025-12-19")
-    print("   Use direct agent instantiation instead (see WeeklyAnalysisOrchestrator pattern)")
+    print(
+        "   Use direct agent instantiation instead (see WeeklyAnalysisOrchestrator pattern)"
+    )
     return True  # Always pass - component is deprecated
+
 
 def test_learning_navigator():
     """Test Learning Navigator Agent"""
@@ -56,7 +65,7 @@ def test_learning_navigator():
     try:
         from agents.learning_navigator_agent import LearningNavigatorAgent
 
-        agent = LearningNavigatorAgent('test_navigator')
+        agent = LearningNavigatorAgent("test_navigator")
 
         # Test capabilities
         if agent.capabilities:
@@ -71,13 +80,14 @@ def test_learning_navigator():
         print(f"❌ Learning Navigator Agent: Failed - {e}")
         return False
 
+
 def test_insight_generator():
     """Test Insight Generator Agent"""
     print("\n🔍 Testing Insight Generator Agent...")
     try:
         from agents.insight_generator_agent import InsightGeneratorAgent
 
-        agent = InsightGeneratorAgent('test_insight')
+        agent = InsightGeneratorAgent("test_insight")
 
         # Test capabilities
         if agent.capabilities:
@@ -92,6 +102,7 @@ def test_insight_generator():
         print(f"❌ Insight Generator Agent: Failed - {e}")
         return False
 
+
 def test_workflow_automator():
     """Test Workflow Automator Agent (deprecated - kept for backward compatibility)"""
     print("\n🔍 Testing Workflow Automator Agent...")
@@ -99,13 +110,14 @@ def test_workflow_automator():
     print("   Use direct agent calls instead (see WeeklyAnalysisOrchestrator pattern)")
     return True  # Always pass - component is deprecated
 
+
 def test_model_execution_engine():
     """Test Model Execution Engine"""
     print("\n🔍 Testing Model Execution Engine...")
     try:
         from agents.model_execution_engine import ModelExecutionEngine
 
-        engine = ModelExecutionEngine('test_model_engine')
+        engine = ModelExecutionEngine("test_model_engine")
 
         # Test model availability
         models_available = []
@@ -113,24 +125,29 @@ def test_model_execution_engine():
         # Test Ridge model
         try:
             import joblib
-            ridge_model = joblib.load('model_pack/ridge_model_2025.joblib')
-            models_available.append('ridge')
+
+            ridge_model = joblib.load("model_pack/ridge_model_2025.joblib")
+            models_available.append("ridge")
         except:
             pass
 
         # Test XGBoost model
         try:
             import joblib
-            xgb_model = joblib.load('model_pack/xgb_home_win_model_2025.pkl')
-            models_available.append('xgboost')
+
+            xgb_model = joblib.load("model_pack/xgb_home_win_model_2025.pkl")
+            models_available.append("xgboost")
         except:
             pass
 
         # Test FastAI model
         try:
             import pickle
-            fastai_model = pickle.load(open('model_pack/fastai_home_win_model_2025.pkl', 'rb'))
-            models_available.append('fastai')
+
+            fastai_model = pickle.load(
+                open("model_pack/fastai_home_win_model_2025.pkl", "rb")
+            )
+            models_available.append("fastai")
         except:
             pass
 
@@ -142,13 +159,14 @@ def test_model_execution_engine():
         print(f"❌ Model Execution Engine: Failed - {e}")
         return False
 
+
 def test_performance_monitor():
     """Test Performance Monitor Agent"""
     print("\n🔍 Testing Performance Monitor Agent...")
     try:
         from agents.performance_monitor_agent import PerformanceMonitorAgent
 
-        agent = PerformanceMonitorAgent('test_monitor')
+        agent = PerformanceMonitorAgent("test_monitor")
 
         # Test capabilities
         if agent.capabilities:
@@ -163,11 +181,13 @@ def test_performance_monitor():
         print(f"❌ Performance Monitor Agent: Failed - {e}")
         return False
 
+
 def test_master_orchestrator():
     """Test Master Orchestrator (DEPRECATED)"""
     print("\n🔍 Testing Master Orchestrator (deprecated)...")
     print("ℹ️ Master Orchestrator is deprecated - using Analytics Orchestrator instead")
     return True  # Deprecated, so we consider it "passed"
+
 
 def main():
     """Run comprehensive agent validation"""
@@ -183,7 +203,7 @@ def main():
         ("Workflow Automator Agent", test_workflow_automator),
         ("Model Execution Engine", test_model_execution_engine),
         ("Performance Monitor Agent", test_performance_monitor),
-        ("Master Orchestrator", test_master_orchestrator)
+        ("Master Orchestrator", test_master_orchestrator),
     ]
 
     results = []
@@ -204,7 +224,7 @@ def main():
     total_agents = len(results)
 
     print(f"\nCore Agents Working: {working_agents}/{total_agents}")
-    print(f"System Health: {working_agents/total_agents*100:.1f}%")
+    print(f"System Health: {working_agents / total_agents * 100:.1f}%")
 
     print("\nDetailed Results:")
     for agent_name, result in results:
@@ -224,6 +244,7 @@ def main():
     else:
         print("\n❌ POOR: Agent system requires major fixes.")
         return False
+
 
 if __name__ == "__main__":
     success = main()

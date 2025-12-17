@@ -87,8 +87,10 @@ def _prepare_features(
     for feature in required_features:
         if feature not in working.columns:
             working[feature] = 0.0
-    return working[list(required_features)].apply(pd.to_numeric, errors="coerce").fillna(
-        0.0
+    return (
+        working[list(required_features)]
+        .apply(pd.to_numeric, errors="coerce")
+        .fillna(0.0)
     )
 
 

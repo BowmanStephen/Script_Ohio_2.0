@@ -10,22 +10,25 @@ Created: 2025-11-13
 Purpose: Ensure all ML models are functional for Week 12 predictions
 """
 
-import os
 import json
-import joblib
-import pandas as pd
-import numpy as np
-from datetime import datetime
-from typing import Dict, List, Any, Optional, Tuple
-from pathlib import Path
 import logging
+import os
 
 # Import agent framework
 import sys
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+
+import joblib
+import numpy as np
+import pandas as pd
+
 sys.path.append(str(Path(__file__).parent.parent.parent.parent))
-from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
+from agents.core.agent_framework import AgentCapability, BaseAgent, PermissionLevel
 
 logger = logging.getLogger(__name__)
+
 
 class ModelRepairAgent(BaseAgent):
     """Model Repair Agent for Week 12 readiness"""
@@ -40,7 +43,7 @@ class ModelRepairAgent(BaseAgent):
         self.model_paths = {
             "ridge": "model_pack/ridge_model_2025.joblib",
             "xgboost": "model_pack/xgb_home_win_model_2025.pkl",
-            "fastai": "model_pack/fastai_home_win_model_2025_fixed.pkl"
+            "fastai": "model_pack/fastai_home_win_model_2025_fixed.pkl",
         }
 
         self.training_data_path = "model_pack/updated_training_data.csv"
@@ -51,20 +54,23 @@ class ModelRepairAgent(BaseAgent):
                 name="model_validation",
                 description="Validate ML model loading and functionality",
                 required_tools=["model_loader", "functionality_tester"],
-                output_schema={"model_status": "string", "load_success": "boolean"}
+                output_schema={"model_status": "string", "load_success": "boolean"},
             ),
             AgentCapability(
                 name="model_repair",
                 description="Repair broken models and handle serialization issues",
                 required_tools=["model_repairer", "serialization_fixer"],
-                output_schema={"repair_status": "string", "models_fixed": "number"}
+                output_schema={"repair_status": "string", "models_fixed": "number"},
             ),
             AgentCapability(
                 name="performance_validation",
                 description="Test model performance and prediction capabilities",
                 required_tools=["performance_tester", "prediction_validator"],
-                output_schema={"performance_score": "number", "prediction_accuracy": "string"}
-            )
+                output_schema={
+                    "performance_score": "number",
+                    "prediction_accuracy": "string",
+                },
+            ),
         ]
 
     def execute_week12_task(self, execution_context) -> Dict[str, Any]:
@@ -74,7 +80,7 @@ class ModelRepairAgent(BaseAgent):
         repair_results = {
             "timestamp": datetime.now().isoformat(),
             "execution_context": execution_context.execution_id,
-            "model_status": {}
+            "model_status": {},
         }
 
         overall_success = True
@@ -87,20 +93,26 @@ class ModelRepairAgent(BaseAgent):
                 overall_success = False
 
         # Test ensemble functionality
-        ensemble_result = self._test_ensemble_functionality(repair_results["model_status"])
+        ensemble_result = self._test_ensemble_functionality(
+            repair_results["model_status"]
+        )
         repair_results["ensemble_test"] = ensemble_result
 
         repair_results["overall_success"] = overall_success
-        repair_results["models_functional"] = sum(1 for r in repair_results["model_status"].values() if r["success"])
+        repair_results["models_functional"] = sum(
+            1 for r in repair_results["model_status"].values() if r["success"]
+        )
         repair_results["total_models"] = len(self.model_paths)
 
         return {
             "success": overall_success,
             "repair_results": repair_results,
-            "message": self._generate_user_message(repair_results)
+            "message": self._generate_user_message(repair_results),
         }
 
-    def _validate_and_repair_model(self, model_name: str, model_path: str) -> Dict[str, Any]:
+    def _validate_and_repair_model(
+        self, model_name: str, model_path: str
+    ) -> Dict[str, Any]:
         """Validate and repair a specific model"""
         result = {
             "success": False,
@@ -109,7 +121,7 @@ class ModelRepairAgent(BaseAgent):
             "prediction_test": False,
             "issues": [],
             "repairs_attempted": [],
-            "final_status": "failed"
+            "final_status": "failed",
         }
 
         try:
@@ -143,7 +155,9 @@ class ModelRepairAgent(BaseAgent):
                     result["success"] = True
                     result["final_status"] = "functional"
                 else:
-                    result["issues"].append(f"Model {model_name} failed prediction test")
+                    result["issues"].append(
+                        f"Model {model_name} failed prediction test"
+                    )
 
         except Exception as e:
             result["issues"].append(f"Model validation error: {e}")
@@ -156,14 +170,20 @@ class ModelRepairAgent(BaseAgent):
         try:
             # Check if we have training data
             if not Path(self.training_data_path).exists():
-                logger.warning("Cannot repair FastAI model - no training data available")
+                logger.warning(
+                    "Cannot repair FastAI model - no training data available"
+                )
                 return False
 
             # Run the FastAI model retraining script
             import subprocess
-            result = subprocess.run([
-                "python", "project_management/core_tools/retrain_fixed_models.py"
-            ], capture_output=True, text=True, timeout=300)
+
+            result = subprocess.run(
+                ["python", "project_management/core_tools/retrain_fixed_models.py"],
+                capture_output=True,
+                text=True,
+                timeout=300,
+            )
 
             if result.returncode == 0:
                 logger.info("FastAI model retraining completed successfully")
@@ -195,7 +215,7 @@ class ModelRepairAgent(BaseAgent):
 
             elif model_name == "fastai":
                 # FastAI model - basic test
-                return hasattr(model, 'predict') or hasattr(model, 'forward')
+                return hasattr(model, "predict") or hasattr(model, "forward")
 
             return False
 
@@ -203,15 +223,15 @@ class ModelRepairAgent(BaseAgent):
             logger.error(f"Prediction test failed for {model_name}: {e}")
             return False
 
-    def _test_ensemble_functionality(self, model_status: Dict[str, Any]) -> Dict[str, Any]:
+    def _test_ensemble_functionality(
+        self, model_status: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Test if models can work together as ensemble"""
-        result = {
-            "success": False,
-            "functional_models": [],
-            "ensemble_ready": False
-        }
+        result = {"success": False, "functional_models": [], "ensemble_ready": False}
 
-        functional_models = [name for name, status in model_status.items() if status["success"]]
+        functional_models = [
+            name for name, status in model_status.items() if status["success"]
+        ]
         result["functional_models"] = functional_models
 
         if len(functional_models) >= 2:
@@ -224,7 +244,9 @@ class ModelRepairAgent(BaseAgent):
         """Generate user-friendly message"""
         total_models = repair_results["total_models"]
         functional_models = repair_results["models_functional"]
-        ensemble_ready = repair_results.get("ensemble_test", {}).get("ensemble_ready", False)
+        ensemble_ready = repair_results.get("ensemble_test", {}).get(
+            "ensemble_ready", False
+        )
 
         if repair_results["overall_success"]:
             return (
@@ -237,7 +259,11 @@ class ModelRepairAgent(BaseAgent):
                 f"Your system can now generate Week 12 predictions using multiple ML approaches!"
             )
         else:
-            working_models = [name for name, status in repair_results["model_status"].items() if status["success"]]
+            working_models = [
+                name
+                for name, status in repair_results["model_status"].items()
+                if status["success"]
+            ]
             working_count = len(working_models)
 
             return (
@@ -250,6 +276,7 @@ class ModelRepairAgent(BaseAgent):
                 f"Any non-functional models have been identified for manual review."
             )
 
+
 def main():
     """Command-line interface"""
     agent = ModelRepairAgent()
@@ -261,6 +288,7 @@ def main():
     result = agent.execute_week12_task(MockExecutionContext())
     print(f"Model repair completed. Success: {result['success']}")
     return 0 if result["success"] else 1
+
 
 if __name__ == "__main__":
     exit(main())

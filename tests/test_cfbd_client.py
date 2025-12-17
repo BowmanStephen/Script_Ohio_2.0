@@ -1,29 +1,29 @@
 """Regression tests for the CFBD client and dataset helpers."""
+
 from __future__ import annotations
 
+import sys
+from pathlib import Path
 from typing import Any, Dict, List
 
 import pytest
 import responses
-
-import sys
-from pathlib import Path
 
 # Add src to path for imports
 src_path = Path(__file__).parent.parent / "src"
 if str(src_path) not in sys.path:
     sys.path.insert(0, str(src_path))
 
-from cfbd_client.client import CFBDClient
 from cfbd_client import client as client_module
+from cfbd_client.client import CFBDClient
 from cfbd_client.datasets import (
     fetch_games,
     fetch_lines,
+    fetch_media,
+    fetch_predicted_points,
     fetch_ratings,
     fetch_recruiting,
     fetch_weather,
-    fetch_media,
-    fetch_predicted_points,
 )
 
 HOST_MAP = client_module.HOST_MAP
@@ -360,5 +360,3 @@ def test_fetch_predicted_points_schema(fake_clock: FakeClock) -> None:
         "fetched_at",
     ]
     assert df.iloc[0]["predicted_margin"] == 7.5
-
-

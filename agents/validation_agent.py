@@ -5,16 +5,16 @@ Extends BaseAgent to provide comprehensive validation and integrity checking
 after file organization operations.
 """
 
-import os
-import sys
 import importlib
 import logging
+import os
+import sys
 import time
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Set
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set
 
-from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
+from agents.core.agent_framework import AgentCapability, BaseAgent, PermissionLevel
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -38,7 +38,7 @@ class ValidationAgent(BaseAgent):
             agent_id=agent_id,
             name="System Validation Agent",
             permission_level=PermissionLevel.READ_EXECUTE,
-            tool_loader=tool_loader
+            tool_loader=tool_loader,
         )
 
         self.project_root = Path.cwd()
@@ -53,7 +53,7 @@ class ValidationAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_ONLY,
                 tools_required=["pathlib", "os"],
                 data_access=["filesystem"],
-                execution_time_estimate=1.0
+                execution_time_estimate=1.0,
             ),
             AgentCapability(
                 name="validate_import_integrity",
@@ -61,7 +61,7 @@ class ValidationAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE,
                 tools_required=["importlib", "sys"],
                 data_access=["python_modules"],
-                execution_time_estimate=1.5
+                execution_time_estimate=1.5,
             ),
             AgentCapability(
                 name="update_gitignore",
@@ -69,7 +69,7 @@ class ValidationAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE_WRITE,
                 tools_required=["pathlib"],
                 data_access=["filesystem"],
-                execution_time_estimate=0.5
+                execution_time_estimate=0.5,
             ),
             AgentCapability(
                 name="generate_validation_report",
@@ -77,12 +77,13 @@ class ValidationAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_ONLY,
                 tools_required=["json", "pathlib"],
                 data_access=["filesystem"],
-                execution_time_estimate=0.5
-            )
+                execution_time_estimate=0.5,
+            ),
         ]
 
-    def _execute_action(self, action: str, parameters: Dict[str, Any],
-                       user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_action(
+        self, action: str, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Execute agent actions with proper error handling and logging."""
 
         try:
@@ -95,7 +96,9 @@ class ValidationAgent(BaseAgent):
             elif action == "update_gitignore":
                 result = self._update_gitignore()
             elif action == "generate_validation_report":
-                result = self._generate_validation_report(parameters.get("organization_log", []))
+                result = self._generate_validation_report(
+                    parameters.get("organization_log", [])
+                )
             else:
                 raise ValueError(f"Unknown action: {action}")
 
@@ -105,7 +108,7 @@ class ValidationAgent(BaseAgent):
                 "status": "success",
                 "result": result,
                 "execution_time": execution_time,
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
             }
 
         except Exception as e:
@@ -113,10 +116,12 @@ class ValidationAgent(BaseAgent):
             return {
                 "status": "error",
                 "error": str(e),
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
             }
 
-    def _validate_file_moves(self, moved_files: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
+    def _validate_file_moves(
+        self, moved_files: Dict[str, Dict[str, Any]]
+    ) -> Dict[str, Any]:
         """Validate that all file moves completed successfully."""
 
         logger.info("Validating file moves...")
@@ -136,7 +141,9 @@ class ValidationAgent(BaseAgent):
             dest_path = Path(destination_path)
 
             if not dest_path.exists():
-                missing_files[original_path] = f"Destination file not found: {destination_path}"
+                missing_files[original_path] = (
+                    f"Destination file not found: {destination_path}"
+                )
                 continue
 
             # Check file size (if original size was recorded)
@@ -145,14 +152,14 @@ class ValidationAgent(BaseAgent):
                 size_mismatches[original_path] = {
                     "original_size": original_size,
                     "current_size": current_size,
-                    "destination": destination_path
+                    "destination": destination_path,
                 }
 
             validated_files[original_path] = {
                 "destination": destination_path,
                 "exists": True,
                 "size": current_size,
-                "category": move_info.get("category", "unknown")
+                "category": move_info.get("category", "unknown"),
             }
 
         validation_result = {
@@ -160,19 +167,25 @@ class ValidationAgent(BaseAgent):
             "validated_files": len(validated_files),
             "missing_files": len(missing_files),
             "size_mismatches": len(size_mismatches),
-            "success_rate": len(validated_files) / len(moved_files) if moved_files else 1.0,
+            "success_rate": len(validated_files) / len(moved_files)
+            if moved_files
+            else 1.0,
             "validated_details": validated_files,
             "missing_details": missing_files,
-            "size_mismatch_details": size_mismatches
+            "size_mismatch_details": size_mismatches,
         }
 
-        self.validation_results.append({
-            "action": "validate_file_moves",
-            "result": validation_result,
-            "timestamp": datetime.now().isoformat()
-        })
+        self.validation_results.append(
+            {
+                "action": "validate_file_moves",
+                "result": validation_result,
+                "timestamp": datetime.now().isoformat(),
+            }
+        )
 
-        logger.info(f"Validated {len(validated_files)}/{len(moved_files)} files successfully")
+        logger.info(
+            f"Validated {len(validated_files)}/{len(moved_files)} files successfully"
+        )
 
         return validation_result
 
@@ -204,22 +217,28 @@ class ValidationAgent(BaseAgent):
                 module = importlib.import_module(module_name)
                 import_results[module_name] = {
                     "success": True,
-                    "module_path": getattr(module, '__file__', 'built-in'),
-                    "module_version": getattr(module, '__version__', 'unknown')
+                    "module_path": getattr(module, "__file__", "built-in"),
+                    "module_version": getattr(module, "__version__", "unknown"),
                 }
 
                 # Additional checks for agent modules
                 if "agent" in module_name.lower():
                     # Check if it has required BaseAgent methods
-                    if hasattr(module, 'BaseAgent') or hasattr(module, 'process_request'):
+                    if hasattr(module, "BaseAgent") or hasattr(
+                        module, "process_request"
+                    ):
                         import_results[module_name]["agent_compatible"] = True
                     else:
-                        warning_imports[module_name] = "Module may not follow agent pattern"
+                        warning_imports[module_name] = (
+                            "Module may not follow agent pattern"
+                        )
 
             except ImportError as e:
                 failed_imports[module_name] = str(e)
             except Exception as e:
-                warning_imports[module_name] = f"Import succeeded but with warnings: {str(e)}"
+                warning_imports[module_name] = (
+                    f"Import succeeded but with warnings: {str(e)}"
+                )
 
         validation_result = {
             "total_modules_tested": len(modules_to_test),
@@ -230,16 +249,20 @@ class ValidationAgent(BaseAgent):
             "successful_imports_detail": import_results,
             "failed_imports_detail": failed_imports,
             "warning_imports_detail": warning_imports,
-            "python_path_entries": sys.path[:5]  # First 5 entries
+            "python_path_entries": sys.path[:5],  # First 5 entries
         }
 
-        self.validation_results.append({
-            "action": "validate_import_integrity",
-            "result": validation_result,
-            "timestamp": datetime.now().isoformat()
-        })
+        self.validation_results.append(
+            {
+                "action": "validate_import_integrity",
+                "result": validation_result,
+                "timestamp": datetime.now().isoformat(),
+            }
+        )
 
-        logger.info(f"Import validation: {len(import_results)}/{len(modules_to_test)} modules imported successfully")
+        logger.info(
+            f"Import validation: {len(import_results)}/{len(modules_to_test)} modules imported successfully"
+        )
 
         return validation_result
 
@@ -307,7 +330,7 @@ class ValidationAgent(BaseAgent):
             # Read existing .gitignore if it exists
             existing_exclusions = []
             if gitignore_path.exists():
-                with open(gitignore_path, 'r', encoding='utf-8') as f:
+                with open(gitignore_path, "r", encoding="utf-8") as f:
                     existing_exclusions = [line.strip() for line in f.readlines()]
 
             # Find new exclusions to add
@@ -318,9 +341,11 @@ class ValidationAgent(BaseAgent):
 
             # Update .gitignore if there are new exclusions
             if new_exclusions:
-                with open(gitignore_path, 'a', encoding='utf-8') as f:
-                    if existing_exclusions and existing_exclusions[-1]:  # Add blank line if needed
-                        f.write('\n')
+                with open(gitignore_path, "a", encoding="utf-8") as f:
+                    if (
+                        existing_exclusions and existing_exclusions[-1]
+                    ):  # Add blank line if needed
+                        f.write("\n")
                     for exclusion in new_exclusions:
                         f.write(f"{exclusion}\n")
 
@@ -330,7 +355,7 @@ class ValidationAgent(BaseAgent):
                 "existing_exclusions": len(existing_exclusions),
                 "new_exclusions_added": len(new_exclusions),
                 "new_exclusions": new_exclusions,
-                "gitignore_updated": len(new_exclusions) > 0
+                "gitignore_updated": len(new_exclusions) > 0,
             }
 
         except Exception as e:
@@ -338,20 +363,26 @@ class ValidationAgent(BaseAgent):
             update_result = {
                 "gitignore_exists": gitignore_path.exists(),
                 "error": str(e),
-                "gitignore_updated": False
+                "gitignore_updated": False,
             }
 
-        self.validation_results.append({
-            "action": "update_gitignore",
-            "result": update_result,
-            "timestamp": datetime.now().isoformat()
-        })
+        self.validation_results.append(
+            {
+                "action": "update_gitignore",
+                "result": update_result,
+                "timestamp": datetime.now().isoformat(),
+            }
+        )
 
-        logger.info(f".gitignore updated: {update_result.get('gitignore_updated', False)}")
+        logger.info(
+            f".gitignore updated: {update_result.get('gitignore_updated', False)}"
+        )
 
         return update_result
 
-    def _generate_validation_report(self, organization_log: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def _generate_validation_report(
+        self, organization_log: List[Dict[str, Any]]
+    ) -> Dict[str, Any]:
         """Generate a comprehensive validation and organization report."""
 
         logger.info("Generating validation report...")
@@ -365,44 +396,67 @@ class ValidationAgent(BaseAgent):
                 "validation_agent_id": self.agent_id,
                 "validation_timestamp": datetime.now().isoformat(),
                 "total_validations": len(self.validation_results),
-                "validation_types": list(set(v["action"] for v in self.validation_results))
+                "validation_types": list(
+                    set(v["action"] for v in self.validation_results)
+                ),
             },
             "organization_summary": {
                 "total_organization_actions": len(organization_log),
-                "organization_timestamp": organization_log[-1]["timestamp"] if organization_log else None,
+                "organization_timestamp": organization_log[-1]["timestamp"]
+                if organization_log
+                else None,
                 "actions_by_type": {
-                    action_type: len([log for log in organization_log if log["action"] == action_type])
+                    action_type: len(
+                        [
+                            log
+                            for log in organization_log
+                            if log["action"] == action_type
+                        ]
+                    )
                     for action_type in set(log["action"] for log in organization_log)
-                }
+                },
             },
             "current_project_state": {
                 "root_files_count": len(root_files),
                 "root_files": root_files,
                 "directories_count": len(directories),
                 "directories": directories,
-                "project_root": str(self.project_root)
+                "project_root": str(self.project_root),
             },
             "detailed_validation_results": self.validation_results,
             "organization_log": organization_log,
             "success_criteria": {
-                "root_directory_clean": len([f for f in root_files if f not in {".git", ".gitignore", "CLAUDE.md"}]) <= 1,
+                "root_directory_clean": len(
+                    [
+                        f
+                        for f in root_files
+                        if f not in {".git", ".gitignore", "CLAUDE.md"}
+                    ]
+                )
+                <= 1,
                 "all_validations_passed": all(
                     v.get("result", {}).get("success_rate", 0) >= 0.95
                     for v in self.validation_results
                     if "success_rate" in v.get("result", {})
-                )
-            }
+                ),
+            },
         }
 
         # Save report to file
-        report_path = self.project_root / "project_management" / "QUALITY_ASSURANCE" / "REPORTS"
+        report_path = (
+            self.project_root / "project_management" / "QUALITY_ASSURANCE" / "REPORTS"
+        )
         report_path.mkdir(parents=True, exist_ok=True)
 
-        report_file = report_path / f"organization_validation_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        report_file = (
+            report_path
+            / f"organization_validation_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        )
 
         try:
             import json
-            with open(report_file, 'w', encoding='utf-8') as f:
+
+            with open(report_file, "w", encoding="utf-8") as f:
                 json.dump(report, f, indent=2, default=str)
 
             report["report_saved_to"] = str(report_file)
@@ -420,9 +474,11 @@ class ValidationAgent(BaseAgent):
             "agent_id": self.agent_id,
             "total_validations": len(self.validation_results),
             "validation_types": list(set(v["action"] for v in self.validation_results)),
-            "latest_validation": self.validation_results[-1] if self.validation_results else None,
+            "latest_validation": self.validation_results[-1]
+            if self.validation_results
+            else None,
             "project_root": str(self.project_root),
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
 
 
@@ -444,6 +500,6 @@ if __name__ == "__main__":
     result = agent.process_request("validate_import_integrity", {})
     print(f"Import validation result: {result['status']}")
 
-    if result['status'] == 'success':
-        success_rate = result['result']['import_success_rate']
+    if result["status"] == "success":
+        success_rate = result["result"]["import_success_rate"]
         print(f"Import success rate: {success_rate:.2%}")

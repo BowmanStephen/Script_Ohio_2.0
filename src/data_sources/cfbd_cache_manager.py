@@ -8,7 +8,6 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, Optional
 
-
 CacheFetcher = Callable[[], Any]
 ClockFn = Callable[[], float]
 
@@ -63,7 +62,9 @@ DEFAULT_TTL_SECONDS: Dict[str, int] = {
 class CFBDCacheConfig:
     enabled: bool = True
     default_ttl_seconds: int = 15 * 60
-    ttl_overrides: Dict[str, int] = field(default_factory=lambda: dict(DEFAULT_TTL_SECONDS))
+    ttl_overrides: Dict[str, int] = field(
+        default_factory=lambda: dict(DEFAULT_TTL_SECONDS)
+    )
 
 
 class CFBDCacheManager:
@@ -130,4 +131,3 @@ class CFBDCacheManager:
 
     def stats(self) -> Dict[str, int]:
         return dict(self._stats)
-

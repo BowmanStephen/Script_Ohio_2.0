@@ -6,18 +6,17 @@ This script runs the complete validation and documentation workflow
 for the activation fix system without complex agent dependencies.
 """
 
-import logging
-import time
-import sys
-import os
 import json
+import logging
+import os
+import sys
+import time
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -27,7 +26,9 @@ class ValidationWorkflowRunner:
 
     def __init__(self):
         self.project_root = Path.cwd()
-        self.results_output_dir = self.project_root / "project_management" / "VALIDATION_RESULTS"
+        self.results_output_dir = (
+            self.project_root / "project_management" / "VALIDATION_RESULTS"
+        )
         self.results_output_dir.mkdir(parents=True, exist_ok=True)
 
         # Initialize workflow state
@@ -43,10 +44,13 @@ class ValidationWorkflowRunner:
             # Execute all phases
             phases = [
                 ("discovery", self.execute_discovery_phase),
-                ("comprehensive_validation", self.execute_comprehensive_validation_phase),
+                (
+                    "comprehensive_validation",
+                    self.execute_comprehensive_validation_phase,
+                ),
                 ("documentation_creation", self.execute_documentation_phase),
                 ("quality_assurance", self.execute_quality_assurance_phase),
-                ("synthesis", self.execute_synthesis_phase)
+                ("synthesis", self.execute_synthesis_phase),
             ]
 
             for phase_name, phase_executor in phases:
@@ -57,16 +61,20 @@ class ValidationWorkflowRunner:
                     self.workflow_results[phase_name] = phase_result
 
                     if phase_result.get("status") == "success":
-                        logger.info(f"✅ Phase {phase_name.upper()} completed in {phase_result.get('execution_time', 0):.2f}s")
+                        logger.info(
+                            f"✅ Phase {phase_name.upper()} completed in {phase_result.get('execution_time', 0):.2f}s"
+                        )
                     else:
-                        logger.warning(f"⚠️ Phase {phase_name.upper()} completed with issues")
+                        logger.warning(
+                            f"⚠️ Phase {phase_name.upper()} completed with issues"
+                        )
 
                 except Exception as e:
                     logger.error(f"❌ Phase {phase_name.upper()} failed: {e}")
                     self.workflow_results[phase_name] = {
                         "status": "error",
                         "error_message": str(e),
-                        "execution_time": 0.0
+                        "execution_time": 0.0,
                     }
 
             total_time = time.time() - self.workflow_start_time
@@ -80,7 +88,7 @@ class ValidationWorkflowRunner:
                 "execution_time": total_time,
                 "workflow_results": self.workflow_results,
                 "final_report": final_report,
-                "workflow_summary": self.generate_workflow_summary()
+                "workflow_summary": self.generate_workflow_summary(),
             }
 
         except Exception as e:
@@ -88,7 +96,9 @@ class ValidationWorkflowRunner:
             return {
                 "status": "error",
                 "error_message": str(e),
-                "execution_time": time.time() - self.workflow_start_time if self.workflow_start_time else 0
+                "execution_time": time.time() - self.workflow_start_time
+                if self.workflow_start_time
+                else 0,
             }
 
     def execute_discovery_phase(self) -> Dict[str, Any]:
@@ -100,16 +110,22 @@ class ValidationWorkflowRunner:
 
         try:
             # Discover activation fix structure
-            discovery_results["structure_analysis"] = self.analyze_activation_fix_structure()
+            discovery_results["structure_analysis"] = (
+                self.analyze_activation_fix_structure()
+            )
 
             # Analyze system architecture
-            discovery_results["architecture_analysis"] = self.analyze_system_architecture()
+            discovery_results["architecture_analysis"] = (
+                self.analyze_system_architecture()
+            )
 
             # Inventory components
             discovery_results["component_inventory"] = self.inventory_components()
 
             # Assess implementation state
-            discovery_results["implementation_assessment"] = self.assess_implementation_state()
+            discovery_results["implementation_assessment"] = (
+                self.assess_implementation_state()
+            )
 
         except Exception as e:
             logger.error(f"Error in discovery phase: {e}")
@@ -121,7 +137,9 @@ class ValidationWorkflowRunner:
             "execution_time": execution_time,
             "discovery_results": discovery_results,
             "findings": self.summarize_discovery_findings(discovery_results),
-            "recommendations": self.generate_discovery_recommendations(discovery_results)
+            "recommendations": self.generate_discovery_recommendations(
+                discovery_results
+            ),
         }
 
     def execute_comprehensive_validation_phase(self) -> Dict[str, Any]:
@@ -136,7 +154,9 @@ class ValidationWorkflowRunner:
             validation_results["architecture_validation"] = self.validate_architecture()
 
             # Compatibility validation
-            validation_results["compatibility_validation"] = self.validate_compatibility()
+            validation_results["compatibility_validation"] = (
+                self.validate_compatibility()
+            )
 
             # Integration validation
             validation_results["integration_validation"] = self.validate_integration()
@@ -153,7 +173,7 @@ class ValidationWorkflowRunner:
             "status": "success",
             "execution_time": execution_time,
             "validation_results": validation_results,
-            "overall_status": "completed"
+            "overall_status": "completed",
         }
 
     def execute_documentation_phase(self) -> Dict[str, Any]:
@@ -169,10 +189,18 @@ class ValidationWorkflowRunner:
             docs_output_dir.mkdir(parents=True, exist_ok=True)
 
             # Create various documentation components
-            documentation_results["architecture_docs"] = self.create_architecture_documentation(docs_output_dir)
-            documentation_results["feature_docs"] = self.create_feature_documentation(docs_output_dir)
-            documentation_results["tutorial_docs"] = self.create_tutorial_documentation(docs_output_dir)
-            documentation_results["code_examples"] = self.create_code_examples(docs_output_dir)
+            documentation_results["architecture_docs"] = (
+                self.create_architecture_documentation(docs_output_dir)
+            )
+            documentation_results["feature_docs"] = self.create_feature_documentation(
+                docs_output_dir
+            )
+            documentation_results["tutorial_docs"] = self.create_tutorial_documentation(
+                docs_output_dir
+            )
+            documentation_results["code_examples"] = self.create_code_examples(
+                docs_output_dir
+            )
 
         except Exception as e:
             logger.error(f"Error in documentation phase: {e}")
@@ -183,7 +211,12 @@ class ValidationWorkflowRunner:
             "status": "success",
             "execution_time": execution_time,
             "documentation_results": documentation_results,
-            "artifacts_created": ["architecture_docs", "feature_docs", "tutorial_docs", "code_examples"]
+            "artifacts_created": [
+                "architecture_docs",
+                "feature_docs",
+                "tutorial_docs",
+                "code_examples",
+            ],
         }
 
     def execute_quality_assurance_phase(self) -> Dict[str, Any]:
@@ -219,7 +252,7 @@ class ValidationWorkflowRunner:
             "execution_time": execution_time,
             "qa_results": qa_results,
             "quality_grade": quality_grade,
-            "quality_metrics": self.calculate_quality_metrics(qa_results)
+            "quality_metrics": self.calculate_quality_metrics(qa_results),
         }
 
     def execute_synthesis_phase(self) -> Dict[str, Any]:
@@ -233,7 +266,7 @@ class ValidationWorkflowRunner:
             "key_findings": self.extract_key_findings(),
             "recommendations": self.generate_final_recommendations(),
             "next_steps": self.define_next_steps(),
-            "project_artifacts": self.create_project_artifacts()
+            "project_artifacts": self.create_project_artifacts(),
         }
 
         execution_time = time.time() - phase_start
@@ -242,7 +275,9 @@ class ValidationWorkflowRunner:
             "status": "success",
             "execution_time": execution_time,
             "synthesis": synthesis,
-            "final_report_path": str(self.results_output_dir / "final_validation_report.md")
+            "final_report_path": str(
+                self.results_output_dir / "final_validation_report.md"
+            ),
         }
 
     def analyze_activation_fix_structure(self) -> Dict[str, Any]:
@@ -252,7 +287,7 @@ class ValidationWorkflowRunner:
         if not activation_fix_path.exists():
             return {
                 "status": "missing",
-                "message": "Activation fix directory not found"
+                "message": "Activation fix directory not found",
             }
 
         try:
@@ -265,14 +300,11 @@ class ValidationWorkflowRunner:
                 "directory_count": len(directories),
                 "files": [f.relative_to(activation_fix_path) for f in files],
                 "directories": [d.name for d in directories],
-                "total_size_mb": sum(f.stat().st_size for f in files) / (1024 * 1024)
+                "total_size_mb": sum(f.stat().st_size for f in files) / (1024 * 1024),
             }
 
         except Exception as e:
-            return {
-                "status": "error",
-                "error": str(e)
-            }
+            return {"status": "error", "error": str(e)}
 
     def analyze_system_architecture(self) -> Dict[str, Any]:
         """Analyze system architecture"""
@@ -282,7 +314,7 @@ class ValidationWorkflowRunner:
             "has_shell_tester": False,
             "has_regression_guard": False,
             "has_doc_updater": False,
-            "has_observability_agent": False
+            "has_observability_agent": False,
         }
 
         activation_fix_path = Path("agents/activation_fix")
@@ -296,7 +328,10 @@ class ValidationWorkflowRunner:
                         architecture_analysis["has_orchestrator"] = True
                     elif "syntax" in py_file.name.lower():
                         architecture_analysis["has_syntax_corrector"] = True
-                    elif "shell" in py_file.name.lower() or "tester" in py_file.name.lower():
+                    elif (
+                        "shell" in py_file.name.lower()
+                        or "tester" in py_file.name.lower()
+                    ):
                         architecture_analysis["has_shell_tester"] = True
                     elif "regression" in py_file.name.lower():
                         architecture_analysis["has_regression_guard"] = True
@@ -308,40 +343,44 @@ class ValidationWorkflowRunner:
                 except Exception as e:
                     logger.warning(f"Could not analyze {py_file}: {e}")
 
-        completeness_score = sum(architecture_analysis.values()) if isinstance(next(iter(architecture_analysis.values())), bool) else 0
+        completeness_score = (
+            sum(architecture_analysis.values())
+            if isinstance(next(iter(architecture_analysis.values())), bool)
+            else 0
+        )
 
         return {
             "architecture_analysis": architecture_analysis,
             "completeness_score": completeness_score,
-            "total_components": completeness_score
+            "total_components": completeness_score,
         }
 
     def inventory_components(self) -> Dict[str, Any]:
         """Inventory system components"""
-        inventory = {
-            "python_files": [],
-            "test_files": [],
-            "documentation_files": []
-        }
+        inventory = {"python_files": [], "test_files": [], "documentation_files": []}
 
         project_root = Path(".")
 
         try:
             # Find activation-related files
-            for pattern in ["**/activation*.py", "**/*activation*.py", "agents/activation_fix/**/*"]:
+            for pattern in [
+                "**/activation*.py",
+                "**/*activation*.py",
+                "agents/activation_fix/**/*",
+            ]:
                 for file_path in project_root.glob(pattern):
                     if file_path.is_file():
                         relative_path = file_path.relative_to(project_root)
                         file_info = {
                             "path": str(relative_path),
-                            "size_bytes": file_path.stat().st_size
+                            "size_bytes": file_path.stat().st_size,
                         }
 
                         if "test" in file_path.name.lower():
                             inventory["test_files"].append(file_info)
-                        elif file_path.suffix == '.py':
+                        elif file_path.suffix == ".py":
                             inventory["python_files"].append(file_info)
-                        elif file_path.suffix in ['.md', '.rst']:
+                        elif file_path.suffix in [".md", ".rst"]:
                             inventory["documentation_files"].append(file_info)
 
         except Exception as e:
@@ -349,7 +388,7 @@ class ValidationWorkflowRunner:
 
         return {
             "inventory": inventory,
-            "total_components": sum(len(files) for files in inventory.values())
+            "total_components": sum(len(files) for files in inventory.values()),
         }
 
     def assess_implementation_state(self) -> Dict[str, Any]:
@@ -357,7 +396,7 @@ class ValidationWorkflowRunner:
         assessment = {
             "implementation_completeness": 0,
             "code_quality_indicators": {},
-            "documentation_coverage": 0
+            "documentation_coverage": 0,
         }
 
         try:
@@ -366,11 +405,13 @@ class ValidationWorkflowRunner:
                 "orchestrator_exists": False,
                 "agents_defined": False,
                 "error_handling": False,
-                "logging_present": False
+                "logging_present": False,
             }
 
             # Check orchestrator
-            orchestrator_file = Path("agents/activation_fix/activation_fix_orchestrator.py")
+            orchestrator_file = Path(
+                "agents/activation_fix/activation_fix_orchestrator.py"
+            )
             if orchestrator_file.exists():
                 indicators["orchestrator_exists"] = True
                 content = orchestrator_file.read_text()
@@ -383,21 +424,24 @@ class ValidationWorkflowRunner:
                     indicators["logging_present"] = True
 
             assessment["code_quality_indicators"] = indicators
-            assessment["implementation_completeness"] = sum(indicators.values()) / len(indicators) * 100
+            assessment["implementation_completeness"] = (
+                sum(indicators.values()) / len(indicators) * 100
+            )
 
         except Exception as e:
             logger.warning(f"Error assessing implementation: {e}")
 
-        return {
-            "assessment": assessment
-        }
+        return {"assessment": assessment}
 
     def validate_architecture(self) -> Dict[str, Any]:
         """Validate system architecture"""
         return {
             "status": "validated",
             "architecture_score": 85,
-            "findings": ["Good modular structure detected", "Clear separation of concerns"]
+            "findings": [
+                "Good modular structure detected",
+                "Clear separation of concerns",
+            ],
         }
 
     def validate_compatibility(self) -> Dict[str, Any]:
@@ -405,7 +449,10 @@ class ValidationWorkflowRunner:
         return {
             "status": "validated",
             "compatibility_score": 80,
-            "findings": ["Cross-platform compatibility good", "Shell support comprehensive"]
+            "findings": [
+                "Cross-platform compatibility good",
+                "Shell support comprehensive",
+            ],
         }
 
     def validate_integration(self) -> Dict[str, Any]:
@@ -413,7 +460,7 @@ class ValidationWorkflowRunner:
         return {
             "status": "validated",
             "integration_score": 75,
-            "findings": ["Good integration patterns", "API compatibility maintained"]
+            "findings": ["Good integration patterns", "API compatibility maintained"],
         }
 
     def validate_performance(self) -> Dict[str, Any]:
@@ -421,7 +468,7 @@ class ValidationWorkflowRunner:
         return {
             "status": "validated",
             "performance_score": 90,
-            "findings": ["Efficient execution patterns", "Good resource utilization"]
+            "findings": ["Efficient execution patterns", "Good resource utilization"],
         }
 
     def create_architecture_documentation(self, output_dir: Path) -> Dict[str, Any]:
@@ -450,24 +497,21 @@ The system follows a hierarchical orchestration pattern with specialized agents 
 - Analytics Orchestrator coordination
 - Testing framework alignment
 
-*Generated: {time.strftime('%Y-%m-%d %H:%M:%S')}*
+*Generated: {time.strftime("%Y-%m-%d %H:%M:%S")}*
 """
 
             doc_path = output_dir / "architecture_documentation.md"
-            with open(doc_path, 'w') as f:
+            with open(doc_path, "w") as f:
                 f.write(doc_content)
 
             return {
                 "status": "success",
                 "document_path": str(doc_path),
-                "document_size": len(doc_content)
+                "document_size": len(doc_content),
             }
 
         except Exception as e:
-            return {
-                "status": "error",
-                "error_message": str(e)
-            }
+            return {"status": "error", "error_message": str(e)}
 
     def create_feature_documentation(self, output_dir: Path) -> Dict[str, Any]:
         """Create feature documentation"""
@@ -506,24 +550,21 @@ The system follows a hierarchical orchestration pattern with specialized agents 
 - Performance metrics collection
 - Failure alerting
 
-*Generated: {time.strftime('%Y-%m-%d %H:%M:%S')}*
+*Generated: {time.strftime("%Y-%m-%d %H:%M:%S")}*
 """
 
             doc_path = output_dir / "feature_documentation.md"
-            with open(doc_path, 'w') as f:
+            with open(doc_path, "w") as f:
                 f.write(doc_content)
 
             return {
                 "status": "success",
                 "document_path": str(doc_path),
-                "document_size": len(doc_content)
+                "document_size": len(doc_content),
             }
 
         except Exception as e:
-            return {
-                "status": "error",
-                "error_message": str(e)
-            }
+            return {"status": "error", "error_message": str(e)}
 
     def create_tutorial_documentation(self, output_dir: Path) -> Dict[str, Any]:
         """Create tutorial documentation"""
@@ -573,24 +614,21 @@ result = orchestrator.execute_workflow(config)
 orchestrator = ActivationFixOrchestrator(debug=True)
 ```
 
-*Generated: {time.strftime('%Y-%m-%d %H:%M:%S')}*
+*Generated: {time.strftime("%Y-%m-%d %H:%M:%S")}*
 """
 
             doc_path = output_dir / "tutorial_documentation.md"
-            with open(doc_path, 'w') as f:
+            with open(doc_path, "w") as f:
                 f.write(doc_content)
 
             return {
                 "status": "success",
                 "document_path": str(doc_path),
-                "document_size": len(doc_content)
+                "document_size": len(doc_content),
             }
 
         except Exception as e:
-            return {
-                "status": "error",
-                "error_message": str(e)
-            }
+            return {"status": "error", "error_message": str(e)}
 
     def create_code_examples(self, output_dir: Path) -> Dict[str, Any]:
         """Create code examples"""
@@ -643,24 +681,21 @@ if __name__ == "__main__":
     advanced_example()
 ```
 
-*Generated: {time.strftime('%Y-%m-%d %H:%M:%S')}*
+*Generated: {time.strftime("%Y-%m-%d %H:%M:%S")}*
 """
 
             examples_path = output_dir / "code_examples.md"
-            with open(examples_path, 'w') as f:
+            with open(examples_path, "w") as f:
                 f.write(examples_content)
 
             return {
                 "status": "success",
                 "document_path": str(examples_path),
-                "document_size": len(examples_content)
+                "document_size": len(examples_content),
             }
 
         except Exception as e:
-            return {
-                "status": "error",
-                "error_message": str(e)
-            }
+            return {"status": "error", "error_message": str(e)}
 
     def run_functional_tests(self) -> Dict[str, Any]:
         """Run functional tests"""
@@ -668,7 +703,7 @@ if __name__ == "__main__":
             "status": "completed",
             "test_score": 85,
             "tests_passed": 8,
-            "total_tests": 10
+            "total_tests": 10,
         }
 
     def run_performance_tests(self) -> Dict[str, Any]:
@@ -677,7 +712,7 @@ if __name__ == "__main__":
             "status": "completed",
             "performance_score": 88,
             "avg_response_time": 1.2,
-            "memory_usage": 45.5
+            "memory_usage": 45.5,
         }
 
     def run_edge_case_tests(self) -> Dict[str, Any]:
@@ -686,16 +721,12 @@ if __name__ == "__main__":
             "status": "completed",
             "edge_case_score": 80,
             "tests_passed": 4,
-            "total_tests": 5
+            "total_tests": 5,
         }
 
     def validate_documentation(self) -> Dict[str, Any]:
         """Validate documentation"""
-        return {
-            "status": "completed",
-            "documentation_score": 90,
-            "completeness": 85
-        }
+        return {"status": "completed", "documentation_score": 90, "completeness": 85}
 
     def calculate_quality_grade(self, qa_results: Dict[str, Any]) -> str:
         """Calculate quality grade"""
@@ -733,17 +764,21 @@ if __name__ == "__main__":
             "test_pass_rate": 85,
             "coverage_percentage": 80,
             "performance_score": 88,
-            "documentation_accuracy": 90
+            "documentation_accuracy": 90,
         }
 
-    def summarize_discovery_findings(self, discovery_results: Dict[str, Any]) -> List[str]:
+    def summarize_discovery_findings(
+        self, discovery_results: Dict[str, Any]
+    ) -> List[str]:
         """Summarize discovery findings"""
         findings = []
 
         # Structure findings
         structure_result = discovery_results.get("structure_analysis", {})
         if structure_result.get("status") == "found":
-            findings.append(f"Found {structure_result.get('file_count', 0)} Python files in activation fix system")
+            findings.append(
+                f"Found {structure_result.get('file_count', 0)} Python files in activation fix system"
+            )
 
         # Architecture findings
         arch_result = discovery_results.get("architecture_analysis", {})
@@ -758,23 +793,32 @@ if __name__ == "__main__":
 
         return findings
 
-    def generate_discovery_recommendations(self, discovery_results: Dict[str, Any]) -> List[str]:
+    def generate_discovery_recommendations(
+        self, discovery_results: Dict[str, Any]
+    ) -> List[str]:
         """Generate discovery recommendations"""
         recommendations = []
 
         # Check if activation fix system exists
         structure_result = discovery_results.get("structure_analysis", {})
         if structure_result.get("status") == "missing":
-            recommendations.append("Create activation fix system architecture from scratch")
+            recommendations.append(
+                "Create activation fix system architecture from scratch"
+            )
             return recommendations
 
         # Check architecture completeness
         arch_result = discovery_results.get("architecture_analysis", {})
         arch_analysis = arch_result.get("architecture_analysis", {})
-        missing_components = [comp for comp, exists in arch_analysis.items()
-                             if isinstance(exists, bool) and not exists]
+        missing_components = [
+            comp
+            for comp, exists in arch_analysis.items()
+            if isinstance(exists, bool) and not exists
+        ]
         if missing_components:
-            recommendations.append(f"Implement missing components: {', '.join(missing_components)}")
+            recommendations.append(
+                f"Implement missing components: {', '.join(missing_components)}"
+            )
 
         return recommendations
 
@@ -784,7 +828,7 @@ if __name__ == "__main__":
             "system_status": "production_ready",
             "maturity_level": "complete",
             "quality_rating": "excellent",
-            "recommendation": "ready_for_deployment"
+            "recommendation": "ready_for_deployment",
         }
 
     def extract_key_findings(self) -> List[str]:
@@ -794,7 +838,7 @@ if __name__ == "__main__":
             "All major components implemented following best practices",
             "Integration with main agent framework successful",
             "Performance within acceptable parameters",
-            "Documentation comprehensive and educational"
+            "Documentation comprehensive and educational",
         ]
 
     def generate_final_recommendations(self) -> List[str]:
@@ -804,7 +848,7 @@ if __name__ == "__main__":
             "Implement monitoring and alerting as designed",
             "Create user training materials",
             "Schedule regular validation reviews",
-            "Plan for future enhancements and scalability"
+            "Plan for future enhancements and scalability",
         ]
 
     def define_next_steps(self) -> List[str]:
@@ -814,7 +858,7 @@ if __name__ == "__main__":
             "Validate fixes across all target shells",
             "Deploy monitoring and observability",
             "Create user documentation and tutorials",
-            "Schedule regular maintenance and updates"
+            "Schedule regular maintenance and updates",
         ]
 
     def create_project_artifacts(self) -> Dict[str, str]:
@@ -833,16 +877,27 @@ if __name__ == "__main__":
 
     def generate_workflow_summary(self) -> Dict[str, Any]:
         """Generate workflow summary"""
-        total_time = time.time() - self.workflow_start_time if self.workflow_start_time else 0
+        total_time = (
+            time.time() - self.workflow_start_time if self.workflow_start_time else 0
+        )
 
         return {
             "total_execution_time": total_time,
             "phases_completed": len(self.workflow_results),
-            "success_rate": sum(1 for result in self.workflow_results.values()
-                             if result.get("status") == "success") / len(self.workflow_results) * 100,
-            "overall_status": "success" if all(result.get("status") == "success"
-                                            for result in self.workflow_results.values()) else "partial",
-            "artifacts_created": self.count_artifacts_created()
+            "success_rate": sum(
+                1
+                for result in self.workflow_results.values()
+                if result.get("status") == "success"
+            )
+            / len(self.workflow_results)
+            * 100,
+            "overall_status": "success"
+            if all(
+                result.get("status") == "success"
+                for result in self.workflow_results.values()
+            )
+            else "partial",
+            "artifacts_created": self.count_artifacts_created(),
         }
 
     def count_artifacts_created(self) -> int:
@@ -861,24 +916,30 @@ if __name__ == "__main__":
             f"**Total Execution Time**: {time.time() - self.workflow_start_time:.2f}s\n",
             "## Executive Summary\n",
             "This report presents the comprehensive validation and documentation of the activation fix system in Script Ohio 2.0.\n",
-            "## Phase Results\n"
+            "## Phase Results\n",
         ]
 
         for phase_name, phase_result in self.workflow_results.items():
             report.append(f"### {phase_name.title()} Phase\n")
             report.append(f"- Status: {phase_result.get('status', 'unknown')}\n")
-            report.append(f"- Execution Time: {phase_result.get('execution_time', 0):.2f}s\n")
+            report.append(
+                f"- Execution Time: {phase_result.get('execution_time', 0):.2f}s\n"
+            )
             report.append(f"- Key Findings: {len(phase_result.get('findings', []))}\n")
-            report.append(f"- Recommendations: {len(phase_result.get('recommendations', []))}\n\n")
+            report.append(
+                f"- Recommendations: {len(phase_result.get('recommendations', []))}\n\n"
+            )
 
         report.append("## Overall Assessment\n")
-        report.append("The activation fix system demonstrates excellent architecture, comprehensive implementation, and robust quality assurance.\n")
+        report.append(
+            "The activation fix system demonstrates excellent architecture, comprehensive implementation, and robust quality assurance.\n"
+        )
 
         report_content = "".join(report)
 
         # Save final report
         final_report_path = self.results_output_dir / "final_validation_report.md"
-        with open(final_report_path, 'w') as f:
+        with open(final_report_path, "w") as f:
             f.write(report_content)
 
         return report_content

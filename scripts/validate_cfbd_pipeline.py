@@ -1,17 +1,21 @@
 """Run an end-to-end validation of the CFBD integrated orchestrator."""
+
 from __future__ import annotations
 
 import json
 import sys
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 # Add project root to path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 # Use simplified orchestrator (backward compatible)
-from agents.simplified_analytics_orchestrator import SimplifiedAnalyticsOrchestrator as AnalyticsOrchestrator, AnalyticsRequest
+from agents.simplified_analytics_orchestrator import AnalyticsRequest
+from agents.simplified_analytics_orchestrator import (
+    SimplifiedAnalyticsOrchestrator as AnalyticsOrchestrator,
+)
 
 
 def main() -> int:
@@ -26,7 +30,9 @@ def main() -> int:
             "week": 12,
             "include_live_scoreboard": True,
         },
-        context_hints={"role": "analyst"},  # Simplified: context_hints still accepted but not used for role filtering
+        context_hints={
+            "role": "analyst"
+        },  # Simplified: context_hints still accepted but not used for role filtering
     )
     response = orchestrator.process_analytics_request(request)
     payload = {

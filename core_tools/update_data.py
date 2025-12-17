@@ -61,9 +61,15 @@ class StarterDataRefreshWorkflow:
         self.datasets = datasets or DEFAULT_DATASETS
         self.seasons = seasons
         self.season_type = season_type
-        self.api_key = api_key or os.environ.get("CFBD_API_KEY") or os.environ.get("CFBD_API_TOKEN")
+        self.api_key = (
+            api_key
+            or os.environ.get("CFBD_API_KEY")
+            or os.environ.get("CFBD_API_TOKEN")
+        )
         if not self.api_key:
-            raise RuntimeError("CFBD API key missing. Set CFBD_API_KEY or pass --api-key.")
+            raise RuntimeError(
+                "CFBD API key missing. Set CFBD_API_KEY or pass --api-key."
+            )
         self.host = host
         self.dry_run = dry_run
 
@@ -73,13 +79,17 @@ class StarterDataRefreshWorkflow:
         self.games_updater = StarterDataUpdater()
 
     def run(self) -> Dict[str, List[Dict[str, object]]]:
-        summaries: Dict[str, List[Dict[str, object]]] = {dataset: [] for dataset in self.datasets}
+        summaries: Dict[str, List[Dict[str, object]]] = {
+            dataset: [] for dataset in self.datasets
+        }
         with CFBDSession(api_key=self.api_key, host=self.host) as session:
             for dataset in self.datasets:
                 for season in self.seasons:
                     handler = getattr(self, f"_update_{dataset}", None)
                     if handler is None:
-                        raise ValueError(f"Unsupported dataset '{dataset}'. Options: {', '.join(DEFAULT_DATASETS)}")
+                        raise ValueError(
+                            f"Unsupported dataset '{dataset}'. Options: {', '.join(DEFAULT_DATASETS)}"
+                        )
                     summary = handler(session=session, season=season)
                     summaries[dataset].append(summary)
         return summaries
@@ -99,13 +109,22 @@ class StarterDataRefreshWorkflow:
         summary["season"] = season
         return summary
 
-    def _update_season_stats(self, *, session: CFBDSession, season: int) -> Dict[str, object]:
+    def _update_season_stats(
+        self, *, session: CFBDSession, season: int
+    ) -> Dict[str, object]:
         self.rate_limiter.wait()
         records = session.stats_api.get_team_season_stats(year=season)
         frame = _records_to_frame(records)
-        return self._write_year_scoped_csv(frame, subdir="season_stats", filename=f"{season}.csv", dataset="season_stats")
+        return self._write_year_scoped_csv(
+            frame,
+            subdir="season_stats",
+            filename=f"{season}.csv",
+            dataset="season_stats",
+        )
 
-    def _update_advanced_season_stats(self, *, session: CFBDSession, season: int) -> Dict[str, object]:
+    def _update_advanced_season_stats(
+        self, *, session: CFBDSession, season: int
+    ) -> Dict[str, object]:
         self.rate_limiter.wait()
         records = session.stats_api.get_advanced_season_stats(year=season)
         frame = _records_to_frame(records)
@@ -171,10 +190,16 @@ def _parse_args(argv: Optional[Iterable[str]] = None) -> argparse.Namespace:
         required=False,
         help="One or more seasons to refresh (defaults to StarterPackDataConfig.current_year)",
     )
-    parser.add_argument("--season-type", default="regular", choices=["regular", "postseason"])
-    parser.add_argument("--api-key", default=None, help="CFBD API key (otherwise uses env vars)")
+    parser.add_argument(
+        "--season-type", default="regular", choices=["regular", "postseason"]
+    )
+    parser.add_argument(
+        "--api-key", default=None, help="CFBD API key (otherwise uses env vars)"
+    )
     parser.add_argument("--host", default="https://api.collegefootballdata.com")
-    parser.add_argument("--dry-run", action="store_true", help="Fetch data but skip writing files")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Fetch data but skip writing files"
+    )
     return parser.parse_args(argv)
 
 
@@ -199,4 +224,3 @@ def main(argv: Optional[Iterable[str]] = None) -> None:
 
 if __name__ == "__main__":
     main(sys.argv[1:])
-

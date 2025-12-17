@@ -9,9 +9,21 @@ from agents.analytics_orchestrator import AnalyticsRequest
 @pytest.mark.parametrize(
     "query,query_type,context",
     [
-        ("Guide me from beginner to advanced analytics", "learning", {"skill_level": "beginner"}),
-        ("Predict all week 12 games", "prediction", {"role": "data_scientist", "week": 12}),
-        ("Analyze Big Ten performance and recommend next steps", "analysis", {"role": "analyst"}),
+        (
+            "Guide me from beginner to advanced analytics",
+            "learning",
+            {"skill_level": "beginner"},
+        ),
+        (
+            "Predict all week 12 games",
+            "prediction",
+            {"role": "data_scientist", "week": 12},
+        ),
+        (
+            "Analyze Big Ten performance and recommend next steps",
+            "analysis",
+            {"role": "analyst"},
+        ),
     ],
 )
 def test_end_to_end_flows(orchestrator, query, query_type, context):

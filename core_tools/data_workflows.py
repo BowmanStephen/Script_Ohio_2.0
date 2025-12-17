@@ -37,16 +37,16 @@ load_dotenv()
 try:
     from fastai.losses import CrossEntropyLossFlat
     from fastai.tabular.all import (
-        CategoryBlock,
         Categorify,
+        CategoryBlock,
+        F1Score,
         FillMissing,
         Normalize,
         RandomSplitter,
-        TabularPandas,
         RocAucBinary,
+        TabularPandas,
         accuracy,
         tabular_learner,
-        F1Score,
     )
 
     FASTAI_AVAILABLE = True
@@ -58,8 +58,11 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from starter_pack.config.data_config import get_starter_pack_config, StarterPackDataConfig
-from starter_pack.utils.cfbd_loader import CFBDLoader, CFBDLoaderError, DEFAULT_HOST
+from starter_pack.config.data_config import (
+    StarterPackDataConfig,
+    get_starter_pack_config,
+)
+from starter_pack.utils.cfbd_loader import DEFAULT_HOST, CFBDLoader, CFBDLoaderError
 
 try:
     from model_pack.config.data_config import get_data_config as get_model_pack_config
@@ -101,9 +104,15 @@ class StarterDataUpdater:
         api_key: Optional[str],
     ) -> pd.DataFrame:
         """Fetch games via CFBD Python client."""
-        token = api_key or os.environ.get("CFBD_API_KEY") or os.environ.get("CFBD_API_TOKEN")
+        token = (
+            api_key
+            or os.environ.get("CFBD_API_KEY")
+            or os.environ.get("CFBD_API_TOKEN")
+        )
         if not token:
-            raise RuntimeError("CFBD API key missing. Set CFBD_API_KEY or pass --api-key.")
+            raise RuntimeError(
+                "CFBD API key missing. Set CFBD_API_KEY or pass --api-key."
+            )
 
         loader = CFBDLoader(api_key=token, host=self.cfbd_host)
         try:
@@ -118,17 +127,23 @@ class StarterDataUpdater:
             raise RuntimeError(str(exc)) from exc
 
         if frame.empty:
-            raise RuntimeError(f"No games returned for season={season}, week={week}, season_type={season_type}")
+            raise RuntimeError(
+                f"No games returned for season={season}, week={week}, season_type={season_type}"
+            )
 
         df = frame.copy()
         df["fetched_at_utc"] = dt.datetime.now(dt.timezone.utc).isoformat()
         return df
 
-    def persist_snapshot(self, frame: pd.DataFrame, *, season: int, week: Optional[int], season_type: str) -> Path:
+    def persist_snapshot(
+        self, frame: pd.DataFrame, *, season: int, week: Optional[int], season_type: str
+    ) -> Path:
         """Write a raw snapshot for reproducibility."""
         stamp = _timestamp()
         week_label = f"week_{week}" if week is not None else "full"
-        snapshot_path = self.snapshots_dir / str(season) / f"{season_type}_{week_label}_{stamp}.csv"
+        snapshot_path = (
+            self.snapshots_dir / str(season) / f"{season_type}_{week_label}_{stamp}.csv"
+        )
         _ensure_parent(snapshot_path)
         frame.to_csv(snapshot_path, index=False)
         return snapshot_path
@@ -150,12 +165,16 @@ class StarterDataUpdater:
     def _merge_games(existing: pd.DataFrame, new_data: pd.DataFrame) -> pd.DataFrame:
         """Combine existing and new games while deduplicating on game id."""
         if existing.empty:
-            return new_data.sort_values(["season", "week", "start_date"], na_position="last").reset_index(drop=True)
+            return new_data.sort_values(
+                ["season", "week", "start_date"], na_position="last"
+            ).reset_index(drop=True)
 
         merged = pd.concat([existing, new_data], ignore_index=True, sort=False)
         if "id" in merged.columns:
             merged = merged.drop_duplicates(subset=["id"], keep="last")
-        merged = merged.sort_values(["season", "week", "start_date"], na_position="last")
+        merged = merged.sort_values(
+            ["season", "week", "start_date"], na_position="last"
+        )
         return merged.reset_index(drop=True)
 
     def run(
@@ -167,8 +186,12 @@ class StarterDataUpdater:
         api_key: Optional[str],
         dry_run: bool = False,
     ) -> dict:
-        frame = self.fetch_games(season=season, week=week, season_type=season_type, api_key=api_key)
-        snapshot_path = self.persist_snapshot(frame, season=season, week=week, season_type=season_type)
+        frame = self.fetch_games(
+            season=season, week=week, season_type=season_type, api_key=api_key
+        )
+        snapshot_path = self.persist_snapshot(
+            frame, season=season, week=week, season_type=season_type
+        )
         summary = {"snapshot": str(snapshot_path), "rows": len(frame)}
         if not dry_run:
             master_path, total_rows = self.update_games_csv(frame)
@@ -185,7 +208,9 @@ class StarterDataUpdater:
 class TrainingDataExtender:
     """Append newly migrated data to the model training dataset."""
 
-    training_data_path: Path = field(default_factory=lambda: get_model_pack_config().get_training_data_path())  # type: ignore
+    training_data_path: Path = field(
+        default_factory=lambda: get_model_pack_config().get_training_data_path()
+    )  # type: ignore
 
     def __post_init__(self) -> None:
         self.backup_dir = self.training_data_path.parent / "backups"
@@ -213,7 +238,10 @@ class TrainingDataExtender:
         }
 
     def _create_backup(self) -> Path:
-        backup_path = self.backup_dir / f"{self.training_data_path.stem}_backup_{_timestamp()}.csv"
+        backup_path = (
+            self.backup_dir
+            / f"{self.training_data_path.stem}_backup_{_timestamp()}.csv"
+        )
         shutil.copy2(self.training_data_path, backup_path)
         return backup_path
 
@@ -235,8 +263,12 @@ class TrainingDataExtender:
 class FastAIModelTrainer:
     """Train the FastAI neural network win probability model."""
 
-    training_data_path: Path = field(default_factory=lambda: get_model_pack_config().get_training_data_path())  # type: ignore
-    output_path: Path = field(default_factory=lambda: Path("model_pack/fastai_home_win_model_2025.pkl"))
+    training_data_path: Path = field(
+        default_factory=lambda: get_model_pack_config().get_training_data_path()
+    )  # type: ignore
+    output_path: Path = field(
+        default_factory=lambda: Path("model_pack/fastai_home_win_model_2025.pkl")
+    )
     random_state: int = 42
     valid_pct: float = 0.2
     batch_size: int = 128
@@ -278,7 +310,9 @@ class FastAIModelTrainer:
 
         frame = pd.read_csv(self.training_data_path, low_memory=False)
         if "margin" not in frame.columns:
-            raise RuntimeError("Training data must contain a 'margin' column to derive home_win labels.")
+            raise RuntimeError(
+                "Training data must contain a 'margin' column to derive home_win labels."
+            )
 
         if self.TARGET_COLUMN not in frame.columns:
             frame[self.TARGET_COLUMN] = (frame["margin"] > 0).astype(int)
@@ -286,7 +320,9 @@ class FastAIModelTrainer:
         cat_names = [col for col in self.CATEGORICAL_FEATURES if col in frame.columns]
         cont_names = self._select_continuous_features(frame, set(cat_names))
         if not cont_names:
-            raise RuntimeError("No continuous feature columns available for FastAI training.")
+            raise RuntimeError(
+                "No continuous feature columns available for FastAI training."
+            )
 
         splitter = RandomSplitter(valid_pct=self.valid_pct, seed=self.random_state)
         splits = splitter(list(range(len(frame))))
@@ -316,7 +352,9 @@ class FastAIModelTrainer:
             "target_positive_rate": float(frame[self.TARGET_COLUMN].mean()),
         }
 
-    def _select_continuous_features(self, frame: pd.DataFrame, categorical: set) -> List[str]:
+    def _select_continuous_features(
+        self, frame: pd.DataFrame, categorical: set
+    ) -> List[str]:
         allowed = []
         for col in frame.columns:
             if col in self.EXCLUDED_COLUMNS or col in categorical:
@@ -343,18 +381,32 @@ def _parse_args(argv: Optional[Iterable[str]] = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Data workflows for Script Ohio 2.0")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    starter_parser = subparsers.add_parser("starter-data", help="Refresh starter pack games via CFBD")
+    starter_parser = subparsers.add_parser(
+        "starter-data", help="Refresh starter pack games via CFBD"
+    )
     starter_parser.add_argument("--season", type=int, required=True)
     starter_parser.add_argument("--week", type=int, default=None)
-    starter_parser.add_argument("--season-type", default="regular", choices=["regular", "postseason"])
+    starter_parser.add_argument(
+        "--season-type", default="regular", choices=["regular", "postseason"]
+    )
     starter_parser.add_argument("--api-key", default=None)
     starter_parser.add_argument("--dry-run", action="store_true")
 
-    extend_parser = subparsers.add_parser("extend-training", help="Append migrated data into training dataset")
-    extend_parser.add_argument("--migrated-file", required=True, help="CSV produced by migrate_starter_pack_data.py")
-    extend_parser.add_argument("--output", default=None, help="Optional alternate output path")
+    extend_parser = subparsers.add_parser(
+        "extend-training", help="Append migrated data into training dataset"
+    )
+    extend_parser.add_argument(
+        "--migrated-file",
+        required=True,
+        help="CSV produced by migrate_starter_pack_data.py",
+    )
+    extend_parser.add_argument(
+        "--output", default=None, help="Optional alternate output path"
+    )
 
-    fastai_parser = subparsers.add_parser("train-fastai", help="Train the FastAI neural win probability model")
+    fastai_parser = subparsers.add_parser(
+        "train-fastai", help="Train the FastAI neural win probability model"
+    )
     fastai_parser.add_argument("--epochs", type=int, default=300)
     fastai_parser.add_argument("--learning-rate", type=float, default=1e-3)
 
@@ -387,7 +439,9 @@ def _handle_starter_data(args: argparse.Namespace) -> None:
 
 def _handle_extend_training(args: argparse.Namespace) -> None:
     extender = TrainingDataExtender()
-    summary = extender.extend(Path(args.migrated_file), Path(args.output) if args.output else None)
+    summary = extender.extend(
+        Path(args.migrated_file), Path(args.output) if args.output else None
+    )
     print(json.dumps(summary, indent=2))
 
 

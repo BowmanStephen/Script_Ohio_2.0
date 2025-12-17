@@ -11,16 +11,15 @@ from __future__ import annotations
 
 import argparse
 import json
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Dict, Iterable, List, Tuple
 
 import joblib
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 import seaborn as sns
-
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = PROJECT_ROOT / "model_pack" / "2025_raw_games_enhanced.csv"
@@ -76,12 +75,16 @@ def load_models() -> Tuple[object, object]:
     return ridge, xgb
 
 
-def build_feature_defaults(training_df: pd.DataFrame, feature_names: Iterable[str]) -> Dict[str, float]:
+def build_feature_defaults(
+    training_df: pd.DataFrame, feature_names: Iterable[str]
+) -> Dict[str, float]:
     medians = training_df[list(feature_names)].median(numeric_only=True)
     return {col: float(medians.get(col, 0.0)) for col in feature_names}
 
 
-def build_feature_vector(row: pd.Series, feature_names: Iterable[str], defaults: Dict[str, float]) -> Dict[str, float]:
+def build_feature_vector(
+    row: pd.Series, feature_names: Iterable[str], defaults: Dict[str, float]
+) -> Dict[str, float]:
     feature_values = {}
     for name in feature_names:
         value = row.get(name)
@@ -91,15 +94,23 @@ def build_feature_vector(row: pd.Series, feature_names: Iterable[str], defaults:
     return feature_values
 
 
-def run_predictions(week: int = 12, season: int = 2025) -> Tuple[List[GamePrediction], Dict[str, object]]:
+def run_predictions(
+    week: int = 12, season: int = 2025
+) -> Tuple[List[GamePrediction], Dict[str, object]]:
     if not DATA_PATH.exists():
         raise FileNotFoundError(f"Feature dataset not found at {DATA_PATH}")
 
     df = pd.read_csv(DATA_PATH)
-    target_games = df[(df["season"] == season) & (df["week"] == week) & (df["season_type"] == "regular")].copy()
+    target_games = df[
+        (df["season"] == season)
+        & (df["week"] == week)
+        & (df["season_type"] == "regular")
+    ].copy()
 
     if target_games.empty:
-        raise ValueError(f"No games found for season {season} week {week} in {DATA_PATH.name}")
+        raise ValueError(
+            f"No games found for season {season} week {week} in {DATA_PATH.name}"
+        )
 
     ridge_model, xgb_model = load_models()
     ridge_features_needed = list(ridge_model.feature_names_in_)
@@ -123,7 +134,9 @@ def run_predictions(week: int = 12, season: int = 2025) -> Tuple[List[GamePredic
         xgb_probs = xgb_model.predict_proba(xgb_vector)[0]
         home_win_prob = float(xgb_probs[1])
         away_win_prob = float(xgb_probs[0])
-        probability_winner = row["home_team"] if home_win_prob >= 0.5 else row["away_team"]
+        probability_winner = (
+            row["home_team"] if home_win_prob >= 0.5 else row["away_team"]
+        )
 
         prediction = GamePrediction(
             game_key=row.get("game_key", f"{row['home_team']}_{row['away_team']}"),
@@ -152,17 +165,23 @@ def run_predictions(week: int = 12, season: int = 2025) -> Tuple[List[GamePredic
 def build_summary(predictions: List[GamePrediction]) -> Dict[str, object]:
     df = pd.DataFrame([p.to_row() for p in predictions])
     high_conf_mask = (df["home_win_probability"] - 0.5).abs() >= 0.2
-    upset_mask = (df["home_win_probability"] < 0.45) & (df["margin_winner"] == df["home_team"])
+    upset_mask = (df["home_win_probability"] < 0.45) & (
+        df["margin_winner"] == df["home_team"]
+    )
     ats_split = df["ats_recommendation"].value_counts().to_dict()
 
     summary = {
         "total_games": len(df),
         "high_confidence_games": int(high_conf_mask.sum()),
-        "high_confidence_examples": df.loc[high_conf_mask, ["home_team", "away_team", "home_win_probability"]]
+        "high_confidence_examples": df.loc[
+            high_conf_mask, ["home_team", "away_team", "home_win_probability"]
+        ]
         .sort_values("home_win_probability", ascending=False)
         .head(5)
         .to_dict(orient="records"),
-        "potential_upsets": df.loc[upset_mask, ["home_team", "away_team", "home_win_probability"]]
+        "potential_upsets": df.loc[
+            upset_mask, ["home_team", "away_team", "home_win_probability"]
+        ]
         .sort_values("home_win_probability")
         .to_dict(orient="records"),
         "ats_recommendation_split": ats_split,
@@ -172,7 +191,9 @@ def build_summary(predictions: List[GamePrediction]) -> Dict[str, object]:
     return summary
 
 
-def write_outputs(predictions: List[GamePrediction], summary: Dict[str, object]) -> None:
+def write_outputs(
+    predictions: List[GamePrediction], summary: Dict[str, object]
+) -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     pd.DataFrame([p.to_row() for p in predictions]).to_csv(PREDICTIONS_CSV, index=False)
     SUMMARY_JSON.write_text(json.dumps(summary, indent=2))
@@ -208,7 +229,7 @@ def generate_visuals(predictions: List[GamePrediction]) -> List[Path]:
         x="confidence_gap",
         hue="probability_winner",
         dodge=False,
-        palette="dark:salmon"
+        palette="dark:salmon",
     )
     ax.set_title("Top 10 Confidence Games (|Win Prob - 50%|)")
     ax.set_xlabel("Confidence Gap")
@@ -230,7 +251,7 @@ def generate_visuals(predictions: List[GamePrediction]) -> List[Path]:
         hue="probability_winner",
         palette="colorblind",
         ax=ax,
-        sizes=(50, 250)
+        sizes=(50, 250),
     )
     ax.axhline(0.5, ls="--", color="gray", alpha=0.5)
     ax.axvline(0, ls="--", color="gray", alpha=0.5)
@@ -248,15 +269,21 @@ def generate_visuals(predictions: List[GamePrediction]) -> List[Path]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate Week 12 predictions.")
-    parser.add_argument("--week", type=int, default=12, help="Target week number (default: 12)")
-    parser.add_argument("--season", type=int, default=2025, help="Target season (default: 2025)")
+    parser.add_argument(
+        "--week", type=int, default=12, help="Target week number (default: 12)"
+    )
+    parser.add_argument(
+        "--season", type=int, default=2025, help="Target season (default: 2025)"
+    )
     args = parser.parse_args()
 
     predictions, summary = run_predictions(week=args.week, season=args.season)
     write_outputs(predictions, summary)
     assets = generate_visuals(predictions)
 
-    print(f"✅ Generated {len(predictions)} predictions for season {args.season} week {args.week}")
+    print(
+        f"✅ Generated {len(predictions)} predictions for season {args.season} week {args.week}"
+    )
     print(f"• Output CSV : {PREDICTIONS_CSV}")
     print(f"• Summary    : {SUMMARY_JSON}")
     for img in assets:
@@ -265,4 +292,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

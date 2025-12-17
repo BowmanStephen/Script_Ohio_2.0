@@ -39,8 +39,12 @@ class ObservabilityHub:
                 cls._instance = cls()
             return cls._instance
 
-    def emit_event(self, event_type: str, payload: Dict[str, Any], severity: str = "info") -> None:
-        event = ObservabilityEvent(event_type=event_type, payload=payload, severity=severity)
+    def emit_event(
+        self, event_type: str, payload: Dict[str, Any], severity: str = "info"
+    ) -> None:
+        event = ObservabilityEvent(
+            event_type=event_type, payload=payload, severity=severity
+        )
         self._events.append(event)
         logger.log(
             level=self._severity_to_level(severity),
@@ -73,4 +77,3 @@ class ObservabilityHub:
             ErrorSeverity.ERROR.value: logging.ERROR,
         }
         return mapping.get(severity, logging.INFO)
-

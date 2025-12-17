@@ -1,23 +1,32 @@
 """
 SHAP Visualization Utilities.
 """
-import shap
+
+from typing import Any, List, Optional, Union
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from typing import Any, Optional, List, Union
+import shap
 
-def generate_beeswarm_plot(explainer: Any, shap_values: Any, features: pd.DataFrame, max_display: int = 20, show: bool = False):
+
+def generate_beeswarm_plot(
+    explainer: Any,
+    shap_values: Any,
+    features: pd.DataFrame,
+    max_display: int = 20,
+    show: bool = False,
+):
     """
     Generate SHAP beeswarm plot.
-    
+
     Args:
         explainer: SHAP explainer object
         shap_values: SHAP values
         features: Feature DataFrame
         max_display: Max features to display
         show: Whether to show the plot
-        
+
     Returns:
         matplotlib figure
     """
@@ -28,10 +37,17 @@ def generate_beeswarm_plot(explainer: Any, shap_values: Any, features: pd.DataFr
         plt.show()
     return fig
 
-def generate_force_plot(explainer: Any, shap_values: Any, features: pd.DataFrame, index: int = 0, matplotlib: bool = False):
+
+def generate_force_plot(
+    explainer: Any,
+    shap_values: Any,
+    features: pd.DataFrame,
+    index: int = 0,
+    matplotlib: bool = False,
+):
     """
     Generate SHAP force plot for a single instance.
-    
+
     Args:
         explainer: SHAP explainer
         shap_values: SHAP values
@@ -41,12 +57,25 @@ def generate_force_plot(explainer: Any, shap_values: Any, features: pd.DataFrame
     """
     # Force plot is usually interactive (JS)
     try:
-        return shap.plots.force(explainer.expected_value, shap_values[index], features.iloc[index], matplotlib=matplotlib)
+        return shap.plots.force(
+            explainer.expected_value,
+            shap_values[index],
+            features.iloc[index],
+            matplotlib=matplotlib,
+        )
     except Exception as e:
         print(f"Error generating force plot: {e}")
         return None
 
-def generate_waterfall_plot(explainer: Any, shap_values: Any, features: pd.DataFrame, index: int = 0, max_display: int = 10, show: bool = False):
+
+def generate_waterfall_plot(
+    explainer: Any,
+    shap_values: Any,
+    features: pd.DataFrame,
+    index: int = 0,
+    max_display: int = 10,
+    show: bool = False,
+):
     """
     Generate SHAP waterfall plot.
     """
@@ -62,4 +91,3 @@ def generate_waterfall_plot(explainer: Any, shap_values: Any, features: pd.DataF
     except Exception as e:
         print(f"Error generating waterfall plot: {e}")
         return None
-

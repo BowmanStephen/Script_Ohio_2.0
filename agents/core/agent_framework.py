@@ -10,16 +10,17 @@ Created: 2025-11-07
 Version: 1.0
 """
 
+import importlib.util
 import json
 import os
 import time
 from abc import ABC, abstractmethod
 from collections import deque
-from typing import Dict, List, Optional, Any, Callable
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from enum import Enum
 from pathlib import Path
-import importlib.util
+from typing import Any, Callable, Dict, List, Optional
+
 from src.observability import (
     ErrorCategory,
     ErrorEvent,
@@ -31,23 +32,29 @@ from src.observability import (
 configure_logging(service_name="agents")
 logger = get_logger(__name__, component="agent_framework", service_name="agents")
 
+
 class AgentStatus(Enum):
     """Agent execution status"""
+
     IDLE = "idle"
     BUSY = "busy"
     ERROR = "error"
     COMPLETED = "completed"
 
+
 class PermissionLevel(Enum):
     """Permission levels for agent access control"""
+
     READ_ONLY = 1
     READ_EXECUTE = 2
     READ_EXECUTE_WRITE = 3
     ADMIN = 4
 
+
 @dataclass
 class AgentCapability:
     """Defines what an agent can do"""
+
     name: str
     description: str
     permission_required: PermissionLevel
@@ -55,9 +62,11 @@ class AgentCapability:
     data_access: List[str]
     execution_time_estimate: float  # in seconds
 
+
 @dataclass
 class AgentRequest:
     """Request to an agent"""
+
     request_id: str
     agent_type: str
     action: str
@@ -66,9 +75,11 @@ class AgentRequest:
     timestamp: float
     priority: int = 1  # 1=low, 2=medium, 3=high
 
+
 @dataclass
 class AgentResponse:
     """Response from an agent"""
+
     request_id: str
     agent_type: str
     status: AgentStatus
@@ -77,6 +88,7 @@ class AgentResponse:
     execution_time: float
     metadata: Dict[str, Any]
 
+
 class BaseAgent(ABC):
     """
     Base class for all specialized agents in the Script Ohio 2.0 platform.
@@ -84,7 +96,13 @@ class BaseAgent(ABC):
     All agents must inherit from this class and implement the required methods.
     """
 
-    def __init__(self, agent_id: str, name: str, permission_level: PermissionLevel, tool_loader: Optional['ToolLoader'] = None):
+    def __init__(
+        self,
+        agent_id: str,
+        name: str,
+        permission_level: PermissionLevel,
+        tool_loader: Optional["ToolLoader"] = None,
+    ):
         self.agent_id = agent_id
         self.name = name
         self.permission_level = permission_level
@@ -92,11 +110,11 @@ class BaseAgent(ABC):
         self.capabilities = self._define_capabilities()
         self.execution_history = []
         self.performance_metrics = {
-            'total_requests': 0,
-            'successful_requests': 0,
-            'failed_requests': 0,
-            'average_execution_time': 0.0,
-            'total_execution_time': 0.0
+            "total_requests": 0,
+            "successful_requests": 0,
+            "failed_requests": 0,
+            "average_execution_time": 0.0,
+            "total_execution_time": 0.0,
         }
         self.tool_loader = tool_loader
 
@@ -111,12 +129,15 @@ class BaseAgent(ABC):
         pass
 
     @abstractmethod
-    def _execute_action(self, action: str, parameters: Dict[str, Any],
-                       user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_action(
+        self, action: str, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Execute the specific action requested"""
         pass
 
-    def can_handle_request(self, request: AgentRequest, user_permissions: PermissionLevel) -> bool:
+    def can_handle_request(
+        self, request: AgentRequest, user_permissions: PermissionLevel
+    ) -> bool:
         """
         Check if this agent can handle the given request.
 
@@ -128,59 +149,113 @@ class BaseAgent(ABC):
             True if the agent can handle the request
         """
         # Check if this is the right agent type
-        agent_type_from_class = self.__class__.__name__.replace('Agent', '').lower()
+        agent_type_from_class = self.__class__.__name__.replace("Agent", "").lower()
         # Handle special case for learning navigator (LearningNavigator -> learning_navigator)
-        if 'learning' in agent_type_from_class and 'navigator' in agent_type_from_class:
-            agent_type_from_class = 'learning_navigator'
+        if "learning" in agent_type_from_class and "navigator" in agent_type_from_class:
+            agent_type_from_class = "learning_navigator"
         # Handle special case for model execution engine (ModelExecutionEngine -> model_engine)
-        elif 'model' in agent_type_from_class and 'execution' in agent_type_from_class and 'engine' in agent_type_from_class:
-            agent_type_from_class = 'model_engine'
+        elif (
+            "model" in agent_type_from_class
+            and "execution" in agent_type_from_class
+            and "engine" in agent_type_from_class
+        ):
+            agent_type_from_class = "model_engine"
         # Handle special case for insight generator (InsightGenerator -> insight_generator)
-        elif 'insight' in agent_type_from_class and 'generator' in agent_type_from_class:
-            agent_type_from_class = 'insight_generator'
+        elif (
+            "insight" in agent_type_from_class and "generator" in agent_type_from_class
+        ):
+            agent_type_from_class = "insight_generator"
         # Handle special case for workflow automator (WorkflowAutomator -> workflow_automator)
-        elif 'workflow' in agent_type_from_class and 'automator' in agent_type_from_class:
-            agent_type_from_class = 'workflow_automator'
+        elif (
+            "workflow" in agent_type_from_class and "automator" in agent_type_from_class
+        ):
+            agent_type_from_class = "workflow_automator"
         # Handle special case for conversational AI (ConversationalAI -> conversational_ai)
-        elif 'conversational' in agent_type_from_class and 'ai' in agent_type_from_class:
-            agent_type_from_class = 'conversational_ai'
+        elif (
+            "conversational" in agent_type_from_class and "ai" in agent_type_from_class
+        ):
+            agent_type_from_class = "conversational_ai"
         # Handle special case for Week 12 prediction orchestrator (Week12PredictionOrchestrator -> week12_prediction_orchestrator)
-        elif 'week12' in agent_type_from_class and 'prediction' in agent_type_from_class and 'orchestrator' in agent_type_from_class:
-            agent_type_from_class = 'week12_prediction_orchestrator'
+        elif (
+            "week12" in agent_type_from_class
+            and "prediction" in agent_type_from_class
+            and "orchestrator" in agent_type_from_class
+        ):
+            agent_type_from_class = "week12_prediction_orchestrator"
         # Handle special case for weekly analysis orchestrator (WeeklyAnalysisOrchestrator -> weekly_analysis_orchestrator)
-        elif 'weekly' in agent_type_from_class and 'analysis' in agent_type_from_class and 'orchestrator' in agent_type_from_class:
-            agent_type_from_class = 'weekly_analysis_orchestrator'
+        elif (
+            "weekly" in agent_type_from_class
+            and "analysis" in agent_type_from_class
+            and "orchestrator" in agent_type_from_class
+        ):
+            agent_type_from_class = "weekly_analysis_orchestrator"
         # Handle special case for weekly agents (WeeklyPredictionGenerationAgent -> weekly_prediction_generation)
-        elif 'weekly' in agent_type_from_class and 'prediction' in agent_type_from_class and 'generation' in agent_type_from_class:
-            agent_type_from_class = 'weekly_prediction_generation'
-        elif 'weekly' in agent_type_from_class and 'matchup' in agent_type_from_class and 'analysis' in agent_type_from_class:
-            agent_type_from_class = 'weekly_matchup_analysis'
-        elif 'weekly' in agent_type_from_class and 'model' in agent_type_from_class and 'validation' in agent_type_from_class:
-            agent_type_from_class = 'weekly_model_validation'
+        elif (
+            "weekly" in agent_type_from_class
+            and "prediction" in agent_type_from_class
+            and "generation" in agent_type_from_class
+        ):
+            agent_type_from_class = "weekly_prediction_generation"
+        elif (
+            "weekly" in agent_type_from_class
+            and "matchup" in agent_type_from_class
+            and "analysis" in agent_type_from_class
+        ):
+            agent_type_from_class = "weekly_matchup_analysis"
+        elif (
+            "weekly" in agent_type_from_class
+            and "model" in agent_type_from_class
+            and "validation" in agent_type_from_class
+        ):
+            agent_type_from_class = "weekly_model_validation"
         # Handle special case for Week 12 agents (Week12PredictionGenerationAgent -> week12_prediction_generation)
-        elif 'week12' in agent_type_from_class and 'prediction' in agent_type_from_class and 'generation' in agent_type_from_class:
-            agent_type_from_class = 'week12_prediction_generation'
-        elif 'week12' in agent_type_from_class and 'matchup' in agent_type_from_class and 'analysis' in agent_type_from_class:
-            agent_type_from_class = 'week12_matchup_analysis'
-        elif 'week12' in agent_type_from_class and 'model' in agent_type_from_class and 'validation' in agent_type_from_class:
-            agent_type_from_class = 'week12_model_validation'
-        elif 'week12' in agent_type_from_class and 'mock' in agent_type_from_class and 'enhancement' in agent_type_from_class:
-            agent_type_from_class = 'week12_mock_enhancement'
+        elif (
+            "week12" in agent_type_from_class
+            and "prediction" in agent_type_from_class
+            and "generation" in agent_type_from_class
+        ):
+            agent_type_from_class = "week12_prediction_generation"
+        elif (
+            "week12" in agent_type_from_class
+            and "matchup" in agent_type_from_class
+            and "analysis" in agent_type_from_class
+        ):
+            agent_type_from_class = "week12_matchup_analysis"
+        elif (
+            "week12" in agent_type_from_class
+            and "model" in agent_type_from_class
+            and "validation" in agent_type_from_class
+        ):
+            agent_type_from_class = "week12_model_validation"
+        elif (
+            "week12" in agent_type_from_class
+            and "mock" in agent_type_from_class
+            and "enhancement" in agent_type_from_class
+        ):
+            agent_type_from_class = "week12_mock_enhancement"
         # Handle special case for Week 13 agents (Week13ConsolidationAgent -> week13_consolidation)
-        elif 'week13' in agent_type_from_class and 'consolidation' in agent_type_from_class:
-            agent_type_from_class = 'week13_consolidation'
+        elif (
+            "week13" in agent_type_from_class
+            and "consolidation" in agent_type_from_class
+        ):
+            agent_type_from_class = "week13_consolidation"
         # Handle special case for Legacy Creation Agent (LegacyCreationAgent -> legacy_creation)
-        elif 'legacy' in agent_type_from_class and 'creation' in agent_type_from_class:
-            agent_type_from_class = 'legacy_creation'
+        elif "legacy" in agent_type_from_class and "creation" in agent_type_from_class:
+            agent_type_from_class = "legacy_creation"
         # Handle special case for CFBD Integration Agent (CFBDIntegrationAgent -> cfbd_integration)
-        elif 'cfbd' in agent_type_from_class and 'integration' in agent_type_from_class:
-            agent_type_from_class = 'cfbd_integration'
+        elif "cfbd" in agent_type_from_class and "integration" in agent_type_from_class:
+            agent_type_from_class = "cfbd_integration"
         # Handle special case for Quality Assurance Agent (QualityAssuranceAgent -> quality_assurance)
-        elif 'quality' in agent_type_from_class and 'assurance' in agent_type_from_class:
-            agent_type_from_class = 'quality_assurance'
+        elif (
+            "quality" in agent_type_from_class and "assurance" in agent_type_from_class
+        ):
+            agent_type_from_class = "quality_assurance"
         # Handle special case for Postseason Projection Agent (PostseasonProjectionAgent -> postseason_projection)
-        elif 'postseason' in agent_type_from_class and 'projection' in agent_type_from_class:
-            agent_type_from_class = 'postseason_projection'
+        elif (
+            "postseason" in agent_type_from_class
+            and "projection" in agent_type_from_class
+        ):
+            agent_type_from_class = "postseason_projection"
 
         if request.agent_type != agent_type_from_class:
             return False
@@ -202,13 +277,17 @@ class BaseAgent(ABC):
             return False
 
         # Check if action is supported
-        action_capability = next((cap for cap in self.capabilities if cap.name == request.action), None)
+        action_capability = next(
+            (cap for cap in self.capabilities if cap.name == request.action), None
+        )
         if not action_capability:
             return False
 
         return True
 
-    def execute_request(self, request: AgentRequest, user_permissions: PermissionLevel) -> AgentResponse:
+    def execute_request(
+        self, request: AgentRequest, user_permissions: PermissionLevel
+    ) -> AgentResponse:
         """
         Execute a request to this agent.
 
@@ -235,10 +314,14 @@ class BaseAgent(ABC):
         try:
             # Validate request
             if not self.can_handle_request(request, user_permissions):
-                raise PermissionError(f"Agent {self.name} cannot handle request {request.request_id}")
+                raise PermissionError(
+                    f"Agent {self.name} cannot handle request {request.request_id}"
+                )
 
             # Execute the action
-            result = self._execute_action(request.action, request.parameters, request.user_context)
+            result = self._execute_action(
+                request.action, request.parameters, request.user_context
+            )
 
             # Update metrics
             execution_time = time.time() - start_time
@@ -253,20 +336,26 @@ class BaseAgent(ABC):
                 error_message=None,
                 execution_time=execution_time,
                 metadata={
-                    'agent_id': self.agent_id,
-                    'capabilities_used': [cap.name for cap in self.capabilities if cap.name == request.action],
-                    'user_role': request.user_context.get('role', 'unknown')
-                }
+                    "agent_id": self.agent_id,
+                    "capabilities_used": [
+                        cap.name
+                        for cap in self.capabilities
+                        if cap.name == request.action
+                    ],
+                    "user_role": request.user_context.get("role", "unknown"),
+                },
             )
 
             # Store execution history
-            self.execution_history.append({
-                'request_id': request.request_id,
-                'action': request.action,
-                'timestamp': time.time(),
-                'execution_time': execution_time,
-                'success': True
-            })
+            self.execution_history.append(
+                {
+                    "request_id": request.request_id,
+                    "action": request.action,
+                    "timestamp": time.time(),
+                    "execution_time": execution_time,
+                    "success": True,
+                }
+            )
 
             self.status = AgentStatus.IDLE
             return response
@@ -290,14 +379,16 @@ class BaseAgent(ABC):
             logger.error(error_event.message, extra=error_event.to_log_extra())
 
             # Store execution history
-            self.execution_history.append({
-                'request_id': request.request_id,
-                'action': request.action,
-                'timestamp': time.time(),
-                'execution_time': execution_time,
-                'success': False,
-                'error': str(e)
-            })
+            self.execution_history.append(
+                {
+                    "request_id": request.request_id,
+                    "action": request.action,
+                    "timestamp": time.time(),
+                    "execution_time": execution_time,
+                    "success": False,
+                    "error": str(e),
+                }
+            )
 
             self.status = AgentStatus.ERROR
             return AgentResponse(
@@ -307,27 +398,28 @@ class BaseAgent(ABC):
                 result=None,
                 error_message=error_message,
                 execution_time=execution_time,
-                metadata={'agent_id': self.agent_id}
+                metadata={"agent_id": self.agent_id},
             )
 
     def _update_performance_metrics(self, execution_time: float, success: bool):
         """Update performance metrics for this agent"""
-        self.performance_metrics['total_requests'] += 1
-        self.performance_metrics['total_execution_time'] += execution_time
+        self.performance_metrics["total_requests"] += 1
+        self.performance_metrics["total_execution_time"] += execution_time
 
         if success:
-            self.performance_metrics['successful_requests'] += 1
+            self.performance_metrics["successful_requests"] += 1
         else:
-            self.performance_metrics['failed_requests'] += 1
+            self.performance_metrics["failed_requests"] += 1
 
         # Update average execution time
-        total_requests = self.performance_metrics['total_requests']
-        self.performance_metrics['average_execution_time'] = (
-            self.performance_metrics['total_execution_time'] / total_requests
+        total_requests = self.performance_metrics["total_requests"]
+        self.performance_metrics["average_execution_time"] = (
+            self.performance_metrics["total_execution_time"] / total_requests
         )
 
-    def execute_tool(self, tool_name: str, parameters: Dict[str, Any],
-                    user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def execute_tool(
+        self, tool_name: str, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """
         Execute a tool using the tool loader.
 
@@ -363,21 +455,26 @@ class BaseAgent(ABC):
         if not self.tool_loader:
             return []
 
-        tools = self.tool_loader.get_tools_for_permission_level(self.permission_level.value)
-        return [{'name': tool, 'available': True} for tool in tools]
+        tools = self.tool_loader.get_tools_for_permission_level(
+            self.permission_level.value
+        )
+        return [{"name": tool, "available": True} for tool in tools]
 
     def get_status(self) -> Dict[str, Any]:
         """Get current status and metrics for this agent"""
         return {
-            'agent_id': self.agent_id,
-            'name': self.name,
-            'status': self.status.value,
-            'permission_level': self.permission_level.value,
-            'capabilities': [asdict(cap) for cap in self.capabilities],
-            'performance_metrics': self.performance_metrics.copy(),
-            'recent_executions': self.execution_history[-5:] if self.execution_history else [],
-            'available_tools': len(self.get_available_tools())
+            "agent_id": self.agent_id,
+            "name": self.name,
+            "status": self.status.value,
+            "permission_level": self.permission_level.value,
+            "capabilities": [asdict(cap) for cap in self.capabilities],
+            "performance_metrics": self.performance_metrics.copy(),
+            "recent_executions": self.execution_history[-5:]
+            if self.execution_history
+            else [],
+            "available_tools": len(self.get_available_tools()),
         }
+
 
 class AgentFactory:
     """
@@ -391,6 +488,7 @@ class AgentFactory:
 
         # Initialize tool loader
         from agents.core.tool_loader import ToolLoader
+
         self.tool_loader = ToolLoader(base_path=base_path)
 
         logger.info("Agent Factory initialized with tool loader")
@@ -400,7 +498,9 @@ class AgentFactory:
         self.agent_registry[agent_type] = agent_class
         logger.info(f"Registered agent class: {agent_type}")
 
-    def create_agent(self, agent_type: str, agent_id: Optional[str] = None, **kwargs) -> BaseAgent:
+    def create_agent(
+        self, agent_type: str, agent_id: Optional[str] = None, **kwargs
+    ) -> BaseAgent:
         """
         Create an instance of a registered agent.
 
@@ -426,8 +526,11 @@ class AgentFactory:
 
         # Check if agent constructor accepts tool_loader parameter
         agent_init_signature = inspect.signature(agent_class.__init__)
-        if 'tool_loader' in agent_init_signature.parameters and 'tool_loader' not in kwargs:
-            kwargs['tool_loader'] = self.tool_loader
+        if (
+            "tool_loader" in agent_init_signature.parameters
+            and "tool_loader" not in kwargs
+        ):
+            kwargs["tool_loader"] = self.tool_loader
 
         # Create agent instance
         agent = agent_class(agent_id=agent_id, **kwargs)
@@ -454,6 +557,7 @@ class AgentFactory:
             return True
         return False
 
+
 class RequestRouter:
     """
     Routes requests to appropriate agents based on capabilities and permissions.
@@ -464,24 +568,28 @@ class RequestRouter:
         self.request_queue = []
         self.active_requests = {}
         self.completed_requests = {}
-        
+
         # Instrumentation metrics
         self.instrumentation_metrics = {
-            'submit_count': 0,
-            'process_count': 0,
-            'total_overhead_ms': 0.0,
-            'permission_denials': 0,
-            'agent_not_found_count': 0,
-            'priority_sorts': 0,
-            'queue_sizes_at_submit': deque(maxlen=1000),
-            'queue_sizes_at_process': deque(maxlen=1000),
-            'errors_caught': 0,
-            'completed_requests_queries': 0
+            "submit_count": 0,
+            "process_count": 0,
+            "total_overhead_ms": 0.0,
+            "permission_denials": 0,
+            "agent_not_found_count": 0,
+            "priority_sorts": 0,
+            "queue_sizes_at_submit": deque(maxlen=1000),
+            "queue_sizes_at_process": deque(maxlen=1000),
+            "errors_caught": 0,
+            "completed_requests_queries": 0,
         }
-        
+
         logger.info("Request Router initialized")
 
-    def submit_request(self, request: AgentRequest, user_permissions: PermissionLevel = PermissionLevel.READ_ONLY) -> str:
+    def submit_request(
+        self,
+        request: AgentRequest,
+        user_permissions: PermissionLevel = PermissionLevel.READ_ONLY,
+    ) -> str:
         """
         Submit a request to be routed to an appropriate agent.
 
@@ -493,24 +601,28 @@ class RequestRouter:
             Request ID for tracking
         """
         start_time = time.time()
-        
+
         # Track queue size at submit
         queue_size = len(self.request_queue)
-        self.instrumentation_metrics['queue_sizes_at_submit'].append(queue_size)
-        self.instrumentation_metrics['submit_count'] += 1
-        
+        self.instrumentation_metrics["queue_sizes_at_submit"].append(queue_size)
+        self.instrumentation_metrics["submit_count"] += 1
+
         # Add to queue
         self.request_queue.append(request)
         self.active_requests[request.request_id] = request
 
         overhead_ms = (time.time() - start_time) * 1000
-        self.instrumentation_metrics['total_overhead_ms'] += overhead_ms
-        
-        logger.info(f"[ROUTER_AUDIT] SUBMIT: request_id={request.request_id} queue_size={queue_size} priority={request.priority} overhead_ms={overhead_ms:.2f}")
+        self.instrumentation_metrics["total_overhead_ms"] += overhead_ms
+
+        logger.info(
+            f"[ROUTER_AUDIT] SUBMIT: request_id={request.request_id} queue_size={queue_size} priority={request.priority} overhead_ms={overhead_ms:.2f}"
+        )
         logger.info(f"Submitted request {request.request_id} to queue")
         return request.request_id
 
-    def process_requests(self, user_permissions: PermissionLevel = PermissionLevel.READ_ONLY):
+    def process_requests(
+        self, user_permissions: PermissionLevel = PermissionLevel.READ_ONLY
+    ):
         """
         Process queued requests by routing them to appropriate agents.
         """
@@ -519,20 +631,24 @@ class RequestRouter:
 
         process_start_time = time.time()
         queue_size_at_start = len(self.request_queue)
-        self.instrumentation_metrics['queue_sizes_at_process'].append(queue_size_at_start)
-        self.instrumentation_metrics['process_count'] += 1
-        
+        self.instrumentation_metrics["queue_sizes_at_process"].append(
+            queue_size_at_start
+        )
+        self.instrumentation_metrics["process_count"] += 1
+
         logger.info(f"[ROUTER_AUDIT] PROCESS_START: queue_size={queue_size_at_start}")
 
         # Sort by priority
         priorities_before = [r.priority for r in self.request_queue]
         self.request_queue.sort(key=lambda x: x.priority, reverse=True)
         priorities_after = [r.priority for r in self.request_queue]
-        
+
         # Check if sorting actually changed order
         if priorities_before != priorities_after:
-            self.instrumentation_metrics['priority_sorts'] += 1
-            logger.info(f"[ROUTER_AUDIT] PRIORITY_SORT: queue_size={queue_size_at_start}")
+            self.instrumentation_metrics["priority_sorts"] += 1
+            logger.info(
+                f"[ROUTER_AUDIT] PRIORITY_SORT: queue_size={queue_size_at_start}"
+            )
 
         # Process requests
         processed_requests = []
@@ -544,8 +660,10 @@ class RequestRouter:
 
                 if agent:
                     # Agent found means permissions already validated in _find_agent_for_request()
-                    logger.info(f"[ROUTER_AUDIT] PERMISSION_GRANTED: request_id={request.request_id} agent_type={request.agent_type}")
-                    
+                    logger.info(
+                        f"[ROUTER_AUDIT] PERMISSION_GRANTED: request_id={request.request_id} agent_type={request.agent_type}"
+                    )
+
                     # Execute request
                     response = agent.execute_request(request, user_permissions)
 
@@ -559,12 +677,16 @@ class RequestRouter:
                     processed_requests.append(request)
                     logger.info(f"Completed request {request.request_id}")
                 else:
-                    self.instrumentation_metrics['agent_not_found_count'] += 1
-                    logger.warning(f"[ROUTER_AUDIT] AGENT_NOT_FOUND: request_id={request.request_id} agent_type={request.agent_type}")
-                    logger.warning(f"No suitable agent found for request {request.request_id}")
+                    self.instrumentation_metrics["agent_not_found_count"] += 1
+                    logger.warning(
+                        f"[ROUTER_AUDIT] AGENT_NOT_FOUND: request_id={request.request_id} agent_type={request.agent_type}"
+                    )
+                    logger.warning(
+                        f"No suitable agent found for request {request.request_id}"
+                    )
 
             except Exception as e:
-                self.instrumentation_metrics['errors_caught'] += 1
+                self.instrumentation_metrics["errors_caught"] += 1
                 error_event = ErrorEvent(
                     message=f"Error processing request {request.request_id}: {str(e)}",
                     category=ErrorCategory.EXECUTION,
@@ -582,11 +704,13 @@ class RequestRouter:
         for request in processed_requests:
             if request in self.request_queue:
                 self.request_queue.remove(request)
-        
-        process_overhead_ms = (time.time() - process_start_time) * 1000
-        self.instrumentation_metrics['total_overhead_ms'] += process_overhead_ms
 
-    def _find_agent_for_request(self, request: AgentRequest, user_permissions: PermissionLevel) -> Optional[BaseAgent]:
+        process_overhead_ms = (time.time() - process_start_time) * 1000
+        self.instrumentation_metrics["total_overhead_ms"] += process_overhead_ms
+
+    def _find_agent_for_request(
+        self, request: AgentRequest, user_permissions: PermissionLevel
+    ) -> Optional[BaseAgent]:
         """Find an agent that can handle the request"""
         for agent in self.agent_factory.agents.values():
             if agent.can_handle_request(request, user_permissions):
@@ -595,19 +719,21 @@ class RequestRouter:
 
     def get_request_status(self, request_id: str) -> Optional[Dict[str, Any]]:
         """Get status of a specific request"""
-        self.instrumentation_metrics['completed_requests_queries'] += 1
+        self.instrumentation_metrics["completed_requests_queries"] += 1
         logger.info(f"[ROUTER_AUDIT] STATUS_RETRIEVED: request_id={request_id}")
-        
+
         if request_id in self.completed_requests:
             response = self.completed_requests[request_id]
-            return {
-                'status': 'completed',
-                'response': asdict(response)
-            }
+            return {"status": "completed", "response": asdict(response)}
         elif request_id in self.active_requests:
             return {
-                'status': 'processing',
-                'queue_position': self.request_queue.index(self.active_requests[request_id]) + 1 if self.active_requests[request_id] in self.request_queue else 0
+                "status": "processing",
+                "queue_position": self.request_queue.index(
+                    self.active_requests[request_id]
+                )
+                + 1
+                if self.active_requests[request_id] in self.request_queue
+                else 0,
             }
         else:
             return None
@@ -615,113 +741,120 @@ class RequestRouter:
     def get_queue_status(self) -> Dict[str, Any]:
         """Get current queue status"""
         return {
-            'queue_length': len(self.request_queue),
-            'active_requests': len(self.active_requests),
-            'completed_requests': len(self.completed_requests),
-            'pending_requests': [req.request_id for req in self.request_queue]
+            "queue_length": len(self.request_queue),
+            "active_requests": len(self.active_requests),
+            "completed_requests": len(self.completed_requests),
+            "pending_requests": [req.request_id for req in self.request_queue],
         }
-    
+
     def get_instrumentation_report(self) -> Dict[str, Any]:
         """
         Get comprehensive instrumentation report with metrics and statistics.
-        
+
         Returns:
             Dictionary containing all tracked metrics and computed statistics
         """
         metrics = self.instrumentation_metrics.copy()
-        
+
         # Compute statistics
-        submit_count = metrics['submit_count']
-        process_count = metrics['process_count']
-        
+        submit_count = metrics["submit_count"]
+        process_count = metrics["process_count"]
+
         # Average queue sizes
-        queue_sizes_at_submit = metrics.get('queue_sizes_at_submit', [])
+        queue_sizes_at_submit = metrics.get("queue_sizes_at_submit", [])
         if not isinstance(queue_sizes_at_submit, list):
             queue_sizes_at_submit = []
         avg_queue_at_submit = (
             sum(queue_sizes_at_submit) / len(queue_sizes_at_submit)
-            if queue_sizes_at_submit else 0.0
+            if queue_sizes_at_submit
+            else 0.0
         )
-        queue_sizes_at_process = metrics.get('queue_sizes_at_process', [])
+        queue_sizes_at_process = metrics.get("queue_sizes_at_process", [])
         if not isinstance(queue_sizes_at_process, list):
             queue_sizes_at_process = []
         avg_queue_at_process = (
             sum(queue_sizes_at_process) / len(queue_sizes_at_process)
-            if queue_sizes_at_process else 0.0
+            if queue_sizes_at_process
+            else 0.0
         )
-        
+
         # Average overhead per operation
         avg_overhead_per_submit = (
-            metrics['total_overhead_ms'] / submit_count if submit_count > 0 else 0.0
+            metrics["total_overhead_ms"] / submit_count if submit_count > 0 else 0.0
         )
         avg_overhead_per_process = (
-            metrics['total_overhead_ms'] / process_count if process_count > 0 else 0.0
+            metrics["total_overhead_ms"] / process_count if process_count > 0 else 0.0
         )
-        
+
         # Rates
         permission_denial_rate = (
-            metrics['permission_denials'] / process_count if process_count > 0 else 0.0
+            metrics["permission_denials"] / process_count if process_count > 0 else 0.0
         )
         agent_not_found_rate = (
-            metrics['agent_not_found_count'] / process_count if process_count > 0 else 0.0
+            metrics["agent_not_found_count"] / process_count
+            if process_count > 0
+            else 0.0
         )
         error_rate = (
-            metrics['errors_caught'] / process_count if process_count > 0 else 0.0
+            metrics["errors_caught"] / process_count if process_count > 0 else 0.0
         )
         priority_sort_rate = (
-            metrics['priority_sorts'] / process_count if process_count > 0 else 0.0
+            metrics["priority_sorts"] / process_count if process_count > 0 else 0.0
         )
-        
+
         return {
-            'raw_metrics': metrics,
-            'statistics': {
-                'average_queue_size_at_submit': round(avg_queue_at_submit, 2),
-                'average_queue_size_at_process': round(avg_queue_at_process, 2),
-                'average_overhead_per_submit_ms': round(avg_overhead_per_submit, 2),
-                'average_overhead_per_process_ms': round(avg_overhead_per_process, 2),
-                'permission_denial_rate': round(permission_denial_rate, 4),
-                'agent_not_found_rate': round(agent_not_found_rate, 4),
-                'error_rate': round(error_rate, 4),
-                'priority_sort_rate': round(priority_sort_rate, 4),
+            "raw_metrics": metrics,
+            "statistics": {
+                "average_queue_size_at_submit": round(avg_queue_at_submit, 2),
+                "average_queue_size_at_process": round(avg_queue_at_process, 2),
+                "average_overhead_per_submit_ms": round(avg_overhead_per_submit, 2),
+                "average_overhead_per_process_ms": round(avg_overhead_per_process, 2),
+                "permission_denial_rate": round(permission_denial_rate, 4),
+                "agent_not_found_rate": round(agent_not_found_rate, 4),
+                "error_rate": round(error_rate, 4),
+                "priority_sort_rate": round(priority_sort_rate, 4),
             },
-            'summary': {
-                'total_submits': submit_count,
-                'total_processes': process_count,
-                'total_overhead_ms': round(metrics['total_overhead_ms'], 2),
-                'total_permission_denials': metrics['permission_denials'],
-                'total_agent_not_found': metrics['agent_not_found_count'],
-                'total_errors': metrics['errors_caught'],
-                'total_priority_sorts': metrics['priority_sorts'],
-                'total_status_queries': metrics['completed_requests_queries'],
-            }
+            "summary": {
+                "total_submits": submit_count,
+                "total_processes": process_count,
+                "total_overhead_ms": round(metrics["total_overhead_ms"], 2),
+                "total_permission_denials": metrics["permission_denials"],
+                "total_agent_not_found": metrics["agent_not_found_count"],
+                "total_errors": metrics["errors_caught"],
+                "total_priority_sorts": metrics["priority_sorts"],
+                "total_status_queries": metrics["completed_requests_queries"],
+            },
         }
 
     def reset_instrumentation(self) -> None:
         """
         Reset all instrumentation metrics to initial state.
-        
+
         Useful for testing or starting a new measurement period.
         """
         self.instrumentation_metrics = {
-            'submit_count': 0,
-            'process_count': 0,
-            'total_overhead_ms': 0.0,
-            'permission_denials': 0,
-            'agent_not_found_count': 0,
-            'priority_sorts': 0,
-            'queue_sizes_at_submit': deque(maxlen=1000),
-            'queue_sizes_at_process': deque(maxlen=1000),
-            'errors_caught': 0,
-            'completed_requests_queries': 0
+            "submit_count": 0,
+            "process_count": 0,
+            "total_overhead_ms": 0.0,
+            "permission_denials": 0,
+            "agent_not_found_count": 0,
+            "priority_sorts": 0,
+            "queue_sizes_at_submit": deque(maxlen=1000),
+            "queue_sizes_at_process": deque(maxlen=1000),
+            "errors_caught": 0,
+            "completed_requests_queries": 0,
         }
         logger.info("RequestRouter instrumentation metrics reset")
+
 
 # Example agent implementations for testing
 class LearningNavigatorAgent(BaseAgent):
     """Agent for educational guidance and learning path navigation"""
 
-    def __init__(self, agent_id: str, tool_loader: Optional['ToolLoader'] = None):
-        super().__init__(agent_id, "Learning Navigator", PermissionLevel.READ_EXECUTE, tool_loader)
+    def __init__(self, agent_id: str, tool_loader: Optional["ToolLoader"] = None):
+        super().__init__(
+            agent_id, "Learning Navigator", PermissionLevel.READ_EXECUTE, tool_loader
+        )
 
     def _define_capabilities(self) -> List[AgentCapability]:
         return [
@@ -731,7 +864,7 @@ class LearningNavigatorAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE,
                 tools_required=["notebook_loader", "progress_tracker"],
                 data_access=["starter_pack/*"],
-                execution_time_estimate=2.0
+                execution_time_estimate=2.0,
             ),
             AgentCapability(
                 name="recommend_content",
@@ -739,12 +872,13 @@ class LearningNavigatorAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE,
                 tools_required=["content_analyzer", "user_profiler"],
                 data_access=["starter_pack/*"],
-                execution_time_estimate=1.5
-            )
+                execution_time_estimate=1.5,
+            ),
         ]
 
-    def _execute_action(self, action: str, parameters: Dict[str, Any],
-                       user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_action(
+        self, action: str, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         if action == "guide_learning_path":
             return self._guide_learning_path(parameters, user_context)
         elif action == "recommend_content":
@@ -752,7 +886,9 @@ class LearningNavigatorAgent(BaseAgent):
         else:
             raise ValueError(f"Unknown action: {action}")
 
-    def _guide_learning_path(self, parameters: Dict[str, Any], user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _guide_learning_path(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Guide user through learning path using tools"""
         try:
             # Use tool to load notebook metadata
@@ -762,21 +898,25 @@ class LearningNavigatorAgent(BaseAgent):
                 "starter_pack/02_build_simple_rankings.ipynb",
                 "starter_pack/03_metrics_comparison.ipynb",
                 "starter_pack/04_team_similarity.ipynb",
-                "starter_pack/05_matchup_predictor.ipynb"
+                "starter_pack/05_matchup_predictor.ipynb",
             ]
 
             notebook_metadata = self.execute_tool(
                 "load_notebook_metadata",
                 {"notebook_paths": notebook_paths, "include_content": False},
-                user_context
+                user_context,
             )
 
             # Create learning path based on available notebooks
             available_notebooks = [
-                meta['name'] + '.ipynb' for meta in notebook_metadata['metadata'] if meta.get('exists', False)
+                meta["name"] + ".ipynb"
+                for meta in notebook_metadata["metadata"]
+                if meta.get("exists", False)
             ]
 
-            recommended_path = available_notebooks[:3] if available_notebooks else notebook_paths[:3]
+            recommended_path = (
+                available_notebooks[:3] if available_notebooks else notebook_paths[:3]
+            )
 
             return {
                 "recommended_path": recommended_path,
@@ -784,7 +924,7 @@ class LearningNavigatorAgent(BaseAgent):
                 "next_steps": ["Learn about data structure", "Explore basic rankings"],
                 "estimated_time": f"{len(recommended_path) * 15} minutes",
                 "notebooks_available": len(available_notebooks),
-                "path_foundation": notebook_metadata.get('summary', {})
+                "path_foundation": notebook_metadata.get("summary", {}),
             }
 
         except Exception as e:
@@ -793,15 +933,17 @@ class LearningNavigatorAgent(BaseAgent):
                 "recommended_path": [
                     "00_data_dictionary.ipynb",
                     "01_intro_to_data.ipynb",
-                    "02_build_simple_rankings.ipynb"
+                    "02_build_simple_rankings.ipynb",
                 ],
                 "current_position": parameters.get("current_notebook", "start"),
                 "next_steps": ["Learn about data structure", "Explore basic rankings"],
                 "estimated_time": "45 minutes",
-                "fallback_used": True
+                "fallback_used": True,
             }
 
-    def _recommend_content(self, parameters: Dict[str, Any], user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _recommend_content(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Recommend content based on user context using tools"""
         skill_level = user_context.get("skill_level", "beginner")
 
@@ -811,69 +953,101 @@ class LearningNavigatorAgent(BaseAgent):
                 notebook_paths = [
                     "starter_pack/01_intro_to_data.ipynb",
                     "starter_pack/02_build_simple_rankings.ipynb",
-                    "starter_pack/03_metrics_comparison.ipynb"
+                    "starter_pack/03_metrics_comparison.ipynb",
                 ]
             elif skill_level == "intermediate":
                 notebook_paths = [
                     "starter_pack/05_matchup_predictor.ipynb",
                     "starter_pack/09_opponent_adjustments.ipynb",
-                    "model_pack/01_linear_regression_margin.ipynb"
+                    "model_pack/01_linear_regression_margin.ipynb",
                 ]
             else:  # advanced
                 notebook_paths = [
                     "starter_pack/12_efficiency_dashboards.ipynb",
                     "model_pack/06_shap_interpretability.ipynb",
-                    "model_pack/07_stacked_ensemble.ipynb"
+                    "model_pack/07_stacked_ensemble.ipynb",
                 ]
 
             # Use tool to get notebook information
             notebook_metadata = self.execute_tool(
                 "load_notebook_metadata",
                 {"notebook_paths": notebook_paths, "include_content": False},
-                user_context
+                user_context,
             )
 
             # Create recommendations based on available notebooks
             recommendations = []
-            for meta in notebook_metadata['metadata']:
-                if meta.get('exists', False):
-                    recommendations.append({
-                        "notebook": meta['path'],
-                        "reason": self._get_recommendation_reason(meta['name'], skill_level),
-                        "size_kb": round(meta.get('size_bytes', 0) / 1024, 1),
-                        "available": True
-                    })
+            for meta in notebook_metadata["metadata"]:
+                if meta.get("exists", False):
+                    recommendations.append(
+                        {
+                            "notebook": meta["path"],
+                            "reason": self._get_recommendation_reason(
+                                meta["name"], skill_level
+                            ),
+                            "size_kb": round(meta.get("size_bytes", 0) / 1024, 1),
+                            "available": True,
+                        }
+                    )
 
             return {
                 "recommendations": recommendations,
                 "skill_level_assessed": skill_level,
-                "personalization_factors": ["previous_notebooks", "time_available", "interests"],
+                "personalization_factors": [
+                    "previous_notebooks",
+                    "time_available",
+                    "interests",
+                ],
                 "notebooks_analyzed": len(notebook_paths),
-                "available_recommendations": len(recommendations)
+                "available_recommendations": len(recommendations),
             }
 
         except Exception as e:
             # Fallback recommendations
             fallback_recommendations = {
                 "beginner": [
-                    {"notebook": "starter_pack/01_intro_to_data.ipynb", "reason": "Perfect starting point"},
-                    {"notebook": "starter_pack/02_build_simple_rankings.ipynb", "reason": "Hands-on learning"}
+                    {
+                        "notebook": "starter_pack/01_intro_to_data.ipynb",
+                        "reason": "Perfect starting point",
+                    },
+                    {
+                        "notebook": "starter_pack/02_build_simple_rankings.ipynb",
+                        "reason": "Hands-on learning",
+                    },
                 ],
                 "intermediate": [
-                    {"notebook": "starter_pack/05_matchup_predictor.ipynb", "reason": "Apply your knowledge"},
-                    {"notebook": "starter_pack/09_opponent_adjustments.ipynb", "reason": "Advanced concepts"}
+                    {
+                        "notebook": "starter_pack/05_matchup_predictor.ipynb",
+                        "reason": "Apply your knowledge",
+                    },
+                    {
+                        "notebook": "starter_pack/09_opponent_adjustments.ipynb",
+                        "reason": "Advanced concepts",
+                    },
                 ],
                 "advanced": [
-                    {"notebook": "starter_pack/12_efficiency_dashboards.ipynb", "reason": "Complex analysis"},
-                    {"notebook": "model_pack/06_shap_interpretability.ipynb", "reason": "Model explainability"}
-                ]
+                    {
+                        "notebook": "starter_pack/12_efficiency_dashboards.ipynb",
+                        "reason": "Complex analysis",
+                    },
+                    {
+                        "notebook": "model_pack/06_shap_interpretability.ipynb",
+                        "reason": "Model explainability",
+                    },
+                ],
             }
 
             return {
-                "recommendations": fallback_recommendations.get(skill_level, fallback_recommendations["beginner"]),
+                "recommendations": fallback_recommendations.get(
+                    skill_level, fallback_recommendations["beginner"]
+                ),
                 "skill_level_assessed": skill_level,
-                "personalization_factors": ["previous_notebooks", "time_available", "interests"],
-                "fallback_used": True
+                "personalization_factors": [
+                    "previous_notebooks",
+                    "time_available",
+                    "interests",
+                ],
+                "fallback_used": True,
             }
 
     def _get_recommendation_reason(self, notebook_name: str, skill_level: str) -> str:
@@ -894,10 +1068,13 @@ class LearningNavigatorAgent(BaseAgent):
             "12_efficiency_dashboards": "Create professional dashboards",
             "01_linear_regression_margin": "Foundation machine learning concepts",
             "06_shap_interpretability": "Model explainability and interpretation",
-            "07_stacked_ensemble": "Advanced ensemble techniques"
+            "07_stacked_ensemble": "Advanced ensemble techniques",
         }
 
-        return reasons.get(notebook_name, f"Recommended for {skill_level} level learning")
+        return reasons.get(
+            notebook_name, f"Recommended for {skill_level} level learning"
+        )
+
 
 # Example usage
 if __name__ == "__main__":
@@ -919,7 +1096,7 @@ if __name__ == "__main__":
         parameters={"current_notebook": "start"},
         user_context={"role": "analyst", "skill_level": "beginner"},
         timestamp=time.time(),
-        priority=2
+        priority=2,
     )
 
     # Submit and process request

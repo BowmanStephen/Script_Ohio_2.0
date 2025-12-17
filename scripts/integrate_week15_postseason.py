@@ -45,18 +45,18 @@ if str(PROJECT_ROOT) not in sys.path:
 
 # Import path utilities
 from model_pack.utils.path_utils import (
-    get_postseason_training_file,
-    get_weekly_training_file,
-    get_training_data_file,
     find_project_root,
+    get_postseason_training_file,
+    get_training_data_file,
+    get_weekly_training_file,
 )
 
 # Import observability
 from src.observability import (
-    ObservabilityHub,
     ErrorCategory,
-    ErrorSeverity,
     ErrorReport,
+    ErrorSeverity,
+    ObservabilityHub,
     configure_logging,
     get_logger,
 )
@@ -72,7 +72,9 @@ MIN_COLUMN_COUNT = 80  # Warn if fewer than 80 columns
 EXPECTED_COLUMN_COUNT = 88  # 86 features + 2 metadata columns
 
 
-def validate_schema_consistency(dataframes: List[pd.DataFrame], labels: List[str]) -> None:
+def validate_schema_consistency(
+    dataframes: List[pd.DataFrame], labels: List[str]
+) -> None:
     """
     Validate that all dataframes have consistent schemas.
 
@@ -146,18 +148,24 @@ def validate_data_quality(df: pd.DataFrame, label: str) -> None:
                 critical_nulls[col] = int(null_count)
 
     if critical_nulls:
-        raise ValueError(f"Null values in critical columns in {label}: {critical_nulls}")
+        raise ValueError(
+            f"Null values in critical columns in {label}: {critical_nulls}"
+        )
 
     # Validate season/week ranges
     if "season" in df.columns:
         invalid_seasons = df[df["season"] < 2016 | (df["season"] > 2030)].shape[0]
         if invalid_seasons > 0:
-            logger.warning(f"⚠️  {label} has {invalid_seasons} rows with season outside 2016-2030")
+            logger.warning(
+                f"⚠️  {label} has {invalid_seasons} rows with season outside 2016-2030"
+            )
 
     if "week" in df.columns:
         invalid_weeks = df[(df["week"] < 1) | (df["week"] > 20)].shape[0]
         if invalid_weeks > 0:
-            logger.warning(f"⚠️  {label} has {invalid_weeks} rows with week outside 1-20")
+            logger.warning(
+                f"⚠️  {label} has {invalid_weeks} rows with week outside 1-20"
+            )
 
 
 def create_backup(file_path: Path) -> Path:
@@ -177,7 +185,9 @@ def create_backup(file_path: Path) -> Path:
         raise FileNotFoundError(f"Cannot backup non-existent file: {file_path}")
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    backup_path = file_path.parent / f"{file_path.stem}_backup_{timestamp}{file_path.suffix}"
+    backup_path = (
+        file_path.parent / f"{file_path.stem}_backup_{timestamp}{file_path.suffix}"
+    )
 
     shutil.copy2(file_path, backup_path)
     logger.info(f"✅ Created backup: {backup_path}")
@@ -187,7 +197,10 @@ def create_backup(file_path: Path) -> Path:
 
 
 def validate_integrated_dataset(
-    combined_df: pd.DataFrame, original_df: pd.DataFrame, week15_df: pd.DataFrame, postseason_df: pd.DataFrame
+    combined_df: pd.DataFrame,
+    original_df: pd.DataFrame,
+    week15_df: pd.DataFrame,
+    postseason_df: pd.DataFrame,
 ) -> Dict[str, int]:
     """
     Validate the integrated dataset.
@@ -223,11 +236,15 @@ def validate_integrated_dataset(
         duplicate_count = combined_df.duplicated(subset=["id"]).sum()
         metrics["duplicates_remaining"] = int(duplicate_count)
         if duplicate_count > 0:
-            raise ValueError(f"Found {duplicate_count} duplicate game IDs after deduplication")
+            raise ValueError(
+                f"Found {duplicate_count} duplicate game IDs after deduplication"
+            )
 
     # Verify week 15 games added
     if "season" in combined_df.columns and "week" in combined_df.columns:
-        week15_in_combined = len(combined_df[(combined_df["season"] == 2025) & (combined_df["week"] == 15)])
+        week15_in_combined = len(
+            combined_df[(combined_df["season"] == 2025) & (combined_df["week"] == 15)]
+        )
         metrics["week15_in_combined"] = week15_in_combined
         if week15_in_combined < week15_count:
             logger.warning(
@@ -237,7 +254,10 @@ def validate_integrated_dataset(
     # Verify postseason games added
     if "season" in combined_df.columns and "season_type" in combined_df.columns:
         postseason_in_combined = len(
-            combined_df[(combined_df["season"] == 2025) & (combined_df["season_type"] == "postseason")]
+            combined_df[
+                (combined_df["season"] == 2025)
+                & (combined_df["season_type"] == "postseason")
+            ]
         )
         metrics["postseason_in_combined"] = postseason_in_combined
         if postseason_in_combined < postseason_count:
@@ -254,7 +274,9 @@ def validate_integrated_dataset(
                 f"Expected >= {MIN_COLUMN_COUNT} for production data."
             )
         else:
-            raise ValueError(f"Combined dataset has only {len(combined_df.columns)} columns (expected >= {MIN_COLUMN_COUNT})")
+            raise ValueError(
+                f"Combined dataset has only {len(combined_df.columns)} columns (expected >= {MIN_COLUMN_COUNT})"
+            )
 
     return metrics
 
@@ -283,7 +305,10 @@ def integrate_week15_postseason(
     if base_path is None:
         base_path = find_project_root()
 
-    hub.emit_event("integration.start", {"files": ["week15", "postseason"], "target": "updated_training_data.csv"})
+    hub.emit_event(
+        "integration.start",
+        {"files": ["week15", "postseason"], "target": "updated_training_data.csv"},
+    )
 
     start_time = datetime.now()
     backup_path = None  # Initialize for exception handler
@@ -291,11 +316,15 @@ def integrate_week15_postseason(
     try:
         # Step 1: Load week 15 file
         logger.info("📂 Loading week 15 training data...")
-        week15_path = get_weekly_training_file(week=15, season=2025, base_path=base_path)
+        week15_path = get_weekly_training_file(
+            week=15, season=2025, base_path=base_path
+        )
         week15_df = pd.read_csv(week15_path, low_memory=False)
         week15_df = week15_df.dropna(how="all")
         logger.info(f"  Loaded {len(week15_df)} games from {week15_path.name}")
-        hub.emit_event("integration.file_loaded", {"file": "week15", "games": int(len(week15_df))})
+        hub.emit_event(
+            "integration.file_loaded", {"file": "week15", "games": int(len(week15_df))}
+        )
 
         # Step 2: Load postseason file
         logger.info("📂 Loading postseason training data...")
@@ -303,7 +332,10 @@ def integrate_week15_postseason(
         postseason_df = pd.read_csv(postseason_path, low_memory=False)
         postseason_df = postseason_df.dropna(how="all")
         logger.info(f"  Loaded {len(postseason_df)} games from {postseason_path.name}")
-        hub.emit_event("integration.file_loaded", {"file": "postseason", "games": int(len(postseason_df))})
+        hub.emit_event(
+            "integration.file_loaded",
+            {"file": "postseason", "games": int(len(postseason_df))},
+        )
 
         # Step 3: Pre-integration validation
         if not skip_validation:
@@ -312,9 +344,13 @@ def integrate_week15_postseason(
             validate_required_columns(postseason_df, "postseason")
             validate_data_quality(week15_df, "week15")
             validate_data_quality(postseason_df, "postseason")
-            validate_schema_consistency([week15_df, postseason_df], ["week15", "postseason"])
+            validate_schema_consistency(
+                [week15_df, postseason_df], ["week15", "postseason"]
+            )
             logger.info("✅ Pre-integration validation passed")
-            hub.emit_event("integration.validation_passed", {"stage": "pre_integration"})
+            hub.emit_event(
+                "integration.validation_passed", {"stage": "pre_integration"}
+            )
 
         # Step 4: Load existing master dataset
         logger.info("📂 Loading master training data...")
@@ -348,9 +384,13 @@ def integrate_week15_postseason(
         # Step 7: Post-integration validation
         if not skip_validation:
             logger.info("🔍 Running post-integration validation...")
-            validation_metrics = validate_integrated_dataset(combined, existing_df, week15_df, postseason_df)
+            validation_metrics = validate_integrated_dataset(
+                combined, existing_df, week15_df, postseason_df
+            )
             logger.info("✅ Post-integration validation passed")
-            hub.emit_event("integration.validation_passed", {"stage": "post_integration"})
+            hub.emit_event(
+                "integration.validation_passed", {"stage": "post_integration"}
+            )
         else:
             validation_metrics = {}
 
@@ -362,7 +402,9 @@ def integrate_week15_postseason(
             shutil.move(temp_path, master_path)
             logger.info(f"✅ Saved {len(combined)} games to {master_path}")
         else:
-            logger.info(f"🔍 DRY RUN: Would save {len(combined)} games to {master_path}")
+            logger.info(
+                f"🔍 DRY RUN: Would save {len(combined)} games to {master_path}"
+            )
 
         # Calculate metrics
         duration = (datetime.now() - start_time).total_seconds()
@@ -437,7 +479,9 @@ def integrate_week15_postseason(
                 logger.info(f"✅ Rollback successful: restored from {backup_path}")
                 error_report.recovery_attempted = True
                 error_report.recovery_successful = True
-                hub.emit_event("integration.rollback_successful", {"backup_path": str(backup_path)})
+                hub.emit_event(
+                    "integration.rollback_successful", {"backup_path": str(backup_path)}
+                )
             except Exception as rollback_error:
                 logger.error(f"❌ Rollback failed: {rollback_error}")
                 error_report.recovery_attempted = True
@@ -462,7 +506,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     args = parser.parse_args(argv)
 
     try:
-        result = integrate_week15_postseason(dry_run=args.dry_run, skip_validation=args.skip_validation)
+        result = integrate_week15_postseason(
+            dry_run=args.dry_run, skip_validation=args.skip_validation
+        )
         return 0
     except Exception as e:
         logger.error(f"Fatal error: {e}")

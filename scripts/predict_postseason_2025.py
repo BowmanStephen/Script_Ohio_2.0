@@ -34,7 +34,12 @@ if str(PROJECT_ROOT) not in sys.path:
 load_dotenv(PROJECT_ROOT / ".env")
 
 from model_pack.utils.path_utils import get_postseason_training_file  # noqa: E402
-from src.observability import ObservabilityHub, configure_logging, get_logger  # noqa: E402
+from src.observability import (  # noqa: E402
+    ObservabilityHub,
+    configure_logging,
+    get_logger,
+)
+
 
 def _load_feature_lists() -> tuple[list[str], list[str]]:
     """
@@ -65,7 +70,9 @@ def _ensure_features(df: pd.DataFrame, features: Sequence[str]) -> pd.DataFrame:
     return df
 
 
-def predict_postseason_2025(*, include_incomplete: bool = True, output_format: str = "csv") -> Path:
+def predict_postseason_2025(
+    *, include_incomplete: bool = True, output_format: str = "csv"
+) -> Path:
     configure_logging(service_name="predict_postseason_2025")
     logger = get_logger(__name__, component="predictions")
     hub = ObservabilityHub.instance()
@@ -83,7 +90,9 @@ def predict_postseason_2025(*, include_incomplete: bool = True, output_format: s
 
     # Feature engineering for XGBoost
     if "home_adjusted_epa" in df.columns and "away_adjusted_epa_allowed" in df.columns:
-        df["epa_interaction"] = df["home_adjusted_epa"] * df["away_adjusted_epa_allowed"]
+        df["epa_interaction"] = (
+            df["home_adjusted_epa"] * df["away_adjusted_epa_allowed"]
+        )
     else:
         df["epa_interaction"] = 0.0
 
@@ -102,20 +111,35 @@ def predict_postseason_2025(*, include_incomplete: bool = True, output_format: s
         if col not in df.columns:
             df[col] = 0.0
 
-
     margin_pred = ridge.predict(df[list(RIDGE_FEATURES)].fillna(0))
-    
+
     # Add engineered features to XGB feature list for prediction
-    xgb_inference_features = list(XGB_FEATURES) + ["epa_interaction", "elo_diff", "talent_diff"]
+    xgb_inference_features = list(XGB_FEATURES) + [
+        "epa_interaction",
+        "elo_diff",
+        "talent_diff",
+    ]
     # Ensure all features exist
     for f in xgb_inference_features:
         if f not in df.columns:
             df[f] = 0.0
-            
+
     win_prob = xgb.predict_proba(df[xgb_inference_features].fillna(0))[:, 1]
 
     out = df[
-        [c for c in ["id", "start_date", "season", "week", "season_type", "home_team", "away_team"] if c in df.columns]
+        [
+            c
+            for c in [
+                "id",
+                "start_date",
+                "season",
+                "week",
+                "season_type",
+                "home_team",
+                "away_team",
+            ]
+            if c in df.columns
+        ]
     ].copy()
     out["predicted_margin"] = margin_pred
     out["home_win_prob"] = win_prob
@@ -126,44 +150,76 @@ def predict_postseason_2025(*, include_incomplete: bool = True, output_format: s
     if output_format == "json":
         # JSON output format for MVP
         output_path = PROJECT_ROOT / "predictions" / "bowls_2025_predictions.json"
-        
+
         games = []
         for _, row in out.iterrows():
             game = {
                 "id": int(row["id"]) if pd.notna(row["id"]) else None,
-                "date": str(row["start_date"]) if "start_date" in row and pd.notna(row["start_date"]) else None,
-                "home_team": str(row["home_team"]) if pd.notna(row["home_team"]) else None,
-                "away_team": str(row["away_team"]) if pd.notna(row["away_team"]) else None,
-                "home_win_prob": float(row["home_win_prob"]) if pd.notna(row["home_win_prob"]) else None,
-                "predicted_margin": float(row["predicted_margin"]) if pd.notna(row["predicted_margin"]) else None,
-                "home_talent": float(row["home_talent"]) if "home_talent" in row and pd.notna(row["home_talent"]) else None,
-                "away_talent": float(row["away_talent"]) if "away_talent" in row and pd.notna(row["away_talent"]) else None,
-                "home_elo": float(row["home_elo"]) if "home_elo" in row and pd.notna(row["home_elo"]) else None,
-                "away_elo": float(row["away_elo"]) if "away_elo" in row and pd.notna(row["away_elo"]) else None,
-                "spread": float(row["spread"]) if "spread" in row and pd.notna(row["spread"]) else None,
+                "date": str(row["start_date"])
+                if "start_date" in row and pd.notna(row["start_date"])
+                else None,
+                "home_team": str(row["home_team"])
+                if pd.notna(row["home_team"])
+                else None,
+                "away_team": str(row["away_team"])
+                if pd.notna(row["away_team"])
+                else None,
+                "home_win_prob": float(row["home_win_prob"])
+                if pd.notna(row["home_win_prob"])
+                else None,
+                "predicted_margin": float(row["predicted_margin"])
+                if pd.notna(row["predicted_margin"])
+                else None,
+                "home_talent": float(row["home_talent"])
+                if "home_talent" in row and pd.notna(row["home_talent"])
+                else None,
+                "away_talent": float(row["away_talent"])
+                if "away_talent" in row and pd.notna(row["away_talent"])
+                else None,
+                "home_elo": float(row["home_elo"])
+                if "home_elo" in row and pd.notna(row["home_elo"])
+                else None,
+                "away_elo": float(row["away_elo"])
+                if "away_elo" in row and pd.notna(row["away_elo"])
+                else None,
+                "spread": float(row["spread"])
+                if "spread" in row and pd.notna(row["spread"])
+                else None,
             }
             games.append(game)
-        
+
         output_data = {
             "generated_at": datetime.now().isoformat() + "Z",
             "season": 2025,
             "games": games,
         }
-        
+
         with open(output_path, "w") as f:
             json.dump(output_data, f, indent=2)
-        
-        hub.emit_event("predict.success", {"rows": int(len(out)), "output": str(output_path), "format": "json"})
-        logger.info("Wrote postseason predictions (JSON)", extra={"output": str(output_path), "rows": int(len(out))})
+
+        hub.emit_event(
+            "predict.success",
+            {"rows": int(len(out)), "output": str(output_path), "format": "json"},
+        )
+        logger.info(
+            "Wrote postseason predictions (JSON)",
+            extra={"output": str(output_path), "rows": int(len(out))},
+        )
     else:
         # CSV output format (default)
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
         output_path = output_dir / f"postseason_predictions_2025_{ts}.csv"
         out.to_csv(output_path, index=False)
-        
-        hub.emit_event("predict.success", {"rows": int(len(out)), "output": str(output_path), "format": "csv"})
-        logger.info("Wrote postseason predictions (CSV)", extra={"output": str(output_path), "rows": int(len(out))})
-    
+
+        hub.emit_event(
+            "predict.success",
+            {"rows": int(len(out)), "output": str(output_path), "format": "csv"},
+        )
+        logger.info(
+            "Wrote postseason predictions (CSV)",
+            extra={"output": str(output_path), "rows": int(len(out))},
+        )
+
     return output_path
 
 
@@ -193,15 +249,17 @@ def ensure_snapshots_exist(season: int) -> None:
         f"games_regular_{season}.json",
         f"games_postseason_{season}.json",
     ]
-    
+
     missing = []
     for filename in required_files:
         if not (snapshot_dir / filename).exists():
             missing.append(filename)
-            
+
     if missing:
         print(f"Error: Snapshots missing ({', '.join(missing)}).")
-        print(f"Run: python scripts/cfbd_refresh_snapshots.py --season {season} --refresh-all")
+        print(
+            f"Run: python scripts/cfbd_refresh_snapshots.py --season {season} --refresh-all"
+        )
         sys.exit(1)
 
 
@@ -210,15 +268,19 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     if args.use_snapshots:
         ensure_snapshots_exist(2025)
-    
+
     # Check for CFBD_API_KEY if needed (though this script reads from CSV, not API)
     # This is a safeguard per plan requirements
     if not os.getenv("CFBD_API_KEY") and args.format == "json":
         # Note: This script doesn't actually need CFBD_API_KEY since it reads from CSV
         # But we check it as a safeguard per MVP requirements
-        print("Warning: CFBD_API_KEY not set (this script reads from CSV, so it may not be needed)")
-    
-    predict_postseason_2025(include_incomplete=not args.postseason_only, output_format=args.format)
+        print(
+            "Warning: CFBD_API_KEY not set (this script reads from CSV, so it may not be needed)"
+        )
+
+    predict_postseason_2025(
+        include_incomplete=not args.postseason_only, output_format=args.format
+    )
     return 0
 
 

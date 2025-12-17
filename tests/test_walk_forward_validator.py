@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
-
 from src.validation.walk_forward_validator import (
     WalkForwardConfig,
     run_walk_forward_validation,
@@ -76,4 +75,3 @@ def test_walk_forward_rolling_window():
 
     assert not results.empty
     assert all(results["train_season_start"] >= 2020)
-

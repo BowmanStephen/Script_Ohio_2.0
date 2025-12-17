@@ -9,6 +9,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 
+
 class EnhancedResumeDemo:
     """
     Demonstrates the enhanced conversation memory system that provides
@@ -16,7 +17,9 @@ class EnhancedResumeDemo:
     """
 
     def __init__(self):
-        self.demo_session = f"enhanced_resume_demo_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        self.demo_session = (
+            f"enhanced_resume_demo_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        )
         print("🧠 **ENHANCED RESUME CONVERSATION FEATURE DEMO**")
         print("=" * 60)
         print()
@@ -40,28 +43,28 @@ class EnhancedResumeDemo:
             {
                 "feature": "Session Persistence",
                 "description": "Remembers conversation topics across context window resets",
-                "benefit": "No need to re-explain previous context"
+                "benefit": "No need to re-explain previous context",
             },
             {
                 "feature": "User Adaptation",
                 "description": "Learns your communication style and expertise level",
-                "benefit": "Personalized responses that match your needs"
+                "benefit": "Personalized responses that match your needs",
             },
             {
                 "feature": "Context Continuity",
                 "description": "Maintains conversation flow and understanding",
-                "benefit": "Seamless continuation of complex discussions"
+                "benefit": "Seamless continuation of complex discussions",
             },
             {
                 "feature": "Smart Compression",
                 "description": "70% storage reduction while maintaining context quality",
-                "benefit": "Efficient memory usage without losing important details"
+                "benefit": "Efficient memory usage without losing important details",
             },
             {
                 "feature": "Zero Performance Impact",
                 "description": "<15ms enhancement time with no effect on response speed",
-                "benefit": "Maintains your <2s response time standards"
-            }
+                "benefit": "Maintains your <2s response time standards",
+            },
         ]
 
         for i, feature in enumerate(features, 1):
@@ -78,20 +81,20 @@ class EnhancedResumeDemo:
                 "scenario": "Context Window Reset",
                 "description": "When conversation context gets cleared due to length",
                 "before": "You'd have to re-explain everything from scratch",
-                "after": "System remembers and continues seamlessly"
+                "after": "System remembers and continues seamlessly",
             },
             {
                 "scenario": "Multi-Session Projects",
                 "description": "Working on complex analytics over multiple sessions",
                 "before": "Each session starts fresh, losing previous progress",
-                "after": "Maintains project context and builds upon previous work"
+                "after": "Maintains project context and builds upon previous work",
             },
             {
                 "scenario": "Vibe Coder Support",
                 "description": "Your preference for hand-holding and clarification",
                 "before": "Generic responses that don't match your style",
-                "after": "Personalized guidance with appropriate detail level"
-            }
+                "after": "Personalized guidance with appropriate detail level",
+            },
         ]
 
         for scenario in scenarios:
@@ -109,7 +112,7 @@ class EnhancedResumeDemo:
             "Uses sophisticated memory compression algorithms",
             "Leverages user role adaptation (Analyst/Data Scientist/Production)",
             "Implements intelligent context prioritization",
-            "Provides automatic session tracking and continuity"
+            "Provides automatic session tracking and continuity",
         ]
 
         for detail in implementation_details:
@@ -185,7 +188,7 @@ class EnhancedResumeDemo:
             "Better Support": "Personalized responses that match your exact needs",
             "Continuity": "Seamless project work across unlimited sessions",
             "Intelligence": "System learns and improves over time",
-            "Performance": "Zero impact on your existing <2s response times"
+            "Performance": "Zero impact on your existing <2s response times",
         }
 
         for benefit, description in benefits.items():
@@ -218,23 +221,25 @@ class EnhancedResumeDemo:
                 "Session persistence across context window resets",
                 "User adaptation for Vibe Coder support level",
                 "70% storage reduction with <15ms enhancement time",
-                "Zero performance impact on <2s response standards"
+                "Zero performance impact on <2s response standards",
             ],
             "user_benefits": [
                 "No re-explanation required",
                 "Personalized support",
                 "Seamless project continuity",
-                "Time savings and efficiency"
+                "Time savings and efficiency",
             ],
             "technical_integration": "Integrated into existing agent system",
-            "readiness_status": "ACTIVE AND PRODUCTION READY"
+            "readiness_status": "ACTIVE AND PRODUCTION READY",
         }
 
         # Store in project management directory
-        demo_path = Path("project_management/CURRENT_STATE/ENHANCED_RESUME_DEMO_RESULTS.json")
+        demo_path = Path(
+            "project_management/CURRENT_STATE/ENHANCED_RESUME_DEMO_RESULTS.json"
+        )
         demo_path.parent.mkdir(parents=True, exist_ok=True)
 
-        with open(demo_path, 'w') as f:
+        with open(demo_path, "w") as f:
             json.dump(demo_results, f, indent=2)
 
         print(f"📄 Demo results stored: {demo_path}")

@@ -15,9 +15,9 @@ Created: 2025-11-19
 
 import logging
 from datetime import datetime
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
 
-from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
+from agents.core.agent_framework import AgentCapability, BaseAgent, PermissionLevel
 
 logger = logging.getLogger(__name__)
 
@@ -85,8 +85,9 @@ class OrchestratorTemplate(BaseAgent):
             ),
         ]
 
-    def _execute_action(self, action: str, parameters: Dict[str, Any],
-                       user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_action(
+        self, action: str, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Execute orchestrator actions"""
         if action == "run_complete_analysis":
             return self.run_complete_analysis(parameters, user_context)
@@ -95,8 +96,11 @@ class OrchestratorTemplate(BaseAgent):
         else:
             raise ValueError(f"Unknown action: {action}")
 
-    def run_complete_analysis(self, parameters: Optional[Dict[str, Any]] = None,
-                             user_context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def run_complete_analysis(
+        self,
+        parameters: Optional[Dict[str, Any]] = None,
+        user_context: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
         """
         Run complete analysis pipeline.
 
@@ -117,12 +121,12 @@ class OrchestratorTemplate(BaseAgent):
             logger.info(f"Starting {self.param1} complete analysis pipeline")
 
             results = {
-                'param1': self.param1,
-                'param2': self.param2,
-                'start_time': datetime.now().isoformat(),
-                'steps_completed': [],
-                'steps_failed': [],
-                'final_status': 'in_progress'
+                "param1": self.param1,
+                "param2": self.param2,
+                "start_time": datetime.now().isoformat(),
+                "steps_completed": [],
+                "steps_failed": [],
+                "final_status": "in_progress",
             }
 
             # Step 1: Run first agent
@@ -135,8 +139,8 @@ class OrchestratorTemplate(BaseAgent):
                 logger.info("Step 1 completed")
             except Exception as e:
                 logger.error(f"Step 1 failed: {e}")
-                results['step1'] = {'status': 'error', 'error': str(e)}
-                results['steps_failed'].append('step1')
+                results["step1"] = {"status": "error", "error": str(e)}
+                results["steps_failed"].append("step1")
 
             # Step 2: Run second agent
             logger.info(f"Step 2: Running step 2 for {self.param1}")
@@ -148,39 +152,44 @@ class OrchestratorTemplate(BaseAgent):
                 logger.info("Step 2 completed")
             except Exception as e:
                 logger.error(f"Step 2 failed: {e}")
-                results['step2'] = {'status': 'error', 'error': str(e)}
-                results['steps_failed'].append('step2')
+                results["step2"] = {"status": "error", "error": str(e)}
+                results["steps_failed"].append("step2")
 
             # Determine final status
-            if len(results['steps_failed']) == 0:
-                results['final_status'] = 'success'
-            elif len(results['steps_completed']) > 0:
-                results['final_status'] = 'partial_success'
+            if len(results["steps_failed"]) == 0:
+                results["final_status"] = "success"
+            elif len(results["steps_completed"]) > 0:
+                results["final_status"] = "partial_success"
             else:
-                results['final_status'] = 'failed'
+                results["final_status"] = "failed"
 
-            results['end_time'] = datetime.now().isoformat()
-            results['completion_rate'] = len(results['steps_completed']) / 2.0
+            results["end_time"] = datetime.now().isoformat()
+            results["completion_rate"] = len(results["steps_completed"]) / 2.0
 
-            logger.info(f"{self.param1} analysis pipeline completed: {results['final_status']}")
+            logger.info(
+                f"{self.param1} analysis pipeline completed: {results['final_status']}"
+            )
             return results
 
         except Exception as e:
             logger.error(f"{self.param1} analysis pipeline failed: {e}")
             return {
-                'param1': self.param1,
-                'param2': self.param2,
-                'final_status': 'error',
-                'error': str(e),
-                'timestamp': datetime.now().isoformat()
+                "param1": self.param1,
+                "param2": self.param2,
+                "final_status": "error",
+                "error": str(e),
+                "timestamp": datetime.now().isoformat(),
             }
 
-    def run_step1(self, parameters: Optional[Dict[str, Any]] = None,
-                  user_context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def run_step1(
+        self,
+        parameters: Optional[Dict[str, Any]] = None,
+        user_context: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
         """Run step 1 only"""
         # Direct agent call
         # return self.agent1.execute_task(parameters or {})
-        return {'status': 'success', 'message': 'Step 1 placeholder'}
+        return {"status": "success", "message": "Step 1 placeholder"}
 
 
 # Example usage

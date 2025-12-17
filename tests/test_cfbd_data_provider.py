@@ -73,14 +73,20 @@ def test_team_snapshot_uses_live_data(monkeypatch):
     dummy_graphql = DummyGraphQL()
     provider = CFBDDataProvider(cfbd_client=object())
 
-    monkeypatch.setattr("cfbd_client.data_provider.fetch_games", lambda *_, **__: _games_df())
-    monkeypatch.setattr("cfbd_client.data_provider.fetch_ratings", lambda *_, **__: _ratings_df())
+    monkeypatch.setattr(
+        "cfbd_client.data_provider.fetch_games", lambda *_, **__: _games_df()
+    )
+    monkeypatch.setattr(
+        "cfbd_client.data_provider.fetch_ratings", lambda *_, **__: _ratings_df()
+    )
     monkeypatch.setattr(
         "cfbd_client.data_provider.fetch_predicted_points",
         lambda *_, **__: _predictions_df(),
     )
     # Mock the adjusted metrics that the snapshot method needs
-    monkeypatch.setattr(provider, "get_adjusted_team_metrics", lambda team, season: {"rating": 10.5})
+    monkeypatch.setattr(
+        provider, "get_adjusted_team_metrics", lambda team, season: {"rating": 10.5}
+    )
 
     snapshot = provider.get_team_snapshot(team="ohio_state", season=2025, week=12)
 
@@ -102,7 +108,7 @@ def test_adjusted_metric_cache(monkeypatch):
         "rating": 28.5,
         "offense": 42.1,
         "defense": 13.6,
-        "specialTeams": 15.2
+        "specialTeams": 15.2,
     }
 
     def mock_get_metrics(team, season):
@@ -120,4 +126,6 @@ def test_adjusted_metric_cache(monkeypatch):
     assert result1["rating"] == 28.5
     assert result1["offense"] == 42.1
     assert result1 == result2  # Should be same
-    assert call_count == 2  # Mock was called twice since we bypassed the actual caching logic
+    assert (
+        call_count == 2
+    )  # Mock was called twice since we bypassed the actual caching logic

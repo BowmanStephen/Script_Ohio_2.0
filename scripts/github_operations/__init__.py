@@ -8,5 +8,4 @@ Safe Git/GitHub operations including:
 """
 
 # Avoid circular imports - import only when needed
-__all__ = ['PushOperations', 'RollbackOperations', 'GitUtils']
-
+__all__ = ["PushOperations", "RollbackOperations", "GitUtils"]

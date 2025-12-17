@@ -10,26 +10,34 @@ Created: 2025-11-19
 Version: 1.0
 """
 
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 
-def get_base_template(title: str = "Interactive Infographic", 
-                     description: Optional[str] = None,
-                     include_plotly: bool = True) -> str:
+def get_base_template(
+    title: str = "Interactive Infographic",
+    description: Optional[str] = None,
+    include_plotly: bool = True,
+) -> str:
     """
     Get base HTML template with Plotly.js, responsive CSS, and dark mode support.
-    
+
     Args:
         title: Page title
         description: Optional description meta tag
         include_plotly: Whether to include Plotly.js CDN
-        
+
     Returns:
         Complete HTML template string
     """
-    description_meta = f'<meta name="description" content="{description}">' if description else ""
-    plotly_script = '<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>' if include_plotly else ""
-    
+    description_meta = (
+        f'<meta name="description" content="{description}">' if description else ""
+    )
+    plotly_script = (
+        '<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>'
+        if include_plotly
+        else ""
+    )
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -233,7 +241,7 @@ def get_base_template(title: str = "Interactive Infographic",
     <div class="container">
         <div class="header">
             <h1>{title}</h1>
-            {f'<p>{description}</p>' if description else ''}
+            {f"<p>{description}</p>" if description else ""}
         </div>
         <div id="component-content">
             <!-- Component content will be inserted here -->
@@ -243,47 +251,49 @@ def get_base_template(title: str = "Interactive Infographic",
 </html>"""
 
 
-def get_standalone_html(figure_html: str, 
-                       title: str = "Interactive Infographic",
-                       description: Optional[str] = None,
-                       additional_css: Optional[str] = None,
-                       additional_js: Optional[str] = None) -> str:
+def get_standalone_html(
+    figure_html: str,
+    title: str = "Interactive Infographic",
+    description: Optional[str] = None,
+    additional_css: Optional[str] = None,
+    additional_js: Optional[str] = None,
+) -> str:
     """
     Wrap Plotly figure HTML in a complete standalone HTML document.
-    
+
     Args:
         figure_html: HTML string from plotly figure.to_html(full_html=False)
         title: Page title
         description: Optional description
         additional_css: Optional additional CSS to inject
         additional_js: Optional additional JavaScript to inject
-        
+
     Returns:
         Complete standalone HTML document
     """
     base = get_base_template(title, description, include_plotly=True)
-    
+
     # Insert figure HTML into component-content div
     html = base.replace(
         '<div id="component-content">',
-        f'<div id="component-content"><div class="component-wrapper"><div class="plotly-container">{figure_html}</div></div>'
+        f'<div id="component-content"><div class="component-wrapper"><div class="plotly-container">{figure_html}</div></div>',
     )
-    
+
     # Add additional CSS before closing </head>
     if additional_css:
-        html = html.replace('</head>', f'<style>{additional_css}</style></head>')
-    
+        html = html.replace("</head>", f"<style>{additional_css}</style></head>")
+
     # Add additional JS before closing </body>
     if additional_js:
-        html = html.replace('</body>', f'<script>{additional_js}</script></body>')
-    
+        html = html.replace("</body>", f"<script>{additional_js}</script></body>")
+
     return html
 
 
 def get_controls_html(controls: list[Dict[str, Any]]) -> str:
     """
     Generate HTML for interactive controls (filters, sliders, toggles).
-    
+
     Args:
         controls: List of control dictionaries with keys:
             - type: 'select', 'input', 'slider', 'checkbox'
@@ -292,55 +302,70 @@ def get_controls_html(controls: list[Dict[str, Any]]) -> str:
             - options: For select type, list of {value, label} dicts
             - min/max/step: For slider type
             - default: Default value
-            
+
     Returns:
         HTML string for controls panel
     """
     if not controls:
         return ""
-    
-    control_html = '<div class="controls" role="group" aria-label="Interactive controls">'
-    
+
+    control_html = (
+        '<div class="controls" role="group" aria-label="Interactive controls">'
+    )
+
     for control in controls:
-        control_type = control.get('type', 'input')
-        control_id = control.get('id', '')
-        label = control.get('label', '')
-        default = control.get('default', '')
-        
+        control_type = control.get("type", "input")
+        control_id = control.get("id", "")
+        label = control.get("label", "")
+        default = control.get("default", "")
+
         control_html += '<div class="control-group">'
         control_html += f'<label for="{control_id}">{label}</label>'
-        
-        if control_type == 'select':
-            options = control.get('options', [])
-            control_html += f'<select id="{control_id}" name="{control_id}" aria-label="{label}">'
+
+        if control_type == "select":
+            options = control.get("options", [])
+            control_html += (
+                f'<select id="{control_id}" name="{control_id}" aria-label="{label}">'
+            )
             for opt in options:
-                value = opt.get('value', '')
-                opt_label = opt.get('label', value)
-                selected = 'selected' if value == default else ''
-                control_html += f'<option value="{value}" {selected}>{opt_label}</option>'
-            control_html += '</select>'
-            
-        elif control_type == 'slider':
-            min_val = control.get('min', 0)
-            max_val = control.get('max', 100)
-            step = control.get('step', 1)
-            control_html += f'<input type="range" id="{control_id}" name="{control_id}" '
-            control_html += f'min="{min_val}" max="{max_val}" step="{step}" value="{default}" '
-            control_html += f'aria-label="{label}"><span id="{control_id}-value">{default}</span>'
-            
-        elif control_type == 'checkbox':
-            checked = 'checked' if default else ''
+                value = opt.get("value", "")
+                opt_label = opt.get("label", value)
+                selected = "selected" if value == default else ""
+                control_html += (
+                    f'<option value="{value}" {selected}>{opt_label}</option>'
+                )
+            control_html += "</select>"
+
+        elif control_type == "slider":
+            min_val = control.get("min", 0)
+            max_val = control.get("max", 100)
+            step = control.get("step", 1)
+            control_html += (
+                f'<input type="range" id="{control_id}" name="{control_id}" '
+            )
+            control_html += (
+                f'min="{min_val}" max="{max_val}" step="{step}" value="{default}" '
+            )
+            control_html += (
+                f'aria-label="{label}"><span id="{control_id}-value">{default}</span>'
+            )
+
+        elif control_type == "checkbox":
+            checked = "checked" if default else ""
             control_html += f'<input type="checkbox" id="{control_id}" name="{control_id}" {checked} '
             control_html += f'aria-label="{label}">'
-            
-        else:  # input (text, number, etc.)
-            input_type = control.get('input_type', 'text')
-            placeholder = control.get('placeholder', '')
-            control_html += f'<input type="{input_type}" id="{control_id}" name="{control_id}" '
-            control_html += f'value="{default}" placeholder="{placeholder}" aria-label="{label}">'
-        
-        control_html += '</div>'
-    
-    control_html += '</div>'
-    return control_html
 
+        else:  # input (text, number, etc.)
+            input_type = control.get("input_type", "text")
+            placeholder = control.get("placeholder", "")
+            control_html += (
+                f'<input type="{input_type}" id="{control_id}" name="{control_id}" '
+            )
+            control_html += (
+                f'value="{default}" placeholder="{placeholder}" aria-label="{label}">'
+            )
+
+        control_html += "</div>"
+
+    control_html += "</div>"
+    return control_html

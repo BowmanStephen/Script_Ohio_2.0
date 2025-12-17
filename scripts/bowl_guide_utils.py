@@ -211,7 +211,9 @@ def compute_agreement_rate(
         val = row.get(col)
         if pd.isna(val):
             continue
-        src_pick = pick_side_vs_dk(model_home_spread=float(val), dk_home_spread=float(dk_val))
+        src_pick = pick_side_vs_dk(
+            model_home_spread=float(val), dk_home_spread=float(dk_val)
+        )
         if src_pick in {"NA", "PASS"}:
             continue
         picks.append((col, src_pick))
@@ -234,25 +236,25 @@ def compute_tier_and_reasons(
 ) -> Tuple[str, list[str]]:
     """Compute tier and human-readable reasons based on market edge primarily."""
     reasons: list[str] = []
-    
+
     edge_dk = row.get(edge_vs_dk_col)
     abs_edge_dk = row.get(abs_edge_vs_dk_col)
     edge_mkt = row.get(edge_vs_market_col)
     abs_edge_mkt = row.get(abs_edge_vs_market_col)
-    
+
     # Add reasons
     if pd.notna(edge_dk):
         reasons.append(f"EDGE_DK={float(edge_dk):.2f}")
     if pd.notna(edge_mkt):
         reasons.append(f"EDGE_MKT={float(edge_mkt):.2f}")
-    
+
     # Flags
     move_data_issue = bool(row.get("flag_move_data_issue", False))
     dk_vs_mkt_conflict = bool(row.get("dk_vs_market_conflict", False))
     outlier_market = bool(row.get("flag_outlier_market", False))
     big_move = bool(row.get("flag_big_move", False))
     ratings_z = row.get("ratings_z")
-    
+
     if move_data_issue:
         reasons.append("MOVE_DATA_ISSUE")
     if dk_vs_mkt_conflict:
@@ -265,7 +267,7 @@ def compute_tier_and_reasons(
         reasons.append("BIG_MOVE")
     if pd.notna(ratings_z):
         reasons.append(f"RATINGS_Z={float(ratings_z):.2f}")
-    
+
     # X-REVIEW overrides (betting-relevant only)
     if move_data_issue:
         return "X-REVIEW", reasons
@@ -278,18 +280,21 @@ def compute_tier_and_reasons(
         if move_val >= 4.0:
             return "X-REVIEW", reasons
     # Optional: extreme ratings conflict with market
-    if (pd.notna(ratings_z) and pd.notna(abs_edge_mkt) 
-        and abs(float(ratings_z)) >= 3.0 
-        and float(abs_edge_mkt) >= 3.0):
+    if (
+        pd.notna(ratings_z)
+        and pd.notna(abs_edge_mkt)
+        and abs(float(ratings_z)) >= 3.0
+        and float(abs_edge_mkt) >= 3.0
+    ):
         return "X-REVIEW", reasons
-    
+
     # Base tiers (market edge primary)
     if pd.isna(abs_edge_dk) or pd.isna(abs_edge_mkt):
         return "C", reasons
-    
+
     abs_edge_dk_val = float(abs_edge_dk)
     abs_edge_mkt_val = float(abs_edge_mkt)
-    
+
     # Tier A: Large edge vs both DK and market
     if abs_edge_dk_val >= 4.0 and abs_edge_mkt_val >= 2.0:
         return "A", reasons
@@ -307,7 +312,12 @@ def validate_totals(
     dk_total_col: str = "dk_total",
 ) -> Dict[str, Any]:
     """Validate totals model scaling and alignment."""
-    result: Dict[str, Any] = {"valid": False, "median": None, "corr": None, "reason": ""}
+    result: Dict[str, Any] = {
+        "valid": False,
+        "median": None,
+        "corr": None,
+        "reason": "",
+    }
 
     if rf_total_col not in df.columns or dk_total_col not in df.columns:
         result["reason"] = "missing_columns"

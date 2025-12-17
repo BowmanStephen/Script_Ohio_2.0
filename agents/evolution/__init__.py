@@ -17,22 +17,22 @@ Created: 2025-11-12
 Purpose: Revolutionary agent evolution and speciation system
 """
 
-from .speciation_engine import AgentSpeciation
-from .genetic_algorithms import GeneticAlgorithmFramework
 from .agent_genome import AgentGenome
-from .species_registry import SpeciesRegistry
 from .evolution_metrics import EvolutionMetrics
+from .genetic_algorithms import GeneticAlgorithmFramework
+from .speciation_engine import AgentSpeciation
+from .species_registry import SpeciesRegistry
 
 __version__ = "1.0.0"
 __status__ = "ACTIVE TRANSFORMATION"
 
 # Core evolution components for creating AI species
 __all__ = [
-    "AgentSpeciation",           # Main speciation engine
-    "GeneticAlgorithmFramework", # Genetic algorithm implementation
-    "AgentGenome",              # Agent genetic encoding
-    "SpeciesRegistry",          # Species management system
-    "EvolutionMetrics",         # Evolution progress tracking
+    "AgentSpeciation",  # Main speciation engine
+    "GeneticAlgorithmFramework",  # Genetic algorithm implementation
+    "AgentGenome",  # Agent genetic encoding
+    "SpeciesRegistry",  # Species management system
+    "EvolutionMetrics",  # Evolution progress tracking
 ]
 
 print("🧬 Project Sentinel Evolution Module Initialized")

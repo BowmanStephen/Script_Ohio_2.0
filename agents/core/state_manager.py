@@ -10,46 +10,52 @@ Implements OpenAI best practices for state management:
 - Recovery and resilience mechanisms
 """
 
+import hashlib
 import json
+import logging
+import pickle
 import sqlite3
+import threading
 import time
 import uuid
-import threading
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional, Union, Callable
-from dataclasses import dataclass, field, asdict
-from enum import Enum
-import logging
-from pathlib import Path
-import pickle
-import hashlib
 from contextlib import contextmanager
+from dataclasses import asdict, dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional, Union
 
 logger = logging.getLogger("state_manager")
 
+
 class StateType(Enum):
     """Types of state that can be managed"""
-    SESSION_STATE = "session_state"           # User session state
-    AGENT_STATE = "agent_state"              # Individual agent state
-    WORKFLOW_STATE = "workflow_state"        # Multi-step workflow state
-    SYSTEM_STATE = "system_state"            # System configuration state
+
+    SESSION_STATE = "session_state"  # User session state
+    AGENT_STATE = "agent_state"  # Individual agent state
+    WORKFLOW_STATE = "workflow_state"  # Multi-step workflow state
+    SYSTEM_STATE = "system_state"  # System configuration state
     COLLABORATION_STATE = "collaboration_state"  # Agent collaboration state
-    MEMORY_STATE = "memory_state"            # Conversation memory state
+    MEMORY_STATE = "memory_state"  # Conversation memory state
+
 
 class StateStatus(Enum):
     """Status of state entries"""
-    ACTIVE = "active"                       # Currently in use
-    COMPLETED = "completed"                 # Successfully completed
-    FAILED = "failed"                      # Failed during execution
-    SUSPENDED = "suspended"                 # Paused for later resumption
-    ARCHIVED = "archived"                   # Stored for long-term reference
+
+    ACTIVE = "active"  # Currently in use
+    COMPLETED = "completed"  # Successfully completed
+    FAILED = "failed"  # Failed during execution
+    SUSPENDED = "suspended"  # Paused for later resumption
+    ARCHIVED = "archived"  # Stored for long-term reference
+
 
 @dataclass
 class StateSnapshot:
     """Represents a snapshot of system state"""
+
     snapshot_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     state_type: StateType = StateType.SESSION_STATE
-    entity_id: str = ""                     # session_id, agent_id, workflow_id, etc.
+    entity_id: str = ""  # session_id, agent_id, workflow_id, etc.
     state_data: Dict[str, Any] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
     version: int = 1
@@ -73,17 +79,20 @@ class StateSnapshot:
         current_checksum = self._calculate_checksum()
         return self.checksum == current_checksum
 
+
 @dataclass
 class StateTransition:
     """Represents a transition between state snapshots"""
+
     transition_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     from_snapshot_id: Optional[str] = None
     to_snapshot_id: str = ""
-    transition_type: str = ""                # "create", "update", "rollback", "restore"
-    actor: str = ""                          # Which agent/system initiated the transition
-    reason: str = ""                         # Reason for the transition
+    transition_type: str = ""  # "create", "update", "rollback", "restore"
+    actor: str = ""  # Which agent/system initiated the transition
+    reason: str = ""  # Reason for the transition
     timestamp: datetime = field(default_factory=datetime.now)
     metadata: Dict[str, Any] = field(default_factory=dict)
+
 
 class DatabaseManager:
     """Handles database operations for state persistence"""
@@ -99,7 +108,7 @@ class DatabaseManager:
             conn = sqlite3.connect(self.db_path)
             try:
                 # Create snapshots table
-                conn.execute('''
+                conn.execute("""
                     CREATE TABLE IF NOT EXISTS state_snapshots (
                         snapshot_id TEXT PRIMARY KEY,
                         state_type TEXT NOT NULL,
@@ -113,10 +122,10 @@ class DatabaseManager:
                         expires_at TEXT,
                         status TEXT DEFAULT 'active'
                     )
-                ''')
+                """)
 
                 # Create transitions table
-                conn.execute('''
+                conn.execute("""
                     CREATE TABLE IF NOT EXISTS state_transitions (
                         transition_id TEXT PRIMARY KEY,
                         from_snapshot_id TEXT,
@@ -127,23 +136,23 @@ class DatabaseManager:
                         timestamp TEXT NOT NULL,
                         metadata TEXT
                     )
-                ''')
+                """)
 
                 # Create indexes for performance
-                conn.execute('''
+                conn.execute("""
                     CREATE INDEX IF NOT EXISTS idx_snapshots_entity_type
                     ON state_snapshots(entity_id, state_type)
-                ''')
+                """)
 
-                conn.execute('''
+                conn.execute("""
                     CREATE INDEX IF NOT EXISTS idx_snapshots_status
                     ON state_snapshots(status, created_at)
-                ''')
+                """)
 
-                conn.execute('''
+                conn.execute("""
                     CREATE INDEX IF NOT EXISTS idx_transitions_to_snapshot
                     ON state_transitions(to_snapshot_id)
-                ''')
+                """)
 
                 conn.commit()
                 logger.info(f"State database initialized: {self.db_path}")
@@ -163,6 +172,7 @@ class DatabaseManager:
             yield conn
         finally:
             conn.close()
+
 
 class StateManager:
     """
@@ -196,23 +206,25 @@ class StateManager:
 
         # Metrics tracking
         self.metrics = {
-            'snapshots_created': 0,
-            'snapshots_restored': 0,
-            'rollbacks_performed': 0,
-            'cache_hits': 0,
-            'cache_misses': 0,
-            'database_operations': 0
+            "snapshots_created": 0,
+            "snapshots_restored": 0,
+            "rollbacks_performed": 0,
+            "cache_hits": 0,
+            "cache_misses": 0,
+            "database_operations": 0,
         }
 
         logger.info("State Manager initialized")
 
-    def create_state_snapshot(self,
-                            state_type: StateType,
-                            entity_id: str,
-                            state_data: Dict[str, Any],
-                            metadata: Optional[Dict[str, Any]] = None,
-                            parent_snapshot_id: Optional[str] = None,
-                            expires_in_hours: Optional[int] = None) -> str:
+    def create_state_snapshot(
+        self,
+        state_type: StateType,
+        entity_id: str,
+        state_data: Dict[str, Any],
+        metadata: Optional[Dict[str, Any]] = None,
+        parent_snapshot_id: Optional[str] = None,
+        expires_in_hours: Optional[int] = None,
+    ) -> str:
         """Create a new state snapshot with atomic operation"""
 
         snapshot = StateSnapshot(
@@ -220,7 +232,7 @@ class StateManager:
             entity_id=entity_id,
             state_data=state_data,
             metadata=metadata or {},
-            parent_snapshot_id=parent_snapshot_id
+            parent_snapshot_id=parent_snapshot_id,
         )
 
         # Set expiration if specified
@@ -230,24 +242,29 @@ class StateManager:
         # Store in database
         try:
             with self.db_manager.get_connection() as conn:
-                conn.execute('''
+                conn.execute(
+                    """
                     INSERT INTO state_snapshots
                     (snapshot_id, state_type, entity_id, state_data, metadata,
                      version, parent_snapshot_id, checksum, created_at, expires_at, status)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ''', (
-                    snapshot.snapshot_id,
-                    snapshot.state_type.value,
-                    snapshot.entity_id,
-                    json.dumps(snapshot.state_data, default=str),
-                    json.dumps(snapshot.metadata, default=str),
-                    snapshot.version,
-                    snapshot.parent_snapshot_id,
-                    snapshot.checksum,
-                    snapshot.created_at.isoformat(),
-                    snapshot.expires_at.isoformat() if snapshot.expires_at else None,
-                    snapshot.status.value
-                ))
+                """,
+                    (
+                        snapshot.snapshot_id,
+                        snapshot.state_type.value,
+                        snapshot.entity_id,
+                        json.dumps(snapshot.state_data, default=str),
+                        json.dumps(snapshot.metadata, default=str),
+                        snapshot.version,
+                        snapshot.parent_snapshot_id,
+                        snapshot.checksum,
+                        snapshot.created_at.isoformat(),
+                        snapshot.expires_at.isoformat()
+                        if snapshot.expires_at
+                        else None,
+                        snapshot.status.value,
+                    ),
+                )
 
                 conn.commit()
 
@@ -259,14 +276,16 @@ class StateManager:
                 transition_type="create",
                 to_snapshot_id=snapshot.snapshot_id,
                 actor="state_manager",
-                reason="Initial state creation"
+                reason="Initial state creation",
             )
 
             # Notify observers
             self._notify_observers(snapshot, "created")
 
-            self.metrics['snapshots_created'] += 1
-            logger.info(f"State snapshot created: {snapshot.snapshot_id} for {entity_id}")
+            self.metrics["snapshots_created"] += 1
+            logger.info(
+                f"State snapshot created: {snapshot.snapshot_id} for {entity_id}"
+            )
 
             return snapshot.snapshot_id
 
@@ -274,11 +293,13 @@ class StateManager:
             logger.error(f"Failed to create state snapshot: {e}")
             raise
 
-    def update_state_snapshot(self,
-                            snapshot_id: str,
-                            new_state_data: Dict[str, Any],
-                            actor: str = "unknown",
-                            reason: str = "State update") -> str:
+    def update_state_snapshot(
+        self,
+        snapshot_id: str,
+        new_state_data: Dict[str, Any],
+        actor: str = "unknown",
+        reason: str = "State update",
+    ) -> str:
         """Update an existing state snapshot with versioning"""
 
         # Get current snapshot
@@ -293,37 +314,43 @@ class StateManager:
             state_data=new_state_data,
             metadata=current_snapshot.metadata.copy(),
             version=current_snapshot.version + 1,
-            parent_snapshot_id=current_snapshot.parent_snapshot_id
+            parent_snapshot_id=current_snapshot.parent_snapshot_id,
         )
 
         # Store updated snapshot
         try:
             with self.db_manager.get_connection() as conn:
                 # Mark old snapshot as completed
-                conn.execute('''
+                conn.execute(
+                    """
                     UPDATE state_snapshots
                     SET status = 'completed'
                     WHERE snapshot_id = ?
-                ''', (snapshot_id,))
+                """,
+                    (snapshot_id,),
+                )
 
                 # Insert new snapshot
-                conn.execute('''
+                conn.execute(
+                    """
                     INSERT INTO state_snapshots
                     (snapshot_id, state_type, entity_id, state_data, metadata,
                      version, parent_snapshot_id, checksum, created_at, status)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ''', (
-                    new_snapshot.snapshot_id,
-                    new_snapshot.state_type.value,
-                    new_snapshot.entity_id,
-                    json.dumps(new_snapshot.state_data, default=str),
-                    json.dumps(new_snapshot.metadata, default=str),
-                    new_snapshot.version,
-                    new_snapshot.parent_snapshot_id,
-                    new_snapshot.checksum,
-                    new_snapshot.created_at.isoformat(),
-                    new_snapshot.status.value
-                ))
+                """,
+                    (
+                        new_snapshot.snapshot_id,
+                        new_snapshot.state_type.value,
+                        new_snapshot.entity_id,
+                        json.dumps(new_snapshot.state_data, default=str),
+                        json.dumps(new_snapshot.metadata, default=str),
+                        new_snapshot.version,
+                        new_snapshot.parent_snapshot_id,
+                        new_snapshot.checksum,
+                        new_snapshot.created_at.isoformat(),
+                        new_snapshot.status.value,
+                    ),
+                )
 
                 conn.commit()
 
@@ -336,20 +363,24 @@ class StateManager:
                 to_snapshot_id=new_snapshot.snapshot_id,
                 transition_type="update",
                 actor=actor,
-                reason=reason
+                reason=reason,
             )
 
             # Notify observers
             self._notify_observers(new_snapshot, "updated")
 
-            logger.info(f"State snapshot updated: {snapshot_id} -> {new_snapshot.snapshot_id}")
+            logger.info(
+                f"State snapshot updated: {snapshot_id} -> {new_snapshot.snapshot_id}"
+            )
             return new_snapshot.snapshot_id
 
         except Exception as e:
             logger.error(f"Failed to update state snapshot: {e}")
             raise
 
-    def restore_state_snapshot(self, snapshot_id: str, actor: str = "unknown") -> Dict[str, Any]:
+    def restore_state_snapshot(
+        self, snapshot_id: str, actor: str = "unknown"
+    ) -> Dict[str, Any]:
         """Restore state from a snapshot with integrity verification"""
 
         # Get snapshot
@@ -372,13 +403,13 @@ class StateManager:
                 to_snapshot_id=snapshot_id,  # Restored to same snapshot
                 transition_type="restore",
                 actor=actor,
-                reason="State restoration"
+                reason="State restoration",
             )
 
             # Notify observers
             self._notify_observers(snapshot, "restored")
 
-            self.metrics['snapshots_restored'] += 1
+            self.metrics["snapshots_restored"] += 1
             logger.info(f"State snapshot restored: {snapshot_id}")
 
             return snapshot.state_data.copy()
@@ -387,7 +418,9 @@ class StateManager:
             logger.error(f"Failed to restore state snapshot: {e}")
             raise
 
-    def rollback_to_snapshot(self, snapshot_id: str, actor: str = "unknown", reason: str = "Rollback") -> Dict[str, Any]:
+    def rollback_to_snapshot(
+        self, snapshot_id: str, actor: str = "unknown", reason: str = "Rollback"
+    ) -> Dict[str, Any]:
         """Rollback to a previous snapshot"""
 
         # Get snapshot and its history
@@ -398,18 +431,24 @@ class StateManager:
         # Mark current active snapshots as completed
         try:
             with self.db_manager.get_connection() as conn:
-                conn.execute('''
+                conn.execute(
+                    """
                     UPDATE state_snapshots
                     SET status = 'completed'
                     WHERE entity_id = ? AND state_type = ? AND status = 'active'
-                ''', (snapshot.entity_id, snapshot.state_type.value))
+                """,
+                    (snapshot.entity_id, snapshot.state_type.value),
+                )
 
                 # Reactivate the target snapshot
-                conn.execute('''
+                conn.execute(
+                    """
                     UPDATE state_snapshots
                     SET status = 'active'
                     WHERE snapshot_id = ?
-                ''', (snapshot_id,))
+                """,
+                    (snapshot_id,),
+                )
 
                 conn.commit()
 
@@ -418,13 +457,13 @@ class StateManager:
                 to_snapshot_id=snapshot_id,
                 transition_type="rollback",
                 actor=actor,
-                reason=reason
+                reason=reason,
             )
 
             # Notify observers
             self._notify_observers(snapshot, "rollback")
 
-            self.metrics['rollbacks_performed'] += 1
+            self.metrics["rollbacks_performed"] += 1
             logger.info(f"Rolled back to snapshot: {snapshot_id}")
 
             return snapshot.state_data.copy()
@@ -433,32 +472,39 @@ class StateManager:
             logger.error(f"Failed to rollback to snapshot: {e}")
             raise
 
-    def get_latest_state(self, state_type: StateType, entity_id: str) -> Optional[Dict[str, Any]]:
+    def get_latest_state(
+        self, state_type: StateType, entity_id: str
+    ) -> Optional[Dict[str, Any]]:
         """Get the latest active state for an entity"""
 
         try:
             with self.db_manager.get_connection() as conn:
-                cursor = conn.execute('''
+                cursor = conn.execute(
+                    """
                     SELECT snapshot_id FROM state_snapshots
                     WHERE entity_id = ? AND state_type = ? AND status = 'active'
                     ORDER BY created_at DESC
                     LIMIT 1
-                ''', (entity_id, state_type.value))
+                """,
+                    (entity_id, state_type.value),
+                )
 
                 row = cursor.fetchone()
                 if row:
-                    return self.restore_state_snapshot(row['snapshot_id'])
+                    return self.restore_state_snapshot(row["snapshot_id"])
                 return None
 
         except Exception as e:
             logger.error(f"Failed to get latest state: {e}")
             return None
 
-    def list_snapshots(self,
-                      state_type: Optional[StateType] = None,
-                      entity_id: Optional[str] = None,
-                      status: Optional[StateStatus] = None,
-                      limit: int = 50) -> List[Dict[str, Any]]:
+    def list_snapshots(
+        self,
+        state_type: Optional[StateType] = None,
+        entity_id: Optional[str] = None,
+        status: Optional[StateStatus] = None,
+        limit: int = 50,
+    ) -> List[Dict[str, Any]]:
         """List snapshots with optional filtering"""
 
         try:
@@ -486,15 +532,17 @@ class StateManager:
 
                 snapshots = []
                 for row in rows:
-                    snapshots.append({
-                        'snapshot_id': row['snapshot_id'],
-                        'state_type': row['state_type'],
-                        'entity_id': row['entity_id'],
-                        'version': row['version'],
-                        'created_at': row['created_at'],
-                        'status': row['status'],
-                        'has_parent': bool(row['parent_snapshot_id'])
-                    })
+                    snapshots.append(
+                        {
+                            "snapshot_id": row["snapshot_id"],
+                            "state_type": row["state_type"],
+                            "entity_id": row["entity_id"],
+                            "version": row["version"],
+                            "created_at": row["created_at"],
+                            "status": row["status"],
+                            "has_parent": bool(row["parent_snapshot_id"]),
+                        }
+                    )
 
                 return snapshots
 
@@ -507,13 +555,13 @@ class StateManager:
 
         try:
             with self.db_manager.get_connection() as conn:
-                cursor = conn.execute('''
+                cursor = conn.execute("""
                     UPDATE state_snapshots
                     SET status = 'archived'
                     WHERE status = 'active'
                     AND expires_at IS NOT NULL
                     AND expires_at < datetime('now')
-                ''')
+                """)
 
                 count = cursor.rowcount
                 conn.commit()
@@ -537,25 +585,32 @@ class StateManager:
         # Get database statistics
         with self.db_manager.get_connection() as conn:
             cursor = conn.execute("SELECT COUNT(*) as total FROM state_snapshots")
-            total_snapshots = cursor.fetchone()['total']
+            total_snapshots = cursor.fetchone()["total"]
 
-            cursor = conn.execute("SELECT COUNT(*) as active FROM state_snapshots WHERE status = 'active'")
-            active_snapshots = cursor.fetchone()['active']
+            cursor = conn.execute(
+                "SELECT COUNT(*) as active FROM state_snapshots WHERE status = 'active'"
+            )
+            active_snapshots = cursor.fetchone()["active"]
 
             cursor = conn.execute("SELECT COUNT(*) as total FROM state_transitions")
-            total_transitions = cursor.fetchone()['total']
+            total_transitions = cursor.fetchone()["total"]
 
-        cache_hit_rate = (self.metrics['cache_hits'] /
-                         (self.metrics['cache_hits'] + self.metrics['cache_misses'])) \
-                        if (self.metrics['cache_hits'] + self.metrics['cache_misses']) > 0 else 0
+        cache_hit_rate = (
+            (
+                self.metrics["cache_hits"]
+                / (self.metrics["cache_hits"] + self.metrics["cache_misses"])
+            )
+            if (self.metrics["cache_hits"] + self.metrics["cache_misses"]) > 0
+            else 0
+        )
 
         return {
             **self.metrics,
-            'total_snapshots': total_snapshots,
-            'active_snapshots': active_snapshots,
-            'total_transitions': total_transitions,
-            'cache_hit_rate': round(cache_hit_rate, 3),
-            'cache_size': len(self.state_cache)
+            "total_snapshots": total_snapshots,
+            "active_snapshots": active_snapshots,
+            "total_transitions": total_transitions,
+            "cache_hit_rate": round(cache_hit_rate, 3),
+            "cache_size": len(self.state_cache),
         }
 
     # Private helper methods
@@ -566,33 +621,38 @@ class StateManager:
         # Try cache first
         with self.cache_lock:
             if snapshot_id in self.state_cache:
-                self.metrics['cache_hits'] += 1
+                self.metrics["cache_hits"] += 1
                 return self.state_cache[snapshot_id]
             else:
-                self.metrics['cache_misses'] += 1
+                self.metrics["cache_misses"] += 1
 
         # Try database
         try:
             with self.db_manager.get_connection() as conn:
-                cursor = conn.execute('''
+                cursor = conn.execute(
+                    """
                     SELECT * FROM state_snapshots
                     WHERE snapshot_id = ?
-                ''', (snapshot_id,))
+                """,
+                    (snapshot_id,),
+                )
 
                 row = cursor.fetchone()
                 if row:
                     snapshot = StateSnapshot(
-                        snapshot_id=row['snapshot_id'],
-                        state_type=StateType(row['state_type']),
-                        entity_id=row['entity_id'],
-                        state_data=json.loads(row['state_data']),
-                        metadata=json.loads(row['metadata']),
-                        version=row['version'],
-                        parent_snapshot_id=row['parent_snapshot_id'],
-                        checksum=row['checksum'],
-                        created_at=datetime.fromisoformat(row['created_at']),
-                        expires_at=datetime.fromisoformat(row['expires_at']) if row['expires_at'] else None,
-                        status=StateStatus(row['status'])
+                        snapshot_id=row["snapshot_id"],
+                        state_type=StateType(row["state_type"]),
+                        entity_id=row["entity_id"],
+                        state_data=json.loads(row["state_data"]),
+                        metadata=json.loads(row["metadata"]),
+                        version=row["version"],
+                        parent_snapshot_id=row["parent_snapshot_id"],
+                        checksum=row["checksum"],
+                        created_at=datetime.fromisoformat(row["created_at"]),
+                        expires_at=datetime.fromisoformat(row["expires_at"])
+                        if row["expires_at"]
+                        else None,
+                        status=StateStatus(row["status"]),
                     )
 
                     # Cache it
@@ -617,31 +677,36 @@ class StateManager:
             # Add new snapshot
             self.state_cache[snapshot.snapshot_id] = snapshot
 
-    def _record_transition(self,
-                          from_snapshot_id: Optional[str] = None,
-                          to_snapshot_id: Optional[str] = None,
-                          transition_type: Optional[str] = None,
-                          actor: Optional[str] = None,
-                          reason: Optional[str] = None):
+    def _record_transition(
+        self,
+        from_snapshot_id: Optional[str] = None,
+        to_snapshot_id: Optional[str] = None,
+        transition_type: Optional[str] = None,
+        actor: Optional[str] = None,
+        reason: Optional[str] = None,
+    ):
         """Record a state transition"""
 
         try:
             with self.db_manager.get_connection() as conn:
-                conn.execute('''
+                conn.execute(
+                    """
                     INSERT INTO state_transitions
                     (transition_id, from_snapshot_id, to_snapshot_id,
                      transition_type, actor, reason, timestamp, metadata)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                ''', (
-                    str(uuid.uuid4()),
-                    from_snapshot_id,
-                    to_snapshot_id,
-                    transition_type,
-                    actor,
-                    reason,
-                    datetime.now().isoformat(),
-                    json.dumps({})
-                ))
+                """,
+                    (
+                        str(uuid.uuid4()),
+                        from_snapshot_id,
+                        to_snapshot_id,
+                        transition_type,
+                        actor,
+                        reason,
+                        datetime.now().isoformat(),
+                        json.dumps({}),
+                    ),
+                )
 
                 conn.commit()
 
@@ -658,46 +723,63 @@ class StateManager:
             except Exception as e:
                 logger.error(f"Observer error: {e}")
 
+
 # Global state manager instance
 state_manager = StateManager()
 
+
 # Utility functions
-def save_session_state(session_id: str, state_data: Dict[str, Any], metadata: Optional[Dict[str, Any]] = None) -> str:
+def save_session_state(
+    session_id: str,
+    state_data: Dict[str, Any],
+    metadata: Optional[Dict[str, Any]] = None,
+) -> str:
     """Convenient function to save session state"""
     return state_manager.create_state_snapshot(
         state_type=StateType.SESSION_STATE,
         entity_id=session_id,
         state_data=state_data,
         metadata=metadata,
-        expires_in_hours=24  # Sessions expire after 24 hours
+        expires_in_hours=24,  # Sessions expire after 24 hours
     )
+
 
 def restore_session_state(session_id: str) -> Optional[Dict[str, Any]]:
     """Convenient function to restore session state"""
     return state_manager.get_latest_state(StateType.SESSION_STATE, session_id)
 
-def save_agent_state(agent_id: str, state_data: Dict[str, Any], metadata: Optional[Dict[str, Any]] = None) -> str:
+
+def save_agent_state(
+    agent_id: str, state_data: Dict[str, Any], metadata: Optional[Dict[str, Any]] = None
+) -> str:
     """Convenient function to save agent state"""
     return state_manager.create_state_snapshot(
         state_type=StateType.AGENT_STATE,
         entity_id=agent_id,
         state_data=state_data,
-        metadata=metadata
+        metadata=metadata,
     )
+
 
 def restore_agent_state(agent_id: str) -> Optional[Dict[str, Any]]:
     """Convenient function to restore agent state"""
     return state_manager.get_latest_state(StateType.AGENT_STATE, agent_id)
 
-def save_workflow_state(workflow_id: str, state_data: Dict[str, Any], metadata: Optional[Dict[str, Any]] = None) -> str:
+
+def save_workflow_state(
+    workflow_id: str,
+    state_data: Dict[str, Any],
+    metadata: Optional[Dict[str, Any]] = None,
+) -> str:
     """Convenient function to save workflow state"""
     return state_manager.create_state_snapshot(
         state_type=StateType.WORKFLOW_STATE,
         entity_id=workflow_id,
         state_data=state_data,
         metadata=metadata,
-        expires_in_hours=72  # Workflows expire after 72 hours
+        expires_in_hours=72,  # Workflows expire after 72 hours
     )
+
 
 def restore_workflow_state(workflow_id: str) -> Optional[Dict[str, Any]]:
     """Convenient function to restore workflow state"""

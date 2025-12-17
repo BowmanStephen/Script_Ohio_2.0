@@ -22,7 +22,6 @@ from agents.core.agent_framework import (
     PermissionLevel,
 )
 
-
 _ORCHESTRATOR = None
 
 
@@ -74,7 +73,10 @@ def test_base_agent() -> bool:
 
     response = agent.execute_request(request, PermissionLevel.READ_EXECUTE)
 
-    ok = response.status == AgentStatus.COMPLETED and response.result["status"] == "success"
+    ok = (
+        response.status == AgentStatus.COMPLETED
+        and response.result["status"] == "success"
+    )
     print("✅ BaseAgent smoke test" if ok else "❌ BaseAgent smoke test failed")
     return ok
 
@@ -102,7 +104,9 @@ def test_production_agents() -> bool:
 
     for agent in orchestrator.agent_factory.agents.values():
         caps = agent.capabilities
-        has_estimates = all(getattr(cap, "execution_time_estimate", 0) > 0 for cap in caps)
+        has_estimates = all(
+            getattr(cap, "execution_time_estimate", 0) > 0 for cap in caps
+        )
         statuses.append((agent.name, bool(caps) and has_estimates))
 
     all_ok = all(status for _, status in statuses)
@@ -148,8 +152,7 @@ def run_all_tests() -> bool:
             {
                 "timestamp": datetime.now().isoformat(),
                 "results": [
-                    {"name": name, "passed": result}
-                    for name, result in results
+                    {"name": name, "passed": result} for name, result in results
                 ],
             },
             handle,

@@ -11,8 +11,11 @@ DATA_CONFIG = {
     "rate_limit": 6,  # requests per second
     "feature_count": 86,  # opponent-adjusted features
     "required_columns": [  # Validate these columns exist
-        "home_team", "away_team", "week", "season"
-    ]
+        "home_team",
+        "away_team",
+        "week",
+        "season",
+    ],
 }
 
 # Model Configuration
@@ -20,18 +23,18 @@ MODEL_CONFIG = {
     "ridge": {
         "model_file": "model_pack/ridge_model_2025.joblib",
         "prediction_type": "margin",
-        "confidence_threshold": 0.7
+        "confidence_threshold": 0.7,
     },
     "xgboost": {
         "model_file": "model_pack/xgb_home_win_model_2025.pkl",
         "prediction_type": "probability",
-        "confidence_threshold": 0.6
+        "confidence_threshold": 0.6,
     },
     "fastai": {
         "model_file": "model_pack/fastai_home_win_model_2025.pkl",
         "prediction_type": "probability",
-        "confidence_threshold": 0.65
-    }
+        "confidence_threshold": 0.65,
+    },
 }
 
 # Analysis Configuration
@@ -42,10 +45,10 @@ ANALYSIS_CONFIG = {
         "matchup_insights",
         "situational_factors",
         "advanced_statistics",
-        "strategic_recommendations"
+        "strategic_recommendations",
     ],
     "output_formats": ["json", "csv", "html", "markdown"],
-    "min_confidence_display": 0.5
+    "min_confidence_display": 0.5,
 }
 
 # Performance Targets
@@ -53,7 +56,7 @@ PERFORMANCE_CONFIG = {
     "max_response_time_seconds": 2.0,
     "max_memory_usage_mb": 512,
     "max_processing_time_minutes": 180,  # 3 hours
-    "min_model_accuracy": 0.40
+    "min_model_accuracy": 0.40,
 }
 
 # Quality Gates
@@ -65,8 +68,8 @@ QUALITY_CONFIG = {
         "predictions_csv",
         "predictions_json",
         "analysis_json",
-        "dashboard_html"
-    ]
+        "dashboard_html",
+    ],
 }
 
 # Notification Configuration
@@ -75,7 +78,7 @@ NOTIFICATION_CONFIG = {
     "success_email": "team@example.com",
     "webhook_url": "https://hooks.slack.com/your-webhook",
     "notify_on_completion": True,
-    "notify_on_errors": True
+    "notify_on_errors": True,
 }
 
 # Automation Configuration
@@ -85,7 +88,7 @@ AUTOMATION_CONFIG = {
     "auto_validate_outputs": True,
     "auto_generate_documentation": True,
     "retry_failed_operations": True,
-    "max_retries": 3
+    "max_retries": 3,
 }
 
 # Week 13 Specific Settings (for reference)
@@ -95,8 +98,8 @@ WEEK13_REFERENCE = {
     "model_accuracy": {
         "ridge_mae": 17.31,
         "xgboost_accuracy": 0.431,
-        "ensemble_performance": "excellent"
+        "ensemble_performance": "excellent",
     },
     "data_quality_score": 0.95,
-    "user_satisfaction": 4.6
+    "user_satisfaction": 4.6,
 }

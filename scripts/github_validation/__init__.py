@@ -11,5 +11,4 @@ Comprehensive validation suite for GitHub operations including:
 """
 
 # Avoid circular imports - import only when needed
-__all__ = ['ValidationOrchestrator']
-
+__all__ = ["ValidationOrchestrator"]

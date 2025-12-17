@@ -9,25 +9,34 @@ import sys
 import time
 
 # Add the agents/core directory to the path (go up to project root first)
-project_root = os.path.dirname(os.path.dirname(__file__))  # core_tools sits directly under the project root
+project_root = os.path.dirname(
+    os.path.dirname(__file__)
+)  # core_tools sits directly under the project root
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
     print(f"✓ Added project root to path: {project_root}")
-agents_core_path = os.path.join(project_root, 'agents', 'core')
+agents_core_path = os.path.join(project_root, "agents", "core")
 if os.path.exists(agents_core_path):
     sys.path.insert(0, agents_core_path)
     print(f"✓ Added agents/core to path: {agents_core_path}")
 
 # Add agents directory for other modules
-agents_path = os.path.join(project_root, 'agents')
+agents_path = os.path.join(project_root, "agents")
 if os.path.exists(agents_path):
     sys.path.insert(0, agents_path)
     print(f"✓ Added agents to path: {agents_path}")
 
 try:
+    from agent_framework import (
+        AgentFactory,
+        AgentRequest,
+        PermissionLevel,
+        RequestRouter,
+    )
     from context_manager import ContextManager, UserRole
-    from agent_framework import AgentFactory, RequestRouter, AgentRequest, PermissionLevel
+
     from analytics_orchestrator import AnalyticsOrchestrator, AnalyticsRequest
+
     print("✓ All agent modules imported successfully!")
 
     def test_context_manager():
@@ -37,9 +46,9 @@ try:
 
         # Test role detection
         test_context = {
-            'notebooks': ['starter_pack/01_intro_to_data.ipynb'],
-            'models': [],
-            'query_type': 'learn about college football data'
+            "notebooks": ["starter_pack/01_intro_to_data.ipynb"],
+            "models": [],
+            "query_type": "learn about college football data",
         }
 
         role = cm.detect_user_role(test_context)
@@ -73,7 +82,7 @@ try:
             parameters={},
             user_context={"role": "analyst"},
             timestamp=time.time(),
-            priority=2
+            priority=2,
         )
         print(f"  ✓ Created test request: {test_request.request_id}")
 
@@ -98,7 +107,7 @@ try:
                 query_type="test",
                 parameters={},
                 context_hints={},
-                priority=2
+                priority=2,
             )
 
             response = orchestrator.process_analytics_request(request)
@@ -117,7 +126,7 @@ try:
     tests = [
         ("Context Manager", test_context_manager),
         ("Agent Framework", test_agent_framework),
-        ("Analytics Orchestrator", test_analytics_orchestrator)
+        ("Analytics Orchestrator", test_analytics_orchestrator),
     ]
 
     results = []
@@ -157,5 +166,6 @@ except ImportError as e:
 except Exception as e:
     print(f"❌ Unexpected error: {e}")
     import traceback
+
     traceback.print_exc()
     sys.exit(1)

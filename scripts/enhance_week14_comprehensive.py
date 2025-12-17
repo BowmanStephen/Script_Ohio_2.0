@@ -26,13 +26,19 @@ if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
 from agents.weekly_analysis_orchestrator import WeeklyAnalysisOrchestrator
+
+from enhance_week14_with_sp import main as enhance_with_sp_main
 from generate_week14_enhanced_features import generate_week14_enhanced_features
 from predict_week14_proper import run_prediction_pipeline
-from enhance_week14_with_sp import main as enhance_with_sp_main
 
 LOG_FILE = PROJECT_ROOT / "logs" / "enhance_week14_comprehensive.log"
 WEEK14_METADATA = (
-    PROJECT_ROOT / "data" / "weekly" / "week14" / "enhanced" / "enhancement_metadata.json"
+    PROJECT_ROOT
+    / "data"
+    / "weekly"
+    / "week14"
+    / "enhanced"
+    / "enhancement_metadata.json"
 )
 WEEK14_PREDICTIONS_DIR = PROJECT_ROOT / "predictions" / "week14"
 
@@ -101,8 +107,12 @@ def run_predictions_step(tune_hyperparameters: bool) -> Tuple[int, Dict[str, Any
     exit_code = run_prediction_pipeline(tune_hyperparameters=tune_hyperparameters)
     outputs: Dict[str, Any] = {}
     if exit_code == 0:
-        outputs["prediction_csv"] = str(WEEK14_PREDICTIONS_DIR / "week14_model_predictions.csv")
-        outputs["prediction_json"] = str(WEEK14_PREDICTIONS_DIR / "week14_model_predictions.json")
+        outputs["prediction_csv"] = str(
+            WEEK14_PREDICTIONS_DIR / "week14_model_predictions.csv"
+        )
+        outputs["prediction_json"] = str(
+            WEEK14_PREDICTIONS_DIR / "week14_model_predictions.json"
+        )
     return exit_code, outputs
 
 
@@ -133,7 +143,9 @@ def execute_step(
         (should_continue, failed_this_step)
     """
     if not enabled:
-        results.append({"name": name, "status": "skipped", "duration": 0.0, "details": {}})
+        results.append(
+            {"name": name, "status": "skipped", "duration": 0.0, "details": {}}
+        )
         logger.info("⏭️  Skipping %s (disabled via flag)", name)
         return True, False
 
@@ -149,7 +161,9 @@ def execute_step(
 
     duration = time.perf_counter() - start
     status = "success" if exit_code == 0 else "failed"
-    logger.info("✅ Completed %s in %.2fs", name, duration) if exit_code == 0 else logger.error(
+    logger.info(
+        "✅ Completed %s in %.2fs", name, duration
+    ) if exit_code == 0 else logger.error(
         "❌ %s failed in %.2fs (exit code %s)", name, duration, exit_code
     )
 
@@ -172,17 +186,27 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Run the complete Week 14 enhancement workflow in one command."
     )
-    parser.add_argument("--week", type=int, default=14, help="Week to process (default: 14)")
-    parser.add_argument("--season", type=int, default=2025, help="Season year (default: 2025)")
+    parser.add_argument(
+        "--week", type=int, default=14, help="Week to process (default: 14)"
+    )
+    parser.add_argument(
+        "--season", type=int, default=2025, help="Season year (default: 2025)"
+    )
     parser.add_argument(
         "--analysis-step",
         choices=["all", "validation", "matchup", "predictions"],
         default="all",
         help="Which WeeklyAnalysisOrchestrator step to execute.",
     )
-    parser.add_argument("--skip-features", action="store_true", help="Skip feature generation.")
-    parser.add_argument("--skip-analysis", action="store_true", help="Skip weekly analysis.")
-    parser.add_argument("--skip-predictions", action="store_true", help="Skip prediction step.")
+    parser.add_argument(
+        "--skip-features", action="store_true", help="Skip feature generation."
+    )
+    parser.add_argument(
+        "--skip-analysis", action="store_true", help="Skip weekly analysis."
+    )
+    parser.add_argument(
+        "--skip-predictions", action="store_true", help="Skip prediction step."
+    )
     parser.add_argument(
         "--include-sp",
         action="store_true",
@@ -208,7 +232,9 @@ def summarize(results: List[Dict[str, Any]], logger: logging.Logger) -> None:
     logger.info("WEEK 14 ENHANCEMENT SUMMARY")
     logger.info("=" * 80)
     for entry in results:
-        icon = {"success": "✅", "failed": "❌", "skipped": "⏭️ "}.get(entry["status"], "•")
+        icon = {"success": "✅", "failed": "❌", "skipped": "⏭️ "}.get(
+            entry["status"], "•"
+        )
         logger.info(
             "%s %-20s %-8s (%.2fs)",
             icon,
@@ -241,7 +267,9 @@ def main() -> int:
         (
             "Weekly Analysis",
             not args.skip_analysis,
-            lambda: run_weekly_analysis_step(args.week, args.season, args.analysis_step),
+            lambda: run_weekly_analysis_step(
+                args.week, args.season, args.analysis_step
+            ),
         ),
         (
             "Model Predictions",
@@ -280,4 +308,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

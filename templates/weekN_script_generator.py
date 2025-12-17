@@ -4,10 +4,11 @@ Week N Script Template Generator
 Generated from Week 13 patterns - 2025-11-20 20:41:26
 """
 
-import sys
 import os
-from pathlib import Path
+import sys
 from datetime import datetime
+from pathlib import Path
+
 
 def generate_script(week: int, script_type: str):
     """Generate a script for the specified week and type"""
@@ -15,7 +16,7 @@ def generate_script(week: int, script_type: str):
     filename = f"week{week}_{script_type}.py"
 
     # Basic template structure
-    content = f"""#!/usr/bin/env python3
+    content = f'''#!/usr/bin/env python3
 """
 Generated for Week {week_str} {script_type}
 Based on Week 13 patterns
@@ -30,7 +31,7 @@ def main():
 
 if __name__ == "__main__":
     main()
-"""
+'''
 
     # Save script
     with open(filename, "w") as script_file:
@@ -40,6 +41,7 @@ if __name__ == "__main__":
     os.chmod(filename, 0o755)
     print(f"Generated {filename}")
     return 0
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:

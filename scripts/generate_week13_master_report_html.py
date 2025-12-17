@@ -5,72 +5,82 @@ Generates comprehensive interactive HTML report with all sections.
 """
 
 import json
-import pandas as pd
-from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Any
-import plotly.graph_objects as go
+from pathlib import Path
+from typing import Any, Dict, List
+
+import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+
 
 class Week13MasterReportGenerator:
     """Generate comprehensive Week 13 master report HTML."""
-    
+
     def __init__(self, week13_dir: Path):
         self.week13_dir = week13_dir
         self.unified_data = None
         self.games_df = None
-        
+
     def load_unified_data(self):
         """Load unified data JSON."""
         file_path = self.week13_dir / "week13_unified_data.json"
-        with open(file_path, 'r') as f:
+        with open(file_path, "r") as f:
             self.unified_data = json.load(f)
-        
+
         # Convert games to DataFrame for easier manipulation
-        games = self.unified_data['games']
-        self.games_df = pd.DataFrame([
-            {
-                'game_id': g['game_id'],
-                'home_team': g['game_info']['home_team'],
-                'away_team': g['game_info']['away_team'],
-                'home_conference': g['game_info'].get('home_conference', ''),
-                'away_conference': g['game_info'].get('away_conference', ''),
-                'confidence': g.get('ensemble', {}).get('confidence', 0),
-                'winner': g.get('ensemble', {}).get('winner', ''),
-                'margin': g.get('ensemble', {}).get('margin', 0),
-                'spread': g['game_info'].get('spread', 0),
-                'upset_prob': g.get('strategic', {}).get('upset_probability', 0) if g.get('strategic') else 0,
-                'betting_rec': ', '.join(g.get('strategic', {}).get('betting_recommendations', [])) if g.get('strategic') else '',
-                'playoff_impact': self._get_playoff_impact(g['game_id']),
-                'narrative': g.get('narrative', '')
-            }
-            for g in games
-        ])
-    
+        games = self.unified_data["games"]
+        self.games_df = pd.DataFrame(
+            [
+                {
+                    "game_id": g["game_id"],
+                    "home_team": g["game_info"]["home_team"],
+                    "away_team": g["game_info"]["away_team"],
+                    "home_conference": g["game_info"].get("home_conference", ""),
+                    "away_conference": g["game_info"].get("away_conference", ""),
+                    "confidence": g.get("ensemble", {}).get("confidence", 0),
+                    "winner": g.get("ensemble", {}).get("winner", ""),
+                    "margin": g.get("ensemble", {}).get("margin", 0),
+                    "spread": g["game_info"].get("spread", 0),
+                    "upset_prob": g.get("strategic", {}).get("upset_probability", 0)
+                    if g.get("strategic")
+                    else 0,
+                    "betting_rec": ", ".join(
+                        g.get("strategic", {}).get("betting_recommendations", [])
+                    )
+                    if g.get("strategic")
+                    else "",
+                    "playoff_impact": self._get_playoff_impact(g["game_id"]),
+                    "narrative": g.get("narrative", ""),
+                }
+                for g in games
+            ]
+        )
+
     def _get_playoff_impact(self, game_id: int) -> str:
         """Get playoff impact level for a game."""
-        playoff = self.unified_data.get('playoff_implications', {})
-        
+        playoff = self.unified_data.get("playoff_implications", {})
+
         # Check elimination games
-        for game in playoff.get('elimination_games', []):
-            if 'game' in game:
+        for game in playoff.get("elimination_games", []):
+            if "game" in game:
                 # Try to match game_id from game string
-                if str(game_id) in str(game.get('game', '')):
-                    return 'ELIMINATION'
-        
+                if str(game_id) in str(game.get("game", "")):
+                    return "ELIMINATION"
+
         # Check path to playoff
-        for game in playoff.get('path_to_playoff', []):
-            if 'game' in game:
-                if str(game_id) in str(game.get('game', '')):
-                    return 'PATH'
-        
-        return 'NONE'
-    
+        for game in playoff.get("path_to_playoff", []):
+            if "game" in game:
+                if str(game_id) in str(game.get("game", "")):
+                    return "PATH"
+
+        return "NONE"
+
     def generate_html(self) -> str:
         """Generate complete HTML report."""
-        metadata = self.unified_data['metadata']
-        
+        metadata = self.unified_data["metadata"]
+
         html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -422,7 +432,7 @@ class Week13MasterReportGenerator:
         }});
         
         // Conference filter
-        const conferences = [...new Set({json.dumps([g['game_info'].get('home_conference', '') for g in self.unified_data['games'] if g['game_info'].get('home_conference')])})];
+        const conferences = [...new Set({json.dumps([g["game_info"].get("home_conference", "") for g in self.unified_data["games"] if g["game_info"].get("home_conference")])})];
         conferences.forEach(conf => {{
             $('#conferenceFilter').append(`<option value="${{conf}}">${{conf}}</option>`);
         }});
@@ -489,34 +499,40 @@ class Week13MasterReportGenerator:
 </body>
 </html>"""
         return html
-    
+
     def _generate_executive_summary(self, metadata: Dict) -> str:
         """Generate executive summary section."""
-        total_games = metadata['total_games']
-        avg_conf = metadata['avg_confidence']
-        high_conf = metadata['high_confidence_games']
-        playoff_impact = metadata['playoff_impact_games']
-        upset_count = metadata['upset_alert_count']
-        
+        total_games = metadata["total_games"]
+        avg_conf = metadata["avg_confidence"]
+        high_conf = metadata["high_confidence_games"]
+        playoff_impact = metadata["playoff_impact_games"]
+        upset_count = metadata["upset_alert_count"]
+
         # Get top 5 games by confidence
-        top_games = self.games_df.nlargest(5, 'confidence')
-        
-        top_games_html = ''
+        top_games = self.games_df.nlargest(5, "confidence")
+
+        top_games_html = ""
         for _, game in top_games.iterrows():
-            conf_class = 'confidence-high' if game['confidence'] > 0.7 else 'confidence-medium' if game['confidence'] > 0.5 else 'confidence-low'
+            conf_class = (
+                "confidence-high"
+                if game["confidence"] > 0.7
+                else "confidence-medium"
+                if game["confidence"] > 0.5
+                else "confidence-low"
+            )
             top_games_html += f"""
-            <div class="game-card" onclick="showGameDetail({game['game_id']})">
+            <div class="game-card" onclick="showGameDetail({game["game_id"]})">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h5>{game['away_team']} @ {game['home_team']}</h5>
-                        <p class="mb-0">Predicted Winner: <strong>{game['winner']}</strong></p>
+                        <h5>{game["away_team"]} @ {game["home_team"]}</h5>
+                        <p class="mb-0">Predicted Winner: <strong>{game["winner"]}</strong></p>
                     </div>
                     <span class="confidence-badge {conf_class}">
-                        {(game['confidence'] * 100):.1f}%
+                        {(game["confidence"] * 100):.1f}%
                     </span>
                 </div>
             </div>"""
-        
+
         return f"""
         <section id="executive-summary" class="section">
             <div class="container">
@@ -565,20 +581,20 @@ class Week13MasterReportGenerator:
                 </div>
             </div>
         </section>"""
-    
+
     def _generate_top_matchups(self) -> str:
         """Generate top matchups section."""
-        top_matchups = self.unified_data.get('top_matchups', [])[:10]
-        
-        matchups_html = ''
+        top_matchups = self.unified_data.get("top_matchups", [])[:10]
+
+        matchups_html = ""
         for matchup in top_matchups:
-            game_id = matchup.get('game_id', '')
-            home = matchup.get('home_team', '')
-            away = matchup.get('away_team', '')
-            winner = matchup.get('predicted_winner', '')
-            conf = matchup.get('confidence_score', 0)
-            category = matchup.get('category', '')
-            
+            game_id = matchup.get("game_id", "")
+            home = matchup.get("home_team", "")
+            away = matchup.get("away_team", "")
+            winner = matchup.get("predicted_winner", "")
+            conf = matchup.get("confidence_score", 0)
+            category = matchup.get("category", "")
+
             matchups_html += f"""
             <div class="game-card">
                 <div class="row">
@@ -593,7 +609,7 @@ class Week13MasterReportGenerator:
                     </div>
                 </div>
             </div>"""
-        
+
         return f"""
         <section id="top-matchups" class="section">
             <div class="container">
@@ -601,24 +617,30 @@ class Week13MasterReportGenerator:
                 {matchups_html}
             </div>
         </section>"""
-    
+
     def _generate_game_explorer(self) -> str:
         """Generate interactive game explorer section."""
         # Build table data
-        table_rows = ''
+        table_rows = ""
         for _, game in self.games_df.iterrows():
-            conf_class = 'confidence-high' if game['confidence'] > 0.7 else 'confidence-medium' if game['confidence'] > 0.5 else 'confidence-low'
+            conf_class = (
+                "confidence-high"
+                if game["confidence"] > 0.7
+                else "confidence-medium"
+                if game["confidence"] > 0.5
+                else "confidence-low"
+            )
             table_rows += f"""
-            <tr onclick="showGameDetail({game['game_id']})" style="cursor: pointer;">
-                <td>{game['away_team']} @ {game['home_team']}</td>
-                <td>{game['winner']}</td>
-                <td><span class="confidence-badge {conf_class}">{(game['confidence'] * 100):.1f}%</span></td>
-                <td>{game['spread']:.1f}</td>
-                <td>{game['betting_rec'] or 'N/A'}</td>
-                <td>{(game['upset_prob'] * 100):.1f}%</td>
-                <td>{game['playoff_impact']}</td>
+            <tr onclick="showGameDetail({game["game_id"]})" style="cursor: pointer;">
+                <td>{game["away_team"]} @ {game["home_team"]}</td>
+                <td>{game["winner"]}</td>
+                <td><span class="confidence-badge {conf_class}">{(game["confidence"] * 100):.1f}%</span></td>
+                <td>{game["spread"]:.1f}</td>
+                <td>{game["betting_rec"] or "N/A"}</td>
+                <td>{(game["upset_prob"] * 100):.1f}%</td>
+                <td>{game["playoff_impact"]}</td>
             </tr>"""
-        
+
         return f"""
         <section id="game-explorer" class="section">
             <div class="container">
@@ -671,7 +693,7 @@ class Week13MasterReportGenerator:
                 </div>
             </div>
         </section>"""
-    
+
     def _generate_visualizations(self) -> str:
         """Generate visualizations section with all 8 charts."""
         return """
@@ -732,41 +754,49 @@ class Week13MasterReportGenerator:
                 </div>
             </div>
         </section>"""
-    
+
     def _generate_playoff_picture(self) -> str:
         """Generate playoff picture section."""
-        playoff = self.unified_data.get('playoff_implications', {})
-        elimination_games = playoff.get('elimination_games', [])
-        path_games = playoff.get('path_to_playoff', [])
-        bubble_teams = playoff.get('bubble_teams', [])
-        lock_scenarios = playoff.get('lock_scenarios', [])
-        
-        elimination_html = ''
+        playoff = self.unified_data.get("playoff_implications", {})
+        elimination_games = playoff.get("elimination_games", [])
+        path_games = playoff.get("path_to_playoff", [])
+        bubble_teams = playoff.get("bubble_teams", [])
+        lock_scenarios = playoff.get("lock_scenarios", [])
+
+        elimination_html = ""
         for game in elimination_games:
             elimination_html += f"""
             <div class="game-card" style="border-left: 4px solid #ef4444;">
-                <h5>{game.get('game', 'N/A')}</h5>
-                <p><strong>Impact:</strong> <span class="badge bg-danger">{game.get('playoff_impact', 'N/A')}</span></p>
-                <p><strong>Predicted Winner:</strong> {game.get('predicted_winner', 'N/A')}</p>
-                <p><strong>Predicted Loser:</strong> {game.get('predicted_loser', 'N/A')}</p>
-                <p><strong>Contenders Involved:</strong> {', '.join(game.get('contenders_involved', []))}</p>
-                <p><strong>Win Probability:</strong> {(game.get('win_probability', 0) * 100):.1f}%</p>
+                <h5>{game.get("game", "N/A")}</h5>
+                <p><strong>Impact:</strong> <span class="badge bg-danger">{game.get("playoff_impact", "N/A")}</span></p>
+                <p><strong>Predicted Winner:</strong> {game.get("predicted_winner", "N/A")}</p>
+                <p><strong>Predicted Loser:</strong> {game.get("predicted_loser", "N/A")}</p>
+                <p><strong>Contenders Involved:</strong> {", ".join(game.get("contenders_involved", []))}</p>
+                <p><strong>Win Probability:</strong> {(game.get("win_probability", 0) * 100):.1f}%</p>
             </div>"""
-        
-        path_html = ''
+
+        path_html = ""
         for game in path_games:
             path_html += f"""
             <div class="game-card" style="border-left: 4px solid #10b981;">
-                <h5>{game.get('game', 'N/A')}</h5>
-                <p><strong>Impact:</strong> <span class="badge bg-success">{game.get('playoff_impact', 'N/A')}</span></p>
-                <p><strong>Predicted Winner:</strong> {game.get('predicted_winner', 'N/A')}</p>
-                <p><strong>Contenders:</strong> {', '.join(game.get('contenders_involved', []))}</p>
-                <p><strong>Win Probability:</strong> {(game.get('win_probability', 0) * 100):.1f}%</p>
+                <h5>{game.get("game", "N/A")}</h5>
+                <p><strong>Impact:</strong> <span class="badge bg-success">{game.get("playoff_impact", "N/A")}</span></p>
+                <p><strong>Predicted Winner:</strong> {game.get("predicted_winner", "N/A")}</p>
+                <p><strong>Contenders:</strong> {", ".join(game.get("contenders_involved", []))}</p>
+                <p><strong>Win Probability:</strong> {(game.get("win_probability", 0) * 100):.1f}%</p>
             </div>"""
-        
-        bubble_html = f"<p>{len(bubble_teams)} bubble teams identified.</p>" if bubble_teams else "<p>No bubble teams identified.</p>"
-        lock_html = f"<p>{len(lock_scenarios)} lock scenarios identified.</p>" if lock_scenarios else "<p>No lock scenarios identified.</p>"
-        
+
+        bubble_html = (
+            f"<p>{len(bubble_teams)} bubble teams identified.</p>"
+            if bubble_teams
+            else "<p>No bubble teams identified.</p>"
+        )
+        lock_html = (
+            f"<p>{len(lock_scenarios)} lock scenarios identified.</p>"
+            if lock_scenarios
+            else "<p>No lock scenarios identified.</p>"
+        )
+
         return f"""
         <section id="playoff-picture" class="section">
             <div class="container">
@@ -776,12 +806,12 @@ class Week13MasterReportGenerator:
                     <div class="col-md-6">
                         <h3>Elimination Scenarios</h3>
                         <p class="text-muted">Games that could eliminate contenders from playoff contention</p>
-                        {elimination_html if elimination_html else '<p>No elimination games identified.</p>'}
+                        {elimination_html if elimination_html else "<p>No elimination games identified.</p>"}
                     </div>
                     <div class="col-md-6">
                         <h3>Path to Playoff</h3>
                         <p class="text-muted">Critical games for playoff contenders</p>
-                        {path_html if path_html else '<p>No path to playoff games identified.</p>'}
+                        {path_html if path_html else "<p>No path to playoff games identified.</p>"}
                     </div>
                 </div>
                 
@@ -805,63 +835,79 @@ class Week13MasterReportGenerator:
                 </div>
             </div>
         </section>"""
-    
+
     def _generate_betting_hub(self) -> str:
         """Generate betting intelligence hub section."""
         # Get top value picks from strategic recommendations
-        strategic_games = [g for g in self.unified_data['games'] if g.get('strategic')]
-        strategic_games.sort(key=lambda x: x.get('strategic', {}).get('confidence_level', 0), reverse=True)
+        strategic_games = [g for g in self.unified_data["games"] if g.get("strategic")]
+        strategic_games.sort(
+            key=lambda x: x.get("strategic", {}).get("confidence_level", 0),
+            reverse=True,
+        )
         top_picks = strategic_games[:5]
-        
-        picks_html = ''
+
+        picks_html = ""
         for idx, game in enumerate(top_picks, 1):
-            strategic = game.get('strategic', {})
-            score_pred = strategic.get('score_prediction', {})
-            spread_analysis = strategic.get('spread_analysis', {})
-            over_under = strategic.get('over_under_analysis', {})
-            
+            strategic = game.get("strategic", {})
+            score_pred = strategic.get("score_prediction", {})
+            spread_analysis = strategic.get("spread_analysis", {})
+            over_under = strategic.get("over_under_analysis", {})
+
             picks_html += f"""
             <div class="game-card">
                 <div class="d-flex justify-content-between align-items-start mb-2">
-                    <h5>#{idx} {game['game_info']['away_team']} @ {game['game_info']['home_team']}</h5>
+                    <h5>#{idx} {game["game_info"]["away_team"]} @ {game["game_info"]["home_team"]}</h5>
                     <span class="badge bg-success">Value Pick</span>
                 </div>
-                <p><strong>Winner Recommendation:</strong> {strategic.get('winner_recommendation', 'N/A')}</p>
-                <p><strong>Confidence Level:</strong> {(strategic.get('confidence_level', 0) * 100):.1f}%</p>
-                <p><strong>Score Prediction:</strong> {score_pred.get('home_score', 'N/A')} - {score_pred.get('away_score', 'N/A')}</p>
-                <p><strong>Spread Analysis:</strong> {spread_analysis.get('recommendation', 'N/A')}</p>
-                <p><strong>Over/Under:</strong> {over_under.get('recommendation', 'N/A')}</p>
-                <p><strong>Betting Recommendations:</strong> {', '.join(strategic.get('betting_recommendations', []))}</p>
+                <p><strong>Winner Recommendation:</strong> {strategic.get("winner_recommendation", "N/A")}</p>
+                <p><strong>Confidence Level:</strong> {(strategic.get("confidence_level", 0) * 100):.1f}%</p>
+                <p><strong>Score Prediction:</strong> {score_pred.get("home_score", "N/A")} - {score_pred.get("away_score", "N/A")}</p>
+                <p><strong>Spread Analysis:</strong> {spread_analysis.get("recommendation", "N/A")}</p>
+                <p><strong>Over/Under:</strong> {over_under.get("recommendation", "N/A")}</p>
+                <p><strong>Betting Recommendations:</strong> {", ".join(strategic.get("betting_recommendations", []))}</p>
             </div>"""
-        
+
         # Upset alerts
-        upset_games = [g for g in self.unified_data['games'] if g.get('strategic', {}).get('upset_probability', 0) > 0.3]
-        upset_games.sort(key=lambda x: x.get('strategic', {}).get('upset_probability', 0), reverse=True)
-        upset_html = ''
+        upset_games = [
+            g
+            for g in self.unified_data["games"]
+            if g.get("strategic", {}).get("upset_probability", 0) > 0.3
+        ]
+        upset_games.sort(
+            key=lambda x: x.get("strategic", {}).get("upset_probability", 0),
+            reverse=True,
+        )
+        upset_html = ""
         for game in upset_games[:5]:
-            strategic = game.get('strategic', {})
-            upset_prob = strategic.get('upset_probability', 0)
+            strategic = game.get("strategic", {})
+            upset_prob = strategic.get("upset_probability", 0)
             upset_html += f"""
             <div class="game-card" style="border-left: 4px solid #ef4444;">
-                <h5>{game['game_info']['away_team']} @ {game['game_info']['home_team']}</h5>
+                <h5>{game["game_info"]["away_team"]} @ {game["game_info"]["home_team"]}</h5>
                 <p><strong>Upset Probability:</strong> <span class="text-danger">{(upset_prob * 100):.1f}%</span></p>
-                <p><strong>Predicted Winner:</strong> {game.get('ensemble', {}).get('winner', 'N/A')}</p>
-                <p><strong>Key Factors:</strong> {', '.join(strategic.get('key_factors', []))}</p>
+                <p><strong>Predicted Winner:</strong> {game.get("ensemble", {}).get("winner", "N/A")}</p>
+                <p><strong>Key Factors:</strong> {", ".join(strategic.get("key_factors", []))}</p>
             </div>"""
-        
+
         # Over/Under value plays
-        over_under_games = [g for g in strategic_games if g.get('strategic', {}).get('over_under_analysis', {}).get('recommendation')]
-        over_under_html = ''
+        over_under_games = [
+            g
+            for g in strategic_games
+            if g.get("strategic", {})
+            .get("over_under_analysis", {})
+            .get("recommendation")
+        ]
+        over_under_html = ""
         for game in over_under_games[:5]:
-            strategic = game.get('strategic', {})
-            over_under = strategic.get('over_under_analysis', {})
+            strategic = game.get("strategic", {})
+            over_under = strategic.get("over_under_analysis", {})
             over_under_html += f"""
             <div class="game-card">
-                <h5>{game['game_info']['away_team']} @ {game['game_info']['home_team']}</h5>
-                <p><strong>Recommendation:</strong> <strong>{over_under.get('recommendation', 'N/A')}</strong></p>
-                <p><strong>Predicted Total:</strong> {over_under.get('predicted_total', 'N/A'):.1f}</p>
+                <h5>{game["game_info"]["away_team"]} @ {game["game_info"]["home_team"]}</h5>
+                <p><strong>Recommendation:</strong> <strong>{over_under.get("recommendation", "N/A")}</strong></p>
+                <p><strong>Predicted Total:</strong> {over_under.get("predicted_total", "N/A"):.1f}</p>
             </div>"""
-        
+
         return f"""
         <section id="betting-hub" class="section">
             <div class="container">
@@ -874,14 +920,14 @@ class Week13MasterReportGenerator:
                     </div>
                     <div class="col-md-6">
                         <h3>Upset Alerts</h3>
-                        {upset_html if upset_html else '<p>No high-probability upset alerts.</p>'}
+                        {upset_html if upset_html else "<p>No high-probability upset alerts.</p>"}
                     </div>
                 </div>
                 
                 <div class="row">
                     <div class="col-12">
                         <h3>Over/Under Value Plays</h3>
-                        {over_under_html if over_under_html else '<p>No over/under recommendations available.</p>'}
+                        {over_under_html if over_under_html else "<p>No over/under recommendations available.</p>"}
                     </div>
                 </div>
                 
@@ -894,22 +940,22 @@ class Week13MasterReportGenerator:
                 </div>
             </div>
         </section>"""
-    
+
     def _generate_power_rankings(self) -> str:
         """Generate power rankings section."""
-        rankings = self.unified_data.get('power_rankings', [])
-        
-        table_rows = ''
+        rankings = self.unified_data.get("power_rankings", [])
+
+        table_rows = ""
         for rank in rankings:
             table_rows += f"""
             <tr>
-                <td>{rank.get('rank', 'N/A')}</td>
-                <td>{rank.get('team', 'N/A')}</td>
-                <td>{rank.get('rating', 0):.2f}</td>
-                <td>{rank.get('record', 'N/A')}</td>
-                <td>{rank.get('strength_of_schedule', 0):.3f}</td>
+                <td>{rank.get("rank", "N/A")}</td>
+                <td>{rank.get("team", "N/A")}</td>
+                <td>{rank.get("rating", 0):.2f}</td>
+                <td>{rank.get("record", "N/A")}</td>
+                <td>{rank.get("strength_of_schedule", 0):.3f}</td>
             </tr>"""
-        
+
         return f"""
         <section id="rankings" class="section">
             <div class="container">
@@ -933,10 +979,10 @@ class Week13MasterReportGenerator:
                 </div>
             </div>
         </section>"""
-    
+
     def _generate_appendices(self) -> str:
         """Generate appendices section."""
-        metadata = self.unified_data['metadata']
+        metadata = self.unified_data["metadata"]
         return f"""
         <section id="appendices" class="section">
             <div class="container">
@@ -956,222 +1002,280 @@ class Week13MasterReportGenerator:
                     </div>
                     <div class="col-md-6">
                         <h3>Metadata</h3>
-                        <p><strong>Generation Time:</strong> {metadata.get('generation_timestamp', 'N/A')}</p>
-                        <p><strong>Total Games:</strong> {metadata.get('total_games', 0)}</p>
-                        <p><strong>Average Confidence:</strong> {(metadata.get('avg_confidence', 0) * 100):.1f}%</p>
+                        <p><strong>Generation Time:</strong> {metadata.get("generation_timestamp", "N/A")}</p>
+                        <p><strong>Total Games:</strong> {metadata.get("total_games", 0)}</p>
+                        <p><strong>Average Confidence:</strong> {(metadata.get("avg_confidence", 0) * 100):.1f}%</p>
                     </div>
                 </div>
             </div>
         </section>"""
-    
+
     def _generate_chart_scripts(self) -> str:
         """Generate all 8 Plotly chart scripts."""
         # V001: Confidence Distribution (histogram)
-        confidences = self.games_df['confidence'].dropna()
+        confidences = self.games_df["confidence"].dropna()
         hist_data = {
-            'x': confidences.tolist(),
-            'type': 'histogram',
-            'nbinsx': 20,
-            'marker': {'color': '#3b82f6'},
-            'name': 'Confidence'
+            "x": confidences.tolist(),
+            "type": "histogram",
+            "nbinsx": 20,
+            "marker": {"color": "#3b82f6"},
+            "name": "Confidence",
         }
         hist_layout = {
-            'title': 'V001: Confidence Distribution',
-            'xaxis': {'title': 'Confidence Score (0.5-1.0)', 'range': [0.5, 1.0]},
-            'yaxis': {'title': 'Count'},
-            'height': 400
+            "title": "V001: Confidence Distribution",
+            "xaxis": {"title": "Confidence Score (0.5-1.0)", "range": [0.5, 1.0]},
+            "yaxis": {"title": "Count"},
+            "height": 400,
         }
-        
+
         # V002: Spread vs Confidence (scatter with color/size encoding)
         scatter_data = {
-            'x': self.games_df['margin'].tolist(),
-            'y': self.games_df['confidence'].tolist(),
-            'mode': 'markers',
-            'type': 'scatter',
-            'marker': {
-                'size': [abs(m) * 2 + 5 for m in self.games_df['margin'].tolist()],
-                'color': self.games_df['upset_prob'].tolist(),
-                'colorscale': 'Reds',
-                'showscale': True,
-                'colorbar': {'title': 'Upset Prob'}
+            "x": self.games_df["margin"].tolist(),
+            "y": self.games_df["confidence"].tolist(),
+            "mode": "markers",
+            "type": "scatter",
+            "marker": {
+                "size": [abs(m) * 2 + 5 for m in self.games_df["margin"].tolist()],
+                "color": self.games_df["upset_prob"].tolist(),
+                "colorscale": "Reds",
+                "showscale": True,
+                "colorbar": {"title": "Upset Prob"},
             },
-            'text': [f"{row['away_team']} @ {row['home_team']}" for _, row in self.games_df.iterrows()],
-            'name': 'Games'
+            "text": [
+                f"{row['away_team']} @ {row['home_team']}"
+                for _, row in self.games_df.iterrows()
+            ],
+            "name": "Games",
         }
         scatter_layout = {
-            'title': 'V002: Spread vs Confidence',
-            'xaxis': {'title': 'Predicted Margin'},
-            'yaxis': {'title': 'Confidence'},
-            'height': 400
+            "title": "V002: Spread vs Confidence",
+            "xaxis": {"title": "Predicted Margin"},
+            "yaxis": {"title": "Confidence"},
+            "height": 400,
         }
-        
+
         # V003: Upset Probability vs Betting Rec (bubble chart)
         bubble_data = {
-            'x': self.games_df['upset_prob'].tolist(),
-            'y': self.games_df['confidence'].tolist(),
-            'mode': 'markers',
-            'type': 'scatter',
-            'marker': {
-                'size': [c * 30 + 10 for c in self.games_df['confidence'].tolist()],
-                'color': self.games_df['playoff_impact'].apply(lambda x: 1 if x != 'NONE' else 0).tolist(),
-                'colorscale': [[0, '#e5e7eb'], [1, '#ef4444']],
-                'showscale': True,
-                'colorbar': {'title': 'Playoff Impact'}
+            "x": self.games_df["upset_prob"].tolist(),
+            "y": self.games_df["confidence"].tolist(),
+            "mode": "markers",
+            "type": "scatter",
+            "marker": {
+                "size": [c * 30 + 10 for c in self.games_df["confidence"].tolist()],
+                "color": self.games_df["playoff_impact"]
+                .apply(lambda x: 1 if x != "NONE" else 0)
+                .tolist(),
+                "colorscale": [[0, "#e5e7eb"], [1, "#ef4444"]],
+                "showscale": True,
+                "colorbar": {"title": "Playoff Impact"},
             },
-            'text': [f"{row['away_team']} @ {row['home_team']}" for _, row in self.games_df.iterrows()],
-            'name': 'Games'
+            "text": [
+                f"{row['away_team']} @ {row['home_team']}"
+                for _, row in self.games_df.iterrows()
+            ],
+            "name": "Games",
         }
         bubble_layout = {
-            'title': 'V003: Upset Probability vs Betting Recommendation',
-            'xaxis': {'title': 'Upset Probability'},
-            'yaxis': {'title': 'Confidence'},
-            'height': 400
+            "title": "V003: Upset Probability vs Betting Recommendation",
+            "xaxis": {"title": "Upset Probability"},
+            "yaxis": {"title": "Confidence"},
+            "height": 400,
         }
-        
+
         # V004: Conference Strength Radar (simplified as bar chart for now)
-        conf_counts = self.games_df['home_conference'].value_counts()
+        conf_counts = self.games_df["home_conference"].value_counts()
         radar_data = {
-            'x': conf_counts.index.tolist(),
-            'y': conf_counts.values.tolist(),
-            'type': 'bar',
-            'marker': {'color': '#8b5cf6'}
+            "x": conf_counts.index.tolist(),
+            "y": conf_counts.values.tolist(),
+            "type": "bar",
+            "marker": {"color": "#8b5cf6"},
         }
         radar_layout = {
-            'title': 'V004: Conference Strength (Game Count)',
-            'xaxis': {'title': 'Conference'},
-            'yaxis': {'title': 'Number of Games'},
-            'height': 400
+            "title": "V004: Conference Strength (Game Count)",
+            "xaxis": {"title": "Conference"},
+            "yaxis": {"title": "Number of Games"},
+            "height": 400,
         }
-        
+
         # V005: Top 10 Matchups Comparison (horizontal bar)
-        top_10 = self.games_df.nlargest(10, 'confidence')
+        top_10 = self.games_df.nlargest(10, "confidence")
         bar_data = {
-            'x': top_10['confidence'].tolist(),
-            'y': [f"{row['away_team']} @ {row['home_team']}" for _, row in top_10.iterrows()],
-            'type': 'bar',
-            'orientation': 'h',
-            'marker': {
-                'color': top_10['confidence'].tolist(),
-                'colorscale': 'Viridis',
-                'showscale': True
+            "x": top_10["confidence"].tolist(),
+            "y": [
+                f"{row['away_team']} @ {row['home_team']}"
+                for _, row in top_10.iterrows()
+            ],
+            "type": "bar",
+            "orientation": "h",
+            "marker": {
+                "color": top_10["confidence"].tolist(),
+                "colorscale": "Viridis",
+                "showscale": True,
             },
-            'name': 'Confidence'
+            "name": "Confidence",
         }
         bar_layout = {
-            'title': 'V005: Top 10 Matchups Comparison',
-            'xaxis': {'title': 'Confidence'},
-            'yaxis': {'title': 'Game', 'categoryorder': 'total ascending'},
-            'height': 400
+            "title": "V005: Top 10 Matchups Comparison",
+            "xaxis": {"title": "Confidence"},
+            "yaxis": {"title": "Game", "categoryorder": "total ascending"},
+            "height": 400,
         }
-        
+
         # V006: Playoff Impact Matrix (heatmap)
-        playoff_games = [g for g in self.unified_data['games'] if self._get_playoff_impact(g['game_id']) != 'NONE']
+        playoff_games = [
+            g
+            for g in self.unified_data["games"]
+            if self._get_playoff_impact(g["game_id"]) != "NONE"
+        ]
         if playoff_games:
             teams = set()
             for g in playoff_games:
-                teams.add(g['game_info']['home_team'])
-                teams.add(g['game_info']['away_team'])
+                teams.add(g["game_info"]["home_team"])
+                teams.add(g["game_info"]["away_team"])
             teams = sorted(list(teams))[:10]  # Limit to top 10
-            
+
             heatmap_data = {
-                'z': [[1 if teams[i] in [g['game_info']['home_team'], g['game_info']['away_team']] else 0 
-                       for g in playoff_games[:10]] for i in range(len(teams))],
-                'x': [f"Game {i+1}" for i in range(min(10, len(playoff_games)))],
-                'y': teams,
-                'type': 'heatmap',
-                'colorscale': 'Reds',
-                'showscale': True
+                "z": [
+                    [
+                        1
+                        if teams[i]
+                        in [g["game_info"]["home_team"], g["game_info"]["away_team"]]
+                        else 0
+                        for g in playoff_games[:10]
+                    ]
+                    for i in range(len(teams))
+                ],
+                "x": [f"Game {i + 1}" for i in range(min(10, len(playoff_games)))],
+                "y": teams,
+                "type": "heatmap",
+                "colorscale": "Reds",
+                "showscale": True,
             }
             heatmap_layout = {
-                'title': 'V006: Playoff Impact Matrix',
-                'xaxis': {'title': 'Games'},
-                'yaxis': {'title': 'Teams'},
-                'height': 400
+                "title": "V006: Playoff Impact Matrix",
+                "xaxis": {"title": "Games"},
+                "yaxis": {"title": "Teams"},
+                "height": 400,
             }
         else:
-            heatmap_data = {'z': [[0]], 'x': ['No Data'], 'y': ['No Data'], 'type': 'heatmap'}
-            heatmap_layout = {'title': 'V006: Playoff Impact Matrix', 'height': 400}
-        
+            heatmap_data = {
+                "z": [[0]],
+                "x": ["No Data"],
+                "y": ["No Data"],
+                "type": "heatmap",
+            }
+            heatmap_layout = {"title": "V006: Playoff Impact Matrix", "height": 400}
+
         # V007: Game Script Timeline (line chart for top 3 matchups)
-        top_3 = self.games_df.nlargest(3, 'confidence')
+        top_3 = self.games_df.nlargest(3, "confidence")
         timeline_data = []
         for idx, (_, game) in enumerate(top_3.iterrows()):
             # Simulated quarter-by-quarter scores
-            quarters = ['Q1', 'Q2', 'Q3', 'Q4']
-            home_scores = [0, game['margin'] * 0.25, game['margin'] * 0.5, game['margin']]
-            away_scores = [0, -game['margin'] * 0.25, -game['margin'] * 0.5, -game['margin']]
-            
-            timeline_data.append({
-                'x': quarters,
-                'y': home_scores,
-                'type': 'scatter',
-                'mode': 'lines+markers',
-                'name': f"{game['home_team']} (Home)",
-                'line': {'color': f'hsl({idx * 120}, 70%, 50%)'}
-            })
-            timeline_data.append({
-                'x': quarters,
-                'y': away_scores,
-                'type': 'scatter',
-                'mode': 'lines+markers',
-                'name': f"{game['away_team']} (Away)",
-                'line': {'color': f'hsl({idx * 120 + 60}, 70%, 50%)', 'dash': 'dash'}
-            })
+            quarters = ["Q1", "Q2", "Q3", "Q4"]
+            home_scores = [
+                0,
+                game["margin"] * 0.25,
+                game["margin"] * 0.5,
+                game["margin"],
+            ]
+            away_scores = [
+                0,
+                -game["margin"] * 0.25,
+                -game["margin"] * 0.5,
+                -game["margin"],
+            ]
+
+            timeline_data.append(
+                {
+                    "x": quarters,
+                    "y": home_scores,
+                    "type": "scatter",
+                    "mode": "lines+markers",
+                    "name": f"{game['home_team']} (Home)",
+                    "line": {"color": f"hsl({idx * 120}, 70%, 50%)"},
+                }
+            )
+            timeline_data.append(
+                {
+                    "x": quarters,
+                    "y": away_scores,
+                    "type": "scatter",
+                    "mode": "lines+markers",
+                    "name": f"{game['away_team']} (Away)",
+                    "line": {
+                        "color": f"hsl({idx * 120 + 60}, 70%, 50%)",
+                        "dash": "dash",
+                    },
+                }
+            )
         timeline_layout = {
-            'title': 'V007: Game Script Timeline (Top 3 Matchups)',
-            'xaxis': {'title': 'Quarter'},
-            'yaxis': {'title': 'Score Margin'},
-            'height': 400
+            "title": "V007: Game Script Timeline (Top 3 Matchups)",
+            "xaxis": {"title": "Quarter"},
+            "yaxis": {"title": "Score Margin"},
+            "height": 400,
         }
-        
+
         # V008: Talent vs Performance Gap (scatter)
         talent_data = []
         for _, game in self.games_df.iterrows():
-            game_data = next((g for g in self.unified_data['games'] if g['game_id'] == game['game_id']), None)
+            game_data = next(
+                (
+                    g
+                    for g in self.unified_data["games"]
+                    if g["game_id"] == game["game_id"]
+                ),
+                None,
+            )
             if game_data:
-                home_talent = game_data['game_info'].get('home_talent', 0)
-                away_talent = game_data['game_info'].get('away_talent', 0)
-                home_epa = game_data['game_info'].get('home_adjusted_epa', 0)
-                away_epa = game_data['game_info'].get('away_adjusted_epa', 0)
-                
-                talent_data.append({
-                    'x': home_talent,
-                    'y': home_epa,
-                    'team': game['home_team'],
-                    'type': 'home'
-                })
-                talent_data.append({
-                    'x': away_talent,
-                    'y': away_epa,
-                    'team': game['away_team'],
-                    'type': 'away'
-                })
-        
+                home_talent = game_data["game_info"].get("home_talent", 0)
+                away_talent = game_data["game_info"].get("away_talent", 0)
+                home_epa = game_data["game_info"].get("home_adjusted_epa", 0)
+                away_epa = game_data["game_info"].get("away_adjusted_epa", 0)
+
+                talent_data.append(
+                    {
+                        "x": home_talent,
+                        "y": home_epa,
+                        "team": game["home_team"],
+                        "type": "home",
+                    }
+                )
+                talent_data.append(
+                    {
+                        "x": away_talent,
+                        "y": away_epa,
+                        "team": game["away_team"],
+                        "type": "away",
+                    }
+                )
+
         if talent_data:
             talent_df = pd.DataFrame(talent_data)
             talent_scatter = {
-                'x': talent_df['x'].tolist(),
-                'y': talent_df['y'].tolist(),
-                'mode': 'markers',
-                'type': 'scatter',
-                'marker': {
-                    'size': 10,
-                    'color': talent_df['type'].apply(lambda x: '#3b82f6' if x == 'home' else '#ef4444').tolist(),
-                    'opacity': 0.6
+                "x": talent_df["x"].tolist(),
+                "y": talent_df["y"].tolist(),
+                "mode": "markers",
+                "type": "scatter",
+                "marker": {
+                    "size": 10,
+                    "color": talent_df["type"]
+                    .apply(lambda x: "#3b82f6" if x == "home" else "#ef4444")
+                    .tolist(),
+                    "opacity": 0.6,
                 },
-                'text': talent_df['team'].tolist(),
-                'name': 'Teams'
+                "text": talent_df["team"].tolist(),
+                "name": "Teams",
             }
             talent_layout = {
-                'title': 'V008: Talent vs Performance Gap',
-                'xaxis': {'title': 'Talent Rating'},
-                'yaxis': {'title': 'Adjusted EPA'},
-                'height': 400
+                "title": "V008: Talent vs Performance Gap",
+                "xaxis": {"title": "Talent Rating"},
+                "yaxis": {"title": "Adjusted EPA"},
+                "height": 400,
             }
         else:
-            talent_scatter = {'x': [0], 'y': [0], 'type': 'scatter', 'mode': 'markers'}
-            talent_layout = {'title': 'V008: Talent vs Performance Gap', 'height': 400}
-        
+            talent_scatter = {"x": [0], "y": [0], "type": "scatter", "mode": "markers"}
+            talent_layout = {"title": "V008: Talent vs Performance Gap", "height": 400}
+
         return f"""
     <script>
         // V001: Confidence Distribution
@@ -1200,18 +1304,18 @@ class Week13MasterReportGenerator:
         
         // Confidence vs Line Analysis (for betting hub)
         const confidenceLineData = {{
-            x: {json.dumps([g.get('ensemble', {}).get('margin', 0) for g in self.unified_data['games']])},
-            y: {json.dumps([g.get('ensemble', {}).get('confidence', 0) for g in self.unified_data['games']])},
+            x: {json.dumps([g.get("ensemble", {}).get("margin", 0) for g in self.unified_data["games"]])},
+            y: {json.dumps([g.get("ensemble", {}).get("confidence", 0) for g in self.unified_data["games"]])},
             mode: 'markers',
             type: 'scatter',
             marker: {{
                 size: 10,
-                color: {json.dumps([g.get('game_info', {}).get('spread', 0) for g in self.unified_data['games']])},
+                color: {json.dumps([g.get("game_info", {}).get("spread", 0) for g in self.unified_data["games"]])},
                 colorscale: 'RdYlGn',
                 showscale: true,
                 colorbar: {{title: 'Spread'}}
             }},
-            text: {json.dumps([f"{g['game_info']['away_team']} @ {g['game_info']['home_team']}" for g in self.unified_data['games']])},
+            text: {json.dumps([f"{g['game_info']['away_team']} @ {g['game_info']['home_team']}" for g in self.unified_data["games"]])},
             name: 'Games'
         }};
         const confidenceLineLayout = {{
@@ -1229,18 +1333,17 @@ def main():
     project_root = Path(__file__).parent.parent
     week13_dir = project_root / "analysis" / "week13"
     output_path = week13_dir / "week13_master_report.html"
-    
+
     generator = Week13MasterReportGenerator(week13_dir)
     generator.load_unified_data()
     html = generator.generate_html()
-    
-    with open(output_path, 'w', encoding='utf-8') as f:
+
+    with open(output_path, "w", encoding="utf-8") as f:
         f.write(html)
-    
+
     print(f"✅ Master report generated: {output_path}")
     print(f"   File size: {output_path.stat().st_size / 1024:.1f} KB")
 
 
 if __name__ == "__main__":
     main()
-

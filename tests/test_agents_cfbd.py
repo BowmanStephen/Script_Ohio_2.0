@@ -1,6 +1,5 @@
 import pandas as pd
 import pytest
-
 from agents.insight_generator_agent import InsightGeneratorAgent
 from agents.workflow_automator_agent import WorkflowAutomatorAgent
 
@@ -86,9 +85,13 @@ def test_insight_generator_cfbd_analysis(monkeypatch, _games_payload):
     stub_engineer = _StubEngineer()
     monkeypatch.setattr(agent, "_get_rest_data_source", lambda host: stub_rest)
     monkeypatch.setattr(agent, "_get_feature_engineer", lambda season: stub_engineer)
-    monkeypatch.setattr(agent, "_summarize_feature_frame", lambda frame: {"avg_margin": 7.0})
+    monkeypatch.setattr(
+        agent, "_summarize_feature_frame", lambda frame: {"avg_margin": 7.0}
+    )
 
-    response = agent._perform_cfbd_real_time_analysis({"season": 2025}, {"detected_role": "analyst"})
+    response = agent._perform_cfbd_real_time_analysis(
+        {"season": 2025}, {"detected_role": "analyst"}
+    )
     assert response["success"] is True
     assert response["summary"]["avg_margin"] == 7.0
     assert response["games_returned"] == 1
@@ -99,7 +102,9 @@ def test_insight_generator_graphql_scan(monkeypatch):
     agent = InsightGeneratorAgent("test_insight_graphql")
     monkeypatch.setattr(agent, "_get_graphql_client", lambda: _StubGraphQLClient())
 
-    response = agent._execute_graphql_trend_scan({"season": 2025, "limit": 5}, {"detected_role": "analyst"})
+    response = agent._execute_graphql_trend_scan(
+        {"season": 2025, "limit": 5}, {"detected_role": "analyst"}
+    )
     assert response["success"] is True
     # GraphQL version returns recruiting_sample, not talent_sample
     assert response["recruiting_sample"][0]["team"] == "Ohio State"
@@ -113,11 +118,20 @@ def test_workflow_automator_cfbd_pipeline(monkeypatch, _games_payload):
     stub_engineer = _StubEngineer()
     monkeypatch.setattr(agent, "_get_rest_data_source", lambda host: stub_rest)
     monkeypatch.setattr(agent, "_get_feature_engineer", lambda season: stub_engineer)
-    monkeypatch.setattr(agent, "_run_ridge_predictions", lambda frame: [{"game_key": "abc", "predicted_margin": 3.2}])
-    monkeypatch.setattr(agent, "_fetch_seasonal_summary_via_rest", lambda season, limit: {"available": True})
+    monkeypatch.setattr(
+        agent,
+        "_run_ridge_predictions",
+        lambda frame: [{"game_key": "abc", "predicted_margin": 3.2}],
+    )
+    monkeypatch.setattr(
+        agent,
+        "_fetch_seasonal_summary_via_rest",
+        lambda season, limit: {"available": True},
+    )
 
-    response = agent._execute_cfbd_pipeline({"season": 2025}, {"detected_role": "analyst"})
+    response = agent._execute_cfbd_pipeline(
+        {"season": 2025}, {"detected_role": "analyst"}
+    )
     assert response["success"] is True
     assert response["games_processed"] == 1
     assert response["predictions"][0]["predicted_margin"] == 3.2
-

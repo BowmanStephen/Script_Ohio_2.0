@@ -16,8 +16,8 @@ from scripts.prepare_weekly_analysis import main as weekly_main
 if __name__ == "__main__":
     # Override sys.argv to add --week 13
     original_argv = sys.argv.copy()
-    if '--week' not in sys.argv:
-        sys.argv.insert(1, '--week')
-        sys.argv.insert(2, '13')
-    
+    if "--week" not in sys.argv:
+        sys.argv.insert(1, "--week")
+        sys.argv.insert(2, "13")
+
     sys.exit(weekly_main())

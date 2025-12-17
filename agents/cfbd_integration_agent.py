@@ -35,6 +35,7 @@ Example Usage:
     ...     {"user_id": "user_001"}
     ... )
 """
+
 from __future__ import annotations
 
 import logging
@@ -42,12 +43,14 @@ import os
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
 from src.cfbd_client.unified_client import UnifiedCFBDClient
+
+from agents.core.agent_framework import AgentCapability, BaseAgent, PermissionLevel
 
 # Try to import GraphQL client (requires Patreon Tier 3+ access)
 try:
     from src.data_sources.cfbd_graphql import CFBDGraphQLClient
+
     GRAPHQL_AVAILABLE = True
 except ImportError:
     GRAPHQL_AVAILABLE = False
@@ -55,9 +58,10 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+
 class CFBDIntegrationAgent(BaseAgent):
     """Provides normalized CFBD datasets and live scoreboard snapshots.
-    
+
     This agent centralizes CFBD data access for the Script Ohio 2.0 platform,
     supporting both REST and GraphQL APIs. GraphQL capabilities are automatically
     registered when available, with graceful degradation to REST when not available.
@@ -78,7 +82,9 @@ class CFBDIntegrationAgent(BaseAgent):
         if GRAPHQL_AVAILABLE and self._graphql_client is None:
             # Check if GraphQL is explicitly disabled
             if os.getenv("CFBD_GRAPHQL_DISABLED", "false").lower() == "true":
-                logger.info("GraphQL explicitly disabled via CFBD_GRAPHQL_DISABLED - skipping initialization")
+                logger.info(
+                    "GraphQL explicitly disabled via CFBD_GRAPHQL_DISABLED - skipping initialization"
+                )
                 self._graphql_client = None
             else:
                 try:
@@ -87,14 +93,16 @@ class CFBDIntegrationAgent(BaseAgent):
                         self._graphql_client = CFBDGraphQLClient(api_key=api_key)
                         logger.info("GraphQL client initialized successfully")
                     else:
-                        logger.warning("CFBD_API_KEY or CFBD_API_TOKEN not set - GraphQL features disabled")
+                        logger.warning(
+                            "CFBD_API_KEY or CFBD_API_TOKEN not set - GraphQL features disabled"
+                        )
                         self._graphql_client = None
                 except Exception as e:
                     logger.warning(f"Failed to initialize GraphQL client: {e}")
                     self._graphql_client = None
         elif not GRAPHQL_AVAILABLE:
             self._graphql_client = None
-        
+
         super().__init__(
             agent_id=agent_id,
             name="CFBD Integration Agent",
@@ -124,46 +132,48 @@ class CFBDIntegrationAgent(BaseAgent):
                 execution_time_estimate=0.2,
             ),
         ]
-        
+
         # Add GraphQL capabilities if available
         # Use getattr to safely access _graphql_client in case it wasn't set yet
-        graphql_client = getattr(self, '_graphql_client', None)
+        graphql_client = getattr(self, "_graphql_client", None)
         if GRAPHQL_AVAILABLE and graphql_client is not None:
-            capabilities.extend([
-                AgentCapability(
-                    name="graphql_scoreboard",
-                    description="Fetch scoreboard data via GraphQL API (requires Patreon Tier 3+ access). Falls back to REST if GraphQL unavailable.",
-                    permission_required=PermissionLevel.READ_EXECUTE,
-                    tools_required=["cfbd_graphql_client", "gql"],
-                    data_access=["graphql.collegefootballdata.com"],
-                    execution_time_estimate=1.5,
-                ),
-                AgentCapability(
-                    name="graphql_recruiting",
-                    description="Fetch recruiting data via GraphQL API (requires Patreon Tier 3+ access). Falls back to REST if GraphQL unavailable.",
-                    permission_required=PermissionLevel.READ_EXECUTE,
-                    tools_required=["cfbd_graphql_client", "gql"],
-                    data_access=["graphql.collegefootballdata.com"],
-                    execution_time_estimate=2.0,
-                ),
-                AgentCapability(
-                    name="graphql_plays",
-                    description="Fetch play-by-play data via GraphQL API (requires Patreon Tier 3+ access). Falls back to REST if GraphQL unavailable.",
-                    permission_required=PermissionLevel.READ_EXECUTE,
-                    tools_required=["cfbd_graphql_client", "gql"],
-                    data_access=["graphql.collegefootballdata.com"],
-                    execution_time_estimate=2.5,
-                ),
-                AgentCapability(
-                    name="graphql_betting_lines",
-                    description="Fetch betting lines via GraphQL API (requires Patreon Tier 3+ access). Falls back to REST if GraphQL unavailable.",
-                    permission_required=PermissionLevel.READ_EXECUTE,
-                    tools_required=["cfbd_graphql_client", "gql"],
-                    data_access=["graphql.collegefootballdata.com"],
-                    execution_time_estimate=1.5,
-                ),
-            ])
-        
+            capabilities.extend(
+                [
+                    AgentCapability(
+                        name="graphql_scoreboard",
+                        description="Fetch scoreboard data via GraphQL API (requires Patreon Tier 3+ access). Falls back to REST if GraphQL unavailable.",
+                        permission_required=PermissionLevel.READ_EXECUTE,
+                        tools_required=["cfbd_graphql_client", "gql"],
+                        data_access=["graphql.collegefootballdata.com"],
+                        execution_time_estimate=1.5,
+                    ),
+                    AgentCapability(
+                        name="graphql_recruiting",
+                        description="Fetch recruiting data via GraphQL API (requires Patreon Tier 3+ access). Falls back to REST if GraphQL unavailable.",
+                        permission_required=PermissionLevel.READ_EXECUTE,
+                        tools_required=["cfbd_graphql_client", "gql"],
+                        data_access=["graphql.collegefootballdata.com"],
+                        execution_time_estimate=2.0,
+                    ),
+                    AgentCapability(
+                        name="graphql_plays",
+                        description="Fetch play-by-play data via GraphQL API (requires Patreon Tier 3+ access). Falls back to REST if GraphQL unavailable.",
+                        permission_required=PermissionLevel.READ_EXECUTE,
+                        tools_required=["cfbd_graphql_client", "gql"],
+                        data_access=["graphql.collegefootballdata.com"],
+                        execution_time_estimate=2.5,
+                    ),
+                    AgentCapability(
+                        name="graphql_betting_lines",
+                        description="Fetch betting lines via GraphQL API (requires Patreon Tier 3+ access). Falls back to REST if GraphQL unavailable.",
+                        permission_required=PermissionLevel.READ_EXECUTE,
+                        tools_required=["cfbd_graphql_client", "gql"],
+                        data_access=["graphql.collegefootballdata.com"],
+                        execution_time_estimate=1.5,
+                    ),
+                ]
+            )
+
         return capabilities
 
     def _execute_action(
@@ -190,10 +200,10 @@ class CFBDIntegrationAgent(BaseAgent):
         team = parameters.get("team")
         if not team:
             raise ValueError("team parameter required")
-            
+
         season = int(parameters.get("season", datetime.utcnow().year))
         week = parameters.get("week")
-        
+
         cache_key = self._build_cache_key(
             "team_snapshot",
             team=team.replace(" ", "_").lower(),
@@ -216,18 +226,18 @@ class CFBDIntegrationAgent(BaseAgent):
         # Gather data using UnifiedCFBDClient
         # 1. Recent games
         games = self.client.get_games(year=season, week=week, team=team)
-        games = sorted(games, key=lambda x: x.get('week', 0), reverse=True)[:3]
+        games = sorted(games, key=lambda x: x.get("week", 0), reverse=True)[:3]
 
         # 2. Ratings
         all_ratings = self.client.get_ratings(year=season, week=week)
-        ratings = [r for r in all_ratings if r.get('team') == team]
+        ratings = [r for r in all_ratings if r.get("team") == team]
 
         # 3. Stats
         stats = self.client.get_stats(year=season, team=team)
 
         # 4. Talent
         talent = self.client.get_team_talent(year=season)
-        team_talent = [t for t in talent if t.get('school') == team]
+        team_talent = [t for t in talent if t.get("school") == team]
 
         snapshot = {
             "team": team,
@@ -236,7 +246,7 @@ class CFBDIntegrationAgent(BaseAgent):
             "recent_games": games,
             "ratings": ratings,
             "stats": stats,
-            "talent": team_talent
+            "talent": team_talent,
         }
 
         if self.cache:
@@ -269,10 +279,10 @@ class CFBDIntegrationAgent(BaseAgent):
     def _handle_graphql_scoreboard(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """
         Handle GraphQL scoreboard request.
-        
+
         Args:
             parameters: Must contain 'season' (int) and optionally 'week' (int)
-        
+
         Returns:
             Dictionary with games data from GraphQL API
         """
@@ -282,37 +292,39 @@ class CFBDIntegrationAgent(BaseAgent):
                 "error": "GraphQL client not available. Ensure CFBD_API_KEY is set and gql library is installed.",
                 "games": [],
             }
-        
+
         # Validate required parameters
         season = parameters.get("season")
         if season is None:
             raise ValueError("Missing required parameter: season")
-        
+
         # Validate types BEFORE conversion
         if not isinstance(season, int):
             raise ValueError("Invalid parameter type: season must be an integer")
-        
+
         week = parameters.get("week")
         if week is not None and not isinstance(week, int):
             raise ValueError("Invalid parameter type: week must be an integer")
-        
+
         # Convert to int (already validated as int)
         season = int(season)
         if week is not None:
             week = int(week)
-        
+
         # Build cache key
         cache_key = self._build_cache_key(
             "graphql_scoreboard",
             season=season,
             week=week or "all",
         )
-        
+
         # Check cache
         if self.cache:
             cached_data = self.cache.get(cache_key)
             if cached_data:
-                logger.debug(f"Cache hit for GraphQL scoreboard: season={season}, week={week}")
+                logger.debug(
+                    f"Cache hit for GraphQL scoreboard: season={season}, week={week}"
+                )
                 return {
                     "status": "success",
                     "season": season,
@@ -321,14 +333,16 @@ class CFBDIntegrationAgent(BaseAgent):
                     "cached": True,
                     "data_source": "GraphQL API (cached)",
                 }
-        
+
         # Fetch from GraphQL API
         try:
             result = self._graphql_client.get_scoreboard(season=season, week=week)
             games = result.get("game", [])
-            
-            logger.info(f"Fetched {len(games)} games via GraphQL for season={season}, week={week}")
-            
+
+            logger.info(
+                f"Fetched {len(games)} games via GraphQL for season={season}, week={week}"
+            )
+
             # Cache the result
             if self.cache and games:
                 self.cache.put(
@@ -337,7 +351,7 @@ class CFBDIntegrationAgent(BaseAgent):
                     ttl_seconds=3600,  # 1 hour cache for scoreboard data
                     tags=["cfbd", "graphql", "scoreboard"],
                 )
-            
+
             return {
                 "status": "success",
                 "season": season,
@@ -346,29 +360,40 @@ class CFBDIntegrationAgent(BaseAgent):
                 "cached": False,
                 "data_source": "GraphQL API",
             }
-            
+
         except Exception as e:
             error_msg = str(e).lower()
-            is_auth_error = any(keyword in error_msg for keyword in ["401", "403", "unauthorized", "forbidden", "tier 3"])
-            
+            is_auth_error = any(
+                keyword in error_msg
+                for keyword in ["401", "403", "unauthorized", "forbidden", "tier 3"]
+            )
+
             # Check if we should fallback to REST
             should_fallback = False
-            if hasattr(self, 'client') and self.client:
+            if hasattr(self, "client") and self.client:
                 # Check config for fallback preference
-                config = getattr(self.client, 'config', None)
-                if config and hasattr(config, 'graphql_fallback_to_rest'):
+                config = getattr(self.client, "config", None)
+                if config and hasattr(config, "graphql_fallback_to_rest"):
                     should_fallback = config.graphql_fallback_to_rest
                 else:
                     # Check environment variable
-                    fallback_env = os.getenv("CFBD_GRAPHQL_FALLBACK_TO_REST", "true").lower()
+                    fallback_env = os.getenv(
+                        "CFBD_GRAPHQL_FALLBACK_TO_REST", "true"
+                    ).lower()
                     should_fallback = fallback_env != "false"
-            
+
             if is_auth_error:
                 if should_fallback:
-                    logger.warning(f"GraphQL access forbidden (Tier 3+ required), falling back to REST: {e}")
+                    logger.warning(
+                        f"GraphQL access forbidden (Tier 3+ required), falling back to REST: {e}"
+                    )
                     # Fallback to REST
                     try:
-                        rest_games = self.client.get_games(year=season, week=week) if self.client else []
+                        rest_games = (
+                            self.client.get_games(year=season, week=week)
+                            if self.client
+                            else []
+                        )
                         return {
                             "status": "success",
                             "season": season,
@@ -387,7 +412,9 @@ class CFBDIntegrationAgent(BaseAgent):
                         }
                 else:
                     # Fallback disabled - fail loudly
-                    logger.error(f"GraphQL access forbidden (Tier 3+ required) and fallback disabled: {e}")
+                    logger.error(
+                        f"GraphQL access forbidden (Tier 3+ required) and fallback disabled: {e}"
+                    )
                     return {
                         "status": "error",
                         "error": f"GraphQL requires Patreon Tier 3+ access. Set CFBD_GRAPHQL_FALLBACK_TO_REST=true to enable REST fallback.",
@@ -405,10 +432,10 @@ class CFBDIntegrationAgent(BaseAgent):
     def _handle_graphql_recruiting(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """
         Handle GraphQL recruiting request.
-        
+
         Args:
             parameters: Must contain 'year' (int) and optionally 'school' (str) and 'limit' (int)
-        
+
         Returns:
             Dictionary with recruiting data from GraphQL API
         """
@@ -418,29 +445,33 @@ class CFBDIntegrationAgent(BaseAgent):
                 "error": "GraphQL client not available. Ensure CFBD_API_KEY is set and gql library is installed.",
                 "recruits": [],
             }
-        
+
         # Validate required parameters
-        year = parameters.get("year") or parameters.get("season")  # Support both 'year' and 'season'
+        year = parameters.get("year") or parameters.get(
+            "season"
+        )  # Support both 'year' and 'season'
         if year is None:
             raise ValueError("Missing required parameter: year (or season)")
-        
+
         # Validate types BEFORE conversion
         if not isinstance(year, int):
             raise ValueError("Invalid parameter type: year must be an integer")
-        
+
         limit = parameters.get("limit", 25)
         if limit is not None and not isinstance(limit, int):
             raise ValueError("Invalid parameter type: limit must be an integer")
-        
-        school = parameters.get("school") or parameters.get("team")  # Support both 'school' and 'team'
-        
+
+        school = parameters.get("school") or parameters.get(
+            "team"
+        )  # Support both 'school' and 'team'
+
         # Convert to int (already validated as int)
         year = int(year)
         if limit is not None:
             limit = int(limit)
         else:
             limit = 25
-        
+
         # Build cache key
         cache_key = self._build_cache_key(
             "graphql_recruiting",
@@ -448,12 +479,14 @@ class CFBDIntegrationAgent(BaseAgent):
             school=school or "all",
             limit=limit,
         )
-        
+
         # Check cache
         if self.cache:
             cached_data = self.cache.get(cache_key)
             if cached_data:
-                logger.debug(f"Cache hit for GraphQL recruiting: year={year}, school={school}")
+                logger.debug(
+                    f"Cache hit for GraphQL recruiting: year={year}, school={school}"
+                )
                 return {
                     "status": "success",
                     "year": year,
@@ -462,14 +495,18 @@ class CFBDIntegrationAgent(BaseAgent):
                     "cached": True,
                     "data_source": "GraphQL API (cached)",
                 }
-        
+
         # Fetch from GraphQL API
         try:
-            result = self._graphql_client.get_recruits(season=year, team=school, limit=limit)
+            result = self._graphql_client.get_recruits(
+                season=year, team=school, limit=limit
+            )
             recruits = result.get("recruit", [])
-            
-            logger.info(f"Fetched {len(recruits)} recruits via GraphQL for year={year}, school={school}")
-            
+
+            logger.info(
+                f"Fetched {len(recruits)} recruits via GraphQL for year={year}, school={school}"
+            )
+
             # Cache the result
             if self.cache and recruits:
                 self.cache.put(
@@ -478,7 +515,7 @@ class CFBDIntegrationAgent(BaseAgent):
                     ttl_seconds=86400,  # 24 hour cache for recruiting data (relatively stable)
                     tags=["cfbd", "graphql", "recruiting"],
                 )
-            
+
             return {
                 "status": "success",
                 "year": year,
@@ -487,7 +524,7 @@ class CFBDIntegrationAgent(BaseAgent):
                 "cached": False,
                 "data_source": "GraphQL API",
             }
-            
+
         except Exception as e:
             logger.error(f"GraphQL recruiting request failed: {e}")
             return {
@@ -495,22 +532,26 @@ class CFBDIntegrationAgent(BaseAgent):
                 "error": f"GraphQL recruiting request failed: {str(e)}",
                 "recruits": [],
             }
-    
+
     def _handle_graphql_plays(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """
         Handle GraphQL plays request.
-        
+
         Args:
             parameters: Must contain 'season' (int) and optionally 'week' (int) and 'game_id' (int)
-        
+
         Returns:
             Dictionary with play-by-play data from GraphQL API
         """
         if not GRAPHQL_AVAILABLE or self._graphql_client is None:
             # Fallback to REST
-            if hasattr(self, 'client') and self.client:
+            if hasattr(self, "client") and self.client:
                 try:
-                    season = int(parameters.get("season", parameters.get("year", datetime.utcnow().year)))
+                    season = int(
+                        parameters.get(
+                            "season", parameters.get("year", datetime.utcnow().year)
+                        )
+                    )
                     week = parameters.get("week")
                     team = parameters.get("team")
                     plays = self.client.get_plays(year=season, week=week, team=team)
@@ -524,24 +565,26 @@ class CFBDIntegrationAgent(BaseAgent):
                     }
                 except Exception as e:
                     logger.error(f"REST fallback for plays failed: {e}")
-            
+
             return {
                 "status": "error",
                 "error": "GraphQL client not available. Falling back to REST.",
                 "plays": [],
             }
-        
-        season = int(parameters.get("season", parameters.get("year", datetime.utcnow().year)))
+
+        season = int(
+            parameters.get("season", parameters.get("year", datetime.utcnow().year))
+        )
         week = parameters.get("week")
         game_id = parameters.get("game_id")
-        
+
         cache_key = self._build_cache_key(
             "graphql_plays",
             season=season,
             week=week or "all",
             game_id=game_id or "all",
         )
-        
+
         if self.cache:
             cached_data = self.cache.get(cache_key)
             if cached_data:
@@ -553,11 +596,13 @@ class CFBDIntegrationAgent(BaseAgent):
                     "cached": True,
                     "data_source": "GraphQL API (cached)",
                 }
-        
+
         try:
-            result = self._graphql_client.get_plays(season=season, week=week, game_id=game_id)
+            result = self._graphql_client.get_plays(
+                season=season, week=week, game_id=game_id
+            )
             plays = result.get("play", [])
-            
+
             if self.cache and plays:
                 self.cache.put(
                     cache_key,
@@ -565,7 +610,7 @@ class CFBDIntegrationAgent(BaseAgent):
                     ttl_seconds=3600,
                     tags=["cfbd", "graphql", "plays"],
                 )
-            
+
             return {
                 "status": "success",
                 "season": season,
@@ -576,7 +621,7 @@ class CFBDIntegrationAgent(BaseAgent):
             }
         except Exception as e:
             # Fallback to REST
-            if hasattr(self, 'client') and self.client:
+            if hasattr(self, "client") and self.client:
                 try:
                     plays = self.client.get_plays(year=season, week=week)
                     return {
@@ -590,28 +635,34 @@ class CFBDIntegrationAgent(BaseAgent):
                     }
                 except Exception as rest_error:
                     logger.error(f"REST fallback for plays failed: {rest_error}")
-            
+
             return {
                 "status": "error",
                 "error": f"GraphQL plays request failed: {str(e)}",
                 "plays": [],
             }
-    
-    def _handle_graphql_betting_lines(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
+
+    def _handle_graphql_betting_lines(
+        self, parameters: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """
         Handle GraphQL betting lines request.
-        
+
         Args:
             parameters: Must contain 'season' (int) and optionally 'week' (int)
-        
+
         Returns:
             Dictionary with betting lines data from GraphQL API
         """
         if not GRAPHQL_AVAILABLE or self._graphql_client is None:
             # Fallback to REST
-            if hasattr(self, 'client') and self.client:
+            if hasattr(self, "client") and self.client:
                 try:
-                    season = int(parameters.get("season", parameters.get("year", datetime.utcnow().year)))
+                    season = int(
+                        parameters.get(
+                            "season", parameters.get("year", datetime.utcnow().year)
+                        )
+                    )
                     week = parameters.get("week")
                     if week:
                         lines = self.client.get_lines(year=season, week=week)
@@ -627,22 +678,24 @@ class CFBDIntegrationAgent(BaseAgent):
                     }
                 except Exception as e:
                     logger.error(f"REST fallback for betting lines failed: {e}")
-            
+
             return {
                 "status": "error",
                 "error": "GraphQL client not available. Falling back to REST.",
                 "lines": [],
             }
-        
-        season = int(parameters.get("season", parameters.get("year", datetime.utcnow().year)))
+
+        season = int(
+            parameters.get("season", parameters.get("year", datetime.utcnow().year))
+        )
         week = parameters.get("week")
-        
+
         cache_key = self._build_cache_key(
             "graphql_betting_lines",
             season=season,
             week=week or "all",
         )
-        
+
         if self.cache:
             cached_data = self.cache.get(cache_key)
             if cached_data:
@@ -654,11 +707,11 @@ class CFBDIntegrationAgent(BaseAgent):
                     "cached": True,
                     "data_source": "GraphQL API (cached)",
                 }
-        
+
         try:
             result = self._graphql_client.get_betting_lines(season=season, week=week)
             lines = result.get("bettingLine", [])
-            
+
             if self.cache and lines:
                 self.cache.put(
                     cache_key,
@@ -666,7 +719,7 @@ class CFBDIntegrationAgent(BaseAgent):
                     ttl_seconds=1800,  # 30 min cache for betting lines
                     tags=["cfbd", "graphql", "betting"],
                 )
-            
+
             return {
                 "status": "success",
                 "season": season,
@@ -677,7 +730,7 @@ class CFBDIntegrationAgent(BaseAgent):
             }
         except Exception as e:
             # Fallback to REST
-            if hasattr(self, 'client') and self.client and week:
+            if hasattr(self, "client") and self.client and week:
                 try:
                     lines = self.client.get_lines(year=season, week=week)
                     return {
@@ -690,8 +743,10 @@ class CFBDIntegrationAgent(BaseAgent):
                         "fallback_reason": str(e),
                     }
                 except Exception as rest_error:
-                    logger.error(f"REST fallback for betting lines failed: {rest_error}")
-            
+                    logger.error(
+                        f"REST fallback for betting lines failed: {rest_error}"
+                    )
+
             return {
                 "status": "error",
                 "error": f"GraphQL betting lines request failed: {str(e)}",

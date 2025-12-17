@@ -1,14 +1,14 @@
 """
 Integration tests for CFBD GraphQL capabilities with Analytics Orchestrator.
 """
+
 from __future__ import annotations
 
 import os
-from unittest.mock import Mock, patch
 from typing import Any, Dict
+from unittest.mock import Mock, patch
 
 import pytest
-
 from agents.analytics_orchestrator import AnalyticsOrchestrator, AnalyticsRequest
 
 
@@ -24,7 +24,7 @@ class TestCFBDGraphQLIntegration:
     @pytest.mark.integration
     @pytest.mark.skipif(
         not os.getenv("CFBD_API_KEY"),
-        reason="CFBD_API_KEY not set - skipping integration test"
+        reason="CFBD_API_KEY not set - skipping integration test",
     )
     def test_orchestrator_graphql_scoreboard(self, orchestrator):
         """Test GraphQL scoreboard through orchestrator"""
@@ -33,7 +33,7 @@ class TestCFBDGraphQLIntegration:
             query="Get scoreboard for week 12, 2025 using GraphQL",
             query_type="data_fetch",
             parameters={"season": 2025, "week": 12},
-            context_hints={"use_graphql": True, "prefer_graphql": True}
+            context_hints={"use_graphql": True, "prefer_graphql": True},
         )
 
         response = orchestrator.process_analytics_request(request)
@@ -45,7 +45,7 @@ class TestCFBDGraphQLIntegration:
     @pytest.mark.integration
     @pytest.mark.skipif(
         not os.getenv("CFBD_API_KEY"),
-        reason="CFBD_API_KEY not set - skipping integration test"
+        reason="CFBD_API_KEY not set - skipping integration test",
     )
     def test_orchestrator_graphql_recruiting(self, orchestrator):
         """Test GraphQL recruiting through orchestrator"""
@@ -54,7 +54,7 @@ class TestCFBDGraphQLIntegration:
             query="Get recruiting data for Ohio State 2026 class using GraphQL",
             query_type="data_fetch",
             parameters={"year": 2026, "school": "Ohio State"},
-            context_hints={"use_graphql": True}
+            context_hints={"use_graphql": True},
         )
 
         response = orchestrator.process_analytics_request(request)
@@ -79,7 +79,7 @@ class TestCFBDGraphQLIntegration:
                 query=query,
                 query_type="data_fetch",
                 parameters={"season": 2025, "week": 12},
-                context_hints={}
+                context_hints={},
             )
 
             # Analyze request requirements
@@ -93,12 +93,19 @@ class TestCFBDGraphQLIntegration:
     def test_cfbd_integration_agent_registered(self, orchestrator):
         """Test that CFBD Integration Agent is registered with orchestrator"""
         # Check if agent factory has CFBD Integration Agent
-        agent_types = orchestrator.agent_factory.agent_types if hasattr(orchestrator.agent_factory, 'agent_types') else []
+        agent_types = (
+            orchestrator.agent_factory.agent_types
+            if hasattr(orchestrator.agent_factory, "agent_types")
+            else []
+        )
 
         # Try to create CFBD Integration Agent
         try:
             from agents.cfbd_integration_agent import CFBDIntegrationAgent
-            agent = orchestrator.agent_factory.create_agent("cfbd_integration", "test_cfbd_001")
+
+            agent = orchestrator.agent_factory.create_agent(
+                "cfbd_integration", "test_cfbd_001"
+            )
             assert agent is not None
             assert isinstance(agent, CFBDIntegrationAgent)
         except (ValueError, KeyError):
@@ -109,11 +116,14 @@ class TestCFBDGraphQLIntegration:
         """Test that GraphQL capabilities are discoverable"""
         try:
             from agents.cfbd_integration_agent import CFBDIntegrationAgent
-            agent = orchestrator.agent_factory.create_agent("cfbd_integration", "test_cfbd_002")
-            
+
+            agent = orchestrator.agent_factory.create_agent(
+                "cfbd_integration", "test_cfbd_002"
+            )
+
             capabilities = agent._define_capabilities()
             capability_names = [cap.name for cap in capabilities]
-            
+
             # Check if GraphQL capabilities exist (if GraphQL is available)
             # This test passes whether GraphQL is available or not
             if "graphql_scoreboard" in capability_names:
@@ -124,7 +134,7 @@ class TestCFBDGraphQLIntegration:
     @pytest.mark.integration
     @pytest.mark.skipif(
         not os.getenv("CFBD_API_KEY"),
-        reason="CFBD_API_KEY not set - skipping integration test"
+        reason="CFBD_API_KEY not set - skipping integration test",
     )
     def test_end_to_end_graphql_workflow(self, orchestrator):
         """Test end-to-end GraphQL workflow through orchestrator"""
@@ -133,7 +143,7 @@ class TestCFBDGraphQLIntegration:
             query="Get GraphQL scoreboard for 2025 season week 12",
             query_type="data_fetch",
             parameters={"season": 2025, "week": 12},
-            context_hints={"prefer_graphql": True}
+            context_hints={"prefer_graphql": True},
         )
 
         response = orchestrator.process_analytics_request(request)
@@ -145,13 +155,13 @@ class TestCFBDGraphQLIntegration:
     def test_graphql_fallback_to_rest(self, orchestrator):
         """Test that system falls back to REST when GraphQL unavailable"""
         # Mock GraphQL as unavailable
-        with patch('agents.cfbd_integration_agent.GRAPHQL_AVAILABLE', False):
+        with patch("agents.cfbd_integration_agent.GRAPHQL_AVAILABLE", False):
             request = AnalyticsRequest(
                 user_id="test_user",
                 query="Get scoreboard for week 12",
                 query_type="data_fetch",
                 parameters={"season": 2025, "week": 12},
-                context_hints={}
+                context_hints={},
             )
 
             response = orchestrator.process_analytics_request(request)

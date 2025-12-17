@@ -10,11 +10,11 @@ Created: 2025-11-10
 Version: 1.0
 """
 
-import os
-import time
 import json
-import threading
 import logging
+import os
+import threading
+import time
 from typing import Any
 
 psutil: Any
@@ -23,25 +23,30 @@ try:
 except ImportError:
     psutil = None
     logger = logging.getLogger(__name__)
-    logger.warning("psutil not available. Performance monitoring features will be limited.")
-import numpy as np
-from typing import Dict, List, Optional, Any, Tuple
-from dataclasses import dataclass, asdict
-from collections import defaultdict, deque
-from pathlib import Path
+    logger.warning(
+        "psutil not available. Performance monitoring features will be limited."
+    )
 import asyncio
+from collections import defaultdict, deque
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
-from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel, AgentCapability, PermissionLevel
+import numpy as np
+
+from agents.core.agent_framework import AgentCapability, BaseAgent, PermissionLevel
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class PerformanceMetric:
     """Single performance metric measurement"""
+
     name: str
     value: float
     unit: str
@@ -49,18 +54,22 @@ class PerformanceMetric:
     category: str  # 'system', 'agent', 'model', 'cache', 'user'
     tags: Dict[str, str]
 
+
 @dataclass
 class PerformanceThreshold:
     """Performance threshold for alerting"""
+
     metric_name: str
     warning_threshold: float
     critical_threshold: float
     operator: str  # '>', '<', '>=', '<='
     window_minutes: int = 5
 
+
 @dataclass
 class SystemResource:
     """System resource utilization snapshot"""
+
     cpu_percent: float
     memory_percent: float
     memory_available_gb: float
@@ -73,6 +82,7 @@ class SystemResource:
     thread_count: int
     timestamp: float
 
+
 class PerformanceMonitorAgent(BaseAgent):
     """
     Advanced performance monitoring agent with real-time metrics,
@@ -80,7 +90,12 @@ class PerformanceMonitorAgent(BaseAgent):
     """
 
     def __init__(self, agent_id: str, tool_loader=None):
-        super().__init__(agent_id, "Performance Monitor", PermissionLevel.READ_EXECUTE_WRITE, tool_loader)
+        super().__init__(
+            agent_id,
+            "Performance Monitor",
+            PermissionLevel.READ_EXECUTE_WRITE,
+            tool_loader,
+        )
 
         # Performance monitoring state
         self.metrics_history = defaultdict(lambda: deque(maxlen=1000))
@@ -100,7 +115,9 @@ class PerformanceMonitorAgent(BaseAgent):
         self.optimization_engine = OptimizationEngine()
 
         # Async processing pool
-        self.executor = ThreadPoolExecutor(max_workers=4, thread_name_prefix="perf_monitor")
+        self.executor = ThreadPoolExecutor(
+            max_workers=4, thread_name_prefix="perf_monitor"
+        )
 
         logger.info(f"Performance Monitor Agent {agent_id} initialized")
 
@@ -113,7 +130,7 @@ class PerformanceMonitorAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE,
                 tools_required=["system_metrics", "resource_monitor"],
                 data_access=["agents/*", "model_pack/*"],
-                execution_time_estimate=1.0
+                execution_time_estimate=1.0,
             ),
             AgentCapability(
                 name="detect_performance_bottlenecks",
@@ -121,7 +138,7 @@ class PerformanceMonitorAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE,
                 tools_required=["bottleneck_analyzer", "profiler"],
                 data_access=["agents/*"],
-                execution_time_estimate=3.0
+                execution_time_estimate=3.0,
             ),
             AgentCapability(
                 name="generate_optimization_recommendations",
@@ -129,7 +146,7 @@ class PerformanceMonitorAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE_WRITE,
                 tools_required=["optimization_engine", "performance_analyzer"],
                 data_access=["agents/*", "model_pack/*"],
-                execution_time_estimate=5.0
+                execution_time_estimate=5.0,
             ),
             AgentCapability(
                 name="benchmark_performance",
@@ -137,12 +154,13 @@ class PerformanceMonitorAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE,
                 tools_required=["benchmark_suite", "load_generator"],
                 data_access=["agents/*", "model_pack/*"],
-                execution_time_estimate=10.0
-            )
+                execution_time_estimate=10.0,
+            ),
         ]
 
-    def _execute_action(self, action: str, parameters: Dict[str, Any],
-                       user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_action(
+        self, action: str, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Execute performance monitoring actions"""
         if action == "monitor_system_performance":
             return self._monitor_system_performance(parameters, user_context)
@@ -165,14 +183,15 @@ class PerformanceMonitorAgent(BaseAgent):
             PerformanceThreshold("error_rate", 5.0, 15.0, ">"),
             PerformanceThreshold("disk_usage_percent", 80.0, 95.0, ">"),
             PerformanceThreshold("agent_load_time", 1.0, 3.0, ">"),
-            PerformanceThreshold("model_prediction_time", 0.5, 2.0, ">")
+            PerformanceThreshold("model_prediction_time", 0.5, 2.0, ">"),
         ]
 
-    def _monitor_system_performance(self, parameters: Dict[str, Any],
-                                   user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _monitor_system_performance(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Monitor real-time system performance"""
-        duration_minutes = parameters.get('duration_minutes', 5)
-        include_detailed = parameters.get('include_detailed', True)
+        duration_minutes = parameters.get("duration_minutes", 5)
+        include_detailed = parameters.get("include_detailed", True)
 
         try:
             # Start continuous monitoring
@@ -202,7 +221,9 @@ class PerformanceMonitorAgent(BaseAgent):
                 "performance_score": performance_score,
                 "insights": insights,
                 "monitoring_duration_minutes": duration_minutes,
-                "detailed_metrics": self._get_detailed_metrics() if include_detailed else None
+                "detailed_metrics": self._get_detailed_metrics()
+                if include_detailed
+                else None,
             }
 
         except Exception as e:
@@ -210,14 +231,15 @@ class PerformanceMonitorAgent(BaseAgent):
             return {
                 "monitoring_active": False,
                 "error_message": str(e),
-                "current_metrics": None
+                "current_metrics": None,
             }
 
-    def _detect_performance_bottlenecks(self, parameters: Dict[str, Any],
-                                      user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _detect_performance_bottlenecks(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Detect and analyze performance bottlenecks"""
-        analysis_depth = parameters.get('analysis_depth', 'comprehensive')
-        focus_areas = parameters.get('focus_areas', ['all'])
+        analysis_depth = parameters.get("analysis_depth", "comprehensive")
+        focus_areas = parameters.get("focus_areas", ["all"])
 
         try:
             # Run bottleneck detection
@@ -225,7 +247,7 @@ class PerformanceMonitorAgent(BaseAgent):
                 metrics_history=dict(self.metrics_history),
                 system_resources=list(self.system_resources),
                 focus_areas=focus_areas,
-                depth=analysis_depth
+                depth=analysis_depth,
             )
 
             # Prioritize bottlenecks by impact
@@ -239,12 +261,16 @@ class PerformanceMonitorAgent(BaseAgent):
 
             return {
                 "bottlenecks_detected": len(prioritized_bottlenecks),
-                "critical_bottlenecks": [b for b in prioritized_bottlenecks if b['severity'] == 'critical'],
+                "critical_bottlenecks": [
+                    b for b in prioritized_bottlenecks if b["severity"] == "critical"
+                ],
                 "bottleneck_details": prioritized_bottlenecks,
                 "bottleneck_patterns": patterns,
                 "impact_analysis": impact_analysis,
-                "recommendation_priority": self._get_recommendation_priorities(prioritized_bottlenecks),
-                "analysis_timestamp": time.time()
+                "recommendation_priority": self._get_recommendation_priorities(
+                    prioritized_bottlenecks
+                ),
+                "analysis_timestamp": time.time(),
             }
 
         except Exception as e:
@@ -252,28 +278,29 @@ class PerformanceMonitorAgent(BaseAgent):
             return {
                 "bottlenecks_detected": 0,
                 "error_message": str(e),
-                "bottleneck_details": []
+                "bottleneck_details": [],
             }
 
-    def _generate_optimization_recommendations(self, parameters: Dict[str, Any],
-                                            user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _generate_optimization_recommendations(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Generate intelligent optimization recommendations"""
-        optimization_type = parameters.get('type', 'comprehensive')
-        target_grade = parameters.get('target_grade', 'A')
-        current_performance = parameters.get('current_performance', 82)  # Grade B
+        optimization_type = parameters.get("type", "comprehensive")
+        target_grade = parameters.get("target_grade", "A")
+        current_performance = parameters.get("current_performance", 82)  # Grade B
 
         try:
             # Get current bottlenecks
             bottleneck_analysis = self._detect_performance_bottlenecks(
-                {'analysis_depth': 'comprehensive'}, user_context
+                {"analysis_depth": "comprehensive"}, user_context
             )
 
             # Generate optimization recommendations
             recommendations = self.optimization_engine.generate_recommendations(
-                bottlenecks=bottleneck_analysis.get('bottleneck_details', []),
+                bottlenecks=bottleneck_analysis.get("bottleneck_details", []),
                 current_grade=current_performance,
                 target_grade=target_grade,
-                optimization_type=optimization_type
+                optimization_type=optimization_type,
             )
 
             # Estimate implementation timeline
@@ -297,10 +324,18 @@ class PerformanceMonitorAgent(BaseAgent):
                 "implementation_roadmap": roadmap,
                 "optimization_summary": {
                     "total_recommendations": len(recommendations),
-                    "high_impact": len([r for r in recommendations if r.get('impact', 0) >= 10]),
-                    "quick_wins": len([r for r in recommendations if r.get('implementation_days', 0) <= 3]),
-                    "estimated_cost": self._estimate_optimization_cost(recommendations)
-                }
+                    "high_impact": len(
+                        [r for r in recommendations if r.get("impact", 0) >= 10]
+                    ),
+                    "quick_wins": len(
+                        [
+                            r
+                            for r in recommendations
+                            if r.get("implementation_days", 0) <= 3
+                        ]
+                    ),
+                    "estimated_cost": self._estimate_optimization_cost(recommendations),
+                },
             }
 
         except Exception as e:
@@ -308,26 +343,27 @@ class PerformanceMonitorAgent(BaseAgent):
             return {
                 "recommendations_generated": 0,
                 "error_message": str(e),
-                "recommendations": []
+                "recommendations": [],
             }
 
-    def _benchmark_performance(self, parameters: Dict[str, Any],
-                             user_context: Dict[str, Any]) -> Dict[str, Any]:
+    def _benchmark_performance(
+        self, parameters: Dict[str, Any], user_context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Run comprehensive performance benchmarks"""
-        benchmark_type = parameters.get('benchmark_type', 'full_suite')
-        user_load = parameters.get('user_load', 100)  # Simulate 100 users
-        duration_seconds = parameters.get('duration_seconds', 60)
+        benchmark_type = parameters.get("benchmark_type", "full_suite")
+        user_load = parameters.get("user_load", 100)  # Simulate 100 users
+        duration_seconds = parameters.get("duration_seconds", 60)
 
         try:
             # Initialize benchmark suite
             benchmark_suite = BenchmarkSuite()
 
             # Run benchmarks based on type
-            if benchmark_type == 'load_test':
+            if benchmark_type == "load_test":
                 results = benchmark_suite.run_load_test(user_load, duration_seconds)
-            elif benchmark_type == 'stress_test':
+            elif benchmark_type == "stress_test":
                 results = benchmark_suite.run_stress_test()
-            elif benchmark_type == 'agent_performance':
+            elif benchmark_type == "agent_performance":
                 results = benchmark_suite.run_agent_performance_test()
             else:  # full_suite
                 results = benchmark_suite.run_full_suite(user_load, duration_seconds)
@@ -346,18 +382,18 @@ class PerformanceMonitorAgent(BaseAgent):
                 "test_configuration": {
                     "user_load": user_load,
                     "duration_seconds": duration_seconds,
-                    "test_timestamp": time.time()
+                    "test_timestamp": time.time(),
                 },
                 "benchmark_results": results,
                 "performance_analysis": analysis,
                 "performance_grade": performance_grade,
                 "baseline_comparison": comparison,
                 "performance_summary": {
-                    "overall_score": analysis.get('overall_score', 0),
+                    "overall_score": analysis.get("overall_score", 0),
                     "grade_achieved": performance_grade,
-                    "key_metrics": analysis.get('key_metrics', {}),
-                    "improvement_areas": analysis.get('improvement_areas', [])
-                }
+                    "key_metrics": analysis.get("key_metrics", {}),
+                    "improvement_areas": analysis.get("improvement_areas", []),
+                },
             }
 
         except Exception as e:
@@ -365,7 +401,7 @@ class PerformanceMonitorAgent(BaseAgent):
             return {
                 "benchmark_type": benchmark_type,
                 "error_message": str(e),
-                "benchmark_results": None
+                "benchmark_results": None,
             }
 
     def _start_monitoring(self):
@@ -374,7 +410,9 @@ class PerformanceMonitorAgent(BaseAgent):
             return
 
         self.monitoring_active = True
-        self.monitoring_thread = threading.Thread(target=self._monitoring_loop, daemon=True)
+        self.monitoring_thread = threading.Thread(
+            target=self._monitoring_loop, daemon=True
+        )
         self.monitoring_thread.start()
         logger.info("Performance monitoring started")
 
@@ -390,10 +428,9 @@ class PerformanceMonitorAgent(BaseAgent):
                 current_metrics = self._collect_current_metrics()
                 for metric_name, metric_value in current_metrics.items():
                     if isinstance(metric_value, (int, float)):
-                        self.metrics_history[metric_name].append({
-                            'value': metric_value,
-                            'timestamp': time.time()
-                        })
+                        self.metrics_history[metric_name].append(
+                            {"value": metric_value, "timestamp": time.time()}
+                        )
 
                 # Check for threshold violations
                 self._check_thresholds(current_metrics)
@@ -420,21 +457,29 @@ class PerformanceMonitorAgent(BaseAgent):
                 network_recv_mb=0.0,
                 open_files=0,
                 thread_count=0,
-                timestamp=time.time()
+                timestamp=time.time(),
             )
-        
+
         return SystemResource(
             cpu_percent=psutil.cpu_percent(interval=1),
             memory_percent=psutil.virtual_memory().percent,
             memory_available_gb=psutil.virtual_memory().available / (1024**3),
-            disk_usage_percent=psutil.disk_usage('/').percent,
-            disk_io_read_mb=psutil.disk_io_counters().read_bytes / (1024**2) if psutil.disk_io_counters() else 0,
-            disk_io_write_mb=psutil.disk_io_counters().write_bytes / (1024**2) if psutil.disk_io_counters() else 0,
-            network_sent_mb=psutil.net_io_counters().bytes_sent / (1024**2) if psutil.net_io_counters() else 0,
-            network_recv_mb=psutil.net_io_counters().bytes_recv / (1024**2) if psutil.net_io_counters() else 0,
+            disk_usage_percent=psutil.disk_usage("/").percent,
+            disk_io_read_mb=psutil.disk_io_counters().read_bytes / (1024**2)
+            if psutil.disk_io_counters()
+            else 0,
+            disk_io_write_mb=psutil.disk_io_counters().write_bytes / (1024**2)
+            if psutil.disk_io_counters()
+            else 0,
+            network_sent_mb=psutil.net_io_counters().bytes_sent / (1024**2)
+            if psutil.net_io_counters()
+            else 0,
+            network_recv_mb=psutil.net_io_counters().bytes_recv / (1024**2)
+            if psutil.net_io_counters()
+            else 0,
             open_files=len(self.process.open_files()) if self.process else 0,
             thread_count=self.process.num_threads() if self.process else 0,
-            timestamp=time.time()
+            timestamp=time.time(),
         )
 
     def _collect_current_metrics(self) -> Dict[str, Any]:
@@ -444,12 +489,14 @@ class PerformanceMonitorAgent(BaseAgent):
         # System metrics
         if self.system_resources:
             latest_resources = self.system_resources[-1]
-            metrics.update({
-                'cpu_percent': latest_resources.cpu_percent,
-                'memory_percent': latest_resources.memory_percent,
-                'memory_available_gb': latest_resources.memory_available_gb,
-                'disk_usage_percent': latest_resources.disk_usage_percent
-            })
+            metrics.update(
+                {
+                    "cpu_percent": latest_resources.cpu_percent,
+                    "memory_percent": latest_resources.memory_percent,
+                    "memory_available_gb": latest_resources.memory_available_gb,
+                    "disk_usage_percent": latest_resources.disk_usage_percent,
+                }
+            )
 
         # Agent performance metrics
         metrics.update(self._collect_agent_metrics())
@@ -467,30 +514,30 @@ class PerformanceMonitorAgent(BaseAgent):
         # These would be collected from actual agent instances
         # For now, return simulated/placeholder metrics
         return {
-            'active_agents': 2,
-            'agent_response_time_avg': 1.2,
-            'agent_response_time_p95': 2.1,
-            'agent_success_rate': 98.5,
-            'agent_throughput_per_sec': 15.3
+            "active_agents": 2,
+            "agent_response_time_avg": 1.2,
+            "agent_response_time_p95": 2.1,
+            "agent_success_rate": 98.5,
+            "agent_throughput_per_sec": 15.3,
         }
 
     def _collect_cache_metrics(self) -> Dict[str, Any]:
         """Collect cache performance metrics"""
         return {
-            'cache_hit_rate': 94.2,
-            'cache_size_mb': 45.7,
-            'cache_evictions_per_min': 2.1,
-            'cache_memory_usage': 67.8
+            "cache_hit_rate": 94.2,
+            "cache_size_mb": 45.7,
+            "cache_evictions_per_min": 2.1,
+            "cache_memory_usage": 67.8,
         }
 
     def _collect_model_metrics(self) -> Dict[str, Any]:
         """Collect ML model performance metrics"""
         return {
-            'model_load_time_avg': 0.8,
-            'model_prediction_time_avg': 0.15,
-            'model_accuracy': 0.856,
-            'active_models': 3,
-            'model_inferences_per_sec': 25.7
+            "model_load_time_avg": 0.8,
+            "model_prediction_time_avg": 0.15,
+            "model_accuracy": 0.856,
+            "active_models": 3,
+            "model_inferences_per_sec": 25.7,
         }
 
     def _analyze_performance_trends(self, duration_minutes: int) -> Dict[str, Any]:
@@ -500,23 +547,30 @@ class PerformanceMonitorAgent(BaseAgent):
 
         for metric_name, history in self.metrics_history.items():
             recent_data = [
-                entry for entry in history
-                if entry['timestamp'] > cutoff_time
+                entry for entry in history if entry["timestamp"] > cutoff_time
             ]
 
             if len(recent_data) >= 2:
-                values = [entry['value'] for entry in recent_data]
+                values = [entry["value"] for entry in recent_data]
                 trend = {
-                    'direction': 'increasing' if values[-1] > values[0] else 'decreasing',
-                    'change_percent': ((values[-1] - values[0]) / values[0]) * 100 if values[0] != 0 else 0,
-                    'volatility': np.std(values) / np.mean(values) if np.mean(values) != 0 else 0,
-                    'data_points': len(recent_data)
+                    "direction": "increasing"
+                    if values[-1] > values[0]
+                    else "decreasing",
+                    "change_percent": ((values[-1] - values[0]) / values[0]) * 100
+                    if values[0] != 0
+                    else 0,
+                    "volatility": np.std(values) / np.mean(values)
+                    if np.mean(values) != 0
+                    else 0,
+                    "data_points": len(recent_data),
                 }
                 trends[metric_name] = trend
 
         return trends
 
-    def _check_thresholds(self, current_metrics: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def _check_thresholds(
+        self, current_metrics: Dict[str, Any]
+    ) -> List[Dict[str, Any]]:
         """Check for threshold violations and generate alerts"""
         alerts = []
 
@@ -528,13 +582,15 @@ class PerformanceMonitorAgent(BaseAgent):
 
                 if violation:
                     alert = {
-                        'metric_name': threshold.metric_name,
-                        'current_value': metric_value,
-                        'threshold_value': threshold.warning_threshold if violation['severity'] == 'warning' else threshold.critical_threshold,
-                        'severity': violation['severity'],
-                        'message': violation['message'],
-                        'timestamp': time.time(),
-                        'trend': self._get_metric_trend(threshold.metric_name)
+                        "metric_name": threshold.metric_name,
+                        "current_value": metric_value,
+                        "threshold_value": threshold.warning_threshold
+                        if violation["severity"] == "warning"
+                        else threshold.critical_threshold,
+                        "severity": violation["severity"],
+                        "message": violation["message"],
+                        "timestamp": time.time(),
+                        "trend": self._get_metric_trend(threshold.metric_name),
                     }
 
                     alerts.append(alert)
@@ -542,33 +598,39 @@ class PerformanceMonitorAgent(BaseAgent):
 
         return alerts
 
-    def _evaluate_threshold(self, threshold: PerformanceThreshold, value: float) -> Optional[Dict[str, Any]]:
+    def _evaluate_threshold(
+        self, threshold: PerformanceThreshold, value: float
+    ) -> Optional[Dict[str, Any]]:
         """Evaluate if a threshold is violated"""
-        warning_violated = self._compare_values(value, threshold.warning_threshold, threshold.operator)
-        critical_violated = self._compare_values(value, threshold.critical_threshold, threshold.operator)
+        warning_violated = self._compare_values(
+            value, threshold.warning_threshold, threshold.operator
+        )
+        critical_violated = self._compare_values(
+            value, threshold.critical_threshold, threshold.operator
+        )
 
         if critical_violated:
             return {
-                'severity': 'critical',
-                'message': f"Critical: {threshold.metric_name} is {value} (threshold: {threshold.critical_threshold})"
+                "severity": "critical",
+                "message": f"Critical: {threshold.metric_name} is {value} (threshold: {threshold.critical_threshold})",
             }
         elif warning_violated:
             return {
-                'severity': 'warning',
-                'message': f"Warning: {threshold.metric_name} is {value} (threshold: {threshold.warning_threshold})"
+                "severity": "warning",
+                "message": f"Warning: {threshold.metric_name} is {value} (threshold: {threshold.warning_threshold})",
             }
 
         return None
 
     def _compare_values(self, value: float, threshold: float, operator: str) -> bool:
         """Compare values based on operator"""
-        if operator == '>':
+        if operator == ">":
             return value > threshold
-        elif operator == '<':
+        elif operator == "<":
             return value < threshold
-        elif operator == '>=':
+        elif operator == ">=":
             return value >= threshold
-        elif operator == '<=':
+        elif operator == "<=":
             return value <= threshold
         else:
             return False
@@ -577,136 +639,155 @@ class PerformanceMonitorAgent(BaseAgent):
         """Get recent trend for a metric"""
         history = list(self.metrics_history.get(metric_name, []))
         if len(history) < 10:
-            return 'insufficient_data'
+            return "insufficient_data"
 
-        recent_values = [entry['value'] for entry in history[-10:]]
+        recent_values = [entry["value"] for entry in history[-10:]]
         if len(recent_values) < 2:
-            return 'stable'
+            return "stable"
 
-        recent_change = (recent_values[-1] - recent_values[0]) / recent_values[0] if recent_values[0] != 0 else 0
+        recent_change = (
+            (recent_values[-1] - recent_values[0]) / recent_values[0]
+            if recent_values[0] != 0
+            else 0
+        )
 
         if abs(recent_change) < 0.05:  # Less than 5% change
-            return 'stable'
+            return "stable"
         elif recent_change > 0:
-            return 'increasing'
+            return "increasing"
         else:
-            return 'decreasing'
+            return "decreasing"
 
-    def _calculate_performance_score(self, current_metrics: Dict[str, Any]) -> Dict[str, Any]:
+    def _calculate_performance_score(
+        self, current_metrics: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Calculate overall performance score"""
         # Weight different categories of metrics
         weights = {
-            'system_performance': 0.3,
-            'agent_performance': 0.3,
-            'cache_performance': 0.2,
-            'model_performance': 0.2
+            "system_performance": 0.3,
+            "agent_performance": 0.3,
+            "cache_performance": 0.2,
+            "model_performance": 0.2,
         }
 
         scores = {}
 
         # System performance score (0-100)
         system_score = 100
-        if current_metrics.get('cpu_percent', 0) > 80:
-            system_score -= (current_metrics['cpu_percent'] - 80) * 2
-        if current_metrics.get('memory_percent', 0) > 75:
-            system_score -= (current_metrics['memory_percent'] - 75) * 2
-        scores['system_performance'] = max(0, system_score)
+        if current_metrics.get("cpu_percent", 0) > 80:
+            system_score -= (current_metrics["cpu_percent"] - 80) * 2
+        if current_metrics.get("memory_percent", 0) > 75:
+            system_score -= (current_metrics["memory_percent"] - 75) * 2
+        scores["system_performance"] = max(0, system_score)
 
         # Agent performance score
         agent_score = 100
-        if current_metrics.get('agent_response_time_p95', 0) > 2.0:
-            agent_score -= (current_metrics['agent_response_time_p95'] - 2.0) * 20
-        if current_metrics.get('agent_success_rate', 100) < 95:
-            agent_score -= (95 - current_metrics['agent_success_rate']) * 2
-        scores['agent_performance'] = max(0, agent_score)
+        if current_metrics.get("agent_response_time_p95", 0) > 2.0:
+            agent_score -= (current_metrics["agent_response_time_p95"] - 2.0) * 20
+        if current_metrics.get("agent_success_rate", 100) < 95:
+            agent_score -= (95 - current_metrics["agent_success_rate"]) * 2
+        scores["agent_performance"] = max(0, agent_score)
 
         # Cache performance score
-        cache_score = current_metrics.get('cache_hit_rate', 0)
-        scores['cache_performance'] = cache_score
+        cache_score = current_metrics.get("cache_hit_rate", 0)
+        scores["cache_performance"] = cache_score
 
         # Model performance score
         model_score = 100
-        if current_metrics.get('model_prediction_time_avg', 0) > 0.5:
-            model_score -= (current_metrics['model_prediction_time_avg'] - 0.5) * 50
-        if current_metrics.get('model_accuracy', 1.0) < 0.8:
-            model_score -= (0.8 - current_metrics['model_accuracy']) * 100
-        scores['model_performance'] = max(0, model_score)
+        if current_metrics.get("model_prediction_time_avg", 0) > 0.5:
+            model_score -= (current_metrics["model_prediction_time_avg"] - 0.5) * 50
+        if current_metrics.get("model_accuracy", 1.0) < 0.8:
+            model_score -= (0.8 - current_metrics["model_accuracy"]) * 100
+        scores["model_performance"] = max(0, model_score)
 
         # Calculate weighted overall score
-        overall_score = sum(scores[category] * weights[category] for category in weights)
+        overall_score = sum(
+            scores[category] * weights[category] for category in weights
+        )
 
         return {
-            'overall_score': round(overall_score, 1),
-            'category_scores': scores,
-            'grade': self._score_to_grade(overall_score),
-            'score_trend': self._get_score_trend(overall_score)
+            "overall_score": round(overall_score, 1),
+            "category_scores": scores,
+            "grade": self._score_to_grade(overall_score),
+            "score_trend": self._get_score_trend(overall_score),
         }
 
     def _score_to_grade(self, score: float) -> str:
         """Convert numeric score to letter grade"""
         if score >= 95:
-            return 'A+'
+            return "A+"
         elif score >= 90:
-            return 'A'
+            return "A"
         elif score >= 85:
-            return 'A-'
+            return "A-"
         elif score >= 80:
-            return 'B+'
+            return "B+"
         elif score >= 75:
-            return 'B'
+            return "B"
         elif score >= 70:
-            return 'B-'
+            return "B-"
         elif score >= 65:
-            return 'C+'
+            return "C+"
         elif score >= 60:
-            return 'C'
+            return "C"
         else:
-            return 'D'
+            return "D"
 
     def _get_score_trend(self, current_score: float) -> str:
         """Get trend for performance score"""
-        if 'overall_score' in self.baseline_metrics:
-            baseline = self.baseline_metrics['overall_score']
+        if "overall_score" in self.baseline_metrics:
+            baseline = self.baseline_metrics["overall_score"]
             change = current_score - baseline
             if abs(change) < 2:
-                return 'stable'
+                return "stable"
             elif change > 0:
-                return 'improving'
+                return "improving"
             else:
-                return 'declining'
-        return 'no_baseline'
+                return "declining"
+        return "no_baseline"
 
-    def _generate_real_time_insights(self, current_metrics: Dict[str, Any],
-                                   trends: Dict[str, Any]) -> List[str]:
+    def _generate_real_time_insights(
+        self, current_metrics: Dict[str, Any], trends: Dict[str, Any]
+    ) -> List[str]:
         """Generate real-time performance insights"""
         insights = []
 
         # CPU insights
-        cpu_percent = current_metrics.get('cpu_percent', 0)
+        cpu_percent = current_metrics.get("cpu_percent", 0)
         if cpu_percent > 80:
-            insights.append(f"High CPU usage detected ({cpu_percent:.1f}%) - consider load balancing")
+            insights.append(
+                f"High CPU usage detected ({cpu_percent:.1f}%) - consider load balancing"
+            )
         elif cpu_percent < 20:
-            insights.append(f"Low CPU usage ({cpu_percent:.1f}%) - system has available capacity")
+            insights.append(
+                f"Low CPU usage ({cpu_percent:.1f}%) - system has available capacity"
+            )
 
         # Memory insights
-        memory_percent = current_metrics.get('memory_percent', 0)
+        memory_percent = current_metrics.get("memory_percent", 0)
         if memory_percent > 85:
-            insights.append(f"High memory usage ({memory_percent:.1f}%) - memory optimization recommended")
+            insights.append(
+                f"High memory usage ({memory_percent:.1f}%) - memory optimization recommended"
+            )
 
         # Agent performance insights
-        response_time = current_metrics.get('agent_response_time_p95', 0)
+        response_time = current_metrics.get("agent_response_time_p95", 0)
         if response_time > 2.0:
-            insights.append(f"Agent response times are slow ({response_time:.2f}s) - optimization needed")
+            insights.append(
+                f"Agent response times are slow ({response_time:.2f}s) - optimization needed"
+            )
 
         # Cache insights
-        cache_hit_rate = current_metrics.get('cache_hit_rate', 0)
+        cache_hit_rate = current_metrics.get("cache_hit_rate", 0)
         if cache_hit_rate < 90:
             insights.append(f"Cache hit rate could be improved ({cache_hit_rate:.1f}%)")
 
         # Trend insights
         for metric_name, trend in trends.items():
-            if trend['volatility'] > 0.2:
-                insights.append(f"{metric_name} shows high volatility - investigation recommended")
+            if trend["volatility"] > 0.2:
+                insights.append(
+                    f"{metric_name} shows high volatility - investigation recommended"
+                )
 
         if not insights:
             insights.append("All systems performing within normal parameters")
@@ -718,45 +799,48 @@ class PerformanceMonitorAgent(BaseAgent):
         if not psutil:
             # Return empty metrics when psutil is not available
             return {
-                'system_metrics': {
-                    'load_average': None,
-                    'boot_time': None,
-                    'process_count': None,
-                    'context_switches': None
+                "system_metrics": {
+                    "load_average": None,
+                    "boot_time": None,
+                    "process_count": None,
+                    "context_switches": None,
                 },
-                'memory_details': {
-                    'virtual_memory': None,
-                    'swap_memory': None
-                },
-                'disk_details': {
-                    'disk_usage': None,
-                    'disk_io': None
-                },
-                'network_details': {
-                    'network_io': None,
-                    'network_connections': 0
-                }
+                "memory_details": {"virtual_memory": None, "swap_memory": None},
+                "disk_details": {"disk_usage": None, "disk_io": None},
+                "network_details": {"network_io": None, "network_connections": 0},
             }
-        
+
         return {
-            'system_metrics': {
-                'load_average': list(psutil.getloadavg()) if hasattr(psutil, 'getloadavg') else None,
-                'boot_time': psutil.boot_time(),
-                'process_count': len(psutil.pids()),
-                'context_switches': psutil.cpu_stats().ctx_switches if hasattr(psutil.cpu_stats(), 'ctx_switches') else None
+            "system_metrics": {
+                "load_average": list(psutil.getloadavg())
+                if hasattr(psutil, "getloadavg")
+                else None,
+                "boot_time": psutil.boot_time(),
+                "process_count": len(psutil.pids()),
+                "context_switches": psutil.cpu_stats().ctx_switches
+                if hasattr(psutil.cpu_stats(), "ctx_switches")
+                else None,
             },
-            'memory_details': {
-                'virtual_memory': dict(psutil.virtual_memory()._asdict()),
-                'swap_memory': dict(psutil.swap_memory()._asdict()) if psutil.swap_memory() else None
+            "memory_details": {
+                "virtual_memory": dict(psutil.virtual_memory()._asdict()),
+                "swap_memory": dict(psutil.swap_memory()._asdict())
+                if psutil.swap_memory()
+                else None,
             },
-            'disk_details': {
-                'disk_usage': dict(psutil.disk_usage('/')._asdict()),
-                'disk_io': dict(psutil.disk_io_counters()._asdict()) if psutil.disk_io_counters() else None
+            "disk_details": {
+                "disk_usage": dict(psutil.disk_usage("/")._asdict()),
+                "disk_io": dict(psutil.disk_io_counters()._asdict())
+                if psutil.disk_io_counters()
+                else None,
             },
-            'network_details': {
-                'network_io': dict(psutil.net_io_counters()._asdict()) if psutil.net_io_counters() else None,
-                'network_connections': len(self.process.connections()) if self.process else 0
-            }
+            "network_details": {
+                "network_io": dict(psutil.net_io_counters()._asdict())
+                if psutil.net_io_counters()
+                else None,
+                "network_connections": len(self.process.connections())
+                if self.process
+                else 0,
+            },
         }
 
     # Additional helper methods would be implemented here for complete functionality
@@ -780,24 +864,30 @@ class PerformanceMonitorAgent(BaseAgent):
         # Placeholder implementation
         return ["optimize_caching", "improve_agent_performance"]
 
-    def _estimate_implementation_timeline(self, recommendations: List[Dict]) -> Dict[str, Any]:
+    def _estimate_implementation_timeline(
+        self, recommendations: List[Dict]
+    ) -> Dict[str, Any]:
         """Estimate implementation timeline for recommendations"""
         # Placeholder implementation
         return {"total_days": 14, "phases": []}
 
-    def _calculate_expected_improvements(self, recommendations: List[Dict],
-                                       current_grade: float, target_grade: float) -> Dict[str, Any]:
+    def _calculate_expected_improvements(
+        self, recommendations: List[Dict], current_grade: float, target_grade: float
+    ) -> Dict[str, Any]:
         """Calculate expected performance improvements"""
         # Placeholder implementation
         return {"grade_improvement": 15, "confidence": 0.8}
 
-    def _create_implementation_roadmap(self, recommendations: List[Dict],
-                                     timeline: Dict[str, Any]) -> Dict[str, Any]:
+    def _create_implementation_roadmap(
+        self, recommendations: List[Dict], timeline: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Create implementation roadmap"""
         # Placeholder implementation
         return {"phases": [], "milestones": []}
 
-    def _estimate_optimization_cost(self, recommendations: List[Dict]) -> Dict[str, Any]:
+    def _estimate_optimization_cost(
+        self, recommendations: List[Dict]
+    ) -> Dict[str, Any]:
         """Estimate optimization implementation cost"""
         # Placeholder implementation
         return {"developer_days": 10, "complexity": "medium"}
@@ -816,7 +906,9 @@ class PerformanceMonitorAgent(BaseAgent):
             "metrics_collected": len(self.metrics_history),
             "alerts_triggered": len(self.alert_history),
             "system_resources": list(self.system_resources)[-10:],  # Last 10 entries
-            "performance_summary": self._calculate_performance_score(self._collect_current_metrics())
+            "performance_summary": self._calculate_performance_score(
+                self._collect_current_metrics()
+            ),
         }
 
 
@@ -824,8 +916,13 @@ class PerformanceMonitorAgent(BaseAgent):
 class BottleneckDetector:
     """Advanced bottleneck detection and analysis"""
 
-    def detect_bottlenecks(self, metrics_history: Dict, system_resources: List,
-                          focus_areas: List[str], depth: str) -> List[Dict]:
+    def detect_bottlenecks(
+        self,
+        metrics_history: Dict,
+        system_resources: List,
+        focus_areas: List[str],
+        depth: str,
+    ) -> List[Dict]:
         """Detect performance bottlenecks using ML and statistical analysis"""
         # Placeholder for sophisticated bottleneck detection
         return [
@@ -834,7 +931,10 @@ class BottleneckDetector:
                 "severity": "medium",
                 "impact": 15,
                 "description": "Agent initialization taking longer than expected",
-                "recommendations": ["Implement agent pooling", "Optimize startup sequence"]
+                "recommendations": [
+                    "Implement agent pooling",
+                    "Optimize startup sequence",
+                ],
             }
         ]
 
@@ -842,8 +942,13 @@ class BottleneckDetector:
 class OptimizationEngine:
     """Intelligent optimization recommendation engine"""
 
-    def generate_recommendations(self, bottlenecks: List[Dict], current_grade: float,
-                               target_grade: str, optimization_type: str) -> List[Dict]:
+    def generate_recommendations(
+        self,
+        bottlenecks: List[Dict],
+        current_grade: float,
+        target_grade: str,
+        optimization_type: str,
+    ) -> List[Dict]:
         """Generate data-driven optimization recommendations"""
         # Placeholder for sophisticated optimization recommendations
         return [
@@ -854,7 +959,7 @@ class OptimizationEngine:
                 "impact": 20,
                 "implementation_days": 5,
                 "complexity": "medium",
-                "priority": "high"
+                "priority": "high",
             },
             {
                 "category": "async_processing",
@@ -863,8 +968,8 @@ class OptimizationEngine:
                 "impact": 25,
                 "implementation_days": 7,
                 "complexity": "high",
-                "priority": "high"
-            }
+                "priority": "high",
+            },
         ]
 
 
@@ -880,7 +985,7 @@ class BenchmarkSuite:
             "duration": duration_seconds,
             "avg_response_time": 1.2,
             "throughput": user_load * 0.8,
-            "error_rate": 2.1
+            "error_rate": 2.1,
         }
 
     def run_stress_test(self) -> Dict[str, Any]:
@@ -924,7 +1029,9 @@ if __name__ == "__main__":
     )
 
     print(f"\n=== Optimization Recommendations ===")
-    print(f"Recommendations generated: {optimization_result['recommendations_generated']}")
+    print(
+        f"Recommendations generated: {optimization_result['recommendations_generated']}"
+    )
     print(f"Expected improvements: {optimization_result['expected_improvements']}")
 
     monitor.stop_monitoring()

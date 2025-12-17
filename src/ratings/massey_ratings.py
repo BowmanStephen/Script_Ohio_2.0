@@ -177,7 +177,8 @@ def compute_massey_ratings(
             hfa = config.home_field_prior
 
     games_played = (
-        df["home_team"].value_counts()
+        df["home_team"]
+        .value_counts()
         .add(df["away_team"].value_counts(), fill_value=0)
         .astype(int)
     )

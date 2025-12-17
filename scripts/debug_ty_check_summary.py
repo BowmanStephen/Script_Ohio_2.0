@@ -12,7 +12,6 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-
 DEBUG_LOG_PATH = Path(__file__).resolve().parents[1] / ".cursor" / "debug.log"
 
 
@@ -90,7 +89,9 @@ def main() -> int:
     )
     # endregion agent log
 
-    invalid_assignment_by_file = _extract_error_locations(combined, "invalid-assignment")
+    invalid_assignment_by_file = _extract_error_locations(
+        combined, "invalid-assignment"
+    )
     invalid_argument_by_file = _extract_error_locations(combined, "invalid-argument")
 
     # region agent log
@@ -102,9 +103,13 @@ def main() -> int:
             "location": "scripts/debug_ty_check_summary.py:main:summary",
             "message": "ty error summary",
             "data": {
-                "invalid_assignment_total": int(sum(invalid_assignment_by_file.values())),
+                "invalid_assignment_total": int(
+                    sum(invalid_assignment_by_file.values())
+                ),
                 "invalid_argument_total": int(sum(invalid_argument_by_file.values())),
-                "invalid_assignment_top_files": invalid_assignment_by_file.most_common(8),
+                "invalid_assignment_top_files": invalid_assignment_by_file.most_common(
+                    8
+                ),
                 "invalid_argument_top_files": invalid_argument_by_file.most_common(8),
             },
             "timestamp": int(time.time() * 1000),

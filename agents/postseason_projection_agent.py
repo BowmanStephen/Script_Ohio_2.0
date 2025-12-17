@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List
 
-from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
+from agents.core.agent_framework import AgentCapability, BaseAgent, PermissionLevel
 
 
 class PostseasonProjectionAgent(BaseAgent):
@@ -47,7 +47,9 @@ class PostseasonProjectionAgent(BaseAgent):
             raise ValueError(f"Unknown action: {action}")
 
         skip_fastai = bool(parameters.get("skip_fastai", False))
-        allow_incomplete_new_rows = bool(parameters.get("allow_incomplete_new_rows", False))
+        allow_incomplete_new_rows = bool(
+            parameters.get("allow_incomplete_new_rows", False)
+        )
         run_validation_agent = bool(parameters.get("run_validation_agent", False))
 
         def _load_script(module_name: str, rel_path: str):
@@ -66,7 +68,9 @@ class PostseasonProjectionAgent(BaseAgent):
         retrain_module = _load_script(
             "retrain_models_current", "scripts/retrain_models_current.py"
         )
-        predict_module = _load_script("predict_postseason_2025", "scripts/predict_postseason_2025.py")
+        predict_module = _load_script(
+            "predict_postseason_2025", "scripts/predict_postseason_2025.py"
+        )
 
         integrate_result = integrate_module.integrate_week15_postseason(
             dry_run=False,

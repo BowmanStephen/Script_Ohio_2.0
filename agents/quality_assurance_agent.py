@@ -1,11 +1,12 @@
 """Agent responsible for CFBD integration QA and telemetry inspection."""
+
 from __future__ import annotations
 
 from collections import Counter, deque
 from statistics import mean
 from typing import Any, Deque, Dict, List, Optional
 
-from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
+from agents.core.agent_framework import AgentCapability, BaseAgent, PermissionLevel
 
 try:
     from cfbd_client import CFBDDataProvider
@@ -70,7 +71,9 @@ class QualityAssuranceAgent(BaseAgent):
             return {"status": "no_data", "message": "No telemetry events recorded yet"}
 
         status_counts = Counter(event.get("outcome", "unknown") for event in events)
-        latencies = [event.get("latency_ms", 0.0) for event in events if event.get("latency_ms")]
+        latencies = [
+            event.get("latency_ms", 0.0) for event in events if event.get("latency_ms")
+        ]
         avg_latency = mean(latencies) if latencies else 0.0
 
         return {

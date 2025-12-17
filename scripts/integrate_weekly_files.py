@@ -149,10 +149,14 @@ def _align_to_master_schema(
     return aligned.loc[:, list(master_columns)]
 
 
-def _fetch_scores_cfbd(game_ids: Sequence[int], *, season: int) -> Dict[int, Dict[str, Any]]:
+def _fetch_scores_cfbd(
+    game_ids: Sequence[int], *, season: int
+) -> Dict[int, Dict[str, Any]]:
     api_key = os.getenv("CFBD_API_KEY") or os.getenv("CFBD_API_TOKEN")
     if not api_key:
-        raise RuntimeError("Missing CFBD_API_KEY/CFBD_API_TOKEN and outcomes are required.")
+        raise RuntimeError(
+            "Missing CFBD_API_KEY/CFBD_API_TOKEN and outcomes are required."
+        )
 
     headers = {"Authorization": f"Bearer {api_key}", "Accept": "application/json"}
     url = "https://api.collegefootballdata.com/games"
@@ -207,7 +211,10 @@ def _ensure_outcomes(
             continue
         updated.at[idx, "home_points"] = scores.get("home_points")
         updated.at[idx, "away_points"] = scores.get("away_points")
-        if scores.get("home_points") is not None and scores.get("away_points") is not None:
+        if (
+            scores.get("home_points") is not None
+            and scores.get("away_points") is not None
+        ):
             filled += 1
 
     updated["margin"] = updated["home_points"] - updated["away_points"]
@@ -300,7 +307,10 @@ def integrate_weekly_files(
         inputs: list[tuple[str, Path]] = []
         for wk in weeks:
             inputs.append(
-                (f"week{int(wk):02d}", get_weekly_training_file(week=int(wk), season=season))
+                (
+                    f"week{int(wk):02d}",
+                    get_weekly_training_file(week=int(wk), season=season),
+                )
             )
         if include_postseason:
             inputs.append(("postseason", get_postseason_training_file(season=season)))
@@ -313,7 +323,11 @@ def integrate_weekly_files(
             df = _load_csv(path)
             _require_columns(df, REQUIRED_COLUMNS, label=label)
             df = _ensure_outcomes(
-                df, label=label, season=season, hub=hub, require_outcomes=require_outcomes
+                df,
+                label=label,
+                season=season,
+                hub=hub,
+                require_outcomes=require_outcomes,
             )
             df = _align_to_master_schema(
                 df,
@@ -448,4 +462,3 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

@@ -41,9 +41,11 @@ def _fetch_graphql_ratings(season: int) -> pd.DataFrame:
     """Fetch SP+, FPI, SRS, Elo via GraphQL."""
     # Check if GraphQL is explicitly disabled
     if os.getenv("CFBD_GRAPHQL_DISABLED", "false").lower() == "true":
-        logger.debug("GraphQL explicitly disabled via CFBD_GRAPHQL_DISABLED; skipping SP+/FPI fetch.")
+        logger.debug(
+            "GraphQL explicitly disabled via CFBD_GRAPHQL_DISABLED; skipping SP+/FPI fetch."
+        )
         return pd.DataFrame()
-    
+
     try:
         from src.data_sources.cfbd_graphql import CFBDGraphQLClient  # type: ignore
     except ImportError:
@@ -73,7 +75,15 @@ def _fetch_graphql_ratings(season: int) -> pd.DataFrame:
         df["team"] = df["team"].apply(_normalize_team_name)
         df["season"] = season
         df["source"] = "graphql"
-        keep_cols = ["team", "season", "sp_rating", "fpi_rating", "elo_rating", "srs_rating", "source"]
+        keep_cols = [
+            "team",
+            "season",
+            "sp_rating",
+            "fpi_rating",
+            "elo_rating",
+            "srs_rating",
+            "source",
+        ]
         return df[keep_cols]
     except Exception as exc:  # pragma: no cover - network dependent
         logger.warning("GraphQL ratings fetch failed: %s", exc)
@@ -153,7 +163,17 @@ def load_cfbd_ratings(
         if col not in df.columns:
             df[col] = pd.NA
 
-    df = df[["team", "season", "sp_rating", "fpi_rating", "elo_rating", "srs_rating", "source"]]
+    df = df[
+        [
+            "team",
+            "season",
+            "sp_rating",
+            "fpi_rating",
+            "elo_rating",
+            "srs_rating",
+            "source",
+        ]
+    ]
     df = df.dropna(subset=["team"]).drop_duplicates(subset=["team"])
 
     cache_path.parent.mkdir(parents=True, exist_ok=True)
@@ -162,4 +182,3 @@ def load_cfbd_ratings(
 
 
 __all__ = ["load_cfbd_ratings"]
-

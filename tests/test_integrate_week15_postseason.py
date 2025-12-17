@@ -76,7 +76,9 @@ def _create_full_schema_columns() -> List[str]:
 def test_file_loading_week15(tmp_path: Path) -> None:
     """Test that week 15 file is loaded correctly."""
     project_root = _mini_project_root(tmp_path)
-    week15_path = project_root / "data" / "training" / "weekly" / "training_data_2025_week15.csv"
+    week15_path = (
+        project_root / "data" / "training" / "weekly" / "training_data_2025_week15.csv"
+    )
     _write_csv(
         week15_path,
         [
@@ -103,7 +105,11 @@ def test_file_loading_postseason(tmp_path: Path) -> None:
     """Test that postseason file is loaded correctly."""
     project_root = _mini_project_root(tmp_path)
     postseason_path = (
-        project_root / "data" / "training" / "weekly" / "training_data_2025_postseason.csv"
+        project_root
+        / "data"
+        / "training"
+        / "weekly"
+        / "training_data_2025_postseason.csv"
     )
     _write_csv(
         postseason_path,
@@ -132,9 +138,15 @@ def test_integration_creates_backup_and_writes_master(tmp_path: Path) -> None:
     project_root = _mini_project_root(tmp_path)
 
     master_path = project_root / "model_pack" / "updated_training_data.csv"
-    week15_path = project_root / "data" / "training" / "weekly" / "training_data_2025_week15.csv"
+    week15_path = (
+        project_root / "data" / "training" / "weekly" / "training_data_2025_week15.csv"
+    )
     postseason_path = (
-        project_root / "data" / "training" / "weekly" / "training_data_2025_postseason.csv"
+        project_root
+        / "data"
+        / "training"
+        / "weekly"
+        / "training_data_2025_postseason.csv"
     )
 
     _write_csv(
@@ -180,7 +192,9 @@ def test_integration_creates_backup_and_writes_master(tmp_path: Path) -> None:
         ],
     )
 
-    module = _load_module("integrate_week15_postseason", Path("scripts/integrate_week15_postseason.py"))
+    module = _load_module(
+        "integrate_week15_postseason", Path("scripts/integrate_week15_postseason.py")
+    )
 
     result = module.integrate_week15_postseason(base_path=project_root)
 
@@ -202,9 +216,15 @@ def test_integration_dedupes_on_id_keep_last(tmp_path: Path) -> None:
     project_root = _mini_project_root(tmp_path)
 
     master_path = project_root / "model_pack" / "updated_training_data.csv"
-    week15_path = project_root / "data" / "training" / "weekly" / "training_data_2025_week15.csv"
+    week15_path = (
+        project_root / "data" / "training" / "weekly" / "training_data_2025_week15.csv"
+    )
     postseason_path = (
-        project_root / "data" / "training" / "weekly" / "training_data_2025_postseason.csv"
+        project_root
+        / "data"
+        / "training"
+        / "weekly"
+        / "training_data_2025_postseason.csv"
     )
 
     _write_csv(
@@ -250,7 +270,9 @@ def test_integration_dedupes_on_id_keep_last(tmp_path: Path) -> None:
         ],
     )
 
-    module = _load_module("integrate_week15_postseason", Path("scripts/integrate_week15_postseason.py"))
+    module = _load_module(
+        "integrate_week15_postseason", Path("scripts/integrate_week15_postseason.py")
+    )
     result = module.integrate_week15_postseason(base_path=project_root)
 
     assert result["duplicates_removed"] == 1
@@ -267,9 +289,15 @@ def test_schema_validation_catches_mismatches(tmp_path: Path) -> None:
     project_root = _mini_project_root(tmp_path)
 
     master_path = project_root / "model_pack" / "updated_training_data.csv"
-    week15_path = project_root / "data" / "training" / "weekly" / "training_data_2025_week15.csv"
+    week15_path = (
+        project_root / "data" / "training" / "weekly" / "training_data_2025_week15.csv"
+    )
     postseason_path = (
-        project_root / "data" / "training" / "weekly" / "training_data_2025_postseason.csv"
+        project_root
+        / "data"
+        / "training"
+        / "weekly"
+        / "training_data_2025_postseason.csv"
     )
 
     # Create dataframes with different columns
@@ -314,7 +342,9 @@ def test_schema_validation_catches_mismatches(tmp_path: Path) -> None:
     )
     master_df.to_csv(master_path, index=False)
 
-    module = _load_module("integrate_week15_postseason", Path("scripts/integrate_week15_postseason.py"))
+    module = _load_module(
+        "integrate_week15_postseason", Path("scripts/integrate_week15_postseason.py")
+    )
 
     with pytest.raises(ValueError, match="Schema mismatch"):
         module.integrate_week15_postseason(base_path=project_root)
@@ -324,9 +354,15 @@ def test_required_columns_validation(tmp_path: Path) -> None:
     """Test that missing required columns are caught."""
     project_root = _mini_project_root(tmp_path)
 
-    week15_path = project_root / "data" / "training" / "weekly" / "training_data_2025_week15.csv"
+    week15_path = (
+        project_root / "data" / "training" / "weekly" / "training_data_2025_week15.csv"
+    )
     postseason_path = (
-        project_root / "data" / "training" / "weekly" / "training_data_2025_postseason.csv"
+        project_root
+        / "data"
+        / "training"
+        / "weekly"
+        / "training_data_2025_postseason.csv"
     )
 
     # Missing 'id' column
@@ -353,7 +389,9 @@ def test_required_columns_validation(tmp_path: Path) -> None:
     )
     postseason_df.to_csv(postseason_path, index=False)
 
-    module = _load_module("integrate_week15_postseason", Path("scripts/integrate_week15_postseason.py"))
+    module = _load_module(
+        "integrate_week15_postseason", Path("scripts/integrate_week15_postseason.py")
+    )
 
     with pytest.raises(ValueError, match="Missing required columns"):
         module.integrate_week15_postseason(base_path=project_root)
@@ -364,9 +402,15 @@ def test_dry_run_mode(tmp_path: Path) -> None:
     project_root = _mini_project_root(tmp_path)
 
     master_path = project_root / "model_pack" / "updated_training_data.csv"
-    week15_path = project_root / "data" / "training" / "weekly" / "training_data_2025_week15.csv"
+    week15_path = (
+        project_root / "data" / "training" / "weekly" / "training_data_2025_week15.csv"
+    )
     postseason_path = (
-        project_root / "data" / "training" / "weekly" / "training_data_2025_postseason.csv"
+        project_root
+        / "data"
+        / "training"
+        / "weekly"
+        / "training_data_2025_postseason.csv"
     )
 
     original_master = pd.DataFrame(
@@ -412,7 +456,9 @@ def test_dry_run_mode(tmp_path: Path) -> None:
         ],
     )
 
-    module = _load_module("integrate_week15_postseason", Path("scripts/integrate_week15_postseason.py"))
+    module = _load_module(
+        "integrate_week15_postseason", Path("scripts/integrate_week15_postseason.py")
+    )
     result = module.integrate_week15_postseason(dry_run=True, base_path=project_root)
 
     assert result["dry_run"] is True
@@ -427,9 +473,15 @@ def test_rollback_on_validation_failure(tmp_path: Path) -> None:
     project_root = _mini_project_root(tmp_path)
 
     master_path = project_root / "model_pack" / "updated_training_data.csv"
-    week15_path = project_root / "data" / "training" / "weekly" / "training_data_2025_week15.csv"
+    week15_path = (
+        project_root / "data" / "training" / "weekly" / "training_data_2025_week15.csv"
+    )
     postseason_path = (
-        project_root / "data" / "training" / "weekly" / "training_data_2025_postseason.csv"
+        project_root
+        / "data"
+        / "training"
+        / "weekly"
+        / "training_data_2025_postseason.csv"
     )
 
     original_master = pd.DataFrame(
@@ -475,7 +527,9 @@ def test_rollback_on_validation_failure(tmp_path: Path) -> None:
         ],
     )
 
-    module = _load_module("integrate_week15_postseason", Path("scripts/integrate_week15_postseason.py"))
+    module = _load_module(
+        "integrate_week15_postseason", Path("scripts/integrate_week15_postseason.py")
+    )
 
     # Should raise ValueError during validation
     with pytest.raises(ValueError, match="Null values in critical columns"):
@@ -492,9 +546,15 @@ def test_observability_events_emitted(tmp_path: Path) -> None:
     project_root = _mini_project_root(tmp_path)
 
     master_path = project_root / "model_pack" / "updated_training_data.csv"
-    week15_path = project_root / "data" / "training" / "weekly" / "training_data_2025_week15.csv"
+    week15_path = (
+        project_root / "data" / "training" / "weekly" / "training_data_2025_week15.csv"
+    )
     postseason_path = (
-        project_root / "data" / "training" / "weekly" / "training_data_2025_postseason.csv"
+        project_root
+        / "data"
+        / "training"
+        / "weekly"
+        / "training_data_2025_postseason.csv"
     )
 
     _write_csv(
@@ -540,7 +600,9 @@ def test_observability_events_emitted(tmp_path: Path) -> None:
         ],
     )
 
-    module = _load_module("integrate_week15_postseason", Path("scripts/integrate_week15_postseason.py"))
+    module = _load_module(
+        "integrate_week15_postseason", Path("scripts/integrate_week15_postseason.py")
+    )
 
     # Get the hub instance to check events
     hub = module.ObservabilityHub.instance()
@@ -562,7 +624,9 @@ def test_missing_files_error(tmp_path: Path) -> None:
     project_root = _mini_project_root(tmp_path)
 
     # Don't create the files
-    module = _load_module("integrate_week15_postseason", Path("scripts/integrate_week15_postseason.py"))
+    module = _load_module(
+        "integrate_week15_postseason", Path("scripts/integrate_week15_postseason.py")
+    )
 
     with pytest.raises(FileNotFoundError):
         module.integrate_week15_postseason(base_path=project_root)

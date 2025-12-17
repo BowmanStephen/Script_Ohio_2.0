@@ -22,7 +22,6 @@ from typing import Any, Iterable
 
 import pandas as pd
 
-
 CANDIDATE_GAME_ID_COLS = [
     "gameId",
     "game_id",
@@ -195,9 +194,7 @@ def audit(season: int, starter_data_dir: Path, include_online: bool) -> dict[str
     adv_game_stats_path = starter_data_dir / "advanced_game_stats" / f"{season}.csv"
     drives_path = starter_data_dir / "drives" / f"drives_{season}.csv"
     season_stats_path = starter_data_dir / "season_stats" / f"{season}.csv"
-    adv_season_stats_path = (
-        starter_data_dir / "advanced_season_stats" / f"{season}.csv"
-    )
+    adv_season_stats_path = starter_data_dir / "advanced_season_stats" / f"{season}.csv"
     plays_dir = starter_data_dir / "plays" / str(season)
 
     notes: list[str] = []
@@ -452,11 +449,11 @@ def write_report(manifest: dict[str, Any], out_path: Path) -> None:
                 preview = ds["missing_game_ids"][:20]
                 lines.append(f"- Missing gameIds: **{len(ds['missing_game_ids'])}**")
                 lines.append(f"  - First 20: `{preview}`")
-        lines.append(
-            f"- Weeks present: `{ds.get('present_weeks', [])}`"
-        )
+        lines.append(f"- Weeks present: `{ds.get('present_weeks', [])}`")
         if ds.get("missing_weeks"):
-            lines.append(f"- Missing weeks: **{len(ds['missing_weeks'])}** → `{ds['missing_weeks']}`")
+            lines.append(
+                f"- Missing weeks: **{len(ds['missing_weeks'])}** → `{ds['missing_weeks']}`"
+            )
         if ds.get("notes"):
             lines.append("- Notes:")
             for n in ds["notes"]:

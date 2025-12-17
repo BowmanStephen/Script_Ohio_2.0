@@ -81,7 +81,9 @@ def _filter_games_by_window(
     return df[mask].copy()
 
 
-def _generate_folds(config: WalkForwardConfig, df: pd.DataFrame) -> List[ValidationFold]:
+def _generate_folds(
+    config: WalkForwardConfig, df: pd.DataFrame
+) -> List[ValidationFold]:
     """Generate validation folds based on configuration strategy."""
     folds = []
     fold_id = 0
@@ -91,7 +93,9 @@ def _generate_folds(config: WalkForwardConfig, df: pd.DataFrame) -> List[Validat
         for test_season in range(config.season_start + 1, config.season_end + 1):
             for test_week in range(config.week_start, 16, config.step_size_weeks):
                 train_end_season = test_season - 1
-                train_end_week = None if test_season > config.season_start + 1 else test_week - 1
+                train_end_week = (
+                    None if test_season > config.season_start + 1 else test_week - 1
+                )
 
                 train_df = _filter_games_by_window(
                     df,
@@ -104,7 +108,10 @@ def _generate_folds(config: WalkForwardConfig, df: pd.DataFrame) -> List[Validat
                     df, test_season, test_season, test_week, test_week
                 )
 
-                if len(train_df) >= config.min_train_games and len(test_df) >= config.min_test_games:
+                if (
+                    len(train_df) >= config.min_train_games
+                    and len(test_df) >= config.min_test_games
+                ):
                     folds.append(
                         ValidationFold(
                             fold_id=fold_id,
@@ -129,7 +136,9 @@ def _generate_folds(config: WalkForwardConfig, df: pd.DataFrame) -> List[Validat
         else:
             window_size = config.window_size_seasons
 
-        for test_season in range(config.season_start + window_size, config.season_end + 1):
+        for test_season in range(
+            config.season_start + window_size, config.season_end + 1
+        ):
             for test_week in range(config.week_start, 16, config.step_size_weeks):
                 train_start_season = test_season - window_size
                 train_end_season = test_season - 1
@@ -146,7 +155,10 @@ def _generate_folds(config: WalkForwardConfig, df: pd.DataFrame) -> List[Validat
                     df, test_season, test_season, test_week, test_week
                 )
 
-                if len(train_df) >= config.min_train_games and len(test_df) >= config.min_test_games:
+                if (
+                    len(train_df) >= config.min_train_games
+                    and len(test_df) >= config.min_test_games
+                ):
                     folds.append(
                         ValidationFold(
                             fold_id=fold_id,
@@ -171,7 +183,9 @@ def _generate_folds(config: WalkForwardConfig, df: pd.DataFrame) -> List[Validat
         else:
             window_size = config.window_size_seasons
 
-        for test_season in range(config.season_start + window_size, config.season_end + 1):
+        for test_season in range(
+            config.season_start + window_size, config.season_end + 1
+        ):
             for test_week in range(config.week_start, 16, config.step_size_weeks):
                 train_start_season = test_season - window_size
                 train_end_season = test_season - 1
@@ -187,7 +201,10 @@ def _generate_folds(config: WalkForwardConfig, df: pd.DataFrame) -> List[Validat
                     df, test_season, test_season, test_week, test_week
                 )
 
-                if len(train_df) >= config.min_train_games and len(test_df) >= config.min_test_games:
+                if (
+                    len(train_df) >= config.min_train_games
+                    and len(test_df) >= config.min_test_games
+                ):
                     folds.append(
                         ValidationFold(
                             fold_id=fold_id,
@@ -360,4 +377,3 @@ def run_walk_forward_validation(
 
 
 __all__ = ["WalkForwardConfig", "ValidationFold", "run_walk_forward_validation"]
-
