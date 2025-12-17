@@ -398,6 +398,58 @@ class ContextManager:
             pass
         return []
 
+    def _calculate_context_quality(self, context: Dict[str, Any]) -> float:
+        """
+        Calculate quality score for a context (0.0 to 1.0)
+
+        Factors considered:
+        - Data completeness
+        - Number of available notebooks
+        - Optimization effectiveness
+        - Presence of recommended models
+
+        Args:
+            context: Context dictionary to evaluate
+
+        Returns:
+            Quality score between 0.0 and 1.0
+        """
+        score = 0.0
+        max_score = 4.0
+
+        # Factor 1: Data completeness (0-1)
+        if 'data' in context and context['data']:
+            data_score = 0.5
+            if isinstance(context['data'], dict):
+                data_keys = len(context['data'].keys())
+                data_score = min(1.0, 0.5 + (data_keys * 0.1))
+            score += data_score
+
+        # Factor 2: Notebook availability (0-1)
+        if 'notebooks' in context and context['notebooks']:
+            notebooks = context['notebooks']
+            if isinstance(notebooks, list):
+                notebook_score = min(1.0, len(notebooks) / 5.0)  # Normalize to 5 notebooks
+                score += notebook_score
+
+        # Factor 3: Optimization metadata quality (0-1)
+        if 'optimization_metadata' in context:
+            metadata = context['optimization_metadata']
+            opt_score = 0.5
+            if metadata.get('optimization_applied', False):
+                savings = metadata.get('savings_percentage', 0)
+                opt_score = 0.5 + min(0.5, savings / 100.0)  # Bonus for effective optimization
+            score += opt_score
+
+        # Factor 4: Model recommendations (0-1)
+        if 'recommended_models' in context and context['recommended_models']:
+            models = context['recommended_models']
+            if isinstance(models, list):
+                model_score = min(1.0, len(models) / 3.0)  # Normalize to 3 models
+                score += model_score
+
+        return min(1.0, score / max_score)
+
     def _load_data_for_role(self, profile: ContextProfile) -> Dict[str, Any]:
         """Load data appropriate for the user role"""
         data_path = Path(self.base_path) / "model_pack"
