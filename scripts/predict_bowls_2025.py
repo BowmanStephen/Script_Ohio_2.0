@@ -21,6 +21,7 @@ Output format:
 
 import json
 import os
+import shutil
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -136,6 +137,15 @@ def predict_game_outcome(home_team, away_team, ratings_df, home_field_advantage=
     return home_win_prob, predicted_margin
 
 
+def backup_file_if_exists(file_path: Path):
+    """Create backup of file if it exists."""
+    if file_path.exists():
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        backup_path = file_path.parent / f"{file_path.stem}_backup_{timestamp}{file_path.suffix}"
+        shutil.copy2(file_path, backup_path)
+        print(f"⚠️ Backed up existing file to: {backup_path}")
+
+
 def main():
     """Main function to generate bowl predictions."""
     print("🏈 Starting bowls 2025 prediction script")
@@ -191,23 +201,35 @@ def main():
         }
         predictions.append(prediction)
     
-    # Create output JSON
+    # Create output JSON - Massey specific filename
     output_data = {
         "generated_at": datetime.now().isoformat() + "Z",
-        "model": "simple-rating-diff-v1",
+        "model": "massey-rating-diff-v1",
+        "model_type": "massey_ratings",
         "season": 2025,
+        "home_field_advantage": home_field_advantage,
         "games": predictions
     }
-    
-    # Write output
-    output_path = PROJECT_ROOT / "predictions" / "bowls_2025_predictions.json"
+
+    # Write output - use Massey-specific filename to avoid conflicts
+    output_path = PROJECT_ROOT / "predictions" / "bowls_2025_predictions_massey.json"
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    
+
+    # Safety: Check if file exists and warn
+    if output_path.exists():
+        print(f"⚠️ File {output_path} already exists")
+        response = input("Overwrite? (y/N): ")
+        if response.lower() != 'y':
+            print("❌ Aborted - file would be overwritten")
+            return 1
+        backup_file_if_exists(output_path)
+
     with open(output_path, 'w') as f:
         json.dump(output_data, f, indent=2)
-    
-    print(f"✅ Generated {len(predictions)} bowl predictions")
+
+    print(f"✅ Generated {len(predictions)} Massey-based bowl predictions")
     print(f"✅ Output saved to: {output_path}")
+    print(f"   Model: Massey rating difference with HFA={home_field_advantage:.2f}")
     
     # Show sample predictions
     if predictions:

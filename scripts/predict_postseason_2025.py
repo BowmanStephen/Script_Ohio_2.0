@@ -18,7 +18,10 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
+import subprocess
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import Optional, Sequence
@@ -65,7 +68,77 @@ def _ensure_features(df: pd.DataFrame, features: Sequence[str]) -> pd.DataFrame:
     return df
 
 
-def predict_postseason_2025(*, include_incomplete: bool = True, output_format: str = "csv") -> Path:
+def get_git_info() -> dict:
+    """Get git information for tracking."""
+    try:
+        git_sha = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            capture_output=True,
+            text=True,
+            cwd=PROJECT_ROOT
+        ).stdout.strip()
+
+        git_branch = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            capture_output=True,
+            text=True,
+            cwd=PROJECT_ROOT
+        ).stdout.strip()
+
+        git_dirty = subprocess.run(
+            ["git", "status", "--porcelain"],
+            capture_output=True,
+            text=True,
+            cwd=PROJECT_ROOT
+        ).stdout.strip() != ""
+
+        return {
+            "sha": git_sha,
+            "branch": git_branch,
+            "dirty": git_dirty,
+            "short_sha": git_sha[:8] if git_sha else "unknown"
+        }
+    except Exception:
+        return {
+            "sha": "unknown",
+            "branch": "unknown",
+            "dirty": False,
+            "short_sha": "unknown"
+        }
+
+
+def backup_file_if_exists(file_path: Path) -> Optional[Path]:
+    """Create backup of file if it exists."""
+    if file_path.exists():
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        backup_path = file_path.parent / f"{file_path.stem}_backup_{timestamp}{file_path.suffix}"
+        shutil.copy2(file_path, backup_path)
+        print(f"⚠️ Backed up existing file to: {backup_path}")
+        return backup_path
+    return None
+
+
+def analyze_margin_distribution(margins: list) -> dict:
+    """Analyze prediction margin distribution."""
+    import numpy as np
+    margins = [m for m in margins if pd.notna(m)]
+
+    if not margins:
+        return {"error": "No valid margins found"}
+
+    margins_array = np.array(margins)
+    return {
+        "count": len(margins),
+        "min": float(np.min(margins_array)),
+        "max": float(np.max(margins_array)),
+        "mean": float(np.mean(margins_array)),
+        "std": float(np.std(margins_array)),
+        "range": float(np.max(margins_array) - np.min(margins_array))
+    }
+
+
+def predict_postseason_2025(*, include_incomplete: bool = True, output_format: str = "csv",
+                           dry_run: bool = False, timestamp_output: bool = False) -> Path:
     configure_logging(service_name="predict_postseason_2025")
     logger = get_logger(__name__, component="predictions")
     hub = ObservabilityHub.instance()
@@ -94,9 +167,24 @@ def predict_postseason_2025(*, include_incomplete: bool = True, output_format: s
     output_dir.mkdir(parents=True, exist_ok=True)
 
     if output_format == "json":
-        # JSON output format for MVP
-        output_path = PROJECT_ROOT / "predictions" / "bowls_2025_predictions.json"
-        
+        # JSON output format for MVP - ML specific filename
+        base_filename = "bowls_2025_predictions_ml"
+        if timestamp_output:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            output_filename = f"{base_filename}_{timestamp}.json"
+        else:
+            output_filename = f"{base_filename}.json"
+
+        output_path = PROJECT_ROOT / "predictions" / output_filename
+
+        # Safety: Check if file exists and warn
+        if output_path.exists() and not dry_run:
+            response = input(f"⚠️ File {output_path} already exists. Overwrite? (y/N): ")
+            if response.lower() != 'y':
+                print("❌ Aborted - file would be overwritten")
+                return output_path
+            backup_file_if_exists(output_path)
+
         games = []
         for _, row in out.iterrows():
             game = {
@@ -108,16 +196,72 @@ def predict_postseason_2025(*, include_incomplete: bool = True, output_format: s
                 "predicted_margin": float(row["predicted_margin"]) if pd.notna(row["predicted_margin"]) else None,
             }
             games.append(game)
-        
+
+        # Get model info
+        model_dir = PROJECT_ROOT / "model_pack"
+        ridge_path = model_dir / "ridge_model_2025.joblib"
+        xgb_path = model_dir / "xgb_home_win_model_2025.pkl"
+
+        # Get model version/timestamp from file modification time
+        ridge_mtime = datetime.fromtimestamp(ridge_path.stat().st_mtime).isoformat() if ridge_path.exists() else None
+        xgb_mtime = datetime.fromtimestamp(xgb_path.stat().st_mtime).isoformat() if xgb_path.exists() else None
+
+        # Get data version info
+        data_path = postseason_path
+        data_mtime = datetime.fromtimestamp(data_path.stat().st_mtime).isoformat() if data_path.exists() else None
+
+        # Get git info
+        git_info = get_git_info()
+
+        # Analyze margins for diagnostics
+        margins = out["predicted_margin"].tolist()
+        margin_analysis = analyze_margin_distribution(margins)
+
+        # Check margin distribution warning
+        if margin_analysis.get("range", 0) < 5.0:
+            print(f"⚠️ WARNING: Margin distribution range is only {margin_analysis.get('range', 0):.1f} points (< 5 points)")
+            print("   This may indicate conservative predictions or data issues")
+
         output_data = {
             "generated_at": datetime.now().isoformat() + "Z",
             "season": 2025,
+            "model_type": "ml_ensemble",
+            "git": git_info,
+            "model": {
+                "name": "Ridge + XGBoost Ensemble (ML)",
+                "ridge_model": "ridge_model_2025.joblib",
+                "xgb_model": "xgb_home_win_model_2025.pkl",
+                "ridge_version": ridge_mtime,
+                "xgb_version": xgb_mtime,
+            },
+            "data": {
+                "source": str(postseason_path.name),
+                "version": data_mtime,
+                "include_incomplete": include_incomplete
+            },
+            "diagnostics": {
+                "margin_distribution": margin_analysis,
+                "total_games": len(games),
+                "predictions_generated": datetime.now().isoformat() + "Z"
+            },
             "games": games,
         }
-        
+
+        if dry_run:
+            print(f"🔍 DRY RUN - Would write {len(games)} predictions to: {output_path}")
+            print(f"   Margin range: {margin_analysis.get('range', 0):.1f} points")
+            print(f"   Git SHA: {git_info['short_sha']}")
+            return output_path
+
+        output_path.parent.mkdir(parents=True, exist_ok=True)
         with open(output_path, "w") as f:
             json.dump(output_data, f, indent=2)
-        
+
+        print(f"✅ Generated {len(games)} ML predictions")
+        print(f"   Output: {output_path}")
+        print(f"   Git: {git_info['short_sha']} ({git_info['branch']})")
+        print(f"   Margin range: {margin_analysis.get('range', 0):.1f} points")
+
         hub.emit_event("predict.success", {"rows": int(len(out)), "output": str(output_path), "format": "json"})
         logger.info("Wrote postseason predictions (JSON)", extra={"output": str(output_path), "rows": int(len(out))})
     else:
@@ -132,6 +276,28 @@ def predict_postseason_2025(*, include_incomplete: bool = True, output_format: s
     return output_path
 
 
+def ensure_snapshots_exist(season: int, snapshot_dir: Path) -> None:
+    """
+    Validate that required snapshots exist.
+    
+    Args:
+        season: Season year
+        snapshot_dir: Directory containing snapshots
+        
+    Raises:
+        SystemExit: If snapshots are missing
+    """
+    required_snapshot = snapshot_dir / f"games_{season}_postseason.json"
+    if not required_snapshot.exists():
+        error_msg = (
+            f"❌ Snapshot not found: {required_snapshot}\n"
+            f"   Run: python scripts/cfbd_refresh_snapshots.py --season {season} --refresh-all"
+        )
+        print(error_msg, file=sys.stderr)
+        raise SystemExit(1)
+    print(f"✅ Snapshot validated: {required_snapshot}")
+
+
 def _parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--postseason-only", action="store_true")
@@ -141,20 +307,46 @@ def _parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
         default="csv",
         help="Output format: csv (default) or json",
     )
+    parser.add_argument(
+        "--use-snapshots",
+        action="store_true",
+        help="Validate that snapshots exist before running predictions. "
+             "Ensures data pipeline used snapshots for data preparation.",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Validate and show what would be generated without writing files",
+    )
+    parser.add_argument(
+        "--timestamp-output",
+        action="store_true",
+        help="Add timestamp to output filename to avoid overwriting",
+    )
     return parser.parse_args(argv)
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
     args = _parse_args(argv)
-    
+
+    # Validate snapshots if --use-snapshots is set
+    if args.use_snapshots:
+        snapshot_dir = PROJECT_ROOT / "data" / "raw" / "cfbd"
+        ensure_snapshots_exist(season=2025, snapshot_dir=snapshot_dir)
+
     # Check for CFBD_API_KEY if needed (though this script reads from CSV, not API)
     # This is a safeguard per plan requirements
     if not os.getenv("CFBD_API_KEY") and args.format == "json":
         # Note: This script doesn't actually need CFBD_API_KEY since it reads from CSV
         # But we check it as a safeguard per MVP requirements
         print("Warning: CFBD_API_KEY not set (this script reads from CSV, so it may not be needed)")
-    
-    predict_postseason_2025(include_incomplete=not args.postseason_only, output_format=args.format)
+
+    predict_postseason_2025(
+        include_incomplete=not args.postseason_only,
+        output_format=args.format,
+        dry_run=args.dry_run,
+        timestamp_output=args.timestamp_output
+    )
     return 0
 
 
