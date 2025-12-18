@@ -47,5 +47,22 @@
     },
     "error_count": 0,
     "warning_count": 0
+  },
+  {
+    "timestamp": "2025-12-18T19:16:14.948211+00:00",
+    "total_agents": 5,
+    "active_agents": 5,
+    "cpu_usage": 33.2,
+    "memory_usage": 66.5,
+    "disk_usage": 4.9,
+    "agent_response_times": {
+      "audit_coordinator_agent": 0.54,
+      "system_integrity_agent": 0.87,
+      "data_pipeline_agent": 1.45,
+      "model_validation_agent": 0.9,
+      "cfbd_features_coordinator": 1.27
+    },
+    "error_count": 0,
+    "warning_count": 0
   }
 ]

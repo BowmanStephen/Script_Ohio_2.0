@@ -17,8 +17,8 @@
       "cpu": 0.0,
       "memory": 0.0
     },
-    "health_score": 1.0,
-    "last_health_check": "2025-12-18T18:36:46.901080+00:00",
+    "health_score": 0.9,
+    "last_health_check": "2025-12-18T19:16:13.935734+00:00",
     "dependencies": [
       "audit_agents",
       "reporting_engine"
@@ -43,8 +43,8 @@
       "cpu": 0.0,
       "memory": 0.0
     },
-    "health_score": 1.0,
-    "last_health_check": "2025-12-18T18:36:55.052525+00:00",
+    "health_score": 0.9,
+    "last_health_check": "2025-12-18T19:16:13.935737+00:00",
     "dependencies": [],
     "metadata": {}
   },
@@ -66,8 +66,8 @@
       "cpu": 0.0,
       "memory": 0.0
     },
-    "health_score": 1.0,
-    "last_health_check": "2025-12-18T18:36:55.053045+00:00",
+    "health_score": 0.9,
+    "last_health_check": "2025-12-18T19:16:13.935739+00:00",
     "dependencies": [],
     "metadata": {}
   },
@@ -89,9 +89,36 @@
       "cpu": 0.0,
       "memory": 0.0
     },
-    "health_score": 1.0,
-    "last_health_check": "2025-12-18T18:36:55.053360+00:00",
+    "health_score": 0.9,
+    "last_health_check": "2025-12-18T19:16:13.935740+00:00",
     "dependencies": [],
+    "metadata": {}
+  },
+  "cfbd_features_coordinator": {
+    "agent_id": "cfbd_features_coordinator",
+    "agent_name": "CFBD Features Coordinator",
+    "class_name": "CFBDFeaturesCoordinatorAgent",
+    "file_path": "agents/cfbd_features_coordinator_agent.py",
+    "created_at": "2025-12-18T19:14:34.991421+00:00",
+    "created_by": "system",
+    "status": "active",
+    "capabilities": [
+      "coordinate_feature_integration",
+      "monitor_integration_progress",
+      "coordinate_feature_dependencies",
+      "optimize_feature_performance"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-18T19:16:13.935742+00:00",
+    "dependencies": [
+      "cfbd_client",
+      "feature_engineering",
+      "meta_agent"
+    ],
     "metadata": {}
   }
 }

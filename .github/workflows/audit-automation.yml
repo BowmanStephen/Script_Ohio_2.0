@@ -1,0 +1,356 @@
+name: 🔍 Production Audit Automation
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run comprehensive audit daily at 8 AM UTC
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+    inputs:
+      audit_type:
+        description: 'Type of audit to run'
+        required: false
+        default: 'quick'
+        type: choice
+        options:
+          - quick
+          - comprehensive
+          - domain
+      domain:
+        description: 'Domain to audit (for domain audits)'
+        required: false
+        type: string
+      alert_on_failure:
+        description: 'Send alerts on audit failures'
+        required: false
+        default: true
+        type: boolean
+
+jobs:
+  production-audit:
+    name: Production Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov flake8 black
+
+      - name: 🔍 Run syntax validation
+        run: |
+          echo "🔍 Validating Python syntax..."
+          find . -name "*.py" -exec python3 -m py_compile {} \;
+          echo "✅ All Python files compile successfully"
+
+      - name: 🧪 Run unit tests
+        run: |
+          echo "🧪 Running test suite..."
+          python3 -m pytest agents/tests -q --tb=short
+          if [ $? -ne 0 ]; then
+            echo "❌ Tests failed"
+            exit 1
+          fi
+          echo "✅ All tests passed"
+
+      - name: 🔧 Run type checking
+        run: |
+          echo "🔧 Running type checking..."
+          mypy agents/ src/ scripts/ --ignore-missing-imports || echo "⚠️ Type checking completed with warnings"
+
+      - name: 🎨 Run linting
+        run: |
+          echo "🎨 Running code linting..."
+          black --check agents/ src/ scripts/
+          flake8 agents/ src/ scripts/ --max-line-length=100 --ignore=E203,W503 || echo "⚠️ Linting completed with warnings"
+
+      - name: 🛡️ Run security audit
+        run: |
+          echo "🛡️ Running security audit..."
+          pip-audit || echo "⚠️ Security audit completed with warnings"
+          bandit -r agents/ src/ scripts/ -f json -o security-report.json || echo "⚠️ Security analysis completed"
+
+      - name: 📊 Setup audit configuration
+        run: |
+          echo "📊 Setting up audit configuration..."
+          # Create production directories
+          mkdir -p production_audit_reports/metrics
+          mkdir -p logs/audit_production
+          mkdir -p config
+
+          # Set CFBD API key (if available)
+          if [ -n "$CFBD_API_KEY" ]; then
+            export CFBD_API_KEY="$CFBD_API_KEY"
+            echo "✅ CFBD API key configured"
+          else
+            echo "⚠️ CFBD API key not configured - some checks may be skipped"
+          fi
+
+      - name: 🔍 Determine audit type
+        id: audit-type
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            echo "audit_type=comprehensive" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "audit_type=${{ github.event.inputs.audit_type }}" >> $GITHUB_OUTPUT
+          else
+            echo "audit_type=quick" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 🚀 Run Production Audit
+        run: |
+          echo "🚀 Running production audit: ${{ steps.audit-type.outputs.audit_type }}"
+
+          # Set up environment for audit
+          export PYTHONPATH="${{ github.workspace }}"
+
+          # Run the audit
+          if [ "${{ steps.audit-type.outputs.audit_type }}" = "domain" ]; then
+            python3 scripts/production_audit.py \
+              --audit-type domain \
+              --domain system
+          else
+            python3 scripts/production_audit.py \
+              --audit-type "${{ steps.audit-type.outputs.audit_type }}"
+          fi
+
+          # Check audit results and set exit code
+          AUDIT_EXIT_CODE=$?
+          echo "📊 Audit exit code: $AUDIT_EXIT_CODE"
+
+          # Save audit results
+          if [ -f production_audit_reports/metrics/audit_metrics_*.json ]; then
+            LATEST_METRICS=$(ls -t production_audit_reports/metrics/audit_metrics_*.json | head -1)
+            cp "$LATEST_METRICS" audit_results.json
+
+            # Extract key metrics for reporting
+            SCORE=$(jq -r '.overall_score // 0' audit_results.json 2>/dev/null || echo "0")
+            CRITICAL=$(jq -r '.critical_failures // 0' audit_results.json 2>/dev/null || echo "0")
+            echo "📊 Audit Score: $SCORE%"
+            echo "🚨 Critical Issues: $CRITICAL"
+
+            echo "audit_score=$SCORE" >> $GITHUB_ENV
+            echo "critical_failures=$CRITICAL" >> $GITHUB_ENV
+          fi
+
+          # Exit with audit result
+          exit $AUDIT_EXIT_CODE
+
+      - name: 📋 Upload audit results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-results-${{ github.run_number }}
+          path: |
+            production_audit_reports/
+            logs/audit_production/
+            audit_results.json
+          retention-days: 30
+
+      - name: 📈 Generate audit summary
+        if: always()
+        run: |
+          echo "## 🔍 Production Audit Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|--------|" >> $GITHUB_STEP_SUMMARY
+
+          if [ -f audit_results.json ]; then
+            SCORE=$(jq -r '.overall_score // 0' audit_results.json 2>/dev/null || echo "N/A")
+            CRITICAL=$(jq -r '.critical_failures // 0' audit_results.json 2>/dev/null || echo "N/A")
+            EXECUTION=$(jq -r '.execution_time // 0' audit_results.json 2>/dev/null || echo "N/A")
+
+            STATUS="✅ Passed"
+            if [ "${{ steps.audit-type.outputs.audit_type }}" = "comprehensive" ]; then
+              if [ "$SCORE" -lt 80 ] || [ "$CRITICAL" -gt 0 ]; then
+                STATUS="❌ Failed"
+              elif [ "$SCORE" -lt 90 ]; then
+                STATUS="⚠️ Warning"
+              fi
+            else
+              if [ "$CRITICAL" -gt 0 ]; then
+                STATUS="❌ Failed"
+              elif [ "$SCORE" -lt 80 ]; then
+                STATUS="⚠️ Warning"
+              fi
+            fi
+
+            echo "| Audit Type | ${{ steps.audit-type.outputs.audit_type }} | $STATUS |" >> $GITHUB_STEP_SUMMARY
+            echo "| Score | $SCORE% | $STATUS |" >> $GITHUB_STEP_SUMMARY
+            echo "| Critical Issues | $CRITICAL | $STATUS |" >> $GITHUB_STEP_SUMMARY
+            echo "| Execution Time | ${EXECUTION}s | $STATUS |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Audit | Results not available | ⚠️ |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: 🚨 Send alert on failure
+        if: failure() && (github.event_name == 'schedule' || github.event.inputs.alert_on_failure == 'true')
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "🚨 Production Audit Failed - Script Ohio 2.0"
+          to: ${{ secrets.ALERT_EMAIL }}
+          from: Script Ohio 2.0 Alerts
+          body: |
+            The production audit has failed!
+
+            Repository: ${{ github.repository }}
+            Branch: ${{ github.ref }}
+            Commit: ${{ github.sha }}
+            Run Number: ${{ github.run_number }}
+            Triggered by: ${{ github.event_name }}
+
+            Audit Type: ${{ steps.audit-type.outputs.audit_type }}
+            Score: ${{ env.audit_score || 'N/A' }}%
+            Critical Failures: ${{ env.critical_failures || 'N/A' }}
+
+            Please investigate the audit results immediately.
+
+            View details: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+      - name: 📊 Check audit thresholds
+        if: always()
+        run: |
+          # Check if audit meets quality thresholds
+          if [ -f audit_results.json ]; then
+            SCORE=$(jq -r '.overall_score // 0' audit_results.json 2>/dev/null || echo "0")
+            CRITICAL=$(jq -r '.critical_failures // 0' audit_results.json 2>/dev/null || echo "0")
+
+            echo "📊 Audit Quality Metrics:"
+            echo "  Score: $SCORE% (threshold: 80%)"
+            echo "  Critical Failures: $CRITICAL (threshold: 0)"
+
+            # Determine quality gate status
+            QUALITY_GATE="PASSED"
+            if [ "$CRITICAL" -gt 0 ]; then
+              QUALITY_GATE="FAILED - Critical failures detected"
+            elif [ "$SCORE" -lt 80 ]; then
+              QUALITY_GATE="FAILED - Score below threshold"
+            fi
+
+            echo "  Quality Gate: $QUALITY_GATE"
+            echo "quality_gate=$QUALITY_GATE" >> $GITHUB_ENV
+
+            # Set job status
+            if [ "$QUALITY_GATE" = "PASSED" ]; then
+              echo "✅ Production audit meets quality standards"
+            else
+              echo "❌ Production audit failed quality gate"
+              exit 1
+            fi
+          else
+            echo "⚠️ No audit results available for quality gate check"
+          fi
+
+  security-scan:
+    name: 🔐 Security Scan
+    runs-on: ubuntu-latest
+    if: github.event == 'schedule' || github.event == 'workflow_dispatch'
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install bandit safety semgrep
+
+      - name: 🔍 Run Bandit security scan
+        run: |
+          echo "🔍 Running Bandit security analysis..."
+          bandit -r agents/ src/ scripts/ -f json -o bandit-report.json || true
+
+          # Check for high-severity issues
+          HIGH_SEVERITY=$(jq -r '.results | map(select(.issue_severity == "HIGH")) | length' bandit-report.json 2>/dev/null || echo "0")
+          echo "High severity issues: $HIGH_SEVERITY"
+
+          if [ "$HIGH_SEVERITY" -gt 0 ]; then
+            echo "❌ Found high severity security issues"
+            echo "bandit_high_severity=$HIGH_SEVERITY" >> $GITHUB_ENV
+          else
+            echo "✅ No high severity security issues found"
+          fi
+
+      - name: 🔍 Run Safety vulnerability scan
+        run: |
+          echo "🔍 Running Safety vulnerability scan..."
+          safety check --json --output safety-report.json || true
+
+          # Parse safety results
+          VULNS=$(jq -r '.vulnerabilities | length' safety-report.json 2>/dev/null || echo "0")
+          echo "Vulnerabilities found: $VULNS"
+
+          if [ "$VULNS" -gt 0 ]; then
+            echo "⚠️ Found $VULNS security vulnerabilities"
+            echo "safety_vulnerabilities=$VULNS" >> $GITHUB_ENV
+          else
+            echo "✅ No security vulnerabilities found"
+          fi
+
+      - name: 🔍 Run Semgrep analysis
+        run: |
+          echo "🔍 Running Semgrep code analysis..."
+          semgrep --config=auto --json --output semgrep-report.json . || true
+
+          echo "✅ Semgrep analysis completed"
+
+      - name: 📋 Upload security reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-reports-${{ github.run_number }}
+          path: |
+            bandit-report.json
+            safety-report.json
+            semgrep-report.json
+          retention-days: 30
+
+  cleanup:
+    name: 🧹 Cleanup Old Reports
+    runs-on: ubuntu-latest
+    if: github.event == 'schedule'
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: 🧹 Clean up old audit reports
+        run: |
+          echo "🧹 Cleaning up audit reports older than 7 days..."
+          python3 scripts/production_audit.py --cleanup-only
+
+          # Clean up logs older than 30 days
+          find logs/audit_production -name "*.log" -mtime +30 -delete 2>/dev/null || true
+          find production_audit_reports/metrics -name "*.json" -mtime +7 -delete 2>/dev/null || true
+
+          echo "✅ Cleanup completed"

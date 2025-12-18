@@ -11,6 +11,7 @@ import { ValueOpportunitiesView } from './simulator/ValueOpportunitiesView';
 import { ModelPerformanceView } from './simulator/ModelPerformanceView';
 import { PredictionsTableView } from './simulator/PredictionsTableView';
 import { ATSView } from './simulator/ATSView';
+import { AuditDashboardView } from './AuditDashboardView';
 import { ErrorBoundary } from './ErrorBoundary';
 import { week14Games } from '../data/week14Games';
 import { predictGame, calculateWCFLPoints, modelPerformance } from '../utils/predictionLogic';
@@ -305,6 +306,7 @@ const MLSimulator: React.FC = () => {
 
                 {(predictions.length > 0 || atsData.length > 0) && (
                     <ErrorBoundary>
+                        {selectedView === 'audit' && <AuditDashboardView />}
                         {selectedView === 'ats' && (
                             <ATSView
                                 atsData={atsData}
