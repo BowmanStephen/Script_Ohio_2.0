@@ -1,7 +1,6 @@
 """Shared data-source utilities for Script Ohio 2.0."""
 
 from .cfbd_cache_manager import CFBDCacheConfig, CFBDCacheManager
-from .cfbd_client import CFBDClientConfig, CFBDRESTDataSource, build_cfbd_rest_client
 
 try:
     from .cfbd_graphql import CFBDGraphQLClient
@@ -12,9 +11,6 @@ except ImportError:
     GRAPHQL_AVAILABLE = False
 
 __all__ = [
-    "CFBDClientConfig",
-    "CFBDRESTDataSource",
-    "build_cfbd_rest_client",
     "CFBDCacheManager",
     "CFBDCacheConfig",
 ]

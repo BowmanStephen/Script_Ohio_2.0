@@ -87,7 +87,7 @@ class ModelValidationAuditAgent(BaseAgent):
             title="Ridge Model Loading",
             description="Validate Ridge regression model can be loaded",
             validation_command="python3 -c 'import joblib; model = joblib.load(\"model_pack/ridge_model_2025.joblib\"); print(\"Ridge model loaded successfully\")'",
-            expected_pattern="Ridge model loaded successfully",
+            expected_result="Ridge model loaded successfully",
             critical=True
         )
 
@@ -135,7 +135,7 @@ class ModelValidationAuditAgent(BaseAgent):
             title="XGBoost Model Loading",
             description="Validate XGBoost model can be loaded",
             validation_command="python3 -c 'import pickle; model = pickle.load(open(\"model_pack/xgb_home_win_model_2025.pkl\", \"rb\")); print(\"XGBoost model loaded successfully\")'",
-            expected_pattern="XGBoost model loaded successfully",
+            expected_result="XGBoost model loaded successfully",
             critical=True
         )
 
@@ -183,7 +183,7 @@ class ModelValidationAuditAgent(BaseAgent):
             title="FastAI Model Loading",
             description="Validate FastAI model loading (with mock fallback acceptable)",
             validation_command="python3 -c 'import pickle; try: model = pickle.load(open(\"model_pack/fastai_home_win_model_2025.pkl\", \"rb\")); print(\"FastAI model loaded\"); except: print(\"FastAI model using mock (acceptable)\")'",
-            expected_pattern="FastAI model loaded or using mock (acceptable)",
+            expected_result="FastAI model loaded or using mock (acceptable)",
             critical=False  # FastAI pickle issues are known and acceptable
         )
 
@@ -248,7 +248,7 @@ class ModelValidationAuditAgent(BaseAgent):
             title="Model Prediction Interface",
             description="Validate models have prediction methods available",
             validation_command="python3 -c 'from src.models.random_forest import RandomForestModel; print(\"Model prediction interface available\")'",
-            expected_pattern="Model prediction interface available",
+            expected_result="Model prediction interface available",
             critical=True
         )
 
@@ -296,7 +296,7 @@ class ModelValidationAuditAgent(BaseAgent):
             title="Bowl Predictions Generation",
             description="Validate bowl predictions can be generated",
             validation_command="python3 -c 'import subprocess; result = subprocess.run([\"python3\", \"scripts/predict_bowls_2025.py\", \"--dry-run\"], capture_output=True, text=True); print(\"Dry run completed\" if result.returncode == 0 else \"Dry run failed\")'",
-            expected_pattern="Dry run completed",
+            expected_result="Dry run completed",
             critical=True
         )
 
@@ -345,7 +345,7 @@ class ModelValidationAuditAgent(BaseAgent):
             title="Prediction File Structure",
             description="Validate prediction files have expected structure",
             validation_command="find predictions/ -name 'bowls_2025_predictions_*.json' -exec echo 'Found prediction file:' {} \\;",
-            expected_pattern="Prediction files found with valid JSON structure",
+            expected_result="Prediction files found with valid JSON structure",
             critical=False
         )
 
@@ -421,7 +421,7 @@ class ModelValidationAuditAgent(BaseAgent):
             title="Model Performance Tracking",
             description="Validate model performance is tracked and available",
             validation_command="python3 -c 'from src.models.metadata import ModelMetadata; print(\"Model metadata tracking available\")'",
-            expected_pattern="Model metadata tracking available",
+            expected_result="Model metadata tracking available",
             critical=False
         )
 
@@ -469,7 +469,7 @@ class ModelValidationAuditAgent(BaseAgent):
             title="Training Data Completeness",
             description="Validate training data is complete for performance evaluation",
             validation_command="python3 -c 'from model_pack.utils.path_utils import get_training_data_file; import pandas as pd; df = pd.read_csv(get_training_data_file()); print(f\"Training data complete: {len(df) > 4000} games\")'",
-            expected_pattern="Training data complete: True games",
+            expected_result="Training data complete: True games",
             critical=False
         )
 
@@ -533,7 +533,7 @@ class ModelValidationAuditAgent(BaseAgent):
             title="Ensemble Methods Availability",
             description="Validate ensemble model methods are implemented",
             validation_command="python3 -c '# Check for ensemble implementation in notebooks' ; import glob ; ensemble_notebooks = [f for f in glob.glob(\"model_pack/*.ipynb\") if \"ensemble\" in f.lower()] ; print(f\"Found {len(ensemble_notebooks)} ensemble notebooks\")'",
-            expected_pattern="Found >= 1 ensemble notebooks",
+            expected_result="Found >= 1 ensemble notebooks",
             critical=False
         )
 
@@ -581,7 +581,7 @@ class ModelValidationAuditAgent(BaseAgent):
             title="Multiple Model Types",
             description="Validate multiple model types are available (Ridge, XGBoost, FastAI)",
             validation_command="ls -la model_pack/*_model_2025.*",
-            expected_pattern="Multiple model files found",
+            expected_result="Multiple model files found",
             critical=True
         )
 

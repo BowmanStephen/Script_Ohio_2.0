@@ -9,7 +9,7 @@ from unittest.mock import MagicMock, Mock
 
 import pandas as pd
 import pytest
-from src.data_sources.cfbd_client import CFBDRESTDataSource
+from src.cfbd_client.unified_client import UnifiedCFBDClient
 from src.data_sources.cfbd_graphql import CFBDGraphQLClient
 from src.features.cfbd_feature_engineering import (
     CFBDFeatureEngineer,

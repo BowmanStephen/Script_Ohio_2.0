@@ -40,7 +40,7 @@ from model_pack.utils.cfbd_advanced_metrics import (
     ADVANCED_METRIC_COLUMNS,
     AdvancedMetricsBuilder,
 )
-from src.cfbd_client.client import CFBDClient, CFBDClientError
+from src.cfbd_client.unified_client import UnifiedCFBDClient
 from starter_pack.utils.cfbd_loader import RateLimiter
 
 # Configuration

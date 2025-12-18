@@ -85,7 +85,7 @@ class DataPipelineAuditAgent(BaseAgent):
             title="CFBD API Key Configuration",
             description="Validate CFBD API key is properly configured",
             validation_command="python3 -c 'import os; print(\"API Key Present:\" , bool(os.environ.get(\"CFBD_API_KEY\")))'",
-            expected_pattern="API Key Present: True",
+            expected_result="API Key Present: True",
             critical=True
         )
 
@@ -133,7 +133,7 @@ class DataPipelineAuditAgent(BaseAgent):
             title="CFBD Client Instantiation",
             description="Validate CFBD unified client can be instantiated",
             validation_command="python3 -c 'from src.cfbd_client.unified_client import UnifiedCFBDClient; client = UnifiedCFBDClient(); print(\"CFBD client instantiated successfully\")'",
-            expected_pattern="CFBD client instantiated successfully",
+            expected_result="CFBD client instantiated successfully",
             critical=True
         )
 
@@ -149,7 +149,7 @@ class DataPipelineAuditAgent(BaseAgent):
                 evidence_type=EvidenceType.SYSTEM_CALL,
                 claim="CFBD client can be instantiated",
                 command="Instantiate UnifiedCFBDClient",
-                expected_pattern="CFBD client instantiated successfully",
+                expected_result="CFBD client instantiated successfully",
                 actual_result=result.stdout.strip(),
                 passed="CFBD client instantiated successfully" in result.stdout,
                 execution_time=execution_time
@@ -164,7 +164,7 @@ class DataPipelineAuditAgent(BaseAgent):
                 evidence_type=EvidenceType.SYSTEM_CALL,
                 claim="CFBD client can be instantiated",
                 command="Instantiate UnifiedCFBDClient",
-                expected_pattern="CFBD client instantiated successfully",
+                expected_result="CFBD client instantiated successfully",
                 actual_result=f"Error: {str(e)}",
                 passed=False,
                 execution_time=0.0
@@ -181,7 +181,7 @@ class DataPipelineAuditAgent(BaseAgent):
             title="CFBD Rate Limiting",
             description="Validate CFBD API rate limiting is properly implemented",
             validation_command="python3 -c 'from src.cfbd_client.unified_client import UnifiedCFBDClient; import time; client = UnifiedCFBDClient(); start = time.time(); # Test rate limiting compliance'",
-            expected_pattern="Rate limiting compliance verified",
+            expected_result="Rate limiting compliance verified",
             critical=False
         )
 
@@ -202,7 +202,7 @@ class DataPipelineAuditAgent(BaseAgent):
                 evidence_type=EvidenceType.CODE_ANALYSIS,
                 claim="CFBD rate limiting is implemented",
                 command="Check unified_client.py for rate limiting implementation",
-                expected_pattern="Rate limiting code present",
+                expected_result="Rate limiting code present",
                 actual_result="Rate limiting implementation found" if rate_limiting_present else "No rate limiting implementation found",
                 passed=rate_limiting_present,
                 execution_time=execution_time
@@ -217,7 +217,7 @@ class DataPipelineAuditAgent(BaseAgent):
                 evidence_type=EvidenceType.CODE_ANALYSIS,
                 claim="CFBD rate limiting is implemented",
                 command="Check unified_client.py for rate limiting implementation",
-                expected_pattern="Rate limiting code present",
+                expected_result="Rate limiting code present",
                 actual_result=f"Error: {str(e)}",
                 passed=False,
                 execution_time=0.0
@@ -248,7 +248,7 @@ class DataPipelineAuditAgent(BaseAgent):
             title="Master Training Data Availability",
             description="Validate master training data file exists and is accessible",
             validation_command="python3 -c 'from model_pack.utils.path_utils import get_training_data_file; print(\"Training data:\", get_training_data_file())'",
-            expected_pattern="Training data file path returned",
+            expected_result="Training data file path returned",
             critical=True
         )
 
@@ -299,7 +299,7 @@ class DataPipelineAuditAgent(BaseAgent):
             title="Training Data Structure",
             description="Validate training data has expected structure and features",
             validation_command="python3 -c 'import pandas as pd; from model_pack.utils.path_utils import get_training_data_file; df = pd.read_csv(get_training_data_file()); print(f\"Shape: {df.shape}, Columns: {len(df.columns)}\")'",
-            expected_pattern="Data loaded with expected structure (>= 4000 rows, >= 80 columns)",
+            expected_result="Data loaded with expected structure (>= 4000 rows, >= 80 columns)",
             critical=True
         )
 
@@ -361,7 +361,7 @@ class DataPipelineAuditAgent(BaseAgent):
             title="Training Data Freshness",
             description="Validate training data includes recent seasons (2025)",
             validation_command="python3 -c 'import pandas as pd; from model_pack.utils.path_utils import get_training_data_file; df = pd.read_csv(get_training_data_file()); print(f\"Season range: {df[\"season\"].min()} - {df[\"season\"].max()}\")'",
-            expected_pattern="Season range includes 2025",
+            expected_result="Season range includes 2025",
             critical=False
         )
 
@@ -432,7 +432,7 @@ class DataPipelineAuditAgent(BaseAgent):
             title="Feature Engineering Module",
             description="Validate feature engineering modules are available",
             validation_command="python3 -c 'from src.features.cfbd_feature_engineering import *; print(\"Feature engineering modules imported successfully\")'",
-            expected_pattern="Feature engineering modules imported successfully",
+            expected_result="Feature engineering modules imported successfully",
             critical=True
         )
 
@@ -480,7 +480,7 @@ class DataPipelineAuditAgent(BaseAgent):
             title="Feature Count Validation",
             description="Validate expected number of features (86 opponent-adjusted features)",
             validation_command="python3 -c 'from src.features.cfbd_feature_engineering import create_features; print(\"Feature engineering function available\")'",
-            expected_pattern="Feature engineering function available",
+            expected_result="Feature engineering function available",
             critical=False
         )
 
@@ -502,7 +502,7 @@ class DataPipelineAuditAgent(BaseAgent):
                 evidence_type=EvidenceType.CODE_ANALYSIS,
                 claim="Feature engineering creates 86 opponent-adjusted features",
                 command="Check feature engineering code for 86 features",
-                expected_pattern="86 opponent-adjusted features implemented",
+                expected_result="86 opponent-adjusted features implemented",
                 actual_result="Feature engineering code structure found" if feature_count_ok else "Feature engineering structure not found",
                 passed=feature_count_ok,
                 execution_time=execution_time
@@ -517,7 +517,7 @@ class DataPipelineAuditAgent(BaseAgent):
                 evidence_type=EvidenceType.CODE_ANALYSIS,
                 claim="Feature engineering creates 86 opponent-adjusted features",
                 command="Check feature engineering code for 86 features",
-                expected_pattern="86 opponent-adjusted features implemented",
+                expected_result="86 opponent-adjusted features implemented",
                 actual_result=f"Error: {str(e)}",
                 passed=False,
                 execution_time=0.0
@@ -548,7 +548,7 @@ class DataPipelineAuditAgent(BaseAgent):
             title="Missing Values Validation",
             description="Validate training data has acceptable missing value rates",
             validation_command="python3 -c 'import pandas as pd; from model_pack.utils.path_utils import get_training_data_file; df = pd.read_csv(get_training_data_file()); missing_rate = df.isnull().sum().sum() / df.size; print(f\"Missing value rate: {missing_rate:.3%}\")'",
-            expected_pattern="Missing value rate < 5%",
+            expected_result="Missing value rate < 5%",
             critical=False
         )
 
@@ -567,7 +567,7 @@ class DataPipelineAuditAgent(BaseAgent):
                 evidence_type=EvidenceType.CODE_ANALYSIS,
                 claim="Training data has acceptable missing value rates",
                 command="Calculate missing value rate in training data",
-                expected_pattern="Missing value rate < 5%",
+                expected_result="Missing value rate < 5%",
                 actual_result=f"Missing value rate: {missing_rate:.3%}",
                 passed=missing_acceptable,
                 execution_time=execution_time
@@ -582,7 +582,7 @@ class DataPipelineAuditAgent(BaseAgent):
                 evidence_type=EvidenceType.CODE_ANALYSIS,
                 claim="Training data has acceptable missing value rates",
                 command="Calculate missing value rate in training data",
-                expected_pattern="Missing value rate < 5%",
+                expected_result="Missing value rate < 5%",
                 actual_result=f"Error: {str(e)}",
                 passed=False,
                 execution_time=0.0
@@ -599,7 +599,7 @@ class DataPipelineAuditAgent(BaseAgent):
             title="Data Consistency",
             description="Validate data consistency across seasons and weeks",
             validation_command="python3 -c 'import pandas as pd; from model_pack.utils.path_utils import get_training_data_file; df = pd.read_csv(get_training_data_file()); print(f\"Unique seasons: {df[\"season\"].nunique()}, Unique weeks: {df[\"week\"].nunique()}\")'",
-            expected_pattern="Multiple seasons and weeks represented",
+            expected_result="Multiple seasons and weeks represented",
             critical=False
         )
 
@@ -624,7 +624,7 @@ class DataPipelineAuditAgent(BaseAgent):
                 evidence_type=EvidenceType.CODE_ANALYSIS,
                 claim="Training data has good consistency across seasons and weeks",
                 command="Check data diversity across seasons and weeks",
-                expected_pattern="Multiple seasons and weeks",
+                expected_result="Multiple seasons and weeks",
                 actual_result=consistency_info,
                 passed=consistency_ok,
                 execution_time=execution_time
@@ -639,7 +639,7 @@ class DataPipelineAuditAgent(BaseAgent):
                 evidence_type=EvidenceType.CODE_ANALYSIS,
                 claim="Training data has good consistency across seasons and weeks",
                 command="Check data diversity across seasons and weeks",
-                expected_pattern="Multiple seasons and weeks",
+                expected_result="Multiple seasons and weeks",
                 actual_result=f"Error: {str(e)}",
                 passed=False,
                 execution_time=0.0

@@ -9,7 +9,6 @@ For new code, always use:
 """
 
 from .cfbd_cache_manager import CFBDCacheConfig, CFBDCacheManager
-from .client import CFBDClient  # Legacy client - for backward compatibility
 from .unified_client import UnifiedCFBDClient
 
-__all__ = ["UnifiedCFBDClient", "CFBDCacheManager", "CFBDCacheConfig", "CFBDClient"]
+__all__ = ["UnifiedCFBDClient", "CFBDCacheManager", "CFBDCacheConfig"]

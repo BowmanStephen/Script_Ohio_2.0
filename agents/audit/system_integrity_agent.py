@@ -87,7 +87,7 @@ class SystemIntegrityAuditAgent(BaseAgent):
             title="Python Version Compatibility",
             description="Validate Python version meets requirements (3.13+)",
             validation_command="python3 --version",
-            expected_pattern="Python 3.13",
+            expected_result="Python 3.13",
             critical=True
         )
 
@@ -100,7 +100,7 @@ class SystemIntegrityAuditAgent(BaseAgent):
                 evidence_type=EvidenceType.SYSTEM_CALL,
                 claim="Python 3.13+ is available",
                 command="python3 --version",
-                expected_pattern="Python 3.13",
+                expected_result="Python 3.13",
                 actual_result=result.stdout.strip(),
                 passed="Python 3.13" in result.stdout or "Python 3.12" in result.stdout,  # Accept 3.12 as well
                 execution_time=execution_time
@@ -115,7 +115,7 @@ class SystemIntegrityAuditAgent(BaseAgent):
                 evidence_type=EvidenceType.SYSTEM_CALL,
                 claim="Python 3.13+ is available",
                 command="python3 --version",
-                expected_pattern="Python 3.13",
+                expected_result="Python 3.13",
                 actual_result=f"Error: {str(e)}",
                 passed=False,
                 execution_time=0.0
@@ -132,7 +132,7 @@ class SystemIntegrityAuditAgent(BaseAgent):
             title="Core Dependencies Installation",
             description="Validate core dependencies are properly installed",
             validation_command="python3 -c 'import pandas, numpy, sklearn, xgboost, fastai; print(\"All core dependencies available\")'",
-            expected_pattern="All core dependencies available",
+            expected_result="All core dependencies available",
             critical=True
         )
 
@@ -148,7 +148,7 @@ class SystemIntegrityAuditAgent(BaseAgent):
                 evidence_type=EvidenceType.SYSTEM_CALL,
                 claim="Core ML dependencies are available",
                 command="python3 -c 'import pandas, numpy, sklearn, xgboost, fastai; print(\"All core dependencies available\")'",
-                expected_pattern="All core dependencies available",
+                expected_result="All core dependencies available",
                 actual_result=result.stdout.strip(),
                 passed="All core dependencies available" in result.stdout,
                 execution_time=execution_time
@@ -163,7 +163,7 @@ class SystemIntegrityAuditAgent(BaseAgent):
                 evidence_type=EvidenceType.SYSTEM_CALL,
                 claim="Core ML dependencies are available",
                 command="python3 -c 'import pandas, numpy, sklearn, xgboost, fastai; print(\"All core dependencies available\")'",
-                expected_pattern="All core dependencies available",
+                expected_result="All core dependencies available",
                 actual_result=f"Error: {str(e)}",
                 passed=False,
                 execution_time=0.0
@@ -180,7 +180,7 @@ class SystemIntegrityAuditAgent(BaseAgent):
             title="CFBD Client Integration",
             description="Validate CFBD client is properly configured and accessible",
             validation_command="python3 -c 'from src.cfbd_client.unified_client import UnifiedCFBDClient; print(\"CFBD client available\")'",
-            expected_pattern="CFBD client available",
+            expected_result="CFBD client available",
             critical=True
         )
 
@@ -196,7 +196,7 @@ class SystemIntegrityAuditAgent(BaseAgent):
                 evidence_type=EvidenceType.SYSTEM_CALL,
                 claim="CFBD unified client is available",
                 command="python3 -c 'from src.cfbd_client.unified_client import UnifiedCFBDClient; print(\"CFBD client available\")'",
-                expected_pattern="CFBD client available",
+                expected_result="CFBD client available",
                 actual_result=result.stdout.strip(),
                 passed="CFBD client available" in result.stdout,
                 execution_time=execution_time
@@ -211,7 +211,7 @@ class SystemIntegrityAuditAgent(BaseAgent):
                 evidence_type=EvidenceType.SYSTEM_CALL,
                 claim="CFBD unified client is available",
                 command="python3 -c 'from src.cfbd_client.unified_client import UnifiedCFBDClient; print(\"CFBD client available\")'",
-                expected_pattern="CFBD client available",
+                expected_result="CFBD client available",
                 actual_result=f"Error: {str(e)}",
                 passed=False,
                 execution_time=0.0
@@ -242,7 +242,7 @@ class SystemIntegrityAuditAgent(BaseAgent):
             title="Core Directory Structure",
             description="Validate essential project directories exist",
             validation_command="find . -maxdepth 1 -type d -name 'agents' -o -name 'src' -o -name 'scripts' -o -name 'model_pack'",
-            expected_pattern="agents src scripts model_pack",
+            expected_result="agents src scripts model_pack",
             critical=True
         )
 
@@ -292,7 +292,7 @@ class SystemIntegrityAuditAgent(BaseAgent):
             title="Configuration Files",
             description="Validate required configuration files are present",
             validation_command="find . -maxdepth 1 -name 'CLAUDE.md' -o -name 'requirements.txt' -o -name 'README.md'",
-            expected_pattern="CLAUDE.md requirements.txt README.md",
+            expected_result="CLAUDE.md requirements.txt README.md",
             critical=True
         )
 
@@ -342,7 +342,7 @@ class SystemIntegrityAuditAgent(BaseAgent):
             title="Model Files Availability",
             description="Validate trained model files are present and accessible",
             validation_command="find model_pack/ -name '*_model_2025.*' -type f",
-            expected_pattern="ridge_model_2025.joblib xgb_home_win_model_2025.pkl fastai_home_win_model_2025.pkl",
+            expected_result="ridge_model_2025.joblib xgb_home_win_model_2025.pkl fastai_home_win_model_2025.pkl",
             critical=True
         )
 
@@ -410,7 +410,7 @@ class SystemIntegrityAuditAgent(BaseAgent):
             title="Script Execution Permissions",
             description="Validate Python scripts are executable",
             validation_command="find scripts/ -name '*.py' -executable | head -5",
-            expected_pattern="Scripts should be executable",
+            expected_result="Scripts should be executable",
             critical=False
         )
 
@@ -462,7 +462,7 @@ class SystemIntegrityAuditAgent(BaseAgent):
             title="Data Directory Write Permissions",
             description="Validate write permissions for data directories",
             validation_command="test -w data/ && test -w predictions/ && echo 'Write permissions OK'",
-            expected_pattern="Write permissions OK",
+            expected_result="Write permissions OK",
             critical=True
         )
 
@@ -527,7 +527,7 @@ class SystemIntegrityAuditAgent(BaseAgent):
             title="Disk Space Availability",
             description="Validate sufficient disk space for operations",
             validation_command="df -h .",
-            expected_pattern="Available disk space > 1GB",
+            expected_result="Available disk space > 1GB",
             critical=True
         )
 
