@@ -82,7 +82,7 @@ class WeeklyAnalysisOrchestrator(BaseAgent):
                     "model_validation",
                     "prediction_generation",
                 ],
-                data_access=["data/", "analysis/", "predictions/", "model_pack/"],
+                data_access=["data/", "predictions/", "model_pack/"],
                 execution_time_estimate=30.0,
             ),
             AgentCapability(

@@ -10,7 +10,7 @@ A simple, open format for guiding coding agents, used by over 20k open-source pr
 - **Install dependencies**: `pip install -r requirements.txt`
 - **Install dev dependencies**: `pip install -r requirements-dev.txt` (if available)
 - **Bootstrap dev environment**: `scripts/bootstrap_dev_env.sh` (installs TypeScript CLI, Kiota, dotnet 9, pnpm/corepack)
-- **Set environment variables**: `export CFBD_API_KEY="your-api-key-here"` (required for CFBD API access)
+- **Set environment variables**: `export CFBD_API_KEY="3nSBeJV4ODZlJLxQZ/H0vWG3DRAfTSPU2PporK/5K+BJininva/bPx5G4iNjeOsb"` (required for CFBD API access)
 
 ## Code style
 

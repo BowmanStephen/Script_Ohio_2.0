@@ -60,7 +60,7 @@ print(f"Cache hit rate: {metrics.cache_hit_rate:.2%}")
 ### Environment Variables
 ```bash
 # Required for API access
-export CFBD_API_KEY="your-api-key-here"
+export CFBD_API_KEY="3nSBeJV4ODZlJLxQZ/H0vWG3DRAfTSPU2PporK/5K+BJininva/bPx5G4iNjeOsb"
 
 # Optional configurations
 export CFBD_HOST="https://api.collegefootballdata.com"  # or apinext host

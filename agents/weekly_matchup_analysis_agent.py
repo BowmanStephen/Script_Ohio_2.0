@@ -600,7 +600,7 @@ class WeeklyMatchupAnalysisAgent(BaseAgent):
         """Save comprehensive analysis results to files"""
 
         # Create output directory
-        output_dir = f"analysis/week{self.week}"
+        output_dir = f"predictions/week${WEEK:-13}/legacy/"
         os.makedirs(output_dir, exist_ok=True)
 
         # Save full analysis

@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-12-17T14:42:08.371177",
+  "tier_tested": "tier3",
+  "config": {
+    "host": "https://api.collegefootballdata.com",
+    "max_requests_per_second": 5,
+    "rate_limit_delay": 0.2
+  },
+  "basic_endpoints": false,
+  "advanced_metrics": {
+    "advanced_stats": "error",
+    "win_probability": "error",
+    "weather_data": "error"
+  },
+  "live_data": {
+    "live_scoreboard": "error",
+    "play_by_play": "error"
+  },
+  "graphql_access": false,
+  "weekly_training": true
+}

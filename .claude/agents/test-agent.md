@@ -1,5 +1,6 @@
 ---
 name: Test Agent
+description: A simple test agent for validating the Prompt Library Generator functionality
 ---
 
 # Test Agent

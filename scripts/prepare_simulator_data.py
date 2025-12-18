@@ -6,7 +6,7 @@ from pathlib import Path
 def prepare_simulator_data():
     # Define paths
     repo_root = Path(__file__).parent.parent
-    input_path = repo_root / "analysis/week13/week13_unified_data.json"
+    input_path = repo_root / "predictions/week${WEEK:-13}/legacy/"
     output_dir = repo_root / "web_app/src/data"
     output_path = output_dir / "week13_data.json"
 

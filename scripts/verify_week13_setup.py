@@ -185,7 +185,7 @@ def verify_directories() -> tuple[bool, list[str]]:
     messages = []
     directories = [
         ("data/week13/enhanced", "Week 13 enhanced data directory"),
-        ("analysis/week13", "Week 13 analysis directory"),
+        ("predictions/week${WEEK:-13}/legacy/", "Week 13 analysis directory"),
         ("predictions/week13", "Week 13 predictions directory"),
     ]
 

@@ -1,0 +1,174 @@
+{
+  "analysis_metadata": {
+    "timestamp": "2025-12-18T17:04:37",
+    "total_files_analyzed": 710,
+    "total_size_mb": 1704.73,
+    "file_types": {
+      "csv": 648,
+      "json": 32,
+      "joblib": 10,
+      "pkl": 20
+    }
+  },
+  "inventory_results": {
+    "summary": {
+      "total_files": 710,
+      "total_size_mb": 1704.73,
+      "largest_file": "model_pack/random_forest_model_2025.pkl (73.56 MB)",
+      "most_common_extension": "CSV files (648 total)"
+    },
+    "file_distribution": {
+      "by_extension": {
+        ".csv": 648,
+        ".json": 32,
+        ".joblib": 10,
+        ".pkl": 20
+      }
+    },
+    "largest_files": [
+      {
+        "path": "model_pack/random_forest_model_2025.pkl",
+        "size_mb": 73.56,
+        "type": "ML model artifact"
+      },
+      {
+        "path": "model_pack/rf_components/random_forest_home.joblib",
+        "size_mb": 37.01,
+        "type": "ML model component"
+      },
+      {
+        "path": "model_pack/rf_components/random_forest_away.joblib",
+        "size_mb": 36.55,
+        "type": "ML model component"
+      },
+      {
+        "path": "starter_pack/data/games.csv",
+        "size_mb": 22.1,
+        "type": "Historical games archive"
+      },
+      {
+        "path": "model_pack/2025_plays.csv",
+        "size_mb": 18.85,
+        "type": "Play-by-play data"
+      }
+    ],
+    "master_sources_identified": {
+      "training_data": "model_pack/updated_training_data.csv",
+      "historical_games": "starter_pack/data/games.csv",
+      "play_by_play": "starter_pack/data/plays/",
+      "advanced_stats": "starter_pack/data/advanced_game_stats/",
+      "season_stats": "starter_pack/data/season_stats/"
+    }
+  },
+  "lineage_analysis": {
+    "data_dependencies": {
+      "cfbd_integration": [
+        "src/cfbd_client/unified_client.py",
+        "scripts/cfbd_pull.py",
+        "scripts/build_training_data_from_cfbd.py"
+      ],
+      "model_training": [
+        "scripts/retrain_models_current.py",
+        "model_pack/*_training_*.ipynb"
+      ],
+      "weekly_analysis": [
+        "scripts/run_weekly_analysis.py",
+        "scripts/enhance_week13_analysis.py"
+      ],
+      "prediction_generation": [
+        "scripts/predict_bowls_2025.py"
+      ]
+    },
+    "data_flow_estimates": [
+      {
+        "source": "CFBD_API",
+        "destination": "scripts/build_training_data_from_cfbd.py",
+        "type": "data_ingestion"
+      },
+      {
+        "source": "model_pack/updated_training_data.csv",
+        "destination": "model training scripts",
+        "type": "model_training"
+      },
+      {
+        "source": "model_pack/*_model_2025.*",
+        "destination": "prediction scripts",
+        "type": "inference"
+      }
+    ],
+    "critical_pathways": {
+      "raw_to_features": "CFBD_API → scripts/build_training_data_from_cfbd.py → model_pack/updated_training_data.csv",
+      "features_to_models": "model_pack/updated_training_data.csv → model training → model_pack/*_model_2025.*",
+      "models_to_predictions": "model_pack/*_model_2025.* → scripts/predict_bowls_2025.py → predictions/"
+    }
+  },
+  "quality_assessment": {
+    "quality_issues": [],
+    "completeness_scores": {
+      "master_training_data": {
+        "rows": 4989,
+        "columns": 86,
+        "null_percentage": 0.0,
+        "quality_score": "excellent"
+      }
+    },
+    "overall_quality_score": 95,
+    "quality_factors": {
+      "data_completeness": "excellent",
+      "schema_consistency": "good",
+      "naming_conventions": "needs_improvement",
+      "documentation": "needs_improvement"
+    },
+    "identified_issues": [
+      {
+        "severity": "medium",
+        "issue": "Inconsistent naming conventions across files",
+        "impact": "Makes navigation and maintenance difficult"
+      },
+      {
+        "severity": "low",
+        "issue": "Scattered backup files throughout directories",
+        "impact": "Storage waste and version confusion"
+      }
+    ]
+  },
+  "architecture_assessment": {
+    "current_strengths": [
+      "Clear master training data source",
+      "Well-organized ML models in model_pack",
+      "Comprehensive historical data coverage",
+      "Automated weekly processing pipeline",
+      "Multiple prediction methods implemented"
+    ],
+    "identified_challenges": [
+      "File sprawl across multiple directories",
+      "Inconsistent naming conventions",
+      "Missing data lineage documentation",
+      "Scattered backup files",
+      "Limited automated validation"
+    ],
+    "data_lifecycle_stages": {
+      "ingestion": "CFBD API → Raw CSV files",
+      "processing": "Feature engineering pipeline → 86 features",
+      "training": "Updated training data → ML models",
+      "inference": "Models → Predictions and analysis",
+      "archival": "Backup and version management"
+    }
+  },
+  "reorganization_priorities": {
+    "high_priority": [
+      "Create consolidated data inventory manifest",
+      "Implement consistent naming conventions",
+      "Document data lineage and dependencies"
+    ],
+    "medium_priority": [
+      "Archive backup files systematically",
+      "Create automated validation scripts",
+      "Standardize directory structure"
+    ],
+    "low_priority": [
+      "Implement data versioning system",
+      "Create comprehensive documentation portal"
+    ]
+  }
+}

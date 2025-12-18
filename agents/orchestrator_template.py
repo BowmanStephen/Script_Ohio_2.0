@@ -72,7 +72,7 @@ class OrchestratorTemplate(BaseAgent):
                 description=f"Run complete {self.param1} analysis pipeline",
                 permission_required=PermissionLevel.ADMIN,
                 tools_required=["analysis", "validation"],
-                data_access=["data/", "analysis/", "model_pack/"],
+                data_access=["data/", "predictions/week${WEEK:-13}/legacy/", "model_pack/"],
                 execution_time_estimate=30.0,
             ),
             AgentCapability(

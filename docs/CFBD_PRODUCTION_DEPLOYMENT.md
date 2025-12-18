@@ -6,7 +6,7 @@
 
 ```bash
 # CFBD API Key (required)
-CFBD_API_KEY=your-api-key-here
+CFBD_API_KEY=3nSBeJV4ODZlJLxQZ/H0vWG3DRAfTSPU2PporK/5K+BJininva/bPx5G4iNjeOsb
 
 # Flask CORS (production: restrict to frontend origin)
 CORS_ORIGINS=https://your-frontend-domain.com

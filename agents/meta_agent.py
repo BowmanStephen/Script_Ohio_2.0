@@ -73,7 +73,7 @@ class MetaAgent(BaseAgent):
     def __init__(self):
         super().__init__(
             agent_id="meta_agent",
-            agent_name="Meta Agent - Master Controller",
+            name="Meta Agent - Master Controller",
             permission_level=PermissionLevel.ADMIN
         )
 
@@ -107,44 +107,50 @@ class MetaAgent(BaseAgent):
             AgentCapability(
                 name="register_agent",
                 description="Register a new agent in the ecosystem",
-                execution_time_estimate=2.0,
-                required_permissions=["admin"],
-                tools_used=["file_operations", "security_validation", "resource_allocation"]
+                permission_required=PermissionLevel.ADMIN,
+                tools_required=["file_operations", "security_validation", "resource_allocation"],
+                data_access=["agent_registry", "system_config"],
+                execution_time_estimate=2.0
             ),
             AgentCapability(
                 name="deactivate_agent",
                 description="Deactivate or remove an agent from the ecosystem",
-                execution_time_estimate=1.0,
-                required_permissions=["admin"],
-                tools_used=["resource_deallocation", "cleanup_operations"]
+                permission_required=PermissionLevel.ADMIN,
+                tools_required=["resource_deallocation", "cleanup_operations"],
+                data_access=["agent_registry"],
+                execution_time_estimate=1.0
             ),
             AgentCapability(
                 name="monitor_system",
                 description="Monitor system health and performance metrics",
-                execution_time_estimate=1.0,
-                required_permissions=["read", "system"],
-                tools_used=["system_monitoring", "performance_analysis"]
+                permission_required=PermissionLevel.READ_EXECUTE,
+                tools_required=["system_monitoring", "performance_analysis"],
+                data_access=["system_metrics", "agent_status"],
+                execution_time_estimate=1.0
             ),
             AgentCapability(
                 name="coordinate_agents",
                 description="Coordinate inter-agent communication and workflows",
-                execution_time_estimate=2.0,
-                required_permissions=["admin"],
-                tools_used=["message_routing", "workflow_orchestration"]
+                permission_required=PermissionLevel.ADMIN,
+                tools_required=["message_routing", "workflow_orchestration"],
+                data_access=["agent_registry", "communication_channels"],
+                execution_time_estimate=2.0
             ),
             AgentCapability(
                 name="audit_system",
                 description="Perform system audit and compliance checks",
-                execution_time_estimate=5.0,
-                required_permissions=["admin"],
-                tools_used=["audit_tools", "compliance_checker"]
+                permission_required=PermissionLevel.ADMIN,
+                tools_required=["audit_tools", "compliance_checker"],
+                data_access=["audit_logs", "system_history", "agent_registry"],
+                execution_time_estimate=5.0
             ),
             AgentCapability(
                 name="allocate_resources",
                 description="Allocate system resources among agents",
-                execution_time_estimate=1.5,
-                required_permissions=["admin"],
-                tools_used=["resource_manager", "load_balancer"]
+                permission_required=PermissionLevel.ADMIN,
+                tools_required=["resource_manager", "load_balancer"],
+                data_access=["resource_monitor", "agent_performance"],
+                execution_time_estimate=1.5
             )
         ]
 

@@ -30,7 +30,7 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
 # Set API key
-export CFBD_API_KEY="your-api-key-here"
+export CFBD_API_KEY="3nSBeJV4ODZlJLxQZ/H0vWG3DRAfTSPU2PporK/5K+BJininva/bPx5G4iNjeOsb"
 ```
 
 ### Basic Usage

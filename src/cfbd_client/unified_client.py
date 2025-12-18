@@ -35,6 +35,13 @@ except ImportError:
     # Fallback if config module not available
     from src.config.cfbd_config import CFBDConfig
 
+# Import the new authentication manager
+try:
+    from ..auth.authentication_manager import get_auth_manager
+except ImportError:
+    # Fallback if auth module not available
+    from src.auth.authentication_manager import get_auth_manager
+
 logger = logging.getLogger(__name__)
 
 
@@ -100,19 +107,17 @@ class UnifiedCFBDClient:
         logger.info(f"✅ Unified CFBD Client initialized: {self.config.host}")
 
     def _init_cfbd_client(self):
-        """Initialize CFBD API client with proper authentication"""
+        """Initialize CFBD API client with proper authentication using centralized auth manager"""
         try:
-            # Clean API key - remove "Bearer " prefix if present (CFBD expects raw key)
-            clean_key = (
-                self.config.api_key.replace("Bearer ", "").strip()
-                if self.config.api_key
-                else None
-            )
+            # Use the centralized authentication manager for consistent auth
+            auth_manager = get_auth_manager()
 
-            # Configure CFBD client
+            # Configure CFBD client with the working authentication pattern
             configuration = cfbd.Configuration()
-            configuration.access_token = clean_key
             configuration.host = self.config.host
+
+            # Let the auth manager configure authentication properly
+            auth_manager.configure_cfbd_client(configuration, "rest")
 
             # Create API client
             self.api_client = cfbd.ApiClient(configuration)

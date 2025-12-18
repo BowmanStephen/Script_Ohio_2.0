@@ -1,0 +1,164 @@
+{
+  "version": "1.0.0",
+  "created": "2025-12-17",
+  "description": "Claude Code + Z.AI optimization configuration for Super AI Agent Architecture",
+
+  "context_management": {
+    "phase_based_clearing": {
+      "enabled": true,
+      "preserve_on_clear": ["meta_agent_state", "current_task_context", "recent_agent_communications"],
+      "archive_path": "project_management/contexts/",
+      "max_context_tokens": 8000,
+      "compression_threshold": 6000
+    },
+    "dynamic_loading": {
+      "enabled": true,
+      "load_only_relevant_capabilities": true,
+      "context_priority_scoring": true,
+      "cache_frequently_accessed": true
+    },
+    "toon_format": {
+      "enabled": true,
+      "compression_ratio_target": 0.65,
+      "apply_to_all_responses": true,
+      "uniform_arrays_only": true
+    }
+  },
+
+  "memory_hierarchy": {
+    "level_1_meta_agent": {
+      "persistent": true,
+      "storage_path": "project_management/memory/meta_agent/",
+      "max_size_mb": 100,
+      "retention_days": 365,
+      "contents": ["system_state", "agent_registry", "performance_metrics"]
+    },
+    "level_2_orchestrators": {
+      "session_based": true,
+      "storage_path": "project_management/memory/orchestrators/",
+      "max_size_mb": 50,
+      "retention_hours": 24,
+      "contents": ["active_plans", "task_queues", "agent_assignments"]
+    },
+    "level_3_agents": {
+      "ephemeral": true,
+      "storage_path": "project_management/memory/agents/",
+      "max_size_mb": 20,
+      "retention_minutes": 60,
+      "contents": ["task_context", "intermediate_results"]
+    },
+    "level_4_cache": {
+      "temporary": true,
+      "storage_path": "project_management/memory/cache/",
+      "max_size_mb": 200,
+      "ttl_minutes": {
+        "cfbd_api_responses": 60,
+        "model_predictions": 1440,
+        "toon_outputs": 30
+      }
+    }
+  },
+
+  "agent_coordination": {
+    "lifecycle_management": {
+      "enabled": true,
+      "health_monitoring": true,
+      "auto_degrade_under_load": true,
+      "warm_up_cool_down_cycles": true,
+      "dynamic_allocation": true,
+      "max_concurrent_agents": 15,
+      "health_check_interval_seconds": 30
+    },
+    "communication": {
+      "routing": "meta_agent_central",
+      "message_prioritization": ["CRITICAL", "HIGH", "NORMAL", "LOW"],
+      "timeout_seconds": 30,
+      "async_non_blocking": true,
+      "message_compression": "toon"
+    },
+    "load_balancing": {
+      "cpu_threshold_percent": 70,
+      "memory_threshold_percent": 80,
+      "disk_threshold_percent": 90,
+      "enable_parallel_execution": true,
+      "enable_agent_caching": true,
+      "auto_scale_agent_pools": true
+    }
+  },
+
+  "workflow_automation": {
+    "weekly_analysis": {
+      "enabled": true,
+      "trigger": "meta_agent",
+      "parallel_execution": true,
+      "steps": [
+        "cfbd_integration_pull_data",
+        "model_execution_validate",
+        "weekly_matchup_analysis_process",
+        "meta_agent_synchronize",
+        "toon_format_outputs",
+        "auto_archive_results"
+      ],
+      "timeout_minutes": 45
+    },
+    "error_handling": {
+      "max_retry_attempts": 3,
+      "circuit_breaker_cfbd": true,
+      "graceful_degradation": ["ml_predictions", "simple_predictions", "massey_predictions"],
+      "comprehensive_error_logging": true,
+      "auto_recovery_patterns": true
+    }
+  },
+
+  "performance_optimization": {
+    "cfbd_integration": {
+      "rate_limit_requests_per_second": 6,
+      "intelligent_batching": true,
+      "request_deduplication": true,
+      "cache_priority": true,
+      "predictive_caching": true,
+      "background_refresh": true
+    },
+    "model_execution": {
+      "parallel_models": ["ridge", "xgboost", "fastai"],
+      "weight_averaging": true,
+      "confidence_intervals": true,
+      "auto_model_selection": true,
+      "ensemble_method": "weighted_average"
+    }
+  },
+
+  "claude_code_integration": {
+    "bridge_enabled": true,
+    "request_routing": "meta_agent",
+    "task_decomposition": true,
+    "progress_reporting": true,
+    "toon_responses": true,
+    "context_preservation": true,
+    "seamless_integration": true
+  },
+
+  "mcp_server_management": {
+    "health_monitoring": true,
+    "dynamic_selection": true,
+    "load_balancing": true,
+    "fallback_servers": true,
+    "critical_operations_fallback": true
+  },
+
+  "monitoring": {
+    "performance_metrics": {
+      "context_window_usage": true,
+      "agent_coordination_speed": true,
+      "memory_usage": true,
+      "api_efficiency": true,
+      "overall_performance": true
+    },
+    "alerts": {
+      "high_memory_usage": 85,
+      "slow_agent_response": 10,
+      "cfbd_api_failure_rate": 0.1,
+      "model_prediction_failure": 0.05
+    }
+  }
+}

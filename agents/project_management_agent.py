@@ -61,8 +61,8 @@ class ProjectManagementAgent(BaseAgent):
     def __init__(self):
         super().__init__(
             agent_id="project_management_agent",
-            agent_name="Project Management Agent",
-            permission_level=PermissionLevel.READ_WRITE_EXECUTE
+            name="Project Management Agent",
+            permission_level=PermissionLevel.READ_EXECUTE_WRITE
         )
 
         # Set up directory structure
@@ -82,37 +82,42 @@ class ProjectManagementAgent(BaseAgent):
             AgentCapability(
                 name="create_plan",
                 description="Create new project plan with milestones",
-                execution_time_estimate=2.0,
-                required_permissions=["write"],
-                tools_used=["file_operations", "toon_encoder"]
+                permission_required=PermissionLevel.READ_EXECUTE_WRITE,
+                tools_required=["file_operations", "toon_encoder"],
+                data_access=["project_management/plans", "project_management/progress"],
+                execution_time_estimate=2.0
             ),
             AgentCapability(
                 name="track_progress",
                 description="Track and update project progress",
-                execution_time_estimate=1.0,
-                required_permissions=["write"],
-                tools_used=["file_operations", "state_management"]
+                permission_required=PermissionLevel.READ_EXECUTE_WRITE,
+                tools_required=["file_operations", "state_management"],
+                data_access=["project_management/progress"],
+                execution_time_estimate=1.0
             ),
             AgentCapability(
                 name="get_plan_status",
                 description="Get current status of project plans",
-                execution_time_estimate=0.5,
-                required_permissions=["read"],
-                tools_used=["file_operations", "state_query"]
+                permission_required=PermissionLevel.READ_EXECUTE,
+                tools_required=["file_operations", "state_query"],
+                data_access=["project_management/plans", "project_management/progress"],
+                execution_time_estimate=0.5
             ),
             AgentCapability(
                 name="archive_plan",
                 description="Archive completed plans",
-                execution_time_estimate=1.0,
-                required_permissions=["write", "delete"],
-                tools_used=["file_operations"]
+                permission_required=PermissionLevel.READ_EXECUTE_WRITE,
+                tools_required=["file_operations"],
+                data_access=["project_management/plans", "project_management/archives"],
+                execution_time_estimate=1.0
             ),
             AgentCapability(
                 name="list_active_plans",
                 description="List all active project plans",
-                execution_time_estimate=0.5,
-                required_permissions=["read"],
-                tools_used=["file_operations"]
+                permission_required=PermissionLevel.READ_EXECUTE,
+                tools_required=["file_operations"],
+                data_access=["project_management/plans"],
+                execution_time_estimate=0.5
             )
         ]
 

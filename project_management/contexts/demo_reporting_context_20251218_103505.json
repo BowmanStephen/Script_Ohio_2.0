@@ -1,0 +1,12 @@
+{
+  "agent_id": "demo_reporting",
+  "timestamp": "20251218_103505",
+  "metadata": {
+    "phase": "workflow_execution"
+  },
+  "context_data": {
+    "state": "ContextState(agent_id='demo_reporting', context_tokens=171, last_updated=datetime.datetime(2025, 12, 18, 10, 35, 5, 469518), priority_score=0.7591000000000001, compression_applied=True, archive_path=None)"
+  },
+  "phase": "workflow_execution",
+  "compression_applied": true
+}

@@ -1,5 +1,6 @@
 ---
 name: Prompt Library Generator
+description: Analyzes Claude Code agents and transforms them into well-documented Prompt Library entries with proper frontmatter
 ---
 
 # Prompt Library Generator Agent
