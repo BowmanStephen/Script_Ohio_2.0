@@ -20,5 +20,32 @@
     "agent_response_times": {},
     "error_count": 0,
     "warning_count": 0
+  },
+  {
+    "timestamp": "2025-12-18T18:33:06.470707+00:00",
+    "total_agents": 0,
+    "active_agents": 0,
+    "cpu_usage": 55.6,
+    "memory_usage": 62.8,
+    "disk_usage": 4.9,
+    "agent_response_times": {},
+    "error_count": 0,
+    "warning_count": 0
+  },
+  {
+    "timestamp": "2025-12-18T18:36:56.055642+00:00",
+    "total_agents": 4,
+    "active_agents": 4,
+    "cpu_usage": 30.8,
+    "memory_usage": 64.2,
+    "disk_usage": 4.9,
+    "agent_response_times": {
+      "audit_coordinator_agent": 0.8400000000000001,
+      "system_integrity_agent": 1.1,
+      "data_pipeline_agent": 1.0699999999999998,
+      "model_validation_agent": 0.55
+    },
+    "error_count": 0,
+    "warning_count": 0
   }
 ]

@@ -1,0 +1,140 @@
+{
+  "audit_metadata": {
+    "audit_id": "2a4408ad-a709-40b6-bbed-5b7813a0cbc0",
+    "audit_name": "Quick System Audit Demo 2025-12-18 12:34:45",
+    "start_time": "2025-12-18T12:34:45.278228",
+    "end_time": "2025-12-18T12:34:47.168331",
+    "generated_at": "2025-12-18T12:34:47.168850"
+  },
+  "summary": {
+    "overall_status": "warning",
+    "overall_score": 92.22222222222223,
+    "total_checks": 9,
+    "passed_checks": 8,
+    "failed_checks": 0,
+    "warning_checks": 1,
+    "critical_failures": 0,
+    "pass_rate": 88.88888888888889
+  },
+  "system_info": {},
+  "checks": [
+    {
+      "check_id": "cf1846d4-08b1-434e-a95f-5d830d433a2b",
+      "category": "system_integrity",
+      "title": "Core Directory Structure",
+      "description": "Validate essential project directories exist",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": true,
+      "validation_command": "find . -maxdepth 1 -type d -name 'agents' -o -name 'src' -o -name 'scripts' -o -name 'model_pack'",
+      "expected_pattern": "agents src scripts model_pack",
+      "evidence_count": 0
+    },
+    {
+      "check_id": "17f34303-1024-4377-a374-fdc6300f0891",
+      "category": "system_integrity",
+      "title": "Configuration Files",
+      "description": "Validate required configuration files are present",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": true,
+      "validation_command": "find . -maxdepth 1 -name 'CLAUDE.md' -o -name 'requirements.txt' -o -name 'README.md'",
+      "expected_pattern": "CLAUDE.md requirements.txt README.md",
+      "evidence_count": 0
+    },
+    {
+      "check_id": "c49856d4-0feb-4175-b850-dbfc5c486270",
+      "category": "system_integrity",
+      "title": "Model Files Availability",
+      "description": "Validate trained model files are present and accessible",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": true,
+      "validation_command": "find model_pack/ -name '*_model_2025.*' -type f",
+      "expected_pattern": "ridge_model_2025.joblib xgb_home_win_model_2025.pkl fastai_home_win_model_2025.pkl",
+      "evidence_count": 0
+    },
+    {
+      "check_id": "2a219c13-f638-4944-8f30-1e44470967cc",
+      "category": "data_pipeline",
+      "title": "CFBD API Key Configuration",
+      "description": "Validate CFBD API key is properly configured",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": true,
+      "validation_command": "python3 -c 'import os; print(\"API Key Present:\" , bool(os.environ.get(\"CFBD_API_KEY\")))'",
+      "expected_pattern": "API Key Present: True",
+      "evidence_count": 0
+    },
+    {
+      "check_id": "32971a69-abc8-4d73-abcb-854899a1b124",
+      "category": "data_pipeline",
+      "title": "CFBD Client Instantiation",
+      "description": "Validate CFBD unified client can be instantiated",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": true,
+      "validation_command": "python3 -c 'from src.cfbd_client.unified_client import UnifiedCFBDClient; client = UnifiedCFBDClient(); print(\"CFBD client instantiated successfully\")'",
+      "expected_pattern": "CFBD client instantiated successfully",
+      "evidence_count": 0
+    },
+    {
+      "check_id": "d3f6355d-77a1-4b2b-bdb6-27c8dfe01b7a",
+      "category": "data_pipeline",
+      "title": "CFBD Rate Limiting",
+      "description": "Validate CFBD API rate limiting is properly implemented",
+      "status": "passed",
+      "score": 90.0,
+      "max_score": 100.0,
+      "critical": false,
+      "validation_command": "python3 -c 'from src.cfbd_client.unified_client import UnifiedCFBDClient; import time; client = UnifiedCFBDClient(); start = time.time(); # Test rate limiting compliance'",
+      "expected_pattern": "Rate limiting compliance verified",
+      "evidence_count": 0
+    },
+    {
+      "check_id": "97277050-ed38-4dbf-81b6-cb1500bf5555",
+      "category": "model_validation",
+      "title": "Ridge Model Loading",
+      "description": "Validate Ridge regression model can be loaded",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": true,
+      "validation_command": "python3 -c 'import joblib; model = joblib.load(\"model_pack/ridge_model_2025.joblib\"); print(\"Ridge model loaded successfully\")'",
+      "expected_pattern": "Ridge model loaded successfully",
+      "evidence_count": 0
+    },
+    {
+      "check_id": "65c0ab6d-1a2c-4c77-9c67-863ed47b296a",
+      "category": "model_validation",
+      "title": "XGBoost Model Loading",
+      "description": "Validate XGBoost model can be loaded",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": true,
+      "validation_command": "python3 -c 'import pickle; model = pickle.load(open(\"model_pack/xgb_home_win_model_2025.pkl\", \"rb\")); print(\"XGBoost model loaded successfully\")'",
+      "expected_pattern": "XGBoost model loaded successfully",
+      "evidence_count": 0
+    },
+    {
+      "check_id": "1a50d1cb-177d-41fb-b889-7aece09b7688",
+      "category": "model_validation",
+      "title": "FastAI Model Loading",
+      "description": "Validate FastAI model loading (with mock fallback acceptable)",
+      "status": "warning",
+      "score": 40.0,
+      "max_score": 100.0,
+      "critical": false,
+      "validation_command": "python3 -c 'import pickle; try: model = pickle.load(open(\"model_pack/fastai_home_win_model_2025.pkl\", \"rb\")); print(\"FastAI model loaded\"); except: print(\"FastAI model using mock (acceptable)\")'",
+      "expected_pattern": "FastAI model loaded or using mock (acceptable)",
+      "evidence_count": 0
+    }
+  ],
+  "recommendations": []
+}

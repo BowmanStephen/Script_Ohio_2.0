@@ -1,0 +1,36 @@
+{
+  "audit_metadata": {
+    "audit_id": "8f5838cb-58c2-40e9-b5b2-40e939f03d98",
+    "audit_name": "Test Audit",
+    "start_time": "2025-12-18T11:18:34.320585",
+    "end_time": "2025-12-18T11:18:34.320596",
+    "generated_at": "2025-12-18T11:18:34.320815"
+  },
+  "summary": {
+    "overall_status": "passed",
+    "overall_score": 100.0,
+    "total_checks": 1,
+    "passed_checks": 1,
+    "failed_checks": 0,
+    "warning_checks": 0,
+    "critical_failures": 0,
+    "pass_rate": 100.0
+  },
+  "system_info": {},
+  "checks": [
+    {
+      "check_id": "cde645d3-2cd7-4e99-98d8-692e0a350b14",
+      "category": "test",
+      "title": "Test Check",
+      "description": "Testing audit check functionality",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": false,
+      "validation_command": "echo test",
+      "expected_pattern": "test",
+      "evidence_count": 0
+    }
+  ],
+  "recommendations": []
+}

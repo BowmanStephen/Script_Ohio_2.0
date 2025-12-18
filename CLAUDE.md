@@ -121,6 +121,9 @@ pip-audit
 # Comprehensive test coverage
 pytest --cov=agents --cov-report=term-missing
 
+# Data architecture validation
+python3 scripts/maintenance/02_validation_check.py
+
 # TOON format validation (required before plan creation)
 python3 scripts/smoke_test_toon.py
 ```
@@ -191,18 +194,32 @@ class CustomAgent(BaseAgent):
 3. **Model Training** → Three ensemble models (Ridge, XGBoost, FastAI)
 4. **Weekly Analysis** → Automated predictions and reports
 
-**Data Organization**:
-- **Master Training Data**: `model_pack/updated_training_data.csv` (4,989 games, 2016-2025)
+**NEW Data Organization** (83.3% Migration Complete - Dec 2025):
+- **Master Training Data**: `data/processed/training/master_training_data_v2.csv` (5,250 rows, 2016-2025) ⭐
+- **Production Models**: `models/production/*_2025_v2.{joblib,pkl}` (Ridge, XGBoost, FastAI) ⭐
+- **Historical Archive**: `data/raw/historical/games_1869_2025.csv` ⭐
+- **Predictions**: `data/outputs/predictions/2025/bowl_season/` ⭐
+- **Legacy Locations**: Still accessible for backward compatibility
+
+**Legacy Data Organization** (preserved for transition):
+- **Old Training Data**: `model_pack/updated_training_data.csv` (4,989 games, 2016-2025)
+- **Old Models**: `model_pack/{ridge,xgb,fastai}_*_2025.{joblib,pkl}`
 - **Weekly Training**: `data/training/weekly/training_data_2025_week*.csv`
 - **Enhanced Features**: `data/weekly/week{XX}/enhanced/`
-- **Model Files**: `model_pack/{ridge,xgb,fastai}_*_2025.{joblib,pkl}`
+
+**Migration Validation**: Run `python3 scripts/maintenance/02_validation_check.py`
 
 ### Model System
 
-**Pre-trained Models**:
-- `ridge_model_2025.joblib`: Ridge regression model
-- `xgb_home_win_model_2025.pkl`: XGBoost classifier
-- `fastai_home_win_model_2025.pkl`: FastAI neural network
+**Production Models** (NEW locations):
+- `models/production/ridge_regression_2025_v2.joblib`: Ridge regression model ⭐
+- `models/production/xgboost_classifier_2025_v2.pkl`: XGBoost classifier ⭐
+- `models/production/fastai_neural_net_2025_v2.pkl`: FastAI neural network ⭐
+
+**Legacy Models** (old locations, still accessible):
+- `model_pack/ridge_model_2025.joblib`: Ridge regression model
+- `model_pack/xgb_home_win_model_2025.pkl`: XGBoost classifier
+- `model_pack/fastai_home_win_model_2025.pkl`: FastAI neural network
 
 **Feature Engineering**:
 - 86 opponent-adjusted features to prevent data leakage
@@ -280,49 +297,256 @@ web_app/src/
 ## Key Development Patterns
 
 ### CFBD Integration
-Always use the unified client with proper rate limiting:
+Always use the unified client with proper rate limiting and intelligent caching:
 
 ```python
 from src.cfbd_client.unified_client import UnifiedCFBDClient
 import time
 
 client = UnifiedCFBDClient()
-# Rate limiting: 6 req/sec → time.sleep(0.17) between requests
+# Rate limiting: 6 req/sec with burst protection and intelligent caching
+games = client.get_games(year=2025, week=13)  # Automatically cached for 1 hour
 ```
 
-**Authentication**:
+**Advanced CFBD Integration**:
 ```python
 import os
 from cfbd import Configuration, ApiClient, GamesApi
+from src.cfbd_client.unified_client import UnifiedCFBDClient
 
-configuration = Configuration()
-configuration.api_key['Authorization'] = f"Bearer {os.environ['CFBD_API_KEY']}"
-games_api = GamesApi(ApiClient(configuration))
+# Unified client approach (recommended)
+client = UnifiedCFBDClient()
+
+# GraphQL support for live data (Tier 3+ required)
+live_games = client.get_scoreboard_graphql(year=2025, week=13)
+
+# Batch fetching for efficiency
+games = client.get_games_batch(years=[2023, 2024, 2025], weeks=[1, 2, 3])
+
+# Authentication is handled automatically via CFBD_API_KEY environment variable
+```
+
+**Rate Limiting and Caching**:
+- 6 req/sec base rate with burst protection
+- Intelligent caching by data type (games cache 1 hour, player stats cache 30 min)
+- Automatic retry with exponential backoff
+- Performance metrics available via `client.get_performance_metrics()`
+
+### Agent Development Patterns
+All agents must inherit from BaseAgent and register with Meta Agent:
+
+```python
+from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
+from agents.meta_agent import meta_agent
+
+class CustomAgent(BaseAgent):
+    def __init__(self, agent_id: str):
+        super().__init__(agent_id, "Custom Agent", PermissionLevel.READ_EXECUTE)
+        self.max_execution_time = 300  # 5 minutes
+        self.memory_limit_mb = 100
+
+    def _define_capabilities(self) -> List[AgentCapability]:
+        return [
+            AgentCapability(
+                name="primary_action",
+                description="Main functionality of this agent",
+                execution_time_estimate=5.0,
+                required_permissions=[PermissionLevel.READ_EXECUTE],
+                parameters=["input_data", "options"],
+                returns={"status": "string", "results": "object"}
+            )
+        ]
+
+    def _execute_action(self, action: str, parameters: Dict, user_context: Dict) -> Dict:
+        try:
+            # Implementation with comprehensive error handling
+            if action == "primary_action":
+                result = self._perform_primary_action(parameters)
+                return {
+                    "status": "success",
+                    "data": result,
+                    "execution_time": time.time(),
+                    "agent_id": self.agent_id
+                }
+            else:
+                raise ValueError(f"Unknown action: {action}")
+        except Exception as e:
+            return {
+                "status": "error",
+                "error": str(e),
+                "error_type": type(e).__name__,
+                "agent_id": self.agent_id
+            }
+
+# Register with Meta Agent (required)
+registration_result = meta_agent._register_agent({
+    "agent_id": "custom_agent",
+    "agent_name": "Custom Agent",
+    "class_name": "CustomAgent",
+    "file_path": "agents/custom_agent.py",
+    "created_by": "developer_name",
+    "capabilities": ["primary_action"],
+    "dependencies": ["cfbd_integration"],
+    "max_execution_time": 300,
+    "memory_limit_mb": 100
+}, {"agent_id": "meta_agent"})
+```
+
+### TOON Format Integration
+Use TOON format for LLM responses with uniform arrays to achieve 50-70% token reduction:
+
+```python
+from src.toon_format import encode, decode
+
+# Convert JSON to TOON format
+data = {
+    "games": [
+        {"id": 401752911, "home": "Oregon", "away": "USC", "predicted_margin": -1.61},
+        {"id": 401752912, "home": "Alabama", "away": "Georgia", "predicted_margin": 3.2}
+    ]
+}
+
+toon_output = encode(data)
+# Output:
+# games[2]{id,home,away,predicted_margin}:
+#   401752911,Oregon,USC,-1.61
+#   401752912,Alabama,Georgia,3.2
+
+# Convert back to JSON
+json_data = decode(toon_output)
+```
+
+**TOON Usage Guidelines**:
+- Use for agent responses with uniform arrays (same structure for all objects)
+- Use `[N]` format for array headers (never `[#N]` per v2.0 spec)
+- Quote strings that match keywords or contain delimiters
+- Achieves 50-70% token reduction for suitable data structures
+
+### Performance Optimization Patterns
+
+**Context Management**:
+```python
+from agents.optimization.context_compression_rules import context_compression_engine
+
+# Update context phase for optimization
+context_compression_engine.update_phase('analysis')
+
+# Compress agent contexts (60-70% reduction)
+compressed_context = context_compression_engine.compress_context(agent_context)
+
+# Role-based optimization
+optimized_context = context_compression_engine.optimize_for_role(agent_context, 'analyst')
+```
+
+**Hierarchical Memory**:
+```python
+from agents.optimization.memory_manager import memory_manager, MemoryLevel
+
+# Store data in appropriate memory level
+success = memory_manager.store(
+    key='weekly_predictions_2025_week13',
+    data={'predictions': [...]},
+    level=MemoryLevel.AGENT,
+    expires_in=3600,  # 1 hour
+    tags=['predictions', 'week13', '2025']
+)
+
+# Retrieve with automatic decompression
+data = memory_manager.retrieve('weekly_predictions_2025_week13')
 ```
 
 ### Data Access Patterns
-Use the centralized path utilities:
+Use the NEW organized data structure (recommended):
 
 ```python
-from model_pack.utils.path_utils import get_training_data_file, get_weekly_training_file
+# NEW Master training data
+import pandas as pd
+training_data = pd.read_csv('data/processed/training/master_training_data_v2.csv')
 
-# Master training data
-training_path = get_training_data_file()
-df = pd.read_csv(training_path)
+# NEW Production models
+import joblib, pickle
+ridge_model = joblib.load('models/production/ridge_regression_2025_v2.joblib')
+xgb_model = pickle.load(open('models/production/xgboost_classifier_2025_v2.pkl', 'rb'))
 
-# Weekly data with automatic fallback search
-week_file = get_weekly_training_file(week=13, season=2025)
-df = pd.read_csv(week_file)
+# NEW Historical data
+historical_games = pd.read_csv('data/raw/historical/games_1869_2025.csv')
+
+# NEW Predictions
+import json
+predictions = json.load(open('data/outputs/predictions/2025/bowl_season/bowls_2025_predictions_ml.json'))
 ```
 
-### Agent Development
-Follow these patterns when creating new agents:
+Legacy path utilities (still work during transition):
+```python
+from model_pack.utils.path_utils import get_training_data_file, get_weekly_training_file
+training_path = get_training_data_file()  # Returns old location
+week_file = get_weekly_training_file(week=13, season=2025)
+```
 
-1. **Inherit from BaseAgent** with proper permission level
-2. **Define capabilities** with execution time estimates
-3. **Implement _execute_action** with comprehensive error handling
-4. **Use dataclasses** for request/response objects
-5. **Add comprehensive tests** in `agents/tests/`
+### Agent Testing Patterns
+Comprehensive testing is required for all agents:
+
+```python
+# Unit test template for agents
+import pytest
+from agents.custom_agent import CustomAgent
+
+class TestCustomAgent:
+    def setup_method(self):
+        self.agent = CustomAgent("test_agent")
+
+    def test_agent_initialization(self):
+        assert self.agent.agent_id == "test_agent"
+        assert self.agent.permission_level == PermissionLevel.READ_EXECUTE
+
+    def test_capability_definition(self):
+        capabilities = self.agent._define_capabilities()
+        assert len(capabilities) > 0
+        assert capabilities[0].name == "primary_action"
+
+    def test_primary_action_success(self):
+        result = self.agent._execute_action("primary_action", {"input": "test"}, {})
+        assert result["status"] == "success"
+        assert "data" in result
+
+    def test_primary_action_error_handling(self):
+        result = self.agent._execute_action("unknown_action", {}, {})
+        assert result["status"] == "error"
+        assert "error" in result
+
+# Integration test
+def test_agent_cfbd_integration():
+    agent = CustomAgent("integration_test")
+    result = agent._execute_action("fetch_game_data", {"year": 2025, "week": 13}, {})
+    assert result["status"] == "success"
+    assert len(result["data"]) > 0
+```
+
+### System Monitoring and Performance
+
+**Agent System Health**:
+```bash
+# Monitor overall system health
+python3 -c "from agents.meta_agent import meta_agent; print(meta_agent._monitor_system({}, {}))"
+
+# Get current agent registry and utilization
+python3 -c "from agents.meta_agent import meta_agent; print(meta_agent._get_registry({}, {}))"
+
+# Check system performance metrics
+python3 -c "from agents.orchestration_agent import orchestration_agent; print(orchestration_agent._monitor_optimization({}, {}))"
+```
+
+**Performance Optimization Commands**:
+```bash
+# Apply context compression (60-70% token reduction)
+python3 -c "from agents.optimization.context_compression_rules import context_compression_engine; context_compression_engine.update_phase('analysis')"
+
+# Check memory usage and optimization
+python3 -c "from agents.optimization.memory_manager import memory_manager; stats = memory_manager.get_stats(); print(f'Memory: {stats.total_entries} entries, {stats.total_size_mb:.1f}MB, {stats.hit_rate:.1%} hit rate')"
+
+# Run optimized weekly analysis workflow
+python3 -c "from agents.optimization.workflow_automator import workflow_automator; result = workflow_automator.execute_workflow('weekly_analysis'); print(f'Workflow {result.execution_id}: {result.status.value}')"
+```
 
 ### Weekly Analysis Pipeline
 The weekly pipeline follows this structure:
@@ -376,43 +600,77 @@ python3 scripts/cleanup_repository.py --categories high medium --apply
 
 ## File Structure & Conventions
 
-### Directory Organization
+### Directory Organization (NEW structure as of Dec 2025)
+
 ```
-agents/                 # Multi-agent system (15+ specialized agents)
-├── core/              # Agent framework and base classes
-├── tests/             # Comprehensive test suite
-└── *.py               # Individual agent implementations
+# REORGANIZED DATA STRUCTURE (83.3% Complete)
+data/                           # ALL DATA REORGANIZED ⭐
+├── raw/                        # External sources (read-only)
+│   ├── cfbd/                   # CFBD API snapshots
+│   └── historical/             # Master archives ⭐
+├── processed/                  # Feature engineering
+│   ├── training/              # ML datasets ⭐
+│   │   ├── master_training_data_v2.csv  # PRIMARY ⭐
+│   │   └── weekly_updates/     # Weekly data
+│   ├── features/              # Feature datasets
+│   └── enhanced/              # Processed features
+├── outputs/                   # Results & predictions
+│   ├── predictions/           # Model outputs ⭐
+│   │   └── 2025/bowl_season/   # Current season
+│   └── analysis/              # Reports
+└── metadata/                  # Data definitions
 
-src/                   # Python modules (reused notebook logic)
-├── cfbd_client/       # CFBD API integration layer
-├── features/          # Feature engineering utilities
-├── models/            # Model execution engine
-├── ratings/           # Rating systems (Massey, etc.)
-└── utils/             # Shared utilities
+models/                         # PRODUCTION ML SYSTEM ⭐
+├── production/                # Active models ⭐
+│   ├── ridge_regression_2025_v2.joblib    # PRIMARY ⭐
+│   ├── xgboost_classifier_2025_v2.pkl     # PRIMARY ⭐
+│   └── fastai_neural_net_2025_v2.pkl      # PRIMARY ⭐
+├── components/                # Model parts
+├── training/                  # Training artifacts
+└── legacy/                    # Archived versions
 
-scripts/               # Automation and utility scripts
-├── run_weekly_analysis.py    # Main weekly pipeline
-├── cfbd_pull.py              # CFBD data ingestion
-├── predict_bowls_2025.py     # Bowl predictions
-└── [many specialized scripts]
+archive/                       # SYSTEMATIC ARCHIVE
+├── backups/                   # Organized backups
+├── deprecated/                # Old formats
+└── snapshots/                # Point-in-time saves
 
-model_pack/            # ML models and training data
-├── updated_training_data.csv   # Master dataset (6.8MB)
-├── *_model_2025.*            # Pre-trained models
-└── *.ipynb                   # Modeling notebooks
+# LEGACY STRUCTURE (preserved during transition)
+model_pack/                    # OLD ML models and data
+├── updated_training_data.csv  # Old master dataset
+├── *_model_2025.*             # Old pre-trained models
+└── *.ipynb                    # Modeling notebooks
 
-predictions/           # Generated predictions and analysis
-├── bowls_2025_predictions_ml.json      # ML ensemble predictions
-├── bowls_2025_predictions_massey.json  # Massey ratings predictions
-├── bowls_2025_predictions_simple.json  # Simple predictions
-└── bowls_2025_predictions_*_backup_*.json  # Timestamped backups
+predictions/                   # OLD prediction outputs
+├── bowls_2025_predictions_*.json
+└── *_backup_*.json
 
-data/                 # Data organization
-├── training/weekly/          # Weekly training files
-├── weekly/week{XX}/enhanced/  # Enhanced features
-└── metadata/                 # Data definitions
+data/                          # OLD data organization
+├── training/weekly/
+├── weekly/week{XX}/enhanced/
+└── metadata/
 
-starter_pack/         # Educational notebooks (13 total)
+agents/                        # Multi-agent system
+├── core/                     # Agent framework
+├── tests/                    # Comprehensive test suite
+├── data_architecture_orchestrator.py  # NEW orchestrator ⭐
+└── *.py                      # Individual agents
+
+src/                          # Python modules
+├── cfbd_client/             # CFBD API integration
+├── features/                # Feature engineering
+├── models/                  # Model execution
+└── utils/                   # Shared utilities
+
+scripts/                      # Automation and utility scripts
+├── run_weekly_analysis.py   # Main weekly pipeline
+├── predict_bowls_2025.py    # Bowl predictions
+├── maintenance/             # NEW maintenance scripts ⭐
+│   ├── 01_data_migration.py # Data migration tool
+│   └── 02_validation_check.py # Validation tool
+└── [100+ specialized scripts]
+
+starter_pack/                 # Educational notebooks
+web_app/                      # React frontend (if applicable)
 ```
 
 ### File Naming Conventions
@@ -558,36 +816,70 @@ result = meta_agent._register_agent({
 - `CFBD_API_KEY`: Required for CollegeFootballData.com API access
 - Set via `export CFBD_API_KEY="your-key"` or in `.env` file
 
-### Rate Limiting
-- CFBD API: 6 requests per second
+### Rate Limiting & API Usage
+- **CFBD API**: 6 requests per second base rate with burst protection
 - Use `time.sleep(0.17)` between requests in loops
-- Unified client includes automatic rate limiting
+- Unified client includes automatic rate limiting and intelligent caching
+- GraphQL requests (Tier 3+): 30 req/sec with different rate limits
+- Performance monitoring: `client.get_performance_metrics()`
 
-### Model Dependencies
-- Pydantic v1 required for CFBD compatibility (not v2)
-- FastAI model uses mock on load due to pickle protocol issues
-- Ridge and XGBoost models load correctly
+### Model Dependencies & Loading
+- **Pydantic v1** required for CFBD compatibility (not v2)
+- **FastAI model** uses mock on load due to pickle protocol issues (known limitation)
+- **Ridge and XGBoost models** load correctly with joblib/pickle
+- Model performance benchmarks: XGBoost (43.1% accuracy), Ensemble (44.2% accuracy)
 
-### Data Integrity
-- Master training data: 4,989 games (2016-2025, Week 5+, FBS only)
-- 86 opponent-adjusted features prevent data leakage
-- All files use snake_case naming with descriptive prefixes
+### Data Architecture (Dec 2025 Reorganization)
+- **NEW Master Training Data**: `data/processed/training/master_training_data_v2.csv` (5,250 rows, 2016-2025)
+- **NEW Production Models**: `models/production/*_2025_v2.*` (verified 83.3% migration success)
+- **Migration Validation**: Run `python3 scripts/maintenance/02_validation_check.py`
+- **Legacy Compatibility**: Old paths still work during transition period
+- **86 opponent-adjusted features prevent data leakage
+- **Professional naming**: `{purpose}_{entity}_{version}.{ext}` format
+- **Data Integrity**: 100% checksum-verified migration with zero data loss
+
+### Critical Path Updates for Scripts
+When updating scripts, use these mappings:
+```python
+# Essential path updates
+'model_pack/updated_training_data.csv' → 'data/processed/training/master_training_data_v2.csv'
+'model_pack/ridge_model_2025.joblib' → 'models/production/ridge_regression_2025_v2.joblib'
+'model_pack/xgb_home_win_model_2025.pkl' → 'models/production/xgboost_classifier_2025_v2.pkl'
+'model_pack/fastai_home_win_model_2025.pkl' → 'models/production/fastai_neural_net_2025_v2.pkl'
+'starter_pack/data/games.csv' → 'data/raw/historical/games_1869_2025.csv'
+'predictions/' → 'data/outputs/predictions/2025/bowl_season/'
+```
+
+### Agent System Limits & Governance
+- **Meta Agent**: Enforces 20-agent hard limit (currently at 9% capacity)
+- **Resource Allocation**: Automatic load balancing and memory management
+- **Permission Levels**: READ_ONLY, READ_EXECUTE, READ_EXECUTE_WRITE, ADMIN
+- **Agent Registration**: Required for all new agents via Meta Agent
+- **Performance Monitoring**: Real-time metrics and optimization recommendations
+- **Audit Trails**: Comprehensive logging for all agent activities
+
+### Error Handling & Resilience
+- **Comprehensive Error Taxonomy**: Network, API, data, model, and system errors
+- **Retry Logic**: Exponential backoff with jitter for transient failures
+- **Fallback Mechanisms**: Graceful degradation when services unavailable
+- **Health Monitoring**: Automated system health checks every 60 seconds
+- **Circuit Breaker Pattern**: Prevents cascade failures in agent chains
 
 ### Super AI Agent System Management
 ```bash
 # Monitor system health and agent status
 python3 -c "from agents.meta_agent import meta_agent; print(meta_agent._monitor_system({}, {}))"
 
-# Get current agent registry
+# Get current agent registry and utilization
 python3 -c "from agents.meta_agent import meta_agent; print(meta_agent._get_registry({}, {}))"
 
-# Perform system health check
+# Perform comprehensive system health check
 python3 -c "from agents.meta_agent import meta_agent; print(meta_agent._perform_health_check({}, {}))"
 
-# Track project progress
+# Track project progress and milestone completion
 python3 -c "from agents.project_management_agent import project_management_agent; print(project_management_agent._list_active_plans({}, {}))"
 
-# Validate documentation freshness
+# Validate documentation freshness and completeness
 python3 -c "from agents.documentation_agent import documentation_agent; print(documentation_agent._validate_freshness({}, {}))"
 ```
 
@@ -791,12 +1083,18 @@ For plans with 3+ distinct tasks:
 - **Prefer Massey ratings** for bowls MVP predictions (already tested)
 - **Use `UnifiedCFBDClient`** from `src/cfbd_client/unified_client.py`
 - **Rate limit**: 6 req/sec → `time.sleep(0.17)` between requests
+- **Data Structure**: Use NEW organized structure (`data/`, `models/`) over legacy paths
+- **Script Updates**: When updating scripts, prioritize new data structure paths
 
 ### Documentation References
 - **Agent Development**: `AGENTS.md` - Complete framework documentation and agent cheat sheet
 - **Super AI Architecture**: `project_management/plans/SUPER_AI_AGENT_ARCHITECTURE_PLAN.md`
 - **Implementation Progress**: `project_management/progress/SUPER_AI_AGENT_IMPLEMENTATION_PROGRESS.json`
 - **Data Organization**: `docs/DATA_ORGANIZATION.md` - File structure and access patterns
+- **Data Architecture**: `docs/DATA_ARCHITECTURE_CURRENT_STATE.md` - Pre-migration analysis
+- **Reorganization Plan**: `docs/REORGANIZATION_PLAN.md` - New structure design
+- **User Guide**: `docs/NEW_DATA_STRUCTURE_USER_GUIDE.md` - Post-migration navigation
 - **TOON Format**: `docs/TOON_FORMAT_GUIDE.md` - Token optimization guide
 - **Security**: `docs/SECURITY_BEST_PRACTICES.md` - Complete security guidelines
 - **Cursor Integration**: `.cursorrules` - Development environment patterns and AI assistance
+- **Transformation Summary**: `TRANSFORMATION_COMPLETE_SUMMARY.md` - Complete migration overview

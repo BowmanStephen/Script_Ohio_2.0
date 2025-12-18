@@ -1,0 +1,768 @@
+{
+  "validation_timestamp": "2025-12-18T12:28:02.058758",
+  "validation_checks": {
+    "file_integrity": {
+      "files_checked": 19,
+      "checksums_valid": 19,
+      "checksums_invalid": 0,
+      "files_missing": 0,
+      "details": [
+        "\u2705 data/processed/training/master_training_data_v2.csv - Checksum valid",
+        "\u2705 data/raw/historical/games_1869_2025.csv - Checksum valid",
+        "\u2705 data/processed/training/weekly_updates/training_data_2025_week10.csv - Checksum valid",
+        "\u2705 data/processed/training/weekly_updates/training_data_2025_week11.csv - Checksum valid",
+        "\u2705 data/processed/training/weekly_updates/training_data_2025_week12.csv - Checksum valid",
+        "\u2705 data/processed/training/weekly_updates/training_data_2025_week13.csv - Checksum valid",
+        "\u2705 data/processed/training/weekly_updates/training_data_2025_week14.csv - Checksum valid",
+        "\u2705 data/processed/training/weekly_updates/training_data_2025_week15.csv - Checksum valid",
+        "\u2705 data/outputs/predictions/2025/bowl_season/bowls_2025_predictions_ml_backup_20251216_214957.json - Checksum valid",
+        "\u2705 data/outputs/predictions/2025/bowl_season/bowls_2025_predictions_ml_20251216_215052.json - Checksum valid",
+        "\u2705 data/outputs/predictions/2025/bowl_season/bowls_2025_predictions_simple.json - Checksum valid",
+        "\u2705 data/outputs/predictions/2025/bowl_season/bowls_2025_predictions_ml_20251216_214727.json - Checksum valid",
+        "\u2705 data/outputs/predictions/2025/bowl_season/bowls_2025_predictions.json - Checksum valid",
+        "\u2705 data/outputs/predictions/2025/bowl_season/bowls_2025_predictions_ml.json - Checksum valid",
+        "\u2705 models/components/rf_components/random_forest_home.joblib - Checksum valid",
+        "\u2705 models/components/rf_components/random_forest_away.joblib - Checksum valid",
+        "\u2705 models/legacy/v1_models/random_forest_model_2025.pkl - Checksum valid",
+        "\u2705 models/legacy/v1_models/random_forest_home.joblib - Checksum valid",
+        "\u2705 models/legacy/v1_models/random_forest_away.joblib - Checksum valid"
+      ]
+    },
+    "data_completeness": {
+      "critical_files_checked": 4,
+      "critical_files_found": 4,
+      "critical_files_accessible": 4,
+      "data_quality_issues": [],
+      "details": [
+        "\u2705 Found: data/processed/training/master_training_data_v2.csv",
+        "\u2705 Accessible: data/processed/training/master_training_data_v2.csv (5 columns)",
+        "\u2705 Found: models/production/ridge_regression_2025_v2.joblib",
+        "\u2705 Accessible: models/production/ridge_regression_2025_v2.joblib",
+        "\u2705 Found: models/production/xgboost_classifier_2025_v2.pkl",
+        "\u2705 Accessible: models/production/xgboost_classifier_2025_v2.pkl",
+        "\u2705 Found: models/production/fastai_neural_net_2025_v2.pkl",
+        "\u2705 Accessible: models/production/fastai_neural_net_2025_v2.pkl"
+      ]
+    },
+    "schema_consistency": {
+      "datasets_validated": 1,
+      "schemas_consistent": 1,
+      "schema_issues": [
+        "data/processed/training/master_training_data_v2.csv: High null percentage: 19.9%"
+      ],
+      "details": [
+        "\u2705 data/processed/training/master_training_data_v2.csv: 5,250 rows",
+        "\u2705 data/processed/training/master_training_data_v2.csv: 107 columns",
+        "\u2705 data/processed/training/master_training_data_v2.csv: Key columns present"
+      ]
+    },
+    "ml_functionality": {
+      "models_tested": 2,
+      "models_loaded": 2,
+      "models_functional": 2,
+      "model_errors": [],
+      "details": [
+        "\u2705 models/production/ridge_regression_2025_v2.joblib: Loaded successfully",
+        "\u2705 models/production/ridge_regression_2025_v2.joblib: Functional (has predict/call method)",
+        "\u2705 models/production/xgboost_classifier_2025_v2.pkl: Loaded successfully",
+        "\u2705 models/production/xgboost_classifier_2025_v2.pkl: Functional (has predict/call method)"
+      ]
+    },
+    "script_paths": {
+      "scripts_checked": 173,
+      "scripts_need_update": 45,
+      "path_updates_identified": [
+        {
+          "script": "scripts/generate_ultimate_bowl_predictions.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/calibrate_predictions_vs_market.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/predict_bowls_2025.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/optimal_kelly_system.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/demo_ppa_integration.py",
+          "updates_needed": [
+            [
+              "model_pack/updated_training_data.csv",
+              "data/processed/training/master_training_data_v2.csv"
+            ],
+            [
+              "model_pack/",
+              "models/production/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/integrate_remaining_2025_weeks.py",
+          "updates_needed": [
+            [
+              "model_pack/updated_training_data.csv",
+              "data/processed/training/master_training_data_v2.csv"
+            ],
+            [
+              "model_pack/",
+              "models/production/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/prepare_simulator_data.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/fix_fastai_notebook.py",
+          "updates_needed": [
+            [
+              "model_pack/",
+              "models/production/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/verify_weeks_1_12_integration.py",
+          "updates_needed": [
+            [
+              "model_pack/updated_training_data.csv",
+              "data/processed/training/master_training_data_v2.csv"
+            ],
+            [
+              "model_pack/",
+              "models/production/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/add_public_consensus.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/rollback_integration.py",
+          "updates_needed": [
+            [
+              "model_pack/updated_training_data.csv",
+              "data/processed/training/master_training_data_v2.csv"
+            ],
+            [
+              "model_pack/",
+              "models/production/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/parse_injury_data.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/generate_enhanced_bowl_predictions.py",
+          "updates_needed": [
+            [
+              "model_pack/updated_training_data.csv",
+              "data/processed/training/master_training_data_v2.csv"
+            ],
+            [
+              "model_pack/",
+              "models/production/"
+            ],
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/create_week14_consolidation_report.py",
+          "updates_needed": [
+            [
+              "data/weekly/",
+              "data/processed/enhanced/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/demo_ppa_integration_fixed.py",
+          "updates_needed": [
+            [
+              "model_pack/updated_training_data.csv",
+              "data/processed/training/master_training_data_v2.csv"
+            ],
+            [
+              "model_pack/",
+              "models/production/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/generate_bowl_betting_guide.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/fix_all_notebooks.py",
+          "updates_needed": [
+            [
+              "model_pack/",
+              "models/production/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/train_random_forest.py",
+          "updates_needed": [
+            [
+              "model_pack/",
+              "models/production/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/clean_zero_score_games.py",
+          "updates_needed": [
+            [
+              "model_pack/updated_training_data.csv",
+              "data/processed/training/master_training_data_v2.csv"
+            ],
+            [
+              "model_pack/",
+              "models/production/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/compare_week13_predictions.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/compare_predictions_to_systems.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/run_weekly_analysis.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/refactor_notebooks.py",
+          "updates_needed": [
+            [
+              "model_pack/",
+              "models/production/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/generate_infographics.py",
+          "updates_needed": [
+            [
+              "model_pack/",
+              "models/production/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/sync_web_app_data.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/predict_bowls_2025_fallback.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/data_quality_report.py",
+          "updates_needed": [
+            [
+              "model_pack/",
+              "models/production/"
+            ],
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/create_multi_system_ensemble.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/predict_postseason_2025.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/build_training_data_from_cfbd.py",
+          "updates_needed": [
+            [
+              "model_pack/updated_training_data.csv",
+              "data/processed/training/master_training_data_v2.csv"
+            ],
+            [
+              "model_pack/",
+              "models/production/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/check_results.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/integrate_weekly_files.py",
+          "updates_needed": [
+            [
+              "model_pack/updated_training_data.csv",
+              "data/processed/training/master_training_data_v2.csv"
+            ],
+            [
+              "model_pack/",
+              "models/production/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/generate_week14_reports.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/validate_data_alignment.py",
+          "updates_needed": [
+            [
+              "model_pack/updated_training_data.csv",
+              "data/processed/training/master_training_data_v2.csv"
+            ],
+            [
+              "model_pack/",
+              "models/production/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/cleanup_repository.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/run_all_notebooks.py",
+          "updates_needed": [
+            [
+              "model_pack/",
+              "models/production/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/add_live_odds.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/import_week13_predictions.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/enhance_ncaa_predictions.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/retrain_models_current.py",
+          "updates_needed": [
+            [
+              "model_pack/",
+              "models/production/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/verify_week13_setup.py",
+          "updates_needed": [
+            [
+              "model_pack/updated_training_data.csv",
+              "data/processed/training/master_training_data_v2.csv"
+            ],
+            [
+              "model_pack/",
+              "models/production/"
+            ],
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/pull_and_predict_week13.py",
+          "updates_needed": [
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/maintenance/02_validation_check.py",
+          "updates_needed": [
+            [
+              "model_pack/updated_training_data.csv",
+              "data/processed/training/master_training_data_v2.csv"
+            ],
+            [
+              "model_pack/",
+              "models/production/"
+            ],
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ],
+            [
+              "data/weekly/",
+              "data/processed/enhanced/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/maintenance/01_data_migration.py",
+          "updates_needed": [
+            [
+              "model_pack/updated_training_data.csv",
+              "data/processed/training/master_training_data_v2.csv"
+            ],
+            [
+              "model_pack/",
+              "models/production/"
+            ],
+            [
+              "predictions/",
+              "data/outputs/predictions/"
+            ],
+            [
+              "data/weekly/",
+              "data/processed/enhanced/"
+            ]
+          ]
+        },
+        {
+          "script": "scripts/maintenance/01b_model_migration_fix.py",
+          "updates_needed": [
+            [
+              "model_pack/",
+              "models/production/"
+            ]
+          ]
+        }
+      ],
+      "details": [
+        "\u26a0\ufe0f  scripts/generate_ultimate_bowl_predictions.py: 1 path updates needed",
+        "\u26a0\ufe0f  scripts/calibrate_predictions_vs_market.py: 1 path updates needed",
+        "\u26a0\ufe0f  scripts/predict_bowls_2025.py: 1 path updates needed",
+        "\u2705 scripts/verify_week13_predictions.py: No path updates needed",
+        "\u2705 scripts/quick_audit_demo.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/optimal_kelly_system.py: 1 path updates needed",
+        "\u2705 scripts/consolidate_week14_predictions.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/demo_ppa_integration.py: 2 path updates needed",
+        "\u2705 scripts/example_weekly_usage.py: No path updates needed",
+        "\u2705 scripts/load_prediction_tracker.py: No path updates needed",
+        "\u2705 scripts/generate_agent_docs.py: No path updates needed",
+        "\u2705 scripts/generate_week14_enhanced_features.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/integrate_remaining_2025_weeks.py: 2 path updates needed",
+        "\u2705 scripts/integrate_weeks_1_14_and_retrain.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/prepare_simulator_data.py: 1 path updates needed",
+        "\u2705 scripts/debug_ty_check_summary.py: No path updates needed",
+        "\u2705 scripts/verify_schema_consistency.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/fix_fastai_notebook.py: 1 path updates needed",
+        "\u2705 scripts/compare_week13_schema.py: No path updates needed",
+        "\u2705 scripts/verify_dependencies.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/verify_weeks_1_12_integration.py: 2 path updates needed",
+        "\u2705 scripts/run_system_audit.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/add_public_consensus.py: 1 path updates needed",
+        "\u2705 scripts/generate_week13_dashboard.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/rollback_integration.py: 2 path updates needed",
+        "\u2705 scripts/fix_missing_elo_talent.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/parse_injury_data.py: 1 path updates needed",
+        "\u2705 scripts/prompt_library_utils.py: No path updates needed",
+        "\u2705 scripts/verify_weekly_file_equivalence.py: No path updates needed",
+        "\u2705 scripts/migrate_training_data.py: No path updates needed",
+        "\u2705 scripts/generate_week14_analysis_outputs.py: No path updates needed",
+        "\u2705 scripts/expand_week13_coverage.py: No path updates needed",
+        "\u2705 scripts/integrate_weeks_1_12_and_retrain.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/generate_enhanced_bowl_predictions.py: 3 path updates needed",
+        "\u2705 scripts/predict_all_week13_games.py: No path updates needed",
+        "\u2705 scripts/prepare_week13_analysis.py: No path updates needed",
+        "\u2705 scripts/generate_verification_report.py: No path updates needed",
+        "\u2705 scripts/verify_2025_data_completeness.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/create_week14_consolidation_report.py: 1 path updates needed",
+        "\u2705 scripts/bowl_guide_utils.py: No path updates needed",
+        "\u2705 scripts/verify_data_structure.py: No path updates needed",
+        "\u2705 scripts/cfbd_audit_completeness.py: No path updates needed",
+        "\u2705 scripts/fix_calculation_issues.py: No path updates needed",
+        "\u2705 scripts/agent_doc_utils.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/demo_ppa_integration_fixed.py: 2 path updates needed",
+        "\u2705 scripts/api_key_manager.py: No path updates needed",
+        "\u2705 scripts/verify_all_calculations.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/generate_bowl_betting_guide.py: 1 path updates needed",
+        "\u2705 scripts/cfbd_refresh_snapshots.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/fix_all_notebooks.py: 1 path updates needed",
+        "\u2705 scripts/predict_dk_slate_2025.py: No path updates needed",
+        "\u2705 scripts/integrate_week15_postseason.py: No path updates needed",
+        "\u2705 scripts/cfbd_pull.py: No path updates needed",
+        "\u2705 scripts/generate_master_verification_report.py: No path updates needed",
+        "\u2705 scripts/generate_week14_narrative_previews.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/train_random_forest.py: 1 path updates needed",
+        "\u26a0\ufe0f  scripts/clean_zero_score_games.py: 2 path updates needed",
+        "\u2705 scripts/comprehensive_data_audit.py: No path updates needed",
+        "\u2705 scripts/recover_missing_games_local_first.py: No path updates needed",
+        "\u2705 scripts/collect_baseline_metrics.py: No path updates needed",
+        "\u2705 scripts/__init__.py: No path updates needed",
+        "\u2705 scripts/generate_week14_ats_analysis.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/compare_week13_predictions.py: 1 path updates needed",
+        "\u2705 scripts/check_data_quality.py: No path updates needed",
+        "\u2705 scripts/optimize_meta_ensemble_weights.py: No path updates needed",
+        "\u2705 scripts/fix_data_synchronization.py: No path updates needed",
+        "\u2705 scripts/validate_week14_web_app_data.py: No path updates needed",
+        "\u2705 scripts/_auto_setup.py: No path updates needed",
+        "\u2705 scripts/validate_sp_blend_weights.py: No path updates needed",
+        "\u2705 scripts/validate_integrated_dataset.py: No path updates needed",
+        "\u2705 scripts/generate_comprehensive_week13_analysis.py: No path updates needed",
+        "\u2705 scripts/enhance_predictions_with_ratings.py: No path updates needed",
+        "\u2705 scripts/fill_missing_games.py: No path updates needed",
+        "\u2705 scripts/cleanup_starter_pack_notebooks.py: No path updates needed",
+        "\u2705 scripts/generate_week13_features.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/compare_predictions_to_systems.py: 1 path updates needed",
+        "\u26a0\ufe0f  scripts/run_weekly_analysis.py: 1 path updates needed",
+        "\u2705 scripts/validate_week13_data.py: No path updates needed",
+        "\u2705 scripts/generate_week13_master_report_html.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/refactor_notebooks.py: 1 path updates needed",
+        "\u2705 scripts/week13_model_predictions.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/generate_infographics.py: 1 path updates needed",
+        "\u2705 scripts/verify_week13_data.py: No path updates needed",
+        "\u2705 scripts/enhanced_week13_analysis.py: No path updates needed",
+        "\u2705 scripts/generate_week14_summary.py: No path updates needed",
+        "\u2705 scripts/smoke_test_toon.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/sync_web_app_data.py: 1 path updates needed",
+        "\u26a0\ufe0f  scripts/predict_bowls_2025_fallback.py: 1 path updates needed",
+        "\u2705 scripts/identify_missing_games.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/data_quality_report.py: 2 path updates needed",
+        "\u2705 scripts/clear_notebook_outputs.py: No path updates needed",
+        "\u2705 scripts/prepare_week14_simulator_data.py: No path updates needed",
+        "\u2705 scripts/combine_weeks_5_13_and_retrain.py: No path updates needed",
+        "\u2705 scripts/generate_calculation_verification_report.py: No path updates needed",
+        "\u2705 scripts/fix_claude_frontmatter.py: No path updates needed",
+        "\u2705 scripts/analyze_prediction_divergences.py: No path updates needed",
+        "\u2705 scripts/verify_phase3_changes.py: No path updates needed",
+        "\u2705 scripts/test_week13_agents.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/create_multi_system_ensemble.py: 1 path updates needed",
+        "\u2705 scripts/validate_combined_dataset.py: No path updates needed",
+        "\u2705 scripts/tune_fastai.py: No path updates needed",
+        "\u2705 scripts/test_tier4_access.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/predict_postseason_2025.py: 1 path updates needed",
+        "\u26a0\ufe0f  scripts/build_training_data_from_cfbd.py: 2 path updates needed",
+        "\u2705 scripts/retrain_models_full_features.py: No path updates needed",
+        "\u2705 scripts/fix_notebook_duplicates.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/check_results.py: 1 path updates needed",
+        "\u2705 scripts/generate_week13_master_report.py: No path updates needed",
+        "\u2705 scripts/check_key.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/integrate_weekly_files.py: 2 path updates needed",
+        "\u26a0\ufe0f  scripts/generate_week14_reports.py: 1 path updates needed",
+        "\u2705 scripts/test_starter_pack_config.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/validate_data_alignment.py: 2 path updates needed",
+        "\u2705 scripts/pickem_league_optimizer.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/cleanup_repository.py: 1 path updates needed",
+        "\u2705 scripts/validate_agent_docs.py: No path updates needed",
+        "\u2705 scripts/verify_weekly_agents.py: No path updates needed",
+        "\u2705 scripts/fetch_week13_simple.py: No path updates needed",
+        "\u2705 scripts/ensure_latest_data.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/run_all_notebooks.py: 1 path updates needed",
+        "\u26a0\ufe0f  scripts/add_live_odds.py: 1 path updates needed",
+        "\u2705 scripts/predict_week13_proper.py: No path updates needed",
+        "\u2705 scripts/cfbd_sync_missing_data.py: No path updates needed",
+        "\u2705 scripts/fix_missing_game_ids.py: No path updates needed",
+        "\u2705 scripts/github_cmd.py: No path updates needed",
+        "\u2705 scripts/validate_cfbd_pipeline.py: No path updates needed",
+        "\u2705 scripts/secure_artifacts.py: No path updates needed",
+        "\u2705 scripts/data_manager.py: No path updates needed",
+        "\u2705 scripts/test_tier3_access.py: No path updates needed",
+        "\u2705 scripts/validate_power_rankings_fix.py: No path updates needed",
+        "\u2705 scripts/predict_week14_proper.py: No path updates needed",
+        "\u2705 scripts/generate_simple_bowl_guide.py: No path updates needed",
+        "\u2705 scripts/plan_to_workflow.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/import_week13_predictions.py: 1 path updates needed",
+        "\u2705 scripts/extract_week14_analysis_components.py: No path updates needed",
+        "\u2705 scripts/audit_model_files.py: No path updates needed",
+        "\u2705 scripts/synchronize_weeks_1_12_data.py: No path updates needed",
+        "\u2705 scripts/sync_all_data_sources.py: No path updates needed",
+        "\u2705 scripts/run_postseason_pipeline.py: No path updates needed",
+        "\u2705 scripts/prepare_weekly_analysis.py: No path updates needed",
+        "\u2705 scripts/enhance_week13_analysis.py: No path updates needed",
+        "\u2705 scripts/audit_and_sync_data.py: No path updates needed",
+        "\u2705 scripts/tune_ridge_xgb.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/enhance_ncaa_predictions.py: 1 path updates needed",
+        "\u2705 scripts/test_auth_simple.py: No path updates needed",
+        "\u2705 scripts/verify_and_fix_calculations.py: No path updates needed",
+        "\u2705 scripts/validate_week14_data.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/retrain_models_current.py: 1 path updates needed",
+        "\u26a0\ufe0f  scripts/verify_week13_setup.py: 3 path updates needed",
+        "\u2705 scripts/detect_notebook_duplicates.py: No path updates needed",
+        "\u2705 scripts/validate_starter_pack_notebooks.py: No path updates needed",
+        "\u2705 scripts/run_consolidation_validation.py: No path updates needed",
+        "\u2705 scripts/analyze_router_instrumentation.py: No path updates needed",
+        "\u2705 scripts/enhance_week14_with_sp.py: No path updates needed",
+        "\u2705 scripts/enhance_week14_comprehensive.py: No path updates needed",
+        "\u2705 scripts/audit_week13_predictions.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/pull_and_predict_week13.py: 1 path updates needed",
+        "\u2705 scripts/github_operations/__init__.py: No path updates needed",
+        "\u2705 scripts/github_operations/push_operations.py: No path updates needed",
+        "\u2705 scripts/github_operations/git_utils.py: No path updates needed",
+        "\u2705 scripts/github_operations/rollback_operations.py: No path updates needed",
+        "\u26a0\ufe0f  scripts/maintenance/02_validation_check.py: 4 path updates needed",
+        "\u26a0\ufe0f  scripts/maintenance/01_data_migration.py: 4 path updates needed",
+        "\u26a0\ufe0f  scripts/maintenance/01b_model_migration_fix.py: 1 path updates needed",
+        "\u2705 scripts/github_validation/build_validation.py: No path updates needed",
+        "\u2705 scripts/github_validation/test_validation.py: No path updates needed",
+        "\u2705 scripts/github_validation/agent_integration.py: No path updates needed",
+        "\u2705 scripts/github_validation/__init__.py: No path updates needed",
+        "\u2705 scripts/github_validation/security_validation.py: No path updates needed",
+        "\u2705 scripts/github_validation/code_quality.py: No path updates needed",
+        "\u2705 scripts/github_validation/performance_validation.py: No path updates needed",
+        "\u2705 scripts/github_validation/validation_orchestrator.py: No path updates needed",
+        "\u2705 scripts/github_validation/repository_health.py: No path updates needed"
+      ]
+    },
+    "performance_benchmark": {
+      "file_access_times": {
+        "data/processed/training/master_training_data_v2.csv": 3.6e-05,
+        "models/production/ridge_regression_2025_v2.joblib": 2e-05,
+        "models/production/xgboost_classifier_2025_v2.pkl": 1.9e-05,
+        "models/production/fastai_neural_net_2025_v2.pkl": 2e-05
+      },
+      "dataset_load_times": {
+        "master_training_data": {
+          "load_time": 0.042293,
+          "rows": 5250,
+          "columns": 107,
+          "rows_per_second": 124134.01744969617
+        }
+      },
+      "details": [
+        "\u2705 data/processed/training/master_training_data_v2.csv: 0.000s access time",
+        "\u2705 models/production/ridge_regression_2025_v2.joblib: 0.000s access time",
+        "\u2705 models/production/xgboost_classifier_2025_v2.pkl: 0.000s access time",
+        "\u2705 models/production/fastai_neural_net_2025_v2.pkl: 0.000s access time",
+        "\u2705 Master dataset: 5,250 rows loaded in 0.04s"
+      ]
+    }
+  },
+  "overall_score": {
+    "total_checks": 6,
+    "passed_checks": 5,
+    "failed_checks": 1,
+    "overall_percentage": 83.33333333333334,
+    "status": "GOOD"
+  }
+}

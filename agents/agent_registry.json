@@ -1,1 +1,97 @@
-{}
+{
+  "audit_coordinator_agent": {
+    "agent_id": "audit_coordinator_agent",
+    "agent_name": "Audit Coordinator Agent",
+    "class_name": "AuditCoordinatorAgent",
+    "file_path": "agents/audit/audit_coordinator_agent.py",
+    "created_at": "2025-12-18T18:36:46.901076+00:00",
+    "created_by": "system",
+    "status": "active",
+    "capabilities": [
+      "run_comprehensive_audit",
+      "run_quick_audit",
+      "generate_audit_reports",
+      "audit_specific_domain"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-18T18:36:46.901080+00:00",
+    "dependencies": [
+      "audit_agents",
+      "reporting_engine"
+    ],
+    "metadata": {}
+  },
+  "system_integrity_agent": {
+    "agent_id": "system_integrity_agent",
+    "agent_name": "System Integrity Audit Agent",
+    "class_name": "SystemIntegrityAuditAgent",
+    "file_path": "agents/audit/system_integrity_agent.py",
+    "created_at": "2025-12-18T18:36:55.052523+00:00",
+    "created_by": "claude_system",
+    "status": "active",
+    "capabilities": [
+      "audit_python_environment",
+      "audit_file_structure",
+      "audit_permissions",
+      "audit_system_resources"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-18T18:36:55.052525+00:00",
+    "dependencies": [],
+    "metadata": {}
+  },
+  "data_pipeline_agent": {
+    "agent_id": "data_pipeline_agent",
+    "agent_name": "Data Pipeline Audit Agent",
+    "class_name": "DataPipelineAuditAgent",
+    "file_path": "agents/audit/data_pipeline_audit_agent.py",
+    "created_at": "2025-12-18T18:36:55.053044+00:00",
+    "created_by": "claude_system",
+    "status": "active",
+    "capabilities": [
+      "audit_cfbd_integration",
+      "audit_training_data",
+      "audit_feature_engineering",
+      "audit_data_quality"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-18T18:36:55.053045+00:00",
+    "dependencies": [],
+    "metadata": {}
+  },
+  "model_validation_agent": {
+    "agent_id": "model_validation_agent",
+    "agent_name": "Model Validation Audit Agent",
+    "class_name": "ModelValidationAuditAgent",
+    "file_path": "agents/audit/model_validation_audit_agent.py",
+    "created_at": "2025-12-18T18:36:55.053359+00:00",
+    "created_by": "claude_system",
+    "status": "active",
+    "capabilities": [
+      "audit_model_loading",
+      "audit_model_predictions",
+      "audit_model_performance",
+      "audit_ensemble_integration"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-18T18:36:55.053360+00:00",
+    "dependencies": [],
+    "metadata": {}
+  }
+}

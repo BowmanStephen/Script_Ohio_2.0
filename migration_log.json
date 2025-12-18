@@ -1,0 +1,173 @@
+[
+  {
+    "timestamp": "2025-12-18T11:21:11.894362",
+    "source": "model_pack/updated_training_data.csv",
+    "destination": "data/processed/training/master_training_data_v2.csv",
+    "category": "critical_master",
+    "description": "Primary training dataset for ML models",
+    "size_bytes": 7070628,
+    "checksum": "9954670a8a15265581d528b99bd8474fb6788633a8b983941ab45656e7cb07be"
+  },
+  {
+    "timestamp": "2025-12-18T11:21:11.932456",
+    "source": "starter_pack/data/games.csv",
+    "destination": "data/raw/historical/games_1869_2025.csv",
+    "category": "historical_archive",
+    "description": "Complete historical games archive",
+    "size_bytes": 23174454,
+    "checksum": "32eae1d1f4b849c11e546339b20ebacf40444f22c7d7a1917183b8737867d6b5"
+  },
+  {
+    "timestamp": "2025-12-18T11:21:11.933739",
+    "source": "data/training/weekly/training_data_2025_week10.csv",
+    "destination": "data/processed/training/weekly_updates/training_data_2025_week10.csv",
+    "category": "weekly_update",
+    "description": "Week 10 training data update",
+    "size_bytes": 52815,
+    "checksum": "7b4c966039aca2308bda512de6387dee2ebed06f783ca571fc0b6dc3372ae7c6"
+  },
+  {
+    "timestamp": "2025-12-18T11:21:11.934198",
+    "source": "data/training/weekly/training_data_2025_week11.csv",
+    "destination": "data/processed/training/weekly_updates/training_data_2025_week11.csv",
+    "category": "weekly_update",
+    "description": "Week 11 training data update",
+    "size_bytes": 47576,
+    "checksum": "9139638f22e9f0f162ba8789ec78740077454e7220deefe153c6cd45d43dc2ba"
+  },
+  {
+    "timestamp": "2025-12-18T11:21:11.934677",
+    "source": "data/training/weekly/training_data_2025_week12.csv",
+    "destination": "data/processed/training/weekly_updates/training_data_2025_week12.csv",
+    "category": "weekly_update",
+    "description": "Week 12 training data update",
+    "size_bytes": 58127,
+    "checksum": "5c1296982cd297ff4b48c16d10bf40c702ddb031e0081667ca9c596d7d20c20e"
+  },
+  {
+    "timestamp": "2025-12-18T11:21:11.935403",
+    "source": "data/training/weekly/training_data_2025_week13.csv",
+    "destination": "data/processed/training/weekly_updates/training_data_2025_week13.csv",
+    "category": "weekly_update",
+    "description": "Week 13 training data update",
+    "size_bytes": 63138,
+    "checksum": "32f1e8dca7ce86b1d99b3ca78c50fb47d77eb74e234a6a0517366b2744941e7b"
+  },
+  {
+    "timestamp": "2025-12-18T11:21:11.936277",
+    "source": "data/training/weekly/training_data_2025_week14.csv",
+    "destination": "data/processed/training/weekly_updates/training_data_2025_week14.csv",
+    "category": "weekly_update",
+    "description": "Week 14 training data update",
+    "size_bytes": 93614,
+    "checksum": "18e56c6ce105e12d4609a9d4cba3a08b865aba52afdff28604f713ee682f221e"
+  },
+  {
+    "timestamp": "2025-12-18T11:21:11.936811",
+    "source": "data/training/weekly/training_data_2025_week15.csv",
+    "destination": "data/processed/training/weekly_updates/training_data_2025_week15.csv",
+    "category": "weekly_update",
+    "description": "Week 15 training data update",
+    "size_bytes": 18246,
+    "checksum": "c1c87841a234962f4f86fa0ecfbd9d81b0751a6a2a8f4ea8cc2674a562f7c557"
+  },
+  {
+    "timestamp": "2025-12-18T11:21:11.937566",
+    "source": "predictions/bowls_2025_predictions_ml_backup_20251216_214957.json",
+    "destination": "data/outputs/predictions/2025/bowl_season/bowls_2025_predictions_ml_backup_20251216_214957.json",
+    "category": "predictions",
+    "description": "Bowl season predictions",
+    "size_bytes": 19206,
+    "checksum": "98d816aa73a5202bded9a9f9e847ea8435d2d2482d7017df4886d6db23afca5e"
+  },
+  {
+    "timestamp": "2025-12-18T11:21:11.938040",
+    "source": "predictions/bowls_2025_predictions_ml_20251216_215052.json",
+    "destination": "data/outputs/predictions/2025/bowl_season/bowls_2025_predictions_ml_20251216_215052.json",
+    "category": "predictions",
+    "description": "Bowl season predictions",
+    "size_bytes": 19206,
+    "checksum": "c2b5aedf2875972e0d7ac904848e5eb5fd78d7593ba0f6eb136c099586de64ab"
+  },
+  {
+    "timestamp": "2025-12-18T11:21:11.938530",
+    "source": "predictions/bowls_2025_predictions_simple.json",
+    "destination": "data/outputs/predictions/2025/bowl_season/bowls_2025_predictions_simple.json",
+    "category": "predictions",
+    "description": "Bowl season predictions",
+    "size_bytes": 16968,
+    "checksum": "867c2689bd8759847b8d5b6710e4bb8a53583f044ef1332535a77e05a5f0d5be"
+  },
+  {
+    "timestamp": "2025-12-18T11:21:11.938989",
+    "source": "predictions/bowls_2025_predictions_ml_20251216_214727.json",
+    "destination": "data/outputs/predictions/2025/bowl_season/bowls_2025_predictions_ml_20251216_214727.json",
+    "category": "predictions",
+    "description": "Bowl season predictions",
+    "size_bytes": 19206,
+    "checksum": "bf933f80f7d5c1f698c6b724a60ae3b8e0cc61f882f5914451da6bb137e6561e"
+  },
+  {
+    "timestamp": "2025-12-18T11:21:11.939457",
+    "source": "predictions/bowls_2025_predictions.json",
+    "destination": "data/outputs/predictions/2025/bowl_season/bowls_2025_predictions.json",
+    "category": "predictions",
+    "description": "Bowl season predictions",
+    "size_bytes": 27906,
+    "checksum": "c81da0710b1f5a51ded9c965e989e21dcf37c3ef3b530c230fa3ccea01de77a8"
+  },
+  {
+    "timestamp": "2025-12-18T11:21:11.939963",
+    "source": "predictions/bowls_2025_predictions_ml.json",
+    "destination": "data/outputs/predictions/2025/bowl_season/bowls_2025_predictions_ml.json",
+    "category": "predictions",
+    "description": "Bowl season predictions",
+    "size_bytes": 19206,
+    "checksum": "c537efe46045ae63999b25e503efe27b4e4d43c2eb46d55b5bb9ee3635e95c9b"
+  },
+  {
+    "timestamp": "2025-12-18T11:21:12.006495",
+    "source": "model_pack/rf_components/random_forest_home.joblib",
+    "destination": "models/components/rf_components/random_forest_home.joblib",
+    "category": "model_components",
+    "description": "Random Forest home team model component",
+    "size_bytes": 38809457,
+    "checksum": "2336d3f40d10979b5ff8b29ce1eec3e457dacabbb88b338b22b0b14d34345188"
+  },
+  {
+    "timestamp": "2025-12-18T11:21:12.079842",
+    "source": "model_pack/rf_components/random_forest_away.joblib",
+    "destination": "models/components/rf_components/random_forest_away.joblib",
+    "category": "model_components",
+    "description": "Random Forest away team model component",
+    "size_bytes": 38329073,
+    "checksum": "0d6e7965b60ec54b4a3d8589db58ac20fcc461e10ebe8f565afa016fa414ff22"
+  },
+  {
+    "timestamp": "2025-12-18T11:21:12.250414",
+    "source": "model_pack/random_forest_model_2025.pkl",
+    "destination": "models/legacy/v1_models/random_forest_model_2025.pkl",
+    "category": "legacy_model",
+    "description": "Legacy model version - archived",
+    "size_bytes": 77137889,
+    "checksum": "19cdc444679bc47c637d5ff2ddff249370c935d90f671f89e2d9cebf0beedb38"
+  },
+  {
+    "timestamp": "2025-12-18T11:21:12.298324",
+    "source": "model_pack/random_forest_home.joblib",
+    "destination": "models/legacy/v1_models/random_forest_home.joblib",
+    "category": "legacy_model",
+    "description": "Legacy model version - archived",
+    "size_bytes": 30090401,
+    "checksum": "f6dbbf0b26f5c8ae6633db8b80fb4ccc0e2b897e83dcee96a16b75e1f2eed0a6"
+  },
+  {
+    "timestamp": "2025-12-18T11:21:12.347951",
+    "source": "model_pack/random_forest_away.joblib",
+    "destination": "models/legacy/v1_models/random_forest_away.joblib",
+    "category": "legacy_model",
+    "description": "Legacy model version - archived",
+    "size_bytes": 29801681,
+    "checksum": "985a89b58028eda4fe6e273df24ea1298d574a4f50324eb539778852ba4296e7"
+  }
+]
