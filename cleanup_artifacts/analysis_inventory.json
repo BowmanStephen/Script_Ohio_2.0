@@ -1,0 +1,99 @@
+{
+  "discovery_timestamp": "2025-12-18T11:15:00Z",
+  "phase": 0,
+  "agent": "discovery_agent",
+  "analysis_directory": {
+    "exists": true,
+    "total_files": 9,
+    "total_size_kb": 704,
+    "total_size_human": "704KB",
+    "oldest_file": "2024-11-24 20:33",
+    "newest_file": "2024-11-24 23:06",
+    "subdirectories": ["week12", "week13", "week14"],
+    "valuable_data_location": "week14/"
+  },
+  "files": [
+    {
+      "path": "analysis/week14/week14_comprehensive_analysis.json",
+      "size_kb": 351,
+      "preserve": true,
+      "migration_target": "predictions/week14/legacy/",
+      "data_type": "comprehensive_analysis"
+    },
+    {
+      "path": "analysis/week14/week14_matchup_analysis.json",
+      "size_kb": 256,
+      "preserve": true,
+      "migration_target": "predictions/week14/legacy/",
+      "data_type": "matchup_analysis"
+    },
+    {
+      "path": "analysis/week14/week14_narrative_previews.md",
+      "size_kb": 37,
+      "preserve": true,
+      "migration_target": "predictions/week14/legacy/",
+      "data_type": "narrative_previews"
+    },
+    {
+      "path": "analysis/week14/week14_strategic_recommendations.csv",
+      "size_kb": 27,
+      "preserve": true,
+      "migration_target": "predictions/week14/legacy/",
+      "data_type": "strategic_recommendations"
+    },
+    {
+      "path": "analysis/week14/week14_intelligence_consolidation.json",
+      "size_kb": 6.9,
+      "preserve": true,
+      "migration_target": "predictions/week14/legacy/",
+      "data_type": "intelligence_consolidation"
+    },
+    {
+      "path": "analysis/week14/week14_power_rankings.csv",
+      "size_kb": 1.7,
+      "preserve": true,
+      "migration_target": "predictions/week14/legacy/",
+      "data_type": "power_rankings"
+    },
+    {
+      "path": "analysis/week14/week14_upset_alerts.csv",
+      "size_kb": 1.5,
+      "preserve": true,
+      "migration_target": "predictions/week14/legacy/",
+      "data_type": "upset_alerts"
+    },
+    {
+      "path": "analysis/week14/week14_model_validation.json",
+      "size_kb": 0.566,
+      "preserve": true,
+      "migration_target": "predictions/week14/legacy/",
+      "data_type": "model_validation"
+    },
+    {
+      "path": "analysis/week14/week14_comprehensive_report.html",
+      "size_kb": 0.140,
+      "preserve": true,
+      "migration_target": "predictions/week14/legacy/",
+      "data_type": "comprehensive_report"
+    }
+  ],
+  "subdirectories": {
+    "week12": {
+      "file_count": 0,
+      "empty": true,
+      "preserve": false
+    },
+    "week13": {
+      "file_count": 0,
+      "empty": true,
+      "preserve": false
+    },
+    "week14": {
+      "file_count": 9,
+      "empty": false,
+      "total_size_kb": 704,
+      "preserve": true,
+      "contains_valuable_data": true
+    }
+  }
+}

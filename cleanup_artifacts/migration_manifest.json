@@ -1,0 +1,34 @@
+{
+  "migration_timestamp": "2025-12-18T11:15:00Z",
+  "phase": 1,
+  "agent": "migration_agent",
+  "backup_location": "archives/analysis_week14_backup_20251218_110417/",
+  "backup_verified": true,
+  "migration": {
+    "source_directory": "analysis/week14/",
+    "target_directory": "predictions/week14/legacy/",
+    "files_migrated": 9,
+    "size_migrated_kb": 704,
+    "migration_status": "SUCCESS"
+  },
+  "migrated_files": [
+    "week14_comprehensive_analysis.json",
+    "week14_comprehensive_report.html", 
+    "week14_intelligence_consolidation.json",
+    "week14_matchup_analysis.json",
+    "week14_model_validation.json",
+    "week14_narrative_previews.md",
+    "week14_power_rankings.csv",
+    "week14_strategic_recommendations.csv",
+    "week14_upset_alerts.csv"
+  ],
+  "integrity": {
+    "backup_checksums_match": true,
+    "source_files_count": 9,
+    "backup_files_count": 9,
+    "migrated_files_count": 9
+  },
+  "gate_passed": true,
+  "gate_blockers": []
+}
+EOF && echo "✓ Migration manifest created"
