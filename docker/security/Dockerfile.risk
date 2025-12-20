@@ -1,0 +1,75 @@
+# Risk Assessment Layer Dockerfile
+# Restricted Security - Threat detection and risk analysis
+# User: 2002:2002 (Risk assessment user)
+# Capabilities: None (read-only risk analysis)
+# Security: no-new-privileges, apparmor, seccomp
+# Networks: orchestration-network, audit-network
+
+FROM python:3.13-slim
+
+# Create system user
+RUN groupadd -r -g 2002 risk_user && \
+    useradd -r -u 2002 -g risk_user risk_user
+
+# Install minimal system packages
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        jq \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install risk assessment dependencies
+RUN pip install --no-cache-dir \
+    pandas \
+    numpy \
+    scikit-learn \
+    matplotlib \
+    seaborn \
+    plotly \
+    dash \
+    pydantic \
+    fastapi \
+    uvicorn \
+    psutil \
+    prometheus-client
+
+# Copy application code
+COPY agents/risk/ ./agents/risk/
+COPY agents/core/ ./agents/core/
+COPY docker/security/scripts/start-risk.sh ./
+COPY docker/security/scripts/health-check.sh ./
+
+# Create risk assessment directories
+RUN mkdir -p /app/data/risk-assessment /app/logs && \
+    chown -R risk_user:risk_user /app && \
+    chmod -R 755 /app
+
+# Copy security configuration
+COPY docker/security/security-policies.json /etc/agent-security/
+COPY docker/security/risk-assessment-rules.json /etc/agent-security/
+RUN chmod 600 /etc/agent-security/security-policies.json && \
+    chmod 600 /etc/agent-security/risk-assessment-rules.json
+
+# Set ownership
+RUN chown -R risk_user:risk_user /app
+
+# Switch to non-root user
+USER risk_user
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD ["./health-check.sh"]
+
+# Expose port for risk assessment interface
+EXPOSE 9100
+
+# Start command
+CMD ["./start-risk.sh"]

@@ -1,0 +1,87 @@
+# Data Operations Layer Dockerfile
+# CFBD API Access Required - External Network Connectivity
+# User: 3000:3000 (Data operations user)
+# Capabilities: NET_RAW (for API access)
+# Security: no-new-privileges, apparmor, seccomp
+# Networks: data-network, cfbd-network, audit-network
+
+FROM python:3.13-slim
+
+# Create system user
+RUN groupadd -r -g 3000 data_user && \
+    useradd -r -u 3000 -g data_user data_user
+
+# Install system packages for data operations
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        jq \
+        wget \
+        unzip \
+        htop \
+        iotop \
+        nethogs \
+        iputils-ping \
+        dnsutils \
+        netcat \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install CFBD client dependencies
+RUN pip install --no-cache-dir \
+    cfbd \
+    requests \
+    beautifulsoup4 \
+    pandas \
+    numpy \
+    scikit-learn \
+    matplotlib \
+    seaborn \
+    plotly \
+    dash \
+    redis \
+    cryptography \
+    pydantic \
+    fastapi \
+    uvicorn
+
+# Copy application code
+COPY src/ ./src/
+COPY agents/data/ ./agents/data/
+COPY agents/core/ ./agents/core/
+COPY docker/security/scripts/start-data.sh ./
+COPY docker/security/scripts/health-check.sh ./
+
+# Create data directories
+RUN mkdir -p /app/data/raw /app/data/processed /app/cache /app/logs && \
+    chown -R data_user:data_user /app && \
+    chmod -R 755 /app
+
+# Copy security configuration
+COPY docker/security/security-policies.json /etc/agent-security/
+COPY docker/security/cfbd-api-rules.json /etc/agent-security/
+RUN chmod 600 /etc/agent-security/security-policies.json && \
+    chmod 600 /etc/agent-security/cfbd-api-rules.json
+
+# Set ownership
+RUN chown -R data_user:data_user /app
+
+# Switch to non-root user
+USER data_user
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD ["./health-check.sh"]
+
+# Expose port for data service interface
+EXPOSE 8100
+
+# Start command
+CMD ["./start-data.sh"]

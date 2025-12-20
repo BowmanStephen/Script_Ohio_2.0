@@ -1,0 +1,81 @@
+# Weather Integration Layer Dockerfile
+# Restricted Security - External weather API access with network connectivity
+# User: 3003:3003 (Weather integration user)
+# Capabilities: NET_RAW (for external API access)
+# Security: no-new-privileges, apparmor, seccomp
+# Networks: data-network, external-network, audit-network
+
+FROM python:3.13-slim
+
+# Create system user
+RUN groupadd -r -g 3003 weather_user && \
+    useradd -r -u 3003 -g weather_user weather_user
+
+# Install system packages for weather data
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        jq \
+        wget \
+        htop \
+        iputils-ping \
+        dnsutils \
+        netcat \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install weather integration dependencies
+RUN pip install --no-cache-dir \
+    requests \
+    beautifulsoup4 \
+    pandas \
+    numpy \
+    matplotlib \
+    seaborn \
+    plotly \
+    dash \
+    pydantic \
+    fastapi \
+    uvicorn \
+    redis \
+    cryptography
+
+# Copy application code
+COPY agents/weather/ ./agents/weather/
+COPY agents/core/ ./agents/core/
+COPY docker/security/scripts/start-weather.sh ./
+COPY docker/security/scripts/health-check.sh ./
+
+# Create weather data directories
+RUN mkdir -p /app/data/weather /app/cache/weather /app/logs && \
+    chown -R weather_user:weather_user /app && \
+    chmod -R 755 /app
+
+# Copy security configuration
+COPY docker/security/security-policies.json /etc/agent-security/
+COPY docker/security/weather-api-rules.json /etc/agent-security/
+RUN chmod 600 /etc/agent-security/security-policies.json && \
+    chmod 600 /etc/agent-security/weather-api-rules.json
+
+# Set ownership
+RUN chown -R weather_user:weather_user /app
+
+# Switch to non-root user
+USER weather_user
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD ["./health-check.sh"]
+
+# Expose port for weather service interface
+EXPOSE 9200
+
+# Start command
+CMD ["./start-weather.sh"]

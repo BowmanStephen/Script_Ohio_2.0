@@ -1,0 +1,57 @@
+# Multi-stage build for production security
+FROM python:3.13-slim as base
+
+# Security defaults
+RUN addgroup --system --gid 1001 agentgroup && \
+    adduser --system --uid 1001 --gid 1001 agentuser
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies with security updates
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends \
+        gcc \
+        g++ \
+        git \
+        curl \
+        procps \
+        && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first for better caching
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Production stage
+FROM base as production
+
+# Security hardening
+RUN echo "root:$(openssl rand -base64 32)" | chpasswd && \
+    sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config || true
+
+# Copy application code
+COPY --chown=agentuser:agentgroup . .
+
+# Set permissions
+RUN chown -R agentuser:agentgroup /app && \
+    chmod -R 755 /app && \
+    chmod -R 644 /app/agents/*.py && \
+    chmod +x /app/scripts/*.py
+
+# Switch to non-root user
+USER agentuser
+
+# Health check endpoint
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python3 -c "from agents.${AGENT_CLASS} import ${AGENT_INSTANCE}; print('OK')" || exit 1
+
+# Expose agent port
+EXPOSE ${AGENT_PORT}
+
+# Entrypoint
+COPY containers/agents/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Default command
+CMD ["run"]

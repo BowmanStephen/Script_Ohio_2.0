@@ -1,0 +1,58 @@
+# Meta Orchestration Layer Dockerfile
+# Top Security Level - System Administration and Orchestration
+# User: 1000:1000 (Non-root with limited privileges)
+# Capabilities: CHOWN, SETGID, SETUID
+# Security: no-new-privileges, apparmor, seccomp
+# Network: orchestration-network, audit-network (internal)
+
+FROM python:3.13-slim
+
+# Create system user
+RUN groupadd -r -g 1000 meta_user && \
+    useradd -r -u 1000 -g meta_user meta_user
+
+# Install minimal system packages
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        jq \
+        htop \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY agents/orchestration/ ./agents/orchestration/
+COPY agents/core/ ./agents/core/
+COPY docker/security/scripts/start-meta.sh ./
+
+# Create necessary directories with proper permissions
+RUN mkdir -p /app/logs /app/checkpoints && \
+    chown -R meta_user:meta_user /app && \
+    chmod -R 755 /app
+
+# Copy security configuration
+COPY docker/security/security-policies.json /etc/agent-security/
+RUN chmod 600 /etc/agent-security/security-policies.json
+
+# Set ownership
+RUN chown -R meta_user:meta_user /app
+
+# Switch to non-root user
+USER meta_user
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "import requests; requests.get('http://localhost:8000/health')" || exit 1
+
+# Expose port for orchestration interface
+EXPOSE 8000
+
+# Start command
+CMD ["./start-meta.sh"]

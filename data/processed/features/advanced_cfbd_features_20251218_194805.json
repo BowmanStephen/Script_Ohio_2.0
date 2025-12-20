@@ -1,0 +1,15 @@
+{
+  "generated_at": "2025-12-18T19:48:05.754737",
+  "season": 2025,
+  "data_sources": [
+    "EPA",
+    "PPA",
+    "Recruiting",
+    "Player Stats"
+  ],
+  "total_teams": 0,
+  "features_data": {
+    "recruiting": {},
+    "advanced_ratings": {}
+  }
+}

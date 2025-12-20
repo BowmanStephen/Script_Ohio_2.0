@@ -1,0 +1,19 @@
+FROM containers/agents/Dockerfile.agent
+
+# Meta agent specific configuration
+ENV AGENT_CLASS=meta_agent
+ENV AGENT_INSTANCE=meta_agent
+ENV AGENT_PORT=8000
+ENV AGENT_TYPE=governance
+ENV SECURITY_LEVEL=high
+
+# Additional system capabilities for orchestration
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    procps && \
+    rm -rf /var/lib/apt/lists/*
+USER agentuser
+
+# Meta agent health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+    CMD python3 -c "from agents.meta_agent import meta_agent; meta_agent._perform_health_check({}, {})" || exit 1

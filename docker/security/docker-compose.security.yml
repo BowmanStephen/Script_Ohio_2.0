@@ -1,0 +1,753 @@
+version: '3.8'
+
+# Advanced Multi-Agent Security Configuration
+# Implements multi-layer sandboxing with role-based security
+
+services:
+  # =================================================================
+  # TIER 1: Meta Orchestration Layer (Admin Level Security)
+  # =================================================================
+  meta-orchestration:
+    build:
+      context: ../../
+      dockerfile: docker/security/Dockerfile.meta
+    container_name: cfbd_meta_orchestrator
+    hostname: meta-orchestration
+    user: "1000:1000"  # Non-root user with limited privileges
+    read_only: false  # Needs write access for coordination
+    security_opt:
+      - no-new-privileges:true
+      - apparmor:docker-default
+      - seccomp:default
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    tmpfs:
+      - /tmp:noexec,nosuid,size=512m
+      - /var/run:noexec,nosuid,size=100m
+    volumes:
+      - ./logs/meta:/app/logs:rw
+      - ./data/checkpoints:/app/checkpoints:rw
+      - /etc/agent-security:/etc/agent-security:ro
+    environment:
+      - SECURITY_LEVEL=top_secret
+      - AUDIT_ENABLED=true
+      - ENCRYPTION_KEY_FILE=/etc/agent-security/encryption.key
+      - LOG_LEVEL=INFO
+    networks:
+      - orchestration-network
+      - audit-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 2G
+    labels:
+      - "security.tier=meta"
+      - "security.level=top_secret"
+      - "orchestration.role=coordinator"
+
+  # =================================================================
+  # TIER 2: Planning & Coordination Layer (High Security)
+  # =================================================================
+  planning-coordinator:
+    build:
+      context: ../../
+      dockerfile: docker/security/Dockerfile.planning
+    container_name: cfbd_planning_coordinator
+    hostname: planning-coordinator
+    user: "2000:2000"
+    read_only: true  # Read-only execution
+    security_opt:
+      - no-new-privileges:true
+      - apparmor:docker-default
+      - seccomp:default
+    cap_drop:
+      - ALL
+    tmpfs:
+      - /tmp:noexec,nosuid,size=256m
+      - /var/run:noexec,nosuid,size=50m
+    volumes:
+      - ./data/plans:/app/plans:ro
+      - ./logs/planning:/app/logs:rw
+      - /etc/agent-security:/etc/agent-security:ro
+    environment:
+      - SECURITY_LEVEL=restricted
+      - READ_ONLY_MODE=true
+      - AUDIT_ENABLED=true
+    networks:
+      - orchestration-network
+      - data-network
+      - audit-network
+    depends_on:
+      - meta-orchestration
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+    labels:
+      - "security.tier=planning"
+      - "security.level=restricted"
+
+  workflow-coordinator:
+    build:
+      context: ../../
+      dockerfile: docker/security/Dockerfile.workflow
+    container_name: cfbd_workflow_coordinator
+    hostname: workflow-coordinator
+    user: "2001:2001"
+    read_only: false
+    security_opt:
+      - no-new-privileges:true
+      - apparmor:docker-default
+      - seccomp:default
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    tmpfs:
+      - /tmp:noexec,nosuid,size=256m
+      - /var/run:noexec,nosuid,size=100m
+    volumes:
+      - ./data/workflows:/app/workflows:rw
+      - ./data/communication:/app/communication:rw
+      - ./logs/workflow:/app/logs:rw
+      - /etc/agent-security:/etc/agent-security:ro
+    environment:
+      - SECURITY_LEVEL=confidential
+      - COMMUNICATION_ENCRYPTION=true
+    networks:
+      - orchestration-network
+      - data-network
+      - communication-network
+      - audit-network
+    depends_on:
+      - meta-orchestration
+      - planning-coordinator
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+    labels:
+      - "security.tier=planning"
+      - "security.level=confidential"
+
+  risk-assessment-agent:
+    build:
+      context: ../../
+      dockerfile: docker/security/Dockerfile.risk
+    container_name: cfbd_risk_assessment
+    hostname: risk-assessment
+    user: "2002:2002"
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+      - apparmor:docker-default
+      - seccomp:default
+    cap_drop:
+      - ALL
+    tmpfs:
+      - /tmp:noexec,nosuid,size=128m
+    volumes:
+      - ./data/risk-assessment:/app/data:ro
+      - ./logs/risk:/app/logs:rw
+      - /etc/agent-security:/etc/agent-security:ro
+    environment:
+      - SECURITY_LEVEL=restricted
+      - THREAT_DETECTION_ENABLED=true
+    networks:
+      - orchestration-network
+      - audit-network
+    depends_on:
+      - meta-orchestration
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+    labels:
+      - "security.tier=planning"
+      - "security.level=restricted"
+
+  # =================================================================
+  # TIER 3: Data Operations Layer (API Access Required)
+  # =================================================================
+  cfbd-data-ingestion:
+    build:
+      context: ../../
+      dockerfile: docker/security/Dockerfile.data
+    container_name: cfbd_data_ingestion
+    hostname: cfbd-data
+    user: "3000:3000"
+    read_only: false
+    security_opt:
+      - no-new-privileges:true
+      - apparmor:docker-default
+      - seccomp:default
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_RAW
+    tmpfs:
+      - /tmp:noexec,nosuid,size=1G
+      - /var/run:noexec,nosuid,size=200m
+    volumes:
+      - ./data/raw:/app/data/raw:rw
+      - ./data/processed:/app/data/processed:rw
+      - ./cache/cfbd:/app/cache:rw
+      - ./logs/data:/app/logs:rw
+      - /etc/agent-security:/etc/agent-security:ro
+    environment:
+      - SECURITY_LEVEL=restricted
+      - CFBD_API_ACCESS=true
+      - RATE_LIMIT_PER_MINUTE=30
+      - ENCRYPTION_ENABLED=true
+      - AUDIT_API_CALLS=true
+    networks:
+      - data-network
+      - cfbd-network
+      - audit-network
+    depends_on:
+      - meta-orchestration
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 2G
+    labels:
+      - "security.tier=data"
+      - "security.level=restricted"
+      - "api.access=cfbd"
+
+  data-validation-agent:
+    build:
+      context: ../../
+      dockerfile: docker/security/Dockerfile.validation
+    container_name: cfbd_data_validation
+    hostname: data-validation
+    user: "3001:3001"
+    read_only: false
+    security_opt:
+      - no-new-privileges:true
+      - apparmor:docker-default
+      - seccomp:default
+    cap_drop:
+      - ALL
+    tmpfs:
+      - /tmp:noexec,nosuid,size=512m
+      - /var/run:noexec,nosuid,size=100m
+    volumes:
+      - ./data/processed:/app/data/processed:rw
+      - ./data/validation:/app/data/validation:rw
+      - ./cache/validation:/app/cache:rw
+      - ./logs/validation:/app/logs:rw
+      - /etc/agent-security:/etc/agent-security:ro
+    environment:
+      - SECURITY_LEVEL=confidential
+      - VALIDATION_STRICT=true
+      - QUALITY_THRESHOLD=0.95
+    networks:
+      - data-network
+      - audit-network
+    depends_on:
+      - cfbd-data-ingestion
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 3G
+    labels:
+      - "security.tier=data"
+      - "security.level=confidential"
+
+  feature-engineering-agent:
+    build:
+      context: ../../
+      dockerfile: docker/security/Dockerfile.features
+    container_name: cfbd_feature_engineering
+    hostname: feature-engineering
+    user: "3002:3002"
+    read_only: false
+    security_opt:
+      - no-new-privileges:true
+      - apparmor:docker-default
+      - seccomp:default
+    cap_drop:
+      - ALL
+    cap_add:
+      - IPC_OWNER
+    tmpfs:
+      - /tmp:noexec,nosuid,size=2G
+      - /var/run:noexec,nosuid,size=200m
+    volumes:
+      - ./data/processed:/app/data/processed:rw
+      - ./data/features:/app/data/features:rw
+      - ./cache/features:/app/cache:rw
+      - ./logs/features:/app/logs:rw
+      - /etc/agent-security:/etc/agent-security:ro
+    environment:
+      - SECURITY_LEVEL=confidential
+      - FEATURE_CACHE_SIZE=2GB
+      - PROCESSING_MODE=batch
+    networks:
+      - data-network
+      - analytics-network
+      - audit-network
+    depends_on:
+      - data-validation-agent
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 6G
+        reservations:
+          cpus: '1.0'
+          memory: 3G
+    labels:
+      - "security.tier=data"
+      - "security.level=confidential"
+
+  weather-integration-agent:
+    build:
+      context: ../../
+      dockerfile: docker/security/Dockerfile.weather
+    container_name: cfbd_weather_integration
+    hostname: weather-data
+    user: "3003:3003"
+    read_only: false
+    security_opt:
+      - no-new-privileges:true
+      - apparmor:docker-default
+      - seccomp:default
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_RAW
+    tmpfs:
+      - /tmp:noexec,nosuid,size=256m
+      - /var/run:noexec,nosuid,size=50m
+    volumes:
+      - ./data/weather:/app/data/weather:rw
+      - ./cache/weather:/app/cache:rw
+      - ./logs/weather:/app/logs:rw
+      - /etc/agent-security:/etc/agent-security:ro
+    environment:
+      - SECURITY_LEVEL=restricted
+      - WEATHER_API_ACCESS=true
+      - RATE_LIMIT_PER_MINUTE=60
+    networks:
+      - data-network
+      - external-network
+      - audit-network
+    depends_on:
+      - cfbd-data-ingestion
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+    labels:
+      - "security.tier=data"
+      - "security.level=restricted"
+      - "api.access=weather"
+
+  # =================================================================
+  # TIER 4: Analytics & Prediction Layer (Model Execution)
+  # =================================================================
+  model-execution-agent:
+    build:
+      context: ../../
+      dockerfile: docker/security/Dockerfile.model
+    container_name: cfbd_model_execution
+    hostname: model-execution
+    user: "4000:4000"
+    read_only: false
+    security_opt:
+      - no-new-privileges:true
+      - apparmor:docker-default
+      - seccomp:default
+    cap_drop:
+      - ALL
+    cap_add:
+      - IPC_OWNER
+    devices:
+      - /dev/dri:/dev/dri
+      - /dev/nvidia0:/dev/nvidia0
+    tmpfs:
+      - /tmp:noexec,nosuid,size=4G
+      - /var/run:noexec,nosuid,size=200m
+    volumes:
+      - ./data/features:/app/data/features:ro
+      - ./models:/app/models:ro
+      - ./data/predictions:/app/data/predictions:rw
+      - ./cache/models:/app/cache:rw
+      - ./logs/models:/app/logs:rw
+      - /etc/agent-security:/etc/agent-security:ro
+    environment:
+      - SECURITY_LEVEL=confidential
+      - MODEL_EXECUTION_ENABLED=true
+      - GPU_ACCELERATION=true
+      - INFERENCE_TIMEOUT=300
+    networks:
+      - analytics-network
+      - audit-network
+    depends_on:
+      - feature-engineering-agent
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 8G
+        reservations:
+          cpus: '2.0'
+          memory: 4G
+    labels:
+      - "security.tier=analytics"
+      - "security.level=confidential"
+      - "gpu.accelerated=true"
+
+  advanced-analytics-agent:
+    build:
+      context: ../../
+      dockerfile: docker/security/Dockerfile.analytics
+    container_name: cfbd_advanced_analytics
+    hostname: advanced-analytics
+    user: "4001:4001"
+    read_only: false
+    security_opt:
+      - no-new-privileges:true
+      - apparmor:docker-default
+      - seccomp:default
+    cap_drop:
+      - ALL
+    cap_add:
+      - IPC_OWNER
+    devices:
+      - /dev/dri:/dev/dri
+      - /dev/nvidia0:/dev/nvidia0
+    tmpfs:
+      - /tmp:noexec,nosuid,size=4G
+      - /var/run:noexec,nosuid,size=200m
+    volumes:
+      - ./data/processed:/app/data/processed:ro
+      - ./data/predictions:/app/data/predictions:rw
+      - ./cache/analytics:/app/cache:rw
+      - ./logs/analytics:/app/logs:rw
+      - ./reports:/app/reports:rw
+      - /etc/agent-security:/etc/agent-security:ro
+    environment:
+      - SECURITY_LEVEL=confidential
+      - ADVANCED_ANALYTICS=true
+      - GPU_ACCELERATION=true
+      - REPORT_GENERATION=true
+    networks:
+      - analytics-network
+      - data-network
+      - audit-network
+    depends_on:
+      - model-execution-agent
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 8G
+        reservations:
+          cpus: '2.0'
+          memory: 4G
+    labels:
+      - "security.tier=analytics"
+      - "security.level=confidential"
+      - "gpu.accelerated=true"
+
+  bowl-games-specialist:
+    build:
+      context: ../../
+      dockerfile: docker/security/Dockerfile.bowl
+    container_name: cfbd_bowl_specialist
+    hostname: bowl-games
+    user: "4002:4002"
+    read_only: false
+    security_opt:
+      - no-new-privileges:true
+      - apparmor:docker-default
+      - seccomp:default
+    cap_drop:
+      - ALL
+    cap_add:
+      - IPC_OWNER
+    tmpfs:
+      - /tmp:noexec,nosuid,size=2G
+      - /var/run:noexec,nosuid,size=100m
+    volumes:
+      - ./data/bowl-games:/app/data/bowl-games:rw
+      - ./data/predictions:/app/data/predictions:rw
+      - ./cache/bowl:/app/cache:rw
+      - ./logs/bowl:/app/logs:rw
+      - ./reports/bowl:/app/reports:rw
+      - /etc/agent-security:/etc/agent-security:ro
+    environment:
+      - SECURITY_LEVEL=restricted
+      - BOWL_GAMES_SPECIALIZATION=true
+      - PREDICTION_CONFIDENCE_THRESHOLD=0.65
+    networks:
+      - analytics-network
+      - data-network
+      - audit-network
+    depends_on:
+      - advanced-analytics-agent
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 3G
+        reservations:
+          cpus: '1.0'
+          memory: 1.5G
+    labels:
+      - "security.tier=analytics"
+      - "security.level=restricted"
+
+  # =================================================================
+  # TIER 5: Quality Assurance Layer (Validation Only)
+  # =================================================================
+  data-quality-assurance:
+    build:
+      context: ../../
+      dockerfile: docker/security/Dockerfile.qa
+    container_name: cfbd_data_qa
+    hostname: data-qa
+    user: "5000:5000"
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+      - apparmor:docker-default
+      - seccomp:default
+    cap_drop:
+      - ALL
+    tmpfs:
+      - /tmp:noexec,nosuid,size=256m
+    volumes:
+      - ./data/processed:/app/data/processed:ro
+      - ./data/validation:/app/data/validation:ro
+      - ./data/features:/app/data/features:ro
+      - ./data/predictions:/app/data/predictions:ro
+      - ./logs/qa:/app/logs:rw
+      - ./reports/validation:/app/reports:rw
+      - /etc/agent-security:/etc/agent-security:ro
+    environment:
+      - SECURITY_LEVEL=confidential
+      - VALIDATION_MODE=comprehensive
+      - QUALITY_THRESHOLD=0.98
+    networks:
+      - qa-network
+      - audit-network
+    depends_on:
+      - advanced-analytics-agent
+      - bowl-games-specialist
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+    labels:
+      - "security.tier=quality_assurance"
+      - "security.level=confidential"
+      - "read.only=true"
+
+  prediction-validator-agent:
+    build:
+      context: ../../
+      dockerfile: docker/security/Dockerfile.validation
+    container_name: cfbd_prediction_validator
+    hostname: prediction-validation
+    user: "5001:5001"
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+      - apparmor:docker-networking
+      - seccomp:default
+    cap_drop:
+      - ALL
+    tmpfs:
+      - /tmp:noexec,nosuid,size=256m
+    volumes:
+      - ./data/predictions:/app/data/predictions:ro
+      - ./reports/validation:/app/reports:rw
+      - ./logs/validation:/app/logs:rw
+      - /etc/agent-security:/etc/agent-security:ro
+    environment:
+      - SECURITY_LEVEL=restricted
+      - VALIDATION_TYPE=prediction
+      - ACCURACY_THRESHOLD=0.75
+    networks:
+      - qa-network
+      - analytics-network
+      - audit-network
+    depends_on:
+      - data-quality-assurance
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1.5G
+    labels:
+      - "security.tier=quality_assurance"
+      - "security.level=restricted"
+      - "read.only=true"
+
+  human-review-coordinator:
+    build:
+      context: ../../
+      dockerfile: docker/security/Dockerfile.human
+    container_name: cfbd_human_review
+    hostname: human-review
+    user: "5002:5002"
+    read_only: false
+    security_opt:
+      - no-new-privileges:true
+      - apparmor:docker-default
+      - seccomp:default
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+    tmpfs:
+      - /tmp:noexec,nosuid,size=512m
+    volumes:
+      - ./data/human-reviews:/app/reviews:rw
+      - ./logs/human:/app/logs:rw
+      - ./reports/human:/app/reports:rw
+      - /etc/agent-security:/etc/agent-security:ro
+    environment:
+      - SECURITY_LEVEL=restricted
+      - HUMAN_REVIEW_ENABLED=true
+      - ESCALATION_TIMEOUT=3600
+    networks:
+      - qa-network
+      - human-interface-network
+      - audit-network
+    depends_on:
+      - data-quality-assurance
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+    labels:
+      - "security.tier=quality_assurance"
+      - "security.level=restricted"
+      - "human.interface=true"
+
+# =================================================================
+# Network Configuration
+# =================================================================
+networks:
+  orchestration-network:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
+
+  data-network:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+          gateway: 172.21.0.1
+
+  analytics-network:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16
+          gateway: 172.22.0.1
+
+  communication-network:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.23.0.0/16
+          gateway: 172.23.0.1
+
+  qa-network:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.24.0.0/16
+          gateway: 172.24.0.1
+
+  cfbd-network:
+    driver: bridge
+    external: true
+    name: cfbd-network
+
+  external-network:
+    driver: bridge
+    external: true
+    name: external-network
+
+  audit-network:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+          gateway: 172.25.0.1
+
+  human-interface-network:
+    driver: bridge
+    external: true
+    name: human-interface
+
+# =================================================================
+# Security Profiles
+# =================================================================
+secrets:
+  cfbd_api_key:
+    external: true
+  encryption_master_key:
+    external: true
+
+  jwt_signing_key:
+    external: true
+
+  database_credentials:
+    external: true
+
+  ssl_certificates:
+    external: true

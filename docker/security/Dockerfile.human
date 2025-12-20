@@ -1,0 +1,77 @@
+# Human Interface Layer Dockerfile
+# Restricted Security - Human review and escalation management
+# User: 5002:5002 (Human interface user)
+# Capabilities: CHOWN, SETGID (for review management)
+# Security: no-new-privileges, apparmor, seccomp
+# Networks: qa-network, human-interface-network, audit-network
+
+FROM python:3.13-slim
+
+# Create system user
+RUN groupadd -r -g 5002 human_user && \
+    useradd -r -u 5002 -g human_user human_user
+
+# Install system packages for human interface
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        jq \
+        htop \
+        wget \
+        nano \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install human interface dependencies
+RUN pip install --no-cache-dir \
+    fastapi \
+    uvicorn \
+    websockets \
+    jinja2 \
+    python-multipart \
+    pydantic \
+    pydantic-settings \
+    python-jose[cryptography] \
+    passlib[bcrypt] \
+    python-multipart \
+    email-validator
+
+# Copy application code
+COPY agents/human/ ./agents/human/
+COPY agents/core/ ./agents/core/
+COPY docker/security/scripts/start-human.sh ./
+COPY docker/security/scripts/health-check.sh ./
+
+# Create human interface directories
+RUN mkdir -p /app/reviews /app/logs /app/reports/human && \
+    chown -R human_user:human_user /app && \
+    chmod -R 755 /app
+
+# Copy security configuration
+COPY docker/security/security-policies.json /etc/agent-security/
+COPY docker/security/human-interface-rules.json /etc/agent-security/
+RUN chmod 600 /etc/agent-security/security-policies.json && \
+    chmod 600 /etc/agent-security/human-interface-rules.json
+
+# Set ownership
+RUN chown -R human_user:human_user /app
+
+# Switch to non-root user
+USER human_user
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD ["./health-check.sh"]
+
+# Expose port for human interface
+EXPOSE 9000
+
+# Start command
+CMD ["./start-human.sh"]
