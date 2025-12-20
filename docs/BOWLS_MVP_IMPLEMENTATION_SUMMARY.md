@@ -228,7 +228,7 @@ predictions/bowls_2025_predictions_{method}_backup_{timestamp}.json
 
 **Required Environment Variables**:
 ```bash
-CFBD_API_KEY=3nSBeJV4ODZlJLxQZ/H0vWG3DRAfTSPU2PporK/5K+BJininva/bPx5G4iNjeOsb
+CFBD_API_KEY=your-api-key-here
 FLASK_ENV=production  # For production deployment
 PYTHONPATH=/path/to/project
 ```
