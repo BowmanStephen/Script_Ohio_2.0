@@ -133,10 +133,29 @@ export default function BowlsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-          <p className="mt-4 text-muted-foreground">Loading...</p>
+      <div className="min-h-screen bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="animate-pulse space-y-6">
+            <div className="space-y-2">
+              <div className="h-8 w-72 rounded-md bg-muted" />
+              <div className="h-4 w-52 rounded-md bg-muted" />
+            </div>
+
+            <div className="grid grid-cols-1 gap-3 lg:grid-cols-4">
+              <div className="lg:col-span-2 h-10 rounded-md bg-muted" />
+              <div className="h-10 rounded-md bg-muted" />
+              <div className="h-10 rounded-md bg-muted" />
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 9 }).map((_, idx) => (
+                <div
+                  key={idx}
+                  className="h-48 rounded-lg border border-border bg-card"
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     );
