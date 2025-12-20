@@ -465,9 +465,9 @@ class AutonomousWorkflowScheduler(BaseAgent):
                 name="schedule_task",
                 description="Schedule a new autonomous task",
                 execution_time_estimate=5.0,
-                permission_required=[PermissionLevel.READ_EXECUTE_WRITE],
+                permission_required=PermissionLevel.READ_EXECUTE_WRITE,
                 tools_required=["task_definition"],
-                data_access=["task_id": "string", "scheduled_time": "datetime", "status": "string"]
+                data_access=["task_id", "scheduled_time", "status"]
             ),
             AgentCapability(
                 name="get_schedule",

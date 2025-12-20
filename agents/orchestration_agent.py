@@ -1206,6 +1206,228 @@ class OrchestrationAgent(BaseAgent):
                 "health_status": "error",
             }
 
+    def get_system_status(self) -> Dict[str, Any]:
+        """
+        Return comprehensive system status including health, active tasks, and resource usage.
+
+        This method provides the main interface for system health monitoring
+        and is expected by the autonomous integration tests.
+
+        Returns:
+            Dict containing system status information
+        """
+        try:
+            # Use existing _monitor_system method to get metrics
+            system_metrics = self._monitor_system({}, {})
+
+            # Add orchestration-specific status
+            status = {
+                "status": "active" if system_metrics.get("success", False) else "error",
+                "health_score": self._calculate_health_score(system_metrics),
+                "active_tasks": self._get_active_tasks_count(),
+                "system_metrics": system_metrics,
+                "agent_capabilities": len(self._define_capabilities()),
+                "delegates": len(self.delegates) if hasattr(self, 'delegates') else 0,
+                "mode": self.mode.value,
+                "optimization_enabled": self.optimization_enabled,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }
+
+            return status
+
+        except Exception as e:
+            logger.error(f"Error getting system status: {e}")
+            return {
+                "status": "error",
+                "health_score": 0.0,
+                "active_tasks": 0,
+                "error": str(e),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }
+
+    def delegate_workflow(self, workflow_params: Dict) -> Dict[str, Any]:
+        """
+        Delegate workflow to appropriate specialized agent with proper routing.
+
+        This method provides the main interface for workflow delegation
+        and enables proper coordination between specialized agents.
+
+        Args:
+            workflow_params: Dict containing workflow parameters
+                - workflow_type: Type of workflow to execute
+                - parameters: Workflow-specific parameters
+                - priority: Priority level (optional)
+
+        Returns:
+            Dict containing delegation results
+        """
+        try:
+            workflow_type = workflow_params.get("workflow_type", "unknown")
+            parameters = workflow_params.get("parameters", {})
+            priority = workflow_params.get("priority", "normal")
+
+            # Route to appropriate specialized agent
+            if workflow_type == "weekly_analysis":
+                return self._delegate_to_weekly_analysis(parameters)
+            elif workflow_type == "cfbd_integration":
+                return self._delegate_to_cfbd_integration(parameters)
+            elif workflow_type == "model_execution":
+                return self._delegate_to_model_execution(parameters)
+            elif workflow_type == "validation":
+                return self._delegate_to_validation_agent(parameters)
+            else:
+                # Handle unknown workflow types
+                return {
+                    "success": False,
+                    "error": f"Unknown workflow type: {workflow_type}",
+                    "delegated_to": None,
+                    "execution_id": None,
+                }
+
+        except Exception as e:
+            logger.error(f"Error delegating workflow: {e}")
+            return {
+                "success": False,
+                "error": str(e),
+                "delegated_to": None,
+                "execution_id": None,
+            }
+
+    def _calculate_health_score(self, system_metrics: Dict) -> float:
+        """Calculate overall system health score from metrics"""
+        try:
+            if not system_metrics.get("success", False):
+                return 0.0
+
+            metrics = system_metrics.get("metrics", {})
+            system_resources = metrics.get("system_resources", {})
+
+            cpu_usage = system_resources.get("cpu_usage_percent", 100)
+            memory_usage = system_resources.get("memory_usage_percent", 100)
+
+            # Calculate health score (100% - average resource usage)
+            resource_score = max(0, 100 - (cpu_usage + memory_usage) / 2)
+
+            # Factor in optimization status
+            optimization_score = 1.0 if self.optimization_enabled else 0.8
+
+            return round(resource_score * optimization_score, 1)
+
+        except Exception:
+            return 0.0
+
+    def _get_active_tasks_count(self) -> int:
+        """Get count of currently active tasks"""
+        try:
+            # This would integrate with task tracking system
+            # For now, return a simple status
+            return 0 if self.mode == OrchestrationMode.IDLE else 1
+        except Exception:
+            return 0
+
+    def _delegate_to_weekly_analysis(self, parameters: Dict) -> Dict:
+        """Delegate workflow to weekly analysis agent"""
+        try:
+            # Import and delegate to weekly analysis agent
+            from agents.autonomous_workflows.weekly_analysis_autonomator import WeeklyAnalysisAutonomator
+
+            agent = WeeklyAnalysisAutonomator("weekly_analysis_delegated")
+
+            # Execute the weekly analysis workflow
+            result = agent._execute_action("run_complete_analysis", parameters, {})
+
+            return {
+                "success": result.get("status") == "success",
+                "delegated_to": "weekly_analysis_autonomator",
+                "execution_id": f"wa_{int(time.time())}",
+                "result": result,
+            }
+
+        except Exception as e:
+            return {
+                "success": False,
+                "error": str(e),
+                "delegated_to": "weekly_analysis_autonomator",
+                "execution_id": None,
+            }
+
+    def _delegate_to_cfbd_integration(self, parameters: Dict) -> Dict:
+        """Delegate workflow to CFBD integration agent"""
+        try:
+            from agents.cfbd_integration_agent import CFBDIntegrationAgent
+
+            agent = CFBDIntegrationAgent("cfbd_delegated")
+
+            # Determine the appropriate action
+            action = parameters.get("action", "get_games")
+
+            result = agent._execute_action(action, parameters, {})
+
+            return {
+                "success": result.get("status") == "success",
+                "delegated_to": "cfbd_integration_agent",
+                "execution_id": f"cfbd_{int(time.time())}",
+                "result": result,
+            }
+
+        except Exception as e:
+            return {
+                "success": False,
+                "error": str(e),
+                "delegated_to": "cfbd_integration_agent",
+                "execution_id": None,
+            }
+
+    def _delegate_to_model_execution(self, parameters: Dict) -> Dict:
+        """Delegate workflow to model execution agent"""
+        try:
+            from agents.analytics.model_execution_agent import ModelExecutionAgent
+
+            agent = ModelExecutionAgent("model_execution_delegated")
+
+            action = parameters.get("action", "execute_predictions")
+            result = agent._execute_action(action, parameters, {})
+
+            return {
+                "success": result.get("status") == "success",
+                "delegated_to": "model_execution_agent",
+                "execution_id": f"model_{int(time.time())}",
+                "result": result,
+            }
+
+        except Exception as e:
+            return {
+                "success": False,
+                "error": str(e),
+                "delegated_to": "model_execution_agent",
+                "execution_id": None,
+            }
+
+    def _delegate_to_validation_agent(self, parameters: Dict) -> Dict:
+        """Delegate workflow to validation agent"""
+        try:
+            from agents.data.data_validation_agent import DataValidationAgent
+
+            agent = DataValidationAgent("validation_delegated")
+
+            action = parameters.get("action", "validate_data")
+            result = agent._execute_action(action, parameters, {})
+
+            return {
+                "success": result.get("status") == "success",
+                "delegated_to": "data_validation_agent",
+                "execution_id": f"val_{int(time.time())}",
+                "result": result,
+            }
+
+        except Exception as e:
+            return {
+                "success": False,
+                "error": str(e),
+                "delegated_to": "data_validation_agent",
+                "execution_id": None,
+            }
+
 
 # Global orchestration agent instance
 orchestration_agent = OrchestrationAgent()

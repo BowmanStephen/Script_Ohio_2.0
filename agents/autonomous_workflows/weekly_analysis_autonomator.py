@@ -807,6 +807,184 @@ class WeeklyAnalysisAutonomator(BaseAgent):
             "capabilities": [cap.name for cap in self._define_capabilities()],
         }
 
+    def get_system_status(self) -> Dict[str, Any]:
+        """
+        Return comprehensive system status for weekly analysis autonomator.
+
+        This method provides a consistent interface with the orchestration agent
+        and is expected by the autonomous integration tests.
+
+        Returns:
+            Dict containing system status information
+        """
+        try:
+            # Get current analysis status
+            analysis_status = self.get_analysis_status()
+
+            # Determine overall status
+            current_time = datetime.now()
+
+            # Check if analysis is recent (within last hour)
+            is_recent = False
+            if self.last_analysis_time:
+                time_diff = current_time - self.last_analysis_time
+                is_recent = time_diff.total_seconds() < 3600  # 1 hour
+
+            overall_status = "active" if is_recent else "idle"
+            if self.current_week == 0 or self.current_season == 0:
+                overall_status = "initializing"
+
+            return {
+                "status": overall_status,
+                "health_score": self._calculate_health_score(),
+                "active_tasks": 1 if overall_status == "active" else 0,
+                "analysis_status": analysis_status,
+                "agent_type": "weekly_analysis_autonomator",
+                "agent_id": self.agent_id,
+                "capabilities_count": len(self._define_capabilities()),
+                "data_freshness": "recent" if is_recent else "stale",
+                "ready_for_analysis": self._is_ready_for_analysis(),
+                "timestamp": current_time.isoformat(),
+            }
+
+        except Exception as e:
+            logger.error(f"Error getting system status: {e}")
+            return {
+                "status": "error",
+                "health_score": 0.0,
+                "active_tasks": 0,
+                "error": str(e),
+                "agent_type": "weekly_analysis_autonomator",
+                "timestamp": datetime.now().isoformat(),
+            }
+
+    def delegate_workflow(self, workflow_params: Dict) -> Dict[str, Any]:
+        """
+        Delegate workflow to appropriate specialized agent within weekly analysis context.
+
+        This method provides workflow delegation capabilities for the weekly analysis
+        autonomator, enabling coordination with other specialized agents.
+
+        Args:
+            workflow_params: Dict containing workflow parameters
+                - workflow_type: Type of workflow to execute
+                - parameters: Workflow-specific parameters
+                - priority: Priority level (optional)
+
+        Returns:
+            Dict containing delegation results
+        """
+        try:
+            workflow_type = workflow_params.get("workflow_type", "unknown")
+            parameters = workflow_params.get("parameters", {})
+            priority = workflow_params.get("priority", "normal")
+
+            # Route to appropriate specialized agent or internal method
+            if workflow_type == "data_validation":
+                return self._delegate_to_internal_method("_validate_data_quality", parameters)
+            elif workflow_type == "feature_generation":
+                return self._delegate_to_internal_method("_generate_features", parameters)
+            elif workflow_type == "prediction_analysis":
+                return self._delegate_to_internal_method("_run_predictions", parameters)
+            elif workflow_type == "report_creation":
+                return self._delegate_to_internal_method("_create_reports", parameters)
+            elif workflow_type == "autonomous_analysis":
+                return self._delegate_to_internal_method("_run_autonomous_analysis", parameters)
+            else:
+                # Handle unknown workflow types
+                return {
+                    "success": False,
+                    "error": f"Unknown workflow type for weekly analysis: {workflow_type}",
+                    "delegated_to": "weekly_analysis_autonomator",
+                    "execution_id": None,
+                }
+
+        except Exception as e:
+            logger.error(f"Error delegating workflow: {e}")
+            return {
+                "success": False,
+                "error": str(e),
+                "delegated_to": "weekly_analysis_autonomator",
+                "execution_id": None,
+            }
+
+    def _calculate_health_score(self) -> float:
+        """Calculate overall health score for the weekly analysis autonomator"""
+        try:
+            score = 50.0  # Base score
+
+            # Factor in configuration status
+            if self.config and len(self.config) > 0:
+                score += 10.0
+
+            # Factor in analysis recency
+            if self.last_analysis_time:
+                time_diff = datetime.now() - self.last_analysis_time
+                hours_diff = time_diff.total_seconds() / 3600
+
+                if hours_diff < 24:  # Analysis within last day
+                    score += 20.0
+                elif hours_diff < 168:  # Analysis within last week
+                    score += 10.0
+            else:
+                score -= 20.0  # No analysis performed yet
+
+            # Factor in current week/season values
+            if self.current_week > 0 and self.current_season > 0:
+                score += 10.0
+
+            # Ensure score is within bounds
+            return max(0.0, min(100.0, score))
+
+        except Exception:
+            return 0.0
+
+    def _is_ready_for_analysis(self) -> bool:
+        """Check if the autonomator is ready for analysis"""
+        try:
+            return (
+                self.config is not None and
+                len(self.config) > 0 and
+                self.current_week > 0 and
+                self.current_season > 0
+            )
+        except Exception:
+            return False
+
+    def _delegate_to_internal_method(self, method_name: str, parameters: Dict) -> Dict[str, Any]:
+        """Delegate workflow to internal method"""
+        try:
+            if not hasattr(self, method_name):
+                return {
+                    "success": False,
+                    "error": f"Method {method_name} not found",
+                    "delegated_to": "weekly_analysis_autonomator",
+                    "execution_id": None,
+                }
+
+            method = getattr(self, method_name)
+            result = method(parameters, {})
+
+            # Generate execution ID
+            execution_id = f"wa_{method_name}_{int(time.time())}"
+
+            return {
+                "success": result.get("success", True),
+                "delegated_to": "weekly_analysis_autonomator",
+                "execution_id": execution_id,
+                "result": result,
+                "method_invoked": method_name,
+            }
+
+        except Exception as e:
+            return {
+                "success": False,
+                "error": str(e),
+                "delegated_to": "weekly_analysis_autonomator",
+                "execution_id": None,
+                "method_invoked": method_name,
+            }
+
 
 # Global instance
 weekly_analysis_autonomator = WeeklyAnalysisAutonomator()
