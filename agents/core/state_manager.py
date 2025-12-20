@@ -108,7 +108,8 @@ class DatabaseManager:
             conn = sqlite3.connect(self.db_path)
             try:
                 # Create snapshots table
-                conn.execute("""
+                conn.execute(
+                    """
                     CREATE TABLE IF NOT EXISTS state_snapshots (
                         snapshot_id TEXT PRIMARY KEY,
                         state_type TEXT NOT NULL,
@@ -122,10 +123,12 @@ class DatabaseManager:
                         expires_at TEXT,
                         status TEXT DEFAULT 'active'
                     )
-                """)
+                """
+                )
 
                 # Create transitions table
-                conn.execute("""
+                conn.execute(
+                    """
                     CREATE TABLE IF NOT EXISTS state_transitions (
                         transition_id TEXT PRIMARY KEY,
                         from_snapshot_id TEXT,
@@ -136,23 +139,30 @@ class DatabaseManager:
                         timestamp TEXT NOT NULL,
                         metadata TEXT
                     )
-                """)
+                """
+                )
 
                 # Create indexes for performance
-                conn.execute("""
+                conn.execute(
+                    """
                     CREATE INDEX IF NOT EXISTS idx_snapshots_entity_type
                     ON state_snapshots(entity_id, state_type)
-                """)
+                """
+                )
 
-                conn.execute("""
+                conn.execute(
+                    """
                     CREATE INDEX IF NOT EXISTS idx_snapshots_status
                     ON state_snapshots(status, created_at)
-                """)
+                """
+                )
 
-                conn.execute("""
+                conn.execute(
+                    """
                     CREATE INDEX IF NOT EXISTS idx_transitions_to_snapshot
                     ON state_transitions(to_snapshot_id)
-                """)
+                """
+                )
 
                 conn.commit()
                 logger.info(f"State database initialized: {self.db_path}")
@@ -259,9 +269,11 @@ class StateManager:
                         snapshot.parent_snapshot_id,
                         snapshot.checksum,
                         snapshot.created_at.isoformat(),
-                        snapshot.expires_at.isoformat()
-                        if snapshot.expires_at
-                        else None,
+                        (
+                            snapshot.expires_at.isoformat()
+                            if snapshot.expires_at
+                            else None
+                        ),
                         snapshot.status.value,
                     ),
                 )
@@ -555,13 +567,15 @@ class StateManager:
 
         try:
             with self.db_manager.get_connection() as conn:
-                cursor = conn.execute("""
+                cursor = conn.execute(
+                    """
                     UPDATE state_snapshots
                     SET status = 'archived'
                     WHERE status = 'active'
                     AND expires_at IS NOT NULL
                     AND expires_at < datetime('now')
-                """)
+                """
+                )
 
                 count = cursor.rowcount
                 conn.commit()
@@ -649,9 +663,11 @@ class StateManager:
                         parent_snapshot_id=row["parent_snapshot_id"],
                         checksum=row["checksum"],
                         created_at=datetime.fromisoformat(row["created_at"]),
-                        expires_at=datetime.fromisoformat(row["expires_at"])
-                        if row["expires_at"]
-                        else None,
+                        expires_at=(
+                            datetime.fromisoformat(row["expires_at"])
+                            if row["expires_at"]
+                            else None
+                        ),
                         status=StateStatus(row["status"]),
                     )
 

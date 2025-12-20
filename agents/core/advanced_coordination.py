@@ -616,9 +616,9 @@ class IntelligentMessageRouter:
             message_history=[],
             current_phase="planning",
             decision_points=[],
-            consensus_mechanism="majority_vote"
-            if len(participants) > 2
-            else "unanimous",
+            consensus_mechanism=(
+                "majority_vote" if len(participants) > 2 else "unanimous"
+            ),
             session_start_time=time.time(),
         )
 
@@ -777,9 +777,9 @@ class AdvancedAgentCoordinator:
                 "coordination_pattern": task.coordination_pattern.value,
                 "complexity": complexity.value,
                 "workflow_id": workflow["workflow_id"],
-                "collaboration_session_id": collaboration_session.session_id
-                if collaboration_session
-                else None,
+                "collaboration_session_id": (
+                    collaboration_session.session_id if collaboration_session else None
+                ),
                 "success": coordination_result.get("success", False),
             }
 

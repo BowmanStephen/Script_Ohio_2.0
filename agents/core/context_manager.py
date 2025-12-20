@@ -552,9 +552,11 @@ class ContextManager:
                     {
                         "path": notebook_path,
                         "name": Path(notebook_path).stem,
-                        "type": "starter_pack"
-                        if "starter_pack" in notebook_path
-                        else "model_pack",
+                        "type": (
+                            "starter_pack"
+                            if "starter_pack" in notebook_path
+                            else "model_pack"
+                        ),
                         "description": self._get_notebook_description(notebook_path),
                     }
                 )
@@ -564,9 +566,11 @@ class ContextManager:
                     {
                         "path": notebook_path,
                         "name": Path(notebook_path).stem,
-                        "type": "starter_pack"
-                        if "starter_pack" in notebook_path
-                        else "model_pack",
+                        "type": (
+                            "starter_pack"
+                            if "starter_pack" in notebook_path
+                            else "model_pack"
+                        ),
                         "description": f"Learning notebook for {Path(notebook_path).stem.replace('_', ' ').title()}",
                         "status": "file_not_found",
                     }
@@ -586,9 +590,9 @@ class ContextManager:
                     {
                         "file": model_file,
                         "name": model_file.replace(".joblib", "").replace(".pkl", ""),
-                        "type": "regression"
-                        if "ridge" in model_file
-                        else "classification",
+                        "type": (
+                            "regression" if "ridge" in model_file else "classification"
+                        ),
                         "size_kb": os.path.getsize(full_path) / 1024,
                         "description": self._get_model_description(model_file),
                     }
@@ -1057,9 +1061,11 @@ class ContextManager:
                 {
                     "turn_number": turn.turn_number,
                     "query": turn.query,
-                    "response": turn.response[:200] + "..."
-                    if len(turn.response) > 200
-                    else turn.response,
+                    "response": (
+                        turn.response[:200] + "..."
+                        if len(turn.response) > 200
+                        else turn.response
+                    ),
                     "timestamp": turn.timestamp.isoformat(),
                     "role_detected": turn.role_detected.value,
                     "tokens_used": turn.tokens_used,

@@ -29,6 +29,9 @@ from src.observability import (
     get_logger,
 )
 
+# Import memory system
+from .memory_system import memory_manager, MemoryLevel, MemoryType, MemoryQuery
+
 configure_logging(service_name="agents")
 logger = get_logger(__name__, component="agent_framework", service_name="agents")
 
@@ -117,6 +120,10 @@ class BaseAgent(ABC):
             "total_execution_time": 0.0,
         }
         self.tool_loader = tool_loader
+
+        # Initialize memory management
+        self._memory_context_id = f"{agent_id}_context"
+        self._initialize_agent_memory()
 
         logger.info(
             "Agent initialized",
@@ -346,6 +353,18 @@ class BaseAgent(ABC):
                 },
             )
 
+            # Store experience in episodic memory
+            self.store_experience(
+                action=request.action,
+                parameters=request.parameters,
+                result={
+                    "status": "success",
+                    "result": result,
+                    "execution_time": execution_time,
+                },
+                importance="high" if execution_time > 5.0 else "medium",
+            )
+
             # Store execution history
             self.execution_history.append(
                 {
@@ -400,6 +419,225 @@ class BaseAgent(ABC):
                 execution_time=execution_time,
                 metadata={"agent_id": self.agent_id},
             )
+
+    def _initialize_agent_memory(self) -> None:
+        """Initialize agent-specific memory context"""
+        try:
+            # Store agent information in working memory
+            agent_info = {
+                "agent_id": self.agent_id,
+                "agent_name": self.name,
+                "permission_level": self.permission_level.value,
+                "capabilities": [cap.name for cap in self.capabilities],
+                "initialization_time": time.time(),
+            }
+
+            memory_manager.store(
+                content=agent_info,
+                memory_level=MemoryLevel.WORKING,
+                memory_type=MemoryType.CONTEXT,
+                metadata={"agent_context": True, "importance": "high"},
+                tags=["agent", self.agent_id],
+            )
+
+            logger.debug(f"🧠 Initialized memory context for agent {self.agent_id}")
+
+        except Exception as e:
+            logger.warning(f"Could not initialize agent memory: {e}")
+
+    def store_memory(
+        self,
+        content: Any,
+        memory_type: MemoryType,
+        metadata: Optional[Dict[str, Any]] = None,
+        level: Optional[MemoryLevel] = None,
+        expires_in: Optional[int] = None,
+    ) -> Optional[str]:
+        """
+        Store content in agent memory
+
+        Args:
+            content: Content to store
+            memory_type: Type of memory entry
+            metadata: Additional metadata
+            level: Memory level (defaults to WORKING)
+            expires_in: Expiration time in seconds
+
+        Returns:
+            Memory entry ID
+        """
+        try:
+            # Default to working memory for agent-specific data
+            if level is None:
+                level = MemoryLevel.WORKING
+
+            # Add agent context to metadata
+            enhanced_metadata = {
+                "agent_id": self.agent_id,
+                "agent_name": self.name,
+                **(metadata or {}),
+            }
+
+            return memory_manager.store(
+                content=content,
+                memory_level=level,
+                memory_type=memory_type,
+                metadata=enhanced_metadata,
+                expires_in=expires_in,
+                tags=["agent", self.agent_id, memory_type.value],
+            )
+
+        except Exception as e:
+            logger.error(f"Could not store memory: {e}")
+            return None
+
+    def retrieve_memory(
+        self,
+        query_text: str,
+        memory_types: Optional[List[MemoryType]] = None,
+        limit: int = 10,
+    ) -> List[Any]:
+        """
+        Retrieve memories matching query
+
+        Args:
+            query_text: Search query
+            memory_types: Types of memory to search
+            limit: Maximum results
+
+        Returns:
+            List of matching memory contents
+        """
+        try:
+            query = MemoryQuery(
+                query_text=query_text,
+                memory_level=MemoryLevel.WORKING,
+                memory_types=memory_types
+                or [MemoryType.CONTEXT, MemoryType.EXPERIENCE],
+                limit=limit,
+            )
+
+            results = memory_manager.retrieve(query)
+            return [entry.content for entry in results]
+
+        except Exception as e:
+            logger.error(f"Could not retrieve memory: {e}")
+            return []
+
+    def store_experience(
+        self, action: str, parameters: Dict, result: Dict, importance: str = "medium"
+    ) -> None:
+        """
+        Store execution experience in episodic memory
+
+        Args:
+            action: Action executed
+            parameters: Action parameters
+            result: Execution result
+            importance: Importance level
+        """
+        try:
+            experience = {
+                "action": action,
+                "parameters": parameters,
+                "result": result,
+                "success": result.get("status") != "error",
+                "execution_time": result.get("execution_time", 0),
+                "timestamp": time.time(),
+            }
+
+            metadata = {
+                "agent_id": self.agent_id,
+                "action": action,
+                "success": experience["success"],
+                "importance": importance,
+                "experience_type": "agent_execution",
+            }
+
+            memory_manager.store(
+                content=experience,
+                memory_level=MemoryLevel.EPISODIC,
+                memory_type=MemoryType.EXPERIENCE,
+                metadata=metadata,
+                expires_in=86400 * 30,  # 30 days
+                tags=["agent", self.agent_id, "experience", action],
+            )
+
+            logger.debug(f"🧠 Stored experience for action {action}")
+
+        except Exception as e:
+            logger.warning(f"Could not store experience: {e}")
+
+    def get_similar_experiences(self, action: str, limit: int = 5) -> List[Dict]:
+        """
+        Get similar past experiences
+
+        Args:
+            action: Action to find similar experiences for
+            limit: Maximum results
+
+        Returns:
+            List of similar experiences
+        """
+        try:
+            query = MemoryQuery(
+                query_text=action,
+                memory_level=MemoryLevel.EPISODIC,
+                memory_types=[MemoryType.EXPERIENCE],
+                limit=limit,
+                filters={"agent_id": self.agent_id},
+            )
+
+            results = memory_manager.retrieve(query)
+            return [entry.content for entry in results]
+
+        except Exception as e:
+            logger.warning(f"Could not retrieve similar experiences: {e}")
+            return []
+
+    def get_agent_memory_stats(self) -> Dict[str, Any]:
+        """Get memory statistics for this agent"""
+        try:
+            agent_memories = memory_manager.retrieve(
+                MemoryQuery(
+                    query_text="",
+                    memory_level=MemoryLevel.WORKING,
+                    memory_types=[],
+                    limit=1000,
+                    filters={"agent_id": self.agent_id},
+                )
+            )
+
+            stats = {
+                "agent_id": self.agent_id,
+                "total_memories": len(agent_memories),
+                "memory_types": {},
+                "recent_experiences": 0,
+            }
+
+            for entry in agent_memories:
+                mem_type = entry.memory_type.value
+                stats["memory_types"][mem_type] = (
+                    stats["memory_types"].get(mem_type, 0) + 1
+                )
+
+            # Count recent experiences
+            recent_exp_query = MemoryQuery(
+                query_text="",
+                memory_level=MemoryLevel.EPISODIC,
+                memory_types=[MemoryType.EXPERIENCE],
+                limit=100,
+                filters={"agent_id": self.agent_id},
+            )
+
+            recent_experiences = memory_manager.retrieve(recent_exp_query)
+            stats["recent_experiences"] = len(recent_experiences)
+
+            return stats
+
+        except Exception as e:
+            logger.warning(f"Could not get memory stats: {e}")
+            return {"error": str(e)}
 
     def _update_performance_metrics(self, execution_time: float, success: bool):
         """Update performance metrics for this agent"""
@@ -469,9 +707,9 @@ class BaseAgent(ABC):
             "permission_level": self.permission_level.value,
             "capabilities": [asdict(cap) for cap in self.capabilities],
             "performance_metrics": self.performance_metrics.copy(),
-            "recent_executions": self.execution_history[-5:]
-            if self.execution_history
-            else [],
+            "recent_executions": (
+                self.execution_history[-5:] if self.execution_history else []
+            ),
             "available_tools": len(self.get_available_tools()),
         }
 
@@ -728,12 +966,11 @@ class RequestRouter:
         elif request_id in self.active_requests:
             return {
                 "status": "processing",
-                "queue_position": self.request_queue.index(
-                    self.active_requests[request_id]
-                )
-                + 1
-                if self.active_requests[request_id] in self.request_queue
-                else 0,
+                "queue_position": (
+                    self.request_queue.index(self.active_requests[request_id]) + 1
+                    if self.active_requests[request_id] in self.request_queue
+                    else 0
+                ),
             }
         else:
             return None

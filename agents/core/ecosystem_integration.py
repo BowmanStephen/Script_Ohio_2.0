@@ -320,9 +320,9 @@ class PluginManager:
                     "name": manifest.name,
                     "version": manifest.version,
                     "type": manifest.plugin_type.value,
-                    "status": "initialized"
-                    if plugin and plugin.is_initialized
-                    else "loaded",
+                    "status": (
+                        "initialized" if plugin and plugin.is_initialized else "loaded"
+                    ),
                     "dependencies": manifest.dependencies,
                 }
             )
@@ -416,14 +416,18 @@ class APIGateway:
                 url=url,
                 headers=headers,
                 params=params if endpoint.method.upper() in ["GET", "DELETE"] else None,
-                json=data
-                if endpoint.method.upper() in ["POST", "PUT", "PATCH"]
-                and isinstance(data, dict)
-                else None,
-                data=data
-                if endpoint.method.upper() in ["POST", "PUT", "PATCH"]
-                and not isinstance(data, dict)
-                else None,
+                json=(
+                    data
+                    if endpoint.method.upper() in ["POST", "PUT", "PATCH"]
+                    and isinstance(data, dict)
+                    else None
+                ),
+                data=(
+                    data
+                    if endpoint.method.upper() in ["POST", "PUT", "PATCH"]
+                    and not isinstance(data, dict)
+                    else None
+                ),
             ) as response:
                 response_time = time.time() - start_time
 

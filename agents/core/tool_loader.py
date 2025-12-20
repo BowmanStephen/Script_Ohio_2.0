@@ -635,12 +635,12 @@ class ToolLoader:
                     "path": notebook_path,
                     "name": full_path.stem,
                     "exists": True,
-                    "size_bytes": full_path.stat().st_size
-                    if full_path.is_file()
-                    else 0,
-                    "last_modified": full_path.stat().st_mtime
-                    if full_path.is_file()
-                    else None,
+                    "size_bytes": (
+                        full_path.stat().st_size if full_path.is_file() else 0
+                    ),
+                    "last_modified": (
+                        full_path.stat().st_mtime if full_path.is_file() else None
+                    ),
                 }
 
                 if include_content:

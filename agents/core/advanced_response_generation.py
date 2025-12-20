@@ -860,9 +860,11 @@ class MultiModalContentGenerator:
                 "Insight": insight.title,
                 "Type": insight.insight_type.value,
                 "Confidence": f"{insight.confidence:.2f}",
-                "Key Finding": insight.description[:100] + "..."
-                if len(insight.description) > 100
-                else insight.description,
+                "Key Finding": (
+                    insight.description[:100] + "..."
+                    if len(insight.description) > 100
+                    else insight.description
+                ),
                 "Recommendations": len(insight.recommendations),
             }
             table_data.append(row)
