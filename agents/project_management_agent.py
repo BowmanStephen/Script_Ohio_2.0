@@ -12,18 +12,20 @@ Follows OpenAI agents.md best practices:
 
 import json
 import os
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, asdict
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
-from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
-from src.toon_format import encode, decode
+from src.toon_format import decode, encode
+
+from agents.core.agent_framework import AgentCapability, BaseAgent, PermissionLevel
 
 
 @dataclass
 class ProjectPlan:
     """Structure for project plans"""
+
     plan_id: str
     title: str
     description: str
@@ -38,6 +40,7 @@ class ProjectPlan:
 @dataclass
 class ProgressEntry:
     """Structure for progress tracking"""
+
     plan_id: str
     timestamp: datetime
     agent_id: str
@@ -62,7 +65,7 @@ class ProjectManagementAgent(BaseAgent):
         super().__init__(
             agent_id="project_management_agent",
             name="Project Management Agent",
-            permission_level=PermissionLevel.READ_EXECUTE_WRITE
+            permission_level=PermissionLevel.READ_EXECUTE_WRITE,
         )
 
         # Set up directory structure
@@ -73,7 +76,12 @@ class ProjectManagementAgent(BaseAgent):
         self.templates_dir = self.base_dir / "templates"
 
         # Ensure directories exist
-        for dir_path in [self.plans_dir, self.progress_dir, self.archives_dir, self.templates_dir]:
+        for dir_path in [
+            self.plans_dir,
+            self.progress_dir,
+            self.archives_dir,
+            self.templates_dir,
+        ]:
             dir_path.mkdir(parents=True, exist_ok=True)
 
     def _define_capabilities(self) -> List[AgentCapability]:
@@ -85,7 +93,7 @@ class ProjectManagementAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE_WRITE,
                 tools_required=["file_operations", "toon_encoder"],
                 data_access=["project_management/plans", "project_management/progress"],
-                execution_time_estimate=2.0
+                execution_time_estimate=2.0,
             ),
             AgentCapability(
                 name="track_progress",
@@ -93,7 +101,7 @@ class ProjectManagementAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE_WRITE,
                 tools_required=["file_operations", "state_management"],
                 data_access=["project_management/progress"],
-                execution_time_estimate=1.0
+                execution_time_estimate=1.0,
             ),
             AgentCapability(
                 name="get_plan_status",
@@ -101,7 +109,7 @@ class ProjectManagementAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE,
                 tools_required=["file_operations", "state_query"],
                 data_access=["project_management/plans", "project_management/progress"],
-                execution_time_estimate=0.5
+                execution_time_estimate=0.5,
             ),
             AgentCapability(
                 name="archive_plan",
@@ -109,7 +117,7 @@ class ProjectManagementAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE_WRITE,
                 tools_required=["file_operations"],
                 data_access=["project_management/plans", "project_management/archives"],
-                execution_time_estimate=1.0
+                execution_time_estimate=1.0,
             ),
             AgentCapability(
                 name="list_active_plans",
@@ -117,11 +125,13 @@ class ProjectManagementAgent(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE,
                 tools_required=["file_operations"],
                 data_access=["project_management/plans"],
-                execution_time_estimate=0.5
-            )
+                execution_time_estimate=0.5,
+            ),
         ]
 
-    def _execute_action(self, action: str, parameters: Dict, user_context: Dict) -> Dict:
+    def _execute_action(
+        self, action: str, parameters: Dict, user_context: Dict
+    ) -> Dict:
         """Execute agent actions with proper error handling"""
         try:
             if action == "create_plan":
@@ -138,14 +148,16 @@ class ProjectManagementAgent(BaseAgent):
                 return {
                     "success": False,
                     "error": f"Unknown action: {action}",
-                    "available_actions": [cap.name for cap in self._define_capabilities()]
+                    "available_actions": [
+                        cap.name for cap in self._define_capabilities()
+                    ],
                 }
         except Exception as e:
             return {
                 "success": False,
                 "error": str(e),
                 "action": action,
-                "parameters": parameters
+                "parameters": parameters,
             }
 
     def _create_plan(self, params: Dict, context: Dict) -> Dict:
@@ -164,7 +176,7 @@ class ProjectManagementAgent(BaseAgent):
             created_by=context.get("user_id", "system"),
             status=params.get("status", "draft"),
             milestones=params["milestones"],
-            metadata=params.get("metadata", {})
+            metadata=params.get("metadata", {}),
         )
 
         # Convert to TOON format for LLM processing
@@ -174,12 +186,12 @@ class ProjectManagementAgent(BaseAgent):
 
         # Save plan
         plan_file = self.plans_dir / f"{plan.plan_id}.json"
-        with open(plan_file, 'w') as f:
+        with open(plan_file, "w") as f:
             json.dump(plan_data, f, indent=2)
 
         # Save TOON version for efficient LLM access
         toon_file = self.plans_dir / f"{plan.plan_id}.toon"
-        with open(toon_file, 'w') as f:
+        with open(toon_file, "w") as f:
             f.write(plan.toon_data)
 
         return {
@@ -187,7 +199,7 @@ class ProjectManagementAgent(BaseAgent):
             "plan_id": plan.plan_id,
             "status": plan.status,
             "milestone_count": len(plan.milestones),
-            "files_created": [str(plan_file), str(toon_file)]
+            "files_created": [str(plan_file), str(toon_file)],
         }
 
     def _track_progress(self, params: Dict, context: Dict) -> Dict:
@@ -205,7 +217,7 @@ class ProjectManagementAgent(BaseAgent):
             milestone=params["milestone"],
             status=params["status"],
             details=params.get("details", {}),
-            completion_percentage=params.get("completion_percentage", 0.0)
+            completion_percentage=params.get("completion_percentage", 0.0),
         )
 
         # Save progress entry
@@ -214,7 +226,7 @@ class ProjectManagementAgent(BaseAgent):
         # Load existing progress or create new
         existing_progress = []
         if progress_file.exists():
-            with open(progress_file, 'r') as f:
+            with open(progress_file, "r") as f:
                 existing_progress = json.load(f)
 
         # Add new entry
@@ -223,7 +235,7 @@ class ProjectManagementAgent(BaseAgent):
         existing_progress.append(progress_data)
 
         # Save updated progress
-        with open(progress_file, 'w') as f:
+        with open(progress_file, "w") as f:
             json.dump(existing_progress, f, indent=2)
 
         return {
@@ -232,7 +244,7 @@ class ProjectManagementAgent(BaseAgent):
             "milestone": progress.milestone,
             "status": progress.status,
             "completion_percentage": progress.completion_percentage,
-            "total_entries": len(existing_progress)
+            "total_entries": len(existing_progress),
         }
 
     def _get_plan_status(self, params: Dict, context: Dict) -> Dict:
@@ -246,21 +258,20 @@ class ProjectManagementAgent(BaseAgent):
         if not plan_file.exists():
             return {"success": False, "error": f"Plan {plan_id} not found"}
 
-        with open(plan_file, 'r') as f:
+        with open(plan_file, "r") as f:
             plan = json.load(f)
 
         # Load progress
         progress_file = self.progress_dir / f"{plan_id}_progress.json"
         progress = []
         if progress_file.exists():
-            with open(progress_file, 'r') as f:
+            with open(progress_file, "r") as f:
                 progress = json.load(f)
 
         # Calculate completion percentage
         if progress:
             latest_completion = max(
-                entry.get("completion_percentage", 0)
-                for entry in progress
+                entry.get("completion_percentage", 0) for entry in progress
             )
         else:
             latest_completion = 0.0
@@ -270,7 +281,11 @@ class ProjectManagementAgent(BaseAgent):
             "plan": plan,
             "progress_entries": len(progress),
             "completion_percentage": latest_completion,
-            "last_updated": max([entry["timestamp"] for entry in progress]) if progress else plan["created_at"]
+            "last_updated": (
+                max([entry["timestamp"] for entry in progress])
+                if progress
+                else plan["created_at"]
+            ),
         }
 
     def _archive_plan(self, params: Dict, context: Dict) -> Dict:
@@ -286,7 +301,7 @@ class ProjectManagementAgent(BaseAgent):
         files_to_archive = [
             self.plans_dir / f"{plan_id}.json",
             self.plans_dir / f"{plan_id}.toon",
-            self.progress_dir / f"{plan_id}_progress.json"
+            self.progress_dir / f"{plan_id}_progress.json",
         ]
 
         archived_files = []
@@ -300,7 +315,7 @@ class ProjectManagementAgent(BaseAgent):
             "success": True,
             "plan_id": plan_id,
             "archived_files": archived_files,
-            "archive_location": str(archive_dir)
+            "archive_location": str(archive_dir),
         }
 
     def _list_active_plans(self, params: Dict, context: Dict) -> Dict:
@@ -309,32 +324,36 @@ class ProjectManagementAgent(BaseAgent):
 
         for plan_file in self.plans_dir.glob("*.json"):
             try:
-                with open(plan_file, 'r') as f:
+                with open(plan_file, "r") as f:
                     plan = json.load(f)
                     if plan.get("status") in ["draft", "active"]:
                         # Get progress summary
-                        progress_file = self.progress_dir / f"{plan['plan_id']}_progress.json"
+                        progress_file = (
+                            self.progress_dir / f"{plan['plan_id']}_progress.json"
+                        )
                         progress_count = 0
                         if progress_file.exists():
-                            with open(progress_file, 'r') as f:
+                            with open(progress_file, "r") as f:
                                 progress = json.load(f)
                                 progress_count = len(progress)
 
-                        active_plans.append({
-                            "plan_id": plan["plan_id"],
-                            "title": plan["title"],
-                            "status": plan["status"],
-                            "created_at": plan["created_at"],
-                            "milestone_count": len(plan.get("milestones", [])),
-                            "progress_entries": progress_count
-                        })
+                        active_plans.append(
+                            {
+                                "plan_id": plan["plan_id"],
+                                "title": plan["title"],
+                                "status": plan["status"],
+                                "created_at": plan["created_at"],
+                                "milestone_count": len(plan.get("milestones", [])),
+                                "progress_entries": progress_count,
+                            }
+                        )
             except Exception as e:
                 continue  # Skip corrupted files
 
         return {
             "success": True,
             "active_plans": active_plans,
-            "total_count": len(active_plans)
+            "total_count": len(active_plans),
         }
 
 
