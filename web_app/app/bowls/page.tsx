@@ -64,7 +64,7 @@ export default function BowlsPage() {
     loadData();
   }, []);
 
-  const games = bowlData.games ?? [];
+  const games = bowlData.games;
 
   const dateOptions = useMemo(() => {
     const set = new Set<string>();

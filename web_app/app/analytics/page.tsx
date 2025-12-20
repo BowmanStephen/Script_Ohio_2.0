@@ -31,7 +31,7 @@ export default function AnalyticsPage() {
     loadData();
   }, []);
 
-  const models = analysis.models ?? [];
+  const models = analysis.models;
   const insights = analysis.insights ?? {};
   const recommendations = analysis.recommendations ?? {};
 
