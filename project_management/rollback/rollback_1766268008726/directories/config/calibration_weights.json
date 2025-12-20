@@ -1,0 +1,13 @@
+{
+  "ohio_model_weight": 0.509546499044128,
+  "sp_weight": 0.4904535009558721,
+  "fpi_weight": 3.57287529020902e-17,
+  "validation_mae": 12.117236497959697,
+  "validation_rmse": 16.118775664806062,
+  "validation_accuracy": 0.7696969696969697,
+  "validation_games": 495,
+  "baseline_mae": 12.788552287582986,
+  "baseline_accuracy": 0.7858585858585858,
+  "optimization_date": "2025-11-20",
+  "optimization_status": "success"
+}
