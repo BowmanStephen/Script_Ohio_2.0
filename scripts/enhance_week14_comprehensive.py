@@ -161,10 +161,12 @@ def execute_step(
 
     duration = time.perf_counter() - start
     status = "success" if exit_code == 0 else "failed"
-    logger.info(
-        "✅ Completed %s in %.2fs", name, duration
-    ) if exit_code == 0 else logger.error(
-        "❌ %s failed in %.2fs (exit code %s)", name, duration, exit_code
+    (
+        logger.info("✅ Completed %s in %.2fs", name, duration)
+        if exit_code == 0
+        else logger.error(
+            "❌ %s failed in %.2fs (exit code %s)", name, duration, exit_code
+        )
     )
 
     results.append(

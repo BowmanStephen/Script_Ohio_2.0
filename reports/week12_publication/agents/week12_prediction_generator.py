@@ -349,20 +349,20 @@ class Week12PredictionGenerator:
                 "ridge_margin_prediction": predicted_margin
                 + random.uniform(-2, 2),  # Model variation
                 "ridge_confidence": 0.65,
-                "ridge_predicted_winner": home_team
-                if predicted_margin > 0
-                else away_team,
+                "ridge_predicted_winner": (
+                    home_team if predicted_margin > 0 else away_team
+                ),
                 "xgb_win_probability": win_probability,
                 "xgb_confidence": 0.62,
-                "xgb_predicted_winner": home_team
-                if win_probability > 0.5
-                else away_team,
+                "xgb_predicted_winner": (
+                    home_team if win_probability > 0.5 else away_team
+                ),
                 "xgb_margin_prediction": (win_probability - 0.5) * 28,
                 "ensemble_margin": predicted_margin,
                 "ensemble_margin_std": abs(random.uniform(0, 3)),
-                "ensemble_predicted_winner": home_team
-                if predicted_margin > 0
-                else away_team,
+                "ensemble_predicted_winner": (
+                    home_team if predicted_margin > 0 else away_team
+                ),
                 "ensemble_win_probability": win_probability,
                 "ensemble_win_std": random.uniform(0.05, 0.15),
                 "confidence_score": abs(win_probability - 0.5) * 2,
@@ -595,9 +595,9 @@ class Week12PredictionGenerator:
                     "week": 12,
                     "season": 2025,
                     "generated_at": time.strftime("%Y-%m-%d %H:%M:%S"),
-                    "total_games": len(self.predictions)
-                    if self.predictions is not None
-                    else 0,
+                    "total_games": (
+                        len(self.predictions) if self.predictions is not None else 0
+                    ),
                     "models_used": ["ridge_model_2025", "xgb_home_win_model_2025"],
                     "prediction_methodology": "Ensemble of Ridge regression and XGBoost with opponent-adjusted features",
                 },

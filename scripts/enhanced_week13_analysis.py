@@ -142,11 +142,11 @@ class EnhancedWeek13Analyzer:
                 playoff_implication = {
                     "team": game_data["predicted_winner"],
                     "conference": matchup["conference"],
-                    "playoff_probability": "HIGH"
-                    if win_prob > 0.6
-                    else "MEDIUM"
-                    if win_prob > 0.4
-                    else "LOW",
+                    "playoff_probability": (
+                        "HIGH"
+                        if win_prob > 0.6
+                        else "MEDIUM" if win_prob > 0.4 else "LOW"
+                    ),
                     "championship_importance": "CRITICAL",
                 }
 
@@ -215,9 +215,11 @@ class EnhancedWeek13Analyzer:
                 game_data["competitive_balance"] = (
                     "HIGHLY_COMPETITIVE"
                     if competitive_score < 0.3
-                    else "MODERATELY_COMPETITIVE"
-                    if competitive_score < 0.6
-                    else "ONE_SIDED"
+                    else (
+                        "MODERATELY_COMPETITIVE"
+                        if competitive_score < 0.6
+                        else "ONE_SIDED"
+                    )
                 )
                 game_data["rivalry_intensity"] = (
                     "EXTREME"
@@ -293,9 +295,11 @@ class EnhancedWeek13Analyzer:
                     "playoff_impact": self._assess_playoff_impact(
                         winner, loser, contenders_in_game
                     ),
-                    "win_probability": game["home_win_probability"]
-                    if winner == game["home_team"]
-                    else game["away_win_probability"],
+                    "win_probability": (
+                        game["home_win_probability"]
+                        if winner == game["home_team"]
+                        else game["away_win_probability"]
+                    ),
                 }
 
                 if winner in projected_contenders:

@@ -51,8 +51,12 @@ REMOVAL_GROUPS: dict[str, Sequence[CleanupTarget]] = {
         CleanupTarget("documentation", "Duplicated documentation set"),
         CleanupTarget("week13_system_validation.py", "Week 13 validation script"),
         CleanupTarget("week12_digestible_analysis", "Week 12 digestible analysis"),
-        CleanupTarget("predictions/week${WEEK:-13}/legacy/", "Old Week 12 analysis outputs"),
-        CleanupTarget("predictions/week${WEEK:-13}/legacy/", "Old Week 13 analysis outputs"),
+        CleanupTarget(
+            "predictions/week${WEEK:-13}/legacy/", "Old Week 12 analysis outputs"
+        ),
+        CleanupTarget(
+            "predictions/week${WEEK:-13}/legacy/", "Old Week 13 analysis outputs"
+        ),
         CleanupTarget("validation/week13", "Week 13 validation artifacts"),
         CleanupTarget("prediction_*_agent.py", "Ad-hoc prediction diagnostic agents"),
         CleanupTarget("check_key.py", "Debug key inspection script"),

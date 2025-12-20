@@ -290,18 +290,24 @@ class RouterInstrumentationAnalyzer:
                 "average_queue_size_at_submit": round(avg_queue_submit, 2),
                 "average_queue_size_at_process": round(avg_queue_process, 2),
                 "max_queue_size": max(
-                    max(self.metrics["queue_sizes_at_submit"])
-                    if self.metrics["queue_sizes_at_submit"]
-                    else 0,
-                    max(self.metrics["queue_sizes_at_process"])
-                    if self.metrics["queue_sizes_at_process"]
-                    else 0,
+                    (
+                        max(self.metrics["queue_sizes_at_submit"])
+                        if self.metrics["queue_sizes_at_submit"]
+                        else 0
+                    ),
+                    (
+                        max(self.metrics["queue_sizes_at_process"])
+                        if self.metrics["queue_sizes_at_process"]
+                        else 0
+                    ),
                 ),
                 "average_router_overhead_ms": round(avg_overhead, 2),
                 "max_router_overhead_ms": round(
-                    max(self.metrics["router_overhead_ms"])
-                    if self.metrics["router_overhead_ms"]
-                    else 0.0,
+                    (
+                        max(self.metrics["router_overhead_ms"])
+                        if self.metrics["router_overhead_ms"]
+                        else 0.0
+                    ),
                     2,
                 ),
             },

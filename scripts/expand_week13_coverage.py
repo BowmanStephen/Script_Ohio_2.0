@@ -499,13 +499,13 @@ def get_team_metrics(team_name, training_df):
         "talent": np.mean(talent_values) if talent_values else 750.0,
         "elo": np.mean(elo_values) if elo_values else 1500.0,
         "adjusted_epa": np.mean(epa_values) if epa_values else 0.0,
-        "adjusted_epa_allowed": np.mean(epa_allowed_values)
-        if epa_allowed_values
-        else 0.0,
+        "adjusted_epa_allowed": (
+            np.mean(epa_allowed_values) if epa_allowed_values else 0.0
+        ),
         "adjusted_success": np.mean(success_values) if success_values else 0.5,
-        "adjusted_success_allowed": np.mean(success_allowed_values)
-        if success_allowed_values
-        else 0.5,
+        "adjusted_success_allowed": (
+            np.mean(success_allowed_values) if success_allowed_values else 0.5
+        ),
     }
 
 

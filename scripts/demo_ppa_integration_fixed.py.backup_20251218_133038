@@ -9,16 +9,14 @@ Expected Impact: 15-20% improvement in prediction accuracy
 Current Accuracy: 41.5-44.2% → Target: 48-52%
 """
 
-import os
 import sys
-from datetime import datetime
+import os
 from pathlib import Path
-
 import pandas as pd
+from datetime import datetime
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-
 
 def demo_ppa_integration():
     """Demonstrate PPA integration process."""
@@ -26,7 +24,7 @@ def demo_ppa_integration():
     print("=" * 55)
 
     # Check existing training data
-    training_data_path = "data/processed/training/master_training_data_v2.csv"
+    training_data_path = "model_pack/updated_training_data.csv"
 
     if not os.path.exists(training_data_path):
         print(f"❌ Training data not found at: {training_data_path}")
@@ -41,29 +39,23 @@ def demo_ppa_integration():
         print(f"📅 Data range: {df['season'].min()} - {df['season'].max()}")
 
         # Show some existing features
-        numeric_features = df.select_dtypes(include=["number"]).columns
+        numeric_features = df.select_dtypes(include=['number']).columns
         print(f"🔢 Numeric features: {len(numeric_features)}")
 
         # Check for PPA-like features that already exist
-        existing_ppa = [col for col in df.columns if "ppa" in col.lower()]
+        existing_ppa = [col for col in df.columns if 'ppa' in col.lower()]
         if existing_ppa:
             print(f"⚠️ Existing PPA-like features: {existing_ppa}")
         else:
             print("✅ No existing PPA features - ready for integration")
 
         # Show sample teams in the data
-        unique_teams = set(df["home_team"].unique()) | set(df["away_team"].unique())
+        unique_teams = set(df['home_team'].unique()) | set(df['away_team'].unique())
         print(f"🏈 Teams in dataset: {len(unique_teams)} unique teams")
 
         # Show sample of existing features that are similar to PPA
-        ppa_like_features = [
-            col
-            for col in df.columns
-            if any(x in col.lower() for x in ["epa", "success", "explosiveness"])
-        ]
-        print(
-            f"🎯 Existing EPA/Success/Explosiveness features: {len(ppa_like_features)}"
-        )
+        ppa_like_features = [col for col in df.columns if any(x in col.lower() for x in ['epa', 'success', 'explosiveness'])]
+        print(f"🎯 Existing EPA/Success/Explosiveness features: {len(ppa_like_features)}")
         if len(ppa_like_features) <= 5:
             for feature in ppa_like_features:
                 print(f"  • {feature}")
@@ -98,71 +90,26 @@ def demo_ppa_integration():
                             setattr(self, key, value)
 
                 return [
-                    MockPPAData(
-                        "Alabama",
-                        successRate=0.48,
-                        explosiveness=2.1,
-                        offensePPA=28.5,
-                        defensePPA=15.2,
-                        specialTeamsPPA=8.1,
-                        epaPerPlay=0.12,
-                        successRatePass=0.52,
-                        successRateRush=0.45,
-                        explosivenessPass=2.4,
-                        explosivenessRush=1.8,
-                    ),
-                    MockPPAData(
-                        "Georgia",
-                        successRate=0.51,
-                        explosiveness=2.3,
-                        offensePPA=29.1,
-                        defensePPA=14.8,
-                        specialTeamsPPA=8.3,
-                        epaPerPlay=0.13,
-                        successRatePass=0.54,
-                        successRateRush=0.48,
-                        explosivenessPass=2.6,
-                        explosivenessRush=2.0,
-                    ),
-                    MockPPAData(
-                        "Ohio State",
-                        successRate=0.53,
-                        explosiveness=2.5,
-                        offensePPA=30.2,
-                        defensePPA=16.1,
-                        specialTeamsPPA=8.5,
-                        epaPerPlay=0.14,
-                        successRatePass=0.55,
-                        successRateRush=0.51,
-                        explosivenessPass=2.8,
-                        explosivenessRush=2.2,
-                    ),
-                    MockPPAData(
-                        "Texas",
-                        successRate=0.50,
-                        explosiveness=2.4,
-                        offensePPA=28.9,
-                        defensePPA=16.3,
-                        specialTeamsPPA=8.2,
-                        epaPerPlay=0.13,
-                        successRatePass=0.53,
-                        successRateRush=0.48,
-                        explosivenessPass=2.7,
-                        explosivenessRush=2.1,
-                    ),
-                    MockPPAData(
-                        "Oklahoma",
-                        successRate=0.47,
-                        explosiveness=2.6,
-                        offensePPA=29.5,
-                        defensePPA=17.2,
-                        specialTeamsPPA=8.6,
-                        epaPerPlay=0.12,
-                        successRatePass=0.49,
-                        successRateRush=0.45,
-                        explosivenessPass=2.9,
-                        explosivenessRush=2.3,
-                    ),
+                    MockPPAData("Alabama", successRate=0.48, explosiveness=2.1,
+                               offensePPA=28.5, defensePPA=15.2, specialTeamsPPA=8.1,
+                               epaPerPlay=0.12, successRatePass=0.52, successRateRush=0.45,
+                               explosivenessPass=2.4, explosivenessRush=1.8),
+                    MockPPAData("Georgia", successRate=0.51, explosiveness=2.3,
+                               offensePPA=29.1, defensePPA=14.8, specialTeamsPPA=8.3,
+                               epaPerPlay=0.13, successRatePass=0.54, successRateRush=0.48,
+                               explosivenessPass=2.6, explosivenessRush=2.0),
+                    MockPPAData("Ohio State", successRate=0.53, explosiveness=2.5,
+                               offensePPA=30.2, defensePPA=16.1, specialTeamsPPA=8.5,
+                               epaPerPlay=0.14, successRatePass=0.55, successRateRush=0.51,
+                               explosivenessPass=2.8, explosivenessRush=2.2),
+                    MockPPAData("Texas", successRate=0.50, explosiveness=2.4,
+                               offensePPA=28.9, defensePPA=16.3, specialTeamsPPA=8.2,
+                               epaPerPlay=0.13, successRatePass=0.53, successRateRush=0.48,
+                               explosivenessPass=2.7, explosivenessRush=2.1),
+                    MockPPAData("Oklahoma", successRate=0.47, explosiveness=2.6,
+                               offensePPA=29.5, defensePPA=17.2, specialTeamsPPA=8.6,
+                               epaPerPlay=0.12, successRatePass=0.49, successRateRush=0.45,
+                               explosivenessPass=2.9, explosivenessRush=2.3),
                 ]
 
         mock_client = MockCFBDClient()
@@ -170,48 +117,19 @@ def demo_ppa_integration():
 
         # Process existing data with PPA features
         # Filter data for teams we have PPA data for
-        sample_teams = ["Alabama", "Georgia", "Ohio State", "Texas", "Oklahoma"]
-        sample_data = df[
-            df["home_team"].isin(sample_teams) | df["away_team"].isin(sample_teams)
-        ].copy()
+        sample_teams = ['Alabama', 'Georgia', 'Ohio State', 'Texas', 'Oklahoma']
+        sample_data = df[df['home_team'].isin(sample_teams) | df['away_team'].isin(sample_teams)].copy()
 
         if len(sample_data) == 0:
             print("⚠️ No data found for sample PPA teams, creating demo data")
             # Create demo data matching the existing structure
-            sample_data = pd.DataFrame(
-                [
-                    {
-                        "home_team": "Alabama",
-                        "away_team": "Georgia",
-                        "season": 2025,
-                        "week": 1,
-                    },
-                    {
-                        "home_team": "Georgia",
-                        "away_team": "Alabama",
-                        "season": 2025,
-                        "week": 1,
-                    },
-                    {
-                        "home_team": "Ohio State",
-                        "away_team": "Texas",
-                        "season": 2025,
-                        "week": 1,
-                    },
-                    {
-                        "home_team": "Texas",
-                        "away_team": "Oklahoma",
-                        "season": 2025,
-                        "week": 1,
-                    },
-                    {
-                        "home_team": "Oklahoma",
-                        "away_team": "Ohio State",
-                        "season": 2025,
-                        "week": 1,
-                    },
-                ]
-            )
+            sample_data = pd.DataFrame([
+                {'home_team': 'Alabama', 'away_team': 'Georgia', 'season': 2025, 'week': 1},
+                {'home_team': 'Georgia', 'away_team': 'Alabama', 'season': 2025, 'week': 1},
+                {'home_team': 'Ohio State', 'away_team': 'Texas', 'season': 2025, 'week': 1},
+                {'home_team': 'Texas', 'away_team': 'Oklahoma', 'season': 2025, 'week': 1},
+                {'home_team': 'Oklahoma', 'away_team': 'Ohio State', 'season': 2025, 'week': 1},
+            ])
 
         print(f"📝 Sample data for PPA integration: {len(sample_data)} rows")
 
@@ -235,7 +153,7 @@ def demo_ppa_integration():
         print(f"\n📊 Enhanced Data Sample:")
         if len(enhanced_data) > 0:
             sample_row = enhanced_data.iloc[0]
-            ppa_cols = [col for col in enhanced_data.columns if "ppa" in col.lower()]
+            ppa_cols = [col for col in enhanced_data.columns if 'ppa' in col.lower()]
             for col in ppa_cols:
                 if pd.notna(sample_row[col]):
                     print(f"  {col}: {sample_row[col]:.3f}")
@@ -249,12 +167,9 @@ def demo_ppa_integration():
         print(f"\n🔄 Comparison with Existing Features:")
         print(f"Your data already has similar advanced metrics:")
         similar_features = [
-            "home_adjusted_epa",
-            "home_adjusted_epa_allowed",
-            "home_adjusted_success",
-            "away_adjusted_success",
-            "home_adjusted_explosiveness",
-            "away_adjusted_explosiveness",
+            'home_adjusted_epa', 'home_adjusted_epa_allowed',
+            'home_adjusted_success', 'away_adjusted_success',
+            'home_adjusted_explosiveness', 'away_adjusted_explosiveness'
         ]
 
         for feature in similar_features:
@@ -266,7 +181,6 @@ def demo_ppa_integration():
     except Exception as e:
         print(f"❌ PPA integration demonstration failed: {e}")
         return False
-
 
 def demonstrate_model_impact():
     """Demonstrate expected model accuracy impact."""
@@ -289,7 +203,7 @@ def demonstrate_model_impact():
         "ppa_defense_allowed_* - Defensive opponent-adjusted metrics",
         "ppa_success_rate_differential - Team vs opponent comparison",
         "ppa_explosiveness_differential - Big play differential",
-        "ppa_epa_per_play_differential - Efficiency advantage",
+        "ppa_epa_per_play_differential - Efficiency advantage"
     ]
 
     for i, feature in enumerate(features, 1):
@@ -307,7 +221,6 @@ def demonstrate_model_impact():
     print(f"  • Confidence intervals: 20% tighter")
     print(f"  • Model explainability: Enhanced with PPA-specific feature importance")
 
-
 def demonstrate_integration_with_existing_features():
     """Show how PPA integrates with your existing feature set."""
     print(f"\n🔗 Integration with Existing 86-Feature Pipeline")
@@ -319,7 +232,7 @@ def demonstrate_integration_with_existing_features():
         "home_adjusted_success - Opponent-adjusted success rates",
         "home_adjusted_explosiveness - Big play production metrics",
         "home_total_havoc - TFL and pressure metrics",
-        "home_points_per_opportunity - Efficiency metrics",
+        "home_points_per_opportunity - Efficiency metrics"
     ]
 
     for feature in existing_advanced:
@@ -336,7 +249,6 @@ def demonstrate_integration_with_existing_features():
     print(f"  Current: 86 opponent-adjusted features")
     print(f"  Added:   8 PPA-specific features")
     print(f"  Total: 94 enhanced features (+9.3%)")
-
 
 def main():
     """Main demonstration function."""
@@ -363,7 +275,6 @@ def main():
     else:
         print(f"\n❌ PPA Integration Demo Failed")
         print(f"Check logs for error details")
-
 
 if __name__ == "__main__":
     main()

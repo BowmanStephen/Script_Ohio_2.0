@@ -9,7 +9,7 @@ result into the canonical training file locations:
 - Postseason: `data/training/weekly/training_data_{season}_postseason.csv`
 
 It is intentionally focused on producing *inputs* for the integration step.
-To merge these files into `model_pack/updated_training_data.csv`, run:
+To merge these files into `data/processed/training/master_training_data_v2.csv`, run:
 
   `python3 scripts/integrate_weekly_files.py --season 2025 --weeks 15 --include-postseason`
 

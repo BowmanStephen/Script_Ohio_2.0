@@ -217,18 +217,16 @@ def load_sp_ratings_from_csv(
         team_col = (
             "Team"
             if "Team" in df.columns
-            else "team"
-            if "team" in df.columns
-            else df.columns[0]
+            else "team" if "team" in df.columns else df.columns[0]
         )
         sp_col = (
             "SP+"
             if "SP+" in df.columns
-            else "sp"
-            if "sp" in df.columns
-            else "spOverall"
-            if "spOverall" in df.columns
-            else None
+            else (
+                "sp"
+                if "sp" in df.columns
+                else "spOverall" if "spOverall" in df.columns else None
+            )
         )
 
         if sp_col is None:

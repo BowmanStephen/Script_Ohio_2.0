@@ -1,0 +1,163 @@
+{
+  "triggers": [
+    {
+      "id": "weekly_analysis_wednesday",
+      "name": "Weekly Analysis - Wednesday Morning",
+      "trigger_type": "schedule",
+      "config": {
+        "schedule": "0 9 * * 3",
+        "timezone": "UTC"
+      },
+      "workflow_mapping": "weekly_analysis",
+      "enabled": true,
+      "conditions": [],
+      "parameters": {
+        "auto_discover_week": true,
+        "enhanced_features": true
+      },
+      "cooldown_seconds": 86400,
+      "last_triggered": null,
+      "trigger_count": 0,
+      "status": "active",
+      "created_at": "2025-12-20T21:22:26.481769+00:00",
+      "metadata": {}
+    },
+    {
+      "id": "model_training_monthly",
+      "name": "Model Training - Monthly Review",
+      "trigger_type": "schedule",
+      "config": {
+        "schedule": "0 2 1 * *",
+        "timezone": "UTC"
+      },
+      "workflow_mapping": "model_training",
+      "enabled": true,
+      "conditions": [],
+      "parameters": {
+        "auto_optimize": true,
+        "validate_performance": true
+      },
+      "cooldown_seconds": 2592000,
+      "last_triggered": null,
+      "trigger_count": 0,
+      "status": "active",
+      "created_at": "2025-12-20T21:22:26.481772+00:00",
+      "metadata": {}
+    },
+    {
+      "id": "performance_degradation",
+      "name": "Performance Degradation Alert",
+      "trigger_type": "performance",
+      "config": {
+        "metric": "prediction_accuracy",
+        "threshold": 0.05,
+        "evaluation_window": 7
+      },
+      "workflow_mapping": "model_training",
+      "enabled": true,
+      "conditions": [],
+      "parameters": {
+        "reason": "performance_degradation",
+        "urgent": true
+      },
+      "cooldown_seconds": 604800,
+      "last_triggered": null,
+      "trigger_count": 0,
+      "status": "active",
+      "created_at": "2025-12-20T21:22:26.481774+00:00",
+      "metadata": {}
+    },
+    {
+      "id": "new_cfbd_data",
+      "name": "New CFBD Data Available",
+      "trigger_type": "data_threshold",
+      "config": {
+        "data_source": "cfbd_api",
+        "check_endpoint": "/games",
+        "min_new_records": 10
+      },
+      "workflow_mapping": "weekly_analysis",
+      "enabled": true,
+      "conditions": [],
+      "parameters": {
+        "data_source": "cfbd",
+        "auto_process": true
+      },
+      "cooldown_seconds": 3600,
+      "last_triggered": null,
+      "trigger_count": 0,
+      "status": "active",
+      "created_at": "2025-12-20T21:22:26.481775+00:00",
+      "metadata": {}
+    },
+    {
+      "id": "gameday_predictions",
+      "name": "Game Day Predictions",
+      "trigger_type": "schedule",
+      "config": {
+        "schedule": "0 8,12,16,20 * * 0,1,6",
+        "timezone": "UTC"
+      },
+      "workflow_mapping": "gameday_predictions",
+      "enabled": true,
+      "conditions": [],
+      "parameters": {
+        "update_existing": true,
+        "check_line_movements": true
+      },
+      "cooldown_seconds": 10800,
+      "last_triggered": null,
+      "trigger_count": 0,
+      "status": "active",
+      "created_at": "2025-12-20T21:22:26.481776+00:00",
+      "metadata": {}
+    },
+    {
+      "id": "high_resource_usage",
+      "name": "High Resource Usage Alert",
+      "trigger_type": "performance",
+      "config": {
+        "metric": "resource_usage",
+        "cpu_threshold": 90,
+        "memory_threshold": 90,
+        "duration_minutes": 10
+      },
+      "workflow_mapping": "resource_optimization",
+      "enabled": true,
+      "conditions": [],
+      "parameters": {
+        "cleanup_cache": true,
+        "optimize_tasks": true
+      },
+      "cooldown_seconds": 1800,
+      "last_triggered": null,
+      "trigger_count": 0,
+      "status": "active",
+      "created_at": "2025-12-20T21:22:26.481777+00:00",
+      "metadata": {}
+    },
+    {
+      "id": "weekly_health_check",
+      "name": "Weekly System Health Check",
+      "trigger_type": "schedule",
+      "config": {
+        "schedule": "0 6 * * 1",
+        "timezone": "UTC"
+      },
+      "workflow_mapping": "system_maintenance",
+      "enabled": true,
+      "conditions": [],
+      "parameters": {
+        "full_check": true,
+        "generate_report": true
+      },
+      "cooldown_seconds": 604800,
+      "last_triggered": null,
+      "trigger_count": 0,
+      "status": "active",
+      "created_at": "2025-12-20T21:22:26.481778+00:00",
+      "metadata": {}
+    }
+  ],
+  "last_updated": "2025-12-20T21:22:26.482694+00:00"
+}

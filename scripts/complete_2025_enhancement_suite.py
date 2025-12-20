@@ -9,25 +9,27 @@ Integrates all Phase 2 and Phase 3 enhancements:
 - Enhanced caching
 """
 
+import asyncio
+import json
 import os
 import sys
-import json
 import time
-import asyncio
-import pandas as pd
 from datetime import datetime, timezone
-from typing import Dict, List, Any, Optional
+from typing import Any, Dict, List, Optional
+
+import pandas as pd
 
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.cfbd_client.enhanced_unified_client import EnhancedUnifiedCFBDClient
-from src.cfbd_client.websocket_client import CFBDWebSocketClient
-from src.cfbd_client.live_game_data_processor import LiveGameProcessor
 from src.cfbd_client.enhanced_box_scores import EnhancedBoxScoreClient
-from src.cfbd_client.team_matchup_analyzer import TeamMatchupAnalyzer
+from src.cfbd_client.enhanced_caching import CacheConfig, get_cache_instance
+from src.cfbd_client.enhanced_unified_client import EnhancedUnifiedCFBDClient
+from src.cfbd_client.live_game_data_processor import LiveGameProcessor
 from src.cfbd_client.parallel_processor import ParallelCFBDProcessor
-from src.cfbd_client.enhanced_caching import get_cache_instance, CacheConfig
+from src.cfbd_client.team_matchup_analyzer import TeamMatchupAnalyzer
+from src.cfbd_client.websocket_client import CFBDWebSocketClient
+
 
 class CompleteEnhancementSuite:
     """
@@ -47,12 +49,14 @@ class CompleteEnhancementSuite:
 
         # Initialize core components
         self.client = EnhancedUnifiedCFBDClient()
-        self.cache = get_cache_instance(CacheConfig(
-            enable_redis=False,  # Disable Redis for demo
-            enable_file_cache=True,
-            enable_memory_cache=True,
-            memory_max_size=500
-        ))
+        self.cache = get_cache_instance(
+            CacheConfig(
+                enable_redis=False,  # Disable Redis for demo
+                enable_file_cache=True,
+                enable_memory_cache=True,
+                memory_max_size=500,
+            )
+        )
         self.parallel_processor = ParallelCFBDProcessor(max_workers=6)
         self.box_score_client = EnhancedBoxScoreClient()
         self.matchup_analyzer = TeamMatchupAnalyzer()
@@ -60,11 +64,11 @@ class CompleteEnhancementSuite:
         # Performance tracking
         self.start_time = datetime.now(timezone.utc)
         self.enhancement_results = {
-            'suite_start_time': self.start_time.isoformat(),
-            'components': {},
-            'performance_metrics': {},
-            'data_processed': {},
-            'success_rate': 0.0
+            "suite_start_time": self.start_time.isoformat(),
+            "components": {},
+            "performance_metrics": {},
+            "data_processed": {},
+            "success_rate": 0.0,
         }
 
         print("✅ Enhancement Suite initialized")
@@ -74,10 +78,10 @@ class CompleteEnhancementSuite:
         print("\n🏈 Running Real-Time Game Processing Demo...")
 
         results = {
-            'component': 'real_time_processing',
-            'start_time': datetime.now(timezone.utc).isoformat(),
-            'status': 'running',
-            'data_processed': {}
+            "component": "real_time_processing",
+            "start_time": datetime.now(timezone.utc).isoformat(),
+            "status": "running",
+            "data_processed": {},
         }
 
         try:
@@ -89,25 +93,29 @@ class CompleteEnhancementSuite:
             score_updates = []
 
             def handle_game_update(game_data):
-                game_updates.append({
-                    'timestamp': datetime.now(timezone.utc).isoformat(),
-                    'home_team': game_data.home_team,
-                    'home_score': game_data.home_score,
-                    'away_team': game_data.away_team,
-                    'away_score': game_data.away_score,
-                    'status': game_data.game_status
-                })
+                game_updates.append(
+                    {
+                        "timestamp": datetime.now(timezone.utc).isoformat(),
+                        "home_team": game_data.home_team,
+                        "home_score": game_data.home_score,
+                        "away_team": game_data.away_team,
+                        "away_score": game_data.away_score,
+                        "status": game_data.game_status,
+                    }
+                )
 
             def handle_score_update(score_data):
-                score_updates.append({
-                    'timestamp': datetime.now(timezone.utc).isoformat(),
-                    'scoring_team': score_data.scoring_team,
-                    'points': score_data.points,
-                    'new_score': f"{score_data.new_home_score}-{score_data.new_away_score}"
-                })
+                score_updates.append(
+                    {
+                        "timestamp": datetime.now(timezone.utc).isoformat(),
+                        "scoring_team": score_data.scoring_team,
+                        "points": score_data.points,
+                        "new_score": f"{score_data.new_home_score}-{score_data.new_away_score}",
+                    }
+                )
 
-            ws_client.add_event_handler('game_update', handle_game_update)
-            ws_client.add_event_handler('score_update', handle_score_update)
+            ws_client.add_event_handler("game_update", handle_game_update)
+            ws_client.add_event_handler("score_update", handle_score_update)
 
             # Connect and subscribe to games
             await ws_client.connect()
@@ -117,25 +125,27 @@ class CompleteEnhancementSuite:
                 # Run for demonstration period
                 await asyncio.sleep(10)  # 10 seconds demo
 
-                results['data_processed'] = {
-                    'game_updates': len(game_updates),
-                    'score_updates': len(score_updates),
-                    'subscribed_games': len(ws_client.subscribed_games),
-                    'websocket_metrics': ws_client.get_metrics()
+                results["data_processed"] = {
+                    "game_updates": len(game_updates),
+                    "score_updates": len(score_updates),
+                    "subscribed_games": len(ws_client.subscribed_games),
+                    "websocket_metrics": ws_client.get_metrics(),
                 }
 
                 await ws_client.disconnect()
 
-            results['status'] = 'completed'
-            print(f"✅ Real-time demo: {len(game_updates)} game updates, {len(score_updates)} score updates")
+            results["status"] = "completed"
+            print(
+                f"✅ Real-time demo: {len(game_updates)} game updates, {len(score_updates)} score updates"
+            )
 
         except Exception as e:
-            results['status'] = 'error'
-            results['error'] = str(e)
+            results["status"] = "error"
+            results["error"] = str(e)
             print(f"❌ Real-time demo error: {e}")
 
-        results['end_time'] = datetime.now(timezone.utc).isoformat()
-        self.enhancement_results['components']['real_time_processing'] = results
+        results["end_time"] = datetime.now(timezone.utc).isoformat()
+        self.enhancement_results["components"]["real_time_processing"] = results
 
         return results
 
@@ -144,31 +154,34 @@ class CompleteEnhancementSuite:
         print("\n📊 Running Enhanced Box Score Demo...")
 
         results = {
-            'component': 'enhanced_box_scores',
-            'start_time': datetime.now(timezone.utc).isoformat(),
-            'status': 'running',
-            'data_processed': {}
+            "component": "enhanced_box_scores",
+            "start_time": datetime.now(timezone.utc).isoformat(),
+            "status": "running",
+            "data_processed": {},
         }
 
         try:
             # Get completed games for a recent week
             games = self.client.get_games(year=2025, week=14)
-            completed_games = [g for g in games if g.get('complete', False)]
+            completed_games = [g for g in games if g.get("complete", False)]
 
             if completed_games:
                 # Process first few games with enhanced box scores
-                game_ids = [game.get('id') for game in completed_games[:3] if game.get('id')]
+                game_ids = [
+                    game.get("id") for game in completed_games[:3] if game.get("id")
+                ]
 
                 enhanced_box_scores = {}
                 for game_id in game_ids:
                     box_score = self.box_score_client.get_enhanced_box_score(game_id)
                     if box_score:
                         enhanced_box_scores[game_id] = {
-                            'teams': f"{box_score.home_team} vs {box_score.away_team}",
-                            'final_score': f"{box_score.home_score}-{box_score.away_score}",
-                            'total_yards': box_score.home_box_score.total_yards + box_score.away_box_score.total_yards,
-                            'player_stats_count': len(box_score.player_stats),
-                            'advanced_metrics_count': len(box_score.advanced_metrics)
+                            "teams": f"{box_score.home_team} vs {box_score.away_team}",
+                            "final_score": f"{box_score.home_score}-{box_score.away_score}",
+                            "total_yards": box_score.home_box_score.total_yards
+                            + box_score.away_box_score.total_yards,
+                            "player_stats_count": len(box_score.player_stats),
+                            "advanced_metrics_count": len(box_score.advanced_metrics),
                         }
 
                 # Export to DataFrame
@@ -176,28 +189,33 @@ class CompleteEnhancementSuite:
                     {k: v for k, v in enhanced_box_scores.items() if v}
                 )
 
-                results['data_processed'] = {
-                    'games_processed': len(enhanced_box_scores),
-                    'total_players': sum(s.get('player_stats_count', 0) for s in enhanced_box_scores.values()),
-                    'dataframe_rows': len(df),
-                    'enhanced_box_scores': enhanced_box_scores
+                results["data_processed"] = {
+                    "games_processed": len(enhanced_box_scores),
+                    "total_players": sum(
+                        s.get("player_stats_count", 0)
+                        for s in enhanced_box_scores.values()
+                    ),
+                    "dataframe_rows": len(df),
+                    "enhanced_box_scores": enhanced_box_scores,
                 }
 
-                print(f"✅ Box score demo: {len(enhanced_box_scores)} enhanced box scores processed")
+                print(
+                    f"✅ Box score demo: {len(enhanced_box_scores)} enhanced box scores processed"
+                )
 
             else:
-                results['data_processed'] = {'message': 'No completed games found'}
+                results["data_processed"] = {"message": "No completed games found"}
                 print("⚠️ No completed games found for box score demo")
 
-            results['status'] = 'completed'
+            results["status"] = "completed"
 
         except Exception as e:
-            results['status'] = 'error'
-            results['error'] = str(e)
+            results["status"] = "error"
+            results["error"] = str(e)
             print(f"❌ Box score demo error: {e}")
 
-        results['end_time'] = datetime.now(timezone.utc).isoformat()
-        self.enhancement_results['components']['enhanced_box_scores'] = results
+        results["end_time"] = datetime.now(timezone.utc).isoformat()
+        self.enhancement_results["components"]["enhanced_box_scores"] = results
 
         return results
 
@@ -206,19 +224,19 @@ class CompleteEnhancementSuite:
         print("\n🥊 Running Historical Matchup Analysis Demo...")
 
         results = {
-            'component': 'matchup_analysis',
-            'start_time': datetime.now(timezone.utc).isoformat(),
-            'status': 'running',
-            'data_processed': {}
+            "component": "matchup_analysis",
+            "start_time": datetime.now(timezone.utc).isoformat(),
+            "status": "running",
+            "data_processed": {},
         }
 
         try:
             # Analyze key rivalries
             rivalries = [
-                ('Alabama', 'Georgia'),
-                ('Ohio State', 'Michigan'),
-                ('Texas', 'Oklahoma'),
-                ('USC', 'UCLA')
+                ("Alabama", "Georgia"),
+                ("Ohio State", "Michigan"),
+                ("Texas", "Oklahoma"),
+                ("USC", "UCLA"),
             ]
 
             matchup_results = {}
@@ -232,36 +250,38 @@ class CompleteEnhancementSuite:
                 prediction = self.matchup_analyzer.predict_matchup_outcome(team1, team2)
 
                 matchup_results[f"{team1}_{team2}"] = {
-                    'total_games': stats.total_games,
-                    'team1_win_pct': stats.team1_win_pct,
-                    'team2_win_pct': stats.team2_win_pct,
-                    'rivalry_score': rivalry['rivalry_score'],
-                    'rivalry_level': rivalry['rivalry_level'],
-                    'predicted_winner': prediction.predicted_winner,
-                    'confidence': prediction.confidence,
-                    'historical_advantage': prediction.historical_advantage
+                    "total_games": stats.total_games,
+                    "team1_win_pct": stats.team1_win_pct,
+                    "team2_win_pct": stats.team2_win_pct,
+                    "rivalry_score": rivalry["rivalry_score"],
+                    "rivalry_level": rivalry["rivalry_level"],
+                    "predicted_winner": prediction.predicted_winner,
+                    "confidence": prediction.confidence,
+                    "historical_advantage": prediction.historical_advantage,
                 }
 
             # Export to DataFrame
             df = self.matchup_analyzer.export_matchup_analysis_to_dataframe(rivalries)
 
-            results['data_processed'] = {
-                'rivalries_analyzed': len(matchup_results),
-                'dataframe_rows': len(df),
-                'matchup_results': matchup_results
+            results["data_processed"] = {
+                "rivalries_analyzed": len(matchup_results),
+                "dataframe_rows": len(df),
+                "matchup_results": matchup_results,
             }
 
-            print(f"✅ Matchup analysis demo: {len(matchup_results)} rivalries analyzed")
+            print(
+                f"✅ Matchup analysis demo: {len(matchup_results)} rivalries analyzed"
+            )
 
-            results['status'] = 'completed'
+            results["status"] = "completed"
 
         except Exception as e:
-            results['status'] = 'error'
-            results['error'] = str(e)
+            results["status"] = "error"
+            results["error"] = str(e)
             print(f"❌ Matchup analysis demo error: {e}")
 
-        results['end_time'] = datetime.now(timezone.utc).isoformat()
-        self.enhancement_results['components']['matchup_analysis'] = results
+        results["end_time"] = datetime.now(timezone.utc).isoformat()
+        self.enhancement_results["components"]["matchup_analysis"] = results
 
         return results
 
@@ -270,11 +290,11 @@ class CompleteEnhancementSuite:
         print("\n🚀 Running Parallel Processing Demo...")
 
         results = {
-            'component': 'parallel_processing',
-            'start_time': datetime.now(timezone.utc).isoformat(),
-            'status': 'running',
-            'data_processed': {},
-            'performance_metrics': {}
+            "component": "parallel_processing",
+            "start_time": datetime.now(timezone.utc).isoformat(),
+            "status": "running",
+            "data_processed": {},
+            "performance_metrics": {},
         }
 
         try:
@@ -287,39 +307,52 @@ class CompleteEnhancementSuite:
             total_games = sum(len(games) for games in games_data.values())
 
             # Demo 2: Parallel team statistics
-            teams = ['Alabama', 'Georgia', 'Ohio State', 'Michigan', 'Texas', 'Oklahoma', 'USC', 'UCLA']
+            teams = [
+                "Alabama",
+                "Georgia",
+                "Ohio State",
+                "Michigan",
+                "Texas",
+                "Oklahoma",
+                "USC",
+                "UCLA",
+            ]
             start_time = time.time()
-            team_stats = self.parallel_processor.parallel_get_team_stats_batch(teams, 2025)
+            team_stats = self.parallel_processor.parallel_get_team_stats_batch(
+                teams, 2025
+            )
             parallel_stats_time = time.time() - start_time
 
             # Get performance metrics
             metrics = self.parallel_processor.get_performance_metrics()
 
-            results['data_processed'] = {
-                'games_fetch': {
-                    'weeks_processed': len(games_data),
-                    'total_games': total_games,
-                    'execution_time': parallel_games_time
+            results["data_processed"] = {
+                "games_fetch": {
+                    "weeks_processed": len(games_data),
+                    "total_games": total_games,
+                    "execution_time": parallel_games_time,
                 },
-                'team_stats_fetch': {
-                    'teams_processed': len(team_stats),
-                    'execution_time': parallel_stats_time
-                }
+                "team_stats_fetch": {
+                    "teams_processed": len(team_stats),
+                    "execution_time": parallel_stats_time,
+                },
             }
 
-            results['performance_metrics'] = asdict(metrics)
+            results["performance_metrics"] = asdict(metrics)
 
-            print(f"✅ Parallel processing demo: {total_games} games, {len(team_stats)} teams processed")
+            print(
+                f"✅ Parallel processing demo: {total_games} games, {len(team_stats)} teams processed"
+            )
 
-            results['status'] = 'completed'
+            results["status"] = "completed"
 
         except Exception as e:
-            results['status'] = 'error'
-            results['error'] = str(e)
+            results["status"] = "error"
+            results["error"] = str(e)
             print(f"❌ Parallel processing demo error: {e}")
 
-        results['end_time'] = datetime.now(timezone.utc).isoformat()
-        self.enhancement_results['components']['parallel_processing'] = results
+        results["end_time"] = datetime.now(timezone.utc).isoformat()
+        self.enhancement_results["components"]["parallel_processing"] = results
 
         return results
 
@@ -328,10 +361,10 @@ class CompleteEnhancementSuite:
         print("\n🗄️ Running Enhanced Caching Demo...")
 
         results = {
-            'component': 'enhanced_caching',
-            'start_time': datetime.now(timezone.utc).isoformat(),
-            'status': 'running',
-            'data_processed': {}
+            "component": "enhanced_caching",
+            "start_time": datetime.now(timezone.utc).isoformat(),
+            "status": "running",
+            "data_processed": {},
         }
 
         try:
@@ -340,10 +373,20 @@ class CompleteEnhancementSuite:
 
             # Store and retrieve different data types
             test_data = {
-                'games': [{'id': 1, 'home': 'Alabama', 'away': 'Georgia', 'score': '31-24'}],
-                'teams': [{'name': 'Alabama', 'conference': 'SEC', 'rank': 1}],
-                'ratings': [{'team': 'Alabama', 'elo': 85.5, 'power_rating': 92.3}],
-                'stats': [{'team': 'Alabama', 'wins': 10, 'losses': 2, 'conf_wins': 7, 'conf_losses': 1}]
+                "games": [
+                    {"id": 1, "home": "Alabama", "away": "Georgia", "score": "31-24"}
+                ],
+                "teams": [{"name": "Alabama", "conference": "SEC", "rank": 1}],
+                "ratings": [{"team": "Alabama", "elo": 85.5, "power_rating": 92.3}],
+                "stats": [
+                    {
+                        "team": "Alabama",
+                        "wins": 10,
+                        "losses": 2,
+                        "conf_wins": 7,
+                        "conf_losses": 1,
+                    }
+                ],
             }
 
             cache_operations = 0
@@ -377,27 +420,29 @@ class CompleteEnhancementSuite:
             metrics = cache.get_metrics()
             cache_stats = cache.export_cache_stats()
 
-            results['data_processed'] = {
-                'cache_operations': cache_operations,
-                'cache_hits': cache_hits,
-                'hit_rate': metrics.hit_rate,
-                'average_response_time': metrics.average_response_time_ms,
-                'total_size_mb': metrics.total_size_mb
+            results["data_processed"] = {
+                "cache_operations": cache_operations,
+                "cache_hits": cache_hits,
+                "hit_rate": metrics.hit_rate,
+                "average_response_time": metrics.average_response_time_ms,
+                "total_size_mb": metrics.total_size_mb,
             }
 
-            results['performance_metrics'] = cache_stats
+            results["performance_metrics"] = cache_stats
 
-            print(f"✅ Caching demo: {cache_hits}/{cache_operations} hits, {metrics.hit_rate:.1f}% hit rate")
+            print(
+                f"✅ Caching demo: {cache_hits}/{cache_operations} hits, {metrics.hit_rate:.1f}% hit rate"
+            )
 
-            results['status'] = 'completed'
+            results["status"] = "completed"
 
         except Exception as e:
-            results['status'] = 'error'
-            results['error'] = str(e)
+            results["status"] = "error"
+            results["error"] = str(e)
             print(f"❌ Caching demo error: {e}")
 
-        results['end_time'] = datetime.now(timezone.utc).isoformat()
-        self.enhancement_results['components']['enhanced_caching'] = results
+        results["end_time"] = datetime.now(timezone.utc).isoformat()
+        self.enhancement_results["components"]["enhanced_caching"] = results
 
         return results
 
@@ -406,56 +451,64 @@ class CompleteEnhancementSuite:
         print("\n📋 Generating Comprehensive Enhancement Report...")
 
         # Calculate overall success rate
-        components = self.enhancement_results['components']
+        components = self.enhancement_results["components"]
         total_components = len(components)
-        successful_components = len([c for c in components.values() if c.get('status') == 'completed'])
-        success_rate = (successful_components / total_components * 100) if total_components > 0 else 0
+        successful_components = len(
+            [c for c in components.values() if c.get("status") == "completed"]
+        )
+        success_rate = (
+            (successful_components / total_components * 100)
+            if total_components > 0
+            else 0
+        )
 
-        self.enhancement_results['success_rate'] = success_rate
+        self.enhancement_results["success_rate"] = success_rate
 
         # Generate performance summary
         performance_summary = {
-            'overall_success_rate': success_rate,
-            'components_completed': successful_components,
-            'total_components': total_components,
-            'enhancement_duration': (datetime.now(timezone.utc) - self.start_time).total_seconds(),
-            'key_achievements': []
+            "overall_success_rate": success_rate,
+            "components_completed": successful_components,
+            "total_components": total_components,
+            "enhancement_duration": (
+                datetime.now(timezone.utc) - self.start_time
+            ).total_seconds(),
+            "key_achievements": [],
         }
 
         # Extract key metrics from each component
-        if 'real_time_processing' in components:
-            rt_data = components['real_time_processing']['data_processed']
-            performance_summary['key_achievements'].append(
+        if "real_time_processing" in components:
+            rt_data = components["real_time_processing"]["data_processed"]
+            performance_summary["key_achievements"].append(
                 f"Real-time processing: {rt_data.get('game_updates', 0)} game updates"
             )
 
-        if 'enhanced_box_scores' in components:
-            bs_data = components['enhanced_box_scores']['data_processed']
-            performance_summary['key_achievements'].append(
+        if "enhanced_box_scores" in components:
+            bs_data = components["enhanced_box_scores"]["data_processed"]
+            performance_summary["key_achievements"].append(
                 f"Enhanced box scores: {bs_data.get('games_processed', 0)} games processed"
             )
 
-        if 'matchup_analysis' in components:
-            ma_data = components['matchup_analysis']['data_processed']
-            performance_summary['key_achievements'].append(
+        if "matchup_analysis" in components:
+            ma_data = components["matchup_analysis"]["data_processed"]
+            performance_summary["key_achievements"].append(
                 f"Matchup analysis: {ma_data.get('rivalries_analyzed', 0)} rivalries analyzed"
             )
 
-        if 'parallel_processing' in components:
-            pp_data = components['parallel_processing']['performance_metrics']
-            speedup = pp_data.get('total_time_saved', 0)
-            performance_summary['key_achievements'].append(
+        if "parallel_processing" in components:
+            pp_data = components["parallel_processing"]["performance_metrics"]
+            speedup = pp_data.get("total_time_saved", 0)
+            performance_summary["key_achievements"].append(
                 f"Parallel processing: {speedup:.1f}s time saved"
             )
 
-        if 'enhanced_caching' in components:
-            cache_data = components['enhanced_caching']['data_processed']
-            hit_rate = cache_data.get('hit_rate', 0)
-            performance_summary['key_achievements'].append(
+        if "enhanced_caching" in components:
+            cache_data = components["enhanced_caching"]["data_processed"]
+            hit_rate = cache_data.get("hit_rate", 0)
+            performance_summary["key_achievements"].append(
                 f"Enhanced caching: {hit_rate:.1f}% hit rate achieved"
             )
 
-        self.enhancement_results['performance_summary'] = performance_summary
+        self.enhancement_results["performance_summary"] = performance_summary
 
         return self.enhancement_results
 
@@ -471,7 +524,7 @@ class CompleteEnhancementSuite:
 
         filepath = os.path.join(reports_dir, filename)
 
-        with open(filepath, 'w') as f:
+        with open(filepath, "w") as f:
             json.dump(self.enhancement_results, f, indent=2, default=str)
 
         print(f"📄 Comprehensive report saved: {filepath}")
@@ -488,7 +541,7 @@ class CompleteEnhancementSuite:
             ("Enhanced Box Scores", self.run_box_score_demo),
             ("Matchup Analysis", self.run_matchup_analysis_demo),
             ("Parallel Processing", self.run_parallel_processing_demo),
-            ("Enhanced Caching", self.run_caching_demo)
+            ("Enhanced Caching", self.run_caching_demo),
         ]
 
         for demo_name, demo_func in demos:
@@ -510,19 +563,25 @@ class CompleteEnhancementSuite:
         # Display summary
         print(f"\n🎉 ENHANCEMENT SUITE COMPLETE!")
         print(f"   Success Rate: {report['success_rate']:.1f}%")
-        print(f"   Components: {report['performance_summary']['components_completed']}/{report['performance_summary']['total_components']}")
-        print(f"   Duration: {report['performance_summary']['enhancement_duration']:.1f}s")
+        print(
+            f"   Components: {report['performance_summary']['components_completed']}/{report['performance_summary']['total_components']}"
+        )
+        print(
+            f"   Duration: {report['performance_summary']['enhancement_duration']:.1f}s"
+        )
 
         print(f"\n🏆 Key Achievements:")
-        for achievement in report['performance_summary']['key_achievements']:
+        for achievement in report["performance_summary"]["key_achievements"]:
             print(f"   ✅ {achievement}")
 
         return report
+
 
 async def main():
     """Main execution function"""
     suite = CompleteEnhancementSuite()
     await suite.run_complete_suite()
+
 
 if __name__ == "__main__":
     asyncio.run(main())

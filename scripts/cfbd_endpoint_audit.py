@@ -4,14 +4,15 @@ Comprehensive CFBD Endpoint Coverage Audit for 2025 Season
 Audits all available CFBD endpoints and identifies gaps in data extraction and utilization
 """
 
+import json
+import logging
 import os
 import sys
-import json
 import time
-import pandas as pd
 from datetime import datetime
-from typing import Dict, List, Any, Optional, Tuple
-import logging
+from typing import Any, Dict, List, Optional, Tuple
+
+import pandas as pd
 
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -20,10 +21,10 @@ from src.cfbd_client.unified_client import UnifiedCFBDClient
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
+
 
 class CFBDEndpointAuditor:
     """Comprehensive auditor for CFBD endpoint utilization and coverage"""
@@ -38,7 +39,7 @@ class CFBDEndpointAuditor:
             "utilization_gaps": [],
             "performance_metrics": {},
             "recommendations": [],
-            "implementation_priority": []
+            "implementation_priority": [],
         }
 
     def get_all_available_endpoints(self) -> List[Dict[str, Any]]:
@@ -51,10 +52,17 @@ class CFBDEndpointAuditor:
                 "endpoint": "games",
                 "method": "get_games",
                 "description": "Game schedules and results",
-                "parameters": ["year", "week", "season_type", "team", "conference", "id"],
+                "parameters": [
+                    "year",
+                    "week",
+                    "season_type",
+                    "team",
+                    "conference",
+                    "id",
+                ],
                 "current_usage": "HIGH",  # We use this extensively
                 "data_critical": True,
-                "real_time": False
+                "real_time": False,
             },
             {
                 "name": "Team Talent",
@@ -64,7 +72,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["year", "team"],
                 "current_usage": "MEDIUM",  # We use some of this
                 "data_critical": True,
-                "real_time": False
+                "real_time": False,
             },
             {
                 "name": "Elo Ratings",
@@ -74,7 +82,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["year", "week", "team"],
                 "current_usage": "HIGH",  # We use this
                 "data_critical": True,
-                "real_time": False
+                "real_time": False,
             },
             {
                 "name": "Teams",
@@ -84,7 +92,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["conference"],
                 "current_usage": "HIGH",  # We use this
                 "data_critical": True,
-                "real_time": False
+                "real_time": False,
             },
             {
                 "name": "Team Season Stats",
@@ -94,7 +102,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["year", "team", "category", "conference"],
                 "current_usage": "MEDIUM",  # Partial usage
                 "data_critical": True,
-                "real_time": False
+                "real_time": False,
             },
             {
                 "name": "Player Season Stats",
@@ -104,7 +112,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["year", "team", "category", "conference", "position"],
                 "current_usage": "LOW",  # Limited usage
                 "data_critical": True,
-                "real_time": False
+                "real_time": False,
             },
             {
                 "name": "Advanced Team Stats",
@@ -114,7 +122,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["year", "team", "conference"],
                 "current_usage": "MEDIUM",  # Some usage
                 "data_critical": True,
-                "real_time": False
+                "real_time": False,
             },
             {
                 "name": "Drives",
@@ -124,7 +132,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["year", "week", "season_type", "team", "game_id"],
                 "current_usage": "LOW",  # Limited usage
                 "data_critical": True,
-                "real_time": False
+                "real_time": False,
             },
             {
                 "name": "Plays",
@@ -134,7 +142,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["game_id", "year", "week", "season_type", "team"],
                 "current_usage": "MEDIUM",  # We have play data
                 "data_critical": True,
-                "real_time": True
+                "real_time": True,
             },
             {
                 "name": "Game Lines",
@@ -144,7 +152,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["year", "week", "season_type", "team"],
                 "current_usage": "MEDIUM",  # Some usage
                 "data_critical": True,
-                "real_time": True
+                "real_time": True,
             },
             {
                 "name": "Conferences",
@@ -154,7 +162,7 @@ class CFBDEndpointAuditor:
                 "parameters": [],
                 "current_usage": "HIGH",  # We use this
                 "data_critical": True,
-                "real_time": False
+                "real_time": False,
             },
             {
                 "name": "Venues",
@@ -164,7 +172,7 @@ class CFBDEndpointAuditor:
                 "parameters": [],
                 "current_usage": "LOW",  # Limited usage
                 "data_critical": False,
-                "real_time": False
+                "real_time": False,
             },
             {
                 "name": "Coaches",
@@ -174,7 +182,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["team", "season"],
                 "current_usage": "LOW",  # Limited usage
                 "data_critical": False,
-                "real_time": False
+                "real_time": False,
             },
             {
                 "name": "Rankings",
@@ -184,7 +192,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["year", "week", "season_type", "poll"],
                 "current_usage": "LOW",  # Limited usage
                 "data_critical": True,
-                "real_time": False
+                "real_time": False,
             },
             {
                 "name": "Calendar",
@@ -194,7 +202,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["year"],
                 "current_usage": "NONE",  # Not used
                 "data_critical": False,
-                "real_time": False
+                "real_time": False,
             },
             {
                 "name": "Game Media",
@@ -204,7 +212,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["year", "week", "season_type", "team", "game_id"],
                 "current_usage": "NONE",  # Not used
                 "data_critical": False,
-                "real_time": True
+                "real_time": True,
             },
             {
                 "name": "Win Probabilities",
@@ -214,7 +222,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["year", "week", "season_type", "team"],
                 "current_usage": "NONE",  # Not used
                 "data_critical": True,
-                "real_time": True
+                "real_time": True,
             },
             {
                 "name": "Game Box Scores",
@@ -224,7 +232,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["game_id"],
                 "current_usage": "NONE",  # Not used
                 "data_critical": True,
-                "real_time": True
+                "real_time": True,
             },
             {
                 "name": "Team Matchups",
@@ -234,7 +242,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["team1", "team2"],
                 "current_usage": "NONE",  # Not used
                 "data_critical": True,
-                "real_time": False
+                "real_time": False,
             },
             {
                 "name": "Rosters",
@@ -244,7 +252,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["team", "year"],
                 "current_usage": "NONE",  # Not used
                 "data_critical": True,
-                "real_time": False
+                "real_time": False,
             },
             {
                 "name": "Recruiting",
@@ -254,7 +262,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["year", "team"],
                 "current_usage": "NONE",  # Not used
                 "data_critical": True,
-                "real_time": False
+                "real_time": False,
             },
             {
                 "name": "Player Usage",
@@ -264,7 +272,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["year", "team", "conference", "position"],
                 "current_usage": "NONE",  # Not used
                 "data_critical": False,
-                "real_time": False
+                "real_time": False,
             },
             {
                 "name": "Draft",
@@ -274,7 +282,7 @@ class CFBDEndpointAuditor:
                 "parameters": ["year", "team", "conference"],
                 "current_usage": "NONE",  # Not used
                 "data_critical": False,
-                "real_time": False
+                "real_time": False,
             },
             {
                 "name": "Transfer Portal",
@@ -284,13 +292,15 @@ class CFBDEndpointAuditor:
                 "parameters": ["year", "team"],
                 "current_usage": "NONE",  # Not used
                 "data_critical": False,
-                "real_time": True
-            }
+                "real_time": True,
+            },
         ]
 
         return available_endpoints
 
-    def test_endpoint_availability(self, endpoint_info: Dict[str, Any]) -> Dict[str, Any]:
+    def test_endpoint_availability(
+        self, endpoint_info: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Test if an endpoint is available and returns data"""
 
         endpoint_name = endpoint_info["name"]
@@ -304,7 +314,7 @@ class CFBDEndpointAuditor:
             "sample_data_count": 0,
             "response_time_ms": 0,
             "error": None,
-            "sample_parameters": {}
+            "sample_parameters": {},
         }
 
         try:
@@ -320,13 +330,19 @@ class CFBDEndpointAuditor:
             # Try to call with minimal parameters for 2025
             if endpoint_name == "Games":
                 data = method(year=self.current_year, limit=5)
-                test_result["sample_parameters"] = {"year": self.current_year, "limit": 5}
+                test_result["sample_parameters"] = {
+                    "year": self.current_year,
+                    "limit": 5,
+                }
             elif endpoint_name == "Teams":
                 data = method(conference="ACC")  # Test with specific conference
                 test_result["sample_parameters"] = {"conference": "ACC"}
             elif endpoint_name == "Elo Ratings":
                 data = method(year=self.current_year, week=1)
-                test_result["sample_parameters"] = {"year": self.current_year, "week": 1}
+                test_result["sample_parameters"] = {
+                    "year": self.current_year,
+                    "week": 1,
+                }
             elif endpoint_name == "Conferences":
                 data = method()
                 test_result["sample_parameters"] = {}
@@ -348,8 +364,12 @@ class CFBDEndpointAuditor:
 
             if data:
                 test_result["available"] = True
-                test_result["sample_data_count"] = len(data) if hasattr(data, '__len__') else 1
-                test_result["has_2025_data"] = True  # If we got data with 2025 parameter
+                test_result["sample_data_count"] = (
+                    len(data) if hasattr(data, "__len__") else 1
+                )
+                test_result["has_2025_data"] = (
+                    True  # If we got data with 2025 parameter
+                )
             else:
                 test_result["available"] = True  # Endpoint exists but returned no data
                 test_result["has_2025_data"] = False
@@ -372,7 +392,7 @@ class CFBDEndpointAuditor:
             "none_usage_count": 0,
             "critical_data_gaps": [],
             "real_time_opportunities": [],
-            "endpoint_details": []
+            "endpoint_details": [],
         }
 
         for endpoint in endpoints:
@@ -384,10 +404,7 @@ class CFBDEndpointAuditor:
             is_critical = endpoint["data_critical"]
             is_real_time = endpoint["real_time"]
 
-            detail = {
-                **endpoint,
-                **test_result
-            }
+            detail = {**endpoint, **test_result}
 
             utilization_analysis["endpoint_details"].append(detail)
 
@@ -404,20 +421,24 @@ class CFBDEndpointAuditor:
             # Identify gaps
             if is_critical and usage_level in ["NONE", "LOW"]:
                 if test_result["available"]:
-                    utilization_analysis["critical_data_gaps"].append({
-                        "endpoint": endpoint["name"],
-                        "current_usage": usage_level,
-                        "description": endpoint["description"],
-                        "priority": "HIGH" if is_critical else "MEDIUM"
-                    })
+                    utilization_analysis["critical_data_gaps"].append(
+                        {
+                            "endpoint": endpoint["name"],
+                            "current_usage": usage_level,
+                            "description": endpoint["description"],
+                            "priority": "HIGH" if is_critical else "MEDIUM",
+                        }
+                    )
 
             # Identify real-time opportunities
             if is_real_time and test_result["available"] and usage_level == "NONE":
-                utilization_analysis["real_time_opportunities"].append({
-                    "endpoint": endpoint["name"],
-                    "description": endpoint["description"],
-                    "sample_response_time": test_result["response_time_ms"]
-                })
+                utilization_analysis["real_time_opportunities"].append(
+                    {
+                        "endpoint": endpoint["name"],
+                        "description": endpoint["description"],
+                        "sample_response_time": test_result["response_time_ms"],
+                    }
+                )
 
         return utilization_analysis
 
@@ -429,13 +450,15 @@ class CFBDEndpointAuditor:
             "rate_limiting_status": "UNKNOWN",
             "caching_effectiveness": "UNKNOWN",
             "bottlenecks": [],
-            "optimization_opportunities": []
+            "optimization_opportunities": [],
         }
 
         try:
             # Get client performance metrics
-            if hasattr(self.client, 'get_performance_metrics'):
-                performance_metrics["client_performance"] = self.client.get_performance_metrics()
+            if hasattr(self.client, "get_performance_metrics"):
+                performance_metrics["client_performance"] = (
+                    self.client.get_performance_metrics()
+                )
 
             # Test rate limiting by making sequential calls
             start_time = time.time()
@@ -445,7 +468,9 @@ class CFBDEndpointAuditor:
             sequential_time = time.time() - start_time
 
             performance_metrics["sequential_call_time_ms"] = sequential_time * 1000
-            performance_metrics["estimated_rate_limit_compliance"] = sequential_time > 0.16  # Should be > 160ms for 6 req/sec
+            performance_metrics["estimated_rate_limit_compliance"] = (
+                sequential_time > 0.16
+            )  # Should be > 160ms for 6 req/sec
 
             # Check for caching by making identical calls
             start_time = time.time()
@@ -453,26 +478,38 @@ class CFBDEndpointAuditor:
             cached_time = time.time() - start_time
 
             performance_metrics["cached_call_time_ms"] = cached_time * 1000
-            performance_metrics["caching_detected"] = cached_time < sequential_time * 0.5
+            performance_metrics["caching_detected"] = (
+                cached_time < sequential_time * 0.5
+            )
 
             # Identify bottlenecks
             if not performance_metrics["estimated_rate_limit_compliance"]:
-                performance_metrics["bottlenecks"].append("Rate limiting not properly respected - may cause API errors")
+                performance_metrics["bottlenecks"].append(
+                    "Rate limiting not properly respected - may cause API errors"
+                )
 
             if not performance_metrics["caching_detected"]:
-                performance_metrics["bottlenecks"].append("No caching detected - redundant API calls")
-                performance_metrics["optimization_opportunities"].append("Implement intelligent caching for frequently accessed data")
+                performance_metrics["bottlenecks"].append(
+                    "No caching detected - redundant API calls"
+                )
+                performance_metrics["optimization_opportunities"].append(
+                    "Implement intelligent caching for frequently accessed data"
+                )
 
-            performance_metrics["optimization_opportunities"].extend([
-                "Implement parallel processing for non-dependent API calls",
-                "Add batch processing for multiple weeks/seasons",
-                "Use WebSocket for real-time data instead of polling",
-                "Implement pre-computed aggregates for common queries"
-            ])
+            performance_metrics["optimization_opportunities"].extend(
+                [
+                    "Implement parallel processing for non-dependent API calls",
+                    "Add batch processing for multiple weeks/seasons",
+                    "Use WebSocket for real-time data instead of polling",
+                    "Implement pre-computed aggregates for common queries",
+                ]
+            )
 
         except Exception as e:
             performance_metrics["error"] = str(e)
-            performance_metrics["bottlenecks"].append(f"Performance assessment failed: {e}")
+            performance_metrics["bottlenecks"].append(
+                f"Performance assessment failed: {e}"
+            )
 
         return performance_metrics
 
@@ -483,71 +520,83 @@ class CFBDEndpointAuditor:
         utilization = self.analyze_current_utilization()
 
         # Priority 1: Critical data gaps (HIGH)
-        critical_gaps = [gap for gap in utilization["critical_data_gaps"] if gap["priority"] == "HIGH"]
+        critical_gaps = [
+            gap
+            for gap in utilization["critical_data_gaps"]
+            if gap["priority"] == "HIGH"
+        ]
         for gap in critical_gaps:
-            priorities.append({
-                "priority": 1,
-                "category": "CRITICAL_DATA",
-                "endpoint": gap["endpoint"],
-                "description": f"Integrate {gap['description']}",
-                "effort": "MEDIUM",
-                "impact": "HIGH",
-                "timeline": "2-3 weeks"
-            })
+            priorities.append(
+                {
+                    "priority": 1,
+                    "category": "CRITICAL_DATA",
+                    "endpoint": gap["endpoint"],
+                    "description": f"Integrate {gap['description']}",
+                    "effort": "MEDIUM",
+                    "impact": "HIGH",
+                    "timeline": "2-3 weeks",
+                }
+            )
 
         # Priority 2: Real-time opportunities
         for opp in utilization["real_time_opportunities"]:
             if opp["sample_response_time"] < 2000:  # Fast endpoints
-                priorities.append({
-                    "priority": 2,
-                    "category": "REAL_TIME",
-                    "endpoint": opp["endpoint"],
-                    "description": f"Add {opp['description']} for live insights",
-                    "effort": "MEDIUM",
-                    "impact": "HIGH",
-                    "timeline": "1-2 weeks"
-                })
+                priorities.append(
+                    {
+                        "priority": 2,
+                        "category": "REAL_TIME",
+                        "endpoint": opp["endpoint"],
+                        "description": f"Add {opp['description']} for live insights",
+                        "effort": "MEDIUM",
+                        "impact": "HIGH",
+                        "timeline": "1-2 weeks",
+                    }
+                )
 
         # Priority 3: Performance optimizations
-        priorities.extend([
-            {
-                "priority": 3,
-                "category": "PERFORMANCE",
-                "endpoint": "PARALLEL_PROCESSING",
-                "description": "Implement parallel API calls for 3x performance",
-                "effort": "HIGH",
-                "impact": "HIGH",
-                "timeline": "3-4 weeks"
-            },
-            {
-                "priority": 3,
-                "category": "PERFORMANCE",
-                "endpoint": "ENHANCED_CACHING",
-                "description": "Deploy Redis-based caching for 80% hit rate",
-                "effort": "MEDIUM",
-                "impact": "HIGH",
-                "timeline": "2-3 weeks"
-            }
-        ])
+        priorities.extend(
+            [
+                {
+                    "priority": 3,
+                    "category": "PERFORMANCE",
+                    "endpoint": "PARALLEL_PROCESSING",
+                    "description": "Implement parallel API calls for 3x performance",
+                    "effort": "HIGH",
+                    "impact": "HIGH",
+                    "timeline": "3-4 weeks",
+                },
+                {
+                    "priority": 3,
+                    "category": "PERFORMANCE",
+                    "endpoint": "ENHANCED_CACHING",
+                    "description": "Deploy Redis-based caching for 80% hit rate",
+                    "effort": "MEDIUM",
+                    "impact": "HIGH",
+                    "timeline": "2-3 weeks",
+                },
+            ]
+        )
 
         # Priority 4: Nice-to-have features
         nice_to_have = [
             ("Game Media", "Highlights and media content integration"),
             ("Team Matchups", "Historical matchup analysis"),
             ("Venues", "Stadium information and travel logistics"),
-            ("Coaches", "Coaching history and trends")
+            ("Coaches", "Coaching history and trends"),
         ]
 
         for endpoint, description in nice_to_have:
-            priorities.append({
-                "priority": 4,
-                "category": "ENHANCEMENT",
-                "endpoint": endpoint,
-                "description": description,
-                "effort": "LOW",
-                "impact": "MEDIUM",
-                "timeline": "1-2 weeks"
-            })
+            priorities.append(
+                {
+                    "priority": 4,
+                    "category": "ENHANCEMENT",
+                    "endpoint": endpoint,
+                    "description": description,
+                    "effort": "LOW",
+                    "impact": "MEDIUM",
+                    "timeline": "1-2 weeks",
+                }
+            )
 
         return sorted(priorities, key=lambda x: (x["priority"], x["impact"]))
 
@@ -559,19 +608,29 @@ class CFBDEndpointAuditor:
 
         # Run all analyses
         self.audit_results["endpoint_analysis"] = self.analyze_current_utilization()
-        self.audit_results["performance_metrics"] = self.assess_data_pipeline_performance()
-        self.audit_results["implementation_priority"] = self.generate_implementation_priorities()
+        self.audit_results["performance_metrics"] = (
+            self.assess_data_pipeline_performance()
+        )
+        self.audit_results["implementation_priority"] = (
+            self.generate_implementation_priorities()
+        )
 
         # Calculate overall scores
         utilization = self.audit_results["endpoint_analysis"]
         total_endpoints = utilization["total_endpoints"]
-        used_endpoints = utilization["high_usage_count"] + utilization["medium_usage_count"] + utilization["low_usage_count"]
+        used_endpoints = (
+            utilization["high_usage_count"]
+            + utilization["medium_usage_count"]
+            + utilization["low_usage_count"]
+        )
 
         self.audit_results["overall_scores"] = {
-            "endpoint_utilization_rate": (used_endpoints / total_endpoints * 100) if total_endpoints > 0 else 0,
+            "endpoint_utilization_rate": (
+                (used_endpoints / total_endpoints * 100) if total_endpoints > 0 else 0
+            ),
             "critical_gap_count": len(utilization["critical_data_gaps"]),
             "real_time_opportunity_count": len(utilization["real_time_opportunities"]),
-            "audit_duration_seconds": time.time() - start_time
+            "audit_duration_seconds": time.time() - start_time,
         }
 
         # Generate summary
@@ -593,20 +652,20 @@ class CFBDEndpointAuditor:
                 f"Currently utilizing {utilization['used_endpoints'] if 'used_endpoints' in utilization else utilization['high_usage_count'] + utilization['medium_usage_count'] + utilization['low_usage_count']}/{utilization['total_endpoints']} available endpoints",
                 f"{len(utilization['critical_data_gaps'])} critical data gaps identified for 2025 season",
                 f"{len(utilization['real_time_opportunities'])} real-time data opportunities available",
-                f"Performance: {'Caching detected' if performance.get('caching_detected') else 'No caching - optimization needed'}"
+                f"Performance: {'Caching detected' if performance.get('caching_detected') else 'No caching - optimization needed'}",
             ],
             "urgent_actions": [
                 "Implement win probabilities integration for predictive analytics",
                 "Add real-time game data pipeline for current season",
                 "Deploy enhanced caching strategies for performance improvement",
-                "Complete missing critical data endpoints for comprehensive coverage"
+                "Complete missing critical data endpoints for comprehensive coverage",
             ],
             "expected_impact": {
                 "data_completeness": "+40%",
                 "predictive_accuracy": "+15%",
                 "system_performance": "+200%",
-                "real_time_capabilities": "NEW"
-            }
+                "real_time_capabilities": "NEW",
+            },
         }
 
     def save_audit_report(self, filename: Optional[str] = None) -> str:
@@ -621,11 +680,12 @@ class CFBDEndpointAuditor:
 
         filepath = os.path.join(reports_dir, filename)
 
-        with open(filepath, 'w') as f:
+        with open(filepath, "w") as f:
             json.dump(self.audit_results, f, indent=2, default=str)
 
         logger.info(f"📄 Endpoint audit report saved to: {filepath}")
         return filepath
+
 
 def main():
     """Main execution function"""
@@ -641,7 +701,7 @@ def main():
     # Display executive summary
     summary = results["executive_summary"]
     print(f"\n📊 {summary['headline']}")
-    print("=" * len(summary['headline']))
+    print("=" * len(summary["headline"]))
 
     print("\n🔍 KEY FINDINGS:")
     for i, finding in enumerate(summary["key_findings"], 1):
@@ -666,14 +726,19 @@ def main():
     # Display top priorities
     print(f"\n🎯 TOP IMPLEMENTATION PRIORITIES:")
     for priority in results["implementation_priority"][:5]:
-        print(f"  P{priority['priority']}: {priority['endpoint']} - {priority['description']}")
-        print(f"         Timeline: {priority['timeline']}, Impact: {priority['impact']}")
+        print(
+            f"  P{priority['priority']}: {priority['endpoint']} - {priority['description']}"
+        )
+        print(
+            f"         Timeline: {priority['timeline']}, Impact: {priority['impact']}"
+        )
 
     # Save comprehensive report
     report_path = auditor.save_audit_report()
     print(f"\n📄 Full audit report saved: {report_path}")
 
     return results
+
 
 if __name__ == "__main__":
     main()

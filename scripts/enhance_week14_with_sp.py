@@ -276,27 +276,41 @@ def load_sp_ratings_from_csv(csv_path: Path) -> Dict[str, Dict[str, float]]:
                 try:
                     team_ratings[team_str] = {
                         "sp": float(sp_rating),
-                        "sp_off": float(sp_off_rating)
-                        if sp_off_rating is not None and not pd.isna(sp_off_rating)
-                        else None,
-                        "sp_def": float(sp_def_rating)
-                        if sp_def_rating is not None and not pd.isna(sp_def_rating)
-                        else None,
-                        "sp_st": float(sp_st_rating)
-                        if sp_st_rating is not None and not pd.isna(sp_st_rating)
-                        else None,
-                        "sp_rank": int(sp_rank)
-                        if sp_rank is not None and not pd.isna(sp_rank)
-                        else None,
-                        "sp_off_rank": int(sp_off_rank)
-                        if sp_off_rank is not None and not pd.isna(sp_off_rank)
-                        else None,
-                        "sp_def_rank": int(sp_def_rank)
-                        if sp_def_rank is not None and not pd.isna(sp_def_rank)
-                        else None,
-                        "sp_st_rank": int(sp_st_rank)
-                        if sp_st_rank is not None and not pd.isna(sp_st_rank)
-                        else None,
+                        "sp_off": (
+                            float(sp_off_rating)
+                            if sp_off_rating is not None and not pd.isna(sp_off_rating)
+                            else None
+                        ),
+                        "sp_def": (
+                            float(sp_def_rating)
+                            if sp_def_rating is not None and not pd.isna(sp_def_rating)
+                            else None
+                        ),
+                        "sp_st": (
+                            float(sp_st_rating)
+                            if sp_st_rating is not None and not pd.isna(sp_st_rating)
+                            else None
+                        ),
+                        "sp_rank": (
+                            int(sp_rank)
+                            if sp_rank is not None and not pd.isna(sp_rank)
+                            else None
+                        ),
+                        "sp_off_rank": (
+                            int(sp_off_rank)
+                            if sp_off_rank is not None and not pd.isna(sp_off_rank)
+                            else None
+                        ),
+                        "sp_def_rank": (
+                            int(sp_def_rank)
+                            if sp_def_rank is not None and not pd.isna(sp_def_rank)
+                            else None
+                        ),
+                        "sp_st_rank": (
+                            int(sp_st_rank)
+                            if sp_st_rank is not None and not pd.isna(sp_st_rank)
+                            else None
+                        ),
                     }
 
                     # Also store with normalized name for matching
