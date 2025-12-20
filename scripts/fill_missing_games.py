@@ -206,13 +206,17 @@ class MissingGamesFiller:
                     "week": getattr(game, "week", week),
                     "neutral_site": getattr(game, "neutral_site", False),
                     "home_team": getattr(game, "home_team", ""),
-                    "home_conference": getattr(game.home_conference, "name", "")
-                    if hasattr(game, "home_conference") and game.home_conference
-                    else "",
+                    "home_conference": (
+                        getattr(game.home_conference, "name", "")
+                        if hasattr(game, "home_conference") and game.home_conference
+                        else ""
+                    ),
                     "away_team": getattr(game, "away_team", ""),
-                    "away_conference": getattr(game.away_conference, "name", "")
-                    if hasattr(game, "away_conference") and game.away_conference
-                    else "",
+                    "away_conference": (
+                        getattr(game.away_conference, "name", "")
+                        if hasattr(game, "away_conference") and game.away_conference
+                        else ""
+                    ),
                     "home_points": getattr(game, "home_points", 0) or 0,
                     "away_points": getattr(game, "away_points", 0) or 0,
                 }

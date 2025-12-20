@@ -133,9 +133,9 @@ class VerificationReportGenerator:
                 "exists": True,
                 "rows": len(df),
                 "columns": len(df.columns),
-                "games_2025": len(df[df["season"] == 2025])
-                if "season" in df.columns
-                else 0,
+                "games_2025": (
+                    len(df[df["season"] == 2025]) if "season" in df.columns else 0
+                ),
             }
 
         # Check model files

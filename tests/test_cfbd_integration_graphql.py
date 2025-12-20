@@ -413,9 +413,9 @@ class TestCFBDGraphQLPerformance:
         execution_time = time.time() - start_time
 
         assert result["status"] == "success"
-        assert execution_time < 2.0, (
-            f"Execution time {execution_time:.3f}s exceeded 2s limit"
-        )
+        assert (
+            execution_time < 2.0
+        ), f"Execution time {execution_time:.3f}s exceeded 2s limit"
 
     def test_graphql_recruiting_response_time(self, agent_perf):
         """Test GraphQL recruiting meets execution time estimate"""
@@ -430,9 +430,9 @@ class TestCFBDGraphQLPerformance:
         execution_time = time.time() - start_time
 
         assert result["status"] == "success"
-        assert execution_time < 3.0, (
-            f"Execution time {execution_time:.3f}s exceeded 3s limit"
-        )
+        assert (
+            execution_time < 3.0
+        ), f"Execution time {execution_time:.3f}s exceeded 3s limit"
 
     def test_graphql_scoreboard_cache_performance(self, agent_perf):
         """Test cache hit improves performance"""
@@ -453,6 +453,6 @@ class TestCFBDGraphQLPerformance:
         assert result["status"] == "success"
         assert result["cached"] is True
         # Cached response should be very fast (< 0.1s)
-        assert execution_time < 0.1, (
-            f"Cached response took {execution_time:.3f}s, expected < 0.1s"
-        )
+        assert (
+            execution_time < 0.1
+        ), f"Cached response took {execution_time:.3f}s, expected < 0.1s"

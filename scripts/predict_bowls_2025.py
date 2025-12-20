@@ -36,6 +36,7 @@ if str(PROJECT_ROOT) not in sys.path:
 try:
     import cfbd
     from cfbd.rest import ApiException
+    from src.cfbd_client.unified_client import UnifiedCFBDClient
     from src.ratings.massey_ratings import MasseyConfig, generate_massey_ratings
 except ImportError as e:
     print(f"❌ Import error: {e}")
@@ -44,37 +45,30 @@ except ImportError as e:
 
 
 def get_bowl_games_2025():
-    """Fetch 2025 bowl games using CFBD API directly."""
+    """Fetch 2025 bowl games using the unified CFBD client."""
     try:
-        # Check for API key
-        api_key = os.getenv("CFBD_API_KEY")
-        if not api_key:
-            raise ValueError("CFBD_API_KEY environment variable required")
-
-        # Configure CFBD client
-        configuration = cfbd.Configuration(access_token=api_key)
-        api_client = cfbd.ApiClient(configuration)
-        games_api = cfbd.GamesApi(api_client)
+        # Use the UnifiedCFBDClient with proper authentication
+        client = UnifiedCFBDClient()
+        print("📡 Fetching 2025 bowl games...")
 
         # Get bowl games - use season_type="postseason"
-        print("📡 Fetching 2025 bowl games...")
-        bowl_games = games_api.get_games(year=2025, season_type="postseason")
+        bowl_games = client.get_games(year=2025, season_type="postseason")
 
         if not bowl_games:
             print("❌ No bowl games found for 2025")
             return []
 
-        # Convert to list of dictionaries
-        games_list = [game.to_dict() for game in bowl_games]
+        # Convert to list of dictionaries (handle both dict and object formats)
+        games_list = []
+        for game in bowl_games:
+            if hasattr(game, "to_dict"):
+                games_list.append(game.to_dict())
+            else:
+                games_list.append(game)
+
         print(f"✅ Found {len(games_list)} bowl games for 2025")
         return games_list
 
-    except ApiException as e:
-        if e.status == 401:
-            print("❌ Invalid CFBD API key")
-        else:
-            print(f"❌ CFBD API error: {e}")
-        return []
     except Exception as e:
         print(f"❌ Error fetching bowl games: {e}")
         return []

@@ -21,7 +21,10 @@ FILES = [
 FRONTMATTER_OPEN = re.compile(r"^\s*---\s*$")
 NAME_LINE = re.compile(r"^\s*name\s*:\s*(.+?)\s*$", re.IGNORECASE)
 
-def find_frontmatter_bounds(lines: list[str], scan_limit: int = 200) -> tuple[int, int] | None:
+
+def find_frontmatter_bounds(
+    lines: list[str], scan_limit: int = 200
+) -> tuple[int, int] | None:
     """
     Find the bounds of YAML frontmatter.
     Returns (start_index, end_index) inclusive indices of the --- ... --- block.
@@ -37,6 +40,7 @@ def find_frontmatter_bounds(lines: list[str], scan_limit: int = 200) -> tuple[in
             return (0, i)
 
     return None  # malformed: opened but not closed within scan limit
+
 
 def ensure_name(file_path: Path, expected_name: str) -> bool:
     """
@@ -59,7 +63,9 @@ def ensure_name(file_path: Path, expected_name: str) -> bool:
         # No frontmatter found
         if lines and FRONTMATTER_OPEN.match(lines[0]):
             # Malformed frontmatter - fail fast to avoid corruption
-            raise RuntimeError(f"{file_path}: malformed frontmatter (opening '---' without closing '---' near top)")
+            raise RuntimeError(
+                f"{file_path}: malformed frontmatter (opening '---' without closing '---' near top)"
+            )
 
         # Prepend new frontmatter
         new_lines = [
@@ -100,6 +106,7 @@ def ensure_name(file_path: Path, expected_name: str) -> bool:
         print(f"ERROR: Could not write {file_path}: {e}", file=sys.stderr)
         return False
 
+
 def main():
     """Main execution function."""
     changed_files = 0
@@ -114,6 +121,7 @@ def main():
 
     print(f"Frontmatter fixes complete. Files changed: {changed_files}")
     return changed_files
+
 
 if __name__ == "__main__":
     sys.exit(main() if main() is not None else 0)

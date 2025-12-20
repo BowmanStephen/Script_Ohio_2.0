@@ -5,11 +5,12 @@ Simple version without complex coordination issues
 """
 
 import sys
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 # Add the project root to the Python path
 sys.path.insert(0, str(Path(__file__).parent.parent))
+
 
 def main():
     """Run a quick demonstration of the audit system."""
@@ -18,17 +19,17 @@ def main():
     print("=" * 40)
 
     try:
-        from agents.audit.system_integrity_agent import SystemIntegrityAuditAgent
+        from agents.audit.core_audit_contracts import AuditReport, AuditStatus
         from agents.audit.data_pipeline_audit_agent import DataPipelineAuditAgent
         from agents.audit.model_validation_audit_agent import ModelValidationAuditAgent
-        from agents.audit.core_audit_contracts import AuditReport, AuditStatus
         from agents.audit.reporting_engine import AuditReportingEngine
+        from agents.audit.system_integrity_agent import SystemIntegrityAuditAgent
 
         # Create audit report
         audit_start = datetime.now()
         report = AuditReport(
             audit_name=f"Quick System Audit Demo {audit_start.strftime('%Y-%m-%d %H:%M:%S')}",
-            start_time=audit_start.isoformat()
+            start_time=audit_start.isoformat(),
         )
 
         print("\n🔍 Running System Integrity Checks...")
@@ -38,19 +39,22 @@ def main():
         structure_result = sys_agent._audit_file_structure({}, {})
         for check_data in structure_result.get("checks", []):
             from agents.audit.core_audit_contracts import AuditCheck
+
             check = AuditCheck(
                 category=check_data["category"],
                 title=check_data["title"],
                 description=check_data.get("description", ""),
                 validation_command=check_data["validation_command"],
                 expected_pattern=check_data["expected_pattern"],
-                critical=check_data["critical"]
+                critical=check_data["critical"],
             )
             check.status = AuditStatus(check_data["status"])
             check.score = check_data["score"]
             report.add_check(check)
 
-        print(f"✅ System Integrity: {structure_result['summary']['passed_checks']}/{structure_result['summary']['total_checks']} checks passed")
+        print(
+            f"✅ System Integrity: {structure_result['summary']['passed_checks']}/{structure_result['summary']['total_checks']} checks passed"
+        )
 
         print("\n🔍 Running Data Pipeline Checks...")
         data_agent = DataPipelineAuditAgent()
@@ -59,19 +63,22 @@ def main():
         cfbd_result = data_agent._audit_cfbd_integration({}, {})
         for check_data in cfbd_result.get("checks", []):
             from agents.audit.core_audit_contracts import AuditCheck
+
             check = AuditCheck(
                 category=check_data["category"],
                 title=check_data["title"],
                 description=check_data.get("description", ""),
                 validation_command=check_data["validation_command"],
                 expected_pattern=check_data["expected_pattern"],
-                critical=check_data["critical"]
+                critical=check_data["critical"],
             )
             check.status = AuditStatus(check_data["status"])
             check.score = check_data["score"]
             report.add_check(check)
 
-        print(f"✅ Data Pipeline: {cfbd_result['summary']['passed_checks']}/{cfbd_result['summary']['total_checks']} checks passed")
+        print(
+            f"✅ Data Pipeline: {cfbd_result['summary']['passed_checks']}/{cfbd_result['summary']['total_checks']} checks passed"
+        )
 
         print("\n🔍 Running Model Validation Checks...")
         model_agent = ModelValidationAuditAgent()
@@ -80,19 +87,22 @@ def main():
         loading_result = model_agent._audit_model_loading({}, {})
         for check_data in loading_result.get("checks", []):
             from agents.audit.core_audit_contracts import AuditCheck
+
             check = AuditCheck(
                 category=check_data["category"],
                 title=check_data["title"],
                 description=check_data.get("description", ""),
                 validation_command=check_data["validation_command"],
                 expected_pattern=check_data["expected_pattern"],
-                critical=check_data["critical"]
+                critical=check_data["critical"],
             )
             check.status = AuditStatus(check_data["status"])
             check.score = check_data["score"]
             report.add_check(check)
 
-        print(f"✅ Model Validation: {loading_result['summary']['passed_checks']}/{loading_result['summary']['total_checks']} checks passed")
+        print(
+            f"✅ Model Validation: {loading_result['summary']['passed_checks']}/{loading_result['summary']['total_checks']} checks passed"
+        )
 
         # Finalize report
         report.finalize_report()
@@ -100,11 +110,17 @@ def main():
         # Generate recommendations
         recommendations = []
         if report.critical_failures > 0:
-            recommendations.append(f"🚨 {report.critical_failures} critical issues need immediate attention")
+            recommendations.append(
+                f"🚨 {report.critical_failures} critical issues need immediate attention"
+            )
         if report.failed_checks > 0:
-            recommendations.append(f"⚠️ {report.failed_checks} issues found that should be addressed")
+            recommendations.append(
+                f"⚠️ {report.failed_checks} issues found that should be addressed"
+            )
         if report.passed_checks == report.total_checks:
-            recommendations.append("🎉 All checks passed! System is operating optimally.")
+            recommendations.append(
+                "🎉 All checks passed! System is operating optimally."
+            )
 
         # Generate reports
         print("\n📊 Generating Reports...")
@@ -146,8 +162,10 @@ def main():
     except Exception as e:
         print(f"\n❌ Audit failed: {str(e)}")
         import traceback
+
         traceback.print_exc()
         sys.exit(3)
+
 
 if __name__ == "__main__":
     main()

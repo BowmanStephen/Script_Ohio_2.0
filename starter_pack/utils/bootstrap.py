@@ -81,7 +81,11 @@ def _resolve_requirements_file(project_root: Path, override: Optional[str]) -> P
         override_path = Path(override).expanduser()
         if override_path.exists():
             return override_path
-    for candidate in ("requirements.txt", "requirements-dev.txt", "requirements-prod.txt"):
+    for candidate in (
+        "requirements.txt",
+        "requirements-dev.txt",
+        "requirements-prod.txt",
+    ):
         candidate_path = project_root / candidate
         if candidate_path.exists():
             return candidate_path
@@ -100,7 +104,9 @@ def _find_missing_modules() -> List[str]:
 def _auto_install(requirements_file: Path) -> None:
     """Install dependencies using pip if missing modules were detected."""
     print(f"📦 Installing dependencies from {requirements_file} ...")
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", str(requirements_file)])
+    subprocess.check_call(
+        [sys.executable, "-m", "pip", "install", "-r", str(requirements_file)]
+    )
 
 
 def _print_cfbd_guidance() -> None:
@@ -197,4 +203,3 @@ __all__ = [
 
 if __name__ == "__main__":
     ensure_notebook_environment()
-

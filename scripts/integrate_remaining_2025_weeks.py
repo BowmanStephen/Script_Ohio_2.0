@@ -103,7 +103,7 @@ def main():
 
     # File paths
     starter_data_path = Path("starter_pack/data/2025_games.csv")
-    training_data_path = Path("model_pack/updated_training_data.csv")
+    training_data_path = Path("data/processed/training/master_training_data_v2.csv")
     output_path = Path("model_pack/updated_training_data_complete.csv")
 
     # Check files exist

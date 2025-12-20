@@ -86,7 +86,9 @@ def test_cache_manager_standalone_functionality():
 
     # Test cache stats
     stats = cache.stats()
-    assert "hits" in stats or "total" in stats  # Different implementations may have different stats
+    assert (
+        "hits" in stats or "total" in stats
+    )  # Different implementations may have different stats
 
 
 @pytest.mark.skip(reason="CFBDRESTDataSource has been deprecated and removed")

@@ -15,7 +15,7 @@ def validate_schema_alignment():
     print("\nValidating Schema Alignment...")
 
     # Load model pack reference
-    model_pack_path = Path("model_pack/updated_training_data.csv")
+    model_pack_path = Path("data/processed/training/master_training_data_v2.csv")
     if not model_pack_path.exists():
         print(f"ERROR: Reference file not found at {model_pack_path}")
         return False
@@ -140,7 +140,7 @@ def validate_outcome_columns():
 
 def check_margin_convention():
     """Determine if margin should be Home-Away or Away-Home."""
-    model_pack_path = Path("model_pack/updated_training_data.csv")
+    model_pack_path = Path("data/processed/training/master_training_data_v2.csv")
     if model_pack_path.exists():
         df = pd.read_csv(model_pack_path, nrows=100)
         # Find a row

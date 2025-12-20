@@ -1,4 +1,5 @@
 """Shared rate-limiting helper for CFBD API calls."""
+
 from __future__ import annotations
 
 import logging
@@ -32,4 +33,3 @@ def sleep_with_rate_limit(
 
 
 __all__ = ["sleep_with_rate_limit", "DEFAULT_DELAY_SECONDS"]
-

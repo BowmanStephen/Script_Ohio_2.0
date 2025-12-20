@@ -155,36 +155,52 @@ def predict_postseason_2025(
         for _, row in out.iterrows():
             game = {
                 "id": int(row["id"]) if pd.notna(row["id"]) else None,
-                "date": str(row["start_date"])
-                if "start_date" in row and pd.notna(row["start_date"])
-                else None,
-                "home_team": str(row["home_team"])
-                if pd.notna(row["home_team"])
-                else None,
-                "away_team": str(row["away_team"])
-                if pd.notna(row["away_team"])
-                else None,
-                "home_win_prob": float(row["home_win_prob"])
-                if pd.notna(row["home_win_prob"])
-                else None,
-                "predicted_margin": float(row["predicted_margin"])
-                if pd.notna(row["predicted_margin"])
-                else None,
-                "home_talent": float(row["home_talent"])
-                if "home_talent" in row and pd.notna(row["home_talent"])
-                else None,
-                "away_talent": float(row["away_talent"])
-                if "away_talent" in row and pd.notna(row["away_talent"])
-                else None,
-                "home_elo": float(row["home_elo"])
-                if "home_elo" in row and pd.notna(row["home_elo"])
-                else None,
-                "away_elo": float(row["away_elo"])
-                if "away_elo" in row and pd.notna(row["away_elo"])
-                else None,
-                "spread": float(row["spread"])
-                if "spread" in row and pd.notna(row["spread"])
-                else None,
+                "date": (
+                    str(row["start_date"])
+                    if "start_date" in row and pd.notna(row["start_date"])
+                    else None
+                ),
+                "home_team": (
+                    str(row["home_team"]) if pd.notna(row["home_team"]) else None
+                ),
+                "away_team": (
+                    str(row["away_team"]) if pd.notna(row["away_team"]) else None
+                ),
+                "home_win_prob": (
+                    float(row["home_win_prob"])
+                    if pd.notna(row["home_win_prob"])
+                    else None
+                ),
+                "predicted_margin": (
+                    float(row["predicted_margin"])
+                    if pd.notna(row["predicted_margin"])
+                    else None
+                ),
+                "home_talent": (
+                    float(row["home_talent"])
+                    if "home_talent" in row and pd.notna(row["home_talent"])
+                    else None
+                ),
+                "away_talent": (
+                    float(row["away_talent"])
+                    if "away_talent" in row and pd.notna(row["away_talent"])
+                    else None
+                ),
+                "home_elo": (
+                    float(row["home_elo"])
+                    if "home_elo" in row and pd.notna(row["home_elo"])
+                    else None
+                ),
+                "away_elo": (
+                    float(row["away_elo"])
+                    if "away_elo" in row and pd.notna(row["away_elo"])
+                    else None
+                ),
+                "spread": (
+                    float(row["spread"])
+                    if "spread" in row and pd.notna(row["spread"])
+                    else None
+                ),
             }
             games.append(game)
 

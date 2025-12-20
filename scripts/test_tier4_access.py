@@ -5,10 +5,10 @@ This script will help us understand what premium features are available
 and test the actual rate limits for Tier 3 membership.
 """
 
+import json
 import os
 import sys
 import time
-import json
 from datetime import datetime
 from pathlib import Path
 
@@ -64,70 +64,74 @@ def test_premium_endpoints(client):
         print("Testing PPA teams endpoint...")
         # This is a hypothetical endpoint - we need to check if it exists
         # For now, let's try to access through the metrics API
-        if hasattr(client.metrics_api, 'get_ppa'):
+        if hasattr(client.metrics_api, "get_ppa"):
             ppa_teams = client.metrics_api.get_ppa(year=2025)
-            premium_results['ppa_teams'] = len(ppa_teams) if ppa_teams else 0
+            premium_results["ppa_teams"] = len(ppa_teams) if ppa_teams else 0
             print(f"✅ PPA Teams: Found {premium_results['ppa_teams']} entries")
         else:
             print("⚠️ PPA endpoint not available in current CFBD client")
-            premium_results['ppa_teams'] = 'not_available'
+            premium_results["ppa_teams"] = "not_available"
 
     except Exception as e:
         print(f"❌ PPA endpoint test failed: {e}")
-        premium_results['ppa_teams'] = 'error'
+        premium_results["ppa_teams"] = "error"
 
     # Test WEPA endpoints
     try:
         print("Testing WEPA endpoint...")
-        if hasattr(client.metrics_api, 'get_wepa'):
+        if hasattr(client.metrics_api, "get_wepa"):
             wepa_data = client.metrics_api.get_wepa(year=2025)
-            premium_results['wepa'] = len(wepa_data) if wepa_data else 0
+            premium_results["wepa"] = len(wepa_data) if wepa_data else 0
             print(f"✅ WEPA: Found {premium_results['wepa']} entries")
         else:
             print("⚠️ WEPA endpoint not available in current CFBD client")
-            premium_results['wepa'] = 'not_available'
+            premium_results["wepa"] = "not_available"
 
     except Exception as e:
         print(f"❌ WEPA endpoint test failed: {e}")
-        premium_results['wepa'] = 'error'
+        premium_results["wepa"] = "error"
 
     # Test live data endpoints
     try:
         print("Testing live scoreboard endpoint...")
-        if hasattr(client.games_api, 'get_scoreboard'):
+        if hasattr(client.games_api, "get_scoreboard"):
             live_games = client.games_api.get_scoreboard(year=2025, week=15)
-            premium_results['live_scoreboard'] = len(live_games) if live_games else 0
-            print(f"✅ Live Scoreboard: Found {premium_results['live_scoreboard']} live games")
+            premium_results["live_scoreboard"] = len(live_games) if live_games else 0
+            print(
+                f"✅ Live Scoreboard: Found {premium_results['live_scoreboard']} live games"
+            )
         else:
             print("⚠️ Live scoreboard endpoint not available in current CFBD client")
-            premium_results['live_scoreboard'] = 'not_available'
+            premium_results["live_scoreboard"] = "not_available"
 
     except Exception as e:
         print(f"❌ Live scoreboard test failed: {e}")
-        premium_results['live_scoreboard'] = 'error'
+        premium_results["live_scoreboard"] = "error"
 
     # Test weather data
     try:
         print("Testing weather data endpoint...")
         # Weather might be available through games endpoint with weather parameter
         games_with_weather = client.get_games(year=2025, week=15)  # Modify as needed
-        premium_results['weather'] = 'basic_available'  # Need to check if weather data is included
+        premium_results["weather"] = (
+            "basic_available"  # Need to check if weather data is included
+        )
         print(f"✅ Weather: Basic weather data may be available")
 
     except Exception as e:
         print(f"❌ Weather data test failed: {e}")
-        premium_results['weather'] = 'error'
+        premium_results["weather"] = "error"
 
     # Test advanced metrics
     try:
         print("Testing advanced win probability endpoint...")
         win_probs = client.get_win_probabilities(year=2025, week=15)
-        premium_results['win_probability'] = len(win_probs) if win_probs else 0
+        premium_results["win_probability"] = len(win_probs) if win_probs else 0
         print(f"✅ Win Probability: Found {premium_results['win_probability']} entries")
 
     except Exception as e:
         print(f"❌ Win probability test failed: {e}")
-        premium_results['win_probability'] = 'error'
+        premium_results["win_probability"] = "error"
 
     return premium_results
 
@@ -168,11 +172,11 @@ def test_rate_limiting(client):
         print(f"Estimated rate limit: {1/avg_time:.1f} requests/second")
 
         return {
-            'avg_time': avg_time,
-            'max_time': max_time,
-            'min_time': min_time,
-            'estimated_rps': 1/avg_time,
-            'successful_requests': len(request_times)
+            "avg_time": avg_time,
+            "max_time": max_time,
+            "min_time": min_time,
+            "estimated_rps": 1 / avg_time,
+            "successful_requests": len(request_times),
         }
 
     return None
@@ -188,7 +192,7 @@ def test_graphql_access(client):
             print("✅ GraphQL client initialized")
 
             # Test basic GraphQL query
-            if hasattr(client.graphql_client, 'get_scoreboard'):
+            if hasattr(client.graphql_client, "get_scoreboard"):
                 scoreboard = client.get_scoreboard_graphql(year=2025, week=15)
                 if scoreboard:
                     print(f"✅ GraphQL Scoreboard: Data retrieved")
@@ -233,31 +237,31 @@ def main():
 
     # Run tests
     results = {
-        'timestamp': datetime.now().isoformat(),
-        'config': {
-            'host': config.host,
-            'max_requests_per_second': config.max_requests_per_second,
-            'rate_limit_delay': config.rate_limit_delay
-        }
+        "timestamp": datetime.now().isoformat(),
+        "config": {
+            "host": config.host,
+            "max_requests_per_second": config.max_requests_per_second,
+            "rate_limit_delay": config.rate_limit_delay,
+        },
     }
 
     # Test basic endpoints
-    results['basic_endpoints'] = test_basic_endpoints(client)
+    results["basic_endpoints"] = test_basic_endpoints(client)
 
     # Test premium endpoints
-    results['premium_endpoints'] = test_premium_endpoints(client)
+    results["premium_endpoints"] = test_premium_endpoints(client)
 
     # Test rate limiting
     rate_limit_results = test_rate_limiting(client)
     if rate_limit_results:
-        results['rate_limit_test'] = rate_limit_results
+        results["rate_limit_test"] = rate_limit_results
 
     # Test GraphQL
-    results['graphql_access'] = test_graphql_access(client)
+    results["graphql_access"] = test_graphql_access(client)
 
     # Save results
     results_file = Path("tier4_test_results.json")
-    with open(results_file, 'w') as f:
+    with open(results_file, "w") as f:
         json.dump(results, f, indent=2, default=str)
 
     print(f"\n💾 Results saved to: {results_file}")
@@ -265,14 +269,14 @@ def main():
     # Summary
     print("\n📊 Summary")
     print("=" * 30)
-    basic_status = "✅ Working" if results['basic_endpoints'] else "❌ Failed"
+    basic_status = "✅ Working" if results["basic_endpoints"] else "❌ Failed"
     print(f"Basic Endpoints: {basic_status}")
 
-    graphql_status = "✅ Working" if results['graphql_access'] else "❌ Failed"
+    graphql_status = "✅ Working" if results["graphql_access"] else "❌ Failed"
     print(f"GraphQL Access: {graphql_status}")
 
-    if 'rate_limit_test' in results:
-        estimated_rps = results['rate_limit_test']['estimated_rps']
+    if "rate_limit_test" in results:
+        estimated_rps = results["rate_limit_test"]["estimated_rps"]
         print(f"Estimated Rate Limit: {estimated_rps:.1f} req/sec")
 
         if estimated_rps > 10:

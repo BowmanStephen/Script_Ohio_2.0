@@ -9,13 +9,15 @@ Author: Data Architecture Orchestrator
 Created: 2025-12-18
 """
 
-import os
-import json
 import hashlib
-from pathlib import Path
+import json
+import os
 from datetime import datetime
-from typing import Dict, List, Tuple, Optional
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
+
 import pandas as pd
+
 
 class MigrationValidator:
     """
@@ -36,7 +38,7 @@ class MigrationValidator:
             "data/processed/training/master_training_data_v2.csv",
             "models/production/ridge_regression_2025_v2.joblib",
             "models/production/xgboost_classifier_2025_v2.pkl",
-            "models/production/fastai_neural_net_2025_v2.pkl"
+            "models/production/fastai_neural_net_2025_v2.pkl",
         ]
 
     def validate_file_integrity(self) -> Dict:
@@ -48,16 +50,18 @@ class MigrationValidator:
             "checksums_valid": 0,
             "checksums_invalid": 0,
             "files_missing": 0,
-            "details": []
+            "details": [],
         }
 
         migration_log_path = self.root_path / "migration_log.json"
         if not migration_log_path.exists():
-            results["details"].append("Migration log not found - cannot validate checksums")
+            results["details"].append(
+                "Migration log not found - cannot validate checksums"
+            )
             return results
 
         try:
-            with open(migration_log_path, 'r') as f:
+            with open(migration_log_path, "r") as f:
                 migration_log = json.load(f)
 
             for record in migration_log:
@@ -69,12 +73,16 @@ class MigrationValidator:
                 # Check if both files exist
                 if not source_path.exists():
                     results["files_missing"] += 1
-                    results["details"].append(f"Source file missing: {record['source']}")
+                    results["details"].append(
+                        f"Source file missing: {record['source']}"
+                    )
                     continue
 
                 if not dest_path.exists():
                     results["files_missing"] += 1
-                    results["details"].append(f"Destination file missing: {record['destination']}")
+                    results["details"].append(
+                        f"Destination file missing: {record['destination']}"
+                    )
                     continue
 
                 # Calculate checksums
@@ -84,12 +92,19 @@ class MigrationValidator:
                 # Compare with recorded checksum
                 recorded_checksum = record.get("checksum", "")
 
-                if source_checksum == recorded_checksum and dest_checksum == recorded_checksum:
+                if (
+                    source_checksum == recorded_checksum
+                    and dest_checksum == recorded_checksum
+                ):
                     results["checksums_valid"] += 1
-                    results["details"].append(f"✅ {record['destination']} - Checksum valid")
+                    results["details"].append(
+                        f"✅ {record['destination']} - Checksum valid"
+                    )
                 else:
                     results["checksums_invalid"] += 1
-                    results["details"].append(f"❌ {record['destination']} - Checksum mismatch")
+                    results["details"].append(
+                        f"❌ {record['destination']} - Checksum mismatch"
+                    )
 
         except Exception as e:
             results["details"].append(f"Error reading migration log: {e}")
@@ -105,7 +120,7 @@ class MigrationValidator:
             "critical_files_found": 0,
             "critical_files_accessible": 0,
             "data_quality_issues": [],
-            "details": []
+            "details": [],
         }
 
         for file_path in self.critical_files:
@@ -117,23 +132,29 @@ class MigrationValidator:
 
                 # Test file accessibility
                 try:
-                    if file_path.endswith('.csv'):
+                    if file_path.endswith(".csv"):
                         # Test CSV file
                         df = pd.read_csv(full_path, nrows=5)
                         if len(df) > 0:
                             results["critical_files_accessible"] += 1
-                            results["details"].append(f"✅ Accessible: {file_path} ({len(df)} columns)")
+                            results["details"].append(
+                                f"✅ Accessible: {file_path} ({len(df)} columns)"
+                            )
                         else:
-                            results["data_quality_issues"].append(f"Empty or corrupted: {file_path}")
+                            results["data_quality_issues"].append(
+                                f"Empty or corrupted: {file_path}"
+                            )
                     else:
                         # Test model file
-                        with open(full_path, 'rb') as f:
+                        with open(full_path, "rb") as f:
                             f.read(100)  # Read first 100 bytes
                         results["critical_files_accessible"] += 1
                         results["details"].append(f"✅ Accessible: {file_path}")
 
                 except Exception as e:
-                    results["data_quality_issues"].append(f"Access error: {file_path} - {e}")
+                    results["data_quality_issues"].append(
+                        f"Access error: {file_path} - {e}"
+                    )
                     results["details"].append(f"❌ Inaccessible: {file_path}")
             else:
                 results["details"].append(f"❌ Missing: {file_path}")
@@ -148,7 +169,7 @@ class MigrationValidator:
             "datasets_validated": 0,
             "schemas_consistent": 0,
             "schema_issues": [],
-            "details": []
+            "details": [],
         }
 
         # Define expected schemas for critical datasets
@@ -156,14 +177,14 @@ class MigrationValidator:
             "data/processed/training/master_training_data_v2.csv": {
                 "min_rows": 4000,
                 "min_columns": 80,
-                "key_columns": ["season", "week", "home_team", "away_team"]
+                "key_columns": ["season", "week", "home_team", "away_team"],
             }
         }
 
         for file_path, expected_schema in expected_schemas.items():
             full_path = self.root_path / file_path
 
-            if full_path.exists() and full_path.suffix == '.csv':
+            if full_path.exists() and full_path.suffix == ".csv":
                 results["datasets_validated"] += 1
 
                 try:
@@ -174,30 +195,48 @@ class MigrationValidator:
                     if rows >= expected_schema["min_rows"]:
                         results["details"].append(f"✅ {file_path}: {rows:,} rows")
                     else:
-                        results["schema_issues"].append(f"{file_path}: Only {rows:,} rows (expected {expected_schema['min_rows']:,})")
+                        results["schema_issues"].append(
+                            f"{file_path}: Only {rows:,} rows (expected {expected_schema['min_rows']:,})"
+                        )
 
                     if cols >= expected_schema["min_columns"]:
                         results["details"].append(f"✅ {file_path}: {cols} columns")
                     else:
-                        results["schema_issues"].append(f"{file_path}: Only {cols} columns (expected {expected_schema['min_columns']})")
+                        results["schema_issues"].append(
+                            f"{file_path}: Only {cols} columns (expected {expected_schema['min_columns']})"
+                        )
 
                     # Check key columns
-                    missing_columns = [col for col in expected_schema["key_columns"] if col not in df.columns]
+                    missing_columns = [
+                        col
+                        for col in expected_schema["key_columns"]
+                        if col not in df.columns
+                    ]
                     if not missing_columns:
-                        results["details"].append(f"✅ {file_path}: Key columns present")
+                        results["details"].append(
+                            f"✅ {file_path}: Key columns present"
+                        )
                         results["schemas_consistent"] += 1
                     else:
-                        results["schema_issues"].append(f"{file_path}: Missing key columns: {missing_columns}")
+                        results["schema_issues"].append(
+                            f"{file_path}: Missing key columns: {missing_columns}"
+                        )
 
                     # Check for excessive null values
                     null_percentage = (df.isnull().sum().sum() / (rows * cols)) * 100
                     if null_percentage < 5:
-                        results["details"].append(f"✅ {file_path}: {null_percentage:.1f}% null values")
+                        results["details"].append(
+                            f"✅ {file_path}: {null_percentage:.1f}% null values"
+                        )
                     else:
-                        results["schema_issues"].append(f"{file_path}: High null percentage: {null_percentage:.1f}%")
+                        results["schema_issues"].append(
+                            f"{file_path}: High null percentage: {null_percentage:.1f}%"
+                        )
 
                 except Exception as e:
-                    results["schema_issues"].append(f"Error validating {file_path}: {e}")
+                    results["schema_issues"].append(
+                        f"Error validating {file_path}: {e}"
+                    )
 
         return results
 
@@ -210,13 +249,13 @@ class MigrationValidator:
             "models_loaded": 0,
             "models_functional": 0,
             "model_errors": [],
-            "details": []
+            "details": [],
         }
 
         # Test model loading (basic validation)
         model_files = [
             "models/production/ridge_regression_2025_v2.joblib",
-            "models/production/xgboost_classifier_2025_v2.pkl"
+            "models/production/xgboost_classifier_2025_v2.pkl",
         ]
 
         for model_file in model_files:
@@ -228,27 +267,33 @@ class MigrationValidator:
                 continue
 
             try:
-                if model_file.endswith('.joblib'):
+                if model_file.endswith(".joblib"):
                     # Test joblib model
                     import joblib
+
                     model = joblib.load(full_path)
                     results["models_loaded"] += 1
                     results["details"].append(f"✅ {model_file}: Loaded successfully")
 
-                elif model_file.endswith('.pkl'):
+                elif model_file.endswith(".pkl"):
                     # Test pickle model
                     import pickle
-                    with open(full_path, 'rb') as f:
+
+                    with open(full_path, "rb") as f:
                         model = pickle.load(f)
                     results["models_loaded"] += 1
                     results["details"].append(f"✅ {model_file}: Loaded successfully")
 
                 # Basic functionality test
-                if hasattr(model, 'predict') or hasattr(model, '__call__'):
+                if hasattr(model, "predict") or hasattr(model, "__call__"):
                     results["models_functional"] += 1
-                    results["details"].append(f"✅ {model_file}: Functional (has predict/call method)")
+                    results["details"].append(
+                        f"✅ {model_file}: Functional (has predict/call method)"
+                    )
                 else:
-                    results["details"].append(f"⚠️  {model_file}: Loaded but may lack predict method")
+                    results["details"].append(
+                        f"⚠️  {model_file}: Loaded but may lack predict method"
+                    )
 
             except Exception as e:
                 results["model_errors"].append(f"{model_file}: {e}")
@@ -264,7 +309,7 @@ class MigrationValidator:
             "scripts_checked": 0,
             "scripts_need_update": 0,
             "path_updates_identified": [],
-            "details": []
+            "details": [],
         }
 
         # Common path patterns that need updating
@@ -272,7 +317,7 @@ class MigrationValidator:
             "model_pack/updated_training_data.csv": "data/processed/training/master_training_data_v2.csv",
             "model_pack/": "models/production/",
             "predictions/": "data/outputs/predictions/",
-            "data/weekly/": "data/processed/enhanced/"
+            "data/weekly/": "data/processed/enhanced/",
         }
 
         scripts_dir = self.root_path / "scripts"
@@ -281,7 +326,7 @@ class MigrationValidator:
                 results["scripts_checked"] += 1
 
                 try:
-                    content = script_file.read_text(encoding='utf-8')
+                    content = script_file.read_text(encoding="utf-8")
                     script_relative = str(script_file.relative_to(self.root_path))
                     updates_needed = []
 
@@ -291,16 +336,24 @@ class MigrationValidator:
 
                     if updates_needed:
                         results["scripts_need_update"] += 1
-                        results["path_updates_identified"].append({
-                            "script": script_relative,
-                            "updates_needed": updates_needed
-                        })
-                        results["details"].append(f"⚠️  {script_relative}: {len(updates_needed)} path updates needed")
+                        results["path_updates_identified"].append(
+                            {
+                                "script": script_relative,
+                                "updates_needed": updates_needed,
+                            }
+                        )
+                        results["details"].append(
+                            f"⚠️  {script_relative}: {len(updates_needed)} path updates needed"
+                        )
                     else:
-                        results["details"].append(f"✅ {script_relative}: No path updates needed")
+                        results["details"].append(
+                            f"✅ {script_relative}: No path updates needed"
+                        )
 
                 except Exception as e:
-                    results["details"].append(f"❌ {script_relative}: Error reading script - {e}")
+                    results["details"].append(
+                        f"❌ {script_relative}: Error reading script - {e}"
+                    )
 
         return results
 
@@ -308,11 +361,7 @@ class MigrationValidator:
         """Run basic performance benchmarks on the new structure."""
         print("⚡ Running performance benchmarks...")
 
-        results = {
-            "file_access_times": {},
-            "dataset_load_times": {},
-            "details": []
-        }
+        results = {"file_access_times": {}, "dataset_load_times": {}, "details": []}
 
         # Test file access times for critical files
         for file_path in self.critical_files:
@@ -323,22 +372,28 @@ class MigrationValidator:
 
                 try:
                     # Simulate file access
-                    with open(full_path, 'rb') as f:
+                    with open(full_path, "rb") as f:
                         f.read(1024)  # Read first 1KB
 
                     access_time = (datetime.now() - start_time).total_seconds()
                     results["file_access_times"][file_path] = access_time
 
                     if access_time < 0.1:  # Less than 100ms
-                        results["details"].append(f"✅ {file_path}: {access_time:.3f}s access time")
+                        results["details"].append(
+                            f"✅ {file_path}: {access_time:.3f}s access time"
+                        )
                     else:
-                        results["details"].append(f"⚠️  {file_path}: {access_time:.3f}s access time (slow)")
+                        results["details"].append(
+                            f"⚠️  {file_path}: {access_time:.3f}s access time (slow)"
+                        )
 
                 except Exception as e:
                     results["details"].append(f"❌ {file_path}: Access error - {e}")
 
         # Test dataset load times
-        master_data_path = self.root_path / "data/processed/training/master_training_data_v2.csv"
+        master_data_path = (
+            self.root_path / "data/processed/training/master_training_data_v2.csv"
+        )
         if master_data_path.exists():
             start_time = datetime.now()
 
@@ -349,10 +404,14 @@ class MigrationValidator:
                     "load_time": load_time,
                     "rows": len(df),
                     "columns": len(df.columns),
-                    "rows_per_second": len(df) / load_time if load_time > 0 else float('inf')
+                    "rows_per_second": (
+                        len(df) / load_time if load_time > 0 else float("inf")
+                    ),
                 }
 
-                results["details"].append(f"✅ Master dataset: {len(df):,} rows loaded in {load_time:.2f}s")
+                results["details"].append(
+                    f"✅ Master dataset: {len(df):,} rows loaded in {load_time:.2f}s"
+                )
 
             except Exception as e:
                 results["details"].append(f"❌ Master dataset load failed: {e}")
@@ -378,7 +437,7 @@ class MigrationValidator:
 
         all_results = {
             "validation_timestamp": datetime.now().isoformat(),
-            "validation_checks": {}
+            "validation_checks": {},
         }
 
         # Run all validation checks
@@ -388,7 +447,7 @@ class MigrationValidator:
             ("schema_consistency", self.validate_schema_consistency),
             ("ml_functionality", self.validate_ml_functionality),
             ("script_paths", self.validate_script_paths),
-            ("performance_benchmark", self.run_performance_benchmark)
+            ("performance_benchmark", self.run_performance_benchmark),
         ]
 
         for check_name, check_func in validation_checks:
@@ -403,19 +462,25 @@ class MigrationValidator:
                 if "files_checked" in result:
                     print(f"Files checked: {result['files_checked']}")
                 if "files_success" in result:
-                    print(f"Success rate: {result['files_success']}/{result['files_checked']}")
+                    print(
+                        f"Success rate: {result['files_success']}/{result['files_checked']}"
+                    )
                 if "critical_files_found" in result:
-                    print(f"Critical files: {result['critical_files_found']}/{result['critical_files_checked']}")
+                    print(
+                        f"Critical files: {result['critical_files_found']}/{result['critical_files_checked']}"
+                    )
 
             except Exception as e:
                 print(f"❌ Validation check failed: {e}")
                 all_results["validation_checks"][check_name] = {
                     "error": str(e),
-                    "status": "failed"
+                    "status": "failed",
                 }
 
         # Calculate overall validation score
-        all_results["overall_score"] = self.calculate_overall_score(all_results["validation_checks"])
+        all_results["overall_score"] = self.calculate_overall_score(
+            all_results["validation_checks"]
+        )
 
         return all_results
 
@@ -426,7 +491,7 @@ class MigrationValidator:
             "passed_checks": 0,
             "failed_checks": 0,
             "overall_percentage": 0,
-            "status": "UNKNOWN"
+            "status": "UNKNOWN",
         }
 
         for check_name, result in validation_results.items():
@@ -435,9 +500,14 @@ class MigrationValidator:
             else:
                 # Determine if check passed based on results
                 if check_name == "file_integrity":
-                    passed = result.get("checksums_invalid", 1) == 0 and result.get("files_missing", 1) == 0
+                    passed = (
+                        result.get("checksums_invalid", 1) == 0
+                        and result.get("files_missing", 1) == 0
+                    )
                 elif check_name == "data_completeness":
-                    passed = result.get("critical_files_accessible", 0) == result.get("critical_files_checked", 1)
+                    passed = result.get("critical_files_accessible", 0) == result.get(
+                        "critical_files_checked", 1
+                    )
                 elif check_name == "schema_consistency":
                     passed = len(result.get("schema_issues", [])) == 0
                 elif check_name == "ml_functionality":
@@ -451,7 +521,11 @@ class MigrationValidator:
                 else:
                     score["failed_checks"] += 1
 
-        score["overall_percentage"] = (score["passed_checks"] / score["total_checks"]) * 100 if score["total_checks"] > 0 else 0
+        score["overall_percentage"] = (
+            (score["passed_checks"] / score["total_checks"]) * 100
+            if score["total_checks"] > 0
+            else 0
+        )
 
         if score["overall_percentage"] >= 90:
             score["status"] = "EXCELLENT"
@@ -531,7 +605,9 @@ class MigrationValidator:
             if isinstance(value, (int, float)):
                 section += f"- **{key.replace('_', ' ').title()}**: {value:,}\n"
             elif isinstance(value, dict):
-                section += f"- **{key.replace('_', ' ').title()}**: {len(value)} items\n"
+                section += (
+                    f"- **{key.replace('_', ' ').title()}**: {len(value)} items\n"
+                )
 
         # Add key details
         if "details" in result and result["details"]:
@@ -550,22 +626,42 @@ class MigrationValidator:
         # Analyze results and generate specific recommendations
         for check_name, result in results["validation_checks"].items():
             if "error" in result:
-                recommendations.append(f"**Critical**: Fix {check_name.replace('_', ' ').title()} validation error")
+                recommendations.append(
+                    f"**Critical**: Fix {check_name.replace('_', ' ').title()} validation error"
+                )
                 continue
 
-            if check_name == "script_paths" and result.get("scripts_need_update", 0) > 0:
-                recommendations.append(f"**High Priority**: Update {result['scripts_need_update']} scripts with new file paths")
+            if (
+                check_name == "script_paths"
+                and result.get("scripts_need_update", 0) > 0
+            ):
+                recommendations.append(
+                    f"**High Priority**: Update {result['scripts_need_update']} scripts with new file paths"
+                )
 
-            if check_name == "schema_consistency" and len(result.get("schema_issues", [])) > 0:
-                recommendations.append(f"**Medium Priority**: Address {len(result['schema_issues'])} schema consistency issues")
+            if (
+                check_name == "schema_consistency"
+                and len(result.get("schema_issues", [])) > 0
+            ):
+                recommendations.append(
+                    f"**Medium Priority**: Address {len(result['schema_issues'])} schema consistency issues"
+                )
 
             if check_name == "performance_benchmark":
-                slow_files = [path for path, time in result.get("file_access_times", {}).items() if time > 0.1]
+                slow_files = [
+                    path
+                    for path, time in result.get("file_access_times", {}).items()
+                    if time > 0.1
+                ]
                 if slow_files:
-                    recommendations.append(f"**Low Priority**: Optimize access to {len(slow_files)} slow files")
+                    recommendations.append(
+                        f"**Low Priority**: Optimize access to {len(slow_files)} slow files"
+                    )
 
         if not recommendations:
-            recommendations.append("✅ **No issues found** - Migration validation passed successfully!")
+            recommendations.append(
+                "✅ **No issues found** - Migration validation passed successfully!"
+            )
 
         return "\n".join(recommendations)
 
@@ -604,8 +700,12 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(description="Migration Validation Script")
-    parser.add_argument("--check", type=str, choices=["integrity", "completeness", "schema", "ml", "scripts", "performance"],
-                       help="Run specific validation check only")
+    parser.add_argument(
+        "--check",
+        type=str,
+        choices=["integrity", "completeness", "schema", "ml", "scripts", "performance"],
+        help="Run specific validation check only",
+    )
     args = parser.parse_args()
 
     print("🔍 Migration Validation Script")
@@ -622,7 +722,7 @@ def main():
             "schema": validator.validate_schema_consistency,
             "ml": validator.validate_ml_functionality,
             "scripts": validator.validate_script_paths,
-            "performance": validator.run_performance_benchmark
+            "performance": validator.run_performance_benchmark,
         }
 
         if args.check in check_functions:

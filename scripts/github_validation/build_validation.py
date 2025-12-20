@@ -156,9 +156,9 @@ class BuildValidator:
                 return {
                     "success": False,
                     "error": "Build failed",
-                    "stderr": result.stderr[-500:]
-                    if result.stderr
-                    else "",  # Last 500 chars
+                    "stderr": (
+                        result.stderr[-500:] if result.stderr else ""
+                    ),  # Last 500 chars
                     "stdout": result.stdout[-500:] if result.stdout else "",
                 }
 

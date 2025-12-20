@@ -214,13 +214,15 @@ def retrain_models_current(*, skip_fastai: bool = False) -> Dict[str, Any]:
     logger = get_logger(__name__, component="model_training")
     hub = ObservabilityHub.instance()
 
-    training_path = PROJECT_ROOT / "model_pack" / "updated_training_data.csv"
-    output_dir = PROJECT_ROOT / "model_pack"
+    training_path = (
+        PROJECT_ROOT / "data" / "processed" / "training" / "master_training_data_v2.csv"
+    )
+    output_dir = PROJECT_ROOT / "models" / "production"
     backup_dir = output_dir / "backups" / "models"
     paths = ModelPaths(
-        ridge_path=output_dir / "ridge_model_2025.joblib",
-        xgb_path=output_dir / "xgb_home_win_model_2025.pkl",
-        fastai_path=output_dir / "fastai_home_win_model_2025.pkl",
+        ridge_path=output_dir / "ridge_regression_2025_v2.joblib",
+        xgb_path=output_dir / "xgboost_classifier_2025_v2.pkl",
+        fastai_path=output_dir / "fastai_neural_net_2025_v2.pkl",
     )
 
     hub.emit_event("retrain.start", {"training_path": str(training_path)})

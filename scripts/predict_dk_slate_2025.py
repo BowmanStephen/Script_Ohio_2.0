@@ -623,27 +623,34 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 "model_home_winprob": round(float(row["home_win_prob"]), 4),
                 "model_margin_fav": round(float(fav_margin), 2),
                 "model_winprob_fav": round(float(fav_win_prob), 4),
-                "fastai_winprob_fav": round(
-                    float(
-                        _favorite_prob(
-                            row, "fastai_home_win_prob", favorite=game.favorite
-                        )
-                    ),
-                    4,
-                )
-                if pd.notna(row.get("fastai_home_win_prob", pd.NA))
-                else pd.NA,
+                "fastai_winprob_fav": (
+                    round(
+                        float(
+                            _favorite_prob(
+                                row, "fastai_home_win_prob", favorite=game.favorite
+                            )
+                        ),
+                        4,
+                    )
+                    if pd.notna(row.get("fastai_home_win_prob", pd.NA))
+                    else pd.NA
+                ),
                 "ensemble_winprob_fav": round(float(ens_prob), 4),
                 "edge_vs_spread": round(float(edge), 2),
                 "pick_against_spread": recommendation,
                 "massey_margin_fav": massey_margin,
                 "massey_edge_vs_spread": massey_edge,
                 "rf_total": row.get("rf_total", pd.NA),
-                "rf_margin_fav": round(
-                    float(_favorite_margin(row, "rf_margin", favorite=game.favorite)), 2
-                )
-                if pd.notna(row.get("rf_margin", pd.NA))
-                else pd.NA,
+                "rf_margin_fav": (
+                    round(
+                        float(
+                            _favorite_margin(row, "rf_margin", favorite=game.favorite)
+                        ),
+                        2,
+                    )
+                    if pd.notna(row.get("rf_margin", pd.NA))
+                    else pd.NA
+                ),
                 **rating_diffs,
             }
         )

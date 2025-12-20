@@ -10,9 +10,9 @@ This script sets up:
 - Documentation and user guides
 """
 
+import json
 import os
 import sys
-import json
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -20,8 +20,13 @@ from pathlib import Path
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from agents.audit.scheduler_agent import AuditSchedulerAgent, AlertSeverity, AlertChannel
 from agents.audit.alerting_agent import AlertingAgent, AlertRule
+from agents.audit.scheduler_agent import (
+    AlertChannel,
+    AlertSeverity,
+    AuditSchedulerAgent,
+)
+
 from scripts.production_audit import ProductionAuditRunner
 
 
@@ -34,7 +39,7 @@ def setup_directories():
         "production_audit_reports/metrics",
         "production_audit_reports/automation_config",
         "logs/audit_production",
-        "config"
+        "config",
     ]
 
     for directory in directories:
@@ -64,24 +69,19 @@ def setup_default_config():
             "username": "",
             "password": "",
             "from_address": "",
-            "to_addresses": []
+            "to_addresses": [],
         },
         "slack_config": {
             "enabled": False,
             "webhook_url": "",
             "channel": "#alerts",
-            "username": "Audit Bot"
+            "username": "Audit Bot",
         },
-        "webhook_config": {
-            "enabled": False,
-            "url": "",
-            "headers": {},
-            "timeout": 30
-        }
+        "webhook_config": {"enabled": False, "url": "", "headers": {}, "timeout": 30},
     }
 
     config_file = Path("config/alerting_config.json")
-    with open(config_file, 'w') as f:
+    with open(config_file, "w") as f:
         json.dump(alerting_config, f, indent=2)
     print(f"   ✅ Created: {config_file}")
 
@@ -93,29 +93,29 @@ def setup_default_config():
             "parallel_execution": True,
             "max_workers": 3,
             "retry_attempts": 2,
-            "retry_delay": 30
+            "retry_delay": 30,
         },
         "output_settings": {
             "output_dir": "production_audit_reports",
             "backup_reports": True,
             "compression": True,
-            "retention_days": 30
+            "retention_days": 30,
         },
         "alerting": {
             "enabled": True,
             "critical_threshold": 70,
             "failure_threshold": 5,
-            "channels": ["console", "file"]
+            "channels": ["console", "file"],
         },
         "scheduling": {
             "auto_cleanup": True,
             "cleanup_threshold": 90,
-            "performance_tracking": True
-        }
+            "performance_tracking": True,
+        },
     }
 
     audit_config_file = Path("config/production_audit_config.json")
-    with open(audit_config_file, 'w') as f:
+    with open(audit_config_file, "w") as f:
         json.dump(audit_config, f, indent=2)
     print(f"   ✅ Created: {audit_config_file}")
 
@@ -131,9 +131,7 @@ def setup_default_alert_rules(alerting_agent: AlertingAgent):
             "description": "Alert when audit score falls below critical threshold",
             "severity": "critical",
             "channels": ["console", "file"],
-            "threshold_conditions": {
-                "min_score": 70
-            },
+            "threshold_conditions": {"min_score": 70},
             "cooldown_minutes": 30,
             "template": """
 🚨 CRITICAL AUDIT SCORE ALERT 🚨
@@ -143,7 +141,7 @@ Audit Name: {audit_name}
 Time: {current_time}
 
 This audit indicates critical system health issues that require immediate attention.
-            """.strip()
+            """.strip(),
         },
         {
             "rule_id": "critical_failures_detected",
@@ -151,9 +149,7 @@ This audit indicates critical system health issues that require immediate attent
             "description": "Alert when critical audit failures are detected",
             "severity": "critical",
             "channels": ["console", "file"],
-            "threshold_conditions": {
-                "critical_failures": 1
-            },
+            "threshold_conditions": {"critical_failures": 1},
             "cooldown_minutes": 15,
             "template": """
 🚨 CRITICAL AUDIT FAILURES DETECTED 🚨
@@ -162,7 +158,7 @@ Audit Name: {audit_name}
 Time: {current_time}
 
 Critical system components have failed validation. Immediate investigation required.
-            """.strip()
+            """.strip(),
         },
         {
             "rule_id": "high_failure_count",
@@ -170,9 +166,7 @@ Critical system components have failed validation. Immediate investigation requi
             "description": "Alert when too many audit checks fail",
             "severity": "warning",
             "channels": ["console", "file"],
-            "threshold_conditions": {
-                "max_failures": 5
-            },
+            "threshold_conditions": {"max_failures": 5},
             "cooldown_minutes": 60,
             "template": """
 ⚠️ HIGH AUDIT FAILURE COUNT ⚠️
@@ -183,7 +177,7 @@ Audit Name: {audit_name}
 Time: {current_time}
 
 Multiple audit checks have failed. System review recommended.
-            """.strip()
+            """.strip(),
         },
         {
             "rule_id": "slow_execution",
@@ -191,9 +185,7 @@ Multiple audit checks have failed. System review recommended.
             "description": "Alert when audit execution takes too long",
             "severity": "warning",
             "channels": ["console", "file"],
-            "threshold_conditions": {
-                "max_execution_time": 300  # 5 minutes
-            },
+            "threshold_conditions": {"max_execution_time": 300},  # 5 minutes
             "cooldown_minutes": 120,
             "template": """
 ⚠️ SLOW AUDIT EXECUTION ⚠️
@@ -203,7 +195,7 @@ Audit Name: {audit_name}
 Time: {current_time}
 
 Audit execution is taking longer than expected. Performance optimization may be needed.
-            """.strip()
+            """.strip(),
         },
         {
             "rule_id": "excellent_performance",
@@ -211,10 +203,7 @@ Audit execution is taking longer than expected. Performance optimization may be 
             "description": "Notify when audit shows excellent performance",
             "severity": "info",
             "channels": ["console", "file"],
-            "threshold_conditions": {
-                "min_score": 95,
-                "max_failures": 1
-            },
+            "threshold_conditions": {"min_score": 95, "max_failures": 1},
             "cooldown_minutes": 1440,  # 24 hours
             "template": """
 🎉 EXCELLENT AUDIT PERFORMANCE 🎉
@@ -224,8 +213,8 @@ Audit Name: {audit_name}
 Time: {current_time}
 
 System demonstrates exceptional performance and reliability!
-            """.strip()
-        }
+            """.strip(),
+        },
     ]
 
     for rule_config in default_rules:
@@ -233,7 +222,9 @@ System demonstrates exceptional performance and reliability!
         if "error" not in result:
             print(f"   ✅ Created rule: {rule_config['rule_id']}")
         else:
-            print(f"   ❌ Failed to create rule: {rule_config['rule_id']} - {result['error']}")
+            print(
+                f"   ❌ Failed to create rule: {rule_config['rule_id']} - {result['error']}"
+            )
 
 
 def setup_default_schedules(scheduler_agent: AuditSchedulerAgent):
@@ -248,7 +239,7 @@ def setup_default_schedules(scheduler_agent: AuditSchedulerAgent):
             "trigger_type": "scheduled",
             "enabled": True,
             "parameters": {},
-            "timezone": "UTC"
+            "timezone": "UTC",
         },
         {
             "schedule_id": "daily_comprehensive_audit",
@@ -257,7 +248,7 @@ def setup_default_schedules(scheduler_agent: AuditSchedulerAgent):
             "trigger_type": "scheduled",
             "enabled": True,
             "parameters": {},
-            "timezone": "UTC"
+            "timezone": "UTC",
         },
         {
             "schedule_id": "weekly_system_audit",
@@ -265,10 +256,8 @@ def setup_default_schedules(scheduler_agent: AuditSchedulerAgent):
             "schedule_pattern": "weekly",
             "trigger_type": "scheduled",
             "enabled": True,
-            "parameters": {
-                "audit_name": "Weekly System Health Audit"
-            },
-            "timezone": "UTC"
+            "parameters": {"audit_name": "Weekly System Health Audit"},
+            "timezone": "UTC",
         },
         {
             "schedule_id": "daily_model_validation",
@@ -278,10 +267,10 @@ def setup_default_schedules(scheduler_agent: AuditSchedulerAgent):
             "enabled": True,
             "parameters": {
                 "domain": "models",
-                "audit_name": "Daily Model Validation Audit"
+                "audit_name": "Daily Model Validation Audit",
             },
-            "timezone": "UTC"
-        }
+            "timezone": "UTC",
+        },
     ]
 
     for schedule_config in default_schedules:
@@ -289,7 +278,9 @@ def setup_default_schedules(scheduler_agent: AuditSchedulerAgent):
         if "error" not in result:
             print(f"   ✅ Created schedule: {schedule_config['schedule_id']}")
         else:
-            print(f"   ❌ Failed to create schedule: {schedule_config['schedule_id']} - {result['error']}")
+            print(
+                f"   ❌ Failed to create schedule: {schedule_config['schedule_id']} - {result['error']}"
+            )
 
 
 def run_initial_audit_test():
@@ -322,7 +313,9 @@ def run_initial_audit_test():
             print(f"      Checks: {summary.get('total_checks', 0)} total")
             print(f"      Critical issues: {summary.get('critical_failures', 0)}")
         else:
-            print(f"   ❌ Comprehensive audit failed: {result.get('error', 'Unknown error')}")
+            print(
+                f"   ❌ Comprehensive audit failed: {result.get('error', 'Unknown error')}"
+            )
             return False
 
         return True
@@ -363,7 +356,7 @@ except KeyboardInterrupt:
 """
 
     script_file = Path("scripts/start_audit_scheduler.sh")
-    with open(script_file, 'w') as f:
+    with open(script_file, "w") as f:
         f.write(start_scheduler_script)
     os.chmod(script_file, 0o755)
     print(f"   ✅ Created: {script_file}")
@@ -379,7 +372,7 @@ python3 scripts/production_audit.py --audit-type "$AUDIT_TYPE"
 """
 
     script_file = Path("scripts/run_production_audit.sh")
-    with open(script_file, 'w') as f:
+    with open(script_file, "w") as f:
         f.write(production_audit_script)
     os.chmod(script_file, 0o755)
     print(f"   ✅ Created: {script_file}")
@@ -402,7 +395,7 @@ print('Alert test results:', result)
 """
 
     script_file = Path("scripts/test_alerting.sh")
-    with open(script_file, 'w') as f:
+    with open(script_file, "w") as f:
         f.write(test_alerts_script)
     os.chmod(script_file, 0o755)
     print(f"   ✅ Created: {script_file}")
@@ -610,7 +603,7 @@ For issues and questions:
 """
 
     guide_file = Path("docs/AUDIT_AUTOMATION_USER_GUIDE.md")
-    with open(guide_file, 'w') as f:
+    with open(guide_file, "w") as f:
         f.write(user_guide)
     print(f"   ✅ Created: {guide_file}")
 
@@ -645,7 +638,9 @@ def main():
         # Step 5: Run initial test
         if not run_initial_audit_test():
             print("⚠️ Warning: Initial audit test failed - check system configuration")
-            print("The automation system has been set up but may require manual adjustment.")
+            print(
+                "The automation system has been set up but may require manual adjustment."
+            )
         else:
             print()
         print("🎉 Production Audit Automation System setup completed successfully!")
@@ -684,6 +679,7 @@ def main():
     except Exception as e:
         print(f"❌ Setup failed: {e}")
         import traceback
+
         traceback.print_exc()
         return False
 

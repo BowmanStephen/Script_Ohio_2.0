@@ -223,9 +223,11 @@ class Week13DataVerifier:
                 print(f"⚠️  Error checking features: {e}")
 
         result = {
-            "status": "complete"
-            if all(f["exists"] for f in file_status.values())
-            else "incomplete",
+            "status": (
+                "complete"
+                if all(f["exists"] for f in file_status.values())
+                else "incomplete"
+            ),
             "files": file_status,
             "has_86_features": has_86_features,
             "all_files_exist": all(f["exists"] for f in file_status.values()),
@@ -307,9 +309,11 @@ class Week13DataVerifier:
                 print(f"⚠️  {model_name} model: Not found")
 
         result = {
-            "status": "complete"
-            if all(f["exists"] for f in file_status.values())
-            else "incomplete",
+            "status": (
+                "complete"
+                if all(f["exists"] for f in file_status.values())
+                else "incomplete"
+            ),
             "prediction_files": file_status,
             "models": model_status,
             "all_predictions_exist": all(f["exists"] for f in file_status.values()),
@@ -367,9 +371,11 @@ class Week13DataVerifier:
                 print(f"❌ {file_type}: File not found")
 
         result = {
-            "status": "complete"
-            if all(f["exists"] for f in file_status.values())
-            else "incomplete",
+            "status": (
+                "complete"
+                if all(f["exists"] for f in file_status.values())
+                else "incomplete"
+            ),
             "analysis_files": file_status,
             "all_analysis_exist": all(f["exists"] for f in file_status.values()),
         }

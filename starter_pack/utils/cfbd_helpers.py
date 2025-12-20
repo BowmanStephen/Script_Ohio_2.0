@@ -16,7 +16,11 @@ from starter_pack.utils.cfbd_loader import (
 
 
 def _resolve_api_key(explicit_key: Optional[str] = None) -> str:
-    key = explicit_key or os.environ.get("CFBD_API_KEY") or os.environ.get("CFBD_API_TOKEN")
+    key = (
+        explicit_key
+        or os.environ.get("CFBD_API_KEY")
+        or os.environ.get("CFBD_API_TOKEN")
+    )
     if not key:
         raise CFBDLoaderError("CFBD API key missing. Set CFBD_API_KEY or pass api_key.")
     return key
@@ -26,7 +30,9 @@ def _resolve_host(explicit_host: Optional[str] = None) -> str:
     return explicit_host or os.environ.get("CFBD_API_HOST", DEFAULT_HOST)
 
 
-def build_cfbd_loader(*, api_key: Optional[str] = None, host: Optional[str] = None) -> CFBDLoader:
+def build_cfbd_loader(
+    *, api_key: Optional[str] = None, host: Optional[str] = None
+) -> CFBDLoader:
     """
     Return a CFBDLoader instance that reuses the shared authentication +
     host selection logic. Diagnostics scripts can call this to fetch data
@@ -37,7 +43,9 @@ def build_cfbd_loader(*, api_key: Optional[str] = None, host: Optional[str] = No
 
 
 @contextmanager
-def cfbd_session(*, api_key: Optional[str] = None, host: Optional[str] = None) -> Iterator[CFBDSession]:
+def cfbd_session(
+    *, api_key: Optional[str] = None, host: Optional[str] = None
+) -> Iterator[CFBDSession]:
     """
     Context manager wrapping ``live_cfbd_session`` with the canonical auth +
     host configuration. This allows QA utilities to simply call::
@@ -46,9 +54,16 @@ def cfbd_session(*, api_key: Optional[str] = None, host: Optional[str] = None) -
             games = session.games_api.get_games(year=2025)
     """
 
-    with live_cfbd_session(api_key=_resolve_api_key(api_key), host=_resolve_host(host)) as session:
+    with live_cfbd_session(
+        api_key=_resolve_api_key(api_key), host=_resolve_host(host)
+    ) as session:
         yield session
 
 
-__all__ = ["CFBDLoaderError", "CFBDSession", "DEFAULT_HOST", "build_cfbd_loader", "cfbd_session"]
-
+__all__ = [
+    "CFBDLoaderError",
+    "CFBDSession",
+    "DEFAULT_HOST",
+    "build_cfbd_loader",
+    "cfbd_session",
+]

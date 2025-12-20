@@ -8,6 +8,7 @@ from pathlib import Path
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
+
 def test_direct_cfbd():
     """Test direct CFBD authentication using working pattern"""
     print("🔑 Testing Direct CFBD Authentication")
@@ -31,12 +32,15 @@ def test_direct_cfbd():
             # Test with a simple request
             games = games_api.get_games(year=2025, week=1, seasonType="regular")
 
-            print(f"✅ Direct CFBD Authentication: Found {len(games) if games else 0} games")
+            print(
+                f"✅ Direct CFBD Authentication: Found {len(games) if games else 0} games"
+            )
             return True
 
     except Exception as e:
         print(f"❌ Direct CFBD Authentication failed: {e}")
         return False
+
 
 def test_unified_client():
     """Test unified client authentication"""
@@ -59,6 +63,7 @@ def test_unified_client():
         print(f"❌ Unified Client failed: {e}")
         return False
 
+
 def main():
     print("🧪 CFBD Authentication Test")
     print("=" * 40)
@@ -77,6 +82,7 @@ def main():
         print("\n💡 Recommendation: Check API key validity")
     else:
         print("\n🎉 Both authentication methods working!")
+
 
 if __name__ == "__main__":
     main()

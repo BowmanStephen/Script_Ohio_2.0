@@ -10,18 +10,19 @@ This script provides production-ready audit execution with:
 - Graceful degradation and recovery mechanisms
 """
 
-import os
-import sys
-import json
-import time
-import signal
-import logging
 import argparse
+import json
+import logging
+import os
+import signal
+import sys
+import time
 import traceback
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FutureTimeoutError
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
-from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
+from typing import Any, Dict, List, Optional, Tuple
 
 # Add project root to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -47,7 +48,7 @@ class ProductionAuditRunner:
             "checks_completed": 0,
             "failures": 0,
             "timeout_occurred": False,
-            "graceful_degradation": False
+            "graceful_degradation": False,
         }
 
         # Set up signal handlers for graceful shutdown
@@ -63,30 +64,30 @@ class ProductionAuditRunner:
                 "parallel_execution": True,
                 "max_workers": 3,
                 "retry_attempts": 2,
-                "retry_delay": 30
+                "retry_delay": 30,
             },
             "output_settings": {
                 "output_dir": "production_audit_reports",
                 "backup_reports": True,
                 "compression": True,
-                "retention_days": 30
+                "retention_days": 30,
             },
             "alerting": {
                 "enabled": True,
                 "critical_threshold": 70,  # Alert if score < 70%
-                "failure_threshold": 5,    # Alert if > 5 failures
-                "channels": ["console", "file"]  # Future: email, slack, webhook
+                "failure_threshold": 5,  # Alert if > 5 failures
+                "channels": ["console", "file"],  # Future: email, slack, webhook
             },
             "scheduling": {
                 "auto_cleanup": True,
                 "cleanup_threshold": 90,  # Clean up reports older than 90 days
-                "performance_tracking": True
-            }
+                "performance_tracking": True,
+            },
         }
 
         if config_file and Path(config_file).exists():
             try:
-                with open(config_file, 'r') as f:
+                with open(config_file, "r") as f:
                     user_config = json.load(f)
                 # Merge with defaults
                 default_config.update(user_config)
@@ -99,25 +100,24 @@ class ProductionAuditRunner:
 
     def setup_logging(self):
         """Set up professional structured logging."""
-        log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
         # Create logs directory if it doesn't exist
         log_dir = Path("logs/audit_production")
         log_dir.mkdir(parents=True, exist_ok=True)
 
         # Set up file logger with rotation
-        log_file = log_dir / f"production_audit_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+        log_file = (
+            log_dir / f"production_audit_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+        )
 
         logging.basicConfig(
             level=logging.INFO,
             format=log_format,
-            handlers=[
-                logging.FileHandler(log_file),
-                logging.StreamHandler(sys.stdout)
-            ]
+            handlers=[logging.FileHandler(log_file), logging.StreamHandler(sys.stdout)],
         )
 
-        self.logger = logging.getLogger('ProductionAudit')
+        self.logger = logging.getLogger("ProductionAudit")
         self.logger.info("Production Audit logging initialized")
 
     def _signal_handler(self, signum, frame):
@@ -157,14 +157,22 @@ class ProductionAuditRunner:
             self.logger.error(traceback.format_exc())
             return False
 
-    def _execute_audit_with_timeout(self, audit_type: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_audit_with_timeout(
+        self, audit_type: str, parameters: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Execute audit with timeout and retry logic."""
-        timeout = self.config["audit_settings"]["quick_mode_timeout"] if audit_type == "quick" else self.config["audit_settings"]["default_timeout"]
+        timeout = (
+            self.config["audit_settings"]["quick_mode_timeout"]
+            if audit_type == "quick"
+            else self.config["audit_settings"]["default_timeout"]
+        )
         max_attempts = self.config["audit_settings"]["retry_attempts"]
 
         for attempt in range(max_attempts + 1):
             try:
-                self.logger.info(f"Executing {audit_type} audit (attempt {attempt + 1}/{max_attempts + 1})")
+                self.logger.info(
+                    f"Executing {audit_type} audit (attempt {attempt + 1}/{max_attempts + 1})"
+                )
 
                 if audit_type == "comprehensive":
                     result = self.coordinator._run_comprehensive_audit(parameters, {})
@@ -177,7 +185,9 @@ class ProductionAuditRunner:
                 if "error" in result:
                     raise Exception(f"Audit execution error: {result['error']}")
 
-                self.logger.info(f"Audit completed successfully - Score: {result.get('audit_summary', {}).get('overall_score', 0):.1f}%")
+                self.logger.info(
+                    f"Audit completed successfully - Score: {result.get('audit_summary', {}).get('overall_score', 0):.1f}%"
+                )
                 return result
 
             except Exception as e:
@@ -189,7 +199,9 @@ class ProductionAuditRunner:
                     time.sleep(retry_delay)
                 else:
                     # All attempts failed
-                    error_msg = f"Audit failed after {max_attempts + 1} attempts: {str(e)}"
+                    error_msg = (
+                        f"Audit failed after {max_attempts + 1} attempts: {str(e)}"
+                    )
                     self.logger.error(error_msg)
                     return {
                         "error": error_msg,
@@ -201,8 +213,8 @@ class ProductionAuditRunner:
                             "warning_checks": 0,
                             "critical_failures": 1,  # Mark as critical failure
                             "overall_score": 0.0,
-                            "overall_status": "FAILED"
-                        }
+                            "overall_status": "FAILED",
+                        },
                     }
 
     def _generate_reports(self, audit_result: Dict[str, Any]) -> Dict[str, Any]:
@@ -213,15 +225,17 @@ class ProductionAuditRunner:
                 return {}
 
             self.logger.info("Generating audit reports...")
-            report_result = self.coordinator._generate_audit_reports({
-                "audit_report": audit_result["audit_report"]
-            }, {})
+            report_result = self.coordinator._generate_audit_reports(
+                {"audit_report": audit_result["audit_report"]}, {}
+            )
 
             if "error" in report_result:
                 self.logger.error(f"Report generation failed: {report_result['error']}")
                 return {}
 
-            self.logger.info(f"Generated {report_result.get('total_reports', 0)} reports")
+            self.logger.info(
+                f"Generated {report_result.get('total_reports', 0)} reports"
+            )
             return report_result
 
         except Exception as e:
@@ -244,18 +258,26 @@ class ProductionAuditRunner:
 
             # Check if alerting is needed
             needs_alert = (
-                score < critical_threshold or
-                critical_failures > 0 or
-                total_failures > failure_threshold
+                score < critical_threshold
+                or critical_failures > 0
+                or total_failures > failure_threshold
             )
 
             if needs_alert:
-                self._send_alert_notification(audit_result, score, critical_failures, total_failures)
+                self._send_alert_notification(
+                    audit_result, score, critical_failures, total_failures
+                )
 
         except Exception as e:
             self.logger.error(f"Error sending alerts: {e}")
 
-    def _send_alert_notification(self, audit_result: Dict[str, Any], score: float, critical_failures: int, total_failures: int):
+    def _send_alert_notification(
+        self,
+        audit_result: Dict[str, Any],
+        score: float,
+        critical_failures: int,
+        total_failures: int,
+    ):
         """Send alert notification through configured channels."""
         alert_message = f"""
 🚨 PRODUCTION AUDIT ALERT 🚨
@@ -278,7 +300,7 @@ Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
                     alert_log = Path("logs/audit_production/alerts.log")
                     alert_log.parent.mkdir(parents=True, exist_ok=True)
 
-                    with open(alert_log, 'a') as f:
+                    with open(alert_log, "a") as f:
                         f.write(f"{datetime.now().isoformat()} - {alert_message}\n")
 
                 # Future channels: email, slack, webhook
@@ -296,14 +318,16 @@ Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
             # Update metrics with audit results
             if audit_result:
                 summary = audit_result.get("audit_summary", {})
-                self.metrics.update({
-                    "execution_time": audit_result.get("execution_time", 0),
-                    "checks_completed": summary.get("total_checks", 0),
-                    "failures": summary.get("failed_checks", 0),
-                    "critical_failures": summary.get("critical_failures", 0),
-                    "overall_score": summary.get("overall_score", 0),
-                    "final_status": summary.get("overall_status", "UNKNOWN")
-                })
+                self.metrics.update(
+                    {
+                        "execution_time": audit_result.get("execution_time", 0),
+                        "checks_completed": summary.get("total_checks", 0),
+                        "failures": summary.get("failed_checks", 0),
+                        "critical_failures": summary.get("critical_failures", 0),
+                        "overall_score": summary.get("overall_score", 0),
+                        "final_status": summary.get("overall_status", "UNKNOWN"),
+                    }
+                )
 
             # Calculate total runtime
             end_time = datetime.now()
@@ -314,9 +338,12 @@ Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
             metrics_dir = Path("production_audit_reports/metrics")
             metrics_dir.mkdir(parents=True, exist_ok=True)
 
-            metrics_file = metrics_dir / f"audit_metrics_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+            metrics_file = (
+                metrics_dir
+                / f"audit_metrics_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+            )
 
-            with open(metrics_file, 'w') as f:
+            with open(metrics_file, "w") as f:
                 json.dump(self.metrics, f, indent=2)
 
             self.logger.info(f"Metrics saved to {metrics_file}")
@@ -324,7 +351,9 @@ Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
         except Exception as e:
             self.logger.error(f"Failed to save metrics: {e}")
 
-    def run_audit(self, audit_type: str = "quick", **kwargs) -> Tuple[bool, Dict[str, Any]]:
+    def run_audit(
+        self, audit_type: str = "quick", **kwargs
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Run production audit with full automation.
 
@@ -345,7 +374,7 @@ Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
             # Prepare audit parameters
             audit_name = kwargs.get(
                 "audit_name",
-                f"Production {audit_type.title()} Audit {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+                f"Production {audit_type.title()} Audit {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
             )
 
             parameters = {"audit_name": audit_name}
@@ -373,9 +402,15 @@ Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
             summary = audit_result.get("audit_summary", {})
             self.logger.info(f"🎉 Production audit completed successfully!")
             self.logger.info(f"   Score: {summary.get('overall_score', 0):.1f}%")
-            self.logger.info(f"   Checks: {summary.get('total_checks', 0)} total, {summary.get('passed_checks', 0)} passed")
-            self.logger.info(f"   Critical Issues: {summary.get('critical_failures', 0)}")
-            self.logger.info(f"   Reports: {report_result.get('total_reports', 0)} generated")
+            self.logger.info(
+                f"   Checks: {summary.get('total_checks', 0)} total, {summary.get('passed_checks', 0)} passed"
+            )
+            self.logger.info(
+                f"   Critical Issues: {summary.get('critical_failures', 0)}"
+            )
+            self.logger.info(
+                f"   Reports: {report_result.get('total_reports', 0)} generated"
+            )
 
             return True, audit_result
 
@@ -426,21 +461,16 @@ def main():
         "--audit-type",
         choices=["quick", "comprehensive", "domain"],
         default="quick",
-        help="Type of audit to run"
+        help="Type of audit to run",
     )
     parser.add_argument(
         "--domain",
         choices=["system", "data", "models"],
-        help="Domain to audit (required for domain audit type)"
+        help="Domain to audit (required for domain audit type)",
     )
+    parser.add_argument("--config", help="Configuration file path")
     parser.add_argument(
-        "--config",
-        help="Configuration file path"
-    )
-    parser.add_argument(
-        "--cleanup-only",
-        action="store_true",
-        help="Only run cleanup of old reports"
+        "--cleanup-only", action="store_true", help="Only run cleanup of old reports"
     )
 
     args = parser.parse_args()

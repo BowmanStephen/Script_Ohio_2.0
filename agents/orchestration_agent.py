@@ -21,6 +21,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 # Import existing Meta Agent
 from agents.core.agent_framework import AgentCapability, BaseAgent, PermissionLevel
+from agents.meta_agent import MetaAgent
 
 
 # Lazy loading for optimization components to avoid circular dependencies
@@ -114,10 +115,15 @@ class OrchestrationAgent(BaseAgent):
         self.agent_load_states: Dict[str, AgentLoadState] = {}
         self.optimization_enabled = mode == OrchestrationMode.OPTIMIZED
 
+        # COMPOSITION PATTERN: Initialize MetaAgent for registry access
+        self._meta_agent = None
+        self._initialize_meta_agent()
+
         # Lazy load optimization components
-        opt_components = _get_optimization_components()
+        self._optimization_components = _get_optimization_components()
         self.workflow_coordinator = (
-            opt_components["workflow_automator"] if opt_components else None
+            self._optimization_components["workflow_automator"]
+            if self._optimization_components else None
         )
 
         # Performance monitoring
@@ -125,6 +131,66 @@ class OrchestrationAgent(BaseAgent):
         self.last_optimization_time = datetime.now(timezone.utc)
 
         logger.info(f"OrchestrationAgent initialized in {mode.value} mode")
+
+    def _initialize_meta_agent(self):
+        """Initialize MetaAgent for registry access"""
+        try:
+            self._meta_agent = MetaAgent()
+            logger.info("MetaAgent initialized for composition pattern")
+        except Exception as e:
+            logger.warning(f"Failed to initialize MetaAgent: {e}")
+            self._meta_agent = None
+
+    @property
+    def agent_registry(self):
+        """Safe access to agent_registry via composition"""
+        if self._meta_agent and hasattr(self._meta_agent, 'agent_registry'):
+            return self._meta_agent.agent_registry
+        return {}
+
+    def _get_context_compression_engine(self):
+        """Safe access to context compression engine"""
+        if (self._optimization_components and
+            "context_compression_engine" in self._optimization_components):
+            return self._optimization_components["context_compression_engine"]
+        return None
+
+    def _get_memory_manager(self):
+        """Safe access to memory manager"""
+        if (self._optimization_components and
+            "memory_manager" in self._optimization_components):
+            return self._optimization_components["memory_manager"]
+        return None
+
+    def _get_workflow_automator(self):
+        """Safe access to workflow automator"""
+        if (self._optimization_components and
+            "workflow_automator" in self._optimization_components):
+            return self._optimization_components["workflow_automator"]
+        return None
+
+    def _check_composition_health(self) -> Dict[str, Any]:
+        """Check health of composed components"""
+        return {
+            "meta_agent_available": self._meta_agent is not None,
+            "agent_registry_size": len(self.agent_registry),
+            "optimization_components_available": self._optimization_components is not None,
+            "context_compression_available": self._get_context_compression_engine() is not None,
+            "memory_manager_available": self._get_memory_manager() is not None,
+            "workflow_automator_available": self._get_workflow_automator() is not None
+        }
+
+    def _handle_missing_component(self, component_name: str, operation: str) -> Dict:
+        """Handle missing optimization component gracefully"""
+        error_msg = f"Cannot execute {operation}: {component_name} not available"
+        logger.error(error_msg)
+        return {
+            "success": False,
+            "error": error_msg,
+            "error_type": "MissingComponent",
+            "component": component_name,
+            "fallback_applied": True
+        }
 
     def _load_orchestration_config(self) -> Dict[str, Any]:
         """Load orchestration-specific configuration"""
@@ -315,9 +381,13 @@ class OrchestrationAgent(BaseAgent):
                 self.optimization_enabled
                 and execution.status == WorkflowStatus.COMPLETED
             ):
-                execution.task_results = context_compression_engine.compress_context(
-                    f"workflow_{workflow_id}_results", execution.task_results
-                )
+                context_compression_engine = self._get_context_compression_engine()
+                if context_compression_engine:
+                    execution.task_results = context_compression_engine.compress_context(
+                        f"workflow_{workflow_id}_results", execution.task_results
+                    )
+                else:
+                    logger.warning("Context compression engine not available, skipping compression")
 
             return {
                 "success": True,
@@ -350,29 +420,45 @@ class OrchestrationAgent(BaseAgent):
             if "all" in optimization_targets or "context" in optimization_targets:
                 # Apply context compression
                 if self.optimization_enabled:
-                    context_stats = context_compression_engine.get_metrics()
-                    results["context_optimization"] = {
-                        "contexts_compressed": context_stats["contexts_compressed"],
-                        "tokens_saved": context_stats["tokens_saved"],
-                        "compression_ratio": context_stats["compression_ratio"],
-                    }
+                    context_compression_engine = self._get_context_compression_engine()
+                    if context_compression_engine:
+                        context_stats = context_compression_engine.get_metrics()
+                    else:
+                        context_stats = {"error": "Context compression engine unavailable"}
+
+                    if "error" not in context_stats:
+                        results["context_optimization"] = {
+                            "contexts_compressed": context_stats["contexts_compressed"],
+                            "tokens_saved": context_stats["tokens_saved"],
+                            "compression_ratio": context_stats["compression_ratio"],
+                        }
+                    else:
+                        results["context_optimization"] = context_stats
 
             if "all" in optimization_targets or "memory" in optimization_targets:
                 # Optimize memory usage
                 if self.optimization_enabled:
-                    memory_stats = memory_manager.get_stats()
-                    results["memory_optimization"] = {
-                        "total_entries": memory_stats.total_entries,
-                        "total_size_mb": memory_stats.total_size_mb,
-                        "hit_rate": memory_stats.hit_rate,
-                        "compression_ratio": memory_stats.compression_ratio,
-                    }
+                    memory_manager = self._get_memory_manager()
+                    if memory_manager:
+                        memory_stats = memory_manager.get_stats()
+                    else:
+                        memory_stats = {"error": "Memory manager unavailable"}
 
-                    # Compress memory if needed
-                    for level in MemoryLevel:
-                        compressed = memory_manager.compress_memory(level)
-                        if compressed > 0:
-                            results[f"memory_compression_{level.name}"] = compressed
+                    if "error" not in memory_stats:
+                        results["memory_optimization"] = {
+                            "total_entries": memory_stats.total_entries,
+                            "total_size_mb": memory_stats.total_size_mb,
+                            "hit_rate": memory_stats.hit_rate,
+                            "compression_ratio": memory_stats.compression_ratio,
+                        }
+
+                        # Compress memory if needed
+                        for level in MemoryLevel:
+                            compressed = memory_manager.compress_memory(level)
+                            if compressed > 0:
+                                results[f"memory_compression_{level.name}"] = compressed
+                    else:
+                        results["memory_optimization"] = memory_stats
 
             if "all" in optimization_targets or "agents" in optimization_targets:
                 # Optimize agent load balancing
@@ -609,15 +695,19 @@ class OrchestrationAgent(BaseAgent):
             # Store in memory manager
             opt_components = _get_optimization_components()
             if opt_components:
-                memory_manager = opt_components["memory_manager"]
-                memory_level = opt_components["MemoryLevel"]
+                memory_manager = self._get_memory_manager()
+                if memory_manager:
+                    # Import MemoryLevel for proper usage
+                    from agents.optimization.memory_manager import MemoryLevel
 
-                memory_manager.store(
-                    key=f"optimization_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
-                    value=optimization_report,
-                    level=memory_level.ORCHESTRATOR,
-                    expires_in=timedelta(hours=24),
-                )
+                    memory_manager.store(
+                        key=f"optimization_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+                        value=optimization_report,
+                        level=MemoryLevel.ORCHESTRATOR,
+                        expires_in=timedelta(hours=24),
+                    )
+                else:
+                    logger.warning("Memory manager not available, skipping optimization report storage")
 
             return {
                 "success": True,
@@ -641,11 +731,19 @@ class OrchestrationAgent(BaseAgent):
             agent_loads = {}
 
             for agent_id in agents:
-                if agent_id in self.agent_registry:
-                    agent = self.agent_registry[agent_id]
+                if not self._meta_agent:
+                    return {
+                        "success": False,
+                        "error": "MetaAgent not available for agent coordination"
+                    }
 
-                    # Check agent health and load
-                    if agent.status == "active" and agent.health_score > 0.5:
+                registry = self.agent_registry  # Uses property for safe access
+                if agent_id in registry:
+                    agent = registry[agent_id]
+
+                    # Check agent health and load with proper attribute validation
+                    if (hasattr(agent, 'status') and hasattr(agent, 'health_score') and
+                        agent.status == "active" and agent.health_score > 0.5):
                         load_state = self._calculate_agent_load(agent_id)
                         agent_loads[agent_id] = load_state
 
@@ -662,7 +760,7 @@ class OrchestrationAgent(BaseAgent):
                     else:
                         return {
                             "success": False,
-                            "error": f"Agent {agent_id} is not healthy (status: {agent.status}, health: {agent.health_score})",
+                            "error": f"Agent {agent_id} is not healthy (status: {getattr(agent, 'status', 'unknown')}, health: {getattr(agent, 'health_score', 'unknown')})",
                         }
                 else:
                     return {
@@ -724,23 +822,30 @@ class OrchestrationAgent(BaseAgent):
 
         # Store in memory manager with appropriate level
         storage_key = f"{action}_{datetime.now().strftime('%H%M%S')}"
-        storage_level = (
-            MemoryLevel.ORCHESTRATOR
-            if action.startswith("monitor")
-            else MemoryLevel.AGENT
-        )
+        memory_manager = self._get_memory_manager()
+        if memory_manager:
+            # Import MemoryLevel for proper usage
+            from agents.optimization.memory_manager import MemoryLevel
 
-        memory_manager.store(
-            key=storage_key,
-            value={
-                "action": action,
-                "result": result,
-                "parameters": parameters,
-                "timestamp": datetime.now(timezone.utc).isoformat(),
-            },
-            level=storage_level,
-            expires_in=timedelta(hours=6),
-        )
+            storage_level = (
+                MemoryLevel.ORCHESTRATOR
+                if action.startswith("monitor")
+                else MemoryLevel.AGENT
+            )
+
+            memory_manager.store(
+                key=storage_key,
+                value={
+                    "action": action,
+                    "result": result,
+                    "parameters": parameters,
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                },
+                level=storage_level,
+                expires_in=timedelta(hours=6),
+            )
+        else:
+            logger.warning(f"Memory manager not available, skipping storage for action: {action}")
 
     def _calculate_agent_load(self, agent_id: str) -> AgentLoadState:
         """Calculate current load state for an agent"""
@@ -832,18 +937,30 @@ class OrchestrationAgent(BaseAgent):
 
         # Context compression metrics
         if self.optimization_enabled:
-            metrics["context_compression"] = context_compression_engine.get_metrics()
+            context_compression_engine = self._get_context_compression_engine()
+            if context_compression_engine:
+                metrics["context_compression"] = context_compression_engine.get_metrics()
+            else:
+                metrics["context_compression"] = {"error": "Context compression engine unavailable"}
 
         # Memory management metrics
-        memory_stats = memory_manager.get_stats()
-        metrics["memory_management"] = {
-            "total_entries": memory_stats.total_entries,
-            "total_size_mb": memory_stats.total_size_mb,
-            "hit_rate": memory_stats.hit_rate,
-        }
+        memory_manager = self._get_memory_manager()
+        if memory_manager:
+            memory_stats = memory_manager.get_stats()
+            metrics["memory_management"] = {
+                "total_entries": getattr(memory_stats, 'total_entries', 0),
+                "total_size_mb": getattr(memory_stats, 'total_size_mb', 0.0),
+                "hit_rate": getattr(memory_stats, 'hit_rate', 0.0),
+            }
+        else:
+            metrics["memory_management"] = {"error": "Memory manager unavailable"}
 
         # Workflow metrics
-        metrics["workflow_automation"] = workflow_automator.get_metrics()
+        workflow_automator = self._get_workflow_automator()
+        if workflow_automator:
+            metrics["workflow_automation"] = workflow_automator.get_metrics()
+        else:
+            metrics["workflow_automation"] = {"error": "Workflow automator unavailable"}
 
         # Agent registry metrics
         metrics["agent_registry"] = {
@@ -916,12 +1033,19 @@ class OrchestrationAgent(BaseAgent):
             "mode": self.mode.value,
         }
 
-        memory_manager.store(
-            key=f"error_{action}_{datetime.now().strftime('%H%M%S')}",
-            value=error_info,
-            level=MemoryLevel.AGENT,
-            expires_in=timedelta(days=7),
-        )
+        memory_manager = self._get_memory_manager()
+        if memory_manager:
+            # Import MemoryLevel for proper usage
+            from agents.optimization.memory_manager import MemoryLevel
+
+            memory_manager.store(
+                key=f"error_{action}_{datetime.now().strftime('%H%M%S')}",
+                value=error_info,
+                level=MemoryLevel.AGENT,
+                expires_in=timedelta(days=7),
+            )
+        else:
+            logger.warning(f"Memory manager not available, skipping error storage for action: {action}")
 
     def _update_performance_metrics(
         self, action: str, execution_time: float, result: Dict
@@ -935,12 +1059,19 @@ class OrchestrationAgent(BaseAgent):
             "timestamp": datetime.now(timezone.utc).isoformat(),
         }
 
-        memory_manager.store(
-            key=f"performance_{action}_{datetime.now().strftime('%H%M%S')}",
-            value=performance_data,
-            level=MemoryLevel.CACHE,
-            expires_in=timedelta(hours=24),
-        )
+        memory_manager = self._get_memory_manager()
+        if memory_manager:
+            # Import MemoryLevel for proper usage
+            from agents.optimization.memory_manager import MemoryLevel
+
+            memory_manager.store(
+                key=f"performance_{action}_{datetime.now().strftime('%H%M%S')}",
+                value=performance_data,
+                level=MemoryLevel.CACHE,
+                expires_in=timedelta(hours=24),
+            )
+        else:
+            logger.warning(f"Memory manager not available, skipping performance storage for action: {action}")
 
     # Placeholder methods for enhanced functionality
     def _decompose_claude_code_task(self, request_data: Dict) -> Dict:

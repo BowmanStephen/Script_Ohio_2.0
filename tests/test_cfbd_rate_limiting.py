@@ -89,9 +89,9 @@ class TestCFBDRateLimiting:
             # Check that sleep was called with value close to 15 (accounting for jitter 0-20%)
             sleep_calls = [call[0][0] for call in mock_sleep.call_args_list]
             # Jitter adds 0-20% (0-3s), so range is 15-18 seconds
-            assert any(15.0 <= s <= 18.0 for s in sleep_calls), (
-                f"Expected sleep time 15-18s, got {sleep_calls}"
-            )
+            assert any(
+                15.0 <= s <= 18.0 for s in sleep_calls
+            ), f"Expected sleep time 15-18s, got {sleep_calls}"
 
     def test_5xx_bounded_exponential_backoff(self, client):
         """Test that 5xx errors use bounded exponential backoff"""

@@ -8,27 +8,40 @@ import argparse
 import json
 import sys
 import time
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 # Add the project root to the Python path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+
 def main():
     parser = argparse.ArgumentParser(description="Run comprehensive system audit")
-    parser.add_argument("--type", choices=["comprehensive", "quick", "domain"],
-                       default="comprehensive", help="Type of audit to run")
-    parser.add_argument("--domain", choices=["system", "data", "models"],
-                       help="Domain to audit (only for domain type)")
+    parser.add_argument(
+        "--type",
+        choices=["comprehensive", "quick", "domain"],
+        default="comprehensive",
+        help="Type of audit to run",
+    )
+    parser.add_argument(
+        "--domain",
+        choices=["system", "data", "models"],
+        help="Domain to audit (only for domain type)",
+    )
     parser.add_argument("--name", help="Custom audit name")
-    parser.add_argument("--reports", action="store_true",
-                       default=True, help="Generate multi-format reports")
-    parser.add_argument("--no-reports", action="store_true",
-                       help="Skip report generation")
-    parser.add_argument("--output-dir", default="audit_reports",
-                       help="Output directory for reports")
-    parser.add_argument("--verbose", "-v", action="store_true",
-                       help="Verbose output")
+    parser.add_argument(
+        "--reports",
+        action="store_true",
+        default=True,
+        help="Generate multi-format reports",
+    )
+    parser.add_argument(
+        "--no-reports", action="store_true", help="Skip report generation"
+    )
+    parser.add_argument(
+        "--output-dir", default="audit_reports", help="Output directory for reports"
+    )
+    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
 
     args = parser.parse_args()
 
@@ -44,8 +57,9 @@ def main():
 
         # Prepare audit parameters
         audit_params = {
-            "audit_name": args.name or f"{args.type.title()} System Audit {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
-            "output_dir": args.output_dir
+            "audit_name": args.name
+            or f"{args.type.title()} System Audit {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+            "output_dir": args.output_dir,
         }
 
         print("🔍 Starting System Audit...")
@@ -57,7 +71,9 @@ def main():
 
         # Execute audit based on type
         if args.type == "comprehensive":
-            result = coordinator._execute_action("run_comprehensive_audit", audit_params, {})
+            result = coordinator._execute_action(
+                "run_comprehensive_audit", audit_params, {}
+            )
 
         elif args.type == "quick":
             result = coordinator._execute_action("run_quick_audit", audit_params, {})
@@ -68,7 +84,9 @@ def main():
                 sys.exit(1)
 
             audit_params["domain"] = args.domain
-            result = coordinator._execute_action("audit_specific_domain", audit_params, {})
+            result = coordinator._execute_action(
+                "audit_specific_domain", audit_params, {}
+            )
 
         # Handle audit execution result
         if "error" in result:
@@ -87,9 +105,15 @@ def main():
         print(f"Execution Time: {execution_time:.1f} seconds")
         print()
         print(f"Total Checks: {summary['total_checks']}")
-        print(f"Passed: {summary['passed_checks']} ({summary['passed_checks']/summary['total_checks']*100:.1f}%)")
-        print(f"Failed: {summary['failed_checks']} ({summary['failed_checks']/summary['total_checks']*100:.1f}%)")
-        print(f"Warnings: {summary['warning_checks']} ({summary['warning_checks']/summary['total_checks']*100:.1f}%)")
+        print(
+            f"Passed: {summary['passed_checks']} ({summary['passed_checks']/summary['total_checks']*100:.1f}%)"
+        )
+        print(
+            f"Failed: {summary['failed_checks']} ({summary['failed_checks']/summary['total_checks']*100:.1f}%)"
+        )
+        print(
+            f"Warnings: {summary['warning_checks']} ({summary['warning_checks']/summary['total_checks']*100:.1f}%)"
+        )
         print(f"Critical Failures: {summary['critical_failures']}")
         print(f"Overall Score: {summary['overall_score']:.1f}%")
         print(f"Status: {summary['overall_status'].upper()}")
@@ -109,11 +133,11 @@ def main():
             print("📄 GENERATING REPORTS")
             print("=" * 50)
 
-            report_params = {
-                "audit_report": result["audit_report"]
-            }
+            report_params = {"audit_report": result["audit_report"]}
 
-            report_result = coordinator._execute_action("generate_audit_reports", report_params, {})
+            report_result = coordinator._execute_action(
+                "generate_audit_reports", report_params, {}
+            )
 
             if "error" in report_result:
                 print(f"❌ Report generation failed: {report_result['error']}")
@@ -145,8 +169,10 @@ def main():
         print(f"❌ Unexpected error: {str(e)}")
         if args.verbose:
             import traceback
+
             traceback.print_exc()
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

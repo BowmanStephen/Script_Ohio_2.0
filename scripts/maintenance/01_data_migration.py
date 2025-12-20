@@ -9,14 +9,16 @@ Author: Data Architecture Orchestrator
 Created: 2025-12-18
 """
 
+import hashlib
+import json
 import os
 import shutil
-import json
-import hashlib
-from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Tuple, Optional
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
+
 import pandas as pd
+
 
 class DataMigrator:
     """
@@ -51,7 +53,7 @@ class DataMigrator:
             "models/legacy": "Deprecated model versions",
             "archive/backups": "Systematic backups by date",
             "archive/deprecated": "Deprecated file formats",
-            "archive/snapshots": "Point-in-time snapshots"
+            "archive/snapshots": "Point-in-time snapshots",
         }
 
         # File mappings - old path → new path with categorization
@@ -68,40 +70,40 @@ class DataMigrator:
         mappings["model_pack/updated_training_data.csv"] = {
             "new_path": "data/processed/training/master_training_data_v2.csv",
             "category": "critical_master",
-            "description": "Primary training dataset for ML models"
+            "description": "Primary training dataset for ML models",
         }
 
         # MODEL FILES
         model_files = [
             "model_pack/ridge_model_2025.joblib",
             "model_pack/xgb_home_win_model_2025.pkl",
-            "model_pack/fastai_home_win_model_2025.pkl"
+            "model_pack/fastai_home_win_model_2025.pkl",
         ]
         for model_file in model_files:
             if model_file.startswith("ridge"):
                 mappings[model_file] = {
                     "new_path": f"models/production/ridge_regression_2025_v2.joblib",
                     "category": "production_model",
-                    "description": "Production Ridge Regression model"
+                    "description": "Production Ridge Regression model",
                 }
             elif model_file.startswith("xgb"):
                 mappings[model_file] = {
                     "new_path": f"models/production/xgboost_classifier_2025_v2.pkl",
                     "category": "production_model",
-                    "description": "Production XGBoost model"
+                    "description": "Production XGBoost model",
                 }
             elif model_file.startswith("fastai"):
                 mappings[model_file] = {
                     "new_path": f"models/production/fastai_neural_net_2025_v2.pkl",
                     "category": "production_model",
-                    "description": "Production FastAI neural network"
+                    "description": "Production FastAI neural network",
                 }
 
         # HISTORICAL ARCHIVES
         mappings["starter_pack/data/games.csv"] = {
             "new_path": "data/raw/historical/games_1869_2025.csv",
             "category": "historical_archive",
-            "description": "Complete historical games archive"
+            "description": "Complete historical games archive",
         }
 
         # WEEKLY TRAINING FILES
@@ -111,7 +113,7 @@ class DataMigrator:
             mappings[old_path] = {
                 "new_path": f"data/processed/training/weekly_updates/training_data_2025_week{week}.csv",
                 "category": "weekly_update",
-                "description": f"Week {week} training data update"
+                "description": f"Week {week} training data update",
             }
 
         # ENHANCED WEEKLY FEATURES
@@ -121,14 +123,14 @@ class DataMigrator:
             feature_files = [
                 "week{week:02d}_features_86.csv",
                 "enhanced_features_{week}.csv",
-                "team_matchups_{week}.csv"
+                "team_matchups_{week}.csv",
             ]
             for feature_file in feature_files:
                 old_path = f"{old_pattern}{feature_file}"
                 mappings[old_path] = {
                     "new_path": f"data/processed/enhanced/2025/week{week:02d}/{feature_file}",
                     "category": "weekly_features",
-                    "description": f"Week {week} enhanced features"
+                    "description": f"Week {week} enhanced features",
                 }
 
         # PREDICTION FILES
@@ -139,52 +141,48 @@ class DataMigrator:
                     mappings[f"predictions/{pred_file.name}"] = {
                         "new_path": f"data/outputs/predictions/2025/bowl_season/{pred_file.name}",
                         "category": "predictions",
-                        "description": "Bowl season predictions"
+                        "description": "Bowl season predictions",
                     }
                 else:
                     mappings[f"predictions/{pred_file.name}"] = {
                         "new_path": f"data/outputs/predictions/2025/regular_season/{pred_file.name}",
                         "category": "predictions",
-                        "description": "Regular season predictions"
+                        "description": "Regular season predictions",
                     }
 
         # MODEL COMPONENTS
         component_files = [
             "model_pack/rf_components/random_forest_home.joblib",
-            "model_pack/rf_components/random_forest_away.joblib"
+            "model_pack/rf_components/random_forest_away.joblib",
         ]
         for component_file in component_files:
             if component_file.endswith("home.joblib"):
                 mappings[component_file] = {
                     "new_path": "models/components/rf_components/random_forest_home.joblib",
                     "category": "model_components",
-                    "description": "Random Forest home team model component"
+                    "description": "Random Forest home team model component",
                 }
             else:
                 mappings[component_file] = {
                     "new_path": "models/components/rf_components/random_forest_away.joblib",
                     "category": "model_components",
-                    "description": "Random Forest away team model component"
+                    "description": "Random Forest away team model component",
                 }
 
         # BACKUP FILES - Move to systematic archive
-        backup_patterns = [
-            "model_pack/backups/",
-            "*backup*",
-            "*_backup_*"
-        ]
+        backup_patterns = ["model_pack/backups/", "*backup*", "*_backup_*"]
 
         # Legacy models to archive
         legacy_models = [
             "model_pack/random_forest_model_2025.pkl",
             "model_pack/random_forest_home.joblib",
-            "model_pack/random_forest_away.joblib"
+            "model_pack/random_forest_away.joblib",
         ]
         for legacy_model in legacy_models:
             mappings[legacy_model] = {
                 "new_path": f"models/legacy/v1_models/{legacy_model.split('/')[-1]}",
                 "category": "legacy_model",
-                "description": "Legacy model version - archived"
+                "description": "Legacy model version - archived",
             }
 
         return mappings
@@ -223,7 +221,7 @@ class DataMigrator:
 
         try:
             # Test file access
-            with open(full_path, 'rb') as f:
+            with open(full_path, "rb") as f:
                 f.read(1)  # Read first byte to test accessibility
             return True, "File accessible"
         except Exception as e:
@@ -242,7 +240,9 @@ class DataMigrator:
         except Exception as e:
             return f"ERROR: {e}"
 
-    def copy_file_with_validation(self, old_path: str, new_path: str, metadata: Dict) -> Tuple[bool, str]:
+    def copy_file_with_validation(
+        self, old_path: str, new_path: str, metadata: Dict
+    ) -> Tuple[bool, str]:
         """Copy file with comprehensive validation."""
         source_file = self.root_path / old_path
         dest_file = self.root_path / new_path
@@ -281,7 +281,7 @@ class DataMigrator:
                 "category": metadata["category"],
                 "description": metadata["description"],
                 "size_bytes": source_file.stat().st_size,
-                "checksum": source_checksum
+                "checksum": source_checksum,
             }
 
             self.migration_log.append(migration_record)
@@ -304,7 +304,7 @@ class DataMigrator:
             "files_failed": 0,
             "files_skipped": 0,
             "categories_processed": {},
-            "errors": []
+            "errors": [],
         }
 
         # Step 1: Create directory structure
@@ -331,7 +331,7 @@ class DataMigrator:
             "weekly_features",
             "predictions",
             "model_components",
-            "legacy_model"
+            "legacy_model",
         ]
 
         for category in priority_order:
@@ -344,7 +344,7 @@ class DataMigrator:
                 "total": len(category_files),
                 "success": 0,
                 "failed": 0,
-                "skipped": 0
+                "skipped": 0,
             }
 
             for old_path, metadata in category_files:
@@ -360,9 +360,7 @@ class DataMigrator:
 
                 # Copy file with validation
                 success, msg = self.copy_file_with_validation(
-                    old_path,
-                    metadata["new_path"],
-                    metadata
+                    old_path, metadata["new_path"], metadata
                 )
 
                 if success:
@@ -404,7 +402,7 @@ class DataMigrator:
 ## Category Breakdown
 """
 
-        for category, stats in results['categories_processed'].items():
+        for category, stats in results["categories_processed"].items():
             report += f"""
 ### {category.replace('_', ' ').title()}
 - Total: {stats['total']}
@@ -413,9 +411,9 @@ class DataMigrator:
 - Skipped: {stats['skipped']} ⚠️
 """
 
-        if results['errors']:
+        if results["errors"]:
             report += "\n## Errors\n"
-            for error in results['errors'][:10]:  # Limit to first 10 errors
+            for error in results["errors"][:10]:  # Limit to first 10 errors
                 report += f"- {error}\n"
 
         report += f"""
@@ -438,10 +436,12 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(description="Data Migration Script")
-    parser.add_argument("--dry-run", action="store_true",
-                       help="Simulate migration without making changes")
-    parser.add_argument("--category", type=str,
-                       help="Migrate specific category only")
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Simulate migration without making changes",
+    )
+    parser.add_argument("--category", type=str, help="Migrate specific category only")
     args = parser.parse_args()
 
     print("🔄 Data Migration Script")
@@ -470,7 +470,7 @@ def main():
     print(f"\n📄 Report saved to: {report_file}")
 
     # Exit with appropriate code
-    if results['files_failed'] > 0:
+    if results["files_failed"] > 0:
         print(f"\n⚠️  Migration completed with {results['files_failed']} errors")
         return 1
     else:

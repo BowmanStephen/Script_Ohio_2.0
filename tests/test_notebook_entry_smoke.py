@@ -26,9 +26,9 @@ def test_intro_notebook_executes(
     if pm is None:
         pytest.skip("papermill is not installed")
 
-    assert STARTER_NOTEBOOK.exists(), (
-        "Starter notebook missing; verify repository checkout."
-    )
+    assert (
+        STARTER_NOTEBOOK.exists()
+    ), "Starter notebook missing; verify repository checkout."
 
     # Ensure matplotlib renders headless during automation
     monkeypatch.setenv("MPLBACKEND", "Agg")

@@ -16,7 +16,7 @@ import pandas as pd
 
 def verify_weeks_1_12_integration():
     """Verify all weeks 1-12 are present in training data."""
-    training_file = Path("model_pack/updated_training_data.csv")
+    training_file = Path("data/processed/training/master_training_data_v2.csv")
 
     if not training_file.exists():
         print("❌ Training data file not found")

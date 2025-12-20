@@ -74,8 +74,12 @@ class CFBDSession:
 
     def __enter__(self):
         # Clean API key - remove "Bearer " prefix if present
-        clean_key = self.api_key.replace("Bearer ", "").strip() if self.api_key else self.api_key
-        
+        clean_key = (
+            self.api_key.replace("Bearer ", "").strip()
+            if self.api_key
+            else self.api_key
+        )
+
         configuration = self._cfbd.Configuration()
         # Use access_token for CFBD v5.13.2+ (API v2 compatible)
         # This is the correct pattern for the updated Python package
@@ -93,11 +97,13 @@ class CFBDSession:
 
     def __exit__(self, exc_type, exc, tb):
         # ApiClient may not have close() in all versions - handle gracefully
-        if hasattr(self.api_client, 'close'):
+        if hasattr(self.api_client, "close"):
             self.api_client.close()
 
 
-def live_cfbd_session(*, api_key: Optional[str] = None, host: str = DEFAULT_HOST) -> CFBDSession:
+def live_cfbd_session(
+    *, api_key: Optional[str] = None, host: str = DEFAULT_HOST
+) -> CFBDSession:
     """
     Convenience helper for QA/diagnostics scripts that need a managed CFBD session.
 
@@ -217,12 +223,16 @@ class CFBDLoader:
     # ------------------------------------------------------------------ #
     # Internal plumbing
     # ------------------------------------------------------------------ #
-    def _fetch_with_session(self, *, dataset: str, request_kwargs: dict) -> pd.DataFrame:
+    def _fetch_with_session(
+        self, *, dataset: str, request_kwargs: dict
+    ) -> pd.DataFrame:
         api_key = self._resolve_api_key()
         with CFBDSession(api_key=api_key, host=self.host) as session:
             self.rate_limiter.wait()
             if dataset == "games":
-                response = session.games_api.get_games(**{k: v for k, v in request_kwargs.items() if v is not None})
+                response = session.games_api.get_games(
+                    **{k: v for k, v in request_kwargs.items() if v is not None}
+                )
             elif dataset == "season_stats":
                 response = session.stats_api.get_team_season_stats(**request_kwargs)
             elif dataset == "advanced_season_stats":
@@ -234,10 +244,14 @@ class CFBDLoader:
 
         frame = _records_to_frame(response)
         if frame.empty:
-            raise CFBDLoaderError(f"No records returned for {dataset} with params {request_kwargs}")
+            raise CFBDLoaderError(
+                f"No records returned for {dataset} with params {request_kwargs}"
+            )
         return frame
 
-    def _cache_path(self, dataset: str, season: int, season_type: str, week: Optional[int] = None) -> Path:
+    def _cache_path(
+        self, dataset: str, season: int, season_type: str, week: Optional[int] = None
+    ) -> Path:
         parts = [dataset, str(season), season_type]
         if week is not None:
             parts.append(f"week{week:02d}")
@@ -245,9 +259,15 @@ class CFBDLoader:
         return self.cache_dir / filename
 
     def _resolve_api_key(self) -> str:
-        key = self.api_key or os.environ.get("CFBD_API_KEY") or os.environ.get("CFBD_API_TOKEN")
+        key = (
+            self.api_key
+            or os.environ.get("CFBD_API_KEY")
+            or os.environ.get("CFBD_API_TOKEN")
+        )
         if not key:
-            raise CFBDLoaderError("CFBD API key missing. Set CFBD_API_KEY or pass `api_key` to CFBDLoader.")
+            raise CFBDLoaderError(
+                "CFBD API key missing. Set CFBD_API_KEY or pass `api_key` to CFBDLoader."
+            )
         return key
 
 
@@ -259,4 +279,3 @@ __all__ = [
     "RateLimiter",
     "_records_to_frame",
 ]
-

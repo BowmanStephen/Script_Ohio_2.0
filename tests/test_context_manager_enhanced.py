@@ -247,9 +247,9 @@ class TestContextManagerEnhanced:
             load_times.append(load_time)
 
             # Should complete within reasonable time
-            assert load_time < 2.0, (
-                f"Load time {load_time:.3f}s too large for size {size}"
-            )
+            assert (
+                load_time < 2.0
+            ), f"Load time {load_time:.3f}s too large for size {size}"
 
         # Check that load times scale reasonably
         if len(load_times) >= 2:
@@ -257,9 +257,9 @@ class TestContextManagerEnhanced:
             size_ratio = context_sizes[-1] / context_sizes[0]
 
             # Time should not scale disproportionately with size
-            assert time_ratio < size_ratio * 2, (
-                "Load times scaling poorly with context size"
-            )
+            assert (
+                time_ratio < size_ratio * 2
+            ), "Load times scaling poorly with context size"
 
     def test_concurrent_context_loading(
         self, context_manager, sample_data_scientist_context
@@ -301,9 +301,9 @@ class TestContextManagerEnhanced:
                 assert result["role"] == "data_scientist"
 
         # Most loads should be successful
-        assert successful_loads >= 4, (
-            f"Too many concurrent load failures: {5 - successful_loads}"
-        )
+        assert (
+            successful_loads >= 4
+        ), f"Too many concurrent load failures: {5 - successful_loads}"
 
     def test_memory_usage_optimization(self, context_manager):
         """Test memory usage optimization"""
@@ -331,9 +331,9 @@ class TestContextManagerEnhanced:
         memory_increase = (final_memory - initial_memory) / 1024 / 1024  # MB
 
         # Memory increase should be reasonable
-        assert memory_increase < 100, (
-            f"Memory increase {memory_increase:.2f}MB exceeds limit"
-        )
+        assert (
+            memory_increase < 100
+        ), f"Memory increase {memory_increase:.2f}MB exceeds limit"
 
     def test_context_persistence_and_recovery(
         self, context_manager, sample_analyst_context
@@ -476,9 +476,9 @@ class TestContextManagerEnhanced:
                     success_count += 1
 
                 # Individual operation should not take too long
-                assert operation_time < 5.0, (
-                    f"Operation {i} took too long: {operation_time:.3f}s"
-                )
+                assert (
+                    operation_time < 5.0
+                ), f"Operation {i} took too long: {operation_time:.3f}s"
 
             except Exception as e:
                 # Log exception but don't fail the test
@@ -489,6 +489,6 @@ class TestContextManagerEnhanced:
         avg_operation_time = total_time / operation_count
 
         assert success_rate > 0.9, f"Success rate too low: {success_rate:.2%}"
-        assert avg_operation_time < 2.0, (
-            f"Average operation time too high: {avg_operation_time:.3f}s"
-        )
+        assert (
+            avg_operation_time < 2.0
+        ), f"Average operation time too high: {avg_operation_time:.3f}s"

@@ -148,9 +148,11 @@ class GitUtils:
                             "commit": commit["hash"],
                             "message": message,
                             "pattern": pattern_name,
-                            "severity": "high"
-                            if pattern_name in ["private_key", "secret"]
-                            else "medium",
+                            "severity": (
+                                "high"
+                                if pattern_name in ["private_key", "secret"]
+                                else "medium"
+                            ),
                         }
                     )
 

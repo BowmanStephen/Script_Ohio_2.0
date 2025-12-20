@@ -13,10 +13,10 @@ Tier 3 Benefits:
 - Weekly model training data downloads (week 5+)
 """
 
+import json
 import os
 import sys
 import time
-import json
 from datetime import datetime
 from pathlib import Path
 
@@ -71,23 +71,23 @@ def test_advanced_metrics(client):
         # Test advanced team stats
         print("Testing advanced team stats...")
         advanced_stats = client.get_advanced_stats(year=2025)
-        results['advanced_stats'] = len(advanced_stats) if advanced_stats else 0
+        results["advanced_stats"] = len(advanced_stats) if advanced_stats else 0
         print(f"✅ Advanced Stats: Found {results['advanced_stats']} entries")
 
     except Exception as e:
         print(f"❌ Advanced stats test failed: {e}")
-        results['advanced_stats'] = 'error'
+        results["advanced_stats"] = "error"
 
     try:
         # Test win probabilities
         print("Testing win probabilities...")
         win_probs = client.get_win_probabilities(year=2025, week=1)
-        results['win_probability'] = len(win_probs) if win_probs else 0
+        results["win_probability"] = len(win_probs) if win_probs else 0
         print(f"✅ Win Probability: Found {results['win_probability']} entries")
 
     except Exception as e:
         print(f"❌ Win probability test failed: {e}")
-        results['win_probability'] = 'error'
+        results["win_probability"] = "error"
 
     # Test weather data availability
     try:
@@ -95,16 +95,20 @@ def test_advanced_metrics(client):
         games = client.get_games(year=2025, week=15)  # Late season for weather
         if games:
             # Check if any games have weather data
-            has_weather = any('weather' in str(game).lower() for game in games[:5])  # Check first 5
-            results['weather_data'] = 'available' if has_weather else 'not_in_sample'
-            print(f"✅ Weather: {'Weather data found' if has_weather else 'No weather in sample (may need specific conditions)'}")
+            has_weather = any(
+                "weather" in str(game).lower() for game in games[:5]
+            )  # Check first 5
+            results["weather_data"] = "available" if has_weather else "not_in_sample"
+            print(
+                f"✅ Weather: {'Weather data found' if has_weather else 'No weather in sample (may need specific conditions)'}"
+            )
         else:
-            results['weather_data'] = 'no_games'
+            results["weather_data"] = "no_games"
             print("⚠️ No games found for weather test")
 
     except Exception as e:
         print(f"❌ Weather data test failed: {e}")
-        results['weather_data'] = 'error'
+        results["weather_data"] = "error"
 
     return results
 
@@ -118,30 +122,30 @@ def test_live_data(client):
 
     try:
         # Test if live data methods are available
-        if hasattr(client.games_api, 'get_scoreboard'):
+        if hasattr(client.games_api, "get_scoreboard"):
             print("Testing live scoreboard (this may be limited outside game days)...")
             # Try to get current scoreboard
             scoreboard = client.games_api.get_scoreboard(year=2025, week=15)
-            results['live_scoreboard'] = len(scoreboard) if scoreboard else 0
+            results["live_scoreboard"] = len(scoreboard) if scoreboard else 0
             print(f"✅ Live Scoreboard: Found {results['live_scoreboard']} games")
         else:
             print("⚠️ Live scoreboard method not available")
-            results['live_scoreboard'] = 'method_not_available'
+            results["live_scoreboard"] = "method_not_available"
 
     except Exception as e:
         print(f"❌ Live scoreboard test failed: {e}")
-        results['live_scoreboard'] = 'error'
+        results["live_scoreboard"] = "error"
 
     # Test play-by-play data availability
     try:
         print("Testing play-by-play data...")
         plays = client.get_plays(year=2025, week=1)
-        results['play_by_play'] = len(plays) if plays else 0
+        results["play_by_play"] = len(plays) if plays else 0
         print(f"✅ Play-by-Play: Found {results['play_by_play']} plays")
 
     except Exception as e:
         print(f"❌ Play-by-play test failed: {e}")
-        results['play_by_play'] = 'error'
+        results["play_by_play"] = "error"
 
     return results
 
@@ -179,7 +183,7 @@ def test_rate_limits(client):
         max_time = max(request_times)
         min_time = min(request_times)
 
-        estimated_rps = 1/avg_time
+        estimated_rps = 1 / avg_time
 
         print(f"\n📊 Rate Limit Test Results:")
         print(f"Average request time: {avg_time:.3f}s")
@@ -199,12 +203,12 @@ def test_rate_limits(client):
             tier_assessment = "basic"
 
         return {
-            'avg_time': avg_time,
-            'max_time': max_time,
-            'min_time': min_time,
-            'estimated_rps': estimated_rps,
-            'successful_requests': len(request_times),
-            'tier_assessment': tier_assessment
+            "avg_time": avg_time,
+            "max_time": max_time,
+            "min_time": min_time,
+            "estimated_rps": estimated_rps,
+            "successful_requests": len(request_times),
+            "tier_assessment": tier_assessment,
         }
 
     return None
@@ -220,14 +224,16 @@ def test_graphql_access(client):
             print("✅ GraphQL client initialized")
 
             # Test basic GraphQL query
-            if hasattr(client.graphql_client, 'get_scoreboard'):
+            if hasattr(client.graphql_client, "get_scoreboard"):
                 try:
                     scoreboard = client.get_scoreboard_graphql(year=2025, week=15)
                     if scoreboard:
                         print(f"✅ GraphQL Scoreboard: Data retrieved successfully")
                         return True
                     else:
-                        print("⚠️ GraphQL Scoreboard: No data returned (may be expected)")
+                        print(
+                            "⚠️ GraphQL Scoreboard: No data returned (may be expected)"
+                        )
                         return True  # Client working, just no data
                 except Exception as e:
                     print(f"⚠️ GraphQL Scoreboard query failed: {e}")
@@ -292,38 +298,38 @@ def main():
 
     # Run tests
     results = {
-        'timestamp': datetime.now().isoformat(),
-        'tier_tested': 'tier3',
-        'config': {
-            'host': config.host,
-            'max_requests_per_second': config.max_requests_per_second,
-            'rate_limit_delay': config.rate_limit_delay
-        }
+        "timestamp": datetime.now().isoformat(),
+        "tier_tested": "tier3",
+        "config": {
+            "host": config.host,
+            "max_requests_per_second": config.max_requests_per_second,
+            "rate_limit_delay": config.rate_limit_delay,
+        },
     }
 
     # Test basic endpoints
-    results['basic_endpoints'] = test_basic_endpoints(client)
+    results["basic_endpoints"] = test_basic_endpoints(client)
 
     # Test advanced metrics
-    results['advanced_metrics'] = test_advanced_metrics(client)
+    results["advanced_metrics"] = test_advanced_metrics(client)
 
     # Test live data
-    results['live_data'] = test_live_data(client)
+    results["live_data"] = test_live_data(client)
 
     # Test rate limiting
     rate_limit_results = test_rate_limits(client)
     if rate_limit_results:
-        results['rate_limit_test'] = rate_limit_results
+        results["rate_limit_test"] = rate_limit_results
 
     # Test GraphQL
-    results['graphql_access'] = test_graphql_access(client)
+    results["graphql_access"] = test_graphql_access(client)
 
     # Test weekly training data
-    results['weekly_training'] = test_weekly_training_downloads()
+    results["weekly_training"] = test_weekly_training_downloads()
 
     # Save results
     results_file = Path("tier3_test_results.json")
-    with open(results_file, 'w') as f:
+    with open(results_file, "w") as f:
         json.dump(results, f, indent=2, default=str)
 
     print(f"\n💾 Results saved to: {results_file}")
@@ -331,24 +337,26 @@ def main():
     # Summary
     print("\n📊 Summary")
     print("=" * 30)
-    basic_status = "✅ Working" if results['basic_endpoints'] else "❌ Failed"
+    basic_status = "✅ Working" if results["basic_endpoints"] else "❌ Failed"
     print(f"Basic Endpoints: {basic_status}")
 
-    graphql_status = "✅ Working" if results['graphql_access'] else "❌ Failed"
+    graphql_status = "✅ Working" if results["graphql_access"] else "❌ Failed"
     print(f"GraphQL Access: {graphql_status}")
 
-    training_status = "✅ Available" if results['weekly_training'] else "⚠️ Not Available"
+    training_status = (
+        "✅ Available" if results["weekly_training"] else "⚠️ Not Available"
+    )
     print(f"Weekly Training: {training_status}")
 
-    if 'rate_limit_test' in results:
-        estimated_rps = results['rate_limit_test']['estimated_rps']
-        tier_assessment = results['rate_limit_test'].get('tier_assessment', 'unknown')
+    if "rate_limit_test" in results:
+        estimated_rps = results["rate_limit_test"]["estimated_rps"]
+        tier_assessment = results["rate_limit_test"].get("tier_assessment", "unknown")
         print(f"Estimated Rate Limit: {estimated_rps:.1f} req/sec")
         print(f"Tier Assessment: {tier_assessment}")
 
-        if tier_assessment == 'tier3_plus':
+        if tier_assessment == "tier3_plus":
             print("🎉 Tier 3 rate limits detected!")
-        elif tier_assessment == 'tier2_plus':
+        elif tier_assessment == "tier2_plus":
             print("✅ Enhanced rate limits - some premium access")
         else:
             print("⚠️ Basic tier rate limits detected")
@@ -357,15 +365,18 @@ def main():
     print("\n💡 Recommendations")
     print("=" * 30)
 
-    if results['graphql_access']:
+    if results["graphql_access"]:
         print("✅ GraphQL available - implement real-time subscriptions")
     else:
         print("❌ GraphQL not working - check client configuration")
 
-    if results['weekly_training'] and results['basic_endpoints']:
+    if results["weekly_training"] and results["basic_endpoints"]:
         print("✅ Weekly training data available - integrate automated downloads")
 
-    if 'rate_limit_test' in results and results['rate_limit_test']['estimated_rps'] > 15:
+    if (
+        "rate_limit_test" in results
+        and results["rate_limit_test"]["estimated_rps"] > 15
+    ):
         print("✅ High rate limits available - optimize concurrent requests")
 
     print("\n🏁 Tier 3 test complete!")

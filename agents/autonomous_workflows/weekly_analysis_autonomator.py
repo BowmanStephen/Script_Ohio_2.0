@@ -411,14 +411,45 @@ class WeeklyAnalysisAutonomator(BaseAgent):
                 "--verbose"
             ]
 
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+            try:
+                result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
 
-            validation_results = {
-                "success": result.returncode == 0,
-                "return_code": result.returncode,
-                "stdout": result.stdout,
-                "stderr": result.stderr,
-            }
+                validation_results = {
+                    "success": result.returncode == 0,
+                    "status": "success" if result.returncode == 0 else "failed",
+                    "data": {
+                        "return_code": result.returncode,
+                        "stdout": result.stdout,
+                        "stderr": result.stderr,
+                        "season": season,
+                        "week": week,
+                        "validation_type": "weekly_data"
+                    },
+                    "error": None if result.returncode == 0 else result.stderr,
+                    "execution_time": time.time()
+                }
+
+                if validation_results["success"]:
+                    # Parse validation output for structured results
+                    validation_summary = self._parse_validation_output(result.stdout)
+                    validation_results["data"].update(validation_summary)
+
+            except subprocess.TimeoutExpired:
+                validation_results = {
+                    "success": False,
+                    "status": "timeout",
+                    "data": None,
+                    "error": "Data validation timed out after 300 seconds",
+                    "execution_time": time.time()
+                }
+            except Exception as e:
+                validation_results = {
+                    "success": False,
+                    "status": "error",
+                    "data": None,
+                    "error": f"Data validation failed: {str(e)}",
+                    "execution_time": time.time()
+                }
 
             if validation_results["success"]:
                 # Parse validation output for structured results
@@ -455,17 +486,41 @@ class WeeklyAnalysisAutonomator(BaseAgent):
                     "--enhanced"
                 ]
 
-                result = subprocess.run(cmd, capture_output=True, text=True, timeout=1800)
+                try:
+                    result = subprocess.run(cmd, capture_output=True, text=True, timeout=1800)
 
-                feature_results = {
-                    "success": result.returncode == 0,
-                    "return_code": result.returncode,
-                    "stdout": result.stdout,
-                    "stderr": result.stderr,
-                    "features_generated": "enhanced" if self.config.get("enhanced_features") else "basic",
-                    "season": season,
-                    "week": week,
-                }
+                    feature_results = {
+                        "success": result.returncode == 0,
+                        "status": "success" if result.returncode == 0 else "failed",
+                        "data": {
+                            "return_code": result.returncode,
+                            "stdout": result.stdout,
+                            "stderr": result.stderr,
+                            "features_generated": "enhanced" if self.config.get("enhanced_features") else "basic",
+                            "season": season,
+                            "week": week,
+                            "feature_type": "enhanced_features"
+                        },
+                        "error": None if result.returncode == 0 else result.stderr,
+                        "execution_time": time.time()
+                    }
+
+                except subprocess.TimeoutExpired:
+                    feature_results = {
+                        "success": False,
+                        "status": "timeout",
+                        "data": None,
+                        "error": "Feature generation timed out after 1800 seconds",
+                        "execution_time": time.time()
+                    }
+                except Exception as e:
+                    feature_results = {
+                        "success": False,
+                        "status": "error",
+                        "data": None,
+                        "error": f"Feature generation failed: {str(e)}",
+                        "execution_time": time.time()
+                    }
 
                 # Check if output files were created
                 if feature_results["success"]:
@@ -512,16 +567,40 @@ class WeeklyAnalysisAutonomator(BaseAgent):
                 "--predictions-only"
             ]
 
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+            try:
+                result = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
 
-            prediction_results = {
-                "success": result.returncode == 0,
-                "return_code": result.returncode,
-                "stdout": result.stdout,
-                "stderr": result.stderr,
-                "season": season,
-                "week": week,
-            }
+                prediction_results = {
+                    "success": result.returncode == 0,
+                    "status": "success" if result.returncode == 0 else "failed",
+                    "data": {
+                        "return_code": result.returncode,
+                        "stdout": result.stdout,
+                        "stderr": result.stderr,
+                        "season": season,
+                        "week": week,
+                        "prediction_type": "weekly_analysis"
+                    },
+                    "error": None if result.returncode == 0 else result.stderr,
+                    "execution_time": time.time()
+                }
+
+            except subprocess.TimeoutExpired:
+                prediction_results = {
+                    "success": False,
+                    "status": "timeout",
+                    "data": None,
+                    "error": "Prediction generation timed out after 600 seconds",
+                    "execution_time": time.time()
+                }
+            except Exception as e:
+                prediction_results = {
+                    "success": False,
+                    "status": "error",
+                    "data": None,
+                    "error": f"Prediction generation failed: {str(e)}",
+                    "execution_time": time.time()
+                }
 
             # Check for prediction output files
             if prediction_results["success"]:
