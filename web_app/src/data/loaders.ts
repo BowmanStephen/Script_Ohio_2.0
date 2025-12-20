@@ -252,6 +252,148 @@ export async function loadBowlPredictions(
  * Default: reads from data/outputs/analysis/external_model_analysis_*.json
  * Optional: proxies to PY_API_BASE_URL if set
  */
+function parsePercentFromText(text: string): number | undefined {
+  const match = text.match(/(\d+(?:\.\d+)?)%/);
+  if (!match) return undefined;
+  const n = Number(match[1]);
+  return Number.isFinite(n) ? n : undefined;
+}
+
+function splitCommaList(text: string): string[] {
+  return text
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+function transformLegacyExternalModelAnalysis(rawData: unknown): unknown {
+  if (!rawData || typeof rawData !== "object") return rawData;
+
+  const r = rawData as Record<string, unknown>;
+
+  // Legacy format: { external_models: { ... }, model_comparisons: { ... }, ... }
+  const externalModels = r.external_models;
+  if (!externalModels || typeof externalModels !== "object") return rawData;
+
+  const comparisons = r.model_comparisons as Record<string, unknown> | undefined;
+  const rankingRows = (comparisons?.rankings as unknown[]) ?? [];
+
+  const rankingMap = new Map<string, number>();
+  if (Array.isArray(rankingRows)) {
+    rankingRows.forEach((row, idx) => {
+      const modelName = (row as Record<string, unknown>)?.Model;
+      if (typeof modelName === "string") {
+        rankingMap.set(modelName, idx + 1);
+      }
+    });
+  }
+
+  const visualization = r.visualization_data as Record<string, unknown> | undefined;
+  const accuracyComparison = (visualization?.accuracy_comparison as unknown[]) ?? [];
+
+  const scriptOhioNames = new Set<string>();
+  if (Array.isArray(accuracyComparison)) {
+    accuracyComparison.forEach((row) => {
+      const obj = row as Record<string, unknown>;
+      const model = obj.model;
+      const isScriptOhio = obj.is_script_ohio;
+      if (typeof model === "string" && isScriptOhio === true) {
+        scriptOhioNames.add(model);
+      }
+    });
+  }
+
+  const models = Object.values(externalModels as Record<string, unknown>)
+    .map((m): Record<string, unknown> | null => {
+      const obj = m as Record<string, unknown>;
+      const name = typeof obj.name === "string" ? obj.name : null;
+      const straightUpAccuracy =
+        typeof obj.accuracy_straight_up === "number" ? obj.accuracy_straight_up : null;
+      if (!name || straightUpAccuracy == null) return null;
+
+      const vsSpreadAccuracy =
+        typeof obj.accuracy_vs_spread === "number" ? obj.accuracy_vs_spread : undefined;
+
+      const isScriptOhio =
+        scriptOhioNames.has(name) || name.toLowerCase().includes("script ohio");
+
+      return {
+        name,
+        straightUpAccuracy,
+        vsSpreadAccuracy,
+        methodology: typeof obj.methodology === "string" ? obj.methodology : undefined,
+        researchConfidence:
+          typeof obj.research_confidence === "string" ? obj.research_confidence : undefined,
+        isScriptOhio,
+        dataSources: Array.isArray(obj.data_sources)
+          ? (obj.data_sources as unknown[]).filter((x): x is string => typeof x === "string")
+          : undefined,
+        updateFrequency:
+          typeof obj.update_frequency === "string" ? obj.update_frequency : undefined,
+        coverage: typeof obj.coverage === "string" ? obj.coverage : undefined,
+        ranking: rankingMap.get(name),
+      };
+    })
+    .filter((x): x is Record<string, unknown> => Boolean(x));
+
+  // Prefer ranking order when available.
+  models.sort((a, b) => {
+    const ra = typeof a.ranking === "number" ? a.ranking : 999;
+    const rb = typeof b.ranking === "number" ? b.ranking : 999;
+    if (ra !== rb) return ra - rb;
+
+    const aa = typeof a.straightUpAccuracy === "number" ? a.straightUpAccuracy : 0;
+    const ab = typeof b.straightUpAccuracy === "number" ? b.straightUpAccuracy : 0;
+    return ab - aa;
+  });
+
+  const recs = (comparisons?.recommendations as Record<string, unknown>) ?? {};
+  const competitive = (recs.competitive_analysis as Record<string, unknown>) ?? {};
+
+  const gapText = competitive.gap_to_leader;
+  const gapToLeader = typeof gapText === "string" ? parsePercentFromText(gapText) : undefined;
+
+  const keyAdvantagesText = competitive.key_advantages;
+  const keyAdvantages =
+    typeof keyAdvantagesText === "string" ? splitCommaList(keyAdvantagesText) : undefined;
+
+  const mainChallengesText = competitive.main_challenges;
+  const mainChallenges =
+    typeof mainChallengesText === "string" ? splitCommaList(mainChallengesText) : undefined;
+
+  const recommendations = {
+    immediate: Array.isArray(recs.immediate_improvements)
+      ? (recs.immediate_improvements as unknown[]).filter(
+          (x): x is string => typeof x === "string"
+        )
+      : undefined,
+    medium: Array.isArray(recs.medium_term_enhancements)
+      ? (recs.medium_term_enhancements as unknown[]).filter(
+          (x): x is string => typeof x === "string"
+        )
+      : undefined,
+    long: Array.isArray(recs.long_term_research)
+      ? (recs.long_term_research as unknown[]).filter((x): x is string => typeof x === "string")
+      : undefined,
+  };
+
+  const insights = {
+    gapToLeader,
+    improvementNeeded: gapToLeader,
+    keyAdvantages,
+    mainChallenges,
+  };
+
+  return {
+    models,
+    insights,
+    recommendations,
+    generated_at: typeof r.generated_at === "string" ? r.generated_at : undefined,
+    total_models_analyzed:
+      typeof r.total_models_analyzed === "number" ? r.total_models_analyzed : models.length,
+  };
+}
+
 export async function loadExternalModelAnalysis(): Promise<ExternalModelAnalysis> {
   const apiUrl = getApiBaseUrl();
 
@@ -297,7 +439,12 @@ export async function loadExternalModelAnalysis(): Promise<ExternalModelAnalysis
 
   const latestFile = files[0].path;
   const rawData = JSON.parse(fs.readFileSync(latestFile, "utf-8"));
-  const validated = ExternalModelAnalysisSchema.parse(rawData);
 
-  return validated;
+  try {
+    return ExternalModelAnalysisSchema.parse(rawData);
+  } catch {
+    // Support legacy analysis artifacts by transforming to the canonical schema.
+    const transformed = transformLegacyExternalModelAnalysis(rawData);
+    return ExternalModelAnalysisSchema.parse(transformed);
+  }
 }
