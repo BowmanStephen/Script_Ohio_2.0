@@ -10,20 +10,21 @@ Coordinates specialized agents to:
 4. Design and implement improved organization
 """
 
-from dataclasses import dataclass
-from typing import Dict, List, Any, Optional
-from pathlib import Path
 import json
 import time
+from dataclasses import dataclass
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 # Import the agent framework
-from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
+from agents.core.agent_framework import AgentCapability, BaseAgent, PermissionLevel
 
 
 @dataclass
 class AnalysisTask:
     """Represents a data analysis task to be coordinated"""
+
     task_id: str
     agent_type: str  # inventory, lineage, quality, design
     description: str
@@ -46,7 +47,7 @@ class DataArchitectureOrchestrator(BaseAgent):
         super().__init__(
             agent_id="data_architecture_orchestrator",
             name="Data Architecture Orchestrator",
-            permission_level=PermissionLevel.READ_EXECUTE_WRITE
+            permission_level=PermissionLevel.READ_EXECUTE_WRITE,
         )
 
         self.root_path = Path(".")
@@ -56,7 +57,7 @@ class DataArchitectureOrchestrator(BaseAgent):
             "discovery": ["inventory", "lineage", "quality"],
             "design": ["architecture_design"],
             "implementation": ["migration"],
-            "verification": ["validation"]
+            "verification": ["validation"],
         }
 
     def _define_capabilities(self) -> List[AgentCapability]:
@@ -68,7 +69,7 @@ class DataArchitectureOrchestrator(BaseAgent):
                 permission_required=PermissionLevel.READ_ONLY,
                 tools_required=["agent_framework"],
                 data_access=["starter_pack", "model_pack", "data", "predictions"],
-                execution_time_estimate=300
+                execution_time_estimate=300,
             ),
             AgentCapability(
                 name="map_data_lineage",
@@ -76,7 +77,7 @@ class DataArchitectureOrchestrator(BaseAgent):
                 permission_required=PermissionLevel.READ_ONLY,
                 tools_required=["inventory_analysis"],
                 data_access=["scripts", "src", "agents"],
-                execution_time_estimate=600
+                execution_time_estimate=600,
             ),
             AgentCapability(
                 name="design_organization",
@@ -84,7 +85,7 @@ class DataArchitectureOrchestrator(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE_WRITE,
                 tools_required=["filesystem", "architecture_design"],
                 data_access=["starter_pack", "model_pack", "data", "predictions"],
-                execution_time_estimate=900
+                execution_time_estimate=900,
             ),
             AgentCapability(
                 name="coordinate_migration",
@@ -92,7 +93,7 @@ class DataArchitectureOrchestrator(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE_WRITE,
                 tools_required=["filesystem", "validation", "backup"],
                 data_access=["starter_pack", "model_pack", "data", "predictions"],
-                execution_time_estimate=1800
+                execution_time_estimate=1800,
             ),
             AgentCapability(
                 name="generate_documentation",
@@ -100,11 +101,13 @@ class DataArchitectureOrchestrator(BaseAgent):
                 permission_required=PermissionLevel.READ_EXECUTE_WRITE,
                 tools_required=["documentation", "reporting"],
                 data_access=["docs", "reports"],
-                execution_time_estimate=600
-            )
+                execution_time_estimate=600,
+            ),
         ]
 
-    def _execute_action(self, action: str, parameters: Dict, user_context: Dict) -> Dict:
+    def _execute_action(
+        self, action: str, parameters: Dict, user_context: Dict
+    ) -> Dict:
         """Execute orchestrator actions"""
         try:
             if action == "coordinate_analysis":
@@ -114,15 +117,9 @@ class DataArchitectureOrchestrator(BaseAgent):
             elif action == "generate_report":
                 return self._generate_comprehensive_report(parameters, user_context)
             else:
-                return {
-                    "status": "error",
-                    "message": f"Unknown action: {action}"
-                }
+                return {"status": "error", "message": f"Unknown action: {action}"}
         except Exception as e:
-            return {
-                "status": "error",
-                "message": f"Execution failed: {str(e)}"
-            }
+            return {"status": "error", "message": f"Execution failed: {str(e)}"}
 
     def _coordinate_full_analysis(self, parameters: Dict, user_context: Dict) -> Dict:
         """Coordinate full data architecture analysis"""
@@ -143,9 +140,15 @@ class DataArchitectureOrchestrator(BaseAgent):
             "results": discovery_results,
             "summary": {
                 "total_tasks": len(discovery_tasks),
-                "completed_tasks": len([r for r in discovery_results.values() if r.get("status") == "success"]),
-                "next_phase": "design_ready"
-            }
+                "completed_tasks": len(
+                    [
+                        r
+                        for r in discovery_results.values()
+                        if r.get("status") == "success"
+                    ]
+                ),
+                "next_phase": "design_ready",
+            },
         }
 
     def _create_discovery_tasks(self) -> List[AnalysisTask]:
@@ -156,10 +159,15 @@ class DataArchitectureOrchestrator(BaseAgent):
                 agent_type="inventory",
                 description="Catalog all CSV files with metadata",
                 parameters={
-                    "target_directories": ["starter_pack", "model_pack", "data", "predictions"],
+                    "target_directories": [
+                        "starter_pack",
+                        "model_pack",
+                        "data",
+                        "predictions",
+                    ],
                     "file_types": [".csv", ".json", ".pkl", ".joblib"],
-                    "include_metadata": True
-                }
+                    "include_metadata": True,
+                },
             ),
             AnalysisTask(
                 task_id="lineage_001",
@@ -168,8 +176,8 @@ class DataArchitectureOrchestrator(BaseAgent):
                 parameters={
                     "scan_scripts": True,
                     "identify_sources": True,
-                    "trace_transformations": True
-                }
+                    "trace_transformations": True,
+                },
             ),
             AnalysisTask(
                 task_id="quality_001",
@@ -178,12 +186,14 @@ class DataArchitectureOrchestrator(BaseAgent):
                 parameters={
                     "validate_schemas": True,
                     "check_coverage": True,
-                    "identify_gaps": True
-                }
-            )
+                    "identify_gaps": True,
+                },
+            ),
         ]
 
-    def _execute_phase_tasks(self, phase: str, tasks: List[AnalysisTask]) -> Dict[str, Any]:
+    def _execute_phase_tasks(
+        self, phase: str, tasks: List[AnalysisTask]
+    ) -> Dict[str, Any]:
         """Execute all tasks for a phase and return results"""
         phase_results = {}
 
@@ -203,9 +213,14 @@ class DataArchitectureOrchestrator(BaseAgent):
                 elif task.agent_type == "quality":
                     result = self._execute_quality_task(task)
                 else:
-                    result = {"status": "error", "message": f"Unknown agent type: {task.agent_type}"}
+                    result = {
+                        "status": "error",
+                        "message": f"Unknown agent type: {task.agent_type}",
+                    }
 
-                task.status = "completed" if result.get("status") == "success" else "failed"
+                task.status = (
+                    "completed" if result.get("status") == "success" else "failed"
+                )
                 task.result = result
 
                 phase_results[task.task_id] = result
@@ -215,10 +230,7 @@ class DataArchitectureOrchestrator(BaseAgent):
             except Exception as e:
                 task.status = "failed"
                 task.error = str(e)
-                phase_results[task.task_id] = {
-                    "status": "error",
-                    "message": str(e)
-                }
+                phase_results[task.task_id] = {"status": "error", "message": str(e)}
                 print(f"❌ Task {task.task_id} failed: {str(e)}")
 
         return phase_results
@@ -237,14 +249,23 @@ class DataArchitectureOrchestrator(BaseAgent):
                 dir_path = self.root_path / directory
                 if dir_path.exists():
                     for file_path in dir_path.rglob("*"):
-                        if file_path.is_file() and file_path.suffix.lower() in ['.csv', '.json', '.pkl', '.joblib']:
+                        if file_path.is_file() and file_path.suffix.lower() in [
+                            ".csv",
+                            ".json",
+                            ".pkl",
+                            ".joblib",
+                        ]:
                             try:
                                 stat = file_path.stat()
-                                file_info[str(file_path.relative_to(self.root_path))] = {
+                                file_info[
+                                    str(file_path.relative_to(self.root_path))
+                                ] = {
                                     "size_bytes": stat.st_size,
                                     "size_mb": round(stat.st_size / (1024 * 1024), 2),
-                                    "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
-                                    "extension": file_path.suffix.lower()
+                                    "modified": datetime.fromtimestamp(
+                                        stat.st_mtime
+                                    ).isoformat(),
+                                    "extension": file_path.suffix.lower(),
                                 }
                                 total_files += 1
                                 total_size += stat.st_size
@@ -258,12 +279,15 @@ class DataArchitectureOrchestrator(BaseAgent):
                     "total_size_mb": round(total_size / (1024 * 1024), 2),
                     "files_by_extension": self._count_by_extension(file_info),
                     "largest_files": self._get_largest_files(file_info, 10),
-                    "file_details": file_info
-                }
+                    "file_details": file_info,
+                },
             }
 
         except Exception as e:
-            return {"status": "error", "message": f"Inventory analysis failed: {str(e)}"}
+            return {
+                "status": "error",
+                "message": f"Inventory analysis failed: {str(e)}",
+            }
 
     def _execute_lineage_task(self, task: AnalysisTask) -> Dict[str, Any]:
         """Execute data lineage analysis"""
@@ -279,12 +303,19 @@ class DataArchitectureOrchestrator(BaseAgent):
             for script_file in self.root_path.rglob("*.py"):
                 if script_file.is_file():
                     try:
-                        content = script_file.read_text(encoding='utf-8', errors='ignore')
+                        content = script_file.read_text(
+                            encoding="utf-8", errors="ignore"
+                        )
                         script_path = str(script_file.relative_to(self.root_path))
 
                         # Find data references
                         data_refs = []
-                        for data_dir in ["starter_pack", "model_pack", "data", "predictions"]:
+                        for data_dir in [
+                            "starter_pack",
+                            "model_pack",
+                            "data",
+                            "predictions",
+                        ]:
                             if data_dir in content:
                                 data_refs.append(data_dir)
 
@@ -292,7 +323,9 @@ class DataArchitectureOrchestrator(BaseAgent):
                             data_dependencies[script_path] = {
                                 "data_directories": data_refs,
                                 "cfbd_references": "cfbd" in content,
-                                "model_references": any(x in content for x in ["model", "predict", "train"])
+                                "model_references": any(
+                                    x in content for x in ["model", "predict", "train"]
+                                ),
                             }
 
                     except Exception:
@@ -303,8 +336,8 @@ class DataArchitectureOrchestrator(BaseAgent):
                 "data": {
                     "data_dependencies": data_dependencies,
                     "data_flow_estimates": self._estimate_data_flow(data_dependencies),
-                    "master_sources": self._identify_master_sources(data_dependencies)
-                }
+                    "master_sources": self._identify_master_sources(data_dependencies),
+                },
             }
 
         except Exception as e:
@@ -320,16 +353,22 @@ class DataArchitectureOrchestrator(BaseAgent):
             completeness_scores = {}
 
             # Check master training data
-            master_data_path = self.root_path / "model_pack" / "updated_training_data.csv"
+            master_data_path = (
+                self.root_path / "model_pack" / "updated_training_data.csv"
+            )
             if master_data_path.exists():
                 try:
                     import pandas as pd
+
                     df = pd.read_csv(master_data_path)
                     completeness_scores["master_training_data"] = {
                         "rows": len(df),
                         "columns": len(df.columns),
-                        "null_percentage": round(df.isnull().sum().sum() / (len(df) * len(df.columns)) * 100, 2),
-                        "data_types": df.dtypes.value_counts().to_dict()
+                        "null_percentage": round(
+                            df.isnull().sum().sum() / (len(df) * len(df.columns)) * 100,
+                            2,
+                        ),
+                        "data_types": df.dtypes.value_counts().to_dict(),
                     }
                 except Exception as e:
                     quality_issues.append(f"Master training data read error: {str(e)}")
@@ -345,7 +384,9 @@ class DataArchitectureOrchestrator(BaseAgent):
                         if file_path.is_file():
                             try:
                                 if file_path.stat().st_size == 0:
-                                    quality_issues.append(f"Empty file: {file_path.relative_to(self.root_path)}")
+                                    quality_issues.append(
+                                        f"Empty file: {file_path.relative_to(self.root_path)}"
+                                    )
                             except OSError:
                                 continue
 
@@ -354,12 +395,17 @@ class DataArchitectureOrchestrator(BaseAgent):
                 "data": {
                     "quality_issues": quality_issues,
                     "completeness_scores": completeness_scores,
-                    "quality_score": max(0, 100 - len(quality_issues) * 5)  # Simple scoring
-                }
+                    "quality_score": max(
+                        0, 100 - len(quality_issues) * 5
+                    ),  # Simple scoring
+                },
             }
 
         except Exception as e:
-            return {"status": "error", "message": f"Quality assessment failed: {str(e)}"}
+            return {
+                "status": "error",
+                "message": f"Quality assessment failed: {str(e)}",
+            }
 
     def _count_by_extension(self, file_info: Dict) -> Dict[str, int]:
         """Count files by extension"""
@@ -371,10 +417,7 @@ class DataArchitectureOrchestrator(BaseAgent):
 
     def _get_largest_files(self, file_info: Dict, limit: int) -> List[Dict]:
         """Get largest files by size"""
-        files = [
-            {"path": path, **info}
-            for path, info in file_info.items()
-        ]
+        files = [{"path": path, **info} for path, info in file_info.items()]
         files.sort(key=lambda x: x["size_bytes"], reverse=True)
         return files[:limit]
 
@@ -385,18 +428,22 @@ class DataArchitectureOrchestrator(BaseAgent):
         # Look for common patterns
         for script_path, info in dependencies.items():
             if "cfbd" in script_path.lower() or info.get("cfbd_references"):
-                flows.append({
-                    "source": "CFBD_API",
-                    "destination": script_path,
-                    "type": "data_ingestion"
-                })
+                flows.append(
+                    {
+                        "source": "CFBD_API",
+                        "destination": script_path,
+                        "type": "data_ingestion",
+                    }
+                )
 
             if info.get("model_references"):
-                flows.append({
-                    "source": "model_pack",
-                    "destination": script_path,
-                    "type": "model_training"
-                })
+                flows.append(
+                    {
+                        "source": "model_pack",
+                        "destination": script_path,
+                        "type": "model_training",
+                    }
+                )
 
         return flows
 
@@ -405,7 +452,7 @@ class DataArchitectureOrchestrator(BaseAgent):
         sources = {
             "starter_pack": "Historical archive and educational datasets",
             "model_pack/updated_training_data.csv": "Canonical training dataset for ML models",
-            "cfbd_api": "External API for current season data"
+            "cfbd_api": "External API for current season data",
         }
 
         return sources
@@ -415,14 +462,24 @@ class DataArchitectureOrchestrator(BaseAgent):
         return {
             "status": "success",
             "total_tasks": len(self.tasks),
-            "completed_tasks": len([t for t in self.tasks.values() if t.status == "completed"]),
-            "failed_tasks": len([t for t in self.tasks.values() if t.status == "failed"]),
-            "in_progress_tasks": len([t for t in self.tasks.values() if t.status == "in_progress"]),
-            "tasks": {task_id: {"status": task.status, "description": task.description}
-                     for task_id, task in self.tasks.items()}
+            "completed_tasks": len(
+                [t for t in self.tasks.values() if t.status == "completed"]
+            ),
+            "failed_tasks": len(
+                [t for t in self.tasks.values() if t.status == "failed"]
+            ),
+            "in_progress_tasks": len(
+                [t for t in self.tasks.values() if t.status == "in_progress"]
+            ),
+            "tasks": {
+                task_id: {"status": task.status, "description": task.description}
+                for task_id, task in self.tasks.items()
+            },
         }
 
-    def _generate_comprehensive_report(self, parameters: Dict, user_context: Dict) -> Dict:
+    def _generate_comprehensive_report(
+        self, parameters: Dict, user_context: Dict
+    ) -> Dict:
         """Generate comprehensive analysis report"""
         report = {
             "analysis_summary": {
@@ -430,10 +487,10 @@ class DataArchitectureOrchestrator(BaseAgent):
                 "total_files_analyzed": 0,
                 "total_size_mb": 0,
                 "quality_score": 0,
-                "issues_found": []
+                "issues_found": [],
             },
             "detailed_findings": {},
-            "recommendations": []
+            "recommendations": [],
         }
 
         # Aggregate results from all tasks
@@ -444,19 +501,24 @@ class DataArchitectureOrchestrator(BaseAgent):
 
                 # Update summary
                 if task.agent_type == "inventory":
-                    report["analysis_summary"]["total_files_analyzed"] = task_data.get("total_files", 0)
-                    report["analysis_summary"]["total_size_mb"] = task_data.get("total_size_mb", 0)
+                    report["analysis_summary"]["total_files_analyzed"] = task_data.get(
+                        "total_files", 0
+                    )
+                    report["analysis_summary"]["total_size_mb"] = task_data.get(
+                        "total_size_mb", 0
+                    )
                 elif task.agent_type == "quality":
-                    report["analysis_summary"]["quality_score"] = task_data.get("quality_score", 0)
-                    report["analysis_summary"]["issues_found"] = task_data.get("quality_issues", [])
+                    report["analysis_summary"]["quality_score"] = task_data.get(
+                        "quality_score", 0
+                    )
+                    report["analysis_summary"]["issues_found"] = task_data.get(
+                        "quality_issues", []
+                    )
 
         # Generate recommendations
         report["recommendations"] = self._generate_recommendations(report)
 
-        return {
-            "status": "success",
-            "report": report
-        }
+        return {"status": "success", "report": report}
 
     def _generate_recommendations(self, report: Dict) -> List[str]:
         """Generate recommendations based on analysis"""
@@ -470,16 +532,22 @@ class DataArchitectureOrchestrator(BaseAgent):
             recommendations.append("Address data quality issues to improve reliability")
 
         if total_files > 500:
-            recommendations.append("Consider consolidating and archiving old files to reduce complexity")
+            recommendations.append(
+                "Consider consolidating and archiving old files to reduce complexity"
+            )
 
         if issues_count > 10:
-            recommendations.append("Implement automated data validation to prevent quality issues")
+            recommendations.append(
+                "Implement automated data validation to prevent quality issues"
+            )
 
-        recommendations.extend([
-            "Create clear documentation of data sources and lineage",
-            "Establish consistent naming conventions across all directories",
-            "Implement automated backup and versioning for critical datasets"
-        ])
+        recommendations.extend(
+            [
+                "Create clear documentation of data sources and lineage",
+                "Establish consistent naming conventions across all directories",
+                "Implement automated backup and versioning for critical datasets",
+            ]
+        )
 
         return recommendations
 
@@ -495,18 +563,18 @@ if __name__ == "__main__":
     result = data_architecture_orchestrator._execute_action(
         "coordinate_analysis",
         {"target_directories": ["starter_pack", "model_pack", "data", "predictions"]},
-        {"user_id": "stephen_bowman"}
+        {"user_id": "stephen_bowman"},
     )
 
     print(f"\n📊 Analysis Results:")
 
     # Helper function to make JSON serializable
     def make_serializable(obj):
-        if hasattr(obj, 'to_dict'):
+        if hasattr(obj, "to_dict"):
             return obj.to_dict()
-        elif hasattr(obj, 'tolist'):
+        elif hasattr(obj, "tolist"):
             return obj.tolist()
-        elif hasattr(obj, 'item'):
+        elif hasattr(obj, "item"):
             return obj.item()
         elif isinstance(obj, dict):
             return {str(k): make_serializable(v) for k, v in obj.items()}

@@ -9,33 +9,37 @@ Implements 4-level memory hierarchy:
 """
 
 import json
-import time
-import os
-import sqlite3
-import pickle
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any, Union, Tuple
-from dataclasses import dataclass, asdict
-from pathlib import Path
-from enum import Enum
 import logging
+import os
+import pickle
+import sqlite3
 import threading
+import time
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 class MemoryLevel(Enum):
     """Memory hierarchy levels"""
-    META_AGENT = 1      # Persistent - system state, agent registry, performance metrics
-    ORCHESTRATOR = 2    # Session - active plans, task queues, agent assignments
-    AGENT = 3           # Ephemeral - task-specific context, intermediate results
-    CACHE = 4           # Temporary - CFBD API responses, model predictions, TOON outputs
+
+    META_AGENT = 1  # Persistent - system state, agent registry, performance metrics
+    ORCHESTRATOR = 2  # Session - active plans, task queues, agent assignments
+    AGENT = 3  # Ephemeral - task-specific context, intermediate results
+    CACHE = 4  # Temporary - CFBD API responses, model predictions, TOON outputs
+
 
 @dataclass
 class MemoryEntry:
     """Represents a memory entry with metadata"""
+
     key: str
     value: Any
     level: MemoryLevel
@@ -46,15 +50,18 @@ class MemoryEntry:
     tags: List[str]
     agent_id: Optional[str] = None
 
+
 @dataclass
 class MemoryStats:
     """Memory usage statistics"""
+
     total_entries: int
     total_size_mb: float
     level_stats: Dict[MemoryLevel, Dict[str, Any]]
     hit_rate: float
     eviction_count: int
     compression_ratio: float
+
 
 class HierarchicalMemoryManager:
     """
@@ -79,7 +86,7 @@ class HierarchicalMemoryManager:
             MemoryLevel.META_AGENT: {},
             MemoryLevel.ORCHESTRATOR: {},
             MemoryLevel.AGENT: {},
-            MemoryLevel.CACHE: {}
+            MemoryLevel.CACHE: {},
         }
 
         # Performance tracking
@@ -91,7 +98,7 @@ class HierarchicalMemoryManager:
             "level_stats": {
                 level: {"entries": 0, "size_bytes": 0, "accesses": 0}
                 for level in MemoryLevel
-            }
+            },
         }
 
         # Initialize storage directories
@@ -105,7 +112,7 @@ class HierarchicalMemoryManager:
     def _load_config(self, config_path: str) -> Dict[str, Any]:
         """Load memory configuration from JSON file"""
         try:
-            with open(config_path, 'r') as f:
+            with open(config_path, "r") as f:
                 config = json.load(f)
             return config.get("memory_hierarchy", {})
         except (FileNotFoundError, json.JSONDecodeError):
@@ -115,26 +122,17 @@ class HierarchicalMemoryManager:
     def _get_default_config(self) -> Dict[str, Any]:
         """Get default memory configuration"""
         return {
-            "level_1_meta_agent": {
-                "max_size_mb": 100,
-                "retention_days": 365
-            },
-            "level_2_orchestrators": {
-                "max_size_mb": 50,
-                "retention_hours": 24
-            },
-            "level_3_agents": {
-                "max_size_mb": 20,
-                "retention_minutes": 60
-            },
+            "level_1_meta_agent": {"max_size_mb": 100, "retention_days": 365},
+            "level_2_orchestrators": {"max_size_mb": 50, "retention_hours": 24},
+            "level_3_agents": {"max_size_mb": 20, "retention_minutes": 60},
             "level_4_cache": {
                 "max_size_mb": 200,
                 "ttl_minutes": {
                     "cfbd_api_responses": 60,
                     "model_predictions": 1440,
-                    "toon_outputs": 30
-                }
-            }
+                    "toon_outputs": 30,
+                },
+            },
         }
 
     def _initialize_storage(self):
@@ -153,7 +151,8 @@ class HierarchicalMemoryManager:
         os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
 
         with sqlite3.connect(self.db_path) as conn:
-            conn.execute("""
+            conn.execute(
+                """
                 CREATE TABLE IF NOT EXISTS memory_entries (
                     key TEXT PRIMARY KEY,
                     level INTEGER,
@@ -165,9 +164,11 @@ class HierarchicalMemoryManager:
                     agent_id TEXT,
                     file_path TEXT
                 )
-            """)
+            """
+            )
 
-            conn.execute("""
+            conn.execute(
+                """
                 CREATE TABLE IF NOT EXISTS memory_stats (
                     level INTEGER,
                     entries INTEGER,
@@ -176,11 +177,18 @@ class HierarchicalMemoryManager:
                     last_updated TEXT,
                     PRIMARY KEY (level)
                 )
-            """)
+            """
+            )
 
-    def store(self, key: str, value: Any, level: MemoryLevel,
-              expires_in: Optional[timedelta] = None,
-              tags: List[str] = None, agent_id: str = None) -> bool:
+    def store(
+        self,
+        key: str,
+        value: Any,
+        level: MemoryLevel,
+        expires_in: Optional[timedelta] = None,
+        tags: List[str] = None,
+        agent_id: str = None,
+    ) -> bool:
         """
         Store a value in the specified memory level
 
@@ -210,7 +218,7 @@ class HierarchicalMemoryManager:
                     access_count=0,
                     size_bytes=self._calculate_size(value),
                     tags=tags or [],
-                    agent_id=agent_id
+                    agent_id=agent_id,
                 )
 
                 # Store in memory
@@ -322,7 +330,8 @@ class HierarchicalMemoryManager:
         with self.lock:
             for level, store in self.memory_stores.items():
                 expired_keys = [
-                    key for key, entry in store.items()
+                    key
+                    for key, entry in store.items()
                     if entry.expires_at and current_time > entry.expires_at
                 ]
 
@@ -347,12 +356,18 @@ class HierarchicalMemoryManager:
                 store = self.memory_stores[level]
                 level_stats[level] = {
                     "entries": len(store),
-                    "size_mb": sum(entry.size_bytes for entry in store.values()) / (1024 * 1024),
+                    "size_mb": sum(entry.size_bytes for entry in store.values())
+                    / (1024 * 1024),
                     "accesses": self.stats["level_stats"][level]["accesses"],
-                    "avg_access_count": sum(entry.access_count for entry in store.values()) / max(1, len(store))
+                    "avg_access_count": sum(
+                        entry.access_count for entry in store.values()
+                    )
+                    / max(1, len(store)),
                 }
 
-            hit_rate = self.stats["hits"] / max(1, self.stats["hits"] + self.stats["misses"])
+            hit_rate = self.stats["hits"] / max(
+                1, self.stats["hits"] + self.stats["misses"]
+            )
 
             return MemoryStats(
                 total_entries=total_entries,
@@ -360,10 +375,12 @@ class HierarchicalMemoryManager:
                 level_stats=level_stats,
                 hit_rate=hit_rate,
                 eviction_count=self.stats["evictions"],
-                compression_ratio=self.stats["compressions"] / max(1, total_entries)
+                compression_ratio=self.stats["compressions"] / max(1, total_entries),
             )
 
-    def search_by_tags(self, tags: List[str], level: Optional[MemoryLevel] = None) -> List[MemoryEntry]:
+    def search_by_tags(
+        self, tags: List[str], level: Optional[MemoryLevel] = None
+    ) -> List[MemoryEntry]:
         """
         Search memory entries by tags
 
@@ -392,7 +409,8 @@ class HierarchicalMemoryManager:
         with self.lock:
             for level, store in self.memory_stores.items():
                 agent_memory[level.name] = {
-                    key: entry.value for key, entry in store.items()
+                    key: entry.value
+                    for key, entry in store.items()
                     if entry.agent_id == agent_id
                 }
 
@@ -421,7 +439,9 @@ class HierarchicalMemoryManager:
         if not level_config:
             return
 
-        current_size = sum(entry.size_bytes for entry in self.memory_stores[level].values())
+        current_size = sum(
+            entry.size_bytes for entry in self.memory_stores[level].values()
+        )
         max_size_bytes = level_config.get("max_size_mb", 50) * 1024 * 1024
 
         if current_size > max_size_bytes:
@@ -432,7 +452,7 @@ class HierarchicalMemoryManager:
         """Evict least recently used entries to free space"""
         entries = sorted(
             self.memory_stores[level].items(),
-            key=lambda x: (x[1].access_count, x[1].timestamp)
+            key=lambda x: (x[1].access_count, x[1].timestamp),
         )
 
         bytes_freed = 0
@@ -467,26 +487,29 @@ class HierarchicalMemoryManager:
             file_path = storage_path / filename
 
             # Serialize and save
-            with open(file_path, 'wb') as f:
+            with open(file_path, "wb") as f:
                 pickle.dump(entry.value, f)
 
             # Update database metadata
             with sqlite3.connect(self.db_path) as conn:
-                conn.execute("""
+                conn.execute(
+                    """
                     INSERT OR REPLACE INTO memory_entries
                     (key, level, timestamp, expires_at, access_count, size_bytes, tags, agent_id, file_path)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """, (
-                    entry.key,
-                    entry.level.value,
-                    entry.timestamp.isoformat(),
-                    entry.expires_at.isoformat() if entry.expires_at else None,
-                    entry.access_count,
-                    entry.size_bytes,
-                    json.dumps(entry.tags),
-                    entry.agent_id,
-                    str(file_path)
-                ))
+                """,
+                    (
+                        entry.key,
+                        entry.level.value,
+                        entry.timestamp.isoformat(),
+                        entry.expires_at.isoformat() if entry.expires_at else None,
+                        entry.access_count,
+                        entry.size_bytes,
+                        json.dumps(entry.tags),
+                        entry.agent_id,
+                        str(file_path),
+                    ),
+                )
 
         except Exception as e:
             logger.error(f"Error persisting entry {entry.key}: {e}")
@@ -495,9 +518,12 @@ class HierarchicalMemoryManager:
         """Load a memory entry from disk"""
         try:
             with sqlite3.connect(self.db_path) as conn:
-                cursor = conn.execute("""
+                cursor = conn.execute(
+                    """
                     SELECT level, file_path FROM memory_entries WHERE key = ?
-                """, (key,))
+                """,
+                    (key,),
+                )
 
                 row = cursor.fetchone()
                 if row:
@@ -505,7 +531,7 @@ class HierarchicalMemoryManager:
                     level = MemoryLevel(level_value)
 
                     if os.path.exists(file_path):
-                        with open(file_path, 'rb') as f:
+                        with open(file_path, "rb") as f:
                             value = pickle.load(f)
 
                         # Load back into memory
@@ -518,7 +544,7 @@ class HierarchicalMemoryManager:
                             access_count=1,
                             size_bytes=self._calculate_size(value),
                             tags=[],
-                            agent_id=None
+                            agent_id=None,
                         )
 
                         logger.debug(f"Loaded {key} from disk")
@@ -533,9 +559,12 @@ class HierarchicalMemoryManager:
         """Delete a memory entry from disk"""
         try:
             with sqlite3.connect(self.db_path) as conn:
-                cursor = conn.execute("""
+                cursor = conn.execute(
+                    """
                     SELECT file_path FROM memory_entries WHERE key = ?
-                """, (key,))
+                """,
+                    (key,),
+                )
 
                 row = cursor.fetchone()
                 if row:
@@ -565,7 +594,7 @@ class HierarchicalMemoryManager:
             MemoryLevel.META_AGENT: "level_1_meta_agent",
             MemoryLevel.ORCHESTRATOR: "level_2_orchestrators",
             MemoryLevel.AGENT: "level_3_agents",
-            MemoryLevel.CACHE: "level_4_cache"
+            MemoryLevel.CACHE: "level_4_cache",
         }
         return self.config.get(level_mapping.get(level.name.lower()))
 
@@ -585,6 +614,7 @@ class HierarchicalMemoryManager:
 
     def _start_cleanup_thread(self):
         """Start background cleanup thread"""
+
         def cleanup_worker():
             while True:
                 try:
@@ -595,6 +625,7 @@ class HierarchicalMemoryManager:
 
         cleanup_thread = threading.Thread(target=cleanup_worker, daemon=True)
         cleanup_thread.start()
+
 
 # Global memory manager instance
 memory_manager = HierarchicalMemoryManager()

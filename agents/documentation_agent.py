@@ -11,20 +11,21 @@ Follows OpenAI agents.md best practices:
 - Quality validation: Automated doc freshness checks
 """
 
+import hashlib
 import json
 import os
-import hashlib
-from datetime import datetime, timezone, timedelta
-from typing import Dict, List, Optional, Any, Tuple
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
-from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
+from agents.core.agent_framework import AgentCapability, BaseAgent, PermissionLevel
 
 
 @dataclass
 class DocumentationEntry:
     """Structure for documentation entries"""
+
     doc_id: str
     title: str
     file_path: str
@@ -42,6 +43,7 @@ class DocumentationEntry:
 @dataclass
 class ValidationResult:
     """Structure for documentation validation results"""
+
     doc_id: str
     is_valid: bool
     issues: List[str]
@@ -64,8 +66,8 @@ class DocumentationAgent(BaseAgent):
     def __init__(self):
         super().__init__(
             agent_id="documentation_agent",
-            agent_name="Documentation Agent",
-            permission_level=PermissionLevel.READ_WRITE
+            name="Documentation Agent",
+            permission_level=PermissionLevel.READ_EXECUTE_WRITE,
         )
 
         # Set up directories
@@ -82,16 +84,16 @@ class DocumentationAgent(BaseAgent):
             "api": ["api/*.py", "web_app/*.py", "CLAUDE.md"],
             "workflow": ["scripts/*.py", "workflows/*.md"],
             "architecture": ["*.md", "docs/ARCHITECTURE.md"],
-            "user_guide": ["README.md", "starter_pack/*.md"]
+            "user_guide": ["README.md", "starter_pack/*.md"],
         }
 
         # Freshness thresholds (in days)
         self.freshness_thresholds = {
-            "agent": 7,      # Agent docs should be current
-            "api": 14,       # API docs can be slightly older
+            "agent": 7,  # Agent docs should be current
+            "api": 14,  # API docs can be slightly older
             "workflow": 30,  # Workflow docs change less frequently
             "architecture": 90,  # Architecture docs are stable
-            "user_guide": 14     # User guides should be current
+            "user_guide": 14,  # User guides should be current
         }
 
     def _define_capabilities(self) -> List[AgentCapability]:
@@ -100,41 +102,52 @@ class DocumentationAgent(BaseAgent):
             AgentCapability(
                 name="register_documentation",
                 description="Register new documentation in the knowledge base",
+                permission_required=PermissionLevel.READ_EXECUTE_WRITE,
+                tools_required=["file_operations", "hash_calculation"],
+                data_access=["file_system"],
                 execution_time_estimate=1.0,
-                required_permissions=["read", "write"],
-                tools_used=["file_operations", "hash_calculation"]
             ),
             AgentCapability(
                 name="validate_freshness",
                 description="Validate documentation freshness and accuracy",
+                permission_required=PermissionLevel.READ_ONLY,
+                tools_required=[
+                    "file_operations",
+                    "timestamp_analysis",
+                    "content_analysis",
+                ],
+                data_access=["file_system"],
                 execution_time_estimate=3.0,
-                required_permissions=["read"],
-                tools_used=["file_operations", "timestamp_analysis", "content_analysis"]
             ),
             AgentCapability(
                 name="check_coverage",
                 description="Check for documentation gaps and missing coverage",
+                permission_required=PermissionLevel.READ_ONLY,
+                tools_required=["file_scanning", "coverage_analysis"],
+                data_access=["file_system"],
                 execution_time_estimate=2.0,
-                required_permissions=["read"],
-                tools_used=["file_scanning", "coverage_analysis"]
             ),
             AgentCapability(
                 name="get_knowledge_base",
                 description="Retrieve knowledge base entries by category or search",
+                permission_required=PermissionLevel.READ_ONLY,
+                tools_required=["file_operations", "search"],
+                data_access=["file_system"],
                 execution_time_estimate=1.0,
-                required_permissions=["read"],
-                tools_used=["file_operations", "search"]
             ),
             AgentCapability(
                 name="update_registry",
                 description="Update documentation registry with changes",
+                permission_required=PermissionLevel.READ_EXECUTE_WRITE,
+                tools_required=["file_operations", "registry_management"],
+                data_access=["file_system"],
                 execution_time_estimate=1.5,
-                required_permissions=["read", "write"],
-                tools_used=["file_operations", "registry_management"]
-            )
+            ),
         ]
 
-    def _execute_action(self, action: str, parameters: Dict, user_context: Dict) -> Dict:
+    def _execute_action(
+        self, action: str, parameters: Dict, user_context: Dict
+    ) -> Dict:
         """Execute agent actions with proper error handling"""
         try:
             if action == "register_documentation":
@@ -151,14 +164,16 @@ class DocumentationAgent(BaseAgent):
                 return {
                     "success": False,
                     "error": f"Unknown action: {action}",
-                    "available_actions": [cap.name for cap in self._define_capabilities()]
+                    "available_actions": [
+                        cap.name for cap in self._define_capabilities()
+                    ],
                 }
         except Exception as e:
             return {
                 "success": False,
                 "error": str(e),
                 "action": action,
-                "parameters": parameters
+                "parameters": parameters,
             }
 
     def _register_documentation(self, params: Dict, context: Dict) -> Dict:
@@ -191,7 +206,7 @@ class DocumentationAgent(BaseAgent):
             checksum=checksum,
             metadata=params.get("metadata", {}),
             freshness_score=1.0,  # New docs start fresh
-            dependencies=params.get("dependencies", [])
+            dependencies=params.get("dependencies", []),
         )
 
         # Update or add entry
@@ -207,7 +222,7 @@ class DocumentationAgent(BaseAgent):
             "doc_id": doc_entry.doc_id,
             "category": doc_entry.category,
             "freshness_score": doc_entry.freshness_score,
-            "registry_size": len(registry)
+            "registry_size": len(registry),
         }
 
     def _validate_freshness(self, params: Dict, context: Dict) -> Dict:
@@ -249,7 +264,9 @@ class DocumentationAgent(BaseAgent):
 
         # Calculate summary statistics
         valid_docs = sum(1 for r in results if r["is_valid"])
-        avg_freshness = sum(r["freshness_score"] for r in results) / len(results) if results else 0
+        avg_freshness = (
+            sum(r["freshness_score"] for r in results) / len(results) if results else 0
+        )
 
         return {
             "success": True,
@@ -259,8 +276,8 @@ class DocumentationAgent(BaseAgent):
                 "valid_docs": valid_docs,
                 "invalid_docs": len(results) - valid_docs,
                 "average_freshness": avg_freshness,
-                "validation_timestamp": now.isoformat()
-            }
+                "validation_timestamp": now.isoformat(),
+            },
         }
 
     def _check_coverage(self, params: Dict, context: Dict) -> Dict:
@@ -288,8 +305,7 @@ class DocumentationAgent(BaseAgent):
         coverage_by_category = {}
         for category in self.doc_patterns.keys():
             category_docs = [
-                doc for doc in registry.values()
-                if doc["category"] == category
+                doc for doc in registry.values() if doc["category"] == category
             ]
             coverage_by_category[category] = len(category_docs)
 
@@ -306,9 +322,12 @@ class DocumentationAgent(BaseAgent):
             "coverage_by_category": coverage_by_category,
             "gaps": gaps,
             "documentation_coverage": (
-                (len(all_code_files) - len(undocumented_files)) / len(all_code_files) * 100
-                if all_code_files else 0
-            )
+                (len(all_code_files) - len(undocumented_files))
+                / len(all_code_files)
+                * 100
+                if all_code_files
+                else 0
+            ),
         }
 
     def _get_knowledge_base(self, params: Dict, context: Dict) -> Dict:
@@ -328,8 +347,12 @@ class DocumentationAgent(BaseAgent):
             # Filter by search term
             if search_term:
                 search_lower = search_term.lower()
-                if (search_lower not in doc_data["title"].lower() and
-                    search_lower not in doc_data["description"].lower() if "description" in doc_data else True):
+                if (
+                    search_lower not in doc_data["title"].lower()
+                    and search_lower not in doc_data["description"].lower()
+                    if "description" in doc_data
+                    else True
+                ):
                     continue
 
             # Prepare result
@@ -339,7 +362,7 @@ class DocumentationAgent(BaseAgent):
                 "category": doc_data["category"],
                 "updated_at": doc_data["updated_at"],
                 "freshness_score": doc_data["freshness_score"],
-                "version": doc_data["version"]
+                "version": doc_data["version"],
             }
 
             # Include content if requested
@@ -347,7 +370,7 @@ class DocumentationAgent(BaseAgent):
                 file_path = Path(doc_data["file_path"])
                 if file_path.exists():
                     try:
-                        with open(file_path, 'r', encoding='utf-8') as f:
+                        with open(file_path, "r", encoding="utf-8") as f:
                             result["content"] = f.read()
                     except Exception as e:
                         result["content"] = f"Error reading file: {e}"
@@ -361,10 +384,7 @@ class DocumentationAgent(BaseAgent):
             "success": True,
             "results": results,
             "total_count": len(results),
-            "filters_applied": {
-                "category": category,
-                "search_term": search_term
-            }
+            "filters_applied": {"category": category, "search_term": search_term},
         }
 
     def _update_registry(self, params: Dict, context: Dict) -> Dict:
@@ -404,22 +424,30 @@ class DocumentationAgent(BaseAgent):
                                 file_path=file_str,
                                 category=category,
                                 created_at=datetime.now(timezone.utc),
-                                updated_at=datetime.fromtimestamp(file_path.stat().st_mtime, timezone.utc),
+                                updated_at=datetime.fromtimestamp(
+                                    file_path.stat().st_mtime, timezone.utc
+                                ),
                                 author="auto_scan",
                                 version="1.0.0",
                                 checksum=current_checksum,
                                 metadata={"auto_generated": True},
                                 freshness_score=1.0,
-                                dependencies=[]
+                                dependencies=[],
                             )
                             registry[doc_id] = asdict(doc_entry)
-                            registry[doc_id]["created_at"] = doc_entry.created_at.isoformat()
-                            registry[doc_id]["updated_at"] = doc_entry.updated_at.isoformat()
+                            registry[doc_id][
+                                "created_at"
+                            ] = doc_entry.created_at.isoformat()
+                            registry[doc_id][
+                                "updated_at"
+                            ] = doc_entry.updated_at.isoformat()
                             updated_count += 1
 
                         elif existing_doc["checksum"] != current_checksum:
                             # Update existing entry
-                            existing_doc["updated_at"] = datetime.now(timezone.utc).isoformat()
+                            existing_doc["updated_at"] = datetime.now(
+                                timezone.utc
+                            ).isoformat()
                             existing_doc["checksum"] = current_checksum
                             existing_doc["freshness_score"] = 1.0
                             updated_count += 1
@@ -430,7 +458,7 @@ class DocumentationAgent(BaseAgent):
             return {
                 "success": True,
                 "updated_entries": updated_count,
-                "registry_size": len(registry)
+                "registry_size": len(registry),
             }
 
         return {"success": False, "error": "No update action specified"}
@@ -439,25 +467,25 @@ class DocumentationAgent(BaseAgent):
     def _load_registry(self) -> Dict:
         """Load documentation registry"""
         if self.docs_registry_file.exists():
-            with open(self.docs_registry_file, 'r') as f:
+            with open(self.docs_registry_file, "r") as f:
                 return json.load(f)
         return {}
 
     def _save_registry(self, registry: Dict):
         """Save documentation registry"""
-        with open(self.docs_registry_file, 'w') as f:
+        with open(self.docs_registry_file, "w") as f:
             json.dump(registry, f, indent=2)
 
     def _load_validation_cache(self) -> Dict:
         """Load validation cache"""
         if self.validation_cache_file.exists():
-            with open(self.validation_cache_file, 'r') as f:
+            with open(self.validation_cache_file, "r") as f:
                 return json.load(f)
         return {}
 
     def _save_validation_cache(self, cache: Dict):
         """Save validation cache"""
-        with open(self.validation_cache_file, 'w') as f:
+        with open(self.validation_cache_file, "w") as f:
             json.dump(cache, f, indent=2)
 
     def _calculate_checksum(self, file_path: Path) -> str:
@@ -484,7 +512,7 @@ class DocumentationAgent(BaseAgent):
                 issues=["File no longer exists"],
                 warnings=[],
                 freshness_score=0.0,
-                last_checked=now
+                last_checked=now,
             )
 
         # Check file integrity
@@ -507,7 +535,7 @@ class DocumentationAgent(BaseAgent):
 
         # Check for basic documentation structure
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             # Basic content checks
@@ -515,8 +543,8 @@ class DocumentationAgent(BaseAgent):
                 warnings.append("Document appears to be very short")
 
             # Check for markdown formatting if it's a markdown file
-            if file_path.suffix in ['.md', '.MD']:
-                if '##' not in content and '###' not in content:
+            if file_path.suffix in [".md", ".MD"]:
+                if "##" not in content and "###" not in content:
                     warnings.append("Markdown document lacks section headers")
 
         except Exception as e:
@@ -530,22 +558,25 @@ class DocumentationAgent(BaseAgent):
             issues=issues,
             warnings=warnings,
             freshness_score=freshness_score,
-            last_checked=now
+            last_checked=now,
         )
 
     def _has_meaningful_content(self, file_path: Path) -> bool:
         """Check if Python file has meaningful content beyond imports"""
-        if file_path.suffix != '.py':
+        if file_path.suffix != ".py":
             return False
 
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
             # Remove imports and basic structure
-            lines = [line.strip() for line in content.split('\n')
-                    if line.strip() and
-                    not line.strip().startswith(('import ', 'from ', '#', '"""', "'''"))]
+            lines = [
+                line.strip()
+                for line in content.split("\n")
+                if line.strip()
+                and not line.strip().startswith(("import ", "from ", "#", '"""', "'''"))
+            ]
 
             # Check if there are meaningful lines
             return len(lines) > 5

@@ -12,15 +12,16 @@ Purpose: Coordinate CFBD advanced features integration (EPA/WPA, recruiting, ros
 
 import logging
 import time
-from typing import Dict, List, Any, Optional, Tuple
 from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple
 
-from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
+from agents.core.agent_framework import AgentCapability, BaseAgent, PermissionLevel
 from agents.meta_agent import meta_agent
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 class CFBDFeaturesCoordinatorAgent(BaseAgent):
     """
@@ -36,10 +37,9 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
     def __init__(self, agent_id: str = "cfbd_features_coordinator"):
         super().__init__(
             agent_id=agent_id,
-            agent_name="CFBD Features Coordinator",
+            name="CFBD Features Coordinator",
             permission_level=PermissionLevel.READ_EXECUTE_WRITE,
-            max_execution_time=1800,  # 30 minutes
-            memory_limit_mb=256
+            tool_loader=None,
         )
 
         # Feature integration status tracking
@@ -47,7 +47,7 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
             "epa_wpa": {"status": "pending", "progress": 0, "last_updated": None},
             "recruiting": {"status": "pending", "progress": 0, "last_updated": None},
             "roster": {"status": "pending", "progress": 0, "last_updated": None},
-            "draft": {"status": "pending", "progress": 0, "last_updated": None}
+            "draft": {"status": "pending", "progress": 0, "last_updated": None},
         }
 
         # Cache for coordination data
@@ -59,7 +59,7 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
             "epa_wpa": ["cfbd_client", "feature_engineering"],
             "recruiting": ["cfbd_client", "talent_analysis"],
             "roster": ["cfbd_client", "team_analysis"],
-            "draft": ["cfbd_client", "player_analysis"]
+            "draft": ["cfbd_client", "player_analysis"],
         }
 
         logger.info(f"CFBD Features Coordinator Agent initialized: {agent_id}")
@@ -70,53 +70,40 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
             AgentCapability(
                 name="coordinate_feature_integration",
                 description="Coordinate integration of CFBD advanced features",
+                permission_required=PermissionLevel.READ_EXECUTE_WRITE,
+                tools_required=["cfbd_client", "feature_engineering"],
+                data_access=["cfbd_api", "training_data", "analytics"],
                 execution_time_estimate=15.0,
-                required_permissions=[PermissionLevel.READ_EXECUTE_WRITE],
-                parameters=["feature_type", "integration_config"],
-                returns={
-                    "status": "string",
-                    "progress": "number",
-                    "integration_plan": "object"
-                }
             ),
             AgentCapability(
                 name="monitor_integration_progress",
                 description="Monitor progress of CFBD feature integration",
+                permission_required=PermissionLevel.READ_ONLY,
+                tools_required=["metrics_monitor"],
+                data_access=["cache_data", "status_reports"],
                 execution_time_estimate=5.0,
-                required_permissions=[PermissionLevel.READ_ONLY],
-                parameters=["feature_types"],
-                returns={
-                    "status": "object",
-                    "progress_report": "object",
-                    "bottlenecks": "list"
-                }
             ),
             AgentCapability(
                 name="coordinate_feature_dependencies",
                 description="Manage dependencies between CFBD features and existing systems",
+                permission_required=PermissionLevel.READ_EXECUTE,
+                tools_required=["dependency_analyzer"],
+                data_access=["system_registry", "configuration"],
                 execution_time_estimate=10.0,
-                required_permissions=[PermissionLevel.READ_EXECUTE],
-                parameters=["feature_mapping", "dependency_analysis"],
-                returns={
-                    "dependency_graph": "object",
-                    "integration_order": "list",
-                    "risk_assessment": "object"
-                }
             ),
             AgentCapability(
                 name="optimize_feature_performance",
                 description="Optimize performance of integrated CFBD features",
+                permission_required=PermissionLevel.READ_EXECUTE,
+                tools_required=["performance_optimizer"],
+                data_access=["metrics_data", "performance_logs"],
                 execution_time_estimate=8.0,
-                required_permissions=[PermissionLevel.READ_EXECUTE],
-                parameters=["performance_metrics", "optimization_targets"],
-                returns={
-                    "optimization_plan": "object",
-                    "expected_improvements": "object"
-                }
-            )
+            ),
         ]
 
-    def _execute_action(self, action: str, parameters: Dict, user_context: Dict) -> Dict:
+    def _execute_action(
+        self, action: str, parameters: Dict, user_context: Dict
+    ) -> Dict:
         """Execute coordinator actions with comprehensive error handling."""
         try:
             if action == "coordinate_feature_integration":
@@ -137,10 +124,12 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
                 "error": str(e),
                 "error_type": type(e).__name__,
                 "agent_id": self.agent_id,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.utcnow().isoformat(),
             }
 
-    def _coordinate_feature_integration(self, parameters: Dict, user_context: Dict) -> Dict:
+    def _coordinate_feature_integration(
+        self, parameters: Dict, user_context: Dict
+    ) -> Dict:
         """Coordinate the integration of specific CFBD features."""
         feature_type = parameters.get("feature_type")
         integration_config = parameters.get("integration_config", {})
@@ -162,18 +151,20 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
                 "status": "blocked",
                 "error": f"Missing dependencies: {missing_deps}",
                 "agent_id": self.agent_id,
-                "timestamp": datetime.utcnow().isoformat()
+                "timestamp": datetime.utcnow().isoformat(),
             }
 
         # Generate integration plan
-        integration_plan = self._generate_integration_plan(feature_type, integration_config)
+        integration_plan = self._generate_integration_plan(
+            feature_type, integration_config
+        )
 
         # Update status
         self.feature_integration_status[feature_type] = {
             "status": "in_progress",
             "progress": 10,
             "last_updated": datetime.utcnow().isoformat(),
-            "plan": integration_plan
+            "plan": integration_plan,
         }
 
         return {
@@ -184,12 +175,16 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
             "estimated_completion": self._estimate_completion_time(feature_type),
             "dependencies_met": True,
             "agent_id": self.agent_id,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.utcnow().isoformat(),
         }
 
-    def _monitor_integration_progress(self, parameters: Dict, user_context: Dict) -> Dict:
+    def _monitor_integration_progress(
+        self, parameters: Dict, user_context: Dict
+    ) -> Dict:
         """Monitor the progress of CFBD feature integrations."""
-        feature_types = parameters.get("feature_types", list(self.feature_integration_status.keys()))
+        feature_types = parameters.get(
+            "feature_types", list(self.feature_integration_status.keys())
+        )
 
         progress_report = {}
         bottlenecks = []
@@ -210,7 +205,7 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
                 "status": status["status"],
                 "progress": detailed_progress,
                 "last_updated": status["last_updated"],
-                "health_score": self._calculate_health_score(feature_type)
+                "health_score": self._calculate_health_score(feature_type),
             }
 
         return {
@@ -219,10 +214,12 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
             "bottlenecks": list(set(bottlenecks)),
             "overall_progress": self._calculate_overall_progress(),
             "agent_id": self.agent_id,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.utcnow().isoformat(),
         }
 
-    def _coordinate_feature_dependencies(self, parameters: Dict, user_context: Dict) -> Dict:
+    def _coordinate_feature_dependencies(
+        self, parameters: Dict, user_context: Dict
+    ) -> Dict:
         """Coordinate dependencies between CFBD features and existing systems."""
         feature_mapping = parameters.get("feature_mapping", {})
         dependency_analysis = parameters.get("dependency_analysis", {})
@@ -241,12 +238,16 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
             "dependency_graph": dependency_graph,
             "integration_order": integration_order,
             "risk_assessment": risk_assessment,
-            "recommendations": self._generate_dependency_recommendations(risk_assessment),
+            "recommendations": self._generate_dependency_recommendations(
+                risk_assessment
+            ),
             "agent_id": self.agent_id,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.utcnow().isoformat(),
         }
 
-    def _optimize_feature_performance(self, parameters: Dict, user_context: Dict) -> Dict:
+    def _optimize_feature_performance(
+        self, parameters: Dict, user_context: Dict
+    ) -> Dict:
         """Optimize performance of integrated CFBD features."""
         performance_metrics = parameters.get("performance_metrics", {})
         optimization_targets = parameters.get("optimization_targets", [])
@@ -270,9 +271,11 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
             "optimization_plan": optimization_plan,
             "expected_improvements": expected_improvements,
             "performance_baseline": performance_metrics,
-            "implementation_timeline": self._estimate_optimization_timeline(optimization_plan),
+            "implementation_timeline": self._estimate_optimization_timeline(
+                optimization_plan
+            ),
             "agent_id": self.agent_id,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.utcnow().isoformat(),
         }
 
     def _check_dependencies(self, dependencies: List[str]) -> List[str]:
@@ -284,7 +287,9 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
                 if dep == "cfbd_client":
                     from src.cfbd_client.unified_client import UnifiedCFBDClient
                 elif dep == "feature_engineering":
-                    from src.features.cfbd_feature_engineering import CFBDFeatureEngineer
+                    from src.features.cfbd_feature_engineering import (
+                        CFBDFeatureEngineer,
+                    )
                 elif dep == "talent_analysis":
                     # Check for talent analysis capabilities
                     pass
@@ -305,44 +310,117 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
         plans = {
             "epa_wpa": {
                 "phases": [
-                    {"phase": "client_enhancement", "duration_days": 3, "tasks": ["Add EPA/WPA methods", "Implement data processing"]},
-                    {"phase": "feature_engineering", "duration_days": 4, "tasks": ["Extend feature schema", "Update ML pipeline"]},
-                    {"phase": "model_integration", "duration_days": 5, "tasks": ["Retrain models", "Validate performance"]},
-                    {"phase": "testing", "duration_days": 2, "tasks": ["Integration tests", "Performance validation"]}
+                    {
+                        "phase": "client_enhancement",
+                        "duration_days": 3,
+                        "tasks": ["Add EPA/WPA methods", "Implement data processing"],
+                    },
+                    {
+                        "phase": "feature_engineering",
+                        "duration_days": 4,
+                        "tasks": ["Extend feature schema", "Update ML pipeline"],
+                    },
+                    {
+                        "phase": "model_integration",
+                        "duration_days": 5,
+                        "tasks": ["Retrain models", "Validate performance"],
+                    },
+                    {
+                        "phase": "testing",
+                        "duration_days": 2,
+                        "tasks": ["Integration tests", "Performance validation"],
+                    },
                 ],
                 "total_duration_days": 14,
-                "priority": "high"
+                "priority": "high",
             },
             "recruiting": {
                 "phases": [
-                    {"phase": "data_enhancement", "duration_days": 4, "tasks": ["Enhance recruiting endpoints", "Add analytics layers"]},
-                    {"phase": "feature_integration", "duration_days": 3, "tasks": ["Create recruiting features", "Integrate with pipeline"]},
-                    {"phase": "dashboard_update", "duration_days": 3, "tasks": ["Update UI components", "Add visualizations"]},
-                    {"phase": "testing", "duration_days": 2, "tasks": ["End-to-end tests", "User acceptance"]}
+                    {
+                        "phase": "data_enhancement",
+                        "duration_days": 4,
+                        "tasks": [
+                            "Enhance recruiting endpoints",
+                            "Add analytics layers",
+                        ],
+                    },
+                    {
+                        "phase": "feature_integration",
+                        "duration_days": 3,
+                        "tasks": [
+                            "Create recruiting features",
+                            "Integrate with pipeline",
+                        ],
+                    },
+                    {
+                        "phase": "dashboard_update",
+                        "duration_days": 3,
+                        "tasks": ["Update UI components", "Add visualizations"],
+                    },
+                    {
+                        "phase": "testing",
+                        "duration_days": 2,
+                        "tasks": ["End-to-end tests", "User acceptance"],
+                    },
                 ],
                 "total_duration_days": 12,
-                "priority": "medium"
+                "priority": "medium",
             },
             "roster": {
                 "phases": [
-                    {"phase": "analytics_enhancement", "duration_days": 3, "tasks": ["Enhance roster endpoints", "Add position analysis"]},
-                    {"phase": "feature_creation", "duration_days": 3, "tasks": ["Create roster features", "Integrate with ML"]},
-                    {"phase": "ui_integration", "duration_days": 2, "tasks": ["Update dashboard", "Add visualizations"]},
-                    {"phase": "testing", "duration_days": 2, "tasks": ["Functional tests", "Performance tests"]}
+                    {
+                        "phase": "analytics_enhancement",
+                        "duration_days": 3,
+                        "tasks": ["Enhance roster endpoints", "Add position analysis"],
+                    },
+                    {
+                        "phase": "feature_creation",
+                        "duration_days": 3,
+                        "tasks": ["Create roster features", "Integrate with ML"],
+                    },
+                    {
+                        "phase": "ui_integration",
+                        "duration_days": 2,
+                        "tasks": ["Update dashboard", "Add visualizations"],
+                    },
+                    {
+                        "phase": "testing",
+                        "duration_days": 2,
+                        "tasks": ["Functional tests", "Performance tests"],
+                    },
                 ],
                 "total_duration_days": 10,
-                "priority": "medium"
+                "priority": "medium",
             },
             "draft": {
                 "phases": [
-                    {"phase": "data_pipeline", "duration_days": 5, "tasks": ["Create draft data pipeline", "Implement tracking"]},
-                    {"phase": "analytics_development", "duration_days": 4, "tasks": ["Develop draft analytics", "Create prediction models"]},
-                    {"phase": "frontend_integration", "duration_days": 3, "tasks": ["Build draft UI", "Add visualizations"]},
-                    {"phase": "testing", "duration_days": 2, "tasks": ["Integration tests", "Model validation"]}
+                    {
+                        "phase": "data_pipeline",
+                        "duration_days": 5,
+                        "tasks": ["Create draft data pipeline", "Implement tracking"],
+                    },
+                    {
+                        "phase": "analytics_development",
+                        "duration_days": 4,
+                        "tasks": [
+                            "Develop draft analytics",
+                            "Create prediction models",
+                        ],
+                    },
+                    {
+                        "phase": "frontend_integration",
+                        "duration_days": 3,
+                        "tasks": ["Build draft UI", "Add visualizations"],
+                    },
+                    {
+                        "phase": "testing",
+                        "duration_days": 2,
+                        "tasks": ["Integration tests", "Model validation"],
+                    },
                 ],
                 "total_duration_days": 14,
-                "priority": "low"
-            }
+                "priority": "low",
+            },
         }
 
         base_plan = plans.get(feature_type, {"phases": [], "total_duration_days": 0})
@@ -356,7 +434,7 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
             "epa_wpa": 14,
             "recruiting": 12,
             "roster": 10,
-            "draft": 14
+            "draft": 14,
         }.get(feature_type, 10)
 
         completion_date = datetime.utcnow() + timedelta(days=duration_days)
@@ -373,8 +451,8 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
                 "planning": min(100, base_progress * 2),
                 "implementation": max(0, min(100, (base_progress - 50) * 2)),
                 "testing": max(0, min(100, (base_progress - 80) * 5)),
-                "deployment": max(0, min(100, (base_progress - 95) * 20))
-            }
+                "deployment": max(0, min(100, (base_progress - 95) * 20)),
+            },
         }
 
         return detailed_progress
@@ -411,19 +489,31 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
         if not self.feature_integration_status:
             return 0.0
 
-        total_progress = sum(status["progress"] for status in self.feature_integration_status.values())
+        total_progress = sum(
+            status["progress"] for status in self.feature_integration_status.values()
+        )
         return total_progress / len(self.feature_integration_status)
 
     def _build_dependency_graph(self, feature_mapping: Dict) -> Dict:
         """Build dependency graph for features."""
         # Simplified dependency graph construction
         return {
-            "nodes": list(feature_mapping.keys()) if feature_mapping else list(self.feature_integration_status.keys()),
+            "nodes": (
+                list(feature_mapping.keys())
+                if feature_mapping
+                else list(self.feature_integration_status.keys())
+            ),
             "edges": [
                 {"from": "cfbd_client", "to": feature}
                 for feature in self.feature_integration_status.keys()
             ],
-            "critical_path": ["cfbd_client", "epa_wpa", "recruiting", "roster", "draft"]
+            "critical_path": [
+                "cfbd_client",
+                "epa_wpa",
+                "recruiting",
+                "roster",
+                "draft",
+            ],
         }
 
     def _determine_integration_order(self, dependency_graph: Dict) -> List[str]:
@@ -440,8 +530,8 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
             "mitigation_strategies": {
                 "epa_wpa": "Implement incremental integration with thorough testing",
                 "data_quality": "Implement comprehensive validation for all new data sources",
-                "performance": "Monitor system load and optimize caching strategies"
-            }
+                "performance": "Monitor system load and optimize caching strategies",
+            },
         }
 
     def _generate_dependency_recommendations(self, risk_assessment: Dict) -> List[str]:
@@ -450,11 +540,13 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
             "Implement EPA/WPA integration first due to high impact",
             "Use parallel integration for low-risk features",
             "Establish comprehensive testing framework",
-            "Monitor system performance throughout integration"
+            "Monitor system performance throughout integration",
         ]
 
         if risk_assessment.get("medium_risk"):
-            recommendations.append("Implement incremental rollout for medium-risk features")
+            recommendations.append(
+                "Implement incremental rollout for medium-risk features"
+            )
 
         return recommendations
 
@@ -467,11 +559,11 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
                     "epa_wpa": 1800,  # 30 minutes
                     "recruiting": 3600,  # 1 hour
                     "roster": 7200,  # 2 hours
-                    "draft": 14400  # 4 hours
+                    "draft": 14400,  # 4 hours
                 },
                 "cache_warmup": "Implement pre-warming for frequently accessed data",
-                "cache_invalidation": "Smart invalidation based on data update frequency"
-            }
+                "cache_invalidation": "Smart invalidation based on data update frequency",
+            },
         }
 
     def _optimize_rate_limiting(self) -> Dict:
@@ -481,8 +573,8 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
             "details": {
                 "priority_queues": "High priority for EPA/WPA data",
                 "batch_requests": "Batch processing for bulk data retrieval",
-                "adaptive_rate_limiting": "Adjust rate limits based on API response times"
-            }
+                "adaptive_rate_limiting": "Adjust rate limits based on API response times",
+            },
         }
 
     def _optimize_feature_processing(self) -> Dict:
@@ -492,8 +584,8 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
             "details": {
                 "parallel_processing": "Process features in parallel where possible",
                 "incremental_updates": "Update only changed features",
-                "memory_optimization": "Implement memory-efficient feature storage"
-            }
+                "memory_optimization": "Implement memory-efficient feature storage",
+            },
         }
 
     def _estimate_optimization_timeline(self, optimization_plan: Dict) -> Dict:
@@ -502,27 +594,35 @@ class CFBDFeaturesCoordinatorAgent(BaseAgent):
             "caching": "2-3 days",
             "rate_limiting": "1-2 days",
             "feature_processing": "3-4 days",
-            "total": "6-9 days"
+            "total": "6-9 days",
         }
+
 
 # Register the agent with Meta Agent
 def register_cfbd_features_coordinator():
     """Register the CFBD Features Coordinator Agent with the Meta Agent."""
     try:
-        registration_result = meta_agent._register_agent({
-            "agent_id": "cfbd_features_coordinator",
-            "agent_name": "CFBD Features Coordinator",
-            "class_name": "CFBDFeaturesCoordinatorAgent",
-            "file_path": "agents/cfbd_features_coordinator_agent.py",
-            "created_by": "system",
-            "capabilities": ["coordinate_feature_integration", "monitor_integration_progress",
-                          "coordinate_feature_dependencies", "optimize_feature_performance"],
-            "dependencies": ["cfbd_client", "feature_engineering", "meta_agent"],
-            "max_execution_time": 1800,
-            "memory_limit_mb": 256,
-            "description": "Coordinates integration of advanced CFBD features (EPA/WPA, recruiting, roster, draft)",
-            "version": "1.0.0"
-        }, {"agent_id": "meta_agent"})
+        registration_result = meta_agent._register_agent(
+            {
+                "agent_id": "cfbd_features_coordinator",
+                "agent_name": "CFBD Features Coordinator",
+                "class_name": "CFBDFeaturesCoordinatorAgent",
+                "file_path": "agents/cfbd_features_coordinator_agent.py",
+                "created_by": "system",
+                "capabilities": [
+                    "coordinate_feature_integration",
+                    "monitor_integration_progress",
+                    "coordinate_feature_dependencies",
+                    "optimize_feature_performance",
+                ],
+                "dependencies": ["cfbd_client", "feature_engineering", "meta_agent"],
+                "max_execution_time": 1800,
+                "memory_limit_mb": 256,
+                "description": "Coordinates integration of advanced CFBD features (EPA/WPA, recruiting, roster, draft)",
+                "version": "1.0.0",
+            },
+            {"agent_id": "meta_agent"},
+        )
 
         logger.info("CFBD Features Coordinator Agent registered successfully")
         return registration_result
@@ -530,6 +630,7 @@ def register_cfbd_features_coordinator():
     except Exception as e:
         logger.error(f"Failed to register CFBD Features Coordinator Agent: {e}")
         return {"status": "error", "error": str(e)}
+
 
 if __name__ == "__main__":
     # Register the agent
@@ -539,9 +640,13 @@ if __name__ == "__main__":
     coordinator = CFBDFeaturesCoordinatorAgent()
 
     # Example: Coordinate EPA/WPA integration
-    result = coordinator._execute_action("coordinate_feature_integration", {
-        "feature_type": "epa_wpa",
-        "integration_config": {"priority": "high", "parallel_processing": True}
-    }, {})
+    result = coordinator._execute_action(
+        "coordinate_feature_integration",
+        {
+            "feature_type": "epa_wpa",
+            "integration_config": {"priority": "high", "parallel_processing": True},
+        },
+        {},
+    )
 
     print("Coordinator result:", result)

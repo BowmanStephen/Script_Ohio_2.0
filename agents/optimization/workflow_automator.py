@@ -8,28 +8,31 @@ Implements automated workflows for football analytics pipeline with:
 - Model ensemble enhancement with parallel processing
 """
 
-import json
-import time
 import asyncio
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any, Callable, Tuple
-from dataclasses import dataclass, asdict
-from enum import Enum
-from concurrent.futures import ThreadPoolExecutor, as_completed
+import json
 import logging
+import time
 import traceback
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+from enum import Enum
 from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional, Tuple
+
+from .context_compression_rules import context_compression_engine
 
 # Import our optimization components
-from .memory_manager import memory_manager, MemoryLevel
-from .context_compression_rules import context_compression_engine
+from .memory_manager import MemoryLevel, memory_manager
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 class WorkflowStatus(Enum):
     """Workflow execution status"""
+
     PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"
@@ -37,16 +40,20 @@ class WorkflowStatus(Enum):
     RETRYING = "retrying"
     CANCELLED = "cancelled"
 
+
 class TaskPriority(Enum):
     """Task priority levels"""
+
     CRITICAL = 1
     HIGH = 2
     NORMAL = 3
     LOW = 4
 
+
 @dataclass
 class WorkflowTask:
     """Represents a workflow task"""
+
     task_id: str
     name: str
     function: Callable
@@ -63,9 +70,11 @@ class WorkflowTask:
     started_at: Optional[datetime] = None
     completed_at: Optional[datetime] = None
 
+
 @dataclass
 class WorkflowDefinition:
     """Represents a workflow definition"""
+
     workflow_id: str
     name: str
     description: str
@@ -75,9 +84,11 @@ class WorkflowDefinition:
     parallel_execution: bool = True
     requires_circuit_breaker: bool = False
 
+
 @dataclass
 class WorkflowExecution:
     """Represents a workflow execution instance"""
+
     execution_id: str
     workflow_id: str
     status: WorkflowStatus
@@ -86,6 +97,7 @@ class WorkflowExecution:
     task_results: Dict[str, Any]
     errors: List[str]
     metrics: Dict[str, Any]
+
 
 class CircuitBreaker:
     """Circuit breaker for CFBD API failures"""
@@ -119,9 +131,12 @@ class CircuitBreaker:
 
             if self.failure_count >= self.failure_threshold:
                 self.state = "OPEN"
-                logger.warning(f"Circuit breaker opened due to {self.failure_count} failures")
+                logger.warning(
+                    f"Circuit breaker opened due to {self.failure_count} failures"
+                )
 
             raise e
+
 
 class WorkflowAutomator:
     """
@@ -150,7 +165,7 @@ class WorkflowAutomator:
             "tasks_failed": 0,
             "total_execution_time": 0,
             "circuit_breaker_trips": 0,
-            "error_recovery_count": 0
+            "error_recovery_count": 0,
         }
 
         # Initialize workflow definitions
@@ -161,7 +176,7 @@ class WorkflowAutomator:
     def _load_config(self, config_path: str) -> Dict[str, Any]:
         """Load workflow configuration"""
         try:
-            with open(config_path, 'r') as f:
+            with open(config_path, "r") as f:
                 config = json.load(f)
             return config.get("workflow_automation", {})
         except (FileNotFoundError, json.JSONDecodeError):
@@ -174,11 +189,15 @@ class WorkflowAutomator:
             "weekly_analysis": {
                 "enabled": True,
                 "timeout_minutes": 45,
-                "max_retry_attempts": 3
+                "max_retry_attempts": 3,
             },
             "error_handling": {
-                "graceful_degradation": ["ml_predictions", "simple_predictions", "massey_predictions"]
-            }
+                "graceful_degradation": [
+                    "ml_predictions",
+                    "simple_predictions",
+                    "massey_predictions",
+                ]
+            },
         }
 
     def _initialize_workflows(self):
@@ -192,7 +211,7 @@ class WorkflowAutomator:
                 args=(),
                 kwargs={},
                 priority=TaskPriority.HIGH,
-                timeout_minutes=15
+                timeout_minutes=15,
             ),
             WorkflowTask(
                 task_id="model_validation",
@@ -202,7 +221,7 @@ class WorkflowAutomator:
                 kwargs={},
                 priority=TaskPriority.HIGH,
                 timeout_minutes=10,
-                dependencies=["cfbd_data_pull"]
+                dependencies=["cfbd_data_pull"],
             ),
             WorkflowTask(
                 task_id="weekly_matchup_analysis",
@@ -212,7 +231,7 @@ class WorkflowAutomator:
                 kwargs={},
                 priority=TaskPriority.NORMAL,
                 timeout_minutes=20,
-                dependencies=["cfbd_data_pull", "model_validation"]
+                dependencies=["cfbd_data_pull", "model_validation"],
             ),
             WorkflowTask(
                 task_id="prediction_generation",
@@ -222,7 +241,7 @@ class WorkflowAutomator:
                 kwargs={},
                 priority=TaskPriority.HIGH,
                 timeout_minutes=15,
-                dependencies=["weekly_matchup_analysis"]
+                dependencies=["weekly_matchup_analysis"],
             ),
             WorkflowTask(
                 task_id="toon_format_output",
@@ -232,7 +251,7 @@ class WorkflowAutomator:
                 kwargs={},
                 priority=TaskPriority.NORMAL,
                 timeout_minutes=5,
-                dependencies=["prediction_generation"]
+                dependencies=["prediction_generation"],
             ),
             WorkflowTask(
                 task_id="archive_results",
@@ -242,8 +261,8 @@ class WorkflowAutomator:
                 kwargs={},
                 priority=TaskPriority.LOW,
                 timeout_minutes=5,
-                dependencies=["toon_format_output"]
-            )
+                dependencies=["toon_format_output"],
+            ),
         ]
 
         self.workflow_definitions["weekly_analysis"] = WorkflowDefinition(
@@ -251,10 +270,12 @@ class WorkflowAutomator:
             name="Weekly Football Analysis",
             description="Complete weekly football analytics pipeline",
             tasks=weekly_tasks,
-            timeout_minutes=self.config.get("weekly_analysis", {}).get("timeout_minutes", 45),
+            timeout_minutes=self.config.get("weekly_analysis", {}).get(
+                "timeout_minutes", 45
+            ),
             auto_retry=True,
             parallel_execution=True,
-            requires_circuit_breaker=True
+            requires_circuit_breaker=True,
         )
 
     def execute_workflow(self, workflow_id: str, **kwargs) -> WorkflowExecution:
@@ -284,7 +305,7 @@ class WorkflowAutomator:
             completed_at=None,
             task_results={},
             errors=[],
-            metrics={}
+            metrics={},
         )
 
         self.active_executions[execution_id] = execution
@@ -318,18 +339,22 @@ class WorkflowAutomator:
                 key=execution_id,
                 value=asdict(execution),
                 level=MemoryLevel.ORCHESTRATOR,
-                expires_in=timedelta(days=7)
+                expires_in=timedelta(days=7),
             )
 
         return execution
 
-    def _execute_workflow_parallel(self, workflow: WorkflowDefinition, execution: WorkflowExecution, **kwargs):
+    def _execute_workflow_parallel(
+        self, workflow: WorkflowDefinition, execution: WorkflowExecution, **kwargs
+    ):
         """Execute workflow tasks in parallel where possible"""
         # Group tasks by dependency level
         task_groups = self._group_tasks_by_dependencies(workflow.tasks)
 
         for group_num, task_group in enumerate(task_groups):
-            logger.info(f"Executing task group {group_num} with {len(task_group)} tasks")
+            logger.info(
+                f"Executing task group {group_num} with {len(task_group)} tasks"
+            )
 
             # Execute tasks in parallel
             futures_to_tasks = {}
@@ -341,17 +366,19 @@ class WorkflowAutomator:
                 task_kwargs = {**kwargs, **task.kwargs}
                 if task.dependencies:
                     for dep_id in task.dependencies:
-                        task_kwargs[f"dep_{dep_id}"] = execution.task_results.get(dep_id)
+                        task_kwargs[f"dep_{dep_id}"] = execution.task_results.get(
+                            dep_id
+                        )
 
                 future = self.executor.submit(
-                    self._execute_task_with_retry,
-                    task,
-                    **task_kwargs
+                    self._execute_task_with_retry, task, **task_kwargs
                 )
                 futures_to_tasks[future] = task
 
             # Wait for tasks to complete
-            for future in as_completed(futures_to_tasks, timeout=workflow.timeout_minutes * 60):
+            for future in as_completed(
+                futures_to_tasks, timeout=workflow.timeout_minutes * 60
+            ):
                 task = futures_to_tasks[future]
 
                 try:
@@ -375,7 +402,9 @@ class WorkflowAutomator:
                     if task.priority == TaskPriority.CRITICAL:
                         raise Exception(f"Critical task {task.task_id} failed: {e}")
 
-    def _execute_workflow_sequential(self, workflow: WorkflowDefinition, execution: WorkflowExecution, **kwargs):
+    def _execute_workflow_sequential(
+        self, workflow: WorkflowDefinition, execution: WorkflowExecution, **kwargs
+    ):
         """Execute workflow tasks sequentially"""
         for task in workflow.tasks:
             logger.info(f"Executing task: {task.name}")
@@ -421,7 +450,7 @@ class WorkflowAutomator:
                     task.retry_count = attempt
 
                 # Apply circuit breaker if required
-                if hasattr(self, '_get_circuit_breaker'):
+                if hasattr(self, "_get_circuit_breaker"):
                     circuit_breaker = self._get_circuit_breaker(task.task_id)
                     result = circuit_breaker.call(task.function, *task.args, **kwargs)
                 else:
@@ -431,7 +460,9 @@ class WorkflowAutomator:
 
             except Exception as e:
                 last_exception = e
-                logger.warning(f"Task {task.task_id} failed (attempt {attempt + 1}): {e}")
+                logger.warning(
+                    f"Task {task.task_id} failed (attempt {attempt + 1}): {e}"
+                )
 
                 # Apply graceful degradation if configured
                 if attempt == task.max_retries:
@@ -440,11 +471,13 @@ class WorkflowAutomator:
                         self.metrics["error_recovery_count"] += 1
                         return degraded_result
 
-                time.sleep(2 ** attempt)  # Exponential backoff
+                time.sleep(2**attempt)  # Exponential backoff
 
         raise last_exception
 
-    def _group_tasks_by_dependencies(self, tasks: List[WorkflowTask]) -> List[List[WorkflowTask]]:
+    def _group_tasks_by_dependencies(
+        self, tasks: List[WorkflowTask]
+    ) -> List[List[WorkflowTask]]:
         """Group tasks by their dependency levels for parallel execution"""
         task_dict = {task.task_id: task for task in tasks}
         groups = []
@@ -475,12 +508,14 @@ class WorkflowAutomator:
 
         return groups
 
-    def _apply_graceful_degradation(self, task_id: str, error: Exception) -> Optional[Any]:
+    def _apply_graceful_degradation(
+        self, task_id: str, error: Exception
+    ) -> Optional[Any]:
         """Apply graceful degradation when a task fails"""
         degradation_strategies = {
             "prediction_generation": self._degrade_prediction_generation,
             "cfbd_data_pull": self._degrade_cfbd_data_pull,
-            "model_validation": self._degrade_model_validation
+            "model_validation": self._degrade_model_validation,
         }
 
         strategy = degradation_strategies.get(task_id)
@@ -496,7 +531,7 @@ class WorkflowAutomator:
             "degradation_applied": True,
             "original_error": str(error),
             "fallback_method": "massey_ratings",
-            "predictions": {"message": "Using Massey ratings as fallback"}
+            "predictions": {"message": "Using Massey ratings as fallback"},
         }
 
     def _degrade_cfbd_data_pull(self, error: Exception) -> Dict[str, Any]:
@@ -505,7 +540,7 @@ class WorkflowAutomator:
             "degradation_applied": True,
             "original_error": str(error),
             "data_source": "cached_data",
-            "data": {"message": "Using cached data as fallback"}
+            "data": {"message": "Using cached data as fallback"},
         }
 
     def _degrade_model_validation(self, error: Exception) -> Dict[str, Any]:
@@ -514,10 +549,12 @@ class WorkflowAutomator:
             "degradation_applied": True,
             "original_error": str(error),
             "validation_result": "skip_validation",
-            "status": "Models validation skipped due to error"
+            "status": "Models validation skipped due to error",
         }
 
-    def _calculate_execution_metrics(self, execution: WorkflowExecution) -> Dict[str, Any]:
+    def _calculate_execution_metrics(
+        self, execution: WorkflowExecution
+    ) -> Dict[str, Any]:
         """Calculate execution metrics"""
         execution_time = (execution.completed_at - execution.started_at).total_seconds()
         successful_tasks = sum(1 for task in execution.task_results.keys())
@@ -526,7 +563,11 @@ class WorkflowAutomator:
             "execution_time_seconds": execution_time,
             "successful_tasks": successful_tasks,
             "failed_tasks": len(execution.errors),
-            "success_rate": successful_tasks / (successful_tasks + len(execution.errors)) if execution.errors else 1.0
+            "success_rate": (
+                successful_tasks / (successful_tasks + len(execution.errors))
+                if execution.errors
+                else 1.0
+            ),
         }
 
     def get_workflow_status(self, execution_id: str) -> Optional[WorkflowExecution]:
@@ -565,7 +606,7 @@ class WorkflowAutomator:
             "games": [],
             "teams": [],
             "ratings": [],
-            "pulled_at": datetime.now().isoformat()
+            "pulled_at": datetime.now().isoformat(),
         }
 
     def _validate_models(self, **kwargs) -> Dict[str, Any]:
@@ -576,7 +617,7 @@ class WorkflowAutomator:
             "ridge_model": {"valid": True, "accuracy": 0.72},
             "xgboost_model": {"valid": True, "accuracy": 0.75},
             "fastai_model": {"valid": True, "accuracy": 0.68},
-            "validated_at": datetime.now().isoformat()
+            "validated_at": datetime.now().isoformat(),
         }
 
     def _analyze_weekly_matchups(self, **kwargs) -> Dict[str, Any]:
@@ -586,7 +627,7 @@ class WorkflowAutomator:
         return {
             "matchups": [],
             "enhanced_features": [],
-            "analysis_completed_at": datetime.now().isoformat()
+            "analysis_completed_at": datetime.now().isoformat(),
         }
 
     def _generate_predictions(self, **kwargs) -> Dict[str, Any]:
@@ -597,7 +638,7 @@ class WorkflowAutomator:
             "ml_predictions": [],
             "ensemble_weights": {"ridge": 0.3, "xgboost": 0.5, "fastai": 0.2},
             "confidence_intervals": [],
-            "generated_at": datetime.now().isoformat()
+            "generated_at": datetime.now().isoformat(),
         }
 
     def _format_toon_output(self, **kwargs) -> Dict[str, Any]:
@@ -610,10 +651,7 @@ class WorkflowAutomator:
             "workflow_output", prediction_data
         )
 
-        return {
-            "toon_data": toon_formatted,
-            "formatted_at": datetime.now().isoformat()
-        }
+        return {"toon_data": toon_formatted, "formatted_at": datetime.now().isoformat()}
 
     def _archive_results(self, **kwargs) -> Dict[str, Any]:
         """Archive workflow results"""
@@ -622,8 +660,9 @@ class WorkflowAutomator:
         return {
             "archived": True,
             "archive_path": f"project_management/archives/{datetime.now().strftime('%Y%m%d')}/",
-            "archived_at": datetime.now().isoformat()
+            "archived_at": datetime.now().isoformat(),
         }
+
 
 # Global workflow automator instance
 workflow_automator = WorkflowAutomator()

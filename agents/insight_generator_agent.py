@@ -638,12 +638,12 @@ class InsightGeneratorAgent(BaseAgent):
                 "data_source": "REST API + Historical Database",
                 "note": "GraphQL functionality replaced with REST API alternatives",
                 "metadata": {
-                    "talent_records": len(talent_data)
-                    if talent_data is not None
-                    else 0,
-                    "recruit_records": len(recruiting_data)
-                    if recruiting_data is not None
-                    else 0,
+                    "talent_records": (
+                        len(talent_data) if talent_data is not None else 0
+                    ),
+                    "recruit_records": (
+                        len(recruiting_data) if recruiting_data is not None else 0
+                    ),
                 },
                 "user_role": user_context.get("detected_role", "analyst"),
             }
@@ -840,9 +840,9 @@ class InsightGeneratorAgent(BaseAgent):
                 "recruiting_sample": recruiting_data[:5] if recruiting_data else [],
                 "ratings_sample": ratings_data[:5] if ratings_data else [],
                 "metadata": {
-                    "recruiting_records": len(recruiting_data)
-                    if recruiting_data
-                    else 0,
+                    "recruiting_records": (
+                        len(recruiting_data) if recruiting_data else 0
+                    ),
                     "ratings_records": len(ratings_data) if ratings_data else 0,
                 },
                 "user_role": user_context.get("detected_role", "analyst"),

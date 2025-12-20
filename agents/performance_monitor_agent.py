@@ -221,9 +221,9 @@ class PerformanceMonitorAgent(BaseAgent):
                 "performance_score": performance_score,
                 "insights": insights,
                 "monitoring_duration_minutes": duration_minutes,
-                "detailed_metrics": self._get_detailed_metrics()
-                if include_detailed
-                else None,
+                "detailed_metrics": (
+                    self._get_detailed_metrics() if include_detailed else None
+                ),
             }
 
         except Exception as e:
@@ -465,18 +465,26 @@ class PerformanceMonitorAgent(BaseAgent):
             memory_percent=psutil.virtual_memory().percent,
             memory_available_gb=psutil.virtual_memory().available / (1024**3),
             disk_usage_percent=psutil.disk_usage("/").percent,
-            disk_io_read_mb=psutil.disk_io_counters().read_bytes / (1024**2)
-            if psutil.disk_io_counters()
-            else 0,
-            disk_io_write_mb=psutil.disk_io_counters().write_bytes / (1024**2)
-            if psutil.disk_io_counters()
-            else 0,
-            network_sent_mb=psutil.net_io_counters().bytes_sent / (1024**2)
-            if psutil.net_io_counters()
-            else 0,
-            network_recv_mb=psutil.net_io_counters().bytes_recv / (1024**2)
-            if psutil.net_io_counters()
-            else 0,
+            disk_io_read_mb=(
+                psutil.disk_io_counters().read_bytes / (1024**2)
+                if psutil.disk_io_counters()
+                else 0
+            ),
+            disk_io_write_mb=(
+                psutil.disk_io_counters().write_bytes / (1024**2)
+                if psutil.disk_io_counters()
+                else 0
+            ),
+            network_sent_mb=(
+                psutil.net_io_counters().bytes_sent / (1024**2)
+                if psutil.net_io_counters()
+                else 0
+            ),
+            network_recv_mb=(
+                psutil.net_io_counters().bytes_recv / (1024**2)
+                if psutil.net_io_counters()
+                else 0
+            ),
             open_files=len(self.process.open_files()) if self.process else 0,
             thread_count=self.process.num_threads() if self.process else 0,
             timestamp=time.time(),
@@ -553,15 +561,17 @@ class PerformanceMonitorAgent(BaseAgent):
             if len(recent_data) >= 2:
                 values = [entry["value"] for entry in recent_data]
                 trend = {
-                    "direction": "increasing"
-                    if values[-1] > values[0]
-                    else "decreasing",
-                    "change_percent": ((values[-1] - values[0]) / values[0]) * 100
-                    if values[0] != 0
-                    else 0,
-                    "volatility": np.std(values) / np.mean(values)
-                    if np.mean(values) != 0
-                    else 0,
+                    "direction": (
+                        "increasing" if values[-1] > values[0] else "decreasing"
+                    ),
+                    "change_percent": (
+                        ((values[-1] - values[0]) / values[0]) * 100
+                        if values[0] != 0
+                        else 0
+                    ),
+                    "volatility": (
+                        np.std(values) / np.mean(values) if np.mean(values) != 0 else 0
+                    ),
                     "data_points": len(recent_data),
                 }
                 trends[metric_name] = trend
@@ -584,9 +594,11 @@ class PerformanceMonitorAgent(BaseAgent):
                     alert = {
                         "metric_name": threshold.metric_name,
                         "current_value": metric_value,
-                        "threshold_value": threshold.warning_threshold
-                        if violation["severity"] == "warning"
-                        else threshold.critical_threshold,
+                        "threshold_value": (
+                            threshold.warning_threshold
+                            if violation["severity"] == "warning"
+                            else threshold.critical_threshold
+                        ),
                         "severity": violation["severity"],
                         "message": violation["message"],
                         "timestamp": time.time(),
@@ -812,34 +824,42 @@ class PerformanceMonitorAgent(BaseAgent):
 
         return {
             "system_metrics": {
-                "load_average": list(psutil.getloadavg())
-                if hasattr(psutil, "getloadavg")
-                else None,
+                "load_average": (
+                    list(psutil.getloadavg()) if hasattr(psutil, "getloadavg") else None
+                ),
                 "boot_time": psutil.boot_time(),
                 "process_count": len(psutil.pids()),
-                "context_switches": psutil.cpu_stats().ctx_switches
-                if hasattr(psutil.cpu_stats(), "ctx_switches")
-                else None,
+                "context_switches": (
+                    psutil.cpu_stats().ctx_switches
+                    if hasattr(psutil.cpu_stats(), "ctx_switches")
+                    else None
+                ),
             },
             "memory_details": {
                 "virtual_memory": dict(psutil.virtual_memory()._asdict()),
-                "swap_memory": dict(psutil.swap_memory()._asdict())
-                if psutil.swap_memory()
-                else None,
+                "swap_memory": (
+                    dict(psutil.swap_memory()._asdict())
+                    if psutil.swap_memory()
+                    else None
+                ),
             },
             "disk_details": {
                 "disk_usage": dict(psutil.disk_usage("/")._asdict()),
-                "disk_io": dict(psutil.disk_io_counters()._asdict())
-                if psutil.disk_io_counters()
-                else None,
+                "disk_io": (
+                    dict(psutil.disk_io_counters()._asdict())
+                    if psutil.disk_io_counters()
+                    else None
+                ),
             },
             "network_details": {
-                "network_io": dict(psutil.net_io_counters()._asdict())
-                if psutil.net_io_counters()
-                else None,
-                "network_connections": len(self.process.connections())
-                if self.process
-                else 0,
+                "network_io": (
+                    dict(psutil.net_io_counters()._asdict())
+                    if psutil.net_io_counters()
+                    else None
+                ),
+                "network_connections": (
+                    len(self.process.connections()) if self.process else 0
+                ),
             },
         }
 

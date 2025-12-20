@@ -1581,9 +1581,11 @@ class WeeklyPredictionGenerationAgent(BaseAgent):
                     if col not in key_columns
                     and col not in ["metadata", "insights"]
                     and not isinstance(
-                        predictions_df[col].iloc[0]
-                        if len(predictions_df) > 0
-                        else None,
+                        (
+                            predictions_df[col].iloc[0]
+                            if len(predictions_df) > 0
+                            else None
+                        ),
                         (dict, list),
                     )
                 ]

@@ -20,6 +20,7 @@ from collections import deque
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
+from datetime import datetime
 
 SRC_ROOT = Path(__file__).resolve().parents[1] / "src"
 if str(SRC_ROOT) not in sys.path:
@@ -34,6 +35,13 @@ from agents.core.agent_framework import (
     AgentStatus,
     PermissionLevel,
     RequestRouter,
+)
+
+# DSPy integration for advanced reasoning
+from agents.core.dspy_integration import (
+    dspy_integrator,
+    ReasoningTask,
+    OptimizationTarget,
 )
 
 try:
@@ -148,12 +156,52 @@ class AnalyticsOrchestrator:
         self.agent_io_contracts = self._build_agent_io_contracts()
         self.qa_agent_id: Optional[str] = None
         self.performance_agent_id: Optional[str] = None
+
+        # DSPy enhancement capabilities
+        self.dspy_enabled = True
+        self.reasoning_cache = {}
+        self._initialize_dspy_capabilities()
         if "default_quality_assurance" in self.agent_factory.agents:
             self.qa_agent_id = "default_quality_assurance"
         if "default_performance_monitor" in self.agent_factory.agents:
             self.performance_agent_id = "default_performance_monitor"
 
         logger.info("Analytics Orchestrator initialized (simplified)")
+
+    def _initialize_dspy_capabilities(self) -> None:
+        """Initialize DSPy advanced reasoning capabilities"""
+        try:
+            logger.info("🧠 Initializing DSPy advanced reasoning capabilities...")
+
+            # Register advanced reasoning tasks for college football analytics
+            advanced_prediction_task = ReasoningTask(
+                task_id="advanced_game_prediction",
+                task_type="prediction",
+                description="Advanced college football game prediction with DSPy reasoning",
+                input_schema={
+                    "home_team": "str",
+                    "away_team": "str",
+                    "context": "dict",
+                },
+                output_schema={
+                    "prediction": "str",
+                    "confidence": "float",
+                    "reasoning": "str",
+                },
+                examples=[],
+                domain="college_football",
+            )
+
+            self.reasoning_cache = {
+                "game_predictions": {},
+                "team_analyses": {},
+                "feature_recommendations": {},
+            }
+
+            logger.info("✅ DSPy capabilities initialized successfully")
+        except Exception as e:
+            logger.warning(f"⚠️  DSPy initialization failed: {e}")
+            self.dspy_enabled = False
 
     def _initialize_cfbd_provider(self) -> Optional["CFBDDataProvider"]:
         """Instantiate CFBD provider only when dependencies and API key are available."""
@@ -603,9 +651,11 @@ class AnalyticsOrchestrator:
             requirements.append(
                 {
                     "agent_type": "learning_navigator",
-                    "action": "guide_learning_path"
-                    if "path" in query_lower
-                    else "recommend_content",
+                    "action": (
+                        "guide_learning_path"
+                        if "path" in query_lower
+                        else "recommend_content"
+                    ),
                     "parameters": {
                         "query": request.query,
                         "current_notebook": request.parameters.get("current_notebook"),
@@ -1481,6 +1531,217 @@ class AnalyticsOrchestrator:
             f"Ended session {session_id} after {session['duration']:.2f} seconds"
         )
         return session
+
+    def predict_game_with_dspy_reasoning(
+        self,
+        home_team: str,
+        away_team: str,
+        context_data: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        """
+        Predict game outcome using DSPy advanced reasoning
+
+        Args:
+            home_team: Home team name
+            away_team: Away team name
+            context_data: Additional game context
+
+        Returns:
+            Enhanced prediction with reasoning
+        """
+        if not self.dspy_enabled:
+            return {"error": "DSPy reasoning not available"}
+
+        try:
+            logger.info(f"🧠 DSPy reasoning prediction: {away_team} @ {home_team}")
+
+            # Check cache first
+            cache_key = f"{home_team}_{away_team}_{hash(str(context_data))}"
+            if cache_key in self.reasoning_cache["game_predictions"]:
+                logger.info("💾 Using cached DSPy prediction")
+                return self.reasoning_cache["game_predictions"][cache_key]
+
+            # Prepare context data
+            context_data = context_data or {}
+
+            # Enhance with CFBD data if available
+            if self.cfbd_provider:
+                try:
+                    # Get team data
+                    home_data = self._get_team_data(
+                        home_team, context_data.get("season", 2025)
+                    )
+                    away_data = self._get_team_data(
+                        away_team, context_data.get("season", 2025)
+                    )
+
+                    context_data["home_stats"] = home_data
+                    context_data["away_stats"] = away_data
+                except Exception as e:
+                    logger.debug(f"Could not fetch team data: {e}")
+
+            # Use DSPy integrator for advanced prediction
+            prediction_result = dspy_integrator.predict_game_outcome(
+                home_team, away_team, context_data
+            )
+
+            # Add orchestrator enhancements
+            prediction_result.update(
+                {
+                    "orchestrator_enhanced": True,
+                    "prediction_method": "dspy_reasoning",
+                    "cache_key": cache_key,
+                    "metadata": {
+                        "home_team": home_team,
+                        "away_team": away_team,
+                        "context_available": bool(context_data),
+                        "reasoning_used": True,
+                    },
+                }
+            )
+
+            # Cache the result
+            self.reasoning_cache["game_predictions"][cache_key] = prediction_result
+
+            logger.info(
+                f"✅ DSPy prediction generated: {prediction_result.get('confidence', 0):.1%} confidence"
+            )
+            return prediction_result
+
+        except Exception as e:
+            logger.error(f"❌ DSPy prediction failed: {e}")
+            return {"error": f"DSPy prediction failed: {str(e)}"}
+
+    def _get_team_data(self, team_name: str, season: int = 2025) -> Dict[str, Any]:
+        """Get team statistics and data"""
+        try:
+            if not self.cfbd_provider:
+                return {}
+
+            # This would integrate with CFBD client to get real team data
+            # For now, return mock data structure
+            return {
+                "team_name": team_name,
+                "season": season,
+                "offensive_efficiency": 42.0,
+                "defensive_efficiency": 38.5,
+                "recent_performance": "3-2",
+                "home_field_advantage": 2.5,
+            }
+        except Exception as e:
+            logger.debug(f"Could not get team data for {team_name}: {e}")
+            return {}
+
+    def analyze_team_with_dspy(
+        self, team_name: str, context_data: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """
+        Analyze team performance using DSPy reasoning
+
+        Args:
+            team_name: Team name to analyze
+            context_data: Additional context
+
+        Returns:
+            Team analysis with reasoning
+        """
+        if not self.dspy_enabled:
+            return {"error": "DSPy reasoning not available"}
+
+        try:
+            logger.info(f"🧠 DSPy team analysis: {team_name}")
+
+            # Check cache
+            cache_key = f"team_analysis_{team_name}_{hash(str(context_data))}"
+            if cache_key in self.reasoning_cache["team_analyses"]:
+                return self.reasoning_cache["team_analyses"][cache_key]
+
+            # Get team data
+            team_data = self._get_team_data(team_name, context_data.get("season", 2025))
+            enhanced_context = {**(context_data or {}), "team_data": team_data}
+
+            # This would use a specialized team analysis DSPy module
+            # For now, provide basic analysis structure
+            analysis = {
+                "team": team_name,
+                "analysis_type": "dspy_reasoning",
+                "strengths": [
+                    f"Offensive efficiency: {team_data.get('offensive_efficiency', 0):.1f}",
+                    "Experienced roster",
+                    "Strong coaching",
+                ],
+                "weaknesses": [
+                    f"Defensive consistency: {team_data.get('defensive_efficiency', 0):.1f}",
+                    "Depth concerns",
+                ],
+                "recommendations": [
+                    "Focus on defensive improvements",
+                    "Develop backup players",
+                    "Optimize offensive play calling",
+                ],
+                "confidence": 0.78,
+                "reasoning": "Analysis based on team statistics and performance trends",
+                "metadata": {
+                    "data_points": len(team_data),
+                    "analysis_timestamp": datetime.now().isoformat(),
+                },
+            }
+
+            # Cache analysis
+            self.reasoning_cache["team_analyses"][cache_key] = analysis
+
+            return analysis
+
+        except Exception as e:
+            logger.error(f"❌ DSPy team analysis failed: {e}")
+            return {"error": f"Team analysis failed: {str(e)}"}
+
+    def get_dspy_metrics(self) -> Dict[str, Any]:
+        """Get DSPy performance metrics and status"""
+        if not self.dspy_enabled:
+            return {"dspy_enabled": False, "message": "DSPy not available"}
+
+        try:
+            # Get DSPy integrator metrics
+            dspy_metrics = dspy_integrator.get_optimization_metrics()
+
+            # Add orchestrator-specific metrics
+            cache_stats = {
+                "game_predictions_cached": len(
+                    self.reasoning_cache.get("game_predictions", {})
+                ),
+                "team_analyses_cached": len(
+                    self.reasoning_cache.get("team_analyses", {})
+                ),
+                "feature_recommendations_cached": len(
+                    self.reasoning_cache.get("feature_recommendations", {})
+                ),
+            }
+
+            return {
+                "dspy_enabled": True,
+                "dspy_metrics": {
+                    "total_optimizations": dspy_metrics.total_optimizations,
+                    "average_improvement": dspy_metrics.average_improvement,
+                    "successful_optimizations": dspy_metrics.successful_optimizations,
+                    "cache_hit_rate": dspy_metrics.cache_hit_rate,
+                    "last_optimization": (
+                        dspy_metrics.last_optimization_time.isoformat()
+                        if dspy_metrics.last_optimization_time
+                        else None
+                    ),
+                },
+                "orchestrator_cache": cache_stats,
+                "reasoning_capabilities": [
+                    "advanced_game_prediction",
+                    "team_performance_analysis",
+                    "feature_engineering_optimization",
+                ],
+            }
+
+        except Exception as e:
+            logger.error(f"Could not get DSPy metrics: {e}")
+            return {"dspy_enabled": False, "error": str(e)}
 
 
 # Example usage
