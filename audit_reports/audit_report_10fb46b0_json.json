@@ -1,0 +1,182 @@
+{
+  "audit_metadata": {
+    "audit_id": "10fb46b0-0cda-4aed-b9da-dab6c8e9e350",
+    "audit_name": "Production Quick Audit 2025-12-18 12:55:19",
+    "start_time": "2025-12-18T12:55:19.934724",
+    "end_time": "2025-12-18T12:55:23.136593",
+    "generated_at": "2025-12-18T12:55:23.137218"
+  },
+  "summary": {
+    "overall_status": "passed",
+    "overall_score": 100.0,
+    "total_checks": 12,
+    "passed_checks": 12,
+    "failed_checks": 0,
+    "warning_checks": 0,
+    "critical_failures": 0,
+    "pass_rate": 100.0
+  },
+  "system_info": {},
+  "checks": [
+    {
+      "check_id": "b4e7dc1d-3105-4268-89dd-ebf69882c36c",
+      "category": "system_integrity",
+      "title": "Python Version Compatibility",
+      "description": "Validate Python version meets requirements (3.13+)",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": true,
+      "validation_command": "python3 --version",
+      "expected_pattern": "Python 3.13",
+      "evidence_count": 0
+    },
+    {
+      "check_id": "371e670f-5a56-46f4-b7e6-2280fe87c32b",
+      "category": "system_integrity",
+      "title": "Core Dependencies Installation",
+      "description": "Validate core dependencies are properly installed",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": true,
+      "validation_command": "python3 -c 'import pandas, numpy, sklearn, xgboost, fastai; print(\"All core dependencies available\")'",
+      "expected_pattern": "All core dependencies available",
+      "evidence_count": 0
+    },
+    {
+      "check_id": "02672a90-c6a4-4bb5-8e53-d5602b8cf970",
+      "category": "system_integrity",
+      "title": "CFBD Client Integration",
+      "description": "Validate CFBD client is properly configured and accessible",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": true,
+      "validation_command": "python3 -c 'from src.cfbd_client.unified_client import UnifiedCFBDClient; print(\"CFBD client available\")'",
+      "expected_pattern": "CFBD client available",
+      "evidence_count": 0
+    },
+    {
+      "check_id": "85eb2f0a-eb64-45e5-b530-cf0a50b550d5",
+      "category": "system_integrity",
+      "title": "Core Directory Structure",
+      "description": "Validate essential project directories exist",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": true,
+      "validation_command": "find . -maxdepth 1 -type d -name 'agents' -o -name 'src' -o -name 'scripts' -o -name 'model_pack'",
+      "expected_pattern": "agents src scripts model_pack",
+      "evidence_count": 0
+    },
+    {
+      "check_id": "49cbf01c-7f74-47ef-aa53-4c21f0980b51",
+      "category": "system_integrity",
+      "title": "Configuration Files",
+      "description": "Validate required configuration files are present",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": true,
+      "validation_command": "find . -maxdepth 1 -name 'CLAUDE.md' -o -name 'requirements.txt' -o -name 'README.md'",
+      "expected_pattern": "CLAUDE.md requirements.txt README.md",
+      "evidence_count": 0
+    },
+    {
+      "check_id": "df031c6d-6832-4e54-b319-ac935731ecef",
+      "category": "system_integrity",
+      "title": "Model Files Availability",
+      "description": "Validate trained model files are present and accessible",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": true,
+      "validation_command": "find model_pack/ -name '*_model_2025.*' -type f",
+      "expected_pattern": "ridge_model_2025.joblib xgb_home_win_model_2025.pkl fastai_home_win_model_2025.pkl",
+      "evidence_count": 0
+    },
+    {
+      "check_id": "f300634b-383b-4f31-ae73-ec28335c815b",
+      "category": "data_pipeline",
+      "title": "CFBD API Key Configuration",
+      "description": "Validate CFBD API key is properly configured",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": true,
+      "validation_command": "python3 -c 'import os; print(\"API Key Present:\" , bool(os.environ.get(\"CFBD_API_KEY\")))'",
+      "expected_pattern": "API Key Present: True",
+      "evidence_count": 0
+    },
+    {
+      "check_id": "8f8c5b83-77e9-4e2e-8c61-84bd348ba3d1",
+      "category": "data_pipeline",
+      "title": "CFBD Client Instantiation",
+      "description": "Validate CFBD unified client can be instantiated",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": true,
+      "validation_command": "python3 -c 'from src.cfbd_client.unified_client import UnifiedCFBDClient; client = UnifiedCFBDClient(); print(\"CFBD client instantiated successfully\")'",
+      "expected_pattern": "CFBD client instantiated successfully",
+      "evidence_count": 0
+    },
+    {
+      "check_id": "ae8c7c02-a529-42a1-96b9-2b44ad6b6844",
+      "category": "data_pipeline",
+      "title": "Master Training Data Availability",
+      "description": "Validate master training data file exists and is accessible",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": true,
+      "validation_command": "python3 -c 'from model_pack.utils.path_utils import get_training_data_file; print(\"Training data:\", get_training_data_file())'",
+      "expected_pattern": "Training data file path returned",
+      "evidence_count": 0
+    },
+    {
+      "check_id": "050f2618-6656-4758-9d0f-43ec7f1ec709",
+      "category": "data_pipeline",
+      "title": "Training Data Structure",
+      "description": "Validate training data has expected structure and features",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": true,
+      "validation_command": "python3 -c 'import pandas as pd; from model_pack.utils.path_utils import get_training_data_file; df = pd.read_csv(get_training_data_file()); print(f\"Shape: {df.shape}, Columns: {len(df.columns)}\")'",
+      "expected_pattern": "Data loaded with expected structure (>= 4000 rows, >= 80 columns)",
+      "evidence_count": 0
+    },
+    {
+      "check_id": "71449567-e5be-439f-8b3f-e2b03a02948d",
+      "category": "model_validation",
+      "title": "Ridge Model Loading",
+      "description": "Validate Ridge regression model can be loaded",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": true,
+      "validation_command": "python3 -c 'import joblib; model = joblib.load(\"model_pack/ridge_model_2025.joblib\"); print(\"Ridge model loaded successfully\")'",
+      "expected_pattern": "Ridge model loaded successfully",
+      "evidence_count": 0
+    },
+    {
+      "check_id": "580bd7d6-87d2-4539-9618-eea775b1844d",
+      "category": "model_validation",
+      "title": "XGBoost Model Loading",
+      "description": "Validate XGBoost model can be loaded",
+      "status": "passed",
+      "score": 100.0,
+      "max_score": 100.0,
+      "critical": true,
+      "validation_command": "python3 -c 'import pickle; model = pickle.load(open(\"model_pack/xgb_home_win_model_2025.pkl\", \"rb\")); print(\"XGBoost model loaded successfully\")'",
+      "expected_pattern": "XGBoost model loaded successfully",
+      "evidence_count": 0
+    }
+  ],
+  "recommendations": [
+    "\ud83c\udf89 EXCELLENT: No critical issues found. System is operating optimally.",
+    "\ud83c\udfc6 OUTSTANDING: System demonstrates exceptional quality and reliability."
+  ]
+}

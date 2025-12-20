@@ -1,0 +1,657 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+Script Ohio 2.0 is a comprehensive college football analytics platform featuring:
+- **Multi-Agent Architecture**: Production-ready 4-tier agent system with 18+ specialized agents following OpenAI best practices
+- **Machine Learning Models**: Three pre-trained models (Ridge Regression, XGBoost, FastAI) for game outcome predictions with ensemble methods
+- **CFBD Integration**: Unified client for CollegeFootballData.com API with rate limiting (6 req/sec) and intelligent caching
+- **Weekly Analysis Pipeline**: Automated weekly matchup analysis and prediction generation with enhanced features
+- **TOON Format Support**: Token-optimized workflow plans for efficient LLM processing (50-70% token reduction)
+- **Web Application**: Modern React 19 frontend with TypeScript, Tailwind CSS v4, and comprehensive data visualization
+- **Z.AI Optimization**: Advanced context compression and hierarchical memory management for 3-4x performance improvements
+
+## Quick Start Commands
+
+### Environment Setup
+```bash
+# Create virtual environment (Python 3.13+ required)
+python3.13 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies (Python and Node.js)
+pip install -r requirements.txt
+cd web_app && npm install && cd ..
+
+# Set API key (required for CFBD integration - replace with your own key)
+export CFBD_API_KEY="your-api-key-here"
+```
+
+### Core Development Tasks
+```bash
+# Run weekly analysis pipeline
+python3 scripts/run_weekly_analysis.py --week 13
+
+# Build training data from CFBD
+python3 scripts/build_training_data_from_cfbd.py --season 2025 --week 14
+
+# Generate predictions for bowls 2025
+python3 scripts/predict_bowls_2025.py --season 2025 --method all --backup-existing --force
+
+# Test agent system
+python3 agents/demo_agent_system.py
+
+# Run all tests
+python3 -m pytest agents/tests -q
+
+# Verify agent system
+python3 agents/test_agent_system.py
+```
+
+### Model Management
+```bash
+# Retrain models with current data
+python3 scripts/retrain_models_current.py
+
+# Integrate new weekly training data
+python3 scripts/integrate_weekly_files.py --season 2025 --weeks 15 --include-postseason
+
+# Roll back training data from backup
+python3 scripts/rollback_integration.py
+```
+
+### Bowl Predictions
+```bash
+# Generate all bowl prediction methods with backup
+python3 scripts/predict_bowls_2025.py --season 2025 --method all --backup-existing --force
+
+# Generate specific method only
+python3 scripts/predict_bowls_2025.py --season 2025 --method ml
+
+# Preview without creating files
+python3 scripts/predict_bowls_2025.py --season 2025 --dry-run
+
+# Check available prediction files
+ls predictions/bowls_2025_predictions_*.json
+```
+
+### Web Application Development
+```bash
+# Navigate to web app directory
+cd web_app
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Run tests
+npm run test
+
+# Type checking
+npm run typecheck
+
+# Linting
+npm run lint
+
+# Preview production build
+npm run preview
+```
+
+### Code Quality & Safety
+```bash
+# Syntax validation (all Python files)
+find . -name "*.py" -exec python3 -m py_compile {} \;
+
+# Type checking
+mypy agents/ src/ scripts/
+
+# Linting (no changes)
+make lint
+
+# Safe code improvements with backup
+make improve-with-backup
+
+# Security audit
+pip-audit
+
+# Comprehensive test coverage
+pytest --cov=agents --cov-report=term-missing
+
+# Data architecture validation
+python3 scripts/maintenance/02_validation_check.py
+
+# TOON format validation (required before plan creation)
+python3 scripts/smoke_test_toon.py
+
+# Complete system health check
+make health-check
+```
+
+### Makefile Quick Reference
+```bash
+# Show all available targets
+make help
+
+# Safe improvements (recommended)
+make improve-with-backup    # Format + sort imports with backup
+make improve-suggest         # Show suggestions without changes
+
+# Validation and testing
+make syntax-validate         # Check Python syntax
+make comprehensive-check     # Full validation suite
+make safe-report            # Generate safety report
+
+# AI assistants
+make ai-assistant           # Easy-to-use AI assistant
+make smart-ai              # Interactive AI assistant
+make smart CMD='task'      # Single AI command
+```
+
+## Architecture Overview
+
+### Super AI Agent Architecture (4-Tier System)
+
+The project implements a comprehensive 4-tier agent architecture following OpenAI agents.md best practices:
+
+**Tier 1: Meta Layer** - Master Control
+- **Meta Agent** (`agents/meta_agent.py`): Ultimate authority preventing agent proliferation
+  - Agent lifecycle management (approve/create/modify/deactivate agents)
+  - Resource allocation and load balancing (max 20 agents enforced)
+  - System health monitoring and performance tracking
+  - Audit trails and compliance enforcement
+
+**Tier 2: Orchestrator Level** - Coordination & Management
+- **Analytics Orchestrator**: Routes analytical requests to domain specialists
+- **Project Management Agent** (`agents/project_management_agent.py`): Plans, progress tracking, TOON support
+- **Documentation Agent** (`agents/documentation_agent.py`): Knowledge base, freshness validation
+
+**Tier 3: Domain Specialists** - 15+ Specialized Agents
+- **Model Execution Engine**: ML predictions and ensemble methods
+- **CFBD Integration Agent**: Rate-limited API access with caching
+- **Insight Generator**: Advanced analytics and visualizations
+- **Quality Assurance Agent**: System validation and health checks
+- [Full list in AGENTS.md agent cheat sheet]
+
+**Tier 4: Utility Sub-Agents** - System Services
+- **Validation Sub-Agent**: Quality control and data validation
+- **Logging Sub-Agent**: Comprehensive audit trails
+- **Cache Manager**: Performance optimization
+- **Error Handler**: Recovery and retry logic
+
+**Core Framework** (`agents/core/`):
+- `agent_framework.py`: BaseAgent class with 4-level permission system
+- `context_manager.py`: Context compression and role detection
+- `tool_loader.py`: Dynamic tool loading and management
+
+All agents inherit from `BaseAgent` with strict separation of concerns:
+```python
+from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
+
+class CustomAgent(BaseAgent):
+    def __init__(self, agent_id: str):
+        super().__init__(agent_id, "Agent Name", PermissionLevel.READ_EXECUTE)
+
+    def _define_capabilities(self) -> List[AgentCapability]:
+        return [AgentCapability(name="action", ...)]
+
+    def _execute_action(self, action: str, parameters: Dict, user_context: Dict) -> Dict:
+        # Implementation with comprehensive error handling
+        pass
+```
+
+### Data Pipeline Architecture
+
+**Data Flow**:
+1. **CFBD API** → Raw data with rate limiting (6 req/sec)
+2. **Feature Engineering** → 86 opponent-adjusted features
+3. **Model Training** → Three ensemble models (Ridge, XGBoost, FastAI)
+4. **Weekly Analysis** → Automated predictions and reports
+
+**NEW Data Organization** (83.3% Migration Complete - Dec 2025):
+- **Master Training Data**: `data/processed/training/master_training_data_v2.csv` (5,250 rows, 2016-2025) ⭐
+- **Production Models**: `models/production/*_2025_v2.{joblib,pkl}` (Ridge, XGBoost, FastAI) ⭐
+- **Historical Archive**: `data/raw/historical/games_1869_2025.csv` ⭐
+- **Predictions**: `data/outputs/predictions/2025/bowl_season/` ⭐
+- **Legacy Locations**: Still accessible for backward compatibility
+
+**Migration Validation**: Run `python3 scripts/maintenance/02_validation_check.py`
+
+### Model System
+
+**Production Models** (NEW locations):
+- `models/production/ridge_regression_2025_v2.joblib`: Ridge regression model ⭐
+- `models/production/xgboost_classifier_2025_v2.pkl`: XGBoost classifier ⭐
+- `models/production/fastai_neural_net_2025_v2.pkl`: FastAI neural network ⭐
+
+**Feature Engineering**:
+- 86 opponent-adjusted features to prevent data leakage
+- Normalized stat lines (yards per play, success rates, etc.)
+- Market-based features (betting lines, consensus picks)
+- Historical performance metrics
+
+## Technology Stack
+
+### Backend Technologies
+- **Python 3.13+**: Core language requirement
+- **Machine Learning**: scikit-learn, XGBoost, FastAI, pandas, numpy
+- **Data Science**: matplotlib, seaborn, plotly, shap
+- **API Integration**: cfbd (CollegeFootballData.com client)
+- **Testing**: pytest with comprehensive test suite
+- **Code Quality**: black, mypy, ruff, bandit, pip-audit
+
+### Frontend Stack
+- **React 19**: Modern React with TypeScript and strict type checking
+- **Build Tools**: Vite 7.2.4 for fast development and optimized builds
+- **UI Components**: Radix UI primitives with comprehensive accessibility, Lucide React icons
+- **Data Visualization**: Recharts 3.4.1 for interactive charts and graphs
+- **Testing**: Vitest 2.1.8 with Testing Library for component testing
+- **Type Checking**: TypeScript 5.9+ with path aliases (@/* mapping)
+- **State Management**: React hooks and context for optimal performance
+- **Styling**: Tailwind CSS v4 with PostCSS and custom component variants
+
+### Web Application Structure
+```
+web_app/src/
+├── components/
+│   ├── ui/              # Reusable UI primitives (button, card, tabs, etc.)
+│   ├── simulator/       # ML prediction simulator components
+│   └── ErrorBoundary.tsx # Error handling for React components
+├── data/                # Static data and TypeScript types
+├── utils/               # Utility functions (API client, prediction logic)
+├── config/              # Configuration constants
+├── types.ts             # Global TypeScript type definitions
+└── App.tsx              # Main application component
+```
+
+## Key Development Patterns
+
+### CFBD Integration
+Always use the unified client with proper rate limiting and intelligent caching:
+
+```python
+from src.cfbd_client.unified_client import UnifiedCFBDClient
+import time
+
+client = UnifiedCFBDClient()
+# Rate limiting: 6 req/sec with burst protection and intelligent caching
+games = client.get_games(year=2025, week=13)  # Automatically cached for 1 hour
+```
+
+**Rate Limiting and Caching**:
+- 6 req/sec base rate with burst protection
+- Intelligent caching by data type (games cache 1 hour, player stats cache 30 min)
+- Automatic retry with exponential backoff
+- Performance metrics available via `client.get_performance_metrics()`
+
+### Agent Development Patterns
+All agents must inherit from BaseAgent and register with Meta Agent:
+
+```python
+from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
+from agents.meta_agent import meta_agent
+
+class CustomAgent(BaseAgent):
+    def __init__(self, agent_id: str):
+        super().__init__(agent_id, "Custom Agent", PermissionLevel.READ_EXECUTE)
+        self.max_execution_time = 300  # 5 minutes
+        self.memory_limit_mb = 100
+
+    def _define_capabilities(self) -> List[AgentCapability]:
+        return [
+            AgentCapability(
+                name="primary_action",
+                description="Main functionality of this agent",
+                execution_time_estimate=5.0,
+                required_permissions=[PermissionLevel.READ_EXECUTE],
+                parameters=["input_data", "options"],
+                returns={"status": "string", "results": "object"}
+            )
+        ]
+
+    def _execute_action(self, action: str, parameters: Dict, user_context: Dict) -> Dict:
+        try:
+            # Implementation with comprehensive error handling
+            if action == "primary_action":
+                result = self._perform_primary_action(parameters)
+                return {
+                    "status": "success",
+                    "data": result,
+                    "execution_time": time.time(),
+                    "agent_id": self.agent_id
+                }
+            else:
+                raise ValueError(f"Unknown action: {action}")
+        except Exception as e:
+            return {
+                "status": "error",
+                "error": str(e),
+                "error_type": type(e).__name__,
+                "agent_id": self.agent_id
+            }
+
+# Register with Meta Agent (required)
+registration_result = meta_agent._register_agent({
+    "agent_id": "custom_agent",
+    "agent_name": "Custom Agent",
+    "class_name": "CustomAgent",
+    "file_path": "agents/custom_agent.py",
+    "created_by": "developer_name",
+    "capabilities": ["primary_action"],
+    "dependencies": ["cfbd_integration"],
+    "max_execution_time": 300,
+    "memory_limit_mb": 100
+}, {"agent_id": "meta_agent"})
+```
+
+### TOON Format Integration
+Use TOON format for LLM responses with uniform arrays to achieve 50-70% token reduction:
+
+```python
+from src.toon_format import encode, decode
+
+# Convert JSON to TOON format
+data = {
+    "games": [
+        {"id": 401752911, "home": "Oregon", "away": "USC", "predicted_margin": -1.61},
+        {"id": 401752912, "home": "Alabama", "away": "Georgia", "predicted_margin": 3.2}
+    ]
+}
+
+toon_output = encode(data)
+# Output:
+# games[2]{id,home,away,predicted_margin}:
+#   401752911,Oregon,USC,-1.61
+#   401752912,Alabama,Georgia,3.2
+
+# Convert back to JSON
+json_data = decode(toon_output)
+```
+
+**TOON Usage Guidelines**:
+- Use for agent responses with uniform arrays (same structure for all objects)
+- Use `[N]` format for array headers (never `[#N]` per v2.0 spec)
+- Quote strings that match keywords or contain delimiters
+- Achieves 50-70% token reduction for suitable data structures
+
+### Data Access Patterns
+Use the NEW organized data structure (recommended):
+
+```python
+# NEW Master training data
+import pandas as pd
+training_data = pd.read_csv('data/processed/training/master_training_data_v2.csv')
+
+# NEW Production models
+import joblib, pickle
+ridge_model = joblib.load('models/production/ridge_regression_2025_v2.joblib')
+xgb_model = pickle.load(open('models/production/xgboost_classifier_2025_v2.pkl', 'rb'))
+
+# NEW Historical data
+historical_games = pd.read_csv('data/raw/historical/games_1869_2025.csv')
+
+# NEW Predictions
+import json
+predictions = json.load(open('data/outputs/predictions/2025/bowl_season/bowls_2025_predictions_ml.json'))
+```
+
+## File Structure & Conventions
+
+### Directory Organization (NEW structure as of Dec 2025)
+
+```
+# REORGANIZED DATA STRUCTURE (83.3% Complete)
+data/                           # ALL DATA REORGANIZED ⭐
+├── raw/                        # External sources (read-only)
+│   ├── cfbd/                   # CFBD API snapshots
+│   └── historical/             # Master archives ⭐
+├── processed/                  # Feature engineering
+│   ├── training/              # ML datasets ⭐
+│   │   ├── master_training_data_v2.csv  # PRIMARY ⭐
+│   │   └── weekly_updates/     # Weekly data
+│   ├── features/              # Feature datasets
+│   └── enhanced/              # Processed features
+├── outputs/                   # Results & predictions
+│   ├── predictions/           # Model outputs ⭐
+│   │   └── 2025/bowl_season/   # Current season
+│   └── analysis/              # Reports
+└── metadata/                  # Data definitions
+
+models/                         # PRODUCTION ML SYSTEM ⭐
+├── production/                # Active models ⭐
+│   ├── ridge_regression_2025_v2.joblib    # PRIMARY ⭐
+│   ├── xgboost_classifier_2025_v2.pkl     # PRIMARY ⭐
+│   └── fastai_neural_net_2025_v2.pkl      # PRIMARY ⭐
+├── components/                # Model parts
+├── training/                  # Training artifacts
+└── legacy/                    # Archived versions
+
+# LEGACY STRUCTURE (preserved during transition)
+model_pack/                    # OLD ML models and data
+├── updated_training_data.csv  # Old master dataset
+├── *_model_2025.*             # Old pre-trained models
+└── *.ipynb                    # Modeling notebooks
+
+predictions/                   # OLD prediction outputs
+├── bowls_2025_predictions_*.json
+└── *_backup_*.json
+
+agents/                        # Multi-agent system
+├── core/                     # Agent framework
+├── tests/                    # Comprehensive test suite
+└── *.py                      # Individual agents
+
+src/                          # Python modules
+├── cfbd_client/             # CFBD API integration
+├── features/                # Feature engineering
+├── models/                  # Model execution
+└── utils/                   # Shared utilities
+
+scripts/                      # Automation and utility scripts
+├── run_weekly_analysis.py   # Main weekly pipeline
+├── predict_bowls_2025.py    # Bowl predictions
+├── maintenance/             # NEW maintenance scripts ⭐
+│   ├── 01_data_migration.py # Data migration tool
+│   └── 02_validation_check.py # Validation tool
+└── [100+ specialized scripts]
+
+starter_pack/                 # Educational notebooks
+web_app/                      # React frontend
+```
+
+### File Naming Conventions
+- **Agents**: `{domain}_agent.py` (e.g., `learning_navigator_agent.py`)
+- **Scripts**: `{action}_{target}.py` (e.g., `predict_bowls_2025.py`)
+- **Models**: `{model_type}_model_2025.{ext}` (e.g., `ridge_model_2025.joblib`)
+- **Predictions**: `bowls_2025_predictions_{method}.json` (e.g., `bowls_2025_predictions_ml.json`)
+- **Backups**: `bowls_2025_predictions_{method}_backup_{timestamp}.json`
+- **Data**: `training_data_2025_week*.csv`, `week{XX}_features_86.csv`
+
+## Code Quality Standards
+
+### Python Standards
+- **Style**: PEP 8, 4-space indentation, 88-character line length
+- **Type Hints**: Preferred in new modules (using `typing` module)
+- **Docstrings**: Google-style for all functions and classes
+- **Error Handling**: Comprehensive with specific exception types
+
+### Testing Requirements
+- **Unit Tests**: All agents must have tests in `agents/tests/`
+- **Integration Tests**: End-to-end workflow validation
+- **Performance Tests**: Model execution and API rate limiting
+- **Syntax Validation**: 100% pass rate required
+
+```bash
+# Run complete test suite
+python3 -m pytest agents/tests -q
+python3 agents/test_agent_system.py
+```
+
+### Security Requirements
+- **API Keys**: Never hardcode, use environment variables
+- **Input Validation**: Validate all external inputs
+- **Rate Limiting**: Strict adherence to CFBD API limits
+- **Data Encryption**: Sensitive data encrypted at rest
+
+## Important Notes
+
+### Environment Variables
+- `CFBD_API_KEY`: Required for CollegeFootballData.com API access
+- Set via `export CFBD_API_KEY="your-key"` or in `.env` file
+
+### Rate Limiting & API Usage
+- **CFBD API**: 6 requests per second base rate with burst protection
+- Use `time.sleep(0.17)` between requests in loops
+- Unified client includes automatic rate limiting and intelligent caching
+- GraphQL requests (Tier 3+): 30 req/sec with different rate limits
+- Performance monitoring: `client.get_performance_metrics()`
+
+### Model Dependencies & Loading
+- **Pydantic v1** required for CFBD compatibility (not v2)
+- **FastAI model** uses mock on load due to pickle protocol issues (known limitation)
+- **Ridge and XGBoost models** load correctly with joblib/pickle
+- Model performance benchmarks: XGBoost (43.1% accuracy), Ensemble (44.2% accuracy)
+
+### Data Architecture (Dec 2025 Reorganization)
+- **NEW Master Training Data**: `data/processed/training/master_training_data_v2.csv` (5,250 rows, 2016-2025)
+- **NEW Production Models**: `models/production/*_2025_v2.*` (verified 83.3% migration success)
+- **Migration Validation**: Run `python3 scripts/maintenance/02_validation_check.py`
+- **Legacy Compatibility**: Old paths still work during transition period
+- **86 opponent-adjusted features prevent data leakage
+- **Professional naming**: `{purpose}_{entity}_{version}.{ext}` format
+- **Data Integrity**: 100% checksum-verified migration with zero data loss
+
+### Agent System Limits & Governance
+- **Meta Agent**: Enforces 20-agent hard limit (currently at 9% capacity)
+- **Resource Allocation**: Automatic load balancing and memory management
+- **Permission Levels**: READ_ONLY, READ_EXECUTE, READ_EXECUTE_WRITE, ADMIN
+- **Agent Registration**: Required for all new agents via Meta Agent
+- **Performance Monitoring**: Real-time metrics and optimization recommendations
+- **Audit Trails**: Comprehensive logging for all agent activities
+
+## Common Workflows
+
+### Adding New Weekly Analysis
+```bash
+# 1. Pull latest data
+python3 scripts/cfbd_pull.py --season 2025 --week 15
+
+# 2. Generate features
+python3 scripts/build_training_data_from_cfbd.py --season 2025 --week 15
+
+# 3. Run analysis pipeline
+python3 scripts/run_weekly_analysis.py --week 15
+
+# 4. Verify outputs
+ls predictions/week15/
+ls data/weekly/week15/enhanced/
+```
+
+### Model Retraining
+```bash
+# 1. Integrate new data
+python3 scripts/integrate_weekly_files.py --season 2025 --weeks 15
+
+# 2. Retrain models
+python3 scripts/retrain_models_current.py
+
+# 3. Validate performance
+python3 scripts/validate_model_performance.py
+```
+
+### Bowl Predictions
+```bash
+# 1. Generate all bowl predictions (ML, Massey, Simple)
+python3 scripts/predict_bowls_2025.py --season 2025 --method all --backup-existing --force
+
+# 2. Preview predictions without creating files
+python3 scripts/predict_bowls_2025.py --season 2025 --dry-run
+
+# 3. Generate specific method only
+python3 scripts/predict_bowls_2025.py --season 2025 --method ml
+
+# 4. Verify prediction files
+ls predictions/bowls_2025_predictions_*.json
+
+# 5. Start web app to serve predictions
+python3 web_app/app.py
+```
+
+### Agent Development
+Follow these patterns for new agents (requires Meta Agent approval):
+
+```bash
+# 1. Create agent inheriting from BaseAgent
+# 2. Define capabilities with execution time estimates
+# 3. Implement _execute_action() with comprehensive error handling
+# 4. Add tests in agents/tests/
+# 5. Register with Meta Agent for system integration
+python3 -c "from agents.meta_agent import meta_agent; result = meta_agent._register_agent({...})"
+# 6. Run validation
+python3 -m pytest agents/tests/test_new_agent.py -q
+```
+
+## Documentation References
+
+- **Agent Development**: `AGENTS.md` - Complete framework documentation and agent cheat sheet
+- **Data Organization**: `docs/DATA_ORGANIZATION.md` - File structure and access patterns
+- **TOON Format**: `docs/TOON_FORMAT_GUIDE.md` - Token optimization guide
+- **Security**: `docs/SECURITY_BEST_PRACTICES.md` - Complete security guidelines
+- **Architecture**: `docs/ARCHITECTURE_OVERVIEW.md` - System design and runbooks
+- **Cursor Integration**: `.cursorrules` - Development environment patterns and AI assistance
+
+## Implementation Status & System Quality
+
+### System Health
+- **Overall Grade**: A+ system, production-ready
+- **Agent System**: 95% complete, 18+ specialized agents operational
+- **Code Quality**: 100% syntax validation across all Python files
+- **Test Coverage**: Comprehensive pytest suite with smoke tests
+- **Security**: Comprehensive security best practices implemented
+
+### Model Status
+- **Training Data**: 4,989 games (2016-2025, Week 5+, FBS only)
+- **Features**: 86 opponent-adjusted features preventing data leakage
+- **Model Files**:
+  - `ridge_model_2025.joblib`: ✓ Loads correctly
+  - `xgb_home_win_model_2025.pkl`: ✓ Loads correctly
+  - `fastai_home_win_model_2025.pkl`: ⚠️ Uses mock due to pickle protocol issues
+
+### Important Notes
+- FastAI model warnings expected (placeholder pickle); ridge/XGB models load correctly
+- `agents/system/` directories deprecated - see MIGRATION_GUIDE.md
+- Pydantic v1 required for CFBD compatibility (not v2)
+
+## Planning & Development Workflow
+
+### Default Planning Behavior
+When the user says "make a plan", "ship MVP", "create a plan", or requests any planning/coordination task, use the structured Coordinator + Sandbox format:
+
+1. **Reality Check**: Start with Green (Working), Red (Blocked), Unknown discovery
+2. **YAML Frontmatter**: Include todos with status tracking
+3. **Architecture Overview**: Explain coordinator + subagent pattern
+4. **Phase-by-Phase Structure**: Phase 0 (Discovery), Implementation phases, Final (Verification)
+5. **File Scope Enforcement**: List exact files before editing, stop if > N files
+6. **Acceptance Gates**: Define verification commands that must pass
+7. **Success Criteria**: Measurable outcomes as checkboxes
+
+### TOON Plan Requirements
+- Run `python3 scripts/smoke_test_toon.py` before creating plans
+- Validate plan structure: `python3 scripts/plan_to_workflow.py plan.md --toon --validate-only`
+- Use uniform arrays for maximum token savings
+- Array headers MUST use `[N]` format (never `[#N]`) per v2.0 spec
+
+### Repository-Specific Rules
+- **Do NOT touch `agents/`** unless explicitly requested or test failing
+- **Prefer snapshot-based data refresh** for CFBD work (deterministic)
+- **Prefer Massey ratings** for bowls MVP predictions (already tested)
+- **Use `UnifiedCFBDClient`** from `src/cfbd_client/unified_client.py`
+- **Rate limit**: 6 req/sec → `time.sleep(0.17)` between requests
+- **Data Structure**: Use NEW organized structure (`data/`, `models/`) over legacy paths
+- **Script Updates**: When updating scripts, prioritize new data structure paths

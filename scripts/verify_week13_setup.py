@@ -94,7 +94,7 @@ def verify_week12_results() -> tuple[bool, list[str]]:
 def verify_training_data() -> tuple[bool, list[str]]:
     """Verify training data includes Week 12"""
     messages = []
-    training_path = "model_pack/updated_training_data.csv"
+    training_path = "data/processed/training/master_training_data_v2.csv"
 
     if not os.path.exists(training_path):
         return False, [f"❌ Training data not found: {training_path}"]
@@ -121,9 +121,9 @@ def verify_models() -> tuple[bool, list[str]]:
     """Verify model files exist and are loadable"""
     messages = []
     model_files = [
-        ("model_pack/ridge_model_2025.joblib", "Ridge model"),
-        ("model_pack/xgb_home_win_model_2025.pkl", "XGBoost model"),
-        ("model_pack/fastai_home_win_model_2025.pkl", "FastAI model"),
+        ("models/production/ridge_regression_2025_v2.joblib", "Ridge model"),
+        ("models/production/xgboost_classifier_2025_v2.pkl", "XGBoost model"),
+        ("models/production/fastai_neural_net_2025_v2.pkl", "FastAI model"),
     ]
 
     all_exist = True
@@ -141,11 +141,11 @@ def verify_models() -> tuple[bool, list[str]]:
             import joblib
 
             # Test Ridge
-            ridge = joblib.load("model_pack/ridge_model_2025.joblib")
+            ridge = joblib.load("models/production/ridge_regression_2025_v2.joblib")
             messages.append("✅ Ridge model loads successfully")
 
             # Test XGBoost
-            with open("model_pack/xgb_home_win_model_2025.pkl", "rb") as f:
+            with open("models/production/xgboost_classifier_2025_v2.pkl", "rb") as f:
                 xgb = pickle.load(f)
             messages.append("✅ XGBoost model loads successfully")
 
@@ -185,7 +185,7 @@ def verify_directories() -> tuple[bool, list[str]]:
     messages = []
     directories = [
         ("data/week13/enhanced", "Week 13 enhanced data directory"),
-        ("analysis/week13", "Week 13 analysis directory"),
+        ("predictions/week${WEEK:-13}/legacy/", "Week 13 analysis directory"),
         ("predictions/week13", "Week 13 predictions directory"),
     ]
 

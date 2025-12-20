@@ -274,9 +274,9 @@ class DataLoaderService:
             "games": list(games.values()),
             "playoff_implications": playoff_implications,
             "top_matchups": enhanced.get("top_matchups", {}).get("top_10", []),
-            "power_rankings": rankings_df.to_dict("records")
-            if not rankings_df.empty
-            else [],
+            "power_rankings": (
+                rankings_df.to_dict("records") if not rankings_df.empty else []
+            ),
         }
 
         logger.info(
@@ -1105,7 +1105,8 @@ class MasterReportAssembler:
                 unified_data.get("power_rankings", [])
             )
         )
-        html_parts.append(f"""        <section id="recommendations" class="mb-5">
+        html_parts.append(
+            f"""        <section id="recommendations" class="mb-5">
             <h2 class="mb-4">Strategic Recommendations</h2>
             <div class="card">
                 <div class="card-body">
@@ -1133,7 +1134,8 @@ class MasterReportAssembler:
                 </div>
             </div>
         </section>
-""")
+"""
+        )
         html_parts.append(self.structure_gen.generate_html_footer())
 
         return "\n".join(html_parts)

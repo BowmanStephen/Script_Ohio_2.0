@@ -112,9 +112,9 @@ class PerformanceValidator:
             "total_size": total_size,
             "total_size_kb": total_size / 1024,
             "bundle_count": len(bundles),
-            "largest_bundle": max(bundles.items(), key=lambda x: x[1])[0]
-            if bundles
-            else None,
+            "largest_bundle": (
+                max(bundles.items(), key=lambda x: x[1])[0] if bundles else None
+            ),
             "largest_size_kb": (max(bundles.values()) / 1024) if bundles else 0,
         }
 

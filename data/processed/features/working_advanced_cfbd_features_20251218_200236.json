@@ -1,0 +1,16 @@
+{
+  "generated_at": "2025-12-18T20:02:36.534872",
+  "season": 2025,
+  "method": "working_cfbd_integration",
+  "data_sources": [
+    "team_talent",
+    "ratings",
+    "games_analysis",
+    "fbs_teams_list"
+  ],
+  "total_teams": 0,
+  "features_data": {
+    "team_data": {},
+    "advanced_ratings": {}
+  }
+}

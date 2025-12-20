@@ -1,0 +1,584 @@
+version: '3.8'
+
+# Networks for agent communication
+networks:
+  orchestration-network:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+  data-network:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+  analytics-network:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16
+  external-network:
+    driver: bridge
+    internal: false
+
+# Volumes for data persistence
+volumes:
+  agent-registry:
+    driver: local
+  model-storage:
+    driver: local
+  data-storage:
+    driver: local
+  logs:
+    driver: local
+  redis-data:
+    driver: local
+  postgres-data:
+    driver: local
+
+# Services
+services:
+  # Redis for caching and messaging
+  redis:
+    image: redis:7-alpine
+    container_name: agents-redis
+    networks:
+      - orchestration-network
+      - data-network
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  # PostgreSQL for agent registry and metadata
+  postgres:
+    image: postgres:15-alpine
+    container_name: agents-postgres
+    networks:
+      - orchestration-network
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: agents
+      POSTGRES_USER: agentuser
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    secrets:
+      - db_password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agentuser -d agents"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  # Tier 1: Meta Agent
+  meta-agent:
+    build:
+      context: .
+      dockerfile: containers/agents/Dockerfile.meta
+    image: script-ohio/meta-agent:dev
+    container_name: meta-agent
+    networks:
+      - orchestration-network
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app:ro
+      - agent-registry:/app/data/registry
+      - logs:/app/logs
+    environment:
+      - AGENT_NAME=meta-agent
+      - AGENT_CLASS=meta_agent
+      - AGENT_INSTANCE=meta_agent
+      - AGENT_PORT=8000
+      - AGENT_TYPE=governance
+      - SECURITY_LEVEL=high
+      - ENVIRONMENT=development
+      - REDIS_URL=redis://redis:6379/0
+      - DATABASE_URL=postgresql://agentuser:${DB_PASSWORD}@postgres:5432/agents
+      - DEPENDENCIES=redis:6379,postgres:5432
+      - LOG_LEVEL=debug
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    secrets:
+      - db_password
+    restart: unless-stopped
+    command: ["run"]
+
+  # Tier 2: Orchestrator Agents
+  orchestration-agent:
+    build:
+      context: .
+      dockerfile: containers/agents/Dockerfile.agent
+      args:
+        AGENT_NAME: orchestration-agent
+        AGENT_CLASS: orchestration_agent
+        AGENT_INSTANCE: orchestration_agent
+    image: script-ohio/orchestration-agent:dev
+    container_name: orchestration-agent
+    networks:
+      - orchestration-network
+      - data-network
+    ports:
+      - "8001:8001"
+    volumes:
+      - .:/app:ro
+      - agent-registry:/app/data/registry
+      - logs:/app/logs
+    environment:
+      - AGENT_NAME=orchestration-agent
+      - AGENT_CLASS=orchestration_agent
+      - AGENT_INSTANCE=orchestration_agent
+      - AGENT_PORT=8001
+      - AGENT_TYPE=orchestrator
+      - SECURITY_LEVEL=medium
+      - REDIS_URL=redis://redis:6379/1
+      - META_AGENT_URL=http://meta-agent:8000
+      - DEPENDENCIES=meta-agent:8000,redis:6379
+    depends_on:
+      meta-agent:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  analytics-orchestrator:
+    build:
+      context: .
+      dockerfile: containers/agents/Dockerfile.agent
+      args:
+        AGENT_NAME: analytics-orchestrator
+        AGENT_CLASS: analytics_orchestrator
+        AGENT_INSTANCE: analytics_orchestrator
+    image: script-ohio/analytics-orchestrator:dev
+    container_name: analytics-orchestrator
+    networks:
+      - orchestration-network
+      - analytics-network
+    ports:
+      - "8002:8002"
+    volumes:
+      - .:/app:ro
+      - logs:/app/logs
+    environment:
+      - AGENT_NAME=analytics-orchestrator
+      - AGENT_CLASS=analytics_orchestrator
+      - AGENT_INSTANCE=analytics_orchestrator
+      - AGENT_PORT=8002
+      - AGENT_TYPE=orchestrator
+      - REDIS_URL=redis://redis:6379/2
+      - META_AGENT_URL=http://meta-agent:8000
+    depends_on:
+      meta-agent:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  project-management-agent:
+    build:
+      context: .
+      dockerfile: containers/agents/Dockerfile.agent
+      args:
+        AGENT_NAME: project-management-agent
+        AGENT_CLASS: project_management_agent
+        AGENT_INSTANCE: project_management_agent
+    image: script-ohio/project-management-agent:dev
+    container_name: project-management-agent
+    networks:
+      - orchestration-network
+    ports:
+      - "8003:8003"
+    volumes:
+      - .:/app:ro
+      - ./project_management:/app/project_management:rw
+      - logs:/app/logs
+    environment:
+      - AGENT_NAME=project-management-agent
+      - AGENT_CLASS=project_management_agent
+      - AGENT_INSTANCE=project_management_agent
+      - AGENT_PORT=8003
+      - AGENT_TYPE=orchestrator
+      - REDIS_URL=redis://redis:6379/3
+      - META_AGENT_URL=http://meta-agent:8000
+    depends_on:
+      meta-agent:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  documentation-agent:
+    build:
+      context: .
+      dockerfile: containers/agents/Dockerfile.agent
+      args:
+        AGENT_NAME: documentation-agent
+        AGENT_CLASS: documentation_agent
+        AGENT_INSTANCE: documentation_agent
+    image: script-ohio/documentation-agent:dev
+    container_name: documentation-agent
+    networks:
+      - orchestration-network
+    ports:
+      - "8004:8004"
+    volumes:
+      - .:/app:ro
+      - ./docs:/app/docs:rw
+      - logs:/app/logs
+    environment:
+      - AGENT_NAME=documentation-agent
+      - AGENT_CLASS=documentation_agent
+      - AGENT_INSTANCE=documentation_agent
+      - AGENT_PORT=8004
+      - AGENT_TYPE=orchestrator
+      - REDIS_URL=redis://redis:6379/4
+      - META_AGENT_URL=http://meta-agent:8000
+    depends_on:
+      meta-agent:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Tier 3: Specialist Agents
+  cfbd-integration-agent:
+    build:
+      context: .
+      dockerfile: containers/agents/Dockerfile.agent
+      args:
+        AGENT_NAME: cfbd-integration-agent
+        AGENT_CLASS: cfbd_integration_agent
+        AGENT_INSTANCE=cfbd_integration_agent
+    image: script-ohio/cfbd-integration-agent:dev
+    container_name: cfbd-integration-agent
+    networks:
+      - data-network
+      - external-network
+    ports:
+      - "8010:8010"
+    volumes:
+      - .:/app:ro
+      - data-storage:/app/data
+      - logs:/app/logs
+    environment:
+      - AGENT_NAME=cfbd-integration-agent
+      - AGENT_CLASS=cfbd_integration_agent
+      - AGENT_INSTANCE=cfbd_integration_agent
+      - AGENT_PORT=8010
+      - AGENT_TYPE=specialist
+      - CFBD_API_KEY_FILE=/run/secrets/cfbd_api_key
+      - REDIS_URL=redis://redis:6379/10
+      - DATA_STORAGE_PATH=/app/data/cfbd
+      - DEPENDENCIES=redis:6379
+    secrets:
+      - cfbd_api_key
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  model-execution-engine:
+    build:
+      context: .
+      dockerfile: containers/agents/Dockerfile.agent
+      args:
+        AGENT_NAME: model-execution-engine
+        AGENT_CLASS=model_execution_engine
+        AGENT_INSTANCE=model_execution_engine
+    image: script-ohio/model-execution-engine:dev
+    container_name: model-execution-engine
+    networks:
+      - analytics-network
+      - data-network
+    ports:
+      - "8011:8011"
+    volumes:
+      - .:/app:ro
+      - model-storage:/app/models
+      - data-storage:/app/data
+      - logs:/app/logs
+    environment:
+      - AGENT_NAME=model-execution-engine
+      - AGENT_CLASS=model_execution_engine
+      - AGENT_INSTANCE=model_execution_engine
+      - AGENT_PORT=8011
+      - AGENT_TYPE=specialist
+      - MODEL_PATH=/app/models
+      - DATA_PATH=/app/data
+      - REDIS_URL=redis://redis:6379/11
+      - DEPENDENCIES=redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  insight-generator-agent:
+    build:
+      context: .
+      dockerfile: containers/agents/Dockerfile.agent
+      args:
+        AGENT_NAME: insight-generator-agent
+        AGENT_CLASS: insight_generator_agent
+        AGENT_INSTANCE=insight_generator_agent
+    image: script-ohio/insight-generator-agent:dev
+    container_name: insight-generator-agent
+    networks:
+      - analytics-network
+      - data-network
+    ports:
+      - "8012:8012"
+    volumes:
+      - .:/app:ro
+      - data-storage:/app/data
+      - logs:/app/logs
+    environment:
+      - AGENT_NAME=insight-generator-agent
+      - AGENT_CLASS=insight_generator_agent
+      - AGENT_INSTANCE=insight_generator_agent
+      - AGENT_PORT=8012
+      - AGENT_TYPE=specialist
+      - REDIS_URL=redis://redis:6379/12
+      - DEPENDENCIES=redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  weekly-matchup-analysis:
+    build:
+      context: .
+      dockerfile: containers/agents/Dockerfile.agent
+      args:
+        AGENT_NAME: weekly-matchup-analysis
+        AGENT_CLASS:weekly_matchup_analysis_agent
+        AGENT_INSTANCE:weekly_matchup_analysis_agent
+    image: script-ohio/weekly-matchup-analysis:dev
+    container_name: weekly-matchup-analysis
+    networks:
+      - analytics-network
+      - data-network
+    ports:
+      - "8013:8013"
+    volumes:
+      - .:/app:ro
+      - data-storage:/app/data
+      - logs:/app/logs
+    environment:
+      - AGENT_NAME=weekly-matchup-analysis
+      - AGENT_CLASS=weekly_matchup_analysis_agent
+      - AGENT_INSTANCE=weekly_matchup_analysis_agent
+      - AGENT_PORT=8013
+      - AGENT_TYPE=specialist
+      - REDIS_URL=redis://redis:6379/13
+      - DEPENDENCIES=redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  weekly-prediction-generation:
+    build:
+      context: .
+      dockerfile: containers/agents/Dockerfile.agent
+      args:
+        AGENT_NAME: weekly-prediction-generation
+        AGENT_CLASS:weekly_prediction_generation_agent
+        AGENT_INSTANCE:weekly_prediction_generation_agent
+    image: script-ohio/weekly-prediction-generation:dev
+    container_name: weekly-prediction-generation
+    networks:
+      - analytics-network
+      - data-network
+    ports:
+      - "8014:8014"
+    volumes:
+      - .:/app:ro
+      - data-storage:/app/data
+      - logs:/app/logs
+    environment:
+      - AGENT_NAME=weekly-prediction-generation
+      - AGENT_CLASS=weekly_prediction_generation_agent
+      - AGENT_INSTANCE=weekly_prediction_generation_agent
+      - AGENT_PORT=8014
+      - AGENT_TYPE=specialist
+      - REDIS_URL=redis://redis:6379/14
+      - DEPENDENCIES=redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  performance-monitor-agent:
+    build:
+      context: .
+      dockerfile: containers/agents/Dockerfile.agent
+      args:
+        AGENT_NAME: performance-monitor-agent
+        AGENT_CLASS:performance_monitor_agent
+        AGENT_INSTANCE=performance_monitor_agent
+    image: script-ohio/performance-monitor-agent:dev
+    container_name: performance-monitor-agent
+    networks:
+      - orchestration-network
+    ports:
+      - "8015:8015"
+    volumes:
+      - .:/app:ro
+      - logs:/app/logs
+    environment:
+      - AGENT_NAME=performance-monitor-agent
+      - AGENT_CLASS=performance_monitor_agent
+      - AGENT_INSTANCE=performance_monitor_agent
+      - AGENT_PORT=8015
+      - AGENT_TYPE=specialist
+      - REDIS_URL=redis://redis:6379/15
+      - DEPENDENCIES=redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  validation-agent:
+    build:
+      context: .
+      dockerfile: containers/agents/Dockerfile.agent
+      args:
+        AGENT_NAME: validation-agent
+        AGENT_CLASS:validation_agent
+        AGENT_INSTANCE=validation_agent
+    image: script-ohio/validation-agent:dev
+    container_name: validation-agent
+    networks:
+      - data-network
+    ports:
+      - "8016:8016"
+    volumes:
+      - .:/app:ro
+      - data-storage:/app/data
+      - logs:/app/logs
+    environment:
+      - AGENT_NAME=validation-agent
+      - AGENT_CLASS=validation_agent
+      - AGENT_INSTANCE=validation_agent
+      - AGENT_PORT=8016
+      - AGENT_TYPE=specialist
+      - REDIS_URL=redis://redis:6379/16
+      - DEPENDENCIES=redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  learning-navigator-agent:
+    build:
+      context: .
+      dockerfile: containers/agents/Dockerfile.agent
+      args:
+        AGENT_NAME: learning-navigator-agent
+        AGENT_CLASS:learning_navigator_agent
+        AGENT_INSTANCE=learning_navigator_agent
+    image: script-ohio/learning-navigator-agent:dev
+    container_name: learning-navigator-agent
+    networks:
+      - orchestration-network
+    ports:
+      - "8017:8017"
+    volumes:
+      - .:/app:ro
+      - logs:/app/logs
+    environment:
+      - AGENT_NAME=learning-navigator-agent
+      - AGENT_CLASS=learning_navigator_agent
+      - AGENT_INSTANCE=learning_navigator_agent
+      - AGENT_PORT=8017
+      - AGENT_TYPE=specialist
+      - REDIS_URL=redis://redis:6379/17
+      - DEPENDENCIES=redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  ai-assistant-agent:
+    build:
+      context: .
+      dockerfile: containers/agents/Dockerfile.agent
+      args:
+        AGENT_NAME: ai-assistant-agent
+        AGENT_CLASS:ai_assistant_agent
+        AGENT_INSTANCE=ai_assistant_agent
+    image: script-ohio/ai-assistant-agent:dev
+    container_name: ai-assistant-agent
+    networks:
+      - orchestration-network
+    ports:
+      - "8018:8018"
+    volumes:
+      - .:/app:ro
+      - logs:/app/logs
+    environment:
+      - AGENT_NAME=ai-assistant-agent
+      - AGENT_CLASS=ai_assistant_agent
+      - AGENT_INSTANCE=ai_assistant_agent
+      - AGENT_PORT=8018
+      - AGENT_TYPE=specialist
+      - REDIS_URL=redis://redis:6379/18
+      - DEPENDENCIES=redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  weekly-validation-agent:
+    build:
+      context: .
+      dockerfile: containers/agents/Dockerfile.agent
+      args:
+        AGENT_NAME: weekly-validation-agent
+        AGENT_CLASS:weekly_model_validation_agent
+        AGENT_INSTANCE:weekly_model_validation_agent
+    image: script-ohio/weekly-validation-agent:dev
+    container_name: weekly-validation-agent
+    networks:
+      - analytics-network
+      - data-network
+    ports:
+      - "8019:8019"
+    volumes:
+      - .:/app:ro
+      - data-storage:/app/data
+      - logs:/app/logs
+    environment:
+      - AGENT_NAME=weekly-validation-agent
+      - AGENT_CLASS=weekly_model_validation_agent
+      - AGENT_INSTANCE=weekly_model_validation_agent
+      - AGENT_PORT=8019
+      - AGENT_TYPE=specialist
+      - REDIS_URL=redis://redis:6379/19
+      - DEPENDENCIES=redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+# Secrets
+secrets:
+  db_password:
+    file: .secrets/db_password.txt
+  cfbd_api_key:
+    file: .secrets/cfbd_api_key.txt

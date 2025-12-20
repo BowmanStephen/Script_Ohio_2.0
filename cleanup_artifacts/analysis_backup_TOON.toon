@@ -1,0 +1,67 @@
+╔══════════════════════════════════════════════════════════════╗
+║  ANALYSIS/ BACKUP TOON ARCHIVE                                 ║
+║  Generated: 2025-12-18T11:15:00Z                               ║
+║  Agent: migration_agent                                        ║
+╚══════════════════════════════════════════════════════════════╝
+
+[1]
+file week14_comprehensive_analysis.json
+size_kb 351
+type comprehensive_analysis
+preserved true
+
+[9]
+file week14_matchup_analysis.json
+size_kb 256
+type matchup_analysis
+preserved true
+
+[3]
+file week14_narrative_previews.md
+size_kb 37
+type narrative_previews
+preserved true
+
+[6]
+file week14_strategic_recommendations.csv
+size_kb 27
+type strategic_recommendations
+preserved true
+
+[5]
+file week14_intelligence_consolidation.json
+size_kb 6.9
+type intelligence_consolidation
+preserved true
+
+[8]
+file week14_power_rankings.csv
+size_kb 1.7
+type power_rankings
+preserved true
+
+[7]
+file week14_upset_alerts.csv
+size_kb 1.5
+type upset_alerts
+preserved true
+
+[9]
+file week14_model_validation.json
+size_kb 0.566
+type model_validation
+preserved true
+
+[2]
+file week14_comprehensive_report.html
+size_kb 0.140
+type comprehensive_report
+preserved true
+
+[1]
+backup_location archives/analysis_week14_backup_20251218_110417/
+integrity_verified true
+total_files 9
+total_size_kb 704
+migration_target predictions/week14/legacy/
+migration_status SUCCESS

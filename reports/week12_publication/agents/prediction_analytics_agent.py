@@ -530,11 +530,11 @@ class PredictionAnalyticsAgent:
                     "low_confidence_games": int((df["confidence_score"] < 0.3).sum()),
                 },
                 "prediction_consensus": {
-                    "model_agreement_rate": float(
-                        (df["ensemble_margin_std"] < 5).mean()
+                    "model_agreement_rate": (
+                        float((df["ensemble_margin_std"] < 5).mean())
+                        if "ensemble_margin_std" in df.columns
+                        else 0.5
                     )
-                    if "ensemble_margin_std" in df.columns
-                    else 0.5
                 },
                 "extreme_predictions": {
                     "games_predicted_over_30_points": int(
@@ -610,9 +610,9 @@ class PredictionAnalyticsAgent:
                 "report_metadata": {
                     "title": "Week 12 College Football Prediction Analytics",
                     "generated_at": datetime.now().isoformat(),
-                    "games_analyzed": len(self.predictions)
-                    if self.predictions is not None
-                    else 0,
+                    "games_analyzed": (
+                        len(self.predictions) if self.predictions is not None else 0
+                    ),
                 },
                 "key_findings": {
                     "average_confidence": all_results.get("distribution_analysis", {})

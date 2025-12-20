@@ -887,9 +887,9 @@ class WeeklyModelValidationAgent(BaseAgent):
         schema_entry = {
             "source_feature_count": int(len(source_df.columns)),
             "derived_feature_count": int(len(derived_features)),
-            "prepared_feature_count": int(prepared_df.shape[1])
-            if prepared_df is not None
-            else 0,
+            "prepared_feature_count": (
+                int(prepared_df.shape[1]) if prepared_df is not None else 0
+            ),
             "missing_features": missing_features,
             "derived_features": derived_features,
         }
@@ -994,9 +994,9 @@ class WeeklyModelValidationAgent(BaseAgent):
                     "compatible": True,
                     "feature_count_used": sample_input.shape[1],
                     "prediction_successful": True,
-                    "prediction_shape": predictions.shape
-                    if hasattr(predictions, "shape")
-                    else "scalar",
+                    "prediction_shape": (
+                        predictions.shape if hasattr(predictions, "shape") else "scalar"
+                    ),
                     "prediction_type": prediction_type,
                     "test_passed": True,
                 }
@@ -1138,9 +1138,9 @@ class WeeklyModelValidationAgent(BaseAgent):
                     validation_result["tests_performed"].append("feature_importance")
 
             except Exception:
-                validation_result["performance_metrics"]["feature_importance"] = (
-                    "Not available"
-                )
+                validation_result["performance_metrics"][
+                    "feature_importance"
+                ] = "Not available"
 
             # Test 4: Prediction sanity check
             try:

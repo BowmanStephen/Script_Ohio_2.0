@@ -338,11 +338,11 @@ class FixValidator:
         overall_grade = (
             "A+"
             if passed_critical_fixes == total_critical_fixes
-            else "A"
-            if passed_critical_fixes >= total_critical_fixes - 1
-            else "B"
-            if passed_critical_fixes >= total_critical_fixes // 2
-            else "C"
+            else (
+                "A"
+                if passed_critical_fixes >= total_critical_fixes - 1
+                else "B" if passed_critical_fixes >= total_critical_fixes // 2 else "C"
+            )
         )
 
         print("🏆 OVERALL ASSESSMENT")

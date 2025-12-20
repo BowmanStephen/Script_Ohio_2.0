@@ -1,0 +1,13 @@
+{
+  "ohio_weight": 0.35,
+  "system_average_weight": 0.25,
+  "opening_line_weight": 0.2,
+  "sagarin_weight": 0.1,
+  "sp_plus_weight": 0.1,
+  "validation_mae": NaN,
+  "validation_rmse": NaN,
+  "validation_accuracy": NaN,
+  "validation_games": 0,
+  "optimization_date": "2025-11-20",
+  "optimization_status": "no_data"
+}

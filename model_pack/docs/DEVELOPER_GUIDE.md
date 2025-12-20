@@ -230,7 +230,7 @@ if str(project_root) not in sys.path:
 ```bash
 export CFBD_API_KEY="your-api-key"
 # Or add to .env file
-echo "CFBD_API_KEY=your-api-key" >> .env
+echo "CFBD_API_KEY=your-api-key-here" >> .env
 ```
 
 #### 3. FastAI Model Loading Issues

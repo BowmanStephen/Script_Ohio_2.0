@@ -1,0 +1,1165 @@
+team,season,system,rating,hfa,solver_version,source,model_version
+Alabama,2025,massey,51.115587754172864,2.747497475712196,1.0.0,,
+Ohio State,2025,massey,50.965700580444064,2.747497475712196,1.0.0,,
+Georgia,2025,massey,48.3137756196476,2.747497475712196,1.0.0,,
+Michigan,2025,massey,45.25523986137796,2.747497475712196,1.0.0,,
+Penn State,2025,massey,42.8252234675236,2.747497475712196,1.0.0,,
+Clemson,2025,massey,42.820204865776205,2.747497475712196,1.0.0,,
+Notre Dame,2025,massey,42.52740470351451,2.747497475712196,1.0.0,,
+LSU,2025,massey,41.953343828936646,2.747497475712196,1.0.0,,
+Oklahoma,2025,massey,39.49591802019968,2.747497475712196,1.0.0,,
+Oregon,2025,massey,37.69382245190904,2.747497475712196,1.0.0,,
+Texas,2025,massey,37.68169016586405,2.747497475712196,1.0.0,,
+Texas A&M,2025,massey,36.86458136158433,2.747497475712196,1.0.0,,
+Utah,2025,massey,36.83142699440164,2.747497475712196,1.0.0,,
+Auburn,2025,massey,36.729227035116224,2.747497475712196,1.0.0,,
+Washington,2025,massey,36.22722670416856,2.747497475712196,1.0.0,,
+Tennessee,2025,massey,35.84316861617219,2.747497475712196,1.0.0,,
+Iowa,2025,massey,35.12648787423594,2.747497475712196,1.0.0,,
+Wisconsin,2025,massey,34.89190380397145,2.747497475712196,1.0.0,,
+Kansas State,2025,massey,34.61694585144468,2.747497475712196,1.0.0,,
+Florida,2025,massey,33.97537511907667,2.747497475712196,1.0.0,,
+Ole Miss,2025,massey,33.54089980893847,2.747497475712196,1.0.0,,
+USC,2025,massey,33.319083005339316,2.747497475712196,1.0.0,,
+Iowa State,2025,massey,33.22536140757125,2.747497475712196,1.0.0,,
+Missouri,2025,massey,33.040464697214375,2.747497475712196,1.0.0,,
+Kentucky,2025,massey,31.036403639429054,2.747497475712196,1.0.0,,
+Boise State,2025,massey,30.879016794075678,2.747497475712196,1.0.0,,
+TCU,2025,massey,30.698458554688557,2.747497475712196,1.0.0,,
+Florida State,2025,massey,30.590583080020792,2.747497475712196,1.0.0,,
+Texas Tech,2025,massey,30.53232610274576,2.747497475712196,1.0.0,,
+Minnesota,2025,massey,30.018324985429132,2.747497475712196,1.0.0,,
+Mississippi State,2025,massey,29.995140126880678,2.747497475712196,1.0.0,,
+Miami,2025,massey,29.911232337585737,2.747497475712196,1.0.0,,
+South Carolina,2025,massey,29.70704775621002,2.747497475712196,1.0.0,,
+Indiana,2025,massey,29.61902307968395,2.747497475712196,1.0.0,,
+Louisville,2025,massey,29.255257485717138,2.747497475712196,1.0.0,,
+Oklahoma State,2025,massey,29.07657217776487,2.747497475712196,1.0.0,,
+Memphis,2025,massey,28.815048526064256,2.747497475712196,1.0.0,,
+Baylor,2025,massey,28.712765699095787,2.747497475712196,1.0.0,,
+James Madison,2025,massey,28.449249055185827,2.747497475712196,1.0.0,,
+Pittsburgh,2025,massey,28.290327660881324,2.747497475712196,1.0.0,,
+UCF,2025,massey,28.13747913906384,2.747497475712196,1.0.0,,
+Washington State,2025,massey,27.90550925655093,2.747497475712196,1.0.0,,
+SMU,2025,massey,27.83776171759654,2.747497475712196,1.0.0,,
+North Dakota State,2025,massey,27.468918973069208,2.747497475712196,1.0.0,,
+Nebraska,2025,massey,27.393010622350364,2.747497475712196,1.0.0,,
+West Virginia,2025,massey,26.986533725897562,2.747497475712196,1.0.0,,
+Virginia Tech,2025,massey,26.61374033578832,2.747497475712196,1.0.0,,
+Northwestern,2025,massey,26.412691427871614,2.747497475712196,1.0.0,,
+BYU,2025,massey,26.21534836182379,2.747497475712196,1.0.0,,
+NC State,2025,massey,26.131729803435814,2.747497475712196,1.0.0,,
+Arizona State,2025,massey,25.577228682236125,2.747497475712196,1.0.0,,
+Michigan State,2025,massey,25.405603140218464,2.747497475712196,1.0.0,,
+Cincinnati,2025,massey,25.11345531257353,2.747497475712196,1.0.0,,
+Arkansas,2025,massey,24.846114177648218,2.747497475712196,1.0.0,,
+UCLA,2025,massey,24.800148180476924,2.747497475712196,1.0.0,,
+Houston,2025,massey,24.67676437517708,2.747497475712196,1.0.0,,
+Georgia Tech,2025,massey,24.293806575581847,2.747497475712196,1.0.0,,
+Vanderbilt,2025,massey,24.285144019454382,2.747497475712196,1.0.0,,
+Tarleton State,2025,massey,23.96629586709286,2.747497475712196,1.0.0,,
+Wake Forest,2025,massey,23.908145572304434,2.747497475712196,1.0.0,,
+Air Force,2025,massey,23.79966135115583,2.747497475712196,1.0.0,,
+North Carolina,2025,massey,23.77326632590904,2.747497475712196,1.0.0,,
+Navy,2025,massey,23.730747693295253,2.747497475712196,1.0.0,,
+Tulane,2025,massey,23.71436544745192,2.747497475712196,1.0.0,,
+App State,2025,massey,23.42982357913862,2.747497475712196,1.0.0,,
+Purdue,2025,massey,23.37561491161038,2.747497475712196,1.0.0,,
+Illinois,2025,massey,23.30740777983249,2.747497475712196,1.0.0,,
+Fresno State,2025,massey,23.258680246620383,2.747497475712196,1.0.0,,
+Jacksonville State,2025,massey,23.09957874381215,2.747497475712196,1.0.0,,
+San Diego State,2025,massey,22.835121361645328,2.747497475712196,1.0.0,,
+Montana State,2025,massey,22.781727740940333,2.747497475712196,1.0.0,,
+Arizona,2025,massey,22.571823504794263,2.747497475712196,1.0.0,,
+California,2025,massey,22.438596136892215,2.747497475712196,1.0.0,,
+Virginia,2025,massey,22.335353584340496,2.747497475712196,1.0.0,,
+Army,2025,massey,21.356679905904866,2.747497475712196,1.0.0,,
+Western Kentucky,2025,massey,21.278188039823554,2.747497475712196,1.0.0,,
+Ohio,2025,massey,21.050006622104057,2.747497475712196,1.0.0,,
+Colorado,2025,massey,20.992902526607914,2.747497475712196,1.0.0,,
+Boston College,2025,massey,20.862646323295095,2.747497475712196,1.0.0,,
+Wyoming,2025,massey,20.837161813130916,2.747497475712196,1.0.0,,
+South Florida,2025,massey,20.4605138721429,2.747497475712196,1.0.0,,
+Syracuse,2025,massey,20.42144976535046,2.747497475712196,1.0.0,,
+Maryland,2025,massey,20.395722359114068,2.747497475712196,1.0.0,,
+Utah State,2025,massey,20.37998262746112,2.747497475712196,1.0.0,,
+Duke,2025,massey,20.182020739199668,2.747497475712196,1.0.0,,
+Oregon State,2025,massey,19.8323905106032,2.747497475712196,1.0.0,,
+Stanford,2025,massey,19.57391461724994,2.747497475712196,1.0.0,,
+Troy,2025,massey,19.020392342357137,2.747497475712196,1.0.0,,
+Kansas,2025,massey,19.01970286207691,2.747497475712196,1.0.0,,
+Toledo,2025,massey,18.25019613640492,2.747497475712196,1.0.0,,
+UTSA,2025,massey,18.24849991548633,2.747497475712196,1.0.0,,
+Louisiana,2025,massey,18.1380424897676,2.747497475712196,1.0.0,,
+North Texas,2025,massey,18.102678463228976,2.747497475712196,1.0.0,,
+Florida Atlantic,2025,massey,17.76311035013232,2.747497475712196,1.0.0,,
+North Dakota,2025,massey,17.458732243547395,2.747497475712196,1.0.0,,
+Liberty,2025,massey,17.4296302223074,2.747497475712196,1.0.0,,
+Marshall,2025,massey,17.250137936781503,2.747497475712196,1.0.0,,
+East Carolina,2025,massey,16.96924923372284,2.747497475712196,1.0.0,,
+Colorado State,2025,massey,16.88735964908716,2.747497475712196,1.0.0,,
+Miami (OH),2025,massey,16.687663026902534,2.747497475712196,1.0.0,,
+Temple,2025,massey,16.31867369359434,2.747497475712196,1.0.0,,
+UNLV,2025,massey,16.246942841281218,2.747497475712196,1.0.0,,
+Louisiana Tech,2025,massey,16.144005421903323,2.747497475712196,1.0.0,,
+Western Michigan,2025,massey,15.854544302291995,2.747497475712196,1.0.0,,
+UAB,2025,massey,15.558890492308787,2.747497475712196,1.0.0,,
+Tulsa,2025,massey,15.171669486080752,2.747497475712196,1.0.0,,
+Montana,2025,massey,14.809926219374747,2.747497475712196,1.0.0,,
+Harvard,2025,massey,14.624478672923034,2.747497475712196,1.0.0,,
+Rutgers,2025,massey,14.419717033138374,2.747497475712196,1.0.0,,
+Nevada,2025,massey,14.400180275211707,2.747497475712196,1.0.0,,
+Northern Illinois,2025,massey,14.251224931332638,2.747497475712196,1.0.0,,
+Middle Tennessee,2025,massey,13.933641487314597,2.747497475712196,1.0.0,,
+San José State,2025,massey,13.866440086767586,2.747497475712196,1.0.0,,
+Arkansas State,2025,massey,13.768514085473385,2.747497475712196,1.0.0,,
+Hawai'i,2025,massey,13.266758297692258,2.747497475712196,1.0.0,,
+Missouri State,2025,massey,13.130516347451678,2.747497475712196,1.0.0,,
+Georgia Southern,2025,massey,12.973552870049456,2.747497475712196,1.0.0,,
+Old Dominion,2025,massey,12.919353233329465,2.747497475712196,1.0.0,,
+Mercer,2025,massey,12.406649961875232,2.747497475712196,1.0.0,,
+South Alabama,2025,massey,11.943045043090068,2.747497475712196,1.0.0,,
+Buffalo,2025,massey,11.30788325271048,2.747497475712196,1.0.0,,
+Southern Miss,2025,massey,10.965435401991305,2.747497475712196,1.0.0,,
+Central Michigan,2025,massey,10.897185837050575,2.747497475712196,1.0.0,,
+Georgia State,2025,massey,10.494531349066868,2.747497475712196,1.0.0,,
+New Mexico,2025,massey,10.482143529587546,2.747497475712196,1.0.0,,
+Eastern Michigan,2025,massey,10.1781776753015,2.747497475712196,1.0.0,,
+Lehigh,2025,massey,10.170632442878778,2.747497475712196,1.0.0,,
+Delaware,2025,massey,10.061083427302878,2.747497475712196,1.0.0,,
+Coastal Carolina,2025,massey,10.012394155952675,2.747497475712196,1.0.0,,
+Tennessee Tech,2025,massey,9.598435487549965,2.747497475712196,1.0.0,,
+Stephen F. Austin,2025,massey,9.362238934841448,2.747497475712196,1.0.0,,
+Kennesaw State,2025,massey,9.349170134069531,2.747497475712196,1.0.0,,
+New Mexico State,2025,massey,9.073064612279698,2.747497475712196,1.0.0,,
+SE Louisiana,2025,massey,9.011452745410418,2.747497475712196,1.0.0,,
+UConn,2025,massey,8.770867393039559,2.747497475712196,1.0.0,,
+Youngstown State,2025,massey,8.593929255977832,2.747497475712196,1.0.0,,
+Sam Houston,2025,massey,8.14648716384459,2.747497475712196,1.0.0,,
+South Dakota State,2025,massey,8.11667258423875,2.747497475712196,1.0.0,,
+Florida International,2025,massey,8.096379974097983,2.747497475712196,1.0.0,,
+Austin Peay,2025,massey,7.495917139047954,2.747497475712196,1.0.0,,
+Bowling Green,2025,massey,7.3572705893393415,2.747497475712196,1.0.0,,
+Southern Utah,2025,massey,7.336814936079114,2.747497475712196,1.0.0,,
+Southern Illinois,2025,massey,7.3293753737985865,2.747497475712196,1.0.0,,
+Texas State,2025,massey,7.274312693063298,2.747497475712196,1.0.0,,
+Abilene Christian,2025,massey,7.247845052867029,2.747497475712196,1.0.0,,
+UC Davis,2025,massey,6.646145245607078,2.747497475712196,1.0.0,,
+Illinois State,2025,massey,6.168606719361891,2.747497475712196,1.0.0,,
+Rice,2025,massey,6.103292219492577,2.747497475712196,1.0.0,,
+Sacramento State,2025,massey,5.728418931187036,2.747497475712196,1.0.0,,
+Charlotte,2025,massey,5.517471808443807,2.747497475712196,1.0.0,,
+Rhode Island,2025,massey,5.418587746560492,2.747497475712196,1.0.0,,
+UTEP,2025,massey,5.361765432772168,2.747497475712196,1.0.0,,
+Yale,2025,massey,5.300232532176385,2.747497475712196,1.0.0,,
+Ball State,2025,massey,4.512945858879515,2.747497475712196,1.0.0,,
+UL Monroe,2025,massey,4.372423871574776,2.747497475712196,1.0.0,,
+Monmouth,2025,massey,4.315437918508668,2.747497475712196,1.0.0,,
+Idaho State,2025,massey,3.958012720103465,2.747497475712196,1.0.0,,
+Northern Arizona,2025,massey,3.6746379662357462,2.747497475712196,1.0.0,,
+Idaho,2025,massey,3.52525835664152,2.747497475712196,1.0.0,,
+Villanova,2025,massey,3.283447178507106,2.747497475712196,1.0.0,,
+South Dakota,2025,massey,3.1709835456025233,2.747497475712196,1.0.0,,
+West Georgia,2025,massey,2.683777576503506,2.747497475712196,1.0.0,,
+Dartmouth,2025,massey,1.7115383908092061,2.747497475712196,1.0.0,,
+Kent State,2025,massey,1.5362465609270117,2.747497475712196,1.0.0,,
+Akron,2025,massey,1.5319329102478068,2.747497475712196,1.0.0,,
+New Hampshire,2025,massey,0.7935567341151898,2.747497475712196,1.0.0,,
+UT Rio Grande Valley,2025,massey,0.4483295510970389,2.747497475712196,1.0.0,,
+East Tennessee State,2025,massey,0.0464860623202192,2.747497475712196,1.0.0,,
+Alabama State,2025,massey,-0.6625259622960147,2.747497475712196,1.0.0,,
+St. Thomas (MN),2025,massey,-0.9512780022663979,2.747497475712196,1.0.0,,
+Massachusetts,2025,massey,-1.7276189601107121,2.747497475712196,1.0.0,,
+Lafayette,2025,massey,-1.7836391949891792,2.747497475712196,1.0.0,,
+Cal Poly,2025,massey,-1.9349841191649264,2.747497475712196,1.0.0,,
+Western Carolina,2025,massey,-2.574518949075097,2.747497475712196,1.0.0,,
+Wofford,2025,massey,-2.8341441303714583,2.747497475712196,1.0.0,,
+Pennsylvania,2025,massey,-2.8466451588016066,2.747497475712196,1.0.0,,
+Princeton,2025,massey,-3.9607161752002242,2.747497475712196,1.0.0,,
+Stony Brook,2025,massey,-3.978324132029075,2.747497475712196,1.0.0,,
+Incarnate Word,2025,massey,-4.09975759688477,2.747497475712196,1.0.0,,
+Gardner-Webb,2025,massey,-4.198377466870887,2.747497475712196,1.0.0,,
+Drake,2025,massey,-4.203830748290949,2.747497475712196,1.0.0,,
+Eastern Kentucky,2025,massey,-4.247003015552881,2.747497475712196,1.0.0,,
+Lamar,2025,massey,-4.263460097432836,2.747497475712196,1.0.0,,
+William & Mary,2025,massey,-4.637923778157305,2.747497475712196,1.0.0,,
+Brown,2025,massey,-5.120084135912219,2.747497475712196,1.0.0,,
+Towson,2025,massey,-5.169646948519011,2.747497475712196,1.0.0,,
+Eastern Washington,2025,massey,-5.437348220024704,2.747497475712196,1.0.0,,
+Elon,2025,massey,-5.496228384110925,2.747497475712196,1.0.0,,
+Northern Iowa,2025,massey,-5.818399060686254,2.747497475712196,1.0.0,,
+Jackson State,2025,massey,-5.932072710220954,2.747497475712196,1.0.0,,
+UT Martin,2025,massey,-6.261358437448478,2.747497475712196,1.0.0,,
+Presbyterian,2025,massey,-6.34866930324043,2.747497475712196,1.0.0,,
+Chattanooga,2025,massey,-6.876595075742228,2.747497475712196,1.0.0,,
+Lindenwood,2025,massey,-7.01240686552319,2.747497475712196,1.0.0,,
+Maine,2025,massey,-7.107269955919649,2.747497475712196,1.0.0,,
+Cornell,2025,massey,-7.307823612606405,2.747497475712196,1.0.0,,
+Central Washington,2025,massey,-7.435141163748979,2.747497475712196,1.0.0,,
+South Carolina State,2025,massey,-7.435708589294805,2.747497475712196,1.0.0,,
+Northern Colorado,2025,massey,-7.520416234303006,2.747497475712196,1.0.0,,
+Holy Cross,2025,massey,-7.6865194587040335,2.747497475712196,1.0.0,,
+Central Arkansas,2025,massey,-7.774265250702878,2.747497475712196,1.0.0,,
+Colgate,2025,massey,-7.85500289755993,2.747497475712196,1.0.0,,
+San Diego,2025,massey,-8.547756897208213,2.747497475712196,1.0.0,,
+Utah Tech,2025,massey,-9.0534822620299,2.747497475712196,1.0.0,,
+Southeast Missouri State,2025,massey,-9.098577187166123,2.747497475712196,1.0.0,,
+Delaware State,2025,massey,-9.52328814058311,2.747497475712196,1.0.0,,
+Duquesne,2025,massey,-9.599317913202432,2.747497475712196,1.0.0,,
+Long Island University,2025,massey,-9.714308378820299,2.747497475712196,1.0.0,,
+Richmond,2025,massey,-9.815175469463252,2.747497475712196,1.0.0,,
+Central Connecticut,2025,massey,-9.892119749221933,2.747497475712196,1.0.0,,
+Nicholls,2025,massey,-9.95105701069541,2.747497475712196,1.0.0,,
+Charleston Southern,2025,massey,-10.06736675302411,2.747497475712196,1.0.0,,
+The Citadel,2025,massey,-10.399825682270153,2.747497475712196,1.0.0,,
+McNeese,2025,massey,-10.967176910284106,2.747497475712196,1.0.0,,
+Prairie View A&M,2025,massey,-11.087019943101703,2.747497475712196,1.0.0,,
+Indiana State,2025,massey,-11.178430355749054,2.747497475712196,1.0.0,,
+North Carolina Central,2025,massey,-11.252113433403233,2.747497475712196,1.0.0,,
+Sacred Heart,2025,massey,-11.86165218613586,2.747497475712196,1.0.0,,
+Furman,2025,massey,-12.315061686196733,2.747497475712196,1.0.0,,
+Merrimack,2025,massey,-12.451885836418844,2.747497475712196,1.0.0,,
+Weber State,2025,massey,-13.021692158778512,2.747497475712196,1.0.0,,
+Dayton,2025,massey,-13.693482545937005,2.747497475712196,1.0.0,,
+Mercyhurst,2025,massey,-13.76281403339344,2.747497475712196,1.0.0,,
+North Alabama,2025,massey,-14.328883668988905,2.747497475712196,1.0.0,,
+Murray State,2025,massey,-14.415103441672304,2.747497475712196,1.0.0,,
+Columbia,2025,massey,-15.673053302669844,2.747497475712196,1.0.0,,
+Bryant,2025,massey,-15.966982809936717,2.747497475712196,1.0.0,,
+Eastern Illinois,2025,massey,-16.05205046127857,2.747497475712196,1.0.0,,
+East Texas A&M,2025,massey,-16.419968319408675,2.747497475712196,1.0.0,,
+Georgetown,2025,massey,-16.421452675503456,2.747497475712196,1.0.0,,
+Northern Michigan,2025,massey,-16.68209338459181,2.747497475712196,1.0.0,,
+Campbell,2025,massey,-16.853906447967084,2.747497475712196,1.0.0,,
+Bucknell,2025,massey,-17.021933080984912,2.747497475712196,1.0.0,,
+Butler,2025,massey,-17.400222871344926,2.747497475712196,1.0.0,,
+Morgan State,2025,massey,-17.726755206047276,2.747497475712196,1.0.0,,
+Western Illinois,2025,massey,-18.19316495437282,2.747497475712196,1.0.0,,
+Stonehill,2025,massey,-18.24026489031636,2.747497475712196,1.0.0,,
+Chadron St,2025,massey,-18.75416459399646,2.747497475712196,1.0.0,,
+Bethune-Cookman,2025,massey,-19.532926350319887,2.747497475712196,1.0.0,,
+Portland State,2025,massey,-19.63468328139816,2.747497475712196,1.0.0,,
+Marist,2025,massey,-19.94143148067947,2.747497475712196,1.0.0,,
+Texas Southern,2025,massey,-20.285902012455903,2.747497475712196,1.0.0,,
+UAlbany,2025,massey,-20.35708596023251,2.747497475712196,1.0.0,,
+Wagner,2025,massey,-20.503511413022995,2.747497475712196,1.0.0,,
+Fordham,2025,massey,-20.884855409329127,2.747497475712196,1.0.0,,
+Grambling,2025,massey,-20.919865745023568,2.747497475712196,1.0.0,,
+Robert Morris,2025,massey,-21.132601034176304,2.747497475712196,1.0.0,,
+Samford,2025,massey,-21.96192820603374,2.747497475712196,1.0.0,,
+Kentucky State,2025,massey,-24.148220049262324,2.747497475712196,1.0.0,,
+Houston Christian,2025,massey,-24.155622762087145,2.747497475712196,1.0.0,,
+Alcorn State,2025,massey,-24.27788823263509,2.747497475712196,1.0.0,,
+Truman State,2025,massey,-24.62809729833408,2.747497475712196,1.0.0,,
+Norfolk State,2025,massey,-24.794454246102102,2.747497475712196,1.0.0,,
+Virginia St,2025,massey,-25.021934835554045,2.747497475712196,1.0.0,,
+Miles College,2025,massey,-25.30823772745185,2.747497475712196,1.0.0,,
+McKendree,2025,massey,-25.405527352684,2.747497475712196,1.0.0,,
+Howard,2025,massey,-25.484474151147367,2.747497475712196,1.0.0,,
+Tennessee State,2025,massey,-25.904987289633706,2.747497475712196,1.0.0,,
+New Haven,2025,massey,-26.23889528439285,2.747497475712196,1.0.0,,
+VMI,2025,massey,-28.696120585476244,2.747497475712196,1.0.0,,
+Bowie State,2025,massey,-28.747043621249357,2.747497475712196,1.0.0,,
+Adrian,2025,massey,-28.851098569926762,2.747497475712196,1.0.0,,
+St. Francis (PA),2025,massey,-28.944064255486456,2.747497475712196,1.0.0,,
+Hanover College,2025,massey,-29.118601745314194,2.747497475712196,1.0.0,,
+Florida A&M,2025,massey,-29.352670578225297,2.747497475712196,1.0.0,,
+North Carolina A&T,2025,massey,-29.382484481442887,2.747497475712196,1.0.0,,
+Webber International,2025,massey,-29.505377846244464,2.747497475712196,1.0.0,,
+Alabama A&M,2025,massey,-29.62773825006883,2.747497475712196,1.0.0,,
+Morehead State,2025,massey,-30.94021034672505,2.747497475712196,1.0.0,,
+ERSKINE,2025,massey,-31.56960222530264,2.747497475712196,1.0.0,,
+Hampton,2025,massey,-31.602250787288774,2.747497475712196,1.0.0,,
+Valdosta State,2025,massey,-31.620707499058522,2.747497475712196,1.0.0,,
+West Liberty,2025,massey,-32.352750807655966,2.747497475712196,1.0.0,,
+Northwestern State,2025,massey,-32.52760889028097,2.747497475712196,1.0.0,,
+Tuskegee,2025,massey,-33.15142381069795,2.747497475712196,1.0.0,,
+American International,2025,massey,-34.11051176174784,2.747497475712196,1.0.0,,
+Albany State GA,2025,massey,-34.57060250001288,2.747497475712196,1.0.0,,
+Valparaiso,2025,massey,-34.62744714420917,2.747497475712196,1.0.0,,
+Southern,2025,massey,-34.63821153422767,2.747497475712196,1.0.0,,
+St. Anselm,2025,massey,-34.66971864206432,2.747497475712196,1.0.0,,
+Arkansas-Pine Bluff,2025,massey,-35.126044553239396,2.747497475712196,1.0.0,,
+Allen,2025,massey,-35.15755531569697,2.747497475712196,1.0.0,,
+Upper Iowa University,2025,massey,-35.420912360218665,2.747497475712196,1.0.0,,
+Mississippi Valley State,2025,massey,-35.80448155876292,2.747497475712196,1.0.0,,
+Elizabeth City State,2025,massey,-35.81893437719903,2.747497475712196,1.0.0,,
+Fayetteville State,2025,massey,-38.466149807882836,2.747497475712196,1.0.0,,
+Northeastern State,2025,massey,-39.541844348927356,2.747497475712196,1.0.0,,
+Davidson,2025,massey,-39.691525740401715,2.747497475712196,1.0.0,,
+Central State (OH),2025,massey,-41.93732040992482,2.747497475712196,1.0.0,,
+Stetson,2025,massey,-42.282380699803355,2.747497475712196,1.0.0,,
+Thomas More College,2025,massey,-42.41334943563929,2.747497475712196,1.0.0,,
+Edward Waters,2025,massey,-42.742686188419,2.747497475712196,1.0.0,,
+Kentucky Christian,2025,massey,-45.14756530570667,2.747497475712196,1.0.0,,
+Savannah St,2025,massey,-47.64057054303915,2.747497475712196,1.0.0,,
+Lincoln (PA),2025,massey,-47.804016421069605,2.747497475712196,1.0.0,,
+Western Oregon,2025,massey,-48.13934729615546,2.747497475712196,1.0.0,,
+Bentley,2025,massey,-49.170315019204956,2.747497475712196,1.0.0,,
+Sul Ross State,2025,massey,-50.83942416528052,2.747497475712196,1.0.0,,
+Cumberland (TN),2025,massey,-52.601465571166315,2.747497475712196,1.0.0,,
+Louisiana College,2025,massey,-53.16651292164974,2.747497475712196,1.0.0,,
+Morehouse College,2025,massey,-53.431043108038644,2.747497475712196,1.0.0,,
+Southern Connecticut State,2025,massey,-53.72206859627468,2.747497475712196,1.0.0,,
+Ferrum,2025,massey,-60.88773537438925,2.747497475712196,1.0.0,,
+Virginia University Of Lynchburg,2025,massey,-65.63590873350736,2.747497475712196,1.0.0,,
+Lincoln (CA),2025,massey,-66.70664550871334,2.747497475712196,1.0.0,,
+Lane College,2025,massey,-68.81142934501207,2.747497475712196,1.0.0,,
+BLUEFIELD,2025,massey,-76.52464718034767,2.747497475712196,1.0.0,,
+Greensboro College,2025,massey,-84.8591690955936,2.747497475712196,1.0.0,,
+Warner University,2025,massey,-85.44943379030029,2.747497475712196,1.0.0,,
+Little Rock,2025,massey,-90.31780747889535,2.747497475712196,1.0.0,,
+Auburn,2025,sp_plus,12.5,,,graphql,
+UAB,2025,sp_plus,-16.8,,,graphql,
+South Alabama,2025,sp_plus,-10.4,,,graphql,
+Arkansas,2025,sp_plus,6.7,,,graphql,
+Arizona State,2025,sp_plus,6.5,,,graphql,
+Arizona,2025,sp_plus,13.0,,,graphql,
+San Diego State,2025,sp_plus,7.2,,,graphql,
+San José State,2025,sp_plus,-11.4,,,graphql,
+Stanford,2025,sp_plus,-9.9,,,graphql,
+California,2025,sp_plus,-4.1,,,graphql,
+UCLA,2025,sp_plus,-8.5,,,graphql,
+USC,2025,sp_plus,16.3,,,graphql,
+Colorado State,2025,sp_plus,-14.5,,,graphql,
+Colorado,2025,sp_plus,-6.8,,,graphql,
+UConn,2025,sp_plus,6.3,,,graphql,
+Delaware,2025,sp_plus,-12.6,,,graphql,
+Florida State,2025,sp_plus,10.1,,,graphql,
+Jacksonville State,2025,sp_plus,-5.2,,,graphql,
+Florida,2025,sp_plus,0.5,,,graphql,
+South Florida,2025,sp_plus,12.4,,,graphql,
+Georgia Tech,2025,sp_plus,8.8,,,graphql,
+Georgia,2025,sp_plus,24.3,,,graphql,
+Hawai'i,2025,sp_plus,-1.1,,,graphql,
+Iowa State,2025,sp_plus,9.5,,,graphql,
+Boise State,2025,sp_plus,5.3,,,graphql,
+Northwestern,2025,sp_plus,1.9,,,graphql,
+Indiana,2025,sp_plus,29.9,,,graphql,
+Notre Dame,2025,sp_plus,24.3,,,graphql,
+Kentucky,2025,sp_plus,4.6,,,graphql,
+Louisville,2025,sp_plus,9.1,,,graphql,
+Western Kentucky,2025,sp_plus,1.1,,,graphql,
+LSU,2025,sp_plus,10.2,,,graphql,
+Boston College,2025,sp_plus,-11.8,,,graphql,
+Massachusetts,2025,sp_plus,-34.9,,,graphql,
+Maryland,2025,sp_plus,0.6,,,graphql,
+Michigan State,2025,sp_plus,-5.2,,,graphql,
+Michigan,2025,sp_plus,15.2,,,graphql,
+Minnesota,2025,sp_plus,-0.2,,,graphql,
+Missouri,2025,sp_plus,15.4,,,graphql,
+Ole Miss,2025,sp_plus,21.9,,,graphql,
+Duke,2025,sp_plus,3.7,,,graphql,
+East Carolina,2025,sp_plus,6.0,,,graphql,
+NC State,2025,sp_plus,0.7,,,graphql,
+North Carolina,2025,sp_plus,-6.1,,,graphql,
+Wake Forest,2025,sp_plus,5.8,,,graphql,
+Nebraska,2025,sp_plus,8.8,,,graphql,
+Rutgers,2025,sp_plus,-0.5,,,graphql,
+New Mexico State,2025,sp_plus,-14.1,,,graphql,
+New Mexico,2025,sp_plus,0.0,,,graphql,
+Syracuse,2025,sp_plus,-12.9,,,graphql,
+Bowling Green,2025,sp_plus,-15.7,,,graphql,
+Miami OH,2025,sp_plus,-3.0,,,graphql,
+Ohio State,2025,sp_plus,32.4,,,graphql,
+Ohio,2025,sp_plus,-2.7,,,graphql,
+Oklahoma State,2025,sp_plus,-16.4,,,graphql,
+Oklahoma,2025,sp_plus,19.5,,,graphql,
+Tulsa,2025,sp_plus,-10.7,,,graphql,
+Oregon State,2025,sp_plus,-13.3,,,graphql,
+Penn State,2025,sp_plus,16.4,,,graphql,
+Temple,2025,sp_plus,-5.1,,,graphql,
+Pittsburgh,2025,sp_plus,11.7,,,graphql,
+Clemson,2025,sp_plus,9.2,,,graphql,
+Memphis,2025,sp_plus,11.3,,,graphql,
+Vanderbilt,2025,sp_plus,19.3,,,graphql,
+Baylor,2025,sp_plus,1.4,,,graphql,
+Rice,2025,sp_plus,-12.5,,,graphql,
+Texas A&M,2025,sp_plus,22.6,,,graphql,
+Houston,2025,sp_plus,7.3,,,graphql,
+North Texas,2025,sp_plus,16.4,,,graphql,
+Texas,2025,sp_plus,14.9,,,graphql,
+BYU,2025,sp_plus,17.3,,,graphql,
+Utah,2025,sp_plus,21.4,,,graphql,
+James Madison,2025,sp_plus,12.5,,,graphql,
+Virginia,2025,sp_plus,11.0,,,graphql,
+Virginia Tech,2025,sp_plus,-8.6,,,graphql,
+Washington,2025,sp_plus,17.5,,,graphql,
+Washington State,2025,sp_plus,0.8,,,graphql,
+Wisconsin,2025,sp_plus,-4.7,,,graphql,
+Marshall,2025,sp_plus,-4.4,,,graphql,
+West Virginia,2025,sp_plus,-5.3,,,graphql,
+Fresno State,2025,sp_plus,-1.2,,,graphql,
+Georgia Southern,2025,sp_plus,-12.1,,,graphql,
+Old Dominion,2025,sp_plus,6.2,,,graphql,
+Louisiana,2025,sp_plus,-8.6,,,graphql,
+Coastal Carolina,2025,sp_plus,-11.5,,,graphql,
+Texas State,2025,sp_plus,-1.5,,,graphql,
+Utah State,2025,sp_plus,-0.7,,,graphql,
+Alabama,2025,sp_plus,21.0,,,graphql,
+Kennesaw State,2025,sp_plus,-1.5,,,graphql,
+Mississippi State,2025,sp_plus,5.1,,,graphql,
+Army,2025,sp_plus,-2.5,,,graphql,
+Illinois,2025,sp_plus,10.7,,,graphql,
+Air Force,2025,sp_plus,-5.8,,,graphql,
+Akron,2025,sp_plus,-13.7,,,graphql,
+App State,2025,sp_plus,-10.6,,,graphql,
+Arkansas State,2025,sp_plus,-9.9,,,graphql,
+Ball State,2025,sp_plus,-20.7,,,graphql,
+Buffalo,2025,sp_plus,-8.0,,,graphql,
+UCF,2025,sp_plus,0.7,,,graphql,
+Central Michigan,2025,sp_plus,-4.4,,,graphql,
+Cincinnati,2025,sp_plus,8.3,,,graphql,
+Eastern Michigan,2025,sp_plus,-14.3,,,graphql,
+Florida Atlantic,2025,sp_plus,-7.7,,,graphql,
+Florida International,2025,sp_plus,-9.7,,,graphql,
+Georgia State,2025,sp_plus,-23.6,,,graphql,
+Iowa,2025,sp_plus,15.4,,,graphql,
+Kansas,2025,sp_plus,3.8,,,graphql,
+Kansas State,2025,sp_plus,6.1,,,graphql,
+Kent State,2025,sp_plus,-19.6,,,graphql,
+Liberty,2025,sp_plus,-8.0,,,graphql,
+Louisiana Tech,2025,sp_plus,-1.5,,,graphql,
+Miami,2025,sp_plus,20.2,,,graphql,
+Middle Tennessee,2025,sp_plus,-18.0,,,graphql,
+Navy,2025,sp_plus,2.3,,,graphql,
+Charlotte,2025,sp_plus,-25.5,,,graphql,
+UL Monroe,2025,sp_plus,-21.6,,,graphql,
+UNLV,2025,sp_plus,5.7,,,graphql,
+Nevada,2025,sp_plus,-12.6,,,graphql,
+Northern Illinois,2025,sp_plus,-15.8,,,graphql,
+Oregon,2025,sp_plus,26.6,,,graphql,
+Purdue,2025,sp_plus,-6.5,,,graphql,
+Sam Houston,2025,sp_plus,-25.4,,,graphql,
+SMU,2025,sp_plus,14.8,,,graphql,
+Southern Miss,2025,sp_plus,-4.2,,,graphql,
+South Carolina,2025,sp_plus,6.1,,,graphql,
+Missouri State,2025,sp_plus,-7.8,,,graphql,
+TCU,2025,sp_plus,6.7,,,graphql,
+Tennessee,2025,sp_plus,17.5,,,graphql,
+UTSA,2025,sp_plus,2.3,,,graphql,
+UTEP,2025,sp_plus,-15.0,,,graphql,
+Texas Tech,2025,sp_plus,28.7,,,graphql,
+Toledo,2025,sp_plus,8.4,,,graphql,
+Troy,2025,sp_plus,-4.2,,,graphql,
+Tulane,2025,sp_plus,5.8,,,graphql,
+Western Michigan,2025,sp_plus,-3.2,,,graphql,
+Wyoming,2025,sp_plus,-9.2,,,graphql,
+Auburn,2025,fpi,11.628,,,graphql,
+UAB,2025,fpi,-15.367,,,graphql,
+South Alabama,2025,fpi,-9.568,,,graphql,
+Arkansas,2025,fpi,7.842,,,graphql,
+Arizona State,2025,fpi,7.828,,,graphql,
+Arizona,2025,fpi,9.285,,,graphql,
+San Diego State,2025,fpi,0.572,,,graphql,
+San José State,2025,fpi,-12.197,,,graphql,
+Stanford,2025,fpi,-3.736,,,graphql,
+California,2025,fpi,-5.063,,,graphql,
+UCLA,2025,fpi,-3.012,,,graphql,
+USC,2025,fpi,18.969,,,graphql,
+Colorado State,2025,fpi,-12.033,,,graphql,
+Colorado,2025,fpi,-2.959,,,graphql,
+UConn,2025,fpi,-2.128,,,graphql,
+Delaware,2025,fpi,-15.43,,,graphql,
+Florida State,2025,fpi,9.971,,,graphql,
+Jacksonville State,2025,fpi,-9.358,,,graphql,
+Florida,2025,fpi,7.332,,,graphql,
+South Florida,2025,fpi,10.861,,,graphql,
+Georgia Tech,2025,fpi,6.286,,,graphql,
+Georgia,2025,fpi,21.71,,,graphql,
+Hawai'i,2025,fpi,-6.072,,,graphql,
+Iowa State,2025,fpi,9.288,,,graphql,
+Boise State,2025,fpi,4.589,,,graphql,
+Northwestern,2025,fpi,3.099,,,graphql,
+Indiana,2025,fpi,26.613,,,graphql,
+Notre Dame,2025,fpi,24.915,,,graphql,
+Kentucky,2025,fpi,7.725,,,graphql,
+Louisville,2025,fpi,6.799,,,graphql,
+Western Kentucky,2025,fpi,-7.896,,,graphql,
+LSU,2025,fpi,11.32,,,graphql,
+Boston College,2025,fpi,-7.218,,,graphql,
+Massachusetts,2025,fpi,-29.827,,,graphql,
+Maryland,2025,fpi,-1.418,,,graphql,
+Michigan State,2025,fpi,-0.339,,,graphql,
+Michigan,2025,fpi,15.842,,,graphql,
+Minnesota,2025,fpi,0.356,,,graphql,
+Missouri,2025,fpi,14.039,,,graphql,
+Ole Miss,2025,fpi,18.003,,,graphql,
+Duke,2025,fpi,4.368,,,graphql,
+East Carolina,2025,fpi,2.578,,,graphql,
+NC State,2025,fpi,2.409,,,graphql,
+North Carolina,2025,fpi,-5.992,,,graphql,
+Wake Forest,2025,fpi,0.809,,,graphql,
+Nebraska,2025,fpi,7.482,,,graphql,
+Rutgers,2025,fpi,0.843,,,graphql,
+New Mexico State,2025,fpi,-15.665,,,graphql,
+New Mexico,2025,fpi,-2.43,,,graphql,
+Syracuse,2025,fpi,-7.851,,,graphql,
+Bowling Green,2025,fpi,-13.214,,,graphql,
+Miami OH,2025,fpi,-4.727,,,graphql,
+Ohio State,2025,fpi,28.111,,,graphql,
+Ohio,2025,fpi,-2.973,,,graphql,
+Oklahoma State,2025,fpi,-12.588,,,graphql,
+Oklahoma,2025,fpi,17.334,,,graphql,
+Tulsa,2025,fpi,-13.365,,,graphql,
+Oregon State,2025,fpi,-11.291,,,graphql,
+Penn State,2025,fpi,15.561,,,graphql,
+Temple,2025,fpi,-8.44,,,graphql,
+Pittsburgh,2025,fpi,9.308,,,graphql,
+Clemson,2025,fpi,8.208,,,graphql,
+Memphis,2025,fpi,6.294,,,graphql,
+Vanderbilt,2025,fpi,16.536,,,graphql,
+Baylor,2025,fpi,3.744,,,graphql,
+Rice,2025,fpi,-15.29,,,graphql,
+Texas A&M,2025,fpi,19.639,,,graphql,
+Houston,2025,fpi,3.063,,,graphql,
+North Texas,2025,fpi,6.97,,,graphql,
+Texas,2025,fpi,18.237,,,graphql,
+BYU,2025,fpi,17.164,,,graphql,
+Utah,2025,fpi,19.89,,,graphql,
+James Madison,2025,fpi,7.985,,,graphql,
+Virginia,2025,fpi,6.596,,,graphql,
+Virginia Tech,2025,fpi,-1.622,,,graphql,
+Washington,2025,fpi,13.417,,,graphql,
+Washington State,2025,fpi,-0.407,,,graphql,
+Wisconsin,2025,fpi,2.791,,,graphql,
+Marshall,2025,fpi,-5.14,,,graphql,
+West Virginia,2025,fpi,-1.965,,,graphql,
+Fresno State,2025,fpi,-6.956,,,graphql,
+Georgia Southern,2025,fpi,-11.689,,,graphql,
+Old Dominion,2025,fpi,3.715,,,graphql,
+Louisiana,2025,fpi,-8.917,,,graphql,
+Coastal Carolina,2025,fpi,-12.812,,,graphql,
+Texas State,2025,fpi,-3.162,,,graphql,
+Utah State,2025,fpi,-2.341,,,graphql,
+Alabama,2025,fpi,21.804,,,graphql,
+Kennesaw State,2025,fpi,-6.944,,,graphql,
+Mississippi State,2025,fpi,5.72,,,graphql,
+Army,2025,fpi,-5.847,,,graphql,
+Illinois,2025,fpi,9.156,,,graphql,
+Air Force,2025,fpi,-10.077,,,graphql,
+Akron,2025,fpi,-17.417,,,graphql,
+App State,2025,fpi,-12.382,,,graphql,
+Arkansas State,2025,fpi,-9.649,,,graphql,
+Ball State,2025,fpi,-18.917,,,graphql,
+Buffalo,2025,fpi,-13.256,,,graphql,
+UCF,2025,fpi,-0.597,,,graphql,
+Central Michigan,2025,fpi,-9.911,,,graphql,
+Cincinnati,2025,fpi,6.822,,,graphql,
+Eastern Michigan,2025,fpi,-12.953,,,graphql,
+Florida Atlantic,2025,fpi,-9.099,,,graphql,
+Florida International,2025,fpi,-11.499,,,graphql,
+Georgia State,2025,fpi,-18.278,,,graphql,
+Iowa,2025,fpi,12.96,,,graphql,
+Kansas,2025,fpi,4.385,,,graphql,
+Kansas State,2025,fpi,7.459,,,graphql,
+Kent State,2025,fpi,-20.35,,,graphql,
+Liberty,2025,fpi,-10.687,,,graphql,
+Louisiana Tech,2025,fpi,-6.6,,,graphql,
+Miami,2025,fpi,19.042,,,graphql,
+Middle Tennessee,2025,fpi,-18.629,,,graphql,
+Navy,2025,fpi,-2.707,,,graphql,
+Charlotte,2025,fpi,-21.734,,,graphql,
+UL Monroe,2025,fpi,-19.996,,,graphql,
+UNLV,2025,fpi,0.785,,,graphql,
+Nevada,2025,fpi,-13.416,,,graphql,
+Northern Illinois,2025,fpi,-13.353,,,graphql,
+Oregon,2025,fpi,24.402,,,graphql,
+Purdue,2025,fpi,-3.402,,,graphql,
+Sam Houston,2025,fpi,-22.328,,,graphql,
+SMU,2025,fpi,12.676,,,graphql,
+Southern Miss,2025,fpi,-7.056,,,graphql,
+South Carolina,2025,fpi,10.793,,,graphql,
+Missouri State,2025,fpi,-10.102,,,graphql,
+TCU,2025,fpi,8.002,,,graphql,
+Tennessee,2025,fpi,17.033,,,graphql,
+UTSA,2025,fpi,0.54,,,graphql,
+UTEP,2025,fpi,-14.548,,,graphql,
+Texas Tech,2025,fpi,20.45,,,graphql,
+Toledo,2025,fpi,3.744,,,graphql,
+Troy,2025,fpi,-7.268,,,graphql,
+Tulane,2025,fpi,3.477,,,graphql,
+Western Michigan,2025,fpi,-5.206,,,graphql,
+Wyoming,2025,fpi,-10.729,,,graphql,
+Auburn,2025,elo,1660.0,,,graphql,
+UAB,2025,elo,1175.0,,,graphql,
+South Alabama,2025,elo,1375.0,,,graphql,
+Arkansas,2025,elo,1588.0,,,graphql,
+Arizona State,2025,elo,1653.0,,,graphql,
+Arizona,2025,elo,1651.0,,,graphql,
+San Diego State,2025,elo,1530.0,,,graphql,
+San José State,2025,elo,1185.0,,,graphql,
+Stanford,2025,elo,1315.0,,,graphql,
+California,2025,elo,1351.0,,,graphql,
+UCLA,2025,elo,1313.0,,,graphql,
+USC,2025,elo,1898.0,,,graphql,
+Colorado State,2025,elo,1191.0,,,graphql,
+Colorado,2025,elo,1338.0,,,graphql,
+UConn,2025,elo,1554.0,,,graphql,
+Delaware,2025,elo,1266.0,,,graphql,
+Florida State,2025,elo,1606.0,,,graphql,
+Jacksonville State,2025,elo,1501.0,,,graphql,
+Florida,2025,elo,1543.0,,,graphql,
+South Florida,2025,elo,1751.0,,,graphql,
+Georgia Tech,2025,elo,1573.0,,,graphql,
+Georgia,2025,elo,2048.0,,,graphql,
+Hawai'i,2025,elo,1421.0,,,graphql,
+Iowa State,2025,elo,1655.0,,,graphql,
+Boise State,2025,elo,1621.0,,,graphql,
+Northwestern,2025,elo,1531.0,,,graphql,
+Indiana,2025,elo,2142.0,,,graphql,
+Notre Dame,2025,elo,2263.0,,,graphql,
+Kentucky,2025,elo,1578.0,,,graphql,
+Louisville,2025,elo,1631.0,,,graphql,
+Western Kentucky,2025,elo,1401.0,,,graphql,
+LSU,2025,elo,1690.0,,,graphql,
+Boston College,2025,elo,1311.0,,,graphql,
+Massachusetts,2025,elo,748.0,,,graphql,
+Maryland,2025,elo,1414.0,,,graphql,
+Michigan State,2025,elo,1382.0,,,graphql,
+Michigan,2025,elo,1825.0,,,graphql,
+Minnesota,2025,elo,1491.0,,,graphql,
+Missouri,2025,elo,1748.0,,,graphql,
+Ole Miss,2025,elo,1959.0,,,graphql,
+Duke,2025,elo,1573.0,,,graphql,
+East Carolina,2025,elo,1491.0,,,graphql,
+NC State,2025,elo,1481.0,,,graphql,
+North Carolina,2025,elo,1364.0,,,graphql,
+Wake Forest,2025,elo,1542.0,,,graphql,
+Nebraska,2025,elo,1611.0,,,graphql,
+Rutgers,2025,elo,1445.0,,,graphql,
+New Mexico State,2025,elo,1188.0,,,graphql,
+New Mexico,2025,elo,1491.0,,,graphql,
+Syracuse,2025,elo,1230.0,,,graphql,
+Bowling Green,2025,elo,1230.0,,,graphql,
+Miami OH,2025,elo,1451.0,,,graphql,
+Ohio State,2025,elo,2158.0,,,graphql,
+Ohio,2025,elo,1572.0,,,graphql,
+Oklahoma State,2025,elo,1084.0,,,graphql,
+Oklahoma,2025,elo,1824.0,,,graphql,
+Tulsa,2025,elo,1119.0,,,graphql,
+Oregon State,2025,elo,1175.0,,,graphql,
+Penn State,2025,elo,1975.0,,,graphql,
+Temple,2025,elo,1234.0,,,graphql,
+Pittsburgh,2025,elo,1691.0,,,graphql,
+Clemson,2025,elo,1727.0,,,graphql,
+Memphis,2025,elo,1660.0,,,graphql,
+Vanderbilt,2025,elo,1827.0,,,graphql,
+Baylor,2025,elo,1526.0,,,graphql,
+Rice,2025,elo,1144.0,,,graphql,
+Texas A&M,2025,elo,1896.0,,,graphql,
+Houston,2025,elo,1479.0,,,graphql,
+North Texas,2025,elo,1741.0,,,graphql,
+Texas,2025,elo,1880.0,,,graphql,
+BYU,2025,elo,1781.0,,,graphql,
+Utah,2025,elo,1971.0,,,graphql,
+James Madison,2025,elo,1874.0,,,graphql,
+Virginia,2025,elo,1604.0,,,graphql,
+Virginia Tech,2025,elo,1409.0,,,graphql,
+Washington,2025,elo,1802.0,,,graphql,
+Washington State,2025,elo,1508.0,,,graphql,
+Wisconsin,2025,elo,1521.0,,,graphql,
+Marshall,2025,elo,1495.0,,,graphql,
+West Virginia,2025,elo,1355.0,,,graphql,
+Fresno State,2025,elo,1478.0,,,graphql,
+Georgia Southern,2025,elo,1250.0,,,graphql,
+Old Dominion,2025,elo,1635.0,,,graphql,
+Louisiana,2025,elo,1354.0,,,graphql,
+Coastal Carolina,2025,elo,1228.0,,,graphql,
+Texas State,2025,elo,1533.0,,,graphql,
+Utah State,2025,elo,1455.0,,,graphql,
+Alabama,2025,elo,1966.0,,,graphql,
+Kennesaw State,2025,elo,1385.0,,,graphql,
+Mississippi State,2025,elo,1492.0,,,graphql,
+Army,2025,elo,1504.0,,,graphql,
+Illinois,2025,elo,1576.0,,,graphql,
+Air Force,2025,elo,1350.0,,,graphql,
+Akron,2025,elo,1101.0,,,graphql,
+App State,2025,elo,1252.0,,,graphql,
+Arkansas State,2025,elo,1302.0,,,graphql,
+Ball State,2025,elo,1018.0,,,graphql,
+Buffalo,2025,elo,1288.0,,,graphql,
+UCF,2025,elo,1464.0,,,graphql,
+Central Michigan,2025,elo,1291.0,,,graphql,
+Cincinnati,2025,elo,1569.0,,,graphql,
+Eastern Michigan,2025,elo,1246.0,,,graphql,
+Florida Atlantic,2025,elo,1263.0,,,graphql,
+Florida International,2025,elo,1343.0,,,graphql,
+Georgia State,2025,elo,1104.0,,,graphql,
+Iowa,2025,elo,1902.0,,,graphql,
+Kansas,2025,elo,1499.0,,,graphql,
+Kansas State,2025,elo,1680.0,,,graphql,
+Kent State,2025,elo,974.0,,,graphql,
+Liberty,2025,elo,1457.0,,,graphql,
+Louisiana Tech,2025,elo,1407.0,,,graphql,
+Miami,2025,elo,1907.0,,,graphql,
+Middle Tennessee,2025,elo,1148.0,,,graphql,
+Navy,2025,elo,1485.0,,,graphql,
+Charlotte,2025,elo,1035.0,,,graphql,
+UL Monroe,2025,elo,1013.0,,,graphql,
+UNLV,2025,elo,1663.0,,,graphql,
+Nevada,2025,elo,1303.0,,,graphql,
+Northern Illinois,2025,elo,1260.0,,,graphql,
+Oregon,2025,elo,2086.0,,,graphql,
+Purdue,2025,elo,1276.0,,,graphql,
+Sam Houston,2025,elo,1068.0,,,graphql,
+SMU,2025,elo,1860.0,,,graphql,
+Southern Miss,2025,elo,1297.0,,,graphql,
+South Carolina,2025,elo,1730.0,,,graphql,
+Missouri State,2025,elo,1366.0,,,graphql,
+TCU,2025,elo,1602.0,,,graphql,
+Tennessee,2025,elo,1856.0,,,graphql,
+UTSA,2025,elo,1585.0,,,graphql,
+UTEP,2025,elo,1208.0,,,graphql,
+Texas Tech,2025,elo,1997.0,,,graphql,
+Toledo,2025,elo,1642.0,,,graphql,
+Troy,2025,elo,1362.0,,,graphql,
+Tulane,2025,elo,1575.0,,,graphql,
+Western Michigan,2025,elo,1407.0,,,graphql,
+Wyoming,2025,elo,1333.0,,,graphql,
+Auburn,2025,srs,10.5,,,graphql,
+UAB,2025,srs,-14.8,,,graphql,
+South Alabama,2025,srs,-12.0,,,graphql,
+Arkansas,2025,srs,6.1,,,graphql,
+Arizona State,2025,srs,7.5,,,graphql,
+Arizona,2025,srs,12.2,,,graphql,
+San Diego State,2025,srs,3.2,,,graphql,
+San José State,2025,srs,-13.2,,,graphql,
+Stanford,2025,srs,-4.4,,,graphql,
+California,2025,srs,-6.7,,,graphql,
+UCLA,2025,srs,-1.3,,,graphql,
+USC,2025,srs,15.8,,,graphql,
+Colorado State,2025,srs,-13.1,,,graphql,
+Colorado,2025,srs,-2.2,,,graphql,
+UConn,2025,srs,-2.2,,,graphql,
+Delaware,2025,srs,-15.5,,,graphql,
+Florida State,2025,srs,9.8,,,graphql,
+Jacksonville State,2025,srs,-10.3,,,graphql,
+Florida,2025,srs,4.7,,,graphql,
+South Florida,2025,srs,14.2,,,graphql,
+Georgia Tech,2025,srs,6.6,,,graphql,
+Georgia,2025,srs,18.4,,,graphql,
+Hawai'i,2025,srs,-4.7,,,graphql,
+Iowa State,2025,srs,10.4,,,graphql,
+Boise State,2025,srs,4.3,,,graphql,
+Northwestern,2025,srs,2.7,,,graphql,
+Indiana,2025,srs,24.9,,,graphql,
+Notre Dame,2025,srs,23.7,,,graphql,
+Kentucky,2025,srs,5.7,,,graphql,
+Louisville,2025,srs,5.8,,,graphql,
+Western Kentucky,2025,srs,-4.5,,,graphql,
+LSU,2025,srs,9.2,,,graphql,
+Boston College,2025,srs,-8.3,,,graphql,
+Massachusetts,2025,srs,-31.5,,,graphql,
+Maryland,2025,srs,0.1,,,graphql,
+Michigan State,2025,srs,-2.3,,,graphql,
+Michigan,2025,srs,13.0,,,graphql,
+Minnesota,2025,srs,-1.1,,,graphql,
+Missouri,2025,srs,12.0,,,graphql,
+Ole Miss,2025,srs,15.2,,,graphql,
+Duke,2025,srs,2.6,,,graphql,
+East Carolina,2025,srs,3.8,,,graphql,
+NC State,2025,srs,3.8,,,graphql,
+North Carolina,2025,srs,-6.8,,,graphql,
+Wake Forest,2025,srs,3.7,,,graphql,
+Nebraska,2025,srs,4.2,,,graphql,
+Rutgers,2025,srs,1.4,,,graphql,
+New Mexico State,2025,srs,-14.3,,,graphql,
+New Mexico,2025,srs,-0.4,,,graphql,
+Syracuse,2025,srs,-5.3,,,graphql,
+Bowling Green,2025,srs,-15.2,,,graphql,
+Miami OH,2025,srs,-5.1,,,graphql,
+Ohio State,2025,srs,27.2,,,graphql,
+Ohio,2025,srs,-4.1,,,graphql,
+Oklahoma State,2025,srs,-11.7,,,graphql,
+Oklahoma,2025,srs,15.8,,,graphql,
+Tulsa,2025,srs,-10.5,,,graphql,
+Oregon State,2025,srs,-12.6,,,graphql,
+Penn State,2025,srs,13.6,,,graphql,
+Temple,2025,srs,-6.8,,,graphql,
+Pittsburgh,2025,srs,11.9,,,graphql,
+Clemson,2025,srs,4.6,,,graphql,
+Memphis,2025,srs,5.8,,,graphql,
+Vanderbilt,2025,srs,16.2,,,graphql,
+Baylor,2025,srs,1.6,,,graphql,
+Rice,2025,srs,-13.5,,,graphql,
+Texas A&M,2025,srs,19.1,,,graphql,
+Houston,2025,srs,5.7,,,graphql,
+North Texas,2025,srs,11.1,,,graphql,
+Texas,2025,srs,12.0,,,graphql,
+BYU,2025,srs,19.0,,,graphql,
+Utah,2025,srs,22.6,,,graphql,
+James Madison,2025,srs,8.2,,,graphql,
+Virginia,2025,srs,8.8,,,graphql,
+Virginia Tech,2025,srs,-4.8,,,graphql,
+Washington,2025,srs,16.8,,,graphql,
+Washington State,2025,srs,3.6,,,graphql,
+Wisconsin,2025,srs,3.3,,,graphql,
+Marshall,2025,srs,-5.4,,,graphql,
+West Virginia,2025,srs,-1.7,,,graphql,
+Fresno State,2025,srs,-5.8,,,graphql,
+Georgia Southern,2025,srs,-13.2,,,graphql,
+Old Dominion,2025,srs,4.0,,,graphql,
+Louisiana,2025,srs,-10.4,,,graphql,
+Coastal Carolina,2025,srs,-11.6,,,graphql,
+Texas State,2025,srs,-4.0,,,graphql,
+Utah State,2025,srs,-1.7,,,graphql,
+Alabama,2025,srs,17.4,,,graphql,
+Kennesaw State,2025,srs,-4.0,,,graphql,
+Mississippi State,2025,srs,5.4,,,graphql,
+Army,2025,srs,-4.4,,,graphql,
+Illinois,2025,srs,11.7,,,graphql,
+Air Force,2025,srs,-9.4,,,graphql,
+Akron,2025,srs,-14.3,,,graphql,
+App State,2025,srs,-12.5,,,graphql,
+Arkansas State,2025,srs,-11.3,,,graphql,
+Ball State,2025,srs,-18.6,,,graphql,
+Buffalo,2025,srs,-14.4,,,graphql,
+UCF,2025,srs,-0.2,,,graphql,
+Central Michigan,2025,srs,-6.4,,,graphql,
+Cincinnati,2025,srs,7.0,,,graphql,
+Eastern Michigan,2025,srs,-16.2,,,graphql,
+Florida Atlantic,2025,srs,-9.6,,,graphql,
+Florida International,2025,srs,-10.7,,,graphql,
+Georgia State,2025,srs,-19.6,,,graphql,
+Iowa,2025,srs,11.1,,,graphql,
+Kansas,2025,srs,3.2,,,graphql,
+Kansas State,2025,srs,7.1,,,graphql,
+Kent State,2025,srs,-15.8,,,graphql,
+Liberty,2025,srs,-10.3,,,graphql,
+Louisiana Tech,2025,srs,-4.7,,,graphql,
+Miami,2025,srs,18.8,,,graphql,
+Middle Tennessee,2025,srs,-19.6,,,graphql,
+Navy,2025,srs,-1.0,,,graphql,
+Charlotte,2025,srs,-21.9,,,graphql,
+UL Monroe,2025,srs,-20.8,,,graphql,
+UNLV,2025,srs,-0.7,,,graphql,
+Nevada,2025,srs,-12.5,,,graphql,
+Northern Illinois,2025,srs,-16.5,,,graphql,
+Oregon,2025,srs,22.2,,,graphql,
+Purdue,2025,srs,-2.1,,,graphql,
+Sam Houston,2025,srs,-21.7,,,graphql,
+SMU,2025,srs,11.0,,,graphql,
+Southern Miss,2025,srs,-7.4,,,graphql,
+South Carolina,2025,srs,6.4,,,graphql,
+Missouri State,2025,srs,-7.0,,,graphql,
+TCU,2025,srs,6.8,,,graphql,
+Tennessee,2025,srs,15.5,,,graphql,
+UTSA,2025,srs,1.0,,,graphql,
+UTEP,2025,srs,-15.6,,,graphql,
+Texas Tech,2025,srs,24.0,,,graphql,
+Toledo,2025,srs,5.8,,,graphql,
+Troy,2025,srs,-9.3,,,graphql,
+Tulane,2025,srs,3.5,,,graphql,
+Western Michigan,2025,srs,-2.9,,,graphql,
+Wyoming,2025,srs,-10.1,,,graphql,
+North Dakota State,2025,coleman,24.00778339631213,,,,0.1.0
+Jacksonville State,2025,coleman,20.729828850014112,,,,0.1.0
+James Madison,2025,coleman,18.80410559240881,,,,0.1.0
+Alabama,2025,coleman,18.525184204813772,,,,0.1.0
+Tarleton State,2025,coleman,18.19117275045914,,,,0.1.0
+Ohio State,2025,coleman,17.703015412966842,,,,0.1.0
+Georgia,2025,coleman,17.251701065928707,,,,0.1.0
+Montana State,2025,coleman,16.92136602004089,,,,0.1.0
+Harvard,2025,coleman,16.66430285212438,,,,0.1.0
+Penn State,2025,coleman,15.890057706065658,,,,0.1.0
+Clemson,2025,coleman,15.762263208566427,,,,0.1.0
+Montana,2025,coleman,15.63864736715546,,,,0.1.0
+Missouri State,2025,coleman,14.446263612874318,,,,0.1.0
+Notre Dame,2025,coleman,14.111088177859308,,,,0.1.0
+Delaware,2025,coleman,13.872210549589553,,,,0.1.0
+North Dakota,2025,coleman,13.583222789950891,,,,0.1.0
+Michigan,2025,coleman,12.966591699459737,,,,0.1.0
+Mercer,2025,coleman,12.249247539743134,,,,0.1.0
+Lehigh,2025,coleman,11.782989409072727,,,,0.1.0
+Sacramento State,2025,coleman,10.597661180333517,,,,0.1.0
+Iowa,2025,coleman,10.465563717098439,,,,0.1.0
+South Dakota State,2025,coleman,10.399035022106924,,,,0.1.0
+LSU,2025,coleman,9.980741463384753,,,,0.1.0
+Illinois State,2025,coleman,9.930802405235037,,,,0.1.0
+Monmouth,2025,coleman,9.618293302589576,,,,0.1.0
+Kennesaw State,2025,coleman,9.005401426246364,,,,0.1.0
+Liberty,2025,coleman,8.75146143170113,,,,0.1.0
+Washington,2025,coleman,8.454854761114136,,,,0.1.0
+Southern Utah,2025,coleman,8.429134343610526,,,,0.1.0
+Auburn,2025,coleman,7.987420403823913,,,,0.1.0
+Southern Illinois,2025,coleman,7.927485466796227,,,,0.1.0
+Stephen F. Austin,2025,coleman,7.847062238645229,,,,0.1.0
+Oklahoma,2025,coleman,7.846726043921082,,,,0.1.0
+Texas A&M,2025,coleman,7.800093771550628,,,,0.1.0
+Rhode Island,2025,coleman,7.796248125487166,,,,0.1.0
+Kansas State,2025,coleman,7.794290826651093,,,,0.1.0
+New Hampshire,2025,coleman,7.792731453598185,,,,0.1.0
+Oregon,2025,coleman,7.499072915389888,,,,0.1.0
+Utah,2025,coleman,7.071101535891271,,,,0.1.0
+Memphis,2025,coleman,7.058811139307627,,,,0.1.0
+Sam Houston,2025,coleman,6.7720449716180156,,,,0.1.0
+West Georgia,2025,coleman,6.6529933076082575,,,,0.1.0
+Ole Miss,2025,coleman,6.64975966346787,,,,0.1.0
+Towson,2025,coleman,6.400231454072092,,,,0.1.0
+Princeton,2025,coleman,6.071677767156292,,,,0.1.0
+Northern Arizona,2025,coleman,6.062298070516144,,,,0.1.0
+Idaho,2025,coleman,5.920865641015467,,,,0.1.0
+Tennessee,2025,coleman,5.813195117886041,,,,0.1.0
+Youngstown State,2025,coleman,5.759621449713627,,,,0.1.0
+Tennessee Tech,2025,coleman,5.740038738533192,,,,0.1.0
+Texas,2025,coleman,5.711399478396734,,,,0.1.0
+UC Davis,2025,coleman,5.529307567671417,,,,0.1.0
+Texas Tech,2025,coleman,5.510320226558502,,,,0.1.0
+Fresno State,2025,coleman,5.360097162650526,,,,0.1.0
+Abilene Christian,2025,coleman,5.199990350589767,,,,0.1.0
+Air Force,2025,coleman,5.063837844432587,,,,0.1.0
+Iowa State,2025,coleman,5.029272420361254,,,,0.1.0
+Army,2025,coleman,4.834262027898218,,,,0.1.0
+North Carolina,2025,coleman,4.794775960057844,,,,0.1.0
+Villanova,2025,coleman,4.37764404223172,,,,0.1.0
+St. Thomas (MN),2025,coleman,4.337232117664177,,,,0.1.0
+Yale,2025,coleman,4.014954406467057,,,,0.1.0
+Louisville,2025,coleman,4.013856352422431,,,,0.1.0
+Alabama State,2025,coleman,3.9361782021857916,,,,0.1.0
+Western Kentucky,2025,coleman,3.9276659895377737,,,,0.1.0
+Austin Peay,2025,coleman,3.9158403287776054,,,,0.1.0
+SMU,2025,coleman,3.853621674750043,,,,0.1.0
+USC,2025,coleman,3.8313898426087967,,,,0.1.0
+Kentucky,2025,coleman,3.806984527447325,,,,0.1.0
+SE Louisiana,2025,coleman,3.7446582998698155,,,,0.1.0
+Washington State,2025,coleman,3.594930209304902,,,,0.1.0
+Missouri,2025,coleman,3.5502969762600323,,,,0.1.0
+Baylor,2025,coleman,3.5141022933439636,,,,0.1.0
+Mississippi State,2025,coleman,3.3691349216533872,,,,0.1.0
+Minnesota,2025,coleman,3.361302467059076,,,,0.1.0
+UCF,2025,coleman,3.115479781163401,,,,0.1.0
+Wake Forest,2025,coleman,2.991044828236163,,,,0.1.0
+Boise State,2025,coleman,2.965102742146887,,,,0.1.0
+Gardner-Webb,2025,coleman,2.8312009318192626,,,,0.1.0
+Dartmouth,2025,coleman,2.7532435064858802,,,,0.1.0
+App State,2025,coleman,2.689025262133277,,,,0.1.0
+Wyoming,2025,coleman,2.610454138889894,,,,0.1.0
+Western Carolina,2025,coleman,2.5978529507347563,,,,0.1.0
+Pennsylvania,2025,coleman,2.536951645066133,,,,0.1.0
+Indiana,2025,coleman,2.488709874848218,,,,0.1.0
+Nebraska,2025,coleman,2.465360601635024,,,,0.1.0
+South Dakota,2025,coleman,2.151347964653504,,,,0.1.0
+South Carolina,2025,coleman,2.1360941106710314,,,,0.1.0
+Wisconsin,2025,coleman,2.0834575310056067,,,,0.1.0
+Ohio,2025,coleman,2.0095267757275526,,,,0.1.0
+Pittsburgh,2025,coleman,1.9924528094080385,,,,0.1.0
+Wofford,2025,coleman,1.8507858305434786,,,,0.1.0
+Jackson State,2025,coleman,1.811140896740346,,,,0.1.0
+Holy Cross,2025,coleman,1.7269881767863469,,,,0.1.0
+Northern Colorado,2025,coleman,1.7269388222811237,,,,0.1.0
+Florida State,2025,coleman,1.7249797110398246,,,,0.1.0
+Florida,2025,coleman,1.7249540632746578,,,,0.1.0
+Georgia Tech,2025,coleman,1.6994563257386526,,,,0.1.0
+San Diego State,2025,coleman,1.66361850704694,,,,0.1.0
+East Tennessee State,2025,coleman,1.5986206614572165,,,,0.1.0
+Idaho State,2025,coleman,1.531965426195577,,,,0.1.0
+Houston,2025,coleman,1.4287976834282023,,,,0.1.0
+North Carolina Central,2025,coleman,1.35121208272386,,,,0.1.0
+Troy,2025,coleman,1.24604636319307,,,,0.1.0
+Lamar,2025,coleman,1.1601026286900602,,,,0.1.0
+Maine,2025,coleman,1.0914596815678168,,,,0.1.0
+Cal Poly,2025,coleman,1.0586649647849011,,,,0.1.0
+Navy,2025,coleman,0.9852353207685054,,,,0.1.0
+UT Rio Grande Valley,2025,coleman,0.9381183026424065,,,,0.1.0
+North Texas,2025,coleman,0.9306382307180998,,,,0.1.0
+Arizona State,2025,coleman,0.854028905970238,,,,0.1.0
+Miami,2025,coleman,0.8349491667424065,,,,0.1.0
+Oklahoma State,2025,coleman,0.5902223210636945,,,,0.1.0
+Northwestern,2025,coleman,0.5860822343733645,,,,0.1.0
+Lafayette,2025,coleman,0.5205609957800554,,,,0.1.0
+California,2025,coleman,0.4546668248421257,,,,0.1.0
+UNLV,2025,coleman,0.42865660482202017,,,,0.1.0
+Central Arkansas,2025,coleman,0.3223313401705292,,,,0.1.0
+Incarnate Word,2025,coleman,0.32144172570837526,,,,0.1.0
+Tulane,2025,coleman,0.29122966288511165,,,,0.1.0
+TCU,2025,coleman,0.2032476742824869,,,,0.1.0
+NC State,2025,coleman,-0.07116899766764195,,,,0.1.0
+Virginia Tech,2025,coleman,-0.2238856008828911,,,,0.1.0
+Utah State,2025,coleman,-0.2910981819397076,,,,0.1.0
+Arkansas,2025,coleman,-0.297350813885199,,,,0.1.0
+Vanderbilt,2025,coleman,-0.3007320695013007,,,,0.1.0
+Lindenwood,2025,coleman,-0.30130404330054894,,,,0.1.0
+Buffalo,2025,coleman,-0.3300497482685367,,,,0.1.0
+BYU,2025,coleman,-0.37343306963008516,,,,0.1.0
+Virginia,2025,coleman,-0.42882131648635813,,,,0.1.0
+The Citadel,2025,coleman,-0.5389325808434462,,,,0.1.0
+Cincinnati,2025,coleman,-0.6764596470775013,,,,0.1.0
+William & Mary,2025,coleman,-0.6814369892749177,,,,0.1.0
+Eastern Kentucky,2025,coleman,-0.8269659953095445,,,,0.1.0
+San Diego,2025,coleman,-0.8539952642704938,,,,0.1.0
+Brown,2025,coleman,-1.093558863361059,,,,0.1.0
+West Virginia,2025,coleman,-1.1556008389024228,,,,0.1.0
+Northern Michigan,2025,coleman,-1.19104805760802,,,,0.1.0
+Marshall,2025,coleman,-1.2098331021711028,,,,0.1.0
+UT Martin,2025,coleman,-1.2651584506236482,,,,0.1.0
+Louisiana,2025,coleman,-1.2761554824008807,,,,0.1.0
+Cornell,2025,coleman,-1.2795224755634438,,,,0.1.0
+Stony Brook,2025,coleman,-1.4519512026303052,,,,0.1.0
+Elon,2025,coleman,-1.5197374852598649,,,,0.1.0
+Colgate,2025,coleman,-1.6827301659245557,,,,0.1.0
+Nevada,2025,coleman,-1.8652480231397925,,,,0.1.0
+South Florida,2025,coleman,-1.9424803221383091,,,,0.1.0
+Duke,2025,coleman,-1.9857779464597756,,,,0.1.0
+Louisiana Tech,2025,coleman,-2.012205014977669,,,,0.1.0
+Boston College,2025,coleman,-2.0486233085457504,,,,0.1.0
+Florida Atlantic,2025,coleman,-2.395698768258848,,,,0.1.0
+Utah Tech,2025,coleman,-2.50827681794238,,,,0.1.0
+Western Michigan,2025,coleman,-2.5428088414133647,,,,0.1.0
+Richmond,2025,coleman,-2.560912096880053,,,,0.1.0
+Middle Tennessee,2025,coleman,-2.579614338567437,,,,0.1.0
+Toledo,2025,coleman,-2.5828671046901697,,,,0.1.0
+Charleston Southern,2025,coleman,-2.642558579772278,,,,0.1.0
+Michigan State,2025,coleman,-2.741252016413398,,,,0.1.0
+Temple,2025,coleman,-2.7949537782506013,,,,0.1.0
+Maryland,2025,coleman,-2.796032882202705,,,,0.1.0
+Central Washington,2025,coleman,-2.8782570608405855,,,,0.1.0
+San José State,2025,coleman,-2.9373279044168203,,,,0.1.0
+Eastern Washington,2025,coleman,-3.0114420363289334,,,,0.1.0
+Prairie View A&M,2025,coleman,-3.0965444254123815,,,,0.1.0
+Illinois,2025,coleman,-3.1621006665547964,,,,0.1.0
+UConn,2025,coleman,-3.29305057680817,,,,0.1.0
+Oregon State,2025,coleman,-3.3287897817767966,,,,0.1.0
+Hawai'i,2025,coleman,-3.4111505188232005,,,,0.1.0
+Coastal Carolina,2025,coleman,-3.445266009348577,,,,0.1.0
+Arizona,2025,coleman,-3.4868138478120794,,,,0.1.0
+Northern Iowa,2025,coleman,-3.5232755130505558,,,,0.1.0
+UCLA,2025,coleman,-3.563087355986543,,,,0.1.0
+East Carolina,2025,coleman,-3.5915757287382064,,,,0.1.0
+South Alabama,2025,coleman,-3.6876621583738958,,,,0.1.0
+Drake,2025,coleman,-3.759266082743194,,,,0.1.0
+Miami (OH),2025,coleman,-3.903641558840774,,,,0.1.0
+Southeast Missouri State,2025,coleman,-4.179391147646112,,,,0.1.0
+Central Michigan,2025,coleman,-4.205045330566413,,,,0.1.0
+UTSA,2025,coleman,-4.269460843853253,,,,0.1.0
+Tulsa,2025,coleman,-4.308781618948821,,,,0.1.0
+Delaware State,2025,coleman,-4.317240999694122,,,,0.1.0
+New Mexico State,2025,coleman,-4.351245170636863,,,,0.1.0
+Arkansas State,2025,coleman,-4.392691956291425,,,,0.1.0
+Northern Illinois,2025,coleman,-4.496713275130349,,,,0.1.0
+Eastern Michigan,2025,coleman,-4.538457275207878,,,,0.1.0
+South Carolina State,2025,coleman,-4.5445678050909075,,,,0.1.0
+Chattanooga,2025,coleman,-4.585265929029769,,,,0.1.0
+Bryant,2025,coleman,-4.620651935714911,,,,0.1.0
+Syracuse,2025,coleman,-4.7486414864245,,,,0.1.0
+UAB,2025,coleman,-4.757561686539441,,,,0.1.0
+Colorado State,2025,coleman,-5.00819291883935,,,,0.1.0
+Central Connecticut,2025,coleman,-5.214530542813562,,,,0.1.0
+Stanford,2025,coleman,-5.387914215454698,,,,0.1.0
+Purdue,2025,coleman,-5.404705578377074,,,,0.1.0
+Murray State,2025,coleman,-5.888257608053384,,,,0.1.0
+Weber State,2025,coleman,-5.906782217002961,,,,0.1.0
+Furman,2025,coleman,-5.91503763974159,,,,0.1.0
+Old Dominion,2025,coleman,-6.036931183569473,,,,0.1.0
+Dayton,2025,coleman,-6.1140081541996585,,,,0.1.0
+Long Island University,2025,coleman,-6.180708832917721,,,,0.1.0
+Kansas,2025,coleman,-6.3032031282389855,,,,0.1.0
+Georgia State,2025,coleman,-6.345933854750308,,,,0.1.0
+Nicholls,2025,coleman,-6.551497357500449,,,,0.1.0
+Colorado,2025,coleman,-6.624389365529573,,,,0.1.0
+Samford,2025,coleman,-6.63802018581188,,,,0.1.0
+Rutgers,2025,coleman,-6.655406098791367,,,,0.1.0
+Mercyhurst,2025,coleman,-6.713857227988533,,,,0.1.0
+Presbyterian,2025,coleman,-6.754785333895577,,,,0.1.0
+Portland State,2025,coleman,-6.912188130068481,,,,0.1.0
+Merrimack,2025,coleman,-7.036615666052706,,,,0.1.0
+New Mexico,2025,coleman,-7.080833742411489,,,,0.1.0
+Sacred Heart,2025,coleman,-7.11991945334675,,,,0.1.0
+Georgia Southern,2025,coleman,-7.11992084987307,,,,0.1.0
+Bucknell,2025,coleman,-7.175287470984479,,,,0.1.0
+Butler,2025,coleman,-7.184856261455326,,,,0.1.0
+Indiana State,2025,coleman,-7.357572625895237,,,,0.1.0
+Florida International,2025,coleman,-7.588154053401497,,,,0.1.0
+McNeese,2025,coleman,-7.624582638912699,,,,0.1.0
+Southern Miss,2025,coleman,-7.768237437285416,,,,0.1.0
+Bowling Green,2025,coleman,-8.02383667255958,,,,0.1.0
+Georgetown,2025,coleman,-8.094931972632192,,,,0.1.0
+East Texas A&M,2025,coleman,-8.119250426965616,,,,0.1.0
+Charlotte,2025,coleman,-8.123266061920221,,,,0.1.0
+Chadron St,2025,coleman,-8.129233999002135,,,,0.1.0
+Rice,2025,coleman,-8.193185149183172,,,,0.1.0
+Columbia,2025,coleman,-8.235743727883408,,,,0.1.0
+UTEP,2025,coleman,-8.25376452321807,,,,0.1.0
+UAlbany,2025,coleman,-8.277757467264793,,,,0.1.0
+Eastern Illinois,2025,coleman,-8.38305786741517,,,,0.1.0
+Campbell,2025,coleman,-8.416460818646387,,,,0.1.0
+Duquesne,2025,coleman,-8.583951447471904,,,,0.1.0
+Stonehill,2025,coleman,-8.885209958462143,,,,0.1.0
+Texas State,2025,coleman,-9.141603451342888,,,,0.1.0
+Texas Southern,2025,coleman,-9.308679695930804,,,,0.1.0
+Fordham,2025,coleman,-9.829942916610527,,,,0.1.0
+Virginia St,2025,coleman,-10.025647210245191,,,,0.1.0
+Kentucky State,2025,coleman,-10.063421149360064,,,,0.1.0
+Hanover College,2025,coleman,-10.274215145600373,,,,0.1.0
+Webber International,2025,coleman,-10.325071012247125,,,,0.1.0
+North Alabama,2025,coleman,-10.370938120506,,,,0.1.0
+Wagner,2025,coleman,-11.08052080945324,,,,0.1.0
+Truman State,2025,coleman,-11.206126826093957,,,,0.1.0
+Adrian,2025,coleman,-11.332589903634677,,,,0.1.0
+Norfolk State,2025,coleman,-11.492442432411405,,,,0.1.0
+Morgan State,2025,coleman,-11.706214275509407,,,,0.1.0
+Robert Morris,2025,coleman,-11.850760989485238,,,,0.1.0
+Western Illinois,2025,coleman,-11.874054732641365,,,,0.1.0
+Akron,2025,coleman,-11.884533042031922,,,,0.1.0
+Marist,2025,coleman,-12.284442882194298,,,,0.1.0
+Florida A&M,2025,coleman,-12.729747109018785,,,,0.1.0
+Miles College,2025,coleman,-13.056234417144928,,,,0.1.0
+McKendree,2025,coleman,-13.164451390596863,,,,0.1.0
+Ball State,2025,coleman,-13.264895743662649,,,,0.1.0
+North Carolina A&T,2025,coleman,-13.296485542256239,,,,0.1.0
+Tennessee State,2025,coleman,-13.443214851991304,,,,0.1.0
+Grambling,2025,coleman,-13.858946754956218,,,,0.1.0
+Massachusetts,2025,coleman,-14.516431250067187,,,,0.1.0
+UL Monroe,2025,coleman,-14.75446718754829,,,,0.1.0
+Kent State,2025,coleman,-14.923478043819859,,,,0.1.0
+Alabama A&M,2025,coleman,-15.294268426301063,,,,0.1.0
+Bethune-Cookman,2025,coleman,-15.428117897500965,,,,0.1.0
+Houston Christian,2025,coleman,-15.56378580409104,,,,0.1.0
+Bowie State,2025,coleman,-16.4135907139768,,,,0.1.0
+New Haven,2025,coleman,-16.587898053162405,,,,0.1.0
+Hampton,2025,coleman,-16.66588234747991,,,,0.1.0
+Alcorn State,2025,coleman,-16.853540740841062,,,,0.1.0
+Howard,2025,coleman,-16.968024992185228,,,,0.1.0
+St. Francis (PA),2025,coleman,-17.095646329969046,,,,0.1.0
+West Liberty,2025,coleman,-17.160126402466766,,,,0.1.0
+Albany State GA,2025,coleman,-17.396988320456618,,,,0.1.0
+Allen,2025,coleman,-17.58078259292124,,,,0.1.0
+Elizabeth City State,2025,coleman,-18.020007895352308,,,,0.1.0
+Southern,2025,coleman,-18.579077712471655,,,,0.1.0
+VMI,2025,coleman,-19.044135055579495,,,,0.1.0
+Valdosta State,2025,coleman,-19.239994921387357,,,,0.1.0
+Northwestern State,2025,coleman,-19.396173576733695,,,,0.1.0
+ERSKINE,2025,coleman,-19.524091701291944,,,,0.1.0
+Morehead State,2025,coleman,-20.717108723418953,,,,0.1.0
+St. Anselm,2025,coleman,-20.964882758255555,,,,0.1.0
+Tuskegee,2025,coleman,-20.98659604961449,,,,0.1.0
+American International,2025,coleman,-21.005518876836977,,,,0.1.0
+Upper Iowa University,2025,coleman,-23.317791974117288,,,,0.1.0
+Fayetteville State,2025,coleman,-24.516133450073177,,,,0.1.0
+Mississippi Valley State,2025,coleman,-24.579350232782694,,,,0.1.0
+Northeastern State,2025,coleman,-24.818499494986284,,,,0.1.0
+Valparaiso,2025,coleman,-25.41597127108629,,,,0.1.0
+Davidson,2025,coleman,-25.764524732267983,,,,0.1.0
+Central State (OH),2025,coleman,-26.203343536961803,,,,0.1.0
+Arkansas-Pine Bluff,2025,coleman,-26.24607102128098,,,,0.1.0
+Kentucky Christian,2025,coleman,-26.27524230500648,,,,0.1.0
+Edward Waters,2025,coleman,-26.532187003193243,,,,0.1.0
+Stetson,2025,coleman,-27.425486843647143,,,,0.1.0
+Thomas More College,2025,coleman,-29.46293094903205,,,,0.1.0
+Bentley,2025,coleman,-32.860850709458134,,,,0.1.0
+Lincoln (PA),2025,coleman,-32.983505496239765,,,,0.1.0
+Savannah St,2025,coleman,-33.792949190876605,,,,0.1.0
+Morehouse College,2025,coleman,-34.04238921360091,,,,0.1.0
+Western Oregon,2025,coleman,-34.85423384770908,,,,0.1.0
+Louisiana College,2025,coleman,-37.36878421804251,,,,0.1.0
+Southern Connecticut State,2025,coleman,-38.65572061360679,,,,0.1.0
+Sul Ross State,2025,coleman,-39.531427431818315,,,,0.1.0
+Ferrum,2025,coleman,-40.43644683324416,,,,0.1.0
+Cumberland (TN),2025,coleman,-41.11361670784213,,,,0.1.0
+Virginia University Of Lynchburg,2025,coleman,-46.78052791745033,,,,0.1.0
+Lane College,2025,coleman,-47.14064273323899,,,,0.1.0
+Lincoln (CA),2025,coleman,-48.116381766702986,,,,0.1.0
+BLUEFIELD,2025,coleman,-58.649160405676426,,,,0.1.0
+Warner University,2025,coleman,-59.01404539992545,,,,0.1.0
+Greensboro College,2025,coleman,-59.03405586113058,,,,0.1.0
+Little Rock,2025,coleman,-66.98525379951694,,,,0.1.0

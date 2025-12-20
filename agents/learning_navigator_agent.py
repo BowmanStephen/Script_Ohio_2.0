@@ -176,18 +176,18 @@ class LearningNavigatorAgent(BaseAgent):
 
         return {
             "success": True,
-            "user_role": user_role.value
-            if hasattr(user_role, "value")
-            else str(user_role),
+            "user_role": (
+                user_role.value if hasattr(user_role, "value") else str(user_role)
+            ),
             "current_position": current_position,
             "total_notebooks": len(learning_path),
             "current_notebook": current_notebook_info,
             "next_notebook": next_notebook_info,
             "learning_path": learning_path[:5],  # Return next 5 notebooks
             "recommendations": recommendations,
-            "progress_percentage": (current_position / len(learning_path)) * 100
-            if learning_path
-            else 0,
+            "progress_percentage": (
+                (current_position / len(learning_path)) * 100 if learning_path else 0
+            ),
         }
 
     def _explain_concepts(
@@ -223,9 +223,9 @@ class LearningNavigatorAgent(BaseAgent):
         return {
             "success": True,
             "resources": resources,
-            "user_role": user_role.value
-            if hasattr(user_role, "value")
-            else str(user_role),
+            "user_role": (
+                user_role.value if hasattr(user_role, "value") else str(user_role)
+            ),
             "current_topic": current_topic,
         }
 
@@ -756,7 +756,10 @@ request = AnalyticsRequest(
 )
 response = orchestrator.process_analytics_request(request)
 print(response.insights)
-""".format(current_notebook=current_notebook or "starter_pack", skill_level=skill_level)
+""".format(
+                    current_notebook=current_notebook or "starter_pack",
+                    skill_level=skill_level,
+                )
             },
         }
 

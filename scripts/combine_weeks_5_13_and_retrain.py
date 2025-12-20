@@ -241,12 +241,12 @@ class WeekDataCombiner:
                 if game_id in game_lookup:
                     game = game_lookup[game_id]
                     outcomes[game_id] = {
-                        "home_points": game.home_points
-                        if game.home_points is not None
-                        else None,
-                        "away_points": game.away_points
-                        if game.away_points is not None
-                        else None,
+                        "home_points": (
+                            game.home_points if game.home_points is not None else None
+                        ),
+                        "away_points": (
+                            game.away_points if game.away_points is not None else None
+                        ),
                         "completed": getattr(game, "completed", False),
                     }
 

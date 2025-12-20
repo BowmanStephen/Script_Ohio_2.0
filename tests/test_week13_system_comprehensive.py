@@ -108,9 +108,9 @@ class TestWeek13System:
         # Validate results
         assert result["status"] == "success"
         assert "data" in result
-        assert execution_time < 2.0, (
-            f"Asset discovery took {execution_time:.2f}s (target: <2s)"
-        )
+        assert (
+            execution_time < 2.0
+        ), f"Asset discovery took {execution_time:.2f}s (target: <2s)"
 
         week13_assets = result["data"]["discovered_assets"]
         assert len(week13_assets) >= 10, "Should find at least 10 Week 13 assets"
@@ -142,9 +142,9 @@ class TestWeek13System:
         # Validate results
         assert result["status"] == "success"
         assert "data" in result
-        assert execution_time < 2.0, (
-            f"Template extraction took {execution_time:.2f}s (target: <2s)"
-        )
+        assert (
+            execution_time < 2.0
+        ), f"Template extraction took {execution_time:.2f}s (target: <2s)"
 
         templates = result["data"]["templates"]
         assert len(templates) >= 1, "Should extract at least 1 template"
@@ -175,13 +175,14 @@ class TestWeek13System:
         execution_time = time.time() - start_time
 
         # Validate routing
-        assert response.status in ["success", "partial_success"], (
-            f"Routing failed: {response.error_message}"
-        )
+        assert response.status in [
+            "success",
+            "partial_success",
+        ], f"Routing failed: {response.error_message}"
         assert execution_time < 2.0, f"Routing took {execution_time:.2f}s (target: <2s)"
-        assert response.metadata.get("agent_type") == "week13_consolidation", (
-            "Incorrect routing"
-        )
+        assert (
+            response.metadata.get("agent_type") == "week13_consolidation"
+        ), "Incorrect routing"
 
         print(f"✅ Week 13 consolidation routing successful in {execution_time:.2f}s")
 
@@ -199,12 +200,13 @@ class TestWeek13System:
         execution_time = time.time() - start_time
 
         # Validate routing
-        assert response.status in ["success", "partial_success"], (
-            f"Legacy routing failed: {response.error_message}"
-        )
-        assert execution_time < 2.0, (
-            f"Legacy routing took {execution_time:.2f}s (target: <2s)"
-        )
+        assert response.status in [
+            "success",
+            "partial_success",
+        ], f"Legacy routing failed: {response.error_message}"
+        assert (
+            execution_time < 2.0
+        ), f"Legacy routing took {execution_time:.2f}s (target: <2s)"
 
         print(f"✅ Week 13 legacy routing successful in {execution_time:.2f}s")
 
@@ -223,9 +225,9 @@ class TestWeek13System:
             assert result["status"] == "success"
 
         avg_consolidation_time = sum(consolidation_times) / len(consolidation_times)
-        assert avg_consolidation_time < 2.0, (
-            f"Average consolidation time: {avg_consolidation_time:.2f}s (target: <2s)"
-        )
+        assert (
+            avg_consolidation_time < 2.0
+        ), f"Average consolidation time: {avg_consolidation_time:.2f}s (target: <2s)"
 
         # Test legacy performance
         legacy_times = []
@@ -240,9 +242,9 @@ class TestWeek13System:
             assert result["status"] == "success"
 
         avg_legacy_time = sum(legacy_times) / len(legacy_times)
-        assert avg_legacy_time < 2.0, (
-            f"Average legacy time: {avg_legacy_time:.2f}s (target: <2s)"
-        )
+        assert (
+            avg_legacy_time < 2.0
+        ), f"Average legacy time: {avg_legacy_time:.2f}s (target: <2s)"
 
         print(f"✅ Performance requirements met:")
         print(f"   - Consolidation: {avg_consolidation_time:.2f}s average")
@@ -281,9 +283,9 @@ class TestWeek13System:
         assert legacy_response.status in ["success", "partial_success"]
 
         workflow_time = time.time() - workflow_start_time
-        assert workflow_time < 5.0, (
-            f"Complete workflow took {workflow_time:.2f}s (target: <5s)"
-        )
+        assert (
+            workflow_time < 5.0
+        ), f"Complete workflow took {workflow_time:.2f}s (target: <5s)"
 
         print(f"✅ Complete workflow successful in {workflow_time:.2f}s")
 
@@ -325,9 +327,9 @@ class TestWeek13System:
         # Validate results
         assert result["status"] == "success"
         assert "validation_report" in result
-        assert execution_time < 2.0, (
-            f"Quality validation took {execution_time:.2f}s (target: <2s)"
-        )
+        assert (
+            execution_time < 2.0
+        ), f"Quality validation took {execution_time:.2f}s (target: <2s)"
 
         validation_report = result["validation_report"]
         assert "assets_validated" in validation_report

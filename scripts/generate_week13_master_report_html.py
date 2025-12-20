@@ -43,14 +43,18 @@ class Week13MasterReportGenerator:
                     "winner": g.get("ensemble", {}).get("winner", ""),
                     "margin": g.get("ensemble", {}).get("margin", 0),
                     "spread": g["game_info"].get("spread", 0),
-                    "upset_prob": g.get("strategic", {}).get("upset_probability", 0)
-                    if g.get("strategic")
-                    else 0,
-                    "betting_rec": ", ".join(
-                        g.get("strategic", {}).get("betting_recommendations", [])
-                    )
-                    if g.get("strategic")
-                    else "",
+                    "upset_prob": (
+                        g.get("strategic", {}).get("upset_probability", 0)
+                        if g.get("strategic")
+                        else 0
+                    ),
+                    "betting_rec": (
+                        ", ".join(
+                            g.get("strategic", {}).get("betting_recommendations", [])
+                        )
+                        if g.get("strategic")
+                        else ""
+                    ),
                     "playoff_impact": self._get_playoff_impact(g["game_id"]),
                     "narrative": g.get("narrative", ""),
                 }
@@ -516,9 +520,11 @@ class Week13MasterReportGenerator:
             conf_class = (
                 "confidence-high"
                 if game["confidence"] > 0.7
-                else "confidence-medium"
-                if game["confidence"] > 0.5
-                else "confidence-low"
+                else (
+                    "confidence-medium"
+                    if game["confidence"] > 0.5
+                    else "confidence-low"
+                )
             )
             top_games_html += f"""
             <div class="game-card" onclick="showGameDetail({game["game_id"]})">
@@ -626,9 +632,11 @@ class Week13MasterReportGenerator:
             conf_class = (
                 "confidence-high"
                 if game["confidence"] > 0.7
-                else "confidence-medium"
-                if game["confidence"] > 0.5
-                else "confidence-low"
+                else (
+                    "confidence-medium"
+                    if game["confidence"] > 0.5
+                    else "confidence-low"
+                )
             )
             table_rows += f"""
             <tr onclick="showGameDetail({game["game_id"]})" style="cursor: pointer;">
@@ -1137,10 +1145,15 @@ class Week13MasterReportGenerator:
             heatmap_data = {
                 "z": [
                     [
-                        1
-                        if teams[i]
-                        in [g["game_info"]["home_team"], g["game_info"]["away_team"]]
-                        else 0
+                        (
+                            1
+                            if teams[i]
+                            in [
+                                g["game_info"]["home_team"],
+                                g["game_info"]["away_team"],
+                            ]
+                            else 0
+                        )
                         for g in playoff_games[:10]
                     ]
                     for i in range(len(teams))

@@ -156,9 +156,9 @@ class Week13PerformanceBenchmark:
                 {"user_id": f"perf_test_{i}"},
             )
             batch_times.append(metrics.execution_time)
-            assert metrics.success, (
-                f"Batch operation {i} failed: {metrics.error_message}"
-            )
+            assert (
+                metrics.success
+            ), f"Batch operation {i} failed: {metrics.error_message}"
 
         avg_batch_time = sum(batch_times) / len(batch_times)
         print(f"   Batch avg: {avg_batch_time:.3f}s")
@@ -171,9 +171,11 @@ class Week13PerformanceBenchmark:
         requests = [
             AnalyticsRequest(
                 user_id=f"perf_user_{i}",
-                query=f"Consolidate Week {i % 2 + 13} analytics"
-                if i % 2 == 0
-                else "Extract templates from Week 13",
+                query=(
+                    f"Consolidate Week {i % 2 + 13} analytics"
+                    if i % 2 == 0
+                    else "Extract templates from Week 13"
+                ),
                 request_type="analysis",
                 parameters={},
                 user_context={},
@@ -209,9 +211,9 @@ class Week13PerformanceBenchmark:
 
         assert success_rate >= 0.8, f"Low success rate: {success_rate:.1%}"
         assert throughput >= 2.0, f"Low throughput: {throughput:.1f} req/s"
-        assert avg_response_time < 3.0, (
-            f"High avg response time: {avg_response_time:.3f}s"
-        )
+        assert (
+            avg_response_time < 3.0
+        ), f"High avg response time: {avg_response_time:.3f}s"
 
     def test_memory_efficiency(self):
         """Test memory usage and efficiency"""
@@ -243,9 +245,9 @@ class Week13PerformanceBenchmark:
                 )
 
                 # Memory shouldn't grow excessively
-                assert memory_increase < 100, (
-                    f"Memory leak detected: {memory_increase:.1f}MB increase"
-                )
+                assert (
+                    memory_increase < 100
+                ), f"Memory leak detected: {memory_increase:.1f}MB increase"
 
     def test_stress_load(self):
         """Test system under stress load"""
@@ -308,9 +310,9 @@ class Week13PerformanceBenchmark:
         print(f"   - Success rate: {success_rate:.1%}")
         print(f"   - Avg time per operation: {avg_time:.3f}s")
 
-        assert success_rate >= 0.7, (
-            f"Stress test success rate too low: {success_rate:.1%}"
-        )
+        assert (
+            success_rate >= 0.7
+        ), f"Stress test success rate too low: {success_rate:.1%}"
         assert avg_time < 5.0, f"Stress test operations too slow: {avg_time:.3f}s"
 
 

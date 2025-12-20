@@ -1,0 +1,93 @@
+{
+  "enhancement_timestamp": "2025-12-18T12:41:57.278632",
+  "season": 2025,
+  "endpoint_coverage": {
+    "win_probabilities": {
+      "status": "success",
+      "total_records": 0,
+      "weeks_covered": 0,
+      "data": [],
+      "extraction_time": "2025-12-18T12:42:00.327496"
+    },
+    "game_media": {
+      "status": "success",
+      "total_media_items": 0,
+      "weeks_covered": 0,
+      "data": [],
+      "extraction_time": "2025-12-18T12:42:04.363932"
+    },
+    "team_rosters": {
+      "status": "success",
+      "teams_processed": 0,
+      "total_teams": 0,
+      "total_players": 0,
+      "rosters": {},
+      "extraction_time": "2025-12-18T12:42:05.543355"
+    },
+    "advanced_team_stats": {
+      "status": "success",
+      "total_teams": 0,
+      "data": [],
+      "extraction_time": "2025-12-18T12:42:08.771200"
+    },
+    "player_stats": {
+      "status": "success",
+      "teams_processed": 10,
+      "total_player_records": 0,
+      "stat_categories": [],
+      "data": [],
+      "extraction_time": "2025-12-18T12:42:36.094708"
+    },
+    "recruiting_data": {
+      "status": "success",
+      "total_recruits": 0,
+      "data": [],
+      "extraction_time": "2025-12-18T12:42:39.203590"
+    },
+    "team_talent": {
+      "status": "success",
+      "total_teams": 0,
+      "data": [],
+      "extraction_time": "2025-12-18T12:42:40.207330"
+    }
+  },
+  "data_extracted": {
+    "win_probabilities": [],
+    "game_media": [],
+    "team_rosters": [],
+    "advanced_team_stats": [],
+    "player_stats": [],
+    "recruiting_data": [],
+    "team_talent": []
+  },
+  "errors": [],
+  "success_count": 7,
+  "total_endpoints": 7,
+  "enhancement_duration_seconds": 43.93360900878906,
+  "success_rate": 100.0,
+  "summary": {
+    "total_new_records": 0,
+    "endpoints_enhanced": 7,
+    "total_endpoints": 7,
+    "success_rate": 100.0,
+    "records_by_endpoint": {
+      "win_probabilities": 0,
+      "game_media": 0,
+      "team_rosters": 0,
+      "advanced_team_stats": 0,
+      "player_stats": 0,
+      "recruiting_data": 0,
+      "team_talent": 0
+    },
+    "new_data_types": [
+      "win_probabilities",
+      "game_media",
+      "team_rosters",
+      "advanced_team_stats",
+      "player_stats",
+      "recruiting_data",
+      "team_talent"
+    ],
+    "estimated_coverage_improvement": "+40%"
+  }
+}

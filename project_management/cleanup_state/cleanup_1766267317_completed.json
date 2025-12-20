@@ -1,0 +1,41 @@
+{
+  "session_id": "cleanup_1766267317",
+  "operation_type": "coordinate_cleanup",
+  "scopes": [
+    "cache"
+  ],
+  "status": "completed",
+  "start_time": 1766267317.15759,
+  "end_time": 1766267318.625888,
+  "duration_seconds": 1.4682981967926025,
+  "progress": {
+    "total_scopes": 1,
+    "completed_scopes": [],
+    "current_scope": null,
+    "progress_percentage": 100.0
+  },
+  "metrics": {
+    "files_processed": 6664,
+    "space_freed_mb": 129.32210540771484,
+    "directories_processed": 0,
+    "errors": 0,
+    "warnings": 0,
+    "operations": {}
+  },
+  "checkpoint_count": 0,
+  "error_count": 0,
+  "warning_count": 0,
+  "additional_data": {
+    "dry_run": true,
+    "force": false,
+    "auto": false,
+    "backup_point": false,
+    "final_summary": {
+      "files_processed": 6664,
+      "space_freed_mb": 129.32210540771484,
+      "execution_time": 0.794219970703125,
+      "errors_count": 0,
+      "warnings_count": 0
+    }
+  }
+}

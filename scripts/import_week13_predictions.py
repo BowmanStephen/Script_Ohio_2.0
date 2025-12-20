@@ -311,17 +311,21 @@ def integrate_predictions():
                         "our_margin": our_row.get("predicted_margin", None),
                         "line_current": ext_row["line_current"],
                         "difference_home_prob": (
-                            ext_row["home_win_probability"]
-                            - our_row.get("home_win_probability", 0.5)
-                        )
-                        if "home_win_probability" in our_row
-                        else None,
+                            (
+                                ext_row["home_win_probability"]
+                                - our_row.get("home_win_probability", 0.5)
+                            )
+                            if "home_win_probability" in our_row
+                            else None
+                        ),
                         "difference_margin": (
-                            ext_row["prediction_avg"]
-                            - our_row.get("predicted_margin", 0)
-                        )
-                        if "predicted_margin" in our_row
-                        else None,
+                            (
+                                ext_row["prediction_avg"]
+                                - our_row.get("predicted_margin", 0)
+                            )
+                            if "predicted_margin" in our_row
+                            else None
+                        ),
                     }
                 )
 

@@ -1,3 +1,8 @@
+---
+name: Comprehensive Test Agent
+description: Tests all features of the Prompt Library Generator including metadata extraction and frontmatter generation
+---
+
 # Comprehensive Test Agent
 
 ## Purpose

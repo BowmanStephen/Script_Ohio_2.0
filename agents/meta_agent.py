@@ -12,22 +12,24 @@ Follows OpenAI agents.md best practices:
 """
 
 import json
-import psutil
 import threading
-from datetime import datetime, timezone, timedelta
-from typing import Dict, List, Optional, Any, Set
-from dataclasses import dataclass, asdict
-from pathlib import Path
-from concurrent.futures import ThreadPoolExecutor
 import time
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set
 
-from agents.core.agent_framework import BaseAgent, AgentCapability, PermissionLevel
+import psutil
+
+from agents.core.agent_framework import AgentCapability, BaseAgent, PermissionLevel
 from agents.project_management_agent import project_management_agent
 
 
 @dataclass
 class AgentRegistration:
     """Agent registration information"""
+
     agent_id: str
     agent_name: str
     class_name: str
@@ -46,6 +48,7 @@ class AgentRegistration:
 @dataclass
 class SystemMetrics:
     """System-wide performance metrics"""
+
     timestamp: datetime
     total_agents: int
     active_agents: int
@@ -73,8 +76,8 @@ class MetaAgent(BaseAgent):
     def __init__(self):
         super().__init__(
             agent_id="meta_agent",
-            agent_name="Meta Agent - Master Controller",
-            permission_level=PermissionLevel.ADMIN
+            name="Meta Agent - Master Controller",
+            permission_level=PermissionLevel.ADMIN,
         )
 
         # Agent registry
@@ -94,6 +97,13 @@ class MetaAgent(BaseAgent):
         self.agent_timeout = 30  # Maximum agent response time in seconds
         self.health_check_interval = 60  # Health check interval in seconds
 
+        # Configuration object for monitoring settings
+        self.config = type(
+            "Config",
+            (),
+            {"monitor_interval": 5},  # Resource monitoring interval in seconds
+        )()
+
         # Load existing registry
         self._load_registry()
         self._load_metrics()
@@ -107,48 +117,60 @@ class MetaAgent(BaseAgent):
             AgentCapability(
                 name="register_agent",
                 description="Register a new agent in the ecosystem",
+                permission_required=PermissionLevel.ADMIN,
+                tools_required=[
+                    "file_operations",
+                    "security_validation",
+                    "resource_allocation",
+                ],
+                data_access=["agent_registry", "system_config"],
                 execution_time_estimate=2.0,
-                required_permissions=["admin"],
-                tools_used=["file_operations", "security_validation", "resource_allocation"]
             ),
             AgentCapability(
                 name="deactivate_agent",
                 description="Deactivate or remove an agent from the ecosystem",
+                permission_required=PermissionLevel.ADMIN,
+                tools_required=["resource_deallocation", "cleanup_operations"],
+                data_access=["agent_registry"],
                 execution_time_estimate=1.0,
-                required_permissions=["admin"],
-                tools_used=["resource_deallocation", "cleanup_operations"]
             ),
             AgentCapability(
                 name="monitor_system",
                 description="Monitor system health and performance metrics",
+                permission_required=PermissionLevel.READ_EXECUTE,
+                tools_required=["system_monitoring", "performance_analysis"],
+                data_access=["system_metrics", "agent_status"],
                 execution_time_estimate=1.0,
-                required_permissions=["read", "system"],
-                tools_used=["system_monitoring", "performance_analysis"]
             ),
             AgentCapability(
                 name="coordinate_agents",
                 description="Coordinate inter-agent communication and workflows",
+                permission_required=PermissionLevel.ADMIN,
+                tools_required=["message_routing", "workflow_orchestration"],
+                data_access=["agent_registry", "communication_channels"],
                 execution_time_estimate=2.0,
-                required_permissions=["admin"],
-                tools_used=["message_routing", "workflow_orchestration"]
             ),
             AgentCapability(
                 name="audit_system",
                 description="Perform system audit and compliance checks",
+                permission_required=PermissionLevel.ADMIN,
+                tools_required=["audit_tools", "compliance_checker"],
+                data_access=["audit_logs", "system_history", "agent_registry"],
                 execution_time_estimate=5.0,
-                required_permissions=["admin"],
-                tools_used=["audit_tools", "compliance_checker"]
             ),
             AgentCapability(
                 name="allocate_resources",
                 description="Allocate system resources among agents",
+                permission_required=PermissionLevel.ADMIN,
+                tools_required=["resource_manager", "load_balancer"],
+                data_access=["resource_monitor", "agent_performance"],
                 execution_time_estimate=1.5,
-                required_permissions=["admin"],
-                tools_used=["resource_manager", "load_balancer"]
-            )
+            ),
         ]
 
-    def _execute_action(self, action: str, parameters: Dict, user_context: Dict) -> Dict:
+    def _execute_action(
+        self, action: str, parameters: Dict, user_context: Dict
+    ) -> Dict:
         """Execute meta-agent actions with supreme authority"""
         action_start_time = time.time()
 
@@ -176,12 +198,16 @@ class MetaAgent(BaseAgent):
                 result = {
                     "success": False,
                     "error": f"Unknown meta-action: {action}",
-                    "available_actions": [cap.name for cap in self._define_capabilities()]
+                    "available_actions": [
+                        cap.name for cap in self._define_capabilities()
+                    ],
                 }
 
             # Log completion
             execution_time = time.time() - action_start_time
-            self._log_action(action, parameters, user_context, "completed", execution_time, result)
+            self._log_action(
+                action, parameters, user_context, "completed", execution_time, result
+            )
 
             return result
 
@@ -191,14 +217,22 @@ class MetaAgent(BaseAgent):
                 "success": False,
                 "error": str(e),
                 "action": action,
-                "execution_time": execution_time
+                "execution_time": execution_time,
             }
-            self._log_action(action, parameters, user_context, "error", execution_time, error_result)
+            self._log_action(
+                action, parameters, user_context, "error", execution_time, error_result
+            )
             return error_result
 
     def _register_agent(self, params: Dict, context: Dict) -> Dict:
         """Register a new agent with strict validation"""
-        required_fields = ["agent_id", "agent_name", "class_name", "file_path", "created_by"]
+        required_fields = [
+            "agent_id",
+            "agent_name",
+            "class_name",
+            "file_path",
+            "created_by",
+        ]
         for field in required_fields:
             if field not in params:
                 return {"success": False, "error": f"Missing required field: {field}"}
@@ -210,11 +244,13 @@ class MetaAgent(BaseAgent):
             return {"success": False, "error": f"Agent {agent_id} already registered"}
 
         # Check agent count limit
-        active_count = sum(1 for agent in self.agent_registry.values() if agent.status == "active")
+        active_count = sum(
+            1 for agent in self.agent_registry.values() if agent.status == "active"
+        )
         if active_count >= self.max_agents:
             return {
                 "success": False,
-                "error": f"Maximum agent limit ({self.max_agents}) reached. Current active: {active_count}"
+                "error": f"Maximum agent limit ({self.max_agents}) reached. Current active: {active_count}",
             }
 
         # Validate agent file exists
@@ -225,10 +261,13 @@ class MetaAgent(BaseAgent):
         # Validate agent class
         try:
             # Basic validation - in production, do more thorough inspection
-            with open(file_path, 'r') as f:
+            with open(file_path, "r") as f:
                 content = f.read()
                 if params["class_name"] not in content:
-                    return {"success": False, "error": f"Agent class {params['class_name']} not found in file"}
+                    return {
+                        "success": False,
+                        "error": f"Agent class {params['class_name']} not found in file",
+                    }
         except Exception as e:
             return {"success": False, "error": f"Error validating agent file: {e}"}
 
@@ -246,7 +285,7 @@ class MetaAgent(BaseAgent):
             health_score=1.0,
             last_health_check=datetime.now(timezone.utc),
             dependencies=params.get("dependencies", []),
-            metadata=params.get("metadata", {})
+            metadata=params.get("metadata", {}),
         )
 
         # Add to registry
@@ -255,13 +294,19 @@ class MetaAgent(BaseAgent):
 
         # Log to project management
         try:
-            project_management_agent._track_progress({
-                "plan_id": "super_ai_agent_architecture_v1",
-                "milestone": f"Agent registered: {agent_id}",
-                "status": "completed",
-                "details": {"agent_name": registration.agent_name, "created_by": registration.created_by},
-                "completion_percentage": (active_count + 1) / self.max_agents * 100
-            }, {"agent_id": self.agent_id})
+            project_management_agent._track_progress(
+                {
+                    "plan_id": "super_ai_agent_architecture_v1",
+                    "milestone": f"Agent registered: {agent_id}",
+                    "status": "completed",
+                    "details": {
+                        "agent_name": registration.agent_name,
+                        "created_by": registration.created_by,
+                    },
+                    "completion_percentage": (active_count + 1) / self.max_agents * 100,
+                },
+                {"agent_id": self.agent_id},
+            )
         except Exception:
             pass  # Don't fail if project management is unavailable
 
@@ -270,7 +315,7 @@ class MetaAgent(BaseAgent):
             "agent_id": agent_id,
             "status": registration.status,
             "total_active_agents": active_count + 1,
-            "registry_size": len(self.agent_registry)
+            "registry_size": len(self.agent_registry),
         }
 
     def _deactivate_agent(self, params: Dict, context: Dict) -> Dict:
@@ -299,7 +344,7 @@ class MetaAgent(BaseAgent):
             "success": True,
             "agent_id": agent_id,
             "previous_status": "active",
-            "deactivated_at": datetime.now(timezone.utc).isoformat()
+            "deactivated_at": datetime.now(timezone.utc).isoformat(),
         }
 
     def _monitor_system(self, params: Dict, context: Dict) -> Dict:
@@ -315,14 +360,18 @@ class MetaAgent(BaseAgent):
         if metrics.error_count > 5:
             health_issues.append(f"High error count: {metrics.error_count}")
 
-        system_health = "healthy" if len(health_issues) == 0 else "degraded" if len(health_issues) <= 2 else "critical"
+        system_health = (
+            "healthy"
+            if len(health_issues) == 0
+            else "degraded" if len(health_issues) <= 2 else "critical"
+        )
 
         return {
             "success": True,
             "metrics": asdict(metrics),
             "health_status": system_health,
             "health_issues": health_issues,
-            "recommendations": self._generate_recommendations(metrics)
+            "recommendations": self._generate_recommendations(metrics),
         }
 
     def _coordinate_agents(self, params: Dict, context: Dict) -> Dict:
@@ -343,10 +392,13 @@ class MetaAgent(BaseAgent):
                 else:
                     return {
                         "success": False,
-                        "error": f"Agent {agent_id} is not healthy (status: {agent.status}, health: {agent.health_score})"
+                        "error": f"Agent {agent_id} is not healthy (status: {agent.status}, health: {agent.health_score})",
                     }
             else:
-                return {"success": False, "error": f"Agent {agent_id} not found in registry"}
+                return {
+                    "success": False,
+                    "error": f"Agent {agent_id} not found in registry",
+                }
 
         # For now, just return coordination plan
         # In full implementation, this would execute the workflow
@@ -355,7 +407,7 @@ class MetaAgent(BaseAgent):
             "workflow": workflow,
             "coordinated_agents": available_agents,
             "coordination_plan": f"Execute {workflow} across {len(available_agents)} agents",
-            "estimated_duration": len(available_agents) * 2.0  # Rough estimate
+            "estimated_duration": len(available_agents) * 2.0,  # Rough estimate
         }
 
     def _audit_system(self, params: Dict, context: Dict) -> Dict:
@@ -363,27 +415,37 @@ class MetaAgent(BaseAgent):
         audit_results = {
             "agent_registry": {
                 "total_agents": len(self.agent_registry),
-                "active_agents": sum(1 for a in self.agent_registry.values() if a.status == "active"),
-                "unhealthy_agents": sum(1 for a in self.agent_registry.values() if a.health_score < 0.5)
+                "active_agents": sum(
+                    1 for a in self.agent_registry.values() if a.status == "active"
+                ),
+                "unhealthy_agents": sum(
+                    1 for a in self.agent_registry.values() if a.health_score < 0.5
+                ),
             },
             "security": {
-                "admin_agents": len([a for a in self.agent_registry.values() if "admin" in str(a.metadata).lower()]),
-                "suspicious_activity": 0  # Would implement actual security checks
+                "admin_agents": len(
+                    [
+                        a
+                        for a in self.agent_registry.values()
+                        if "admin" in str(a.metadata).lower()
+                    ]
+                ),
+                "suspicious_activity": 0,  # Would implement actual security checks
             },
             "performance": self._analyze_performance_trends(),
             "compliance": {
                 "agent_documentation": self._check_agent_documentation(),
                 "test_coverage": self._estimate_test_coverage(),
-                "security_standards": True  # Would implement actual compliance checks
-            }
+                "security_standards": True,  # Would implement actual compliance checks
+            },
         }
 
         # Calculate overall compliance score
         compliance_score = (
-            audit_results["agent_registry"]["unhealthy_agents"] == 0 and
-            audit_results["security"]["suspicious_activity"] == 0 and
-            audit_results["compliance"]["agent_documentation"] and
-            audit_results["compliance"]["security_standards"]
+            audit_results["agent_registry"]["unhealthy_agents"] == 0
+            and audit_results["security"]["suspicious_activity"] == 0
+            and audit_results["compliance"]["agent_documentation"]
+            and audit_results["compliance"]["security_standards"]
         )
 
         return {
@@ -391,7 +453,7 @@ class MetaAgent(BaseAgent):
             "audit_results": audit_results,
             "compliance_score": 1.0 if compliance_score else 0.7,
             "audit_timestamp": datetime.now(timezone.utc).isoformat(),
-            "recommendations": self._generate_audit_recommendations(audit_results)
+            "recommendations": self._generate_audit_recommendations(audit_results),
         }
 
     def _allocate_resources(self, params: Dict, context: Dict) -> Dict:
@@ -403,10 +465,15 @@ class MetaAgent(BaseAgent):
         total_memory_available = 100.0 - current_metrics.memory_usage
 
         # Simple allocation strategy - equal distribution among active agents
-        active_agents = [a for a in self.agent_registry.values() if a.status == "active"]
+        active_agents = [
+            a for a in self.agent_registry.values() if a.status == "active"
+        ]
 
         if not active_agents:
-            return {"success": True, "message": "No active agents to allocate resources to"}
+            return {
+                "success": True,
+                "message": "No active agents to allocate resources to",
+            }
 
         per_agent_cpu = total_cpu_available / len(active_agents)
         per_agent_memory = total_memory_available / len(active_agents)
@@ -416,7 +483,7 @@ class MetaAgent(BaseAgent):
             allocations[agent.agent_id] = {
                 "cpu_limit": per_agent_cpu,
                 "memory_limit": per_agent_memory,
-                "priority": "normal"
+                "priority": "normal",
             }
 
         return {
@@ -425,8 +492,8 @@ class MetaAgent(BaseAgent):
             "total_agents": len(active_agents),
             "available_resources": {
                 "cpu": total_cpu_available,
-                "memory": total_memory_available
-            }
+                "memory": total_memory_available,
+            },
         }
 
     def _get_registry(self, params: Dict, context: Dict) -> Dict:
@@ -438,14 +505,18 @@ class MetaAgent(BaseAgent):
             if include_inactive or agent.status == "active":
                 registry_data[agent_id] = asdict(agent)
                 registry_data[agent_id]["created_at"] = agent.created_at.isoformat()
-                registry_data[agent_id]["last_health_check"] = agent.last_health_check.isoformat()
+                registry_data[agent_id][
+                    "last_health_check"
+                ] = agent.last_health_check.isoformat()
 
         return {
             "success": True,
             "registry": registry_data,
             "total_count": len(registry_data),
-            "active_count": sum(1 for a in registry_data.values() if a["status"] == "active"),
-            "max_agents": self.max_agents
+            "active_count": sum(
+                1 for a in registry_data.values() if a["status"] == "active"
+            ),
+            "max_agents": self.max_agents,
         }
 
     def _perform_health_check(self, params: Dict, context: Dict) -> Dict:
@@ -455,7 +526,9 @@ class MetaAgent(BaseAgent):
         for agent_id, agent in self.agent_registry.items():
             if agent.status == "active":
                 # Simple health check based on last update time
-                time_since_check = (datetime.now(timezone.utc) - agent.last_health_check).total_seconds()
+                time_since_check = (
+                    datetime.now(timezone.utc) - agent.last_health_check
+                ).total_seconds()
 
                 if time_since_check > 300:  # 5 minutes
                     health_score = max(0.0, agent.health_score - 0.1)
@@ -471,7 +544,7 @@ class MetaAgent(BaseAgent):
                     "status": status,
                     "health_score": health_score,
                     "last_check": agent.last_health_check.isoformat(),
-                    "issues": [] if health_score > 0.7 else ["Performance degraded"]
+                    "issues": [] if health_score > 0.7 else ["Performance degraded"],
                 }
 
                 # Update agent health
@@ -485,10 +558,16 @@ class MetaAgent(BaseAgent):
             "health_results": health_results,
             "summary": {
                 "total_checked": len(health_results),
-                "healthy": sum(1 for r in health_results.values() if r["status"] == "healthy"),
-                "unhealthy": sum(1 for r in health_results.values() if r["status"] == "unhealthy"),
-                "stale": sum(1 for r in health_results.values() if r["status"] == "stale")
-            }
+                "healthy": sum(
+                    1 for r in health_results.values() if r["status"] == "healthy"
+                ),
+                "unhealthy": sum(
+                    1 for r in health_results.values() if r["status"] == "unhealthy"
+                ),
+                "stale": sum(
+                    1 for r in health_results.values() if r["status"] == "stale"
+                ),
+            },
         }
 
     # Helper methods
@@ -496,12 +575,17 @@ class MetaAgent(BaseAgent):
         """Collect current system metrics"""
         cpu_percent = psutil.cpu_percent(interval=1)
         memory_percent = psutil.virtual_memory().percent
-        disk_percent = psutil.disk_usage('/').percent
+        disk_percent = psutil.disk_usage("/").percent
 
-        active_agents = sum(1 for a in self.agent_registry.values() if a.status == "active")
+        active_agents = sum(
+            1 for a in self.agent_registry.values() if a.status == "active"
+        )
 
         # Calculate agent response times (mock data for now)
-        response_times = {agent_id: 0.5 + (hash(agent_id) % 100) / 100 for agent_id in self.agent_registry.keys()}
+        response_times = {
+            agent_id: 0.5 + (hash(agent_id) % 100) / 100
+            for agent_id in self.agent_registry.keys()
+        }
 
         return SystemMetrics(
             timestamp=datetime.now(timezone.utc),
@@ -512,7 +596,7 @@ class MetaAgent(BaseAgent):
             disk_usage=disk_percent,
             agent_response_times=response_times,
             error_count=0,  # Would implement actual error tracking
-            warning_count=0  # Would implement actual warning tracking
+            warning_count=0,  # Would implement actual warning tracking
         )
 
     def _generate_recommendations(self, metrics: SystemMetrics) -> List[str]:
@@ -520,27 +604,44 @@ class MetaAgent(BaseAgent):
         recommendations = []
 
         if metrics.cpu_usage > 70:
-            recommendations.append("Consider scaling compute resources or optimizing agent workloads")
+            recommendations.append(
+                "Consider scaling compute resources or optimizing agent workloads"
+            )
 
         if metrics.memory_usage > 70:
-            recommendations.append("Monitor memory usage and consider implementing caching strategies")
+            recommendations.append(
+                "Monitor memory usage and consider implementing caching strategies"
+            )
 
         if metrics.active_agents > 15:
-            recommendations.append("Approaching agent limit - consider consolidating functionality")
+            recommendations.append(
+                "Approaching agent limit - consider consolidating functionality"
+            )
 
-        slow_agents = [aid for aid, rt in metrics.agent_response_times.items() if rt > 2.0]
+        slow_agents = [
+            aid for aid, rt in metrics.agent_response_times.items() if rt > 2.0
+        ]
         if slow_agents:
-            recommendations.append(f"Optimize performance for slow agents: {', '.join(slow_agents)}")
+            recommendations.append(
+                f"Optimize performance for slow agents: {', '.join(slow_agents)}"
+            )
 
         return recommendations
 
     def _analyze_performance_trends(self) -> Dict:
         """Analyze performance trends from historical metrics"""
         if len(self.system_metrics) < 2:
-            return {"trend": "insufficient_data", "recommendation": "Continue monitoring"}
+            return {
+                "trend": "insufficient_data",
+                "recommendation": "Continue monitoring",
+            }
 
         # Simple trend analysis
-        recent = self.system_metrics[-5:] if len(self.system_metrics) >= 5 else self.system_metrics
+        recent = (
+            self.system_metrics[-5:]
+            if len(self.system_metrics) >= 5
+            else self.system_metrics
+        )
         avg_cpu = sum(m.cpu_usage for m in recent) / len(recent)
         avg_memory = sum(m.memory_usage for m in recent) / len(recent)
 
@@ -548,7 +649,7 @@ class MetaAgent(BaseAgent):
             "trend": "stable" if avg_cpu < 70 and avg_memory < 70 else "degraded",
             "average_cpu": avg_cpu,
             "average_memory": avg_memory,
-            "data_points": len(recent)
+            "data_points": len(recent),
         }
 
     def _check_agent_documentation(self) -> bool:
@@ -567,13 +668,19 @@ class MetaAgent(BaseAgent):
         recommendations = []
 
         if audit_results["agent_registry"]["unhealthy_agents"] > 0:
-            recommendations.append("Address unhealthy agents - check logs and restart if necessary")
+            recommendations.append(
+                "Address unhealthy agents - check logs and restart if necessary"
+            )
 
         if not audit_results["compliance"]["agent_documentation"]:
-            recommendations.append("Improve agent documentation for better maintainability")
+            recommendations.append(
+                "Improve agent documentation for better maintainability"
+            )
 
         if audit_results["compliance"]["test_coverage"] < 0.8:
-            recommendations.append("Increase test coverage to ensure system reliability")
+            recommendations.append(
+                "Increase test coverage to ensure system reliability"
+            )
 
         return recommendations
 
@@ -581,11 +688,15 @@ class MetaAgent(BaseAgent):
         """Load agent registry from file"""
         if self.registry_file.exists():
             try:
-                with open(self.registry_file, 'r') as f:
+                with open(self.registry_file, "r") as f:
                     data = json.load(f)
                     for agent_id, agent_data in data.items():
-                        agent_data["created_at"] = datetime.fromisoformat(agent_data["created_at"])
-                        agent_data["last_health_check"] = datetime.fromisoformat(agent_data["last_health_check"])
+                        agent_data["created_at"] = datetime.fromisoformat(
+                            agent_data["created_at"]
+                        )
+                        agent_data["last_health_check"] = datetime.fromisoformat(
+                            agent_data["last_health_check"]
+                        )
                         self.agent_registry[agent_id] = AgentRegistration(**agent_data)
             except Exception as e:
                 print(f"Error loading registry: {e}")
@@ -597,9 +708,11 @@ class MetaAgent(BaseAgent):
             for agent_id, agent in self.agent_registry.items():
                 data[agent_id] = asdict(agent)
                 data[agent_id]["created_at"] = agent.created_at.isoformat()
-                data[agent_id]["last_health_check"] = agent.last_health_check.isoformat()
+                data[agent_id][
+                    "last_health_check"
+                ] = agent.last_health_check.isoformat()
 
-            with open(self.registry_file, 'w') as f:
+            with open(self.registry_file, "w") as f:
                 json.dump(data, f, indent=2)
         except Exception as e:
             print(f"Error saving registry: {e}")
@@ -608,10 +721,12 @@ class MetaAgent(BaseAgent):
         """Load system metrics from file"""
         if self.metrics_file.exists():
             try:
-                with open(self.metrics_file, 'r') as f:
+                with open(self.metrics_file, "r") as f:
                     data = json.load(f)
                     for metric_data in data:
-                        metric_data["timestamp"] = datetime.fromisoformat(metric_data["timestamp"])
+                        metric_data["timestamp"] = datetime.fromisoformat(
+                            metric_data["timestamp"]
+                        )
                         self.system_metrics.append(SystemMetrics(**metric_data))
             except Exception as e:
                 print(f"Error loading metrics: {e}")
@@ -625,13 +740,20 @@ class MetaAgent(BaseAgent):
                 metric_dict["timestamp"] = metric.timestamp.isoformat()
                 data.append(metric_dict)
 
-            with open(self.metrics_file, 'w') as f:
+            with open(self.metrics_file, "w") as f:
                 json.dump(data, f, indent=2)
         except Exception as e:
             print(f"Error saving metrics: {e}")
 
-    def _log_action(self, action: str, params: Dict, context: Dict, status: str,
-                   execution_time: float = 0, result: Dict = None):
+    def _log_action(
+        self,
+        action: str,
+        params: Dict,
+        context: Dict,
+        status: str,
+        execution_time: float = 0,
+        result: Dict = None,
+    ):
         """Log meta-agent actions for audit trail"""
         log_entry = {
             "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -641,14 +763,14 @@ class MetaAgent(BaseAgent):
             "user_context": context,
             "status": status,
             "execution_time": execution_time,
-            "result_summary": result.get("success", False) if result else None
+            "result_summary": result.get("success", False) if result else None,
         }
 
         # Append to audit log
         try:
             audit_logs = []
             if self.audit_log_file.exists():
-                with open(self.audit_log_file, 'r') as f:
+                with open(self.audit_log_file, "r") as f:
                     audit_logs = json.load(f)
 
             audit_logs.append(log_entry)
@@ -657,13 +779,14 @@ class MetaAgent(BaseAgent):
             if len(audit_logs) > 1000:
                 audit_logs = audit_logs[-1000:]
 
-            with open(self.audit_log_file, 'w') as f:
+            with open(self.audit_log_file, "w") as f:
                 json.dump(audit_logs, f, indent=2)
         except Exception as e:
             print(f"Error logging action: {e}")
 
     def _start_resource_monitoring(self):
         """Start background resource monitoring"""
+
         def monitor():
             while not self.shutdown_flag:
                 try:
@@ -678,7 +801,9 @@ class MetaAgent(BaseAgent):
                 except Exception as e:
                     print(f"Error in resource monitoring: {e}")
 
-                time.sleep(60)  # Monitor every minute
+                time.sleep(
+                    self.config.monitor_interval
+                )  # Monitor using configurable interval
 
         self.resource_monitor_thread = threading.Thread(target=monitor, daemon=True)
         self.resource_monitor_thread.start()

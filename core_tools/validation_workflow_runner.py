@@ -96,9 +96,11 @@ class ValidationWorkflowRunner:
             return {
                 "status": "error",
                 "error_message": str(e),
-                "execution_time": time.time() - self.workflow_start_time
-                if self.workflow_start_time
-                else 0,
+                "execution_time": (
+                    time.time() - self.workflow_start_time
+                    if self.workflow_start_time
+                    else 0
+                ),
             }
 
     def execute_discovery_phase(self) -> Dict[str, Any]:
@@ -891,12 +893,14 @@ if __name__ == "__main__":
             )
             / len(self.workflow_results)
             * 100,
-            "overall_status": "success"
-            if all(
-                result.get("status") == "success"
-                for result in self.workflow_results.values()
-            )
-            else "partial",
+            "overall_status": (
+                "success"
+                if all(
+                    result.get("status") == "success"
+                    for result in self.workflow_results.values()
+                )
+                else "partial"
+            ),
             "artifacts_created": self.count_artifacts_created(),
         }
 

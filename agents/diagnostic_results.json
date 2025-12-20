@@ -1,0 +1,430 @@
+{
+  "timestamp": 1766075797.1214132,
+  "working": [
+    {
+      "agent_id": "default_learning_nav",
+      "agent_name": "Learning Navigator",
+      "agent_type": "LearningNavigatorAgent",
+      "status": "WORKING",
+      "capabilities": [
+        {
+          "name": "guide_learning_path",
+          "status": "WORKING",
+          "message": "Capability guide_learning_path: completed",
+          "data": {
+            "execution_time": 3.314018249511719e-05,
+            "error": "",
+            "result_keys": [
+              "success",
+              "user_role",
+              "current_position",
+              "total_notebooks",
+              "current_notebook",
+              "next_notebook",
+              "learning_path",
+              "recommendations",
+              "progress_percentage"
+            ]
+          }
+        },
+        {
+          "name": "explain_concepts",
+          "status": "WORKING",
+          "message": "Capability explain_concepts: completed",
+          "data": {
+            "execution_time": 2.193450927734375e-05,
+            "error": "",
+            "result_keys": [
+              "success",
+              "concepts_explained",
+              "explanations",
+              "skill_level"
+            ]
+          }
+        },
+        {
+          "name": "recommend_resources",
+          "status": "WORKING",
+          "message": "Capability recommend_resources: completed",
+          "data": {
+            "execution_time": 2.09808349609375e-05,
+            "error": "",
+            "result_keys": [
+              "success",
+              "resources",
+              "user_role",
+              "current_topic"
+            ]
+          }
+        },
+        {
+          "name": "recommend_content",
+          "status": "WORKING",
+          "message": "Capability recommend_content: completed",
+          "data": {
+            "execution_time": 1.6927719116210938e-05,
+            "error": "",
+            "result_keys": [
+              "success",
+              "resources",
+              "user_role",
+              "current_topic"
+            ]
+          }
+        },
+        {
+          "name": "track_progress",
+          "status": "WORKING",
+          "message": "Capability track_progress: completed",
+          "data": {
+            "execution_time": 2.09808349609375e-05,
+            "error": "",
+            "result_keys": [
+              "success",
+              "completed_notebooks",
+              "total_notebooks",
+              "completed_count",
+              "progress_percentage",
+              "next_steps",
+              "achievement_badges"
+            ]
+          }
+        },
+        {
+          "name": "bridge_to_model_pack",
+          "status": "WORKING",
+          "message": "Capability bridge_to_model_pack: completed",
+          "data": {
+            "execution_time": 0.001859903335571289,
+            "error": "",
+            "result_keys": [
+              "success",
+              "current_notebook",
+              "bridge_info",
+              "weekly_data_preview",
+              "next_steps",
+              "agent_usage_example"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "agent_id": "default_quality_assurance",
+      "agent_name": "Quality Assurance Agent",
+      "agent_type": "QualityAssuranceAgent",
+      "status": "WORKING",
+      "capabilities": [
+        {
+          "name": "cfbd_health_check",
+          "status": "WORKING",
+          "message": "Capability cfbd_health_check: completed",
+          "data": {
+            "execution_time": 3.790855407714844e-05,
+            "error": "",
+            "result_keys": [
+              "status",
+              "message"
+            ]
+          }
+        },
+        {
+          "name": "cfbd_recent_events",
+          "status": "WORKING",
+          "message": "Capability cfbd_recent_events: completed",
+          "data": {
+            "execution_time": 2.288818359375e-05,
+            "error": "",
+            "result_keys": [
+              "status",
+              "events"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "partial": [
+    {
+      "agent_id": "default_cfbd_integration",
+      "agent_name": "CFBD Integration Agent",
+      "agent_type": "CFBDIntegrationAgent",
+      "status": "PARTIAL",
+      "capabilities": [
+        {
+          "name": "team_snapshot",
+          "status": "BROKEN",
+          "message": "Capability team_snapshot: error",
+          "data": {
+            "execution_time": 5.507469177246094e-05,
+            "error": "Error executing team_snapshot on CFBD Integration Agent: team parameter required",
+            "result_keys": []
+          }
+        },
+        {
+          "name": "live_scoreboard",
+          "status": "WORKING",
+          "message": "Capability live_scoreboard: completed",
+          "data": {
+            "execution_time": 2.384185791015625e-05,
+            "error": "",
+            "result_keys": [
+              "status",
+              "events"
+            ]
+          }
+        },
+        {
+          "name": "graphql_scoreboard",
+          "status": "BROKEN",
+          "message": "Capability graphql_scoreboard: error",
+          "data": {
+            "execution_time": 3.3855438232421875e-05,
+            "error": "Error executing graphql_scoreboard on CFBD Integration Agent: Missing required parameter: season",
+            "result_keys": []
+          }
+        },
+        {
+          "name": "graphql_recruiting",
+          "status": "BROKEN",
+          "message": "Capability graphql_recruiting: error",
+          "data": {
+            "execution_time": 3.0994415283203125e-05,
+            "error": "Error executing graphql_recruiting on CFBD Integration Agent: Missing required parameter: year (or season)",
+            "result_keys": []
+          }
+        },
+        {
+          "name": "graphql_plays",
+          "status": "WORKING",
+          "message": "Capability graphql_plays: completed",
+          "data": {
+            "execution_time": 0.15278267860412598,
+            "error": "",
+            "result_keys": [
+              "status",
+              "error",
+              "plays"
+            ]
+          }
+        },
+        {
+          "name": "graphql_betting_lines",
+          "status": "WORKING",
+          "message": "Capability graphql_betting_lines: completed",
+          "data": {
+            "execution_time": 0.20679283142089844,
+            "error": "",
+            "result_keys": [
+              "status",
+              "error",
+              "lines"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "broken": [
+    {
+      "agent_id": "default_model_engine",
+      "agent_name": "Model Execution Engine",
+      "agent_type": "ModelExecutionEngine",
+      "status": "BROKEN",
+      "capabilities": [
+        {
+          "name": "predict_game_outcome",
+          "status": "BROKEN",
+          "message": "Capability predict_game_outcome: error",
+          "data": {
+            "execution_time": 0.0001220703125,
+            "error": "Error executing predict_game_outcome on Model Execution Engine: Agent Model Execution Engine cannot handle request test_1766075796",
+            "result_keys": []
+          }
+        },
+        {
+          "name": "batch_predictions",
+          "status": "BROKEN",
+          "message": "Capability batch_predictions: error",
+          "data": {
+            "execution_time": 6.723403930664062e-05,
+            "error": "Error executing batch_predictions on Model Execution Engine: Agent Model Execution Engine cannot handle request test_1766075796",
+            "result_keys": []
+          }
+        },
+        {
+          "name": "model_comparison",
+          "status": "BROKEN",
+          "message": "Capability model_comparison: error",
+          "data": {
+            "execution_time": 5.1975250244140625e-05,
+            "error": "Error executing model_comparison on Model Execution Engine: Agent Model Execution Engine cannot handle request test_1766075796",
+            "result_keys": []
+          }
+        },
+        {
+          "name": "model_performance_analysis",
+          "status": "BROKEN",
+          "message": "Capability model_performance_analysis: error",
+          "data": {
+            "execution_time": 4.1961669921875e-05,
+            "error": "Error executing model_performance_analysis on Model Execution Engine: Agent Model Execution Engine cannot handle request test_1766075796",
+            "result_keys": []
+          }
+        },
+        {
+          "name": "kelly_criterion_analysis",
+          "status": "BROKEN",
+          "message": "Capability kelly_criterion_analysis: error",
+          "data": {
+            "execution_time": 4.887580871582031e-05,
+            "error": "Error executing kelly_criterion_analysis on Model Execution Engine: Agent Model Execution Engine cannot handle request test_1766075796",
+            "result_keys": []
+          }
+        },
+        {
+          "name": "value_betting_detection",
+          "status": "BROKEN",
+          "message": "Capability value_betting_detection: error",
+          "data": {
+            "execution_time": 4.506111145019531e-05,
+            "error": "Error executing value_betting_detection on Model Execution Engine: Agent Model Execution Engine cannot handle request test_1766075796",
+            "result_keys": []
+          }
+        },
+        {
+          "name": "betting_opportunity_analysis",
+          "status": "BROKEN",
+          "message": "Capability betting_opportunity_analysis: error",
+          "data": {
+            "execution_time": 4.482269287109375e-05,
+            "error": "Error executing betting_opportunity_analysis on Model Execution Engine: Agent Model Execution Engine cannot handle request test_1766075796",
+            "result_keys": []
+          }
+        }
+      ]
+    },
+    {
+      "agent_id": "default_insight_generator",
+      "agent_name": "Insight Generator",
+      "agent_type": "InsightGeneratorAgent",
+      "status": "BROKEN",
+      "capabilities": [
+        {
+          "name": "generate_analysis",
+          "status": "BROKEN",
+          "message": "Capability generate_analysis: error",
+          "data": {
+            "execution_time": 4.887580871582031e-05,
+            "error": "Error executing generate_analysis on Insight Generator: Agent Insight Generator cannot handle request test_1766075796",
+            "result_keys": []
+          }
+        },
+        {
+          "name": "statistical_analysis",
+          "status": "BROKEN",
+          "message": "Capability statistical_analysis: error",
+          "data": {
+            "execution_time": 4.1961669921875e-05,
+            "error": "Error executing statistical_analysis on Insight Generator: Agent Insight Generator cannot handle request test_1766075796",
+            "result_keys": []
+          }
+        },
+        {
+          "name": "create_visualizations",
+          "status": "BROKEN",
+          "message": "Capability create_visualizations: error",
+          "data": {
+            "execution_time": 4.220008850097656e-05,
+            "error": "Error executing create_visualizations on Insight Generator: Agent Insight Generator cannot handle request test_1766075796",
+            "result_keys": []
+          }
+        },
+        {
+          "name": "comparative_analysis",
+          "status": "BROKEN",
+          "message": "Capability comparative_analysis: error",
+          "data": {
+            "execution_time": 4.506111145019531e-05,
+            "error": "Error executing comparative_analysis on Insight Generator: Agent Insight Generator cannot handle request test_1766075796",
+            "result_keys": []
+          }
+        },
+        {
+          "name": "trend_analysis",
+          "status": "BROKEN",
+          "message": "Capability trend_analysis: error",
+          "data": {
+            "execution_time": 4.506111145019531e-05,
+            "error": "Error executing trend_analysis on Insight Generator: Agent Insight Generator cannot handle request test_1766075796",
+            "result_keys": []
+          }
+        },
+        {
+          "name": "cfbd_real_time_analysis",
+          "status": "BROKEN",
+          "message": "Capability cfbd_real_time_analysis: error",
+          "data": {
+            "execution_time": 4.315376281738281e-05,
+            "error": "Error executing cfbd_real_time_analysis on Insight Generator: Agent Insight Generator cannot handle request test_1766075796",
+            "result_keys": []
+          }
+        },
+        {
+          "name": "trend_analysis",
+          "status": "BROKEN",
+          "message": "Capability trend_analysis: error",
+          "data": {
+            "execution_time": 4.100799560546875e-05,
+            "error": "Error executing trend_analysis on Insight Generator: Agent Insight Generator cannot handle request test_1766075796",
+            "result_keys": []
+          }
+        },
+        {
+          "name": "graphql_trend_scan",
+          "status": "BROKEN",
+          "message": "Capability graphql_trend_scan: error",
+          "data": {
+            "execution_time": 4.601478576660156e-05,
+            "error": "Error executing graphql_trend_scan on Insight Generator: Agent Insight Generator cannot handle request test_1766075796",
+            "result_keys": []
+          }
+        },
+        {
+          "name": "generate_infographic",
+          "status": "BROKEN",
+          "message": "Capability generate_infographic: error",
+          "data": {
+            "execution_time": 4.124641418457031e-05,
+            "error": "Error executing generate_infographic on Insight Generator: Agent Insight Generator cannot handle request test_1766075796",
+            "result_keys": []
+          }
+        }
+      ]
+    },
+    {
+      "agent_id": "default_postseason_projection",
+      "agent_name": "Postseason Projection Agent",
+      "agent_type": "PostseasonProjectionAgent",
+      "status": "BROKEN",
+      "capabilities": [
+        {
+          "name": "run_postseason_pipeline",
+          "status": "BROKEN",
+          "message": "Capability run_postseason_pipeline: error",
+          "data": {
+            "execution_time": 5.817413330078125e-05,
+            "error": "Error executing run_postseason_pipeline on Postseason Projection Agent: Agent Postseason Projection Agent cannot handle request test_1766075797",
+            "result_keys": []
+          }
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_agents": 6,
+    "working": 2,
+    "partial": 1,
+    "broken": 3
+  }
+}

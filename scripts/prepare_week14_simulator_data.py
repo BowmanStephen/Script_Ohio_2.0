@@ -41,53 +41,69 @@ def prepare_week14_simulator_data():
             "id": int(row.get("id", 0)),
             "home_team": str(row.get("home_team", "")),
             "away_team": str(row.get("away_team", "")),
-            "spread": float(row.get("spread", 0.0))
-            if pd.notna(row.get("spread"))
-            else 0.0,
-            "home_elo": float(row.get("home_elo", 0.0))
-            if pd.notna(row.get("home_elo"))
-            else 0.0,
-            "away_elo": float(row.get("away_elo", 0.0))
-            if pd.notna(row.get("away_elo"))
-            else 0.0,
-            "home_talent": float(row.get("home_talent", 0.0))
-            if pd.notna(row.get("home_talent"))
-            else 0.0,
-            "away_talent": float(row.get("away_talent", 0.0))
-            if pd.notna(row.get("away_talent"))
-            else 0.0,
-            "home_adjusted_epa": float(row.get("home_adjusted_epa", 0.0))
-            if pd.notna(row.get("home_adjusted_epa"))
-            else 0.0,
-            "away_adjusted_epa": float(row.get("away_adjusted_epa", 0.0))
-            if pd.notna(row.get("away_adjusted_epa"))
-            else 0.0,
-            "home_adjusted_success": float(row.get("home_adjusted_success", 0.0))
-            if pd.notna(row.get("home_adjusted_success"))
-            else 0.0,
-            "away_adjusted_success": float(row.get("away_adjusted_success", 0.0))
-            if pd.notna(row.get("away_adjusted_success"))
-            else 0.0,
-            "home_adjusted_explosiveness": float(
-                row.get("home_adjusted_explosiveness", 0.0)
-            )
-            if pd.notna(row.get("home_adjusted_explosiveness"))
-            else 0.0,
-            "away_adjusted_explosiveness": float(
-                row.get("away_adjusted_explosiveness", 0.0)
-            )
-            if pd.notna(row.get("away_adjusted_explosiveness"))
-            else 0.0,
-            "home_points_per_opportunity_offense": float(
-                row.get("home_points_per_opportunity_offense", 0.0)
-            )
-            if pd.notna(row.get("home_points_per_opportunity_offense"))
-            else 0.0,
-            "away_points_per_opportunity_offense": float(
-                row.get("away_points_per_opportunity_offense", 0.0)
-            )
-            if pd.notna(row.get("away_points_per_opportunity_offense"))
-            else 0.0,
+            "spread": (
+                float(row.get("spread", 0.0)) if pd.notna(row.get("spread")) else 0.0
+            ),
+            "home_elo": (
+                float(row.get("home_elo", 0.0))
+                if pd.notna(row.get("home_elo"))
+                else 0.0
+            ),
+            "away_elo": (
+                float(row.get("away_elo", 0.0))
+                if pd.notna(row.get("away_elo"))
+                else 0.0
+            ),
+            "home_talent": (
+                float(row.get("home_talent", 0.0))
+                if pd.notna(row.get("home_talent"))
+                else 0.0
+            ),
+            "away_talent": (
+                float(row.get("away_talent", 0.0))
+                if pd.notna(row.get("away_talent"))
+                else 0.0
+            ),
+            "home_adjusted_epa": (
+                float(row.get("home_adjusted_epa", 0.0))
+                if pd.notna(row.get("home_adjusted_epa"))
+                else 0.0
+            ),
+            "away_adjusted_epa": (
+                float(row.get("away_adjusted_epa", 0.0))
+                if pd.notna(row.get("away_adjusted_epa"))
+                else 0.0
+            ),
+            "home_adjusted_success": (
+                float(row.get("home_adjusted_success", 0.0))
+                if pd.notna(row.get("home_adjusted_success"))
+                else 0.0
+            ),
+            "away_adjusted_success": (
+                float(row.get("away_adjusted_success", 0.0))
+                if pd.notna(row.get("away_adjusted_success"))
+                else 0.0
+            ),
+            "home_adjusted_explosiveness": (
+                float(row.get("home_adjusted_explosiveness", 0.0))
+                if pd.notna(row.get("home_adjusted_explosiveness"))
+                else 0.0
+            ),
+            "away_adjusted_explosiveness": (
+                float(row.get("away_adjusted_explosiveness", 0.0))
+                if pd.notna(row.get("away_adjusted_explosiveness"))
+                else 0.0
+            ),
+            "home_points_per_opportunity_offense": (
+                float(row.get("home_points_per_opportunity_offense", 0.0))
+                if pd.notna(row.get("home_points_per_opportunity_offense"))
+                else 0.0
+            ),
+            "away_points_per_opportunity_offense": (
+                float(row.get("away_points_per_opportunity_offense", 0.0))
+                if pd.notna(row.get("away_points_per_opportunity_offense"))
+                else 0.0
+            ),
         }
         simulator_games.append(sim_game)
 

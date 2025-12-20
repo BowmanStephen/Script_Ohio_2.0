@@ -241,12 +241,15 @@ def predict_game():
         model_type = request.args.get("model_type", "ridge_model_2025")
 
         if not home_team or not away_team:
-            return jsonify(
-                {
-                    "error": "Both home_team and away_team are required",
-                    "example": "GET /api/predict?home_team=Ohio%20State&away_team=Michigan",
-                }
-            ), 400
+            return (
+                jsonify(
+                    {
+                        "error": "Both home_team and away_team are required",
+                        "example": "GET /api/predict?home_team=Ohio%20State&away_team=Michigan",
+                    }
+                ),
+                400,
+            )
 
     else:  # POST
         data = request.get_json() or {}
@@ -266,12 +269,15 @@ def predict_game():
                     raise ValueError("Both home_team and away_team are required")
 
         except (ValueError, ValidationError) as e:
-            return jsonify(
-                {
-                    "error": str(e),
-                    "example": {"home_team": "Ohio State", "away_team": "Michigan"},
-                }
-            ), 400
+            return (
+                jsonify(
+                    {
+                        "error": str(e),
+                        "example": {"home_team": "Ohio State", "away_team": "Michigan"},
+                    }
+                ),
+                400,
+            )
 
     logger.info(f"Prediction request: {home_team} vs {away_team} using {model_type}")
 
@@ -296,12 +302,15 @@ def get_week_predictions(week):
     existing_data = get_current_week_data()
 
     if not existing_data:
-        return jsonify(
-            {
-                "error": f"No data available for week {week}",
-                "message": "Static predictions file not found",
-            }
-        ), 404
+        return (
+            jsonify(
+                {
+                    "error": f"No data available for week {week}",
+                    "message": "Static predictions file not found",
+                }
+            ),
+            404,
+        )
 
     logger.info(f"Returning {len(existing_data)} predictions for week {week}")
 
@@ -333,12 +342,15 @@ def get_bowls_predictions():
         )
 
         if not os.path.exists(bowls_file):
-            return jsonify(
-                {
-                    "error": "Bowl predictions not found",
-                    "message": "Run sync_web_app_data.py to generate bowl predictions",
-                }
-            ), 404
+            return (
+                jsonify(
+                    {
+                        "error": "Bowl predictions not found",
+                        "message": "Run sync_web_app_data.py to generate bowl predictions",
+                    }
+                ),
+                404,
+            )
 
         with open(bowls_file, "r") as f:
             bowls_data = json.load(f)
@@ -367,9 +379,10 @@ def get_bowls_predictions():
 
     except Exception as e:
         logger.error(f"Error loading bowl predictions: {str(e)}")
-        return jsonify(
-            {"error": "Failed to load bowl predictions", "message": str(e)}
-        ), 500
+        return (
+            jsonify({"error": "Failed to load bowl predictions", "message": str(e)}),
+            500,
+        )
 
 
 @app.route("/api/models", methods=["GET"])
@@ -377,9 +390,10 @@ def get_available_models():
     """Get list of available prediction models"""
 
     if not model_agent:
-        return jsonify(
-            {"error": "Model agent not available", "available_models": []}
-        ), 503
+        return (
+            jsonify({"error": "Model agent not available", "available_models": []}),
+            503,
+        )
 
     # Known models from the system
     models = [
@@ -427,12 +441,16 @@ def get_system_stats():
         "agent_system": {
             "initialized": agents_orchestrator is not None,
             "model_agent_available": model_agent is not None,
-            "registered_agents": len(agents_orchestrator.agent_factory.agent_registry)
-            if agents_orchestrator
-            else 0,
-            "active_agents": len(agents_orchestrator.agent_factory.agents)
-            if agents_orchestrator
-            else 0,
+            "registered_agents": (
+                len(agents_orchestrator.agent_factory.agent_registry)
+                if agents_orchestrator
+                else 0
+            ),
+            "active_agents": (
+                len(agents_orchestrator.agent_factory.agents)
+                if agents_orchestrator
+                else 0
+            ),
         },
         "api_info": {
             "version": "1.0",
@@ -472,9 +490,10 @@ def api_cfbd_games():
         team = request.args.get("team", type=str)
 
         if not year:
-            return jsonify(
-                {"status": "error", "message": "year parameter is required"}
-            ), 400
+            return (
+                jsonify({"status": "error", "message": "year parameter is required"}),
+                400,
+            )
 
         # Use unified client (CFBD_API_KEY from backend env, never exposed)
         client = UnifiedCFBDClient()
@@ -542,9 +561,10 @@ def api_cfbd_scoreboard():
         )
     except Exception as e:
         logger.error(f"CFBD scoreboard proxy error: {e}")
-        return jsonify(
-            {"status": "error", "message": "Failed to fetch scoreboard"}
-        ), 500
+        return (
+            jsonify({"status": "error", "message": "Failed to fetch scoreboard"}),
+            500,
+        )
 
 
 @app.route("/api/cfbd/ratings", methods=["GET"])
@@ -557,9 +577,10 @@ def api_cfbd_ratings():
         week = request.args.get("week", type=int)
 
         if not year:
-            return jsonify(
-                {"status": "error", "message": "year parameter is required"}
-            ), 400
+            return (
+                jsonify({"status": "error", "message": "year parameter is required"}),
+                400,
+            )
 
         # Use unified client (CFBD_API_KEY from backend env, never exposed)
         client = UnifiedCFBDClient()
@@ -589,9 +610,10 @@ def api_cfbd_advanced_stats():
         team = request.args.get("team", type=str)
 
         if not year:
-            return jsonify(
-                {"status": "error", "message": "year parameter is required"}
-            ), 400
+            return (
+                jsonify({"status": "error", "message": "year parameter is required"}),
+                400,
+            )
 
         # Use unified client (CFBD_API_KEY from backend env, never exposed)
         client = UnifiedCFBDClient()
@@ -608,9 +630,10 @@ def api_cfbd_advanced_stats():
         )
     except Exception as e:
         logger.error(f"CFBD advanced stats proxy error: {e}")
-        return jsonify(
-            {"status": "error", "message": "Failed to fetch advanced stats"}
-        ), 500
+        return (
+            jsonify({"status": "error", "message": "Failed to fetch advanced stats"}),
+            500,
+        )
 
 
 @app.route("/api/cfbd/media", methods=["GET"])
@@ -693,9 +716,10 @@ def api_cfbd_matchup():
         max_year = request.args.get("max_year", type=int)
 
         if not team1 or not team2:
-            return jsonify(
-                {"status": "error", "message": "team1 and team2 required"}
-            ), 400
+            return (
+                jsonify({"status": "error", "message": "team1 and team2 required"}),
+                400,
+            )
 
         client = UnifiedCFBDClient()
         matchup = client.get_team_matchup(

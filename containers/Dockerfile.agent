@@ -1,0 +1,51 @@
+# Multi-stage build for production security
+FROM python:3.13-slim as base
+
+# Security defaults
+RUN addgroup --system --gid 1001 agentgroup && \
+    adduser --system --uid 1001 --gid 1001 agentuser
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies with security updates
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends \
+        gcc \
+        g++ \
+        git \
+        curl \
+        && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first for better caching
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Production stage
+FROM base as production
+
+# Security hardening
+RUN echo "root:$(openssl rand -base64 32)" | chpasswd && \
+    sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config || true
+
+# Copy application code
+COPY . .
+
+# Set permissions
+RUN chown -R agentuser:agentgroup /app && \
+    chmod -R 755 /app && \
+    chmod -R 644 /app/agents/*.py && \
+    chmod +x /app/scripts/*.py
+
+# Switch to non-root user
+USER agentuser
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python3 -c "import agents.meta_agent; print('Agent system healthy')" || exit 1
+
+# Expose port (if needed for API)
+EXPOSE 8000
+
+# Default command
+CMD ["python3", "-c", "from agents.meta_agent import meta_agent; meta_agent._monitor_system({}, {})"]

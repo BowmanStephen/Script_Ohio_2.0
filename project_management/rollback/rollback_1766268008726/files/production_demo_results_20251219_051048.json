@@ -1,0 +1,93 @@
+{
+  "demo_name": "Script Ohio 2.0 Production System",
+  "start_time": "2025-12-19T05:10:40.878687",
+  "phases": {
+    "health_check": {
+      "success": true,
+      "health_status": "healthy",
+      "cpu_usage": 36.2,
+      "memory_usage": 61.0,
+      "disk_usage": 5.0,
+      "python_processes": 4,
+      "health_issues": []
+    },
+    "cfbd_integration": {
+      "success": true,
+      "cfbd_status": "connected",
+      "details": "Unified CFBD client loaded successfully"
+    },
+    "model_system": {
+      "success": true,
+      "working_models": 2,
+      "total_models": 3,
+      "model_status": {
+        "ridge": true,
+        "xgboost": true,
+        "fastai": false
+      },
+      "model_details": {
+        "ridge": "Loaded from models/production/ridge_regression_2025_v2.joblib",
+        "xgboost": "Loaded from models/production/xgboost_classifier_2025_v2.pkl",
+        "fastai": "Error: persistent IDs in protocol 0 must be ASCII strings",
+        "training_data": "Loaded 5250 rows from data/processed/training/master_training_data_v2.csv"
+      },
+      "training_data_available": true
+    },
+    "quality_assurance": {
+      "success": true,
+      "quality_score": 100.0,
+      "passed_checks": 4,
+      "total_checks": 4,
+      "qa_results": {
+        "syntax_check": true,
+        "data_validation": true,
+        "security_check": true,
+        "performance_check": true
+      }
+    },
+    "production_metrics": {
+      "success": true,
+      "system_metrics": {
+        "cpu_usage": 0.0,
+        "memory_usage": 60.4,
+        "disk_usage": 5.0,
+        "network_io": {
+          "bytes_sent": 2375684096,
+          "bytes_recv": 2848991232,
+          "packets_sent": 2340803,
+          "packets_recv": 7003590,
+          "errin": 0,
+          "errout": 0,
+          "dropin": 0,
+          "dropout": 0
+        },
+        "process_count": 788,
+        "uptime_seconds": 99111.15475702286
+      },
+      "file_metrics": {
+        "python_files_count": 17337,
+        "total_file_size_mb": 4420.33984375
+      },
+      "quality_metrics": {
+        "code_quality_score": 85.0,
+        "test_coverage_estimate": 70.0,
+        "documentation_completeness": 80.0
+      }
+    },
+    "bowl_predictions": {
+      "success": true,
+      "prediction_files_count": 6,
+      "bowl_guide_available": true,
+      "prediction_files": [
+        "bowls_2025_predictions_ml_backup_20251216_214957.json",
+        "bowls_2025_predictions_ml_20251216_215052.json",
+        "bowls_2025_predictions_simple.json",
+        "bowls_2025_predictions_ml_20251216_214727.json",
+        "bowls_2025_predictions_massey.json"
+      ]
+    }
+  },
+  "overall_success": true,
+  "end_time": "2025-12-19T05:10:48.950563",
+  "duration_seconds": 8.071876
+}

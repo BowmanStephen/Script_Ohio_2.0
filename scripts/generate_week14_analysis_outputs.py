@@ -21,27 +21,31 @@ def generate_prediction_insights(unified_df):
     # Explicitly type as JSON-like dict to avoid overly-narrow inference in ty.
     insights: dict[str, Any] = {
         "total_predictions": len(unified_df),
-        "home_win_predictions": int(
-            (unified_df.get("home_win_probability", 0) > 0.5).sum()
-        )
-        if "home_win_probability" in unified_df.columns
-        else 0,
-        "away_win_predictions": int(
-            (unified_df.get("away_win_probability", 0) > 0.5).sum()
-        )
-        if "away_win_probability" in unified_df.columns
-        else 0,
-        "average_confidence": float(unified_df.get("ensemble_confidence", 0).mean())
-        if "ensemble_confidence" in unified_df.columns
-        else 0.0,
-        "high_confidence_predictions": int(
-            (unified_df.get("ensemble_confidence", 0) > 0.75).sum()
-        )
-        if "ensemble_confidence" in unified_df.columns
-        else 0,
-        "average_predicted_margin": float(unified_df.get("predicted_margin", 0).mean())
-        if "predicted_margin" in unified_df.columns
-        else 0.0,
+        "home_win_predictions": (
+            int((unified_df.get("home_win_probability", 0) > 0.5).sum())
+            if "home_win_probability" in unified_df.columns
+            else 0
+        ),
+        "away_win_predictions": (
+            int((unified_df.get("away_win_probability", 0) > 0.5).sum())
+            if "away_win_probability" in unified_df.columns
+            else 0
+        ),
+        "average_confidence": (
+            float(unified_df.get("ensemble_confidence", 0).mean())
+            if "ensemble_confidence" in unified_df.columns
+            else 0.0
+        ),
+        "high_confidence_predictions": (
+            int((unified_df.get("ensemble_confidence", 0) > 0.75).sum())
+            if "ensemble_confidence" in unified_df.columns
+            else 0
+        ),
+        "average_predicted_margin": (
+            float(unified_df.get("predicted_margin", 0).mean())
+            if "predicted_margin" in unified_df.columns
+            else 0.0
+        ),
         "upset_predictions": 0,
         "close_games": 0,
         "blowout_predictions": 0,

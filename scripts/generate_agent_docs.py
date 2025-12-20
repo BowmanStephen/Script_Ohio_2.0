@@ -56,11 +56,15 @@ def update_agents_md(agent_metadata: Dict[str, AgentMetadata]):
         first_sentence = (
             description.split(".")[0] + "."
             if "." in description
-            else description.split("!")[0] + "!"
-            if "!" in description
-            else description.split("?")[0] + "?"
-            if "?" in description
-            else description
+            else (
+                description.split("!")[0] + "!"
+                if "!" in description
+                else (
+                    description.split("?")[0] + "?"
+                    if "?" in description
+                    else description
+                )
+            )
         )
         # If first sentence is too short, take first 100 chars
         if len(first_sentence) < 20 and len(description) > len(first_sentence):

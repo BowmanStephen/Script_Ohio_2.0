@@ -21,7 +21,8 @@ if __name__ == "__main__":
     from starter_pack.utils.bootstrap import ensure_notebook_environment
 
     result = ensure_notebook_environment(
-        auto_install=os.environ.get("CFB_AUTO_INSTALL", "1") not in {"0", "false", "False"},
+        auto_install=os.environ.get("CFB_AUTO_INSTALL", "1")
+        not in {"0", "false", "False"},
         requirements_override=requirements_override,
         quiet_success=True,
     )
@@ -32,4 +33,3 @@ if __name__ == "__main__":
         f"  • Missing modules: {', '.join(result.missing_modules) or 'none'}\n"
         f"  • Auto install performed: {result.auto_install_performed}"
     )
-

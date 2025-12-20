@@ -1,0 +1,136 @@
+{
+  "validation_timestamp": "2025-12-18T20:02:11.541800",
+  "duration_seconds": 2.542042,
+  "total_tests": 25,
+  "passed_tests": 22,
+  "failed_tests": 3,
+  "success_rate": 88.0,
+  "system_ready": false,
+  "detailed_results": {
+    "Model Predictions": {
+      "passed": true,
+      "details": "Fresh verification completed",
+      "timestamp": "2025-12-18T20:02:11.057477"
+    },
+    "CFBD FBS Teams": {
+      "passed": true,
+      "details": "Retrieved 136 FBS teams",
+      "timestamp": "2025-12-18T20:02:11.264734"
+    },
+    "CFBD Integration": {
+      "passed": false,
+      "details": "Error: 'TeamsApi' object has no attribute 'get_team_talent'",
+      "timestamp": "2025-12-18T20:02:11.438613"
+    },
+    "Advanced Features Script": {
+      "passed": true,
+      "details": "Working advanced features script exists",
+      "timestamp": "2025-12-18T20:02:11.438758"
+    },
+    "Enhanced Predictions": {
+      "passed": true,
+      "details": "Found enhanced predictions for 13 games",
+      "timestamp": "2025-12-18T20:02:11.440005"
+    },
+    "Working Features Data": {
+      "passed": false,
+      "details": "Only 0 teams with features",
+      "timestamp": "2025-12-18T20:02:11.440607"
+    },
+    "External Model Analysis": {
+      "passed": true,
+      "details": "Analyzed 9 models including Script Ohio",
+      "timestamp": "2025-12-18T20:02:11.441413"
+    },
+    "Script Ohio Ranking": {
+      "passed": true,
+      "details": "Script Ohio Ensemble ranked #4 out of 9",
+      "timestamp": "2025-12-18T20:02:11.441425"
+    },
+    "Analytics API Script": {
+      "passed": true,
+      "details": "Analytics API server script exists",
+      "timestamp": "2025-12-18T20:02:11.441509"
+    },
+    "API Module Import": {
+      "passed": true,
+      "details": "Analytics API module imports successfully",
+      "timestamp": "2025-12-18T20:02:11.498264"
+    },
+    "Advanced Analytics Dashboard": {
+      "passed": true,
+      "details": "React dashboard component exists",
+      "timestamp": "2025-12-18T20:02:11.498297"
+    },
+    "Master Training Data": {
+      "passed": true,
+      "details": "Master dataset with 5250 games (2016-2025)",
+      "timestamp": "2025-12-18T20:02:11.540488"
+    },
+    "Production Models": {
+      "passed": true,
+      "details": "All 3 production models found",
+      "timestamp": "2025-12-18T20:02:11.540567"
+    },
+    "Prediction Outputs": {
+      "passed": true,
+      "details": "Found 6 prediction files",
+      "timestamp": "2025-12-18T20:02:11.540755"
+    },
+    "CFBD API Performance": {
+      "passed": true,
+      "details": "API response time: 0.00s",
+      "timestamp": "2025-12-18T20:02:11.540907"
+    },
+    "Model Loading Performance": {
+      "passed": true,
+      "details": "Ridge model load time: 0.000s",
+      "timestamp": "2025-12-18T20:02:11.541130"
+    },
+    "Memory Usage": {
+      "passed": true,
+      "details": "Current memory usage: 391.4MB",
+      "timestamp": "2025-12-18T20:02:11.541262"
+    },
+    "Meta Agent": {
+      "passed": true,
+      "details": "Meta agent script exists",
+      "timestamp": "2025-12-18T20:02:11.541285"
+    },
+    "Agent Registry": {
+      "passed": false,
+      "details": "Only 0 agents registered",
+      "timestamp": "2025-12-18T20:02:11.541578"
+    },
+    "Orchestration Agent": {
+      "passed": true,
+      "details": "Orchestration agent exists",
+      "timestamp": "2025-12-18T20:02:11.541608"
+    },
+    "Web App Directory": {
+      "passed": true,
+      "details": "Web application directory exists",
+      "timestamp": "2025-12-18T20:02:11.541629"
+    },
+    "Package.json": {
+      "passed": true,
+      "details": "React package.json exists",
+      "timestamp": "2025-12-18T20:02:11.541641"
+    },
+    "Source Directory": {
+      "passed": true,
+      "details": "React src directory exists",
+      "timestamp": "2025-12-18T20:02:11.541651"
+    },
+    "App.tsx": {
+      "passed": true,
+      "details": "Main React component exists",
+      "timestamp": "2025-12-18T20:02:11.541662"
+    },
+    "React Components": {
+      "passed": true,
+      "details": "Found 8 React components",
+      "timestamp": "2025-12-18T20:02:11.541792"
+    }
+  }
+}

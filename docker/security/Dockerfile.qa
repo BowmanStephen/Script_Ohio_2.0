@@ -1,0 +1,78 @@
+# Quality Assurance Layer Dockerfile
+# Confidential Security - Read-only quality assurance and validation
+# User: 5000:5000 (QA operations user)
+# Capabilities: None (read-only validation)
+# Security: no-new-privileges, apparmor, seccomp
+# Networks: qa-network, audit-network
+
+FROM python:3.13-slim
+
+# Create system user
+RUN groupadd -r -g 5000 qa_user && \
+    useradd -r -u 5000 -g qa_user qa_user
+
+# Install minimal system packages
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        jq \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install QA dependencies
+RUN pip install --no-cache-dir \
+    pytest \
+    pytest-cov \
+    pytest-xdist \
+    coverage \
+    bandit \
+    safety \
+    pip-audit \
+    mypy \
+    black \
+    ruff \
+    flake8 \
+    pylint \
+    pydantic \
+    jsonschema \
+    great_expectations
+
+# Copy application code
+COPY agents/qa/ ./agents/qa/
+COPY agents/core/ ./agents/core/
+COPY docker/security/scripts/start-qa.sh ./
+COPY docker/security/scripts/health-check.sh ./
+
+# Create QA directories
+RUN mkdir -p /app/logs /app/reports/validation && \
+    chown -R qa_user:qa_user /app && \
+    chmod -R 755 /app
+
+# Copy security configuration
+COPY docker/security/security-policies.json /etc/agent-security/
+COPY docker/security/qa-rules.json /etc/agent-security/
+RUN chmod 600 /etc/agent-security/security-policies.json && \
+    chmod 600 /etc/agent-security/qa-rules.json
+
+# Set ownership
+RUN chown -R qa_user:qa_user /app
+
+# Switch to non-root user
+USER qa_user
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD ["./health-check.sh"]
+
+# Expose port for QA service interface
+EXPOSE 8900
+
+# Start command
+CMD ["./start-qa.sh"]

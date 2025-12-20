@@ -9,7 +9,7 @@ from unittest.mock import MagicMock, Mock
 
 import pandas as pd
 import pytest
-from src.data_sources.cfbd_client import CFBDRESTDataSource
+from src.cfbd_client.unified_client import UnifiedCFBDClient
 from src.data_sources.cfbd_graphql import CFBDGraphQLClient
 from src.features.cfbd_feature_engineering import (
     CFBDFeatureEngineer,
@@ -201,12 +201,12 @@ def test_graphql_dict_processing(feature_engineer, graphql_scoreboard_fixture):
     assert "away_points" in games_df.columns, "awayPoints should map to away_points"
     assert "season_type" in games_df.columns, "seasonType should map to season_type"
     assert "start_date" in games_df.columns, "startDate should map to start_date"
-    assert "home_conference" in games_df.columns, (
-        "homeConference should map to home_conference"
-    )
-    assert "away_conference" in games_df.columns, (
-        "awayConference should map to away_conference"
-    )
+    assert (
+        "home_conference" in games_df.columns
+    ), "homeConference should map to home_conference"
+    assert (
+        "away_conference" in games_df.columns
+    ), "awayConference should map to away_conference"
     assert "neutral_site" in games_df.columns, "neutralSite should map to neutral_site"
 
     # Verify data integrity
@@ -373,9 +373,9 @@ def test_mixed_graphql_rest_scenario(
     combined_df = pd.concat([week12_df, week13_df], ignore_index=True)
 
     # Verify combined DataFrame has consistent schema
-    assert len(combined_df) == 3, (
-        "Should have 3 total games (2 from GraphQL, 1 from REST)"
-    )
+    assert (
+        len(combined_df) == 3
+    ), "Should have 3 total games (2 from GraphQL, 1 from REST)"
 
     # Verify schema consistency
     common_columns = set(week12_df.columns) & set(week13_df.columns)
@@ -386,12 +386,14 @@ def test_mixed_graphql_rest_scenario(
     assert 13 in combined_df["week"].values, "Week 13 game should be present"
 
     # Verify no type mismatches
-    assert combined_df["home_points"].dtype in [float, int], (
-        "home_points should be numeric"
-    )
-    assert combined_df["away_points"].dtype in [float, int], (
-        "away_points should be numeric"
-    )
+    assert combined_df["home_points"].dtype in [
+        float,
+        int,
+    ], "home_points should be numeric"
+    assert combined_df["away_points"].dtype in [
+        float,
+        int,
+    ], "away_points should be numeric"
 
     # Verify all games present
     game_ids = combined_df["id"].tolist()
@@ -417,9 +419,9 @@ def test_empty_graphql_results(feature_engineer, graphql_empty_fixture):
     # Verify expected columns are present (even if empty)
     expected_columns = ["id", "season", "week", "home_team", "away_team"]
     for col in expected_columns:
-        assert col in games_df.columns or games_df.empty, (
-            f"Column {col} should be in schema"
-        )
+        assert (
+            col in games_df.columns or games_df.empty
+        ), f"Column {col} should be in schema"
 
 
 def test_empty_rest_results(feature_engineer):
@@ -557,15 +559,15 @@ def test_field_mapping_validation_graphql(feature_engineer):
 
     row = games_df.iloc[0]
     for camel_case, snake_case in mappings.items():
-        assert snake_case in games_df.columns, (
-            f"{camel_case} should map to {snake_case}"
-        )
+        assert (
+            snake_case in games_df.columns
+        ), f"{camel_case} should map to {snake_case}"
         if camel_case in graphql_game:
             expected_value = graphql_game[camel_case]
             actual_value = row[snake_case]
-            assert actual_value == expected_value or pd.isna(actual_value), (
-                f"{camel_case} → {snake_case}: expected {expected_value}, got {actual_value}"
-            )
+            assert actual_value == expected_value or pd.isna(
+                actual_value
+            ), f"{camel_case} → {snake_case}: expected {expected_value}, got {actual_value}"
 
 
 def test_field_mapping_validation_rest(feature_engineer):

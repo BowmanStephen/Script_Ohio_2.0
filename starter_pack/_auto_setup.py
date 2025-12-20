@@ -1,4 +1,5 @@
 """Helper entrypoint so notebooks can simply `%run _auto_setup.py`."""
+
 from __future__ import annotations
 
 import os
@@ -16,7 +17,8 @@ from starter_pack.utils.bootstrap import ensure_notebook_environment
 if __name__ == "__main__":
     requirements_override = os.environ.get("CFB_NOTEBOOK_REQUIREMENTS")
     result = ensure_notebook_environment(
-        auto_install=os.environ.get("CFB_AUTO_INSTALL", "1") not in {"0", "false", "False"},
+        auto_install=os.environ.get("CFB_AUTO_INSTALL", "1")
+        not in {"0", "false", "False"},
         requirements_override=requirements_override,
         quiet_success=True,
     )

@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-12-20T21:57:01.843194+00:00",
+  "tests_passed": 0,
+  "total_tests": 4,
+  "overall_grade": "C",
+  "individual_results": {
+    "cfbd_data": {
+      "test_passed": false,
+      "data_available": false,
+      "reason": "No real data available for testing"
+    },
+    "model_execution": {
+      "test_passed": false,
+      "error": "cannot import name 'DATA_CONFIG' from 'model_pack.config.data_config' (/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack/config/data_config.py)"
+    },
+    "load_performance": {
+      "test_passed": false,
+      "error": "Object of type ResourceLevel is not JSON serializable"
+    },
+    "stability": {
+      "test_passed": false,
+      "error": "AgentCapability.__init__() got an unexpected keyword argument 'required_permissions'"
+    }
+  },
+  "production_ready": false
+}

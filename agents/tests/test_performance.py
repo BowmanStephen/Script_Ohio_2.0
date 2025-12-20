@@ -20,9 +20,11 @@ def test_response_time(orchestrator, query, query_type, max_seconds):
         user_id="performance_test",
         query=query,
         query_type=query_type,
-        parameters={"home_team": "Ohio State", "away_team": "Michigan"}
-        if query_type == "prediction"
-        else {},
+        parameters=(
+            {"home_team": "Ohio State", "away_team": "Michigan"}
+            if query_type == "prediction"
+            else {}
+        ),
         context_hints={},
     )
 
@@ -31,6 +33,6 @@ def test_response_time(orchestrator, query, query_type, max_seconds):
     elapsed = time.perf_counter() - start
 
     assert response.status in {"success", "partial_success"}
-    assert elapsed < max_seconds, (
-        f"{query_type} request took {elapsed:.2f}s (limit {max_seconds:.2f}s)"
-    )
+    assert (
+        elapsed < max_seconds
+    ), f"{query_type} request took {elapsed:.2f}s (limit {max_seconds:.2f}s)"

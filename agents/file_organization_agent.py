@@ -287,9 +287,9 @@ class FileOrganizationAgent(BaseAgent):
                 moved_files[str(file_path)] = {
                     "destination": str(destination_path),
                     "category": file_info["category"],
-                    "original_size": file_path.stat().st_size
-                    if file_path.exists()
-                    else 0,
+                    "original_size": (
+                        file_path.stat().st_size if file_path.exists() else 0
+                    ),
                 }
 
                 self.organization_log.append(

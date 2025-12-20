@@ -1,0 +1,26 @@
+# SYSTEM INFO
+audit_id | audit_name | start_time | overall_status | overall_score
+2a4408ad | Quick System Audit Demo 2025-12-18 12:34:45 | 2025-12-18T12:34:45 | warning | 92.2
+
+# SUMMARY STATS
+metric | value
+total_checks | 9
+passed_checks | 8
+failed_checks | 0
+warning_checks | 1
+critical_failures | 0
+
+# CHECK RESULTS
+check_id | category | title | status | score | critical
+cf1846d4 | system_integrity | Core Directory Structure | passed | 100.0 | True
+17f34303 | system_integrity | Configuration Files | passed | 100.0 | True
+c49856d4 | system_integrity | Model Files Availability | passed | 100.0 | True
+2a219c13 | data_pipeline | CFBD API Key Configuration | passed | 100.0 | True
+32971a69 | data_pipeline | CFBD Client Instantiation | passed | 100.0 | True
+d3f6355d | data_pipeline | CFBD Rate Limiting | passed | 90.0 | False
+97277050 | model_validation | Ridge Model Loading | passed | 100.0 | True
+65c0ab6d | model_validation | XGBoost Model Loading | passed | 100.0 | True
+1a50d1cb | model_validation | FastAI Model Loading | warning | 40.0 | False
+
+# RECOMMENDATIONS
+recommendation

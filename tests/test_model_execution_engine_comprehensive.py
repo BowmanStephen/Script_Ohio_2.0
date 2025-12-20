@@ -343,9 +343,9 @@ class TestModelExecutionEngineComprehensive:
             memory_increase = (final_memory - initial_memory) / 1024 / 1024  # MB
 
             # Memory increase should be reasonable
-            assert memory_increase < 50, (
-                f"Memory increase {memory_increase:.2f}MB exceeds limit"
-            )
+            assert (
+                memory_increase < 50
+            ), f"Memory increase {memory_increase:.2f}MB exceeds limit"
 
     @pytest.mark.skip(reason="Slow test")
     def test_stress_test_high_volume_predictions(self, model_engine):

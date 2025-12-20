@@ -262,9 +262,9 @@ class Week13AnalysisEnhancer:
         print(f"Neutral site: {situational_analysis['neutral_site_games']}")
         print(f"Conference games: {situational_analysis['conference_games']}")
 
-        self.enhanced_analysis["enhancements"]["situational_factors"] = (
-            situational_analysis
-        )
+        self.enhanced_analysis["enhancements"][
+            "situational_factors"
+        ] = situational_analysis
 
         return situational_analysis
 
@@ -363,9 +363,9 @@ class Week13AnalysisEnhancer:
         print(f"FBS games: {statistical_breakdowns['fbs_games']}")
         print(f"Teams involved: {statistical_breakdowns['teams_involved']}")
 
-        self.enhanced_analysis["enhancements"]["statistical_breakdowns"] = (
-            statistical_breakdowns
-        )
+        self.enhanced_analysis["enhancements"][
+            "statistical_breakdowns"
+        ] = statistical_breakdowns
 
         return statistical_breakdowns
 

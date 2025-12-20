@@ -54,6 +54,7 @@ if str(_config_dir.parent.parent) not in sys.path:
 
 import sys
 import os
+
 project_root = Path(__file__).resolve().parent.parent
 
 # Force project root to be first in sys.path to avoid shadowing by src/validation
@@ -66,7 +67,7 @@ print(f"DEBUG: Current Working Directory: {os.getcwd()}")
 print(f"DEBUG: Project Root: {project_root}")
 print(f"DEBUG: sys.path[0]: {sys.path[0]}")
 
-from validation.cfbd_data_validator import CFBDDataValidator # Should work now
+from validation.cfbd_data_validator import CFBDDataValidator  # Should work now
 
 try:
     from model_pack.config.data_config import get_data_config
@@ -90,6 +91,7 @@ logger = logging.getLogger(__name__)
 # GraphQL client import
 try:
     from src.data_sources.cfbd_graphql import CFBDGraphQLClient
+
     GQL_AVAILABLE = True
 except ImportError:
     CFBDGraphQLClient = None
@@ -111,40 +113,39 @@ class UnifiedDataAcquisitionAgent:
     def __init__(self, use_graphql: Optional[bool] = None, use_rest: bool = False):
         """
         Initialize the unified agent with API clients and configuration.
-        
+
         Args:
             use_graphql: Explicitly enable/disable GraphQL (None = auto-detect)
             use_rest: Force REST API only (overrides use_graphql)
         """
         # Initialize REST clients using shared utilities
         rest_clients = DataAcquisitionUtils.initialize_rest_clients(API_KEY)
-        self.api_client = rest_clients['api_client']
-        self.games_api = rest_clients['games_api']
-        self.plays_api = rest_clients['plays_api']
-        self.teams_api = rest_clients['teams_api']
-        self.ratings_api = rest_clients['ratings_api']
-        self.betting_api = rest_clients['betting_api']
-        
-        self.current_season = CURRENT_SEASON # explicit mapping
+        self.api_client = rest_clients["api_client"]
+        self.games_api = rest_clients["games_api"]
+        self.plays_api = rest_clients["plays_api"]
+        self.teams_api = rest_clients["teams_api"]
+        self.ratings_api = rest_clients["ratings_api"]
+        self.betting_api = rest_clients["betting_api"]
 
-        
+        self.current_season = CURRENT_SEASON  # explicit mapping
+
         self.validator = CFBDDataValidator()
         self.rate_limiter = DataAcquisitionUtils.create_rate_limiter()
         self.data_cache = {}
         self.quality_report = {
-            'total_games': 0,
-            'successful_game_fetches': 0,
-            'successful_play_fetches': 0,
-            'failed_games': [],
-            'failed_plays': [],
-            'data_gaps': [],
-            'processing_time': None,
-            'start_time': None
+            "total_games": 0,
+            "successful_game_fetches": 0,
+            "successful_play_fetches": 0,
+            "failed_games": [],
+            "failed_plays": [],
+            "data_gaps": [],
+            "processing_time": None,
+            "start_time": None,
         }
         self._historical_elo_cache: Optional[Dict[str, float]] = None
         self._historical_talent_cache: Optional[Dict[str, float]] = None
         self._historical_spread_cache: Optional[Dict[str, float]] = None
-        
+
         # GraphQL client initialization using shared utilities
         if use_rest:
             self.use_graphql = False
@@ -154,7 +155,7 @@ class UnifiedDataAcquisitionAgent:
             self.graphql_client = DataAcquisitionUtils.initialize_graphql_client(
                 API_KEY, force_rest=(use_graphql is False)
             )
-            self.use_graphql = (self.graphql_client is not None)
+            self.use_graphql = self.graphql_client is not None
             if self.use_graphql:
                 logger.info("✅ GraphQL client initialized (PRIMARY METHOD)")
             else:
@@ -167,20 +168,20 @@ class UnifiedDataAcquisitionAgent:
     def fetch_games_graphql(self, season: int, week: int) -> pd.DataFrame:
         """
         Fetch games data using GraphQL API (PRIMARY METHOD).
-        
+
         Args:
             season: Season year
             week: Week number
-            
+
         Returns:
             DataFrame containing game information
-            
+
         Raises:
             ValueError: If GraphQL client is not available
         """
         if not self.graphql_client:
             raise ValueError("GraphQL client not initialized")
-        
+
         query = """
         query Scoreboard($season: Int!, $week: smallint) {
           game(
@@ -208,50 +209,56 @@ class UnifiedDataAcquisitionAgent:
           }
         }
         """
-        
+
         variables = {"season": season, "week": week}
         result = self.graphql_client.query(query, variables)
-        
+
         if not result or "game" not in result:
             return pd.DataFrame()
-        
+
         games_data = result["game"]
         if not games_data:
             return pd.DataFrame()
-        
+
         # Use shared utility for conversion
         df = DataAcquisitionUtils.convert_graphql_to_dataframe(games_data)
-        
+
         logger.info(f"✅ Fetched {len(df)} games via GraphQL")
         return df
-    
+
     def _is_fbs_game(self, game) -> bool:
         """
         Check if a game is between FBS teams (REST API version).
-        
+
         Args:
             game: Game object from REST API
-            
+
         Returns:
             True if both teams are FBS
         """
-        home_conf = getattr(game, 'home_conference', None) or getattr(game, 'homeConference', None)
-        away_conf = getattr(game, 'away_conference', None) or getattr(game, 'awayConference', None)
-        
+        home_conf = getattr(game, "home_conference", None) or getattr(
+            game, "homeConference", None
+        )
+        away_conf = getattr(game, "away_conference", None) or getattr(
+            game, "awayConference", None
+        )
+
         if home_conf is None:
             home_conf = ""
         if away_conf is None:
             away_conf = ""
-        
-        if hasattr(home_conf, 'name'):
+
+        if hasattr(home_conf, "name"):
             home_conf = home_conf.name
-        if hasattr(away_conf, 'name'):
+        if hasattr(away_conf, "name"):
             away_conf = away_conf.name
-        
+
         home_conf = str(home_conf) if home_conf else ""
         away_conf = str(away_conf) if away_conf else ""
-        
-        return (config.is_fbs_conference(home_conf) or config.is_fbs_conference(away_conf))
+
+        return config.is_fbs_conference(home_conf) or config.is_fbs_conference(
+            away_conf
+        )
 
     def test_api_connectivity(self) -> bool:
         """Test API connection and authentication."""
@@ -259,10 +266,14 @@ class UnifiedDataAcquisitionAgent:
             logger.info("Testing API connectivity...")
             current_season = config.get_season()
             games = self.games_api.get_games(year=current_season, week=1)
-            logger.info(f"API connectivity test successful. Found {len(games)} games in Week 1.")
+            logger.info(
+                f"API connectivity test successful. Found {len(games)} games in Week 1."
+            )
             return True
         except ApiException as e:
-            logger.error(f"API connectivity test failed (API error): {e.status} - {e.reason}")
+            logger.error(
+                f"API connectivity test failed (API error): {e.status} - {e.reason}"
+            )
             if e.status == 401:
                 logger.error("Authentication failed - check API key")
             elif e.status == 429:
@@ -282,8 +293,10 @@ class UnifiedDataAcquisitionAgent:
         """
         current_season = config.get_season()
         current_week = config.get_week()
-        logger.info(f"Fetching {current_season} games data for Weeks 1-{current_week}...")
-        self.quality_report['start_time'] = datetime.now()
+        logger.info(
+            f"Fetching {current_season} games data for Weeks 1-{current_week}..."
+        )
+        self.quality_report["start_time"] = datetime.now()
 
         # Also fetch postseason if we are late in the season (Week 15+)
         fetch_postseason = current_week >= 15
@@ -297,29 +310,35 @@ class UnifiedDataAcquisitionAgent:
         for week in range(1, current_week + 1):
             try:
                 logger.info(f"Fetching Week {week} games...")
-                
+
                 # Try GraphQL first (PRIMARY METHOD)
                 if self.use_graphql and self.graphql_client:
                     try:
                         df_week = self.fetch_games_graphql(current_season, week)
-                        
+
                         if not df_week.empty:
                             # Filter for FBS games using shared utility
                             fbs_mask = df_week.apply(
-                                lambda row: DataAcquisitionUtils.is_fbs_game(row, config),
-                                axis=1
+                                lambda row: DataAcquisitionUtils.is_fbs_game(
+                                    row, config
+                                ),
+                                axis=1,
                             )
                             fbs_games_df = df_week[fbs_mask]
-                            
+
                             if not fbs_games_df.empty:
-                                fbs_games = fbs_games_df.to_dict('records')
+                                fbs_games = fbs_games_df.to_dict("records")
                                 all_games.extend(fbs_games)
                                 method_used = "GraphQL"
-                                logger.info(f"Found {len(fbs_games)} FBS games in Week {week} via GraphQL")
+                                logger.info(
+                                    f"Found {len(fbs_games)} FBS games in Week {week} via GraphQL"
+                                )
                                 continue
                     except Exception as e:
-                        logger.warning(f"GraphQL fetch failed for Week {week}: {e} - falling back to REST")
-                
+                        logger.warning(
+                            f"GraphQL fetch failed for Week {week}: {e} - falling back to REST"
+                        )
+
                 # REST fallback (FALLBACK METHOD)
                 self._rate_limit()
                 games = self.games_api.get_games(year=current_season, week=week)
@@ -328,18 +347,24 @@ class UnifiedDataAcquisitionAgent:
                 if games:
                     fbs_games = [g for g in games if self._is_fbs_game(g)]
                     all_games.extend(fbs_games)
-                    logger.info(f"Found {len(fbs_games)} FBS games in Week {week} via REST")
+                    logger.info(
+                        f"Found {len(fbs_games)} FBS games in Week {week} via REST"
+                    )
                 else:
                     logger.warning(f"No games found for Week {week}")
 
             except ApiException as e:
                 logger.error(f"API error for Week {week}: {e.status} - {e.reason}")
-                self.quality_report['failed_games'].append({'week': week, 'error': str(e)})
+                self.quality_report["failed_games"].append(
+                    {"week": week, "error": str(e)}
+                )
             except Exception as e:
                 logger.error(f"Error fetching Week {week}: {str(e)}")
             except Exception as e:
                 logger.error(f"Error fetching Week {week}: {str(e)}")
-                self.quality_report['failed_games'].append({'week': week, 'error': str(e)})
+                self.quality_report["failed_games"].append(
+                    {"week": week, "error": str(e)}
+                )
 
         # 2. Fetch Postseason (if applicable)
         if fetch_postseason:
@@ -351,22 +376,26 @@ class UnifiedDataAcquisitionAgent:
                         # GraphQL query for postseason not strictly defined by week, depends on API
                         # We can try fetching with seasonType='postseason' if the schema supports it
                         # For now, let's use REST for postseason as it's safer/known
-                        pass 
+                        pass
                     except Exception:
                         pass
-                
+
                 # REST Postseason
                 self._rate_limit()
                 # Postseason is often "Week 1" of seasonType='postseason' or just querying by seasonType
-                postseason_games = self.games_api.get_games(year=current_season, season_type='postseason')
-                
+                postseason_games = self.games_api.get_games(
+                    year=current_season, season_type="postseason"
+                )
+
                 if postseason_games:
-                    fbs_post_games = [g for g in postseason_games if self._is_fbs_game(g)]
+                    fbs_post_games = [
+                        g for g in postseason_games if self._is_fbs_game(g)
+                    ]
                     all_games.extend(fbs_post_games)
                     logger.info(f"Found {len(fbs_post_games)} FBS Postseason games")
                 else:
                     logger.info("No Postseason games found yet")
-                    
+
             except ApiException as e:
                 logger.error(f"API error fetching Postseason: {e.status}")
             except Exception as e:
@@ -380,32 +409,34 @@ class UnifiedDataAcquisitionAgent:
         # Fix: Convert objects to dicts first
         games_data = []
         for game in all_games:
-            if hasattr(game, 'to_dict'):
+            if hasattr(game, "to_dict"):
                 games_data.append(game.to_dict())
             else:
                 games_data.append(game.__dict__)
-        
+
         df = pd.DataFrame(games_data)
         df = DataAcquisitionUtils.normalize_column_names(df)
-        
+
         # Validate data quality
         validation = DataAcquisitionUtils.validate_game_data(df)
         logger.info(f"Data validation: {validation}")
-        
-        self.quality_report['total_games'] = len(df)
-        self.quality_report['successful_game_fetches'] = len(df)
-        self.quality_report['processing_time'] = (datetime.now() - self.quality_report['start_time']).total_seconds()
-        
+
+        self.quality_report["total_games"] = len(df)
+        self.quality_report["successful_game_fetches"] = len(df)
+        self.quality_report["processing_time"] = (
+            datetime.now() - self.quality_report["start_time"]
+        ).total_seconds()
+
         logger.info(f"✅ Fetched {len(df)} total games using {method_used} API")
         return df
 
     def fetch_play_by_play_data(self, games_df: pd.DataFrame) -> pd.DataFrame:
         """
         Fetch play-by-play data for games (placeholder - uses shared structure).
-        
+
         Args:
             games_df: DataFrame containing game information
-            
+
         Returns:
             DataFrame containing play-by-play data
         """
@@ -416,7 +447,7 @@ class UnifiedDataAcquisitionAgent:
     def fetch_team_talent_ratings(self) -> pd.DataFrame:
         """
         Fetch team talent ratings.
-        
+
         Returns:
             DataFrame containing talent ratings
         """
@@ -426,7 +457,7 @@ class UnifiedDataAcquisitionAgent:
             talent = self.teams_api.get_talent(year=self.current_season)
             data = []
             for t in talent:
-                if hasattr(t, 'to_dict'):
+                if hasattr(t, "to_dict"):
                     data.append(t.to_dict())
                 else:
                     data.append(t.__dict__)
@@ -451,7 +482,7 @@ class UnifiedDataAcquisitionAgent:
             elo = self.ratings_api.get_elo(year=self.current_season)
             data = []
             for e in elo:
-                if hasattr(e, 'to_dict'):
+                if hasattr(e, "to_dict"):
                     data.append(e.to_dict())
                 else:
                     data.append(e.__dict__)
@@ -460,7 +491,9 @@ class UnifiedDataAcquisitionAgent:
             logger.error(f"Error fetching ELO: {e}")
             return pd.DataFrame()
 
-    def merge_talent_data(self, games_df: pd.DataFrame, talent_df: pd.DataFrame) -> pd.DataFrame:
+    def merge_talent_data(
+        self, games_df: pd.DataFrame, talent_df: pd.DataFrame
+    ) -> pd.DataFrame:
         """Merge talent data into games DataFrame"""
         logger.info("Merging talent data...")
         try:
@@ -470,74 +503,82 @@ class UnifiedDataAcquisitionAgent:
             if games_df.empty:
                 logger.warning("Games DataFrame is empty. Skipping merge.")
                 return games_df
-            
+
             # Create mapping from school to talent
             # Adjust column names: API might return 'team' or 'school'
-            school_col = 'school' if 'school' in talent_df.columns else 'team'
-            
-            if school_col in talent_df.columns and 'talent' in talent_df.columns:
+            school_col = "school" if "school" in talent_df.columns else "team"
+
+            if school_col in talent_df.columns and "talent" in talent_df.columns:
                 # Strip whitespace safely
                 talent_df = talent_df.copy()
                 talent_df[school_col] = talent_df[school_col].astype(str).str.strip()
-                
+
                 # Careful with existing dataframes to avoid SettingWithCopyWarning
-                games_df['home_team'] = games_df['home_team'].astype(str).str.strip()
-                games_df['away_team'] = games_df['away_team'].astype(str).str.strip()
-                
-                talent_map = talent_df.set_index(school_col)['talent'].to_dict()
-                
-                games_df['home_talent'] = games_df['home_team'].map(talent_map)
-                games_df['away_talent'] = games_df['away_team'].map(talent_map)
-                
+                games_df["home_team"] = games_df["home_team"].astype(str).str.strip()
+                games_df["away_team"] = games_df["away_team"].astype(str).str.strip()
+
+                talent_map = talent_df.set_index(school_col)["talent"].to_dict()
+
+                games_df["home_talent"] = games_df["home_team"].map(talent_map)
+                games_df["away_talent"] = games_df["away_team"].map(talent_map)
+
                 logger.info(f"Talent data merged. Map size: {len(talent_map)}")
             else:
-                logger.warning(f"Talent data validation failed. Columns found: {talent_df.columns.tolist()}")
+                logger.warning(
+                    f"Talent data validation failed. Columns found: {talent_df.columns.tolist()}"
+                )
 
         except Exception as e:
             logger.error(f"Error merging talent data: {e}")
             # Don't crash, return original df
             return games_df
-            
+
         return games_df
 
-    def merge_elo_data(self, games_df: pd.DataFrame, elo_df: pd.DataFrame) -> pd.DataFrame:
+    def merge_elo_data(
+        self, games_df: pd.DataFrame, elo_df: pd.DataFrame
+    ) -> pd.DataFrame:
         """Merge ELO data into games DataFrame"""
         logger.info("Merging ELO data...")
         if elo_df.empty or games_df.empty:
             return games_df
-            
+
         # ELO df usually has 'team', 'elo'
         # If API returns weekly ELO, we need to be careful.
         # However, for Bowl games, we can use the latest ELO available.
         # If elo_df has 'team' and 'elo' columns:
-        if 'team' in elo_df.columns and 'elo' in elo_df.columns:
+        if "team" in elo_df.columns and "elo" in elo_df.columns:
             # If multiple entries per team (weekly), take the last one (latest)
-            latest_elo = elo_df.sort_values('elo').groupby('team')['elo'].last() # Wait, sort by what? 
-            # If 'year' is present, it's just one per team per year usually? 
+            latest_elo = (
+                elo_df.sort_values("elo").groupby("team")["elo"].last()
+            )  # Wait, sort by what?
+            # If 'year' is present, it's just one per team per year usually?
             # Or if it has 'week'?
-            # Actually get_elo(year=..) usually returns ONE entry per team (current/final ELO)? 
+            # Actually get_elo(year=..) usually returns ONE entry per team (current/final ELO)?
             # Let's inspect columns if possible, but assuming 'team'/'elo' unique.
-            
-            elo_map = elo_df.set_index('team')['elo'].to_dict()
-            
-            games_df['home_elo'] = games_df['home_team'].map(elo_map)
-            games_df['away_elo'] = games_df['away_team'].map(elo_map)
-            
+
+            elo_map = elo_df.set_index("team")["elo"].to_dict()
+
+            games_df["home_elo"] = games_df["home_team"].map(elo_map)
+            games_df["away_elo"] = games_df["away_team"].map(elo_map)
+
         return games_df
 
-    def calculate_advanced_metrics(self, games_df: pd.DataFrame, plays_df: pd.DataFrame) -> pd.DataFrame:
+    def calculate_advanced_metrics(
+        self, games_df: pd.DataFrame, plays_df: pd.DataFrame
+    ) -> pd.DataFrame:
         """
         Calculate advanced opponent-adjusted metrics.
-        
+
         Args:
             games_df: DataFrame containing game information
             plays_df: DataFrame containing play-by-play data
-            
+
         Returns:
             DataFrame with advanced metrics added
         """
         logger.info("Calculating advanced metrics using AdvancedMetricsBuilder...")
-        
+
         if games_df.empty:
             return games_df
 
@@ -545,65 +586,69 @@ class UnifiedDataAcquisitionAgent:
             builder = AdvancedMetricsBuilder(
                 api_client=self.api_client,
                 season=self.current_season,
-                rate_limit_callback=self._rate_limit
+                rate_limit_callback=self._rate_limit,
             )
-            
+
             metrics_map = builder.build_metrics_for_games(games_df, plays_df)
-            
+
             if not metrics_map:
                 logger.warning("No metrics calculated!")
                 return games_df
-                
+
             logger.info(f"Calculated metrics for {len(metrics_map)} games")
-                
+
             # Convert metrics to DataFrame
             metrics_data = []
             for game_id, metrics in metrics_map.items():
                 row = metrics.copy()
-                row['id'] = game_id
+                row["id"] = game_id
                 metrics_data.append(row)
-                
+
             metrics_df = pd.DataFrame(metrics_data)
-            
+
             # Ensure ID match
-            if 'id' in games_df.columns and not metrics_df.empty:
+            if "id" in games_df.columns and not metrics_df.empty:
                 # Align ID types
-                metrics_df['id'] = metrics_df['id'].astype(games_df['id'].dtype)
-                
+                metrics_df["id"] = metrics_df["id"].astype(games_df["id"].dtype)
+
                 # Merge
                 # Use suffixes to handle potential existing columns (though they should be empty/missing)
-                merged_df = games_df.merge(metrics_df, on='id', how='left', suffixes=('', '_new'))
-                
+                merged_df = games_df.merge(
+                    metrics_df, on="id", how="left", suffixes=("", "_new")
+                )
+
                 # Update columns
                 for col in metrics_df.columns:
-                    if col == 'id':
+                    if col == "id":
                         continue
-                        
+
                     if f"{col}_new" in merged_df.columns:
                         # If the column existed, fill NaNs with new values
                         if col in merged_df.columns:
-                            merged_df[col] = merged_df[col].fillna(merged_df[f"{col}_new"])
+                            merged_df[col] = merged_df[col].fillna(
+                                merged_df[f"{col}_new"]
+                            )
                         else:
                             # If it didn't exist, just rename
                             merged_df[col] = merged_df[f"{col}_new"]
-                        
+
                         merged_df = merged_df.drop(columns=[f"{col}_new"])
-                
+
                 return merged_df
-            
+
             return games_df
-            
+
         except Exception as e:
             logger.error(f"Error calculating advanced metrics: {e}")
             # Return original df on error to avoid full failure
             return games_df
 
-
-
-    def save_datasets(self, games_df: pd.DataFrame, plays_df: pd.DataFrame, talent_df: pd.DataFrame):
+    def save_datasets(
+        self, games_df: pd.DataFrame, plays_df: pd.DataFrame, talent_df: pd.DataFrame
+    ):
         """
         Save all datasets to files.
-        
+
         Args:
             games_df: Games DataFrame
             plays_df: Plays DataFrame
@@ -618,51 +663,62 @@ class UnifiedDataAcquisitionAgent:
             talent_df: Talent DataFrame
         """
         logger.info("Saving datasets...")
-        
+
         try:
             # Create backups of existing files
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            
+
             # 1. Save Training Data (Games)
             training_path = Path(OUTPUT_DIR) / "updated_training_data.csv"
             if training_path.exists():
-                backup_path = Path(OUTPUT_DIR) / "backups" / f"updated_training_data_{timestamp}.csv"
+                backup_path = (
+                    Path(OUTPUT_DIR)
+                    / "backups"
+                    / f"updated_training_data_{timestamp}.csv"
+                )
                 backup_path.parent.mkdir(parents=True, exist_ok=True)
                 import shutil
+
                 shutil.copy2(training_path, backup_path)
                 logger.info(f"Backed up existing training data to {backup_path}")
-            
+
             # Convert proper types before saving
             if not games_df.empty:
                 # Ensure updated_training_data.csv has the right columns
                 # We overwrite the file with the fresh fetch for the current season
                 # BUT we need to preserve historical data if we only fetched current season
-                
+
                 # Check if we should append or replace
                 # For this agent, we fetched the CURRENT season.
                 # We should load the existing file, remove current season rows, and append new ones.
-                
+
                 if training_path.exists():
                     existing_df = pd.read_csv(training_path, low_memory=False)
                     # Remove existing records for current season to avoid duplicates
-                    historical_df = existing_df[existing_df['season'] != self.current_season]
+                    historical_df = existing_df[
+                        existing_df["season"] != self.current_season
+                    ]
                     logger.info(f"Retained {len(historical_df)} historical records")
-                    
+
                     # Align columns
                     # Add missing columns to games_df that exist in historical_df
                     for col in historical_df.columns:
                         if col not in games_df.columns:
                             games_df[col] = np.nan
-                            
+
                     # Add missing columns to historical_df that exist in games_df
                     for col in games_df.columns:
                         if col not in historical_df.columns:
                             historical_df[col] = np.nan
-                            
+
                     # Combine
-                    combined_df = pd.concat([historical_df, games_df], ignore_index=True)
+                    combined_df = pd.concat(
+                        [historical_df, games_df], ignore_index=True
+                    )
                     combined_df.to_csv(training_path, index=False)
-                    logger.info(f"Saved {len(combined_df)} total records to {training_path}")
+                    logger.info(
+                        f"Saved {len(combined_df)} total records to {training_path}"
+                    )
                 else:
                     games_df.to_csv(training_path, index=False)
                     logger.info(f"Created new training data file at {training_path}")
@@ -682,7 +738,7 @@ class UnifiedDataAcquisitionAgent:
                 talent_path = talent_dir / f"talent_{self.current_season}.csv"
                 talent_df.to_csv(talent_path, index=False)
                 logger.info(f"Saved {len(talent_df)} talent records to {talent_path}")
-                
+
         except Exception as e:
             logger.error(f"Error saving datasets: {e}")
             raise
@@ -690,7 +746,7 @@ class UnifiedDataAcquisitionAgent:
     def generate_quality_report(self) -> str:
         """
         Generate data quality report.
-        
+
         Returns:
             Quality report as string
         """
@@ -707,7 +763,7 @@ class UnifiedDataAcquisitionAgent:
     def run_complete_acquisition(self):
         """
         Execute the complete data acquisition pipeline.
-        
+
         Returns:
             True if successful, False otherwise
         """
@@ -731,7 +787,7 @@ class UnifiedDataAcquisitionAgent:
             # Fetch talent ratings
             talent_df = self.fetch_team_talent_ratings()
             print(f"DEBUG: Talent DF empty? {talent_df.empty}")
-            
+
             # Fetch ELO ratings
             elo_df = self.fetch_elo_ratings()
 
@@ -741,7 +797,7 @@ class UnifiedDataAcquisitionAgent:
                 games_df = self.merge_talent_data(games_df, talent_df)
             else:
                 print("DEBUG: Skipping merge_talent_data because talent_df is empty")
-                
+
             # Merge ELO data
             if not elo_df.empty:
                 games_df = self.merge_elo_data(games_df, elo_df)
@@ -777,22 +833,26 @@ DataAcquisitionAgent = UnifiedDataAcquisitionAgent
 def main():
     """Main execution function."""
     parser = argparse.ArgumentParser(description="Unified CFBD Data Acquisition Agent")
-    parser.add_argument("--use-graphql", action="store_true", help="Prefer GraphQL API (default: auto-detect)")
+    parser.add_argument(
+        "--use-graphql",
+        action="store_true",
+        help="Prefer GraphQL API (default: auto-detect)",
+    )
     parser.add_argument("--no-graphql", action="store_true", help="Disable GraphQL API")
     parser.add_argument("--use-rest", action="store_true", help="Force REST API only")
-    
+
     args = parser.parse_args()
-    
+
     # Determine settings
     use_graphql = None
     use_rest = False
-    
+
     if args.use_rest or args.no_graphql:
         use_rest = True
         use_graphql = False
     elif args.use_graphql:
         use_graphql = True
-    
+
     agent = UnifiedDataAcquisitionAgent(use_graphql=use_graphql, use_rest=use_rest)
     success = agent.run_complete_acquisition()
     sys.exit(0 if success else 1)
@@ -800,4 +860,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

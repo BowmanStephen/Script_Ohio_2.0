@@ -1,0 +1,51 @@
+{
+  "overview": {
+    "status": "passed",
+    "score": 100.0,
+    "checks_analyzed": 12,
+    "critical_issues": 0
+  },
+  "category_breakdown": {
+    "system_integrity": 100.0,
+    "data_pipeline": 100.0,
+    "model_validation": 100.0
+  },
+  "timeline": {
+    "start": "2025-12-18T13:12:08.895271",
+    "end": "2025-12-18T13:12:12.527181",
+    "duration": 3.63191
+  },
+  "alerts": [],
+  "recommendations": [
+    "\ud83c\udf89 EXCELLENT: No critical issues found. System is operating optimally.",
+    "\ud83c\udfc6 OUTSTANDING: System demonstrates exceptional quality and reliability."
+  ],
+  "charts": {
+    "status_distribution": {
+      "passed": 12,
+      "failed": 0,
+      "warning": 0
+    },
+    "category_performance": {
+      "system_integrity": {
+        "total": 6,
+        "passed": 6,
+        "failed": 0,
+        "warning": 0
+      },
+      "data_pipeline": {
+        "total": 4,
+        "passed": 4,
+        "failed": 0,
+        "warning": 0
+      },
+      "model_validation": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0,
+        "warning": 0
+      }
+    },
+    "score_trend": []
+  }
+}

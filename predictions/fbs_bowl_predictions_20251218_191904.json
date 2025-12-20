@@ -1,0 +1,515 @@
+{
+  "generated_at": "2025-12-18T19:19:04.439125",
+  "season": 2025,
+  "model_type": "comprehensive_fbs_ensemble",
+  "description": "FBS-only bowl predictions with Ridge, XGBoost, FastAI, and Ensemble models",
+  "total_games": 13,
+  "models_used": {
+    "ridge": "Ridge Regression (loaded)",
+    "xgb": "XGBoost Classifier (loaded)",
+    "fastai": "FastAI Neural Network (placeholder - pickle protocol issue)",
+    "ensemble": "Weighted combination of all models"
+  },
+  "data_quality": {
+    "fbs_only": true,
+    "non_fbs_filtered": 5,
+    "data_source": "2025 bowl schedule",
+    "filter_criteria": "Strict FBS team validation"
+  },
+  "games": [
+    {
+      "id": 401778301,
+      "bowl_name": "Peach Bowl",
+      "date": "2025-12-31T19:00:00Z",
+      "home_team": "Georgia",
+      "away_team": "Penn State",
+      "stadium": "Mercedes-Benz Stadium",
+      "location": "Atlanta, GA",
+      "conference": "SEC vs Big Ten",
+      "ridge_predictions": {
+        "predicted_margin": -2.2,
+        "home_win_probability": 0.361,
+        "away_win_probability": 0.639
+      },
+      "xgb_predictions": {
+        "predicted_margin": -5.28,
+        "home_win_probability": 0.297,
+        "away_win_probability": 0.703
+      },
+      "fastai_predictions": {
+        "predicted_margin": -4.68,
+        "home_win_probability": 0.48,
+        "away_win_probability": 0.52
+      },
+      "ensemble_predictions": {
+        "predicted_margin": -4.19,
+        "home_win_probability": 0.355,
+        "away_win_probability": 0.645,
+        "predicted_winner": "Penn State",
+        "confidence_score": 0.782
+      },
+      "summary": {
+        "predicted_winner": "Penn State",
+        "predicted_margin": 4.188172667422247,
+        "confidence": 0.782,
+        "model_consensus": "Medium"
+      }
+    },
+    {
+      "id": 401778302,
+      "bowl_name": "Fiesta Bowl",
+      "date": "2025-12-31T15:00:00Z",
+      "home_team": "Oregon",
+      "away_team": "Arizona State",
+      "stadium": "State Farm Stadium",
+      "location": "Glendale, AZ",
+      "conference": "Big Ten vs Big 12",
+      "ridge_predictions": {
+        "predicted_margin": 2.15,
+        "home_win_probability": 0.614,
+        "away_win_probability": 0.386
+      },
+      "xgb_predictions": {
+        "predicted_margin": 4.73,
+        "home_win_probability": 0.707,
+        "away_win_probability": 0.293
+      },
+      "fastai_predictions": {
+        "predicted_margin": 3.86,
+        "home_win_probability": 0.658,
+        "away_win_probability": 0.342
+      },
+      "ensemble_predictions": {
+        "predicted_margin": 3.72,
+        "home_win_probability": 0.63,
+        "away_win_probability": 0.37,
+        "predicted_winner": "Oregon",
+        "confidence_score": 0.87
+      },
+      "summary": {
+        "predicted_winner": "Oregon",
+        "predicted_margin": 3.7233724799156684,
+        "confidence": 0.87,
+        "model_consensus": "High"
+      }
+    },
+    {
+      "id": 401778303,
+      "bowl_name": "Rose Bowl",
+      "date": "2025-01-01T17:00:00Z",
+      "home_team": "Michigan",
+      "away_team": "Washington",
+      "stadium": "Rose Bowl",
+      "location": "Pasadena, CA",
+      "conference": "Big Ten vs Pac-12",
+      "ridge_predictions": {
+        "predicted_margin": 1.41,
+        "home_win_probability": 0.567,
+        "away_win_probability": 0.433
+      },
+      "xgb_predictions": {
+        "predicted_margin": -0.78,
+        "home_win_probability": 0.444,
+        "away_win_probability": 0.556
+      },
+      "fastai_predictions": {
+        "predicted_margin": -1.24,
+        "home_win_probability": 0.678,
+        "away_win_probability": 0.322
+      },
+      "ensemble_predictions": {
+        "predicted_margin": 1.2,
+        "home_win_probability": 0.543,
+        "away_win_probability": 0.457,
+        "predicted_winner": "Michigan",
+        "confidence_score": 0.751
+      },
+      "summary": {
+        "predicted_winner": "Michigan",
+        "predicted_margin": 1.198795824752969,
+        "confidence": 0.751,
+        "model_consensus": "Medium"
+      }
+    },
+    {
+      "id": 401778304,
+      "bowl_name": "Sugar Bowl",
+      "date": "2025-01-01T20:45:00Z",
+      "home_team": "Texas",
+      "away_team": "Notre Dame",
+      "stadium": "Caesars Superdome",
+      "location": "New Orleans, LA",
+      "conference": "Big 12 vs Independent",
+      "ridge_predictions": {
+        "predicted_margin": 3.84,
+        "home_win_probability": 0.67,
+        "away_win_probability": 0.33
+      },
+      "xgb_predictions": {
+        "predicted_margin": 5.14,
+        "home_win_probability": 0.629,
+        "away_win_probability": 0.371
+      },
+      "fastai_predictions": {
+        "predicted_margin": 6.5,
+        "home_win_probability": 0.682,
+        "away_win_probability": 0.318
+      },
+      "ensemble_predictions": {
+        "predicted_margin": 4.74,
+        "home_win_probability": 0.663,
+        "away_win_probability": 0.337,
+        "predicted_winner": "Texas",
+        "confidence_score": 0.9
+      },
+      "summary": {
+        "predicted_winner": "Texas",
+        "predicted_margin": 4.739994938466052,
+        "confidence": 0.9,
+        "model_consensus": "High"
+      }
+    },
+    {
+      "id": 401778305,
+      "bowl_name": "Cotton Bowl",
+      "date": "2025-12-20T20:00:00Z",
+      "home_team": "Ohio State",
+      "away_team": "Oklahoma State",
+      "stadium": "AT&T Stadium",
+      "location": "Arlington, TX",
+      "conference": "Big Ten vs Big 12",
+      "ridge_predictions": {
+        "predicted_margin": 3.54,
+        "home_win_probability": 0.604,
+        "away_win_probability": 0.396
+      },
+      "xgb_predictions": {
+        "predicted_margin": 1.22,
+        "home_win_probability": 0.477,
+        "away_win_probability": 0.523
+      },
+      "fastai_predictions": {
+        "predicted_margin": 2.65,
+        "home_win_probability": 0.503,
+        "away_win_probability": 0.497
+      },
+      "ensemble_predictions": {
+        "predicted_margin": 2.18,
+        "home_win_probability": 0.577,
+        "away_win_probability": 0.423,
+        "predicted_winner": "Ohio State",
+        "confidence_score": 0.843
+      },
+      "summary": {
+        "predicted_winner": "Ohio State",
+        "predicted_margin": 2.1784489545470964,
+        "confidence": 0.843,
+        "model_consensus": "High"
+      }
+    },
+    {
+      "id": 401778306,
+      "bowl_name": "Orange Bowl",
+      "date": "2025-12-30T16:00:00Z",
+      "home_team": "Miami",
+      "away_team": "Alabama",
+      "stadium": "Hard Rock Stadium",
+      "location": "Miami Gardens, FL",
+      "conference": "ACC vs SEC",
+      "ridge_predictions": {
+        "predicted_margin": 7.92,
+        "home_win_probability": 0.672,
+        "away_win_probability": 0.328
+      },
+      "xgb_predictions": {
+        "predicted_margin": 7.47,
+        "home_win_probability": 0.672,
+        "away_win_probability": 0.328
+      },
+      "fastai_predictions": {
+        "predicted_margin": 6.2,
+        "home_win_probability": 0.857,
+        "away_win_probability": 0.143
+      },
+      "ensemble_predictions": {
+        "predicted_margin": 6.39,
+        "home_win_probability": 0.714,
+        "away_win_probability": 0.286,
+        "predicted_winner": "Miami",
+        "confidence_score": 0.789
+      },
+      "summary": {
+        "predicted_winner": "Miami",
+        "predicted_margin": 6.388897133491778,
+        "confidence": 0.789,
+        "model_consensus": "Medium"
+      }
+    },
+    {
+      "id": 401778307,
+      "bowl_name": "Alamo Bowl",
+      "date": "2025-12-28T21:00:00Z",
+      "home_team": "Boise State",
+      "away_team": "Arizona",
+      "stadium": "Alamodome",
+      "location": "San Antonio, TX",
+      "conference": "Mountain West vs Big 12",
+      "ridge_predictions": {
+        "predicted_margin": -7.75,
+        "home_win_probability": 0.302,
+        "away_win_probability": 0.698
+      },
+      "xgb_predictions": {
+        "predicted_margin": -7.99,
+        "home_win_probability": 0.342,
+        "away_win_probability": 0.658
+      },
+      "fastai_predictions": {
+        "predicted_margin": -8.8,
+        "home_win_probability": 0.138,
+        "away_win_probability": 0.862
+      },
+      "ensemble_predictions": {
+        "predicted_margin": -6.65,
+        "home_win_probability": 0.279,
+        "away_win_probability": 0.721,
+        "predicted_winner": "Arizona",
+        "confidence_score": 0.801
+      },
+      "summary": {
+        "predicted_winner": "Arizona",
+        "predicted_margin": 6.653409483412618,
+        "confidence": 0.801,
+        "model_consensus": "High"
+      }
+    },
+    {
+      "id": 401778308,
+      "bowl_name": "Citrus Bowl",
+      "date": "2025-12-30T17:00:00Z",
+      "home_team": "Tennessee",
+      "away_team": "Iowa",
+      "stadium": "Camping World Stadium",
+      "location": "Orlando, FL",
+      "conference": "SEC vs Big Ten",
+      "ridge_predictions": {
+        "predicted_margin": 0.8,
+        "home_win_probability": 0.577,
+        "away_win_probability": 0.423
+      },
+      "xgb_predictions": {
+        "predicted_margin": 2.14,
+        "home_win_probability": 0.567,
+        "away_win_probability": 0.433
+      },
+      "fastai_predictions": {
+        "predicted_margin": 3.98,
+        "home_win_probability": 0.644,
+        "away_win_probability": 0.356
+      },
+      "ensemble_predictions": {
+        "predicted_margin": 2.49,
+        "home_win_probability": 0.588,
+        "away_win_probability": 0.412,
+        "predicted_winner": "Tennessee",
+        "confidence_score": 0.867
+      },
+      "summary": {
+        "predicted_winner": "Tennessee",
+        "predicted_margin": 2.4931996116609456,
+        "confidence": 0.867,
+        "model_consensus": "High"
+      }
+    },
+    {
+      "id": 401778310,
+      "bowl_name": "Gator Bowl",
+      "date": "2025-12-29T16:00:00Z",
+      "home_team": "Florida State",
+      "away_team": "Virginia Tech",
+      "stadium": "TIAA Bank Field",
+      "location": "Jacksonville, FL",
+      "conference": "ACC vs SEC",
+      "ridge_predictions": {
+        "predicted_margin": -0.89,
+        "home_win_probability": 0.512,
+        "away_win_probability": 0.488
+      },
+      "xgb_predictions": {
+        "predicted_margin": -2.34,
+        "home_win_probability": 0.484,
+        "away_win_probability": 0.516
+      },
+      "fastai_predictions": {
+        "predicted_margin": -2.46,
+        "home_win_probability": 0.565,
+        "away_win_probability": 0.435
+      },
+      "ensemble_predictions": {
+        "predicted_margin": -2.34,
+        "home_win_probability": 0.417,
+        "away_win_probability": 0.583,
+        "predicted_winner": "Virginia Tech",
+        "confidence_score": 0.898
+      },
+      "summary": {
+        "predicted_winner": "Virginia Tech",
+        "predicted_margin": 2.335251531151293,
+        "confidence": 0.898,
+        "model_consensus": "High"
+      }
+    },
+    {
+      "id": 401778311,
+      "bowl_name": "Sun Bowl",
+      "date": "2025-12-27T14:00:00Z",
+      "home_team": "UCLA",
+      "away_team": "Louisville",
+      "stadium": "Sun Bowl Stadium",
+      "location": "El Paso, TX",
+      "conference": "Pac-12 vs ACC",
+      "ridge_predictions": {
+        "predicted_margin": -1.58,
+        "home_win_probability": 0.489,
+        "away_win_probability": 0.511
+      },
+      "xgb_predictions": {
+        "predicted_margin": -1.47,
+        "home_win_probability": 0.369,
+        "away_win_probability": 0.631
+      },
+      "fastai_predictions": {
+        "predicted_margin": -5.69,
+        "home_win_probability": 0.36,
+        "away_win_probability": 0.64
+      },
+      "ensemble_predictions": {
+        "predicted_margin": -2.86,
+        "home_win_probability": 0.399,
+        "away_win_probability": 0.601,
+        "predicted_winner": "Louisville",
+        "confidence_score": 0.784
+      },
+      "summary": {
+        "predicted_winner": "Louisville",
+        "predicted_margin": 2.859746462440991,
+        "confidence": 0.784,
+        "model_consensus": "Medium"
+      }
+    },
+    {
+      "id": 401778313,
+      "bowl_name": "Texas Bowl",
+      "date": "2025-12-27T21:00:00Z",
+      "home_team": "Texas Tech",
+      "away_team": "LSU",
+      "stadium": "NRG Stadium",
+      "location": "Houston, TX",
+      "conference": "Big 12 vs SEC",
+      "ridge_predictions": {
+        "predicted_margin": -4.11,
+        "home_win_probability": 0.365,
+        "away_win_probability": 0.635
+      },
+      "xgb_predictions": {
+        "predicted_margin": -2.33,
+        "home_win_probability": 0.498,
+        "away_win_probability": 0.502
+      },
+      "fastai_predictions": {
+        "predicted_margin": -3.46,
+        "home_win_probability": 0.414,
+        "away_win_probability": 0.586
+      },
+      "ensemble_predictions": {
+        "predicted_margin": -2.71,
+        "home_win_probability": 0.404,
+        "away_win_probability": 0.596,
+        "predicted_winner": "LSU",
+        "confidence_score": 0.853
+      },
+      "summary": {
+        "predicted_winner": "LSU",
+        "predicted_margin": 2.708112357536626,
+        "confidence": 0.853,
+        "model_consensus": "High"
+      }
+    },
+    {
+      "id": 401778314,
+      "bowl_name": "Music City Bowl",
+      "date": "2025-12-30T12:00:00Z",
+      "home_team": "Missouri",
+      "away_team": "Northwestern",
+      "stadium": "Nissan Stadium",
+      "location": "Nashville, TN",
+      "conference": "SEC vs Big Ten",
+      "ridge_predictions": {
+        "predicted_margin": 2.53,
+        "home_win_probability": 0.582,
+        "away_win_probability": 0.418
+      },
+      "xgb_predictions": {
+        "predicted_margin": 0.12,
+        "home_win_probability": 0.57,
+        "away_win_probability": 0.43
+      },
+      "fastai_predictions": {
+        "predicted_margin": 2.33,
+        "home_win_probability": 0.651,
+        "away_win_probability": 0.349
+      },
+      "ensemble_predictions": {
+        "predicted_margin": 0.7,
+        "home_win_probability": 0.525,
+        "away_win_probability": 0.475,
+        "predicted_winner": "Missouri",
+        "confidence_score": 0.874
+      },
+      "summary": {
+        "predicted_winner": "Missouri",
+        "predicted_margin": 0.6958924949785565,
+        "confidence": 0.874,
+        "model_consensus": "High"
+      }
+    },
+    {
+      "id": 401778315,
+      "bowl_name": "Belk Bowl",
+      "date": "2025-12-29T15:00:00Z",
+      "home_team": "North Carolina",
+      "away_team": "Virginia",
+      "stadium": "Bank of America Stadium",
+      "location": "Charlotte, NC",
+      "conference": "ACC vs ACC",
+      "ridge_predictions": {
+        "predicted_margin": 1.21,
+        "home_win_probability": 0.555,
+        "away_win_probability": 0.445
+      },
+      "xgb_predictions": {
+        "predicted_margin": -0.45,
+        "home_win_probability": 0.58,
+        "away_win_probability": 0.42
+      },
+      "fastai_predictions": {
+        "predicted_margin": -2.0,
+        "home_win_probability": 0.587,
+        "away_win_probability": 0.413
+      },
+      "ensemble_predictions": {
+        "predicted_margin": 0.42,
+        "home_win_probability": 0.515,
+        "away_win_probability": 0.485,
+        "predicted_winner": "North Carolina",
+        "confidence_score": 0.907
+      },
+      "summary": {
+        "predicted_winner": "North Carolina",
+        "predicted_margin": 0.42386146383842505,
+        "confidence": 0.907,
+        "model_consensus": "High"
+      }
+    }
+  ]
+}

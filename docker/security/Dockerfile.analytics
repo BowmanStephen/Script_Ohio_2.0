@@ -1,0 +1,88 @@
+# Advanced Analytics Layer Dockerfile
+# Confidential Security - Analytics and reporting with GPU acceleration
+# User: 4001:4001 (Analytics operations user)
+# Capabilities: IPC_OWNER (shared memory), GPU access
+# Devices: /dev/dri, /dev/nvidia0
+# Networks: analytics-network, data-network, audit-network
+
+FROM python:3.13-slim
+
+# Create system user
+RUN groupadd -r -g 4001 analytics_user && \
+    useradd -r -u 4001 -g analytics_user analytics_user
+
+# Install system packages for analytics
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        jq \
+        htop \
+        iotop \
+        cuda-compat-11-8 \
+        libnvidia-ml-1 \
+        python3-cuda-ml-1 \
+        python3-nvidia-ml-12.1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install advanced analytics dependencies
+RUN pip install --no-cache-dir \
+    pandas \
+    numpy \
+    scikit-learn \
+    matplotlib \
+    seaborn \
+    plotly \
+    dash \
+    jupyter \
+    ipython \
+    nbformat \
+    nbconvert \
+    papermill \
+    streamlit \
+    gradio \
+    shap \
+    lime \
+    torch \
+    torchvision \
+    tensorflow
+
+# Copy application code
+COPY agents/analytics/ ./agents/analytics/
+COPY agents/core/ ./agents/core/
+COPY docker/security/scripts/start-analytics.sh ./
+COPY docker/security/scripts/health-check.sh ./
+
+# Create analytics directories
+RUN mkdir -p /app/cache/analytics /app/logs /app/reports && \
+    chown -R analytics_user:analytics_user /app && \
+    chmod -R 755 /app
+
+# Copy security configuration
+COPY docker/security/security-policies.json /etc/agent-security/
+COPY docker/security/analytics-rules.json /etc/agent-security/
+RUN chmod 600 /etc/agent-security/security-policies.json && \
+    chmod 600 /etc/agent-security/analytics-rules.json
+
+# Set ownership
+RUN chown -R analytics_user:analytics_user /app
+
+# Switch to non-root user
+USER analytics_user
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD ["./health-check.sh"]
+
+# Expose port for analytics service interface
+EXPOSE 8700
+
+# Start command
+CMD ["./start-analytics.sh"]

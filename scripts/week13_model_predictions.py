@@ -321,9 +321,11 @@ class Week13ModelPredictor:
 
                         game_prediction["model_predictions"][model_name] = {
                             "predicted_margin": float(margin_pred),
-                            "predicted_winner": game["home_team"]
-                            if margin_pred > 0
-                            else game["away_team"],
+                            "predicted_winner": (
+                                game["home_team"]
+                                if margin_pred > 0
+                                else game["away_team"]
+                            ),
                             "confidence": min(
                                 abs(margin_pred) / 20.0, 1.0
                             ),  # Simple confidence calculation
@@ -361,9 +363,11 @@ class Week13ModelPredictor:
                         game_prediction["model_predictions"][model_name] = {
                             "home_win_probability": float(home_win_prob),
                             "away_win_probability": float(1 - home_win_prob),
-                            "predicted_winner": game["home_team"]
-                            if home_win_prob > 0.5
-                            else game["away_team"],
+                            "predicted_winner": (
+                                game["home_team"]
+                                if home_win_prob > 0.5
+                                else game["away_team"]
+                            ),
                             "confidence": abs(home_win_prob - 0.5)
                             * 2,  # Distance from 0.5
                         }

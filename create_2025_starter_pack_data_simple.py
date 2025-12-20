@@ -1251,9 +1251,9 @@ class StarterPack2025DataGenerator:
         ]:
             full_path = self.output_dir / file_path
             if full_path.exists():
-                report["file_sizes"][file_path] = (
-                    f"{full_path.stat().st_size / (1024 * 1024):.1f} MB"
-                )
+                report["file_sizes"][
+                    file_path
+                ] = f"{full_path.stat().st_size / (1024 * 1024):.1f} MB"
 
         # Check plays directory size
         plays_dir = self.output_dir / "plays" / "2025"

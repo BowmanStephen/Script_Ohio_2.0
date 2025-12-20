@@ -126,9 +126,9 @@ class TestModelPackDataQuality:
         """Test that training data is complete without missing values"""
         # Check for missing values
         missing_data = sample_training_data.isnull().sum()
-        assert missing_data.sum() == 0, (
-            f"Missing values found: {missing_data[missing_data > 0]}"
-        )
+        assert (
+            missing_data.sum() == 0
+        ), f"Missing values found: {missing_data[missing_data > 0]}"
 
         # Check for duplicate rows
         duplicate_count = sample_training_data.duplicated().sum()
@@ -173,9 +173,9 @@ class TestModelPackDataQuality:
         for season in unique_seasons:
             season_data = sorted_data[sorted_data["season"] == season]
             weeks = season_data["week"].values
-            assert np.all(np.diff(weeks) >= 0), (
-                "Weeks should be non-decreasing within each season"
-            )
+            assert np.all(
+                np.diff(weeks) >= 0
+            ), "Weeks should be non-decreasing within each season"
 
     def test_feature_correlation_analysis(self, sample_training_data):
         """Test feature correlation analysis"""
@@ -199,9 +199,9 @@ class TestModelPackDataQuality:
                     )
 
         # Should not have extremely high correlations (potential data leakage)
-        assert len(high_correlations) == 0, (
-            f"High correlations found: {high_correlations}"
-        )
+        assert (
+            len(high_correlations) == 0
+        ), f"High correlations found: {high_correlations}"
 
     def test_team_consistency_validation(self, sample_training_data):
         """Test team name consistency and validation"""
@@ -219,9 +219,9 @@ class TestModelPackDataQuality:
             assert total_count > 0, f"Team {team} has no appearances"
             # Teams should have some variety in home/away appearances
             if total_count > 2:
-                assert home_count > 0 and away_count > 0, (
-                    f"Team {team} only appears as {'home' if home_count > 0 else 'away'}"
-                )
+                assert (
+                    home_count > 0 and away_count > 0
+                ), f"Team {team} only appears as {'home' if home_count > 0 else 'away'}"
 
 
 class TestModelTrainingPipeline:
@@ -356,9 +356,9 @@ class TestModelTrainingPipeline:
 
         # Calculate accuracy
         accuracy = np.mean(predictions == y_test)
-        assert accuracy > 0.4, (
-            f"Accuracy too low: {accuracy}"
-        )  # Should be better than random
+        assert (
+            accuracy > 0.4
+        ), f"Accuracy too low: {accuracy}"  # Should be better than random
 
         # Save model
         model_path = Path(temp_workspace) / "test_xgb_model.pkl"
@@ -418,9 +418,9 @@ class TestModelTrainingPipeline:
         train_seasons_in_test = set(train_data["season"].unique()) & set(
             test_data["season"].unique()
         )
-        assert len(train_seasons_in_test) == 0, (
-            "Data leakage detected in temporal split"
-        )
+        assert (
+            len(train_seasons_in_test) == 0
+        ), "Data leakage detected in temporal split"
 
     def test_model_performance_evaluation(self, mock_training_data, feature_columns):
         """Test comprehensive model performance evaluation"""
@@ -670,9 +670,9 @@ class TestModelDeploymentAndIntegration:
         # Performance assertions
         assert len(predictions) == batch_size
         assert prediction_time < 1.0, f"Prediction too slow: {prediction_time:.3f}s"
-        assert prediction_time / batch_size < 0.001, (
-            f"Per-prediction time too slow: {prediction_time / batch_size:.6f}s"
-        )
+        assert (
+            prediction_time / batch_size < 0.001
+        ), f"Per-prediction time too slow: {prediction_time / batch_size:.6f}s"
 
     def test_model_version_management(self, temp_workspace):
         """Test model version management"""
@@ -731,9 +731,9 @@ class TestModelQualityAssurance:
         accuracy = np.mean(binary_predictions == actual_outcomes)
 
         # Validate accuracy meets minimum threshold
-        assert accuracy >= 0.4, (
-            f"Model accuracy {accuracy:.3f} below minimum threshold 0.4"
-        )
+        assert (
+            accuracy >= 0.4
+        ), f"Model accuracy {accuracy:.3f} below minimum threshold 0.4"
 
     def test_model_calibration_validation(self):
         """Test model probability calibration"""
@@ -756,9 +756,9 @@ class TestModelQualityAssurance:
 
         # Average calibration error should be low
         mean_calibration_error = np.mean(calibration_errors)
-        assert mean_calibration_error < 0.1, (
-            f"Poor calibration: {mean_calibration_error:.3f}"
-        )
+        assert (
+            mean_calibration_error < 0.1
+        ), f"Poor calibration: {mean_calibration_error:.3f}"
 
     def test_model_fairness_validation(self):
         """Test model fairness across different groups"""
@@ -780,9 +780,9 @@ class TestModelQualityAssurance:
 
         # Fairness: accuracy difference should be reasonable
         accuracy_difference = abs(group_1_accuracy - group_2_accuracy)
-        assert accuracy_difference < 0.2, (
-            f"Significant fairness issue: {accuracy_difference:.3f}"
-        )
+        assert (
+            accuracy_difference < 0.2
+        ), f"Significant fairness issue: {accuracy_difference:.3f}"
 
     def test_model_robustness_validation(self):
         """Test model robustness to input variations"""
@@ -809,9 +809,9 @@ class TestModelQualityAssurance:
 
         # Check that predictions don't vary wildly with small input changes
         prediction_std = np.std(predictions)
-        assert prediction_std < 1.0, (
-            f"Model not robust: prediction std {prediction_std:.3f}"
-        )
+        assert (
+            prediction_std < 1.0
+        ), f"Model not robust: prediction std {prediction_std:.3f}"
 
     def test_model_drift_detection(self):
         """Test model drift detection capabilities"""
@@ -862,9 +862,9 @@ class TestModelQualityAssurance:
             drift_detected = False
 
         # The test should detect the drift we introduced
-        assert accuracy_drop > 0.05, (
-            f"Should detect accuracy degradation: {accuracy_drop:.3f}"
-        )
+        assert (
+            accuracy_drop > 0.05
+        ), f"Should detect accuracy degradation: {accuracy_drop:.3f}"
 
     @pytest.mark.performance
     def test_model_quality_monitoring(self):
@@ -912,6 +912,6 @@ class TestModelQualityAssurance:
             if (
                 metric_name != "prediction_time"
             ):  # Time metrics can be any positive value
-                assert all(0 <= v <= 1 for v in values), (
-                    f"Invalid {metric_name} values: {values[:5]}"
-                )
+                assert all(
+                    0 <= v <= 1 for v in values
+                ), f"Invalid {metric_name} values: {values[:5]}"

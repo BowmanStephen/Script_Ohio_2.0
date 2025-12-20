@@ -1,0 +1,73 @@
+{
+  "timestamp": "2025-12-18T19:24:03.720003",
+  "tests_passed": 11,
+  "tests_failed": 0,
+  "test_details": [
+    {
+      "test_name": "Ridge Model Loading",
+      "passed": true,
+      "details": "Ridge model loaded successfully",
+      "timestamp": "2025-12-18T19:24:04.643606"
+    },
+    {
+      "test_name": "XGBoost Model Loading",
+      "passed": true,
+      "details": "XGBoost model loaded successfully",
+      "timestamp": "2025-12-18T19:24:04.678438"
+    },
+    {
+      "test_name": "FastAI Model Loading",
+      "passed": true,
+      "details": "FastAI neural network loaded successfully",
+      "timestamp": "2025-12-18T19:24:05.990586"
+    },
+    {
+      "test_name": "Ridge Feature Consistency",
+      "passed": true,
+      "details": "Successful prediction: 6.55 margin",
+      "timestamp": "2025-12-18T19:24:05.992225"
+    },
+    {
+      "test_name": "Feature Count Validation",
+      "passed": true,
+      "details": "Expected 8, got 8 features",
+      "timestamp": "2025-12-18T19:24:05.992237"
+    },
+    {
+      "test_name": "Ridge Determinism",
+      "passed": true,
+      "details": "Consistent predictions: 6.55, 6.55",
+      "timestamp": "2025-12-18T19:24:05.992622"
+    },
+    {
+      "test_name": "Output Range Validation",
+      "passed": true,
+      "details": "All 3/3 predictions in valid range",
+      "timestamp": "2025-12-18T19:24:05.992801"
+    },
+    {
+      "test_name": "Feature Sensitivity",
+      "passed": true,
+      "details": "Higher home talent: 6.55 \u2192 8.32",
+      "timestamp": "2025-12-18T19:24:05.992866"
+    },
+    {
+      "test_name": "Ensemble Logic",
+      "passed": true,
+      "details": "Ensemble calculation correct: margin=6.00, prob=0.677",
+      "timestamp": "2025-12-18T19:24:05.992902"
+    },
+    {
+      "test_name": "Prediction File Structure",
+      "passed": true,
+      "details": "File has 13 games",
+      "timestamp": "2025-12-18T19:24:05.993474"
+    },
+    {
+      "test_name": "Game Prediction Structure",
+      "passed": true,
+      "details": "All model predictions present in games",
+      "timestamp": "2025-12-18T19:24:05.993484"
+    }
+  ]
+}

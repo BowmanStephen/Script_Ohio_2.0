@@ -1,0 +1,71 @@
+# Data Validation Layer Dockerfile
+# High Security - Read-only data validation with strict quality controls
+# User: 3001:3001 (Validation operations user)
+# Capabilities: None (read-only validation)
+# Security: no-new-privileges, apparmor, seccomp
+# Networks: data-network, audit-network
+
+FROM python:3.13-slim
+
+# Create system user
+RUN groupadd -r -g 3001 validation_user && \
+    useradd -r -u 3001 -g validation_user validation_user
+
+# Install minimal system packages
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        jq \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install validation dependencies
+RUN pip install --no-cache-dir \
+    pydantic \
+    jsonschema \
+    cerberus \
+    great_expectations \
+    pandas \
+    numpy \
+    pytest \
+    coverage
+
+# Copy application code
+COPY agents/validation/ ./agents/validation/
+COPY agents/core/ ./agents/core/
+COPY docker/security/scripts/start-validation.sh ./
+COPY docker/security/scripts/health-check.sh ./
+
+# Create validation directories
+RUN mkdir -p /app/data/validation /app/cache/validation /app/logs && \
+    chown -R validation_user:validation_user /app && \
+    chmod -R 755 /app
+
+# Copy security configuration
+COPY docker/security/security-policies.json /etc/agent-security/
+COPY docker/security/validation-rules.json /etc/agent-security/
+RUN chmod 600 /etc/agent-security/security-policies.json && \
+    chmod 600 /etc/agent-security/validation-rules.json
+
+# Set ownership
+RUN chown -R validation_user:validation_user /app
+
+# Switch to non-root user
+USER validation_user
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD ["./health-check.sh"]
+
+# Expose port for validation service interface
+EXPOSE 8500
+
+# Start command
+CMD ["./start-validation.sh"]

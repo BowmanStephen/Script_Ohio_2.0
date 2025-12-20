@@ -12,7 +12,6 @@ fi
 # Create main directories
 mkdir -p data/week$WEEK/enhanced
 mkdir -p predictions/week$WEEK
-mkdir -p analysis/week$WEEK
 mkdir -p scripts/cache/week$WEEK
 mkdir -p validation/week$WEEK
 
@@ -24,6 +23,6 @@ echo "Ready for data collection and analysis..."
 # data/week$WEEK/enhanced/week$WEEK_features_86_model_compatible.csv
 # predictions/week$WEEK/week$WEEK_predictions_*.csv
 # predictions/week$WEEK/week$WEEK_predictions_*.json
-# analysis/week$WEEK/week$WEEK_comprehensive_analysis_*.json
-# analysis/week$WEEK/week$WEEK_dashboard.html
+# predictions/week (legacy)$WEEK/week$WEEK_comprehensive_analysis_*.json
+# predictions/week (legacy)$WEEK/week$WEEK_dashboard.html
 # validation/week$WEEK/week$WEEK_validation_report.json

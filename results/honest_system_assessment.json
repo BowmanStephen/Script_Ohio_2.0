@@ -1,0 +1,115 @@
+{
+  "timestamp": "2025-12-20T22:18:04.910592+00:00",
+  "capabilities": {
+    "data_infrastructure": 75.0,
+    "api_connectivity": 100,
+    "model_availability": 100.0,
+    "autonomous_framework": 100.0,
+    "workflow_execution": 0.0
+  },
+  "overall_score": 75.0,
+  "grade": "C",
+  "assessment": "Fair - System needs significant work",
+  "data_results": {
+    "data/processed/training/master_training_data_v2.csv": {
+      "exists": true,
+      "rows": 5250,
+      "columns": 107,
+      "size_mb": 6.743076324462891,
+      "sample_columns": [
+        "id",
+        "start_date",
+        "season",
+        "season_type",
+        "week"
+      ]
+    },
+    "model_pack/updated_training_data.csv": {
+      "exists": true,
+      "rows": 5250,
+      "columns": 107,
+      "size_mb": 6.743076324462891,
+      "sample_columns": [
+        "id",
+        "start_date",
+        "season",
+        "season_type",
+        "week"
+      ]
+    },
+    "data/training/weekly/training_data_2025.csv": {
+      "exists": false
+    },
+    "starter_pack/data/games.csv": {
+      "exists": true,
+      "rows": 106841,
+      "columns": 71,
+      "size_mb": 22.100881576538086,
+      "sample_columns": [
+        "id",
+        "season",
+        "season_type",
+        "week",
+        "start_date"
+      ]
+    }
+  },
+  "cfbd_results": {
+    "api_working": true,
+    "games_count": 94,
+    "api_response_time": "success"
+  },
+  "model_results": {
+    "models/production/ridge_regression_2025_v2.joblib": {
+      "exists": true,
+      "size_mb": 0.0009698867797851562
+    },
+    "models/production/xgboost_classifier_2025_v2.pkl": {
+      "exists": true,
+      "size_mb": 0.15885543823242188
+    },
+    "models/production/fastai_neural_net_2025_v2.pkl": {
+      "exists": true,
+      "size_mb": 0.7847490310668945
+    },
+    "model_pack/ridge_model_2025.joblib": {
+      "exists": true,
+      "size_mb": 0.0009698867797851562
+    },
+    "model_pack/xgb_home_win_model_2025.pkl": {
+      "exists": true,
+      "size_mb": 0.15885543823242188
+    },
+    "model_pack/fastai_home_win_model_2025.pkl": {
+      "exists": true,
+      "size_mb": 0.7847490310668945
+    }
+  },
+  "component_results": {
+    "orchestration_agent": {
+      "available": true,
+      "health_score": 1.0,
+      "autonomy_level": "fully_autonomous"
+    },
+    "weekly_analysis_autonomator": {
+      "available": true,
+      "analysis_state": "unknown"
+    },
+    "model_training_autonomator": {
+      "available": true,
+      "training_state": "unknown"
+    }
+  },
+  "workflow_results": {
+    "data_validation": {
+      "executed": true,
+      "success": false,
+      "games_found": 94
+    },
+    "resource_optimization": {
+      "executed": true,
+      "success": false,
+      "optimizations_count": 0
+    }
+  }
+}

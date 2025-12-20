@@ -664,9 +664,9 @@ class LeanAgentTestSuite:
             "tests_run": total_tests,
             "tests_passed": successful_tests,
             "tests_failed": total_tests - successful_tests,
-            "success_rate": (successful_tests / total_tests) * 100
-            if total_tests > 0
-            else 0,
+            "success_rate": (
+                (successful_tests / total_tests) * 100 if total_tests > 0 else 0
+            ),
             "performance_score": self.test_results.get("performance", {}).get(
                 "overall_score", 0
             ),

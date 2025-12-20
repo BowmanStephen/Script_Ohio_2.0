@@ -306,9 +306,9 @@ class DataSynchronizer:
             "starter_pack_games": len(starter_ids),
             "training_data_games": len(training_ids),
             "missing_in_training": len(missing_in_training),
-            "missing_game_ids": sorted(list(missing_in_training))
-            if missing_in_training
-            else [],
+            "missing_game_ids": (
+                sorted(list(missing_in_training)) if missing_in_training else []
+            ),
             "extra_in_training": len(extra_in_training),
             "synchronized": len(missing_in_training) == 0,
         }
@@ -405,9 +405,11 @@ class DataSynchronizer:
 
         summary = {
             "overall_status": "success" if all_steps_successful else "partial",
-            "synchronized": verification.get("synchronized", False)
-            if isinstance(verification, dict)
-            else False,
+            "synchronized": (
+                verification.get("synchronized", False)
+                if isinstance(verification, dict)
+                else False
+            ),
             "steps_completed": len(
                 [
                     s

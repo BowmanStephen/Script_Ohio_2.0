@@ -23,7 +23,9 @@ import os
 import sys
 from datetime import datetime
 import warnings
-warnings.filterwarnings('ignore')
+
+warnings.filterwarnings("ignore")
+
 
 class MetricsCalculationAgent:
     """
@@ -32,11 +34,17 @@ class MetricsCalculationAgent:
     """
 
     def __init__(self):
-        self.base_path = "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack"
+        self.base_path = (
+            "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack"
+        )
         self.training_data_path = os.path.join(self.base_path, "training_data.csv")
         self.raw_2025_path = os.path.join(self.base_path, "2025_raw_games_fixed.csv")
-        self.processed_2025_path = os.path.join(self.base_path, "2025_processed_features.csv")
-        self.updated_training_path = os.path.join(self.base_path, "updated_training_data.csv")
+        self.processed_2025_path = os.path.join(
+            self.base_path, "2025_processed_features.csv"
+        )
+        self.updated_training_path = os.path.join(
+            self.base_path, "updated_training_data.csv"
+        )
 
         # Initialize tracking variables
         self.historical_data = None
@@ -53,28 +61,30 @@ class MetricsCalculationAgent:
     def _ensure_identifier_columns(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Ensure stable identifier columns exist for downstream metrics.
-        
+
         Contract:
         - Always creates `game_key` column from season, week, home_team, away_team.
         - Always creates `conference_game` column (defaults to False when conference info isn't available).
         """
         df = df.copy()
-        if 'game_key' not in df.columns:
+        if "game_key" not in df.columns:
+
             def _make_key(row):
-                home = str(row.get('home_team', '')).replace(' ', '_')
-                away = str(row.get('away_team', '')).replace(' ', '_')
+                home = str(row.get("home_team", "")).replace(" ", "_")
+                away = str(row.get("away_team", "")).replace(" ", "_")
                 return f"{row.get('season')}_{row.get('week')}_{home}_{away}"
-            df['game_key'] = df.apply(_make_key, axis=1)
-        if 'conference_game' not in df.columns:
-            if 'home_conference' in df.columns and 'away_conference' in df.columns:
-                df['conference_game'] = (
-                    df['home_conference'].notna() &
-                    df['away_conference'].notna() &
-                    (df['home_conference'] == df['away_conference'])
+
+            df["game_key"] = df.apply(_make_key, axis=1)
+        if "conference_game" not in df.columns:
+            if "home_conference" in df.columns and "away_conference" in df.columns:
+                df["conference_game"] = (
+                    df["home_conference"].notna()
+                    & df["away_conference"].notna()
+                    & (df["home_conference"] == df["away_conference"])
                 )
             else:
                 # Default to False when conference data is not available
-                df['conference_game'] = False
+                df["conference_game"] = False
         return df
 
     def load_and_analyze_data(self):
@@ -84,13 +94,21 @@ class MetricsCalculationAgent:
 
         # Load historical training data
         print("Loading historical training data...")
-        self.historical_data = self._ensure_identifier_columns(pd.read_csv(self.training_data_path))
-        print(f"Historical data: {len(self.historical_data)} games, {len(self.historical_data.columns)} columns")
+        self.historical_data = self._ensure_identifier_columns(
+            pd.read_csv(self.training_data_path)
+        )
+        print(
+            f"Historical data: {len(self.historical_data)} games, {len(self.historical_data.columns)} columns"
+        )
 
         # Load 2025 data
         print("Loading 2025 raw data...")
-        self.data_2025 = self._ensure_identifier_columns(pd.read_csv(self.raw_2025_path))
-        print(f"2025 data: {len(self.data_2025)} games, {len(self.data_2025.columns)} columns")
+        self.data_2025 = self._ensure_identifier_columns(
+            pd.read_csv(self.raw_2025_path)
+        )
+        print(
+            f"2025 data: {len(self.data_2025)} games, {len(self.data_2025.columns)} columns"
+        )
 
         # Validate column structure
         historical_cols = set(self.historical_data.columns)
@@ -108,12 +126,20 @@ class MetricsCalculationAgent:
 
         # Analyze data ranges and patterns
         print("\nHistorical data summary:")
-        print(f"Season range: {self.historical_data['season'].min()}-{self.historical_data['season'].max()}")
-        print(f"Week range: {self.historical_data['week'].min()}-{self.historical_data['week'].max()}")
+        print(
+            f"Season range: {self.historical_data['season'].min()}-{self.historical_data['season'].max()}"
+        )
+        print(
+            f"Week range: {self.historical_data['week'].min()}-{self.historical_data['week'].max()}"
+        )
 
         print("\n2025 data summary:")
-        print(f"Season range: {self.data_2025['season'].min()}-{self.data_2025['season'].max()}")
-        print(f"Week range: {self.data_2025['week'].min()}-{self.data_2025['week'].max()}")
+        print(
+            f"Season range: {self.data_2025['season'].min()}-{self.data_2025['season'].max()}"
+        )
+        print(
+            f"Week range: {self.data_2025['week'].min()}-{self.data_2025['week'].max()}"
+        )
 
         return True
 
@@ -123,7 +149,9 @@ class MetricsCalculationAgent:
         print("-" * 50)
 
         # Check for opponent-adjusted features naming pattern
-        adjusted_features = [col for col in self.historical_data.columns if 'adjusted' in col]
+        adjusted_features = [
+            col for col in self.historical_data.columns if "adjusted" in col
+        ]
         print(f"Found {len(adjusted_features)} opponent-adjusted features")
 
         # Verify opponent adjustment logic: adjusted = team_raw - opponent_avg_allowed
@@ -131,14 +159,17 @@ class MetricsCalculationAgent:
 
         # Sample validation for key metrics
         key_metrics = [
-            'adjusted_epa', 'adjusted_rushing_epa', 'adjusted_passing_epa',
-            'adjusted_success', 'adjusted_explosiveness'
+            "adjusted_epa",
+            "adjusted_rushing_epa",
+            "adjusted_passing_epa",
+            "adjusted_success",
+            "adjusted_explosiveness",
         ]
 
         print("Validating opponent adjustment logic for key metrics...")
         for metric in key_metrics:
-            home_col = f'home_{metric}'
-            away_col = f'away_{metric}'
+            home_col = f"home_{metric}"
+            away_col = f"away_{metric}"
 
             if home_col in self.historical_data.columns:
                 home_mean = self.historical_data[home_col].mean()
@@ -150,7 +181,9 @@ class MetricsCalculationAgent:
         for col in adjusted_features[:5]:  # Check first 5 adjusted features
             if col in self.historical_data.columns:
                 col_data = self.historical_data[col].dropna()
-                print(f"{col}: min={col_data.min():.4f}, max={col_data.max():.4f}, mean={col_data.mean():.4f}")
+                print(
+                    f"{col}: min={col_data.min():.4f}, max={col_data.max():.4f}, mean={col_data.mean():.4f}"
+                )
 
                 # Flag potential issues
                 if col_data.max() > 10 or col_data.min() < -10:
@@ -175,17 +208,23 @@ class MetricsCalculationAgent:
         print("Comparing 2025 metric ranges against historical patterns...")
 
         key_feature_groups = {
-            'EPA Metrics': ['home_adjusted_epa', 'away_adjusted_epa'],
-            'Success Rates': ['home_adjusted_success', 'away_adjusted_success'],
-            'Explosiveness': ['home_adjusted_explosiveness', 'away_adjusted_explosiveness'],
-            'Line Yards': ['home_adjusted_line_yards', 'away_adjusted_line_yards'],
-            'Havoc Rates': ['home_total_havoc_offense', 'away_total_havoc_offense']
+            "EPA Metrics": ["home_adjusted_epa", "away_adjusted_epa"],
+            "Success Rates": ["home_adjusted_success", "away_adjusted_success"],
+            "Explosiveness": [
+                "home_adjusted_explosiveness",
+                "away_adjusted_explosiveness",
+            ],
+            "Line Yards": ["home_adjusted_line_yards", "away_adjusted_line_yards"],
+            "Havoc Rates": ["home_total_havoc_offense", "away_total_havoc_offense"],
         }
 
         for group_name, features in key_feature_groups.items():
             print(f"\n{group_name}:")
             for feature in features:
-                if feature in self.historical_data.columns and feature in self.processed_2025.columns:
+                if (
+                    feature in self.historical_data.columns
+                    and feature in self.processed_2025.columns
+                ):
                     hist_mean = self.historical_data[feature].mean()
                     hist_std = self.historical_data[feature].std()
                     data_2025_mean = self.processed_2025[feature].mean()
@@ -194,14 +233,16 @@ class MetricsCalculationAgent:
                     deviation = abs(data_2025_mean - hist_mean) / hist_std
                     status = "OK" if deviation < 2 else "WARNING"
 
-                    print(f"  {feature}: Hist={hist_mean:.4f}±{hist_std:.4f}, 2025={data_2025_mean:.4f} [{status}]")
+                    print(
+                        f"  {feature}: Hist={hist_mean:.4f}±{hist_std:.4f}, 2025={data_2025_mean:.4f} [{status}]"
+                    )
 
                     self.validation_results[feature] = {
-                        'historical_mean': hist_mean,
-                        'historical_std': hist_std,
-                        'data_2025_mean': data_2025_mean,
-                        'deviation': deviation,
-                        'status': status
+                        "historical_mean": hist_mean,
+                        "historical_std": hist_std,
+                        "data_2025_mean": data_2025_mean,
+                        "deviation": deviation,
+                        "status": status,
                     }
 
         return True
@@ -223,27 +264,31 @@ class MetricsCalculationAgent:
             print("✓ No missing values detected")
 
         # Check for duplicate games
-        duplicates = self.processed_2025.duplicated(subset=['id']).sum()
+        duplicates = self.processed_2025.duplicated(subset=["id"]).sum()
         print(f"Duplicate games: {duplicates}")
 
         # Validate week filtering (should be Week 5+ for meaningful opponent adjustments)
-        week_filter = self.processed_2025['week'] >= 5
+        week_filter = self.processed_2025["week"] >= 5
         games_week5_plus = week_filter.sum()
         total_games = len(self.processed_2025)
 
-        print(f"Games Week 5+: {games_week5_plus}/{total_games} ({100*games_week5_plus/total_games:.1f}%)")
+        print(
+            f"Games Week 5+: {games_week5_plus}/{total_games} ({100*games_week5_plus/total_games:.1f}%)"
+        )
 
         # Check for data consistency
         print("\nChecking data consistency...")
 
         # Verify margin calculation
-        calculated_margin = self.processed_2025['home_points'] - self.processed_2025['away_points']
-        margin_match = (calculated_margin == self.processed_2025['margin']).all()
+        calculated_margin = (
+            self.processed_2025["home_points"] - self.processed_2025["away_points"]
+        )
+        margin_match = (calculated_margin == self.processed_2025["margin"]).all()
         print(f"Margin calculation consistency: {margin_match}")
 
         # Check for reasonable score ranges
-        max_home_score = self.processed_2025['home_points'].max()
-        max_away_score = self.processed_2025['away_points'].max()
+        max_home_score = self.processed_2025["home_points"].max()
+        max_away_score = self.processed_2025["away_points"].max()
         print(f"Max scores: Home={max_home_score}, Away={max_away_score}")
 
         if max_home_score > 100 or max_away_score > 100:
@@ -258,10 +303,14 @@ class MetricsCalculationAgent:
 
         # Apply Week 5+ filter for meaningful opponent adjustments
         print("Applying Week 5+ filter for opponent adjustments...")
-        week_filter = self.processed_2025['week'] >= 5
-        self.processed_2025_filtered = self._ensure_identifier_columns(self.processed_2025[week_filter].copy())
+        week_filter = self.processed_2025["week"] >= 5
+        self.processed_2025_filtered = self._ensure_identifier_columns(
+            self.processed_2025[week_filter].copy()
+        )
 
-        print(f"Filtered dataset: {len(self.processed_2025_filtered)} games (from {len(self.processed_2025)} total)")
+        print(
+            f"Filtered dataset: {len(self.processed_2025_filtered)} games (from {len(self.processed_2025)} total)"
+        )
 
         # Save processed 2025 features
         self.processed_2025_filtered.to_csv(self.processed_2025_path, index=False)
@@ -269,8 +318,12 @@ class MetricsCalculationAgent:
 
         # Create summary statistics
         print("\nProcessed 2025 dataset summary:")
-        print(f"- Teams: {len(self.processed_2025_filtered['home_team'].unique())} unique")
-        print(f"- Weeks: {self.processed_2025_filtered['week'].min()}-{self.processed_2025_filtered['week'].max()}")
+        print(
+            f"- Teams: {len(self.processed_2025_filtered['home_team'].unique())} unique"
+        )
+        print(
+            f"- Weeks: {self.processed_2025_filtered['week'].min()}-{self.processed_2025_filtered['week'].max()}"
+        )
         print(f"- Features: {len(self.processed_2025_filtered.columns)} columns")
 
         return True
@@ -282,10 +335,9 @@ class MetricsCalculationAgent:
 
         # Combine historical and 2025 data
         print("Combining datasets...")
-        self.updated_training_data = pd.concat([
-            self.historical_data,
-            self.processed_2025_filtered
-        ], ignore_index=True)
+        self.updated_training_data = pd.concat(
+            [self.historical_data, self.processed_2025_filtered], ignore_index=True
+        )
 
         print(f"Combined dataset: {len(self.updated_training_data)} total games")
         print(f"- Historical (2016-2024): {len(self.historical_data)} games")
@@ -293,10 +345,12 @@ class MetricsCalculationAgent:
 
         # Verify data integrity
         print("\nVerifying data integrity...")
-        print(f"Column consistency: {set(self.historical_data.columns) == set(self.updated_training_data.columns)}")
+        print(
+            f"Column consistency: {set(self.historical_data.columns) == set(self.updated_training_data.columns)}"
+        )
 
         # Check season distribution
-        season_counts = self.updated_training_data['season'].value_counts().sort_index()
+        season_counts = self.updated_training_data["season"].value_counts().sort_index()
         print("Season distribution:")
         for season, count in season_counts.items():
             print(f"  {season}: {count} games")
@@ -313,22 +367,32 @@ class MetricsCalculationAgent:
         print("-" * 50)
 
         # Metrics Calculation Report
-        metrics_report_path = os.path.join(self.base_path, "metrics_calculation_report.md")
-        with open(metrics_report_path, 'w') as f:
+        metrics_report_path = os.path.join(
+            self.base_path, "metrics_calculation_report.md"
+        )
+        with open(metrics_report_path, "w") as f:
             f.write("# METRICS CALCULATION AND VALIDATION REPORT\n\n")
-            f.write(f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+            f.write(
+                f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
+            )
 
             f.write("## EXECUTIVE SUMMARY\n\n")
             f.write("- **Mission Status:** SUCCESS\n")
-            f.write(f"- **2025 Games Processed:** {len(self.processed_2025_filtered)}\n")
+            f.write(
+                f"- **2025 Games Processed:** {len(self.processed_2025_filtered)}\n"
+            )
             f.write(f"- **Historical Games:** {len(self.historical_data)}\n")
-            f.write(f"- **Combined Dataset:** {len(self.updated_training_data)} games\n")
+            f.write(
+                f"- **Combined Dataset:** {len(self.updated_training_data)} games\n"
+            )
             f.write(f"- **Features Validated:** {len(self.validation_results)}\n\n")
 
             f.write("## METHODOLOGY VALIDATION\n\n")
             f.write("### Opponent Adjustment Approach\n")
             f.write("- **Method:** Subtraction-based opponent adjustments\n")
-            f.write("- **Formula:** Adjusted_Metric = Team_Raw_Metric - Opponent_Average_Allowed\n")
+            f.write(
+                "- **Formula:** Adjusted_Metric = Team_Raw_Metric - Opponent_Average_Allowed\n"
+            )
             f.write("- **Validation:** All features follow historical patterns\n\n")
 
             f.write("### Quality Assurance Results\n")
@@ -342,25 +406,35 @@ class MetricsCalculationAgent:
             f.write("|---------|----------------|-----------|-----------|--------|\n")
 
             for feature, results in self.validation_results.items():
-                status_icon = "✓" if results['status'] == 'OK' else "⚠"
-                f.write(f"| {feature} | {results['historical_mean']:.4f} | {results['data_2025_mean']:.4f} | ")
-                f.write(f"{results['deviation']:.2f}σ | {status_icon} {results['status']} |\n")
+                status_icon = "✓" if results["status"] == "OK" else "⚠"
+                f.write(
+                    f"| {feature} | {results['historical_mean']:.4f} | {results['data_2025_mean']:.4f} | "
+                )
+                f.write(
+                    f"{results['deviation']:.2f}σ | {status_icon} {results['status']} |\n"
+                )
 
         print(f"Generated metrics calculation report: {metrics_report_path}")
 
         # Feature Validation Summary
-        validation_summary_path = os.path.join(self.base_path, "feature_validation_summary.txt")
-        with open(validation_summary_path, 'w') as f:
+        validation_summary_path = os.path.join(
+            self.base_path, "feature_validation_summary.txt"
+        )
+        with open(validation_summary_path, "w") as f:
             f.write("FEATURE VALIDATION SUMMARY - 2025 METRICS CALCULATION\n")
             f.write("=" * 60 + "\n\n")
 
-            f.write(f"Processing Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(
+                f"Processing Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+            )
             f.write(f"Total Features Validated: {len(self.validation_results)}\n\n")
 
             f.write("VALIDATION RESULTS:\n")
             f.write("-" * 30 + "\n")
 
-            ok_count = sum(1 for r in self.validation_results.values() if r['status'] == 'OK')
+            ok_count = sum(
+                1 for r in self.validation_results.values() if r["status"] == "OK"
+            )
             warning_count = len(self.validation_results) - ok_count
 
             f.write(f"Features OK: {ok_count}\n")
@@ -370,22 +444,26 @@ class MetricsCalculationAgent:
                 f.write("FEATURES REQUIRING ATTENTION:\n")
                 f.write("-" * 30 + "\n")
                 for feature, results in self.validation_results.items():
-                    if results['status'] != 'OK':
+                    if results["status"] != "OK":
                         f.write(f"{feature}: {results['deviation']:.2f}σ deviation\n")
 
         print(f"Generated feature validation summary: {validation_summary_path}")
 
         # Data Integration Log
         integration_log_path = os.path.join(self.base_path, "data_integration_log.txt")
-        with open(integration_log_path, 'w') as f:
+        with open(integration_log_path, "w") as f:
             f.write("DATA INTEGRATION LOG - 2025 TRAINING DATA MERGE\n")
             f.write("=" * 55 + "\n\n")
 
-            f.write(f"Integration Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+            f.write(
+                f"Integration Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
+            )
 
             f.write("SOURCE DATA:\n")
             f.write(f"- Historical training data: {len(self.historical_data)} games\n")
-            f.write(f"- 2025 processed data: {len(self.processed_2025_filtered)} games\n\n")
+            f.write(
+                f"- 2025 processed data: {len(self.processed_2025_filtered)} games\n\n"
+            )
 
             f.write("INTEGRATION PROCESS:\n")
             f.write("1. Validated column structure consistency\n")
@@ -444,7 +522,9 @@ class MetricsCalculationAgent:
             print("✓ ALL TASKS COMPLETED SUCCESSFULLY")
             print(f"✓ Processed {len(self.processed_2025_filtered)} 2025 games")
             print(f"✓ Validated {len(self.validation_results)} features")
-            print(f"✓ Created integrated dataset with {len(self.updated_training_data)} total games")
+            print(
+                f"✓ Created integrated dataset with {len(self.updated_training_data)} total games"
+            )
             print(f"✓ Generated comprehensive reports and documentation")
             print("\nDELIVERABLES CREATED:")
             print(f"- 2025_processed_features.csv")
@@ -459,8 +539,10 @@ class MetricsCalculationAgent:
         except Exception as e:
             print(f"\n❌ ERROR: {str(e)}")
             import traceback
+
             traceback.print_exc()
             return False
+
 
 def main():
     """Main execution function"""
@@ -473,6 +555,7 @@ def main():
     else:
         print("\n💥 Metrics Calculation Agent failed!")
         return 1
+
 
 if __name__ == "__main__":
     exit_code = main()

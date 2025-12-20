@@ -1,0 +1,77 @@
+# Bowl Games Specialist Layer Dockerfile
+# Restricted Security - Specialized bowl games prediction and analysis
+# User: 4002:4002 (Bowl games specialist user)
+# Capabilities: IPC_OWNER (shared memory for prediction processing)
+# Security: no-new-privileges, apparmor, seccomp
+# Networks: analytics-network, data-network, audit-network
+
+FROM python:3.13-slim
+
+# Create system user
+RUN groupadd -r -g 4002 bowl_user && \
+    useradd -r -u 4002 -g bowl_user bowl_user
+
+# Install system packages for bowl games analysis
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        jq \
+        htop \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install bowl games specialist dependencies
+RUN pip install --no-cache-dir \
+    pandas \
+    numpy \
+    scikit-learn \
+    matplotlib \
+    seaborn \
+    plotly \
+    dash \
+    joblib \
+    dill \
+    requests \
+    beautifulsoup4 \
+    cfbd
+
+# Copy application code
+COPY agents/bowl/ ./agents/bowl/
+COPY agents/core/ ./agents/core/
+COPY src/models/ ./src/models/
+COPY docker/security/scripts/start-bowl.sh ./
+COPY docker/security/scripts/health-check.sh ./
+
+# Create bowl games directories
+RUN mkdir -p /app/data/bowl-games /app/cache/bowl /app/logs /app/reports && \
+    chown -R bowl_user:bowl_user /app && \
+    chmod -R 755 /app
+
+# Copy security configuration
+COPY docker/security/security-policies.json /etc/agent-security/
+COPY docker/security/bowl-games-rules.json /etc/agent-security/
+RUN chmod 600 /etc/agent-security/security-policies.json && \
+    chmod 600 /etc/agent-security/bowl-games-rules.json
+
+# Set ownership
+RUN chown -R bowl_user:bowl_user /app
+
+# Switch to non-root user
+USER bowl_user
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD ["./health-check.sh"]
+
+# Expose port for bowl games service interface
+EXPOSE 8800
+
+# Start command
+CMD ["./start-bowl.sh"]

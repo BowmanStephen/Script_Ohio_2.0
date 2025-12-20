@@ -1,0 +1,17 @@
+{
+  "updated_at": "2025-12-20T16:00:13.516737",
+  "rollbacks": [
+    {
+      "rollback_id": "rollback_1766268008726",
+      "session_id": "cleanup_1766268008",
+      "description": "Pre-cleanup backup for scopes: cache",
+      "created_at": 1766268008.72647,
+      "timestamp": "2025-12-20T16:00:08.726471",
+      "git_commit": "87b738cbdfe0a825b12c0153b1c2d276dbe84c2a",
+      "backup_dir": "project_management/rollback/rollback_1766268008726",
+      "file_count": 3396,
+      "config_count": 1,
+      "size_mb": 70.94538497924805
+    }
+  ]
+}

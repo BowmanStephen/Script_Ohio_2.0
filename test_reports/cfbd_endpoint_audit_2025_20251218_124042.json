@@ -1,0 +1,610 @@
+{
+  "audit_timestamp": "2025-12-18T12:40:38.048483",
+  "season": 2025,
+  "endpoint_analysis": {
+    "total_endpoints": 24,
+    "high_usage_count": 4,
+    "medium_usage_count": 5,
+    "low_usage_count": 5,
+    "none_usage_count": 10,
+    "critical_data_gaps": [
+      {
+        "endpoint": "Rosters",
+        "current_usage": "NONE",
+        "description": "Team roster and depth chart information",
+        "priority": "HIGH"
+      }
+    ],
+    "real_time_opportunities": [],
+    "endpoint_details": [
+      {
+        "name": "Games",
+        "endpoint": "Games",
+        "method": "get_games",
+        "description": "Game schedules and results",
+        "parameters": [
+          "year",
+          "week",
+          "season_type",
+          "team",
+          "conference",
+          "id"
+        ],
+        "current_usage": "HIGH",
+        "data_critical": true,
+        "real_time": false,
+        "available": false,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 0,
+        "error": "UnifiedCFBDClient.get_games() got an unexpected keyword argument 'limit'",
+        "sample_parameters": {}
+      },
+      {
+        "name": "Team Talent",
+        "endpoint": "Team Talent",
+        "method": "get_team_talent",
+        "description": "Team talent recruiting rankings",
+        "parameters": [
+          "year",
+          "team"
+        ],
+        "current_usage": "MEDIUM",
+        "data_critical": true,
+        "real_time": false,
+        "available": false,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 0,
+        "error": "'TeamsApi' object has no attribute 'get_team_talent'",
+        "sample_parameters": {}
+      },
+      {
+        "name": "Elo Ratings",
+        "endpoint": "Elo Ratings",
+        "method": "get_elo",
+        "description": "Elo power ratings for teams",
+        "parameters": [
+          "year",
+          "week",
+          "team"
+        ],
+        "current_usage": "HIGH",
+        "data_critical": true,
+        "real_time": false,
+        "available": false,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 0,
+        "error": "Method get_elo not found in client",
+        "sample_parameters": {}
+      },
+      {
+        "name": "Teams",
+        "endpoint": "Teams",
+        "method": "get_teams",
+        "description": "Team information and conferences",
+        "parameters": [
+          "conference"
+        ],
+        "current_usage": "HIGH",
+        "data_critical": true,
+        "real_time": false,
+        "available": true,
+        "has_2025_data": true,
+        "sample_data_count": 17,
+        "response_time_ms": 383.20422172546387,
+        "error": null,
+        "sample_parameters": {
+          "conference": "ACC"
+        }
+      },
+      {
+        "name": "Team Season Stats",
+        "endpoint": "Team Season Stats",
+        "method": "get_team_season_stats",
+        "description": "Team seasonal statistics",
+        "parameters": [
+          "year",
+          "team",
+          "category",
+          "conference"
+        ],
+        "current_usage": "MEDIUM",
+        "data_critical": true,
+        "real_time": false,
+        "available": false,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 0,
+        "error": "Method get_team_season_stats not found in client",
+        "sample_parameters": {}
+      },
+      {
+        "name": "Player Season Stats",
+        "endpoint": "Player Season Stats",
+        "method": "get_player_season_stats",
+        "description": "Player seasonal statistics",
+        "parameters": [
+          "year",
+          "team",
+          "category",
+          "conference",
+          "position"
+        ],
+        "current_usage": "LOW",
+        "data_critical": true,
+        "real_time": false,
+        "available": false,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 0,
+        "error": "Method get_player_season_stats not found in client",
+        "sample_parameters": {}
+      },
+      {
+        "name": "Advanced Team Stats",
+        "endpoint": "Advanced Team Stats",
+        "method": "get_advanced_team_stats",
+        "description": "Advanced team analytics (EPA, success rates)",
+        "parameters": [
+          "year",
+          "team",
+          "conference"
+        ],
+        "current_usage": "MEDIUM",
+        "data_critical": true,
+        "real_time": false,
+        "available": false,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 0,
+        "error": "Method get_advanced_team_stats not found in client",
+        "sample_parameters": {}
+      },
+      {
+        "name": "Drives",
+        "endpoint": "Drives",
+        "method": "get_drives",
+        "description": "Drive-level game statistics",
+        "parameters": [
+          "year",
+          "week",
+          "season_type",
+          "team",
+          "game_id"
+        ],
+        "current_usage": "LOW",
+        "data_critical": true,
+        "real_time": false,
+        "available": false,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 0,
+        "error": "'>' not supported between instances of 'NoneType' and 'int'",
+        "sample_parameters": {}
+      },
+      {
+        "name": "Plays",
+        "endpoint": "Plays",
+        "method": "get_plays",
+        "description": "Play-by-play data",
+        "parameters": [
+          "game_id",
+          "year",
+          "week",
+          "season_type",
+          "team"
+        ],
+        "current_usage": "MEDIUM",
+        "data_critical": true,
+        "real_time": true,
+        "available": false,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 0,
+        "error": "Missing the required parameter `week` when calling `get_plays`",
+        "sample_parameters": {}
+      },
+      {
+        "name": "Game Lines",
+        "endpoint": "Game Lines",
+        "method": "get_lines",
+        "description": "Betting lines and odds",
+        "parameters": [
+          "year",
+          "week",
+          "season_type",
+          "team"
+        ],
+        "current_usage": "MEDIUM",
+        "data_critical": true,
+        "real_time": true,
+        "available": false,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 0,
+        "error": "UnifiedCFBDClient.get_lines() missing 1 required positional argument: 'week'",
+        "sample_parameters": {}
+      },
+      {
+        "name": "Conferences",
+        "endpoint": "Conferences",
+        "method": "get_conferences",
+        "description": "Conference information and alignment",
+        "parameters": [],
+        "current_usage": "HIGH",
+        "data_critical": true,
+        "real_time": false,
+        "available": true,
+        "has_2025_data": true,
+        "sample_data_count": 106,
+        "response_time_ms": 68.29595565795898,
+        "error": null,
+        "sample_parameters": {}
+      },
+      {
+        "name": "Venues",
+        "endpoint": "Venues",
+        "method": "get_venues",
+        "description": "Stadium and venue information",
+        "parameters": [],
+        "current_usage": "LOW",
+        "data_critical": false,
+        "real_time": false,
+        "available": true,
+        "has_2025_data": true,
+        "sample_data_count": 837,
+        "response_time_ms": 667.2937870025635,
+        "error": null,
+        "sample_parameters": {}
+      },
+      {
+        "name": "Coaches",
+        "endpoint": "Coaches",
+        "method": "get_coaches",
+        "description": "Coaching information and history",
+        "parameters": [
+          "team",
+          "season"
+        ],
+        "current_usage": "LOW",
+        "data_critical": false,
+        "real_time": false,
+        "available": true,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 355.2699089050293,
+        "error": null,
+        "sample_parameters": {
+          "year": 2025
+        }
+      },
+      {
+        "name": "Rankings",
+        "endpoint": "Rankings",
+        "method": "get_rankings",
+        "description": "Historical rankings and polls",
+        "parameters": [
+          "year",
+          "week",
+          "season_type",
+          "poll"
+        ],
+        "current_usage": "LOW",
+        "data_critical": true,
+        "real_time": false,
+        "available": false,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 0,
+        "error": "'>' not supported between instances of 'NoneType' and 'int'",
+        "sample_parameters": {}
+      },
+      {
+        "name": "Calendar",
+        "endpoint": "Calendar",
+        "method": "get_calendar",
+        "description": "Season calendar and scheduling",
+        "parameters": [
+          "year"
+        ],
+        "current_usage": "NONE",
+        "data_critical": false,
+        "real_time": false,
+        "available": true,
+        "has_2025_data": true,
+        "sample_data_count": 17,
+        "response_time_ms": 72.82090187072754,
+        "error": null,
+        "sample_parameters": {
+          "year": 2025
+        }
+      },
+      {
+        "name": "Game Media",
+        "endpoint": "Game Media",
+        "method": "get_game_media",
+        "description": "Game media highlights and content",
+        "parameters": [
+          "year",
+          "week",
+          "season_type",
+          "team",
+          "game_id"
+        ],
+        "current_usage": "NONE",
+        "data_critical": false,
+        "real_time": true,
+        "available": false,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 0,
+        "error": "'>' not supported between instances of 'NoneType' and 'int'",
+        "sample_parameters": {}
+      },
+      {
+        "name": "Win Probabilities",
+        "endpoint": "Win Probabilities",
+        "method": "get_win_probabilities",
+        "description": "Pregame win probability predictions",
+        "parameters": [
+          "year",
+          "week",
+          "season_type",
+          "team"
+        ],
+        "current_usage": "NONE",
+        "data_critical": true,
+        "real_time": true,
+        "available": false,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 0,
+        "error": "'>' not supported between instances of 'NoneType' and 'int'",
+        "sample_parameters": {}
+      },
+      {
+        "name": "Game Box Scores",
+        "endpoint": "Game Box Scores",
+        "method": "get_game_box_score",
+        "description": "Detailed game box scores",
+        "parameters": [
+          "game_id"
+        ],
+        "current_usage": "NONE",
+        "data_critical": true,
+        "real_time": true,
+        "available": false,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 0,
+        "error": "Method get_game_box_score not found in client",
+        "sample_parameters": {}
+      },
+      {
+        "name": "Team Matchups",
+        "endpoint": "Team Matchups",
+        "method": "get_team_matchup",
+        "description": "Historical team matchup records",
+        "parameters": [
+          "team1",
+          "team2"
+        ],
+        "current_usage": "NONE",
+        "data_critical": true,
+        "real_time": false,
+        "available": false,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 0,
+        "error": "UnifiedCFBDClient.get_team_matchup() got an unexpected keyword argument 'year'",
+        "sample_parameters": {}
+      },
+      {
+        "name": "Rosters",
+        "endpoint": "Rosters",
+        "method": "get_roster",
+        "description": "Team roster and depth chart information",
+        "parameters": [
+          "team",
+          "year"
+        ],
+        "current_usage": "NONE",
+        "data_critical": true,
+        "real_time": false,
+        "available": true,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 334.1970443725586,
+        "error": null,
+        "sample_parameters": {
+          "year": 2025
+        }
+      },
+      {
+        "name": "Recruiting",
+        "endpoint": "Recruiting",
+        "method": "get_recruiting",
+        "description": "Recruiting class rankings and commitments",
+        "parameters": [
+          "year",
+          "team"
+        ],
+        "current_usage": "NONE",
+        "data_critical": true,
+        "real_time": false,
+        "available": false,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 0,
+        "error": "'RecruitingApi' object has no attribute 'get_team_recruiting_rankings'",
+        "sample_parameters": {}
+      },
+      {
+        "name": "Player Usage",
+        "endpoint": "Player Usage",
+        "method": "get_player_usage",
+        "description": "Player usage statistics",
+        "parameters": [
+          "year",
+          "team",
+          "conference",
+          "position"
+        ],
+        "current_usage": "NONE",
+        "data_critical": false,
+        "real_time": false,
+        "available": false,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 0,
+        "error": "Method get_player_usage not found in client",
+        "sample_parameters": {}
+      },
+      {
+        "name": "Draft",
+        "endpoint": "Draft",
+        "method": "get_draft",
+        "description": "NFL draft information",
+        "parameters": [
+          "year",
+          "team",
+          "conference"
+        ],
+        "current_usage": "NONE",
+        "data_critical": false,
+        "real_time": false,
+        "available": false,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 0,
+        "error": "Method get_draft not found in client",
+        "sample_parameters": {}
+      },
+      {
+        "name": "Transfer Portal",
+        "endpoint": "Transfer Portal",
+        "method": "get_transfer_portal",
+        "description": "Transfer portal activity",
+        "parameters": [
+          "year",
+          "team"
+        ],
+        "current_usage": "NONE",
+        "data_critical": false,
+        "real_time": true,
+        "available": false,
+        "has_2025_data": false,
+        "sample_data_count": 0,
+        "response_time_ms": 0,
+        "error": "Method get_transfer_portal not found in client",
+        "sample_parameters": {}
+      }
+    ]
+  },
+  "utilization_gaps": [],
+  "performance_metrics": {
+    "client_performance": {},
+    "rate_limiting_status": "UNKNOWN",
+    "caching_effectiveness": "UNKNOWN",
+    "bottlenecks": [
+      "Performance assessment failed: UnifiedCFBDClient.get_games() got an unexpected keyword argument 'limit'"
+    ],
+    "optimization_opportunities": [],
+    "error": "UnifiedCFBDClient.get_games() got an unexpected keyword argument 'limit'"
+  },
+  "recommendations": [],
+  "implementation_priority": [
+    {
+      "priority": 1,
+      "category": "CRITICAL_DATA",
+      "endpoint": "Rosters",
+      "description": "Integrate Team roster and depth chart information",
+      "effort": "MEDIUM",
+      "impact": "HIGH",
+      "timeline": "2-3 weeks"
+    },
+    {
+      "priority": 3,
+      "category": "PERFORMANCE",
+      "endpoint": "PARALLEL_PROCESSING",
+      "description": "Implement parallel API calls for 3x performance",
+      "effort": "HIGH",
+      "impact": "HIGH",
+      "timeline": "3-4 weeks"
+    },
+    {
+      "priority": 3,
+      "category": "PERFORMANCE",
+      "endpoint": "ENHANCED_CACHING",
+      "description": "Deploy Redis-based caching for 80% hit rate",
+      "effort": "MEDIUM",
+      "impact": "HIGH",
+      "timeline": "2-3 weeks"
+    },
+    {
+      "priority": 4,
+      "category": "ENHANCEMENT",
+      "endpoint": "Game Media",
+      "description": "Highlights and media content integration",
+      "effort": "LOW",
+      "impact": "MEDIUM",
+      "timeline": "1-2 weeks"
+    },
+    {
+      "priority": 4,
+      "category": "ENHANCEMENT",
+      "endpoint": "Team Matchups",
+      "description": "Historical matchup analysis",
+      "effort": "LOW",
+      "impact": "MEDIUM",
+      "timeline": "1-2 weeks"
+    },
+    {
+      "priority": 4,
+      "category": "ENHANCEMENT",
+      "endpoint": "Venues",
+      "description": "Stadium information and travel logistics",
+      "effort": "LOW",
+      "impact": "MEDIUM",
+      "timeline": "1-2 weeks"
+    },
+    {
+      "priority": 4,
+      "category": "ENHANCEMENT",
+      "endpoint": "Coaches",
+      "description": "Coaching history and trends",
+      "effort": "LOW",
+      "impact": "MEDIUM",
+      "timeline": "1-2 weeks"
+    }
+  ],
+  "overall_scores": {
+    "endpoint_utilization_rate": 58.333333333333336,
+    "critical_gap_count": 1,
+    "real_time_opportunity_count": 0,
+    "audit_duration_seconds": 4.486717939376831
+  },
+  "executive_summary": {
+    "headline": "CFBD Endpoint Audit: 58.3% Utilization, 1 Critical Gaps",
+    "key_findings": [
+      "Currently utilizing 14/24 available endpoints",
+      "1 critical data gaps identified for 2025 season",
+      "0 real-time data opportunities available",
+      "Performance: No caching - optimization needed"
+    ],
+    "urgent_actions": [
+      "Implement win probabilities integration for predictive analytics",
+      "Add real-time game data pipeline for current season",
+      "Deploy enhanced caching strategies for performance improvement",
+      "Complete missing critical data endpoints for comprehensive coverage"
+    ],
+    "expected_impact": {
+      "data_completeness": "+40%",
+      "predictive_accuracy": "+15%",
+      "system_performance": "+200%",
+      "real_time_capabilities": "NEW"
+    }
+  }
+}

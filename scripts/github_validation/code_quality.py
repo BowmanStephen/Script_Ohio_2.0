@@ -82,9 +82,11 @@ class CodeQualityValidator:
                 "success": result.returncode == 0,
                 "exit_code": result.returncode,
                 "output": result.stdout + result.stderr,
-                "message": "Ruff check passed"
-                if result.returncode == 0
-                else "Ruff found issues",
+                "message": (
+                    "Ruff check passed"
+                    if result.returncode == 0
+                    else "Ruff found issues"
+                ),
             }
         except FileNotFoundError:
             return {
@@ -114,9 +116,11 @@ class CodeQualityValidator:
                 "success": result.returncode == 0,
                 "exit_code": result.returncode,
                 "output": result.stdout + result.stderr,
-                "message": "Black formatting check passed"
-                if result.returncode == 0
-                else "Black found formatting issues",
+                "message": (
+                    "Black formatting check passed"
+                    if result.returncode == 0
+                    else "Black found formatting issues"
+                ),
             }
         except FileNotFoundError:
             return {
@@ -146,9 +150,11 @@ class CodeQualityValidator:
                 "success": result.returncode == 0,
                 "exit_code": result.returncode,
                 "output": result.stdout + result.stderr,
-                "message": "Mypy type check passed"
-                if result.returncode == 0
-                else "Mypy found type issues",
+                "message": (
+                    "Mypy type check passed"
+                    if result.returncode == 0
+                    else "Mypy found type issues"
+                ),
             }
         except FileNotFoundError:
             return {
@@ -176,9 +182,11 @@ class CodeQualityValidator:
                 "success": result.returncode == 0,
                 "exit_code": result.returncode,
                 "output": result.stdout + result.stderr,
-                "message": "ty type check passed"
-                if result.returncode == 0
-                else "ty found type issues",
+                "message": (
+                    "ty type check passed"
+                    if result.returncode == 0
+                    else "ty found type issues"
+                ),
             }
         except FileNotFoundError:
             return {
@@ -231,9 +239,11 @@ class CodeQualityValidator:
                 "success": result.returncode == 0,
                 "exit_code": result.returncode,
                 "output": result.stdout + result.stderr,
-                "message": "ESLint check passed"
-                if result.returncode == 0
-                else "ESLint found issues",
+                "message": (
+                    "ESLint check passed"
+                    if result.returncode == 0
+                    else "ESLint found issues"
+                ),
             }
         except FileNotFoundError:
             return {"success": False, "error": "npm not found"}
@@ -256,9 +266,11 @@ class CodeQualityValidator:
                 "success": result.returncode == 0,
                 "exit_code": result.returncode,
                 "output": result.stdout + result.stderr,
-                "message": "TypeScript check passed"
-                if result.returncode == 0
-                else "TypeScript found type errors",
+                "message": (
+                    "TypeScript check passed"
+                    if result.returncode == 0
+                    else "TypeScript found type errors"
+                ),
             }
         except FileNotFoundError:
             return {"success": False, "error": "npm not found"}

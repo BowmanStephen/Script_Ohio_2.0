@@ -393,9 +393,11 @@ class ValidationOrchestrator(BaseAgent):
         return {
             "status": "success",
             "architecture_analysis": architecture_analysis,
-            "completeness_score": sum(architecture_analysis.values())
-            if isinstance(next(iter(architecture_analysis.values())), bool)
-            else 0,
+            "completeness_score": (
+                sum(architecture_analysis.values())
+                if isinstance(next(iter(architecture_analysis.values())), bool)
+                else 0
+            ),
         }
 
     def _inventory_components(self) -> Dict[str, Any]:
@@ -455,22 +457,30 @@ class ValidationOrchestrator(BaseAgent):
 
         # Check for key implementation indicators
         indicators = {
-            "error_handling": "try:"
-            in open("agents/activation_fix/activation_fix_orchestrator.py").read()
-            if Path("agents/activation_fix/activation_fix_orchestrator.py").exists()
-            else False,
-            "logging_present": "import logging"
-            in open("agents/activation_fix/activation_fix_orchestrator.py").read()
-            if Path("agents/activation_fix/activation_fix_orchestrator.py").exists()
-            else False,
-            "type_hints": "typing"
-            in open("agents/activation_fix/activation_fix_orchestrator.py").read()
-            if Path("agents/activation_fix/activation_fix_orchestrator.py").exists()
-            else False,
-            "docstrings": '"""'
-            in open("agents/activation_fix/activation_fix_orchestrator.py").read()
-            if Path("agents/activation_fix/activation_fix_orchestrator.py").exists()
-            else False,
+            "error_handling": (
+                "try:"
+                in open("agents/activation_fix/activation_fix_orchestrator.py").read()
+                if Path("agents/activation_fix/activation_fix_orchestrator.py").exists()
+                else False
+            ),
+            "logging_present": (
+                "import logging"
+                in open("agents/activation_fix/activation_fix_orchestrator.py").read()
+                if Path("agents/activation_fix/activation_fix_orchestrator.py").exists()
+                else False
+            ),
+            "type_hints": (
+                "typing"
+                in open("agents/activation_fix/activation_fix_orchestrator.py").read()
+                if Path("agents/activation_fix/activation_fix_orchestrator.py").exists()
+                else False
+            ),
+            "docstrings": (
+                '"""'
+                in open("agents/activation_fix/activation_fix_orchestrator.py").read()
+                if Path("agents/activation_fix/activation_fix_orchestrator.py").exists()
+                else False
+            ),
         }
 
         assessment["code_quality_indicators"] = indicators
@@ -842,12 +852,14 @@ class ValidationOrchestrator(BaseAgent):
             )
             / len(self.phase_results)
             * 100,
-            "overall_status": "success"
-            if all(
-                result.get("status") == "success"
-                for result in self.phase_results.values()
-            )
-            else "partial",
+            "overall_status": (
+                "success"
+                if all(
+                    result.get("status") == "success"
+                    for result in self.phase_results.values()
+                )
+                else "partial"
+            ),
             "artifacts_created": self._count_artifacts_created(),
         }
 
@@ -887,9 +899,9 @@ class ValidationOrchestrator(BaseAgent):
             "current_phase": self.current_phase,
             "phases_completed": list(self.phase_results.keys()),
             "overall_status": "in_progress" if self.current_phase else "not_started",
-            "execution_time": time.time() - self.overall_start_time
-            if self.overall_start_time
-            else 0,
+            "execution_time": (
+                time.time() - self.overall_start_time if self.overall_start_time else 0
+            ),
         }
 
     def _generate_final_report(self) -> Dict[str, Any]:

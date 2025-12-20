@@ -1,0 +1,79 @@
+# Feature Engineering Layer Dockerfile
+# Confidential Security - Data processing with shared memory access
+# User: 3002:3002 (Feature engineering user)
+# Capabilities: IPC_OWNER (shared memory for data processing)
+# Security: no-new-privileges, apparmor, seccomp
+# Networks: data-network, analytics-network, audit-network
+
+FROM python:3.13-slim
+
+# Create system user
+RUN groupadd -r -g 3002 features_user && \
+    useradd -r -u 3002 -g features_user features_user
+
+# Install system packages for data processing
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        jq \
+        htop \
+        iotop \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install feature engineering dependencies
+RUN pip install --no-cache-dir \
+    pandas \
+    numpy \
+    scikit-learn \
+    featuretools \
+    tsfresh \
+    scipy \
+    matplotlib \
+    seaborn \
+    plotly \
+    dash \
+    joblib \
+    dill \
+    psutil
+
+# Copy application code
+COPY agents/features/ ./agents/features/
+COPY agents/core/ ./agents/core/
+COPY src/features/ ./src/features/
+COPY docker/security/scripts/start-features.sh ./
+COPY docker/security/scripts/health-check.sh ./
+
+# Create feature engineering directories
+RUN mkdir -p /app/data/features /app/cache/features /app/logs && \
+    chown -R features_user:features_user /app && \
+    chmod -R 755 /app
+
+# Copy security configuration
+COPY docker/security/security-policies.json /etc/agent-security/
+COPY docker/security/feature-engineering-rules.json /etc/agent-security/
+RUN chmod 600 /etc/agent-security/security-policies.json && \
+    chmod 600 /etc/agent-security/feature-engineering-rules.json
+
+# Set ownership
+RUN chown -R features_user:features_user /app
+
+# Switch to non-root user
+USER features_user
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD ["./health-check.sh"]
+
+# Expose port for feature service interface
+EXPOSE 8600
+
+# Start command
+CMD ["./start-features.sh"]

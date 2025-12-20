@@ -37,7 +37,7 @@ class ReportGeneratorAgent(BaseAgent):
         )
         self.week = week
         self.season = season
-        self.output_dir = Path(f"analysis/week{week}")
+        self.output_dir = Path(f"predictions/week${WEEK:-13}/legacy/")
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def _define_capabilities(self) -> List[AgentCapability]:
@@ -47,7 +47,7 @@ class ReportGeneratorAgent(BaseAgent):
                 description="Generate comprehensive weekly report with visualizations",
                 permission_required=PermissionLevel.READ_EXECUTE_WRITE,
                 tools_required=["shap_utils", "dashboard_utils"],
-                data_access=["analysis/", "model_pack/"],
+                data_access=["predictions/week${WEEK:-13}/legacy/", "model_pack/"],
                 execution_time_estimate=20.0,
             )
         ]

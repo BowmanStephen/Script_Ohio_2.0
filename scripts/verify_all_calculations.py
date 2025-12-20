@@ -364,11 +364,13 @@ class CalculationVerifier:
                         missing_value_issues[feature] = int(missing_count)
 
         result = {
-            "status": "pass"
-            if not missing_features
-            and not data_type_issues
-            and not missing_value_issues
-            else "warning",
+            "status": (
+                "pass"
+                if not missing_features
+                and not data_type_issues
+                and not missing_value_issues
+                else "warning"
+            ),
             "total_columns": total_columns,
             "feature_groups": feature_status,
             "missing_features": missing_features,
@@ -433,9 +435,11 @@ class CalculationVerifier:
         ]
 
         result = {
-            "status": "pass"
-            if not non_numeric_in_features and not missing_metadata
-            else "warning",
+            "status": (
+                "pass"
+                if not non_numeric_in_features and not missing_metadata
+                else "warning"
+            ),
             "models": model_status,
             "numeric_features_count": len(numeric_columns),
             "non_numeric_feature_issues": non_numeric_in_features,
@@ -489,14 +493,16 @@ class CalculationVerifier:
 
         result = {
             "status": "pass" if len(games_before_week5) == 0 else "warning",
-            "2025_week_distribution": week_distribution.to_dict()
-            if len(week_distribution) > 0
-            else {},
+            "2025_week_distribution": (
+                week_distribution.to_dict() if len(week_distribution) > 0 else {}
+            ),
             "games_before_week5": len(games_before_week5),
             "week5_plus_filter_applied": len(games_before_week5) == 0,
-            "historical_weeks_sample": dict(list(historical_weeks.items())[:5])
-            if len(historical_weeks) > 0
-            else {},
+            "historical_weeks_sample": (
+                dict(list(historical_weeks.items())[:5])
+                if len(historical_weeks) > 0
+                else {}
+            ),
         }
 
         self.verification_results["checks"]["temporal_consistency"] = result
