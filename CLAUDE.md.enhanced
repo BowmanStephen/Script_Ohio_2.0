@@ -25,7 +25,7 @@ pip install -r requirements.txt
 pip install -r requirements-dev.txt  # Development dependencies
 
 # Set API key (required for CFBD integration)
-export CFBD_API_KEY="3nSBeJV4ODZlJLxQZ/H0vWG3DRAfTSPU2PporK/5K+BJininva/bPx5G4iNjeOsb"
+export CFBD_API_KEY="your-api-key-here"
 
 # Install web app dependencies
 cd web_app && npm install && cd ..

@@ -24,8 +24,8 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 # Install dependencies
 pip install -r requirements.txt
 
-# Set API key (required for CFBD integration)
-export CFBD_API_KEY="3nSBeJV4ODZlJLxQZ/H0vWG3DRAfTSPU2PporK/5K+BJininva/bPx5G4iNjeOsb"
+# Set API key (required for CFBD integration - replace with your own key)
+export CFBD_API_KEY="your-api-key-here"
 ```
 
 ### Core Development Tasks
@@ -47,6 +47,30 @@ python3 -m pytest agents/tests -q
 
 # Verify agent system
 python3 agents/test_agent_system.py
+```
+
+### Autonomous Code Cleanup System
+```bash
+# Analyze cleanup scope (dry run)
+python3 scripts/autonomous_cleanup.py --scope backup,cache --dry-run
+
+# Safe cleanup with backup point
+python3 scripts/autonomous_cleanup.py --scope cache --backup-point
+
+# Full autonomous cleanup with all safety checks
+python3 scripts/autonomous_cleanup.py --auto --backup-point
+
+# List available rollback points
+python3 scripts/autonomous_cleanup.py --list-rollback
+
+# Show system status
+python3 scripts/autonomous_cleanup.py --status
+
+# Emergency rollback
+python3 scripts/autonomous_cleanup.py --rollback rollback_1642690800000
+
+# Clean up old backup data
+python3 scripts/autonomous_cleanup.py --cleanup-old 30
 ```
 
 ### Model Management
@@ -293,6 +317,85 @@ web_app/src/
 - **Package Management**: pip (requirements.txt), npm (package.json)
 - **Version Control**: Git with structured commit messages
 - **Code Style**: PEP 8, 4-space indentation, 88-character line length
+
+## Claude Code Plan-then-Execute Integration
+
+Script Ohio 2.0 integrates Claude Code's Plan-then-Execute (P-t-E) architecture,
+enabling autonomous project development through orchestrator-driven subagent
+delegation.
+
+### Architecture
+
+**Core Components:**
+- **Plan-then-Execute Orchestrator** (`agents/claude_code_orchestrator.py`): Separates strategic planning from tactical implementation
+- **Subagent Registry** (`agents/claude_code_subagent_registry.py`): Loads and manages subagent definitions from `.claude/agents/*.md`
+- **Context Isolation Manager** (`agents/core/context_isolation.py`): Fresh context windows per subagent
+- **Sandbox Manager** (`agents/core/sandbox_manager.py`): OS-level isolation (Bubblewrap/Seatbelt)
+- **Handoff Manager** (`agents/core/handoff_manager.py`): Sequential handoff coordination
+
+### Usage
+
+**List available subagents:**
+```bash
+python3 scripts/claude_code_agents.py list
+```
+
+**Invoke a subagent:**
+```bash
+python3 scripts/claude_code_agents.py invoke --name "Senior Engineer" --task "Implement feature X"
+```
+
+**Create a new subagent:**
+```bash
+python3 scripts/claude_code_agents.py create --name "Security Auditor" --template security
+```
+
+**Use the orchestrator programmatically:**
+```python
+from agents.claude_code_orchestrator import PlanThenExecuteOrchestrator
+
+orchestrator = PlanThenExecuteOrchestrator()
+
+# Planning phase
+plan = orchestrator.plan_phase("Add feature X")
+
+# Execution phase
+result = orchestrator.execute_phase(plan)
+
+# Or combine both
+result = orchestrator._plan_and_execute({"objective": "Add feature X"}, {})
+```
+
+### Subagent Definitions
+
+Subagents are defined in `.claude/agents/*.md` files with YAML frontmatter:
+
+```yaml
+---
+name: Senior Engineer
+description: Senior software engineer focused on clean, maintainable code
+system_prompt: |
+  You are a senior software engineer...
+tools:
+  - file_operations
+  - code_editing
+model: claude-3-5-sonnet
+permissions: READ_EXECUTE_WRITE
+context_isolation: true
+sandbox_enabled: true
+---
+```
+
+### Context Isolation
+
+Each subagent operates in an isolated context window with no previous
+conversation noise. Context handoffs between agents filter irrelevant
+information and maintain audit trails.
+
+### Sandboxing
+
+OS-level sandboxing is available on Linux (Bubblewrap) and macOS (Seatbelt).
+Falls back to permission-based isolation if OS-level sandboxing is unavailable.
 
 ## Key Development Patterns
 

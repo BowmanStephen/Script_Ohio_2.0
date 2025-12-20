@@ -34,24 +34,26 @@ class Tier3CFBDConfig:
     # Tier 3 Rate Limiting - Optimized for 75k monthly requests
     # Conservative estimate: 75k/30 days = 2.5k/day = 104/hour = 25/sec
     max_requests_per_second: int = 25  # Tier 3 optimized rate
-    rate_limit_delay: float = 0.04   # 1/25 = 0.04s for exactly 25 req/sec
+    rate_limit_delay: float = 0.04  # 1/25 = 0.04s for exactly 25 req/sec
     max_retries: int = 3
 
     # Tier 3 Enhanced Caching - More aggressive for premium features
-    cache_config: CFBDCacheConfig = field(default_factory=lambda: CFBDCacheConfig(
-        enable_cache=True,
-        default_ttl_seconds=900,  # 15 minutes default
-        ttl_overrides={
-            "games": 43200,           # 12 hours for games (live data changes)
-            "stats": 1800,            # 30 minutes for stats (premium data)
-            "teams": 604800,          # 7 days for teams (stable)
-            "predictions": 300,       # 5 minutes for predictions (live)
-            "live_data": 60,          # 1 minute for live data (real-time)
-            "premium_metrics": 900,   # 15 minutes for premium metrics
-            "ppa_data": 1800,         # 30 minutes for PPA data
-            "week_data": 3600,        # 1 hour for weekly data
-        }
-    ))
+    cache_config: CFBDCacheConfig = field(
+        default_factory=lambda: CFBDCacheConfig(
+            enable_cache=True,
+            default_ttl_seconds=900,  # 15 minutes default
+            ttl_overrides={
+                "games": 43200,  # 12 hours for games (live data changes)
+                "stats": 1800,  # 30 minutes for stats (premium data)
+                "teams": 604800,  # 7 days for teams (stable)
+                "predictions": 300,  # 5 minutes for predictions (live)
+                "live_data": 60,  # 1 minute for live data (real-time)
+                "premium_metrics": 900,  # 15 minutes for premium metrics
+                "ppa_data": 1800,  # 30 minutes for PPA data
+                "week_data": 3600,  # 1 hour for weekly data
+            },
+        )
+    )
 
     # Feature Flags - All enabled for Tier 3
     enable_metrics: bool = True
@@ -77,7 +79,9 @@ class Tier3CFBDConfig:
         api_key = os.getenv("CFBD_API_KEY") or os.getenv("CFBD_API_TOKEN")
 
         if not api_key:
-            raise ValueError("CFBD_API_KEY or CFBD_API_TOKEN environment variable required")
+            raise ValueError(
+                "CFBD_API_KEY or CFBD_API_TOKEN environment variable required"
+            )
 
         # Determine host
         host_env = os.getenv("CFBD_HOST", "production").lower()
@@ -97,24 +101,30 @@ class Tier3CFBDConfig:
 
         # Enhanced caching for Tier 3
         cache_enabled = os.getenv("CFBD_CACHE_ENABLED", "true").lower() != "false"
-        default_ttl = int(os.getenv("CFBD_CACHE_DEFAULT_TTL", "900"))  # 15 minutes default
+        default_ttl = int(
+            os.getenv("CFBD_CACHE_DEFAULT_TTL", "900")
+        )  # 15 minutes default
 
         # TTL overrides for different data types (Tier 3 optimized)
         ttl_overrides = {
-            "games": int(os.getenv("CFBD_CACHE_TTL_GAMES", "43200")),      # 12 hours
-            "stats": int(os.getenv("CFBD_CACHE_TTL_STATS", "1800")),       # 30 minutes
-            "teams": int(os.getenv("CFBD_CACHE_TTL_TEAMS", "604800")),     # 7 days
-            "predictions": int(os.getenv("CFBD_CACHE_TTL_PREDICTIONS", "300")),  # 5 minutes
-            "live_data": int(os.getenv("CFBD_CACHE_TTL_LIVE", "60")),       # 1 minute
-            "premium_metrics": int(os.getenv("CFBD_CACHE_TTL_PREMIUM", "900")),  # 15 minutes
-            "ppa_data": int(os.getenv("CFBD_CACHE_TTL_PPA", "1800")),       # 30 minutes
-            "week_data": int(os.getenv("CFBD_CACHE_TTL_WEEKLY", "3600")),    # 1 hour
+            "games": int(os.getenv("CFBD_CACHE_TTL_GAMES", "43200")),  # 12 hours
+            "stats": int(os.getenv("CFBD_CACHE_TTL_STATS", "1800")),  # 30 minutes
+            "teams": int(os.getenv("CFBD_CACHE_TTL_TEAMS", "604800")),  # 7 days
+            "predictions": int(
+                os.getenv("CFBD_CACHE_TTL_PREDICTIONS", "300")
+            ),  # 5 minutes
+            "live_data": int(os.getenv("CFBD_CACHE_TTL_LIVE", "60")),  # 1 minute
+            "premium_metrics": int(
+                os.getenv("CFBD_CACHE_TTL_PREMIUM", "900")
+            ),  # 15 minutes
+            "ppa_data": int(os.getenv("CFBD_CACHE_TTL_PPA", "1800")),  # 30 minutes
+            "week_data": int(os.getenv("CFBD_CACHE_TTL_WEEKLY", "3600")),  # 1 hour
         }
 
         cache_config = CFBDCacheConfig(
             enable_cache=cache_enabled,
             default_ttl_seconds=default_ttl,
-            ttl_overrides=ttl_overrides
+            ttl_overrides=ttl_overrides,
         )
 
         # Feature flags (all enabled by default for Tier 3)
@@ -122,15 +132,21 @@ class Tier3CFBDConfig:
         enable_logging = os.getenv("CFBD_ENABLE_LOGGING", "true").lower() != "false"
         enable_graphql = os.getenv("CFBD_ENABLE_GRAPHQL", "true").lower() != "false"
         enable_live_data = os.getenv("CFBD_ENABLE_LIVE_DATA", "true").lower() != "false"
-        enable_premium_metrics = os.getenv("CFBD_ENABLE_PREMIUM", "true").lower() != "false"
-        enable_weekly_training = os.getenv("CFBD_ENABLE_WEEKLY_TRAINING", "true").lower() != "false"
+        enable_premium_metrics = (
+            os.getenv("CFBD_ENABLE_PREMIUM", "true").lower() != "false"
+        )
+        enable_weekly_training = (
+            os.getenv("CFBD_ENABLE_WEEKLY_TRAINING", "true").lower() != "false"
+        )
 
         # Transport preference for Tier 3
         preferred_transport = os.getenv("CFBD_PREFERRED_TRANSPORT", "graphql").lower()
         if preferred_transport not in ["graphql", "rest", "auto"]:
             preferred_transport = "graphql"
 
-        graphql_fallback_to_rest = os.getenv("CFBD_GRAPHQL_FALLBACK_TO_REST", "true").lower() != "false"
+        graphql_fallback_to_rest = (
+            os.getenv("CFBD_GRAPHQL_FALLBACK_TO_REST", "true").lower() != "false"
+        )
         graphql_disabled = os.getenv("CFBD_GRAPHQL_DISABLED", "false").lower() == "true"
 
         # Tier 3 performance settings
@@ -173,8 +189,8 @@ class Tier3CFBDConfig:
                 "Live scoreboard and play-by-play",
                 "Weather data",
                 "Weekly model training downloads",
-                "Betting lines and historical data"
-            ]
+                "Betting lines and historical data",
+            ],
         }
 
     def validate(self) -> None:
@@ -183,7 +199,9 @@ class Tier3CFBDConfig:
             raise ValueError("API key is required for Tier 3")
 
         if self.max_requests_per_second <= 0 or self.max_requests_per_second > 30:
-            raise ValueError("max_requests_per_second must be between 1 and 30 for Tier 3")
+            raise ValueError(
+                "max_requests_per_second must be between 1 and 30 for Tier 3"
+            )
 
         if self.rate_limit_delay <= 0:
             raise ValueError("rate_limit_delay must be positive")

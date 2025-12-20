@@ -6,7 +6,7 @@
     "file_path": "agents/audit/audit_coordinator_agent.py",
     "created_at": "2025-12-18T18:36:46.901076+00:00",
     "created_by": "system",
-    "status": "active",
+    "status": "inactive",
     "capabilities": [
       "run_comprehensive_audit",
       "run_quick_audit",
@@ -17,8 +17,8 @@
       "cpu": 0.0,
       "memory": 0.0
     },
-    "health_score": 0.9,
-    "last_health_check": "2025-12-18T19:16:13.935734+00:00",
+    "health_score": 0.0,
+    "last_health_check": "2025-12-18T21:04:41.872232+00:00",
     "dependencies": [
       "audit_agents",
       "reporting_engine"
@@ -32,7 +32,7 @@
     "file_path": "agents/audit/system_integrity_agent.py",
     "created_at": "2025-12-18T18:36:55.052523+00:00",
     "created_by": "claude_system",
-    "status": "active",
+    "status": "inactive",
     "capabilities": [
       "audit_python_environment",
       "audit_file_structure",
@@ -43,8 +43,8 @@
       "cpu": 0.0,
       "memory": 0.0
     },
-    "health_score": 0.9,
-    "last_health_check": "2025-12-18T19:16:13.935737+00:00",
+    "health_score": 0.0,
+    "last_health_check": "2025-12-18T21:04:41.872236+00:00",
     "dependencies": [],
     "metadata": {}
   },
@@ -55,7 +55,7 @@
     "file_path": "agents/audit/data_pipeline_audit_agent.py",
     "created_at": "2025-12-18T18:36:55.053044+00:00",
     "created_by": "claude_system",
-    "status": "active",
+    "status": "inactive",
     "capabilities": [
       "audit_cfbd_integration",
       "audit_training_data",
@@ -66,8 +66,8 @@
       "cpu": 0.0,
       "memory": 0.0
     },
-    "health_score": 0.9,
-    "last_health_check": "2025-12-18T19:16:13.935739+00:00",
+    "health_score": 0.0,
+    "last_health_check": "2025-12-18T21:04:41.872238+00:00",
     "dependencies": [],
     "metadata": {}
   },
@@ -89,8 +89,8 @@
       "cpu": 0.0,
       "memory": 0.0
     },
-    "health_score": 0.9,
-    "last_health_check": "2025-12-18T19:16:13.935740+00:00",
+    "health_score": 0.7000000000000001,
+    "last_health_check": "2025-12-18T21:04:41.872240+00:00",
     "dependencies": [],
     "metadata": {}
   },
@@ -112,13 +112,486 @@
       "cpu": 0.0,
       "memory": 0.0
     },
-    "health_score": 1.0,
-    "last_health_check": "2025-12-18T19:16:13.935742+00:00",
+    "health_score": 0.8,
+    "last_health_check": "2025-12-18T21:04:41.872241+00:00",
     "dependencies": [
       "cfbd_client",
       "feature_engineering",
       "meta_agent"
     ],
     "metadata": {}
+  },
+  "project_management_agent": {
+    "agent_id": "project_management_agent",
+    "agent_name": "Project Management Agent",
+    "class_name": "ProjectManagementAgent",
+    "file_path": "agents/project_management_agent.py",
+    "created_at": "2025-12-18T21:04:16.705970+00:00",
+    "created_by": "optimization_system",
+    "status": "active",
+    "capabilities": [
+      "project_planning",
+      "toon_format_support",
+      "progress_tracking",
+      "workflow_coordination"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-18T21:04:41.872243+00:00",
+    "dependencies": [
+      "meta_agent",
+      "documentation_agent"
+    ],
+    "metadata": {}
+  },
+  "documentation_agent": {
+    "agent_id": "documentation_agent",
+    "agent_name": "Documentation Agent",
+    "class_name": "DocumentationAgent",
+    "file_path": "agents/documentation_agent.py",
+    "created_at": "2025-12-18T21:04:16.706968+00:00",
+    "created_by": "optimization_system",
+    "status": "active",
+    "capabilities": [
+      "knowledge_management",
+      "documentation_freshness",
+      "content_generation",
+      "version_control"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-18T21:04:41.872245+00:00",
+    "dependencies": [
+      "meta_agent"
+    ],
+    "metadata": {}
+  },
+  "orchestration_agent": {
+    "agent_id": "orchestration_agent",
+    "agent_name": "Orchestration Agent",
+    "class_name": "OrchestrationAgent",
+    "file_path": "agents/orchestration_agent.py",
+    "created_at": "2025-12-18T21:04:16.707822+00:00",
+    "created_by": "optimization_system",
+    "status": "active",
+    "capabilities": [
+      "multi_agent_coordination",
+      "load_balancing",
+      "workflow_orchestration",
+      "performance_optimization"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-18T21:04:41.872247+00:00",
+    "dependencies": [
+      "meta_agent"
+    ],
+    "metadata": {}
+  },
+  "cfbd_integration_agent": {
+    "agent_id": "cfbd_integration_agent",
+    "agent_name": "CFBD Integration Agent",
+    "class_name": "CFBDIntegrationAgent",
+    "file_path": "agents/cfbd_integration_agent.py",
+    "created_at": "2025-12-18T21:04:16.708454+00:00",
+    "created_by": "optimization_system",
+    "status": "active",
+    "capabilities": [
+      "cfbd_api_integration",
+      "rate_limiting",
+      "data_caching",
+      "api_monitoring"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-18T21:04:41.872248+00:00",
+    "dependencies": [
+      "meta_agent"
+    ],
+    "metadata": {}
+  },
+  "performance_monitor_agent": {
+    "agent_id": "performance_monitor_agent",
+    "agent_name": "Performance Monitor Agent",
+    "class_name": "PerformanceMonitorAgent",
+    "file_path": "agents/performance_monitor_agent.py",
+    "created_at": "2025-12-18T21:04:16.709167+00:00",
+    "created_by": "optimization_system",
+    "status": "active",
+    "capabilities": [
+      "real_time_monitoring",
+      "performance_analysis",
+      "alert_generation",
+      "metrics_collection"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-18T21:04:41.872250+00:00",
+    "dependencies": [
+      "meta_agent"
+    ],
+    "metadata": {}
+  },
+  "insight_generator_agent": {
+    "agent_id": "insight_generator_agent",
+    "agent_name": "Insight Generator Agent",
+    "class_name": "InsightGeneratorAgent",
+    "file_path": "agents/insight_generator_agent.py",
+    "created_at": "2025-12-18T21:05:00.684545+00:00",
+    "created_by": "optimization_system",
+    "status": "active",
+    "capabilities": [
+      "advanced_analytics",
+      "insight_generation",
+      "data_visualization",
+      "pattern_recognition"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-18T21:05:00.684547+00:00",
+    "dependencies": [
+      "cfbd_integration_agent",
+      "performance_monitor_agent"
+    ],
+    "metadata": {}
+  },
+  "weekly_matchup_analysis_agent": {
+    "agent_id": "weekly_matchup_analysis_agent",
+    "agent_name": "Weekly Matchup Analysis Agent",
+    "class_name": "WeeklyMatchupAnalysisAgent",
+    "file_path": "agents/weekly_matchup_analysis_agent.py",
+    "created_at": "2025-12-18T21:05:00.686077+00:00",
+    "created_by": "optimization_system",
+    "status": "active",
+    "capabilities": [
+      "matchup_analysis",
+      "weekly_predictions",
+      "team_performance",
+      "game_forecasting"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-18T21:05:00.686078+00:00",
+    "dependencies": [
+      "cfbd_integration_agent",
+      "model_validation_agent"
+    ],
+    "metadata": {}
+  },
+  "weekly_prediction_generation_agent": {
+    "agent_id": "weekly_prediction_generation_agent",
+    "agent_name": "Weekly Prediction Generation Agent",
+    "class_name": "WeeklyPredictionGenerationAgent",
+    "file_path": "agents/weekly_prediction_generation_agent.py",
+    "created_at": "2025-12-18T21:05:00.687243+00:00",
+    "created_by": "optimization_system",
+    "status": "active",
+    "capabilities": [
+      "ml_predictions",
+      "ensemble_methods",
+      "probability_calculations",
+      "confidence_intervals"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-18T21:05:00.687244+00:00",
+    "dependencies": [
+      "weekly_matchup_analysis_agent",
+      "model_validation_agent"
+    ],
+    "metadata": {}
+  },
+  "learning_navigator_agent": {
+    "agent_id": "learning_navigator_agent",
+    "agent_name": "Learning Navigator Agent",
+    "class_name": "LearningNavigatorAgent",
+    "file_path": "agents/learning_navigator_agent.py",
+    "created_at": "2025-12-18T21:05:00.688204+00:00",
+    "created_by": "optimization_system",
+    "status": "inactive",
+    "capabilities": [
+      "learning_pathways",
+      "knowledge_mapping",
+      "skill_assessment",
+      "educational_guidance"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 0.0,
+    "last_health_check": "2025-12-18T21:05:00.688205+00:00",
+    "dependencies": [
+      "documentation_agent",
+      "project_management_agent"
+    ],
+    "metadata": {}
+  },
+  "validation_agent": {
+    "agent_id": "validation_agent",
+    "agent_name": "Validation Agent",
+    "class_name": "ValidationAgent",
+    "file_path": "agents/validation_agent.py",
+    "created_at": "2025-12-18T21:05:00.689108+00:00",
+    "created_by": "optimization_system",
+    "status": "active",
+    "capabilities": [
+      "data_validation",
+      "quality_assurance",
+      "integrity_checks",
+      "compliance_verification"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-18T21:05:00.689110+00:00",
+    "dependencies": [
+      "cfbd_integration_agent",
+      "performance_monitor_agent"
+    ],
+    "metadata": {}
+  },
+  "analytics_orchestrator": {
+    "agent_id": "analytics_orchestrator",
+    "agent_name": "Analytics Orchestrator",
+    "class_name": "AnalyticsOrchestrator",
+    "file_path": "agents/analytics_orchestrator.py",
+    "created_at": "2025-12-19T02:12:56.939773+00:00",
+    "created_by": "system",
+    "status": "active",
+    "capabilities": [
+      "data_analysis",
+      "visualization",
+      "reporting"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-19T02:12:56.939775+00:00",
+    "dependencies": [
+      "pandas",
+      "matplotlib"
+    ],
+    "metadata": {}
+  },
+  "ai_assistant": {
+    "agent_id": "ai_assistant",
+    "agent_name": "AI Assistant",
+    "class_name": "AIAssistantAgent",
+    "file_path": "agents/ai_assistant_agent.py",
+    "created_at": "2025-12-19T03:14:28.978630+00:00",
+    "created_by": "claude_code",
+    "status": "inactive",
+    "capabilities": [
+      "natural_language_processing",
+      "conversation_management",
+      "intent_recognition",
+      "query_expansion",
+      "clarification_handling",
+      "intelligent_dialogue"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 0.0,
+    "last_health_check": "2025-12-19T03:14:28.978634+00:00",
+    "dependencies": [
+      "base_agent_framework"
+    ],
+    "metadata": {}
+  },
+  "commit_coordinator": {
+    "agent_id": "commit_coordinator",
+    "agent_name": "Commit Coordinator Agent",
+    "class_name": "CommitCoordinatorAgent",
+    "file_path": "agents/commit_coordinator_agent.py",
+    "created_at": "2025-12-20T22:04:34.497557+00:00",
+    "created_by": "claude_code",
+    "status": "active",
+    "capabilities": [
+      "orchestrate_commit",
+      "analyze_commit_scope",
+      "coordinate_validation",
+      "execute_commit_batches",
+      "monitor_progress",
+      "emergency_rollback"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-20T22:04:34.497562+00:00",
+    "dependencies": [
+      "git_utils",
+      "push_operations",
+      "rollback_operations",
+      "validation_orchestrator"
+    ],
+    "metadata": {
+      "max_execution_time": 300,
+      "memory_limit_mb": 100,
+      "description": "Master controller for Git commit operations with real-time coordination and automatic rollback capabilities",
+      "version": "1.0.0"
+    }
+  },
+  "commit_analyzer": {
+    "agent_id": "commit_analyzer",
+    "agent_name": "Commit Analyzer Agent",
+    "class_name": "CommitAnalyzerAgent",
+    "file_path": "agents/commit_analyzer_agent.py",
+    "created_at": "2025-12-20T22:04:34.516622+00:00",
+    "created_by": "claude_code",
+    "status": "active",
+    "capabilities": [
+      "analyze_changes",
+      "assess_risk_level",
+      "create_dependency_graph",
+      "generate_commit_strategy",
+      "create_commit_batches",
+      "suggest_commit_messages"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-20T22:04:34.516626+00:00",
+    "dependencies": [
+      "git_utils"
+    ],
+    "metadata": {
+      "max_execution_time": 60,
+      "memory_limit_mb": 50,
+      "description": "Analyzes repository changes and creates optimal commit strategies with risk assessment and dependency analysis",
+      "version": "1.0.0"
+    }
+  },
+  "push_agent": {
+    "agent_id": "push_agent",
+    "agent_name": "Push Agent",
+    "class_name": "PushAgent",
+    "file_path": "agents/push_agent.py",
+    "created_at": "2025-12-20T22:04:34.521254+00:00",
+    "created_by": "claude_code",
+    "status": "active",
+    "capabilities": [
+      "safe_push",
+      "batch_push",
+      "validate_before_push",
+      "handle_push_conflicts",
+      "monitor_push_status",
+      "retry_failed_push"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-20T22:04:34.521256+00:00",
+    "dependencies": [
+      "git_utils",
+      "push_operations"
+    ],
+    "metadata": {
+      "max_execution_time": 120,
+      "memory_limit_mb": 50,
+      "description": "Safe push operations with agent coordination, validation, and automatic retry capabilities",
+      "version": "1.0.0"
+    }
+  },
+  "rollback_agent": {
+    "agent_id": "rollback_agent",
+    "agent_name": "Rollback Agent",
+    "class_name": "RollbackAgent",
+    "file_path": "agents/rollback_agent.py",
+    "created_at": "2025-12-20T22:05:49.381902+00:00",
+    "created_by": "claude_code",
+    "status": "active",
+    "capabilities": [
+      "emergency_rollback",
+      "create_checkpoint",
+      "rollback_to_checkpoint",
+      "selective_rollback",
+      "verify_rollback",
+      "manage_checkpoints"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-20T22:05:49.381905+00:00",
+    "dependencies": [
+      "git_utils",
+      "rollback_operations"
+    ],
+    "metadata": {
+      "max_execution_time": 90,
+      "memory_limit_mb": 50,
+      "description": "Recovery specialist agent for failed operations with checkpoint management and intelligent rollback strategies",
+      "version": "1.0.0"
+    }
+  },
+  "commit_validation_agent": {
+    "agent_id": "commit_validation_agent",
+    "agent_name": "Commit Validation Agent",
+    "class_name": "ValidationAgent",
+    "file_path": "agents/validation_agent.py",
+    "created_at": "2025-12-20T22:05:49.388181+00:00",
+    "created_by": "claude_code",
+    "status": "active",
+    "capabilities": [
+      "orchestrate_validation",
+      "run_custom_validation",
+      "monitor_validation",
+      "create_validation_report",
+      "manage_validation_policies",
+      "validate_specific_scope"
+    ],
+    "resource_usage": {
+      "cpu": 0.0,
+      "memory": 0.0
+    },
+    "health_score": 1.0,
+    "last_health_check": "2025-12-20T22:05:49.388186+00:00",
+    "dependencies": [
+      "validation_orchestrator"
+    ],
+    "metadata": {
+      "max_execution_time": 120,
+      "memory_limit_mb": 100,
+      "description": "Orchestrates existing Validation Orchestrator with agent coordination, custom validation rules, and detailed reporting",
+      "version": "1.0.0"
+    }
   }
 }

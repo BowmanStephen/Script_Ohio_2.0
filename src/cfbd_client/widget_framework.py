@@ -4,22 +4,24 @@ Complete replication of CFBD website widgets and UI components with enhanced fea
 """
 
 import asyncio
+import base64
+import html
 import json
 import logging
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta
 from enum import Enum
-import html
 from pathlib import Path
-import base64
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 class WidgetType(Enum):
     """Types of CFBD widgets to replicate"""
+
     SCOREBOARD = "scoreboard"
     PLAYER_STATS = "player_stats"
     TEAM_RANKINGS = "rankings"
@@ -31,16 +33,20 @@ class WidgetType(Enum):
     MEDIA_SCHEDULE = "media_schedule"
     HISTORICAL_ANALYSIS = "historical_analysis"
 
+
 class Theme(Enum):
     """Widget theme options"""
+
     LIGHT = "light"
     DARK = "dark"
     AUTO = "auto"  # System preference
     CUSTOM = "custom"
 
+
 @dataclass
 class WidgetConfig:
     """Widget configuration settings"""
+
     widget_type: WidgetType
     width: str = "100%"
     height: str = "auto"
@@ -58,9 +64,11 @@ class WidgetConfig:
         """Convert to dictionary for JSON serialization"""
         return asdict(self)
 
+
 @dataclass
 class WidgetData:
     """Generic widget data structure"""
+
     data: Any
     metadata: Dict[str, Any]
     last_updated: datetime
@@ -71,8 +79,9 @@ class WidgetData:
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary with proper datetime serialization"""
         result = asdict(self)
-        result['last_updated'] = self.last_updated.isoformat()
+        result["last_updated"] = self.last_updated.isoformat()
         return result
+
 
 class CFBDWidgetRenderer:
     """
@@ -101,12 +110,15 @@ class CFBDWidgetRenderer:
             WidgetType.ADVANCED_STATS: self._create_advanced_stats_template,
             WidgetType.WEATHER_INFO: self._create_weather_template,
             WidgetType.MEDIA_SCHEDULE: self._create_media_template,
-            WidgetType.HISTORICAL_ANALYSIS: self._create_historical_template
+            WidgetType.HISTORICAL_ANALYSIS: self._create_historical_template,
         }
 
-    def render_widget(self, widget_config: WidgetConfig,
-                     widget_data: WidgetData,
-                     target_format: str = "html") -> Dict[str, Any]:
+    def render_widget(
+        self,
+        widget_config: WidgetConfig,
+        widget_data: WidgetData,
+        target_format: str = "html",
+    ) -> Dict[str, Any]:
         """
         Render a complete widget with the given configuration and data
 
@@ -121,10 +133,14 @@ class CFBDWidgetRenderer:
         try:
             # Validate widget type
             if widget_config.widget_type not in self.templates:
-                raise ValueError(f"Unsupported widget type: {widget_config.widget_type}")
+                raise ValueError(
+                    f"Unsupported widget type: {widget_config.widget_type}"
+                )
 
             # Generate widget HTML
-            widget_html = self.templates[widget_config.widget_type](widget_config, widget_data)
+            widget_html = self.templates[widget_config.widget_type](
+                widget_config, widget_data
+            )
 
             # Generate CSS for the widget
             widget_css = self._generate_widget_css(widget_config)
@@ -137,21 +153,23 @@ class CFBDWidgetRenderer:
                 "widget_html": widget_html,
                 "widget_css": widget_css,
                 "widget_js": widget_js,
-                "embed_code": self._generate_embed_code(widget_config, widget_html, widget_css, widget_js),
+                "embed_code": self._generate_embed_code(
+                    widget_config, widget_html, widget_css, widget_js
+                ),
                 "metadata": {
                     "widget_type": widget_config.widget_type.value,
                     "data_version": widget_data.data_version,
                     "last_updated": widget_data.last_updated.isoformat(),
                     "dimensions": {
                         "width": widget_config.width,
-                        "height": widget_config.height
-                    }
+                        "height": widget_config.height,
+                    },
                 },
                 "performance_metrics": {
                     "render_time_ms": 0,  # Would track actual render time
                     "data_size_bytes": len(str(widget_data.data)),
-                    "cache_status": "hit" if self.cache else "no_cache"
-                }
+                    "cache_status": "hit" if self.cache else "no_cache",
+                },
             }
 
             if target_format == "json":
@@ -165,7 +183,9 @@ class CFBDWidgetRenderer:
             logger.error(f"Widget render error for {widget_config.widget_type}: {e}")
             return self._render_error_widget(widget_config, str(e))
 
-    def _create_scoreboard_template(self, config: WidgetConfig, data: WidgetData) -> str:
+    def _create_scoreboard_template(
+        self, config: WidgetConfig, data: WidgetData
+    ) -> str:
         """Create scoreboard widget template (enhanced version of CFBD scoreboard)"""
         games_data = data.data
 
@@ -222,16 +242,16 @@ class CFBDWidgetRenderer:
 
         games_html = []
         for game in games_data[:25]:  # Limit to 25 games for performance
-            status = game.get('status', 'Scheduled')
-            home_score = game.get('home_points', 0)
-            away_score = game.get('away_points', 0)
+            status = game.get("status", "Scheduled")
+            home_score = game.get("home_points", 0)
+            away_score = game.get("away_points", 0)
 
             status_class = {
-                'scheduled': 'scheduled',
-                'in_progress': 'live',
-                'completed': 'final',
-                'cancelled': 'cancelled'
-            }.get(status.lower(), 'scheduled')
+                "scheduled": "scheduled",
+                "in_progress": "live",
+                "completed": "final",
+                "cancelled": "cancelled",
+            }.get(status.lower(), "scheduled")
 
             game_html = f"""
             <div class="cfbd-game-card {status_class}" data-game-id="{game.get('id', '')}">
@@ -277,7 +297,9 @@ class CFBDWidgetRenderer:
 
         return "".join(games_html)
 
-    def _create_live_tracker_template(self, config: WidgetConfig, data: WidgetData) -> str:
+    def _create_live_tracker_template(
+        self, config: WidgetConfig, data: WidgetData
+    ) -> str:
         """Create live game tracker widget (real-time updates)"""
         game_data = data.data
 
@@ -307,7 +329,9 @@ class CFBDWidgetRenderer:
 
         return template
 
-    def _create_advanced_stats_template(self, config: WidgetConfig, data: WidgetData) -> str:
+    def _create_advanced_stats_template(
+        self, config: WidgetConfig, data: WidgetData
+    ) -> str:
         """Create advanced analytics dashboard widget"""
         stats_data = data.data
 
@@ -337,7 +361,9 @@ class CFBDWidgetRenderer:
 
         return template
 
-    def _create_predictions_template(self, config: WidgetConfig, data: WidgetData) -> str:
+    def _create_predictions_template(
+        self, config: WidgetConfig, data: WidgetData
+    ) -> str:
         """Create game predictions widget with ML insights"""
         predictions_data = data.data
 
@@ -646,7 +672,9 @@ class CFBDWidgetRenderer:
 
         return js
 
-    def _generate_embed_code(self, config: WidgetConfig, html: str, css: str, js: str) -> str:
+    def _generate_embed_code(
+        self, config: WidgetConfig, html: str, css: str, js: str
+    ) -> str:
         """Generate embeddable code for widget"""
         # Encode CSS and JS for safe embedding
         encoded_css = base64.b64encode(css.encode()).decode()
@@ -699,8 +727,8 @@ class CFBDWidgetRenderer:
         """Format game date for display"""
         try:
             if date_str:
-                date_obj = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
-                return date_obj.strftime('%a %I:%M %p')
+                date_obj = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
+                return date_obj.strftime("%a %I:%M %p")
         except:
             pass
         return "TBD"
@@ -709,15 +737,17 @@ class CFBDWidgetRenderer:
         """Render additional game details"""
         details = []
 
-        if game.get('venue'):
+        if game.get("venue"):
             details.append(f"🏟️ {game['venue']}")
 
-        if game.get('network'):
+        if game.get("network"):
             details.append(f"📺 {game['network']}")
 
-        if game.get('weather'):
-            weather = game['weather']
-            details.append(f"🌤️ {weather.get('temperature', '--')}°F {weather.get('condition', '')}")
+        if game.get("weather"):
+            weather = game["weather"]
+            details.append(
+                f"🌤️ {weather.get('temperature', '--')}°F {weather.get('condition', '')}"
+            )
 
         if details:
             return f'<div class="game-details">{" | ".join(details)}</div>'
@@ -752,9 +782,9 @@ class CFBDWidgetRenderer:
 
         cards = []
         for game in games[:10]:  # Limit to 10 games
-            home_team = game.get('home_team', 'Home Team')
-            away_team = game.get('away_team', 'Away Team')
-            home_win_prob = game.get('home_win_probability', 0.5)
+            home_team = game.get("home_team", "Home Team")
+            away_team = game.get("away_team", "Away Team")
+            home_win_prob = game.get("home_win_probability", 0.5)
             away_win_prob = 1 - home_win_prob
 
             card = f"""
@@ -785,7 +815,9 @@ class CFBDWidgetRenderer:
         return "".join(cards)
 
     # Additional template methods for all widget types
-    def _create_player_stats_template(self, config: WidgetConfig, data: WidgetData) -> str:
+    def _create_player_stats_template(
+        self, config: WidgetConfig, data: WidgetData
+    ) -> str:
         """Create player statistics widget template"""
         return f"""
         <div class="cfbd-widget cfbd-player-stats">
@@ -865,7 +897,9 @@ class CFBDWidgetRenderer:
         </div>
         """
 
-    def _create_historical_template(self, config: WidgetConfig, data: WidgetData) -> str:
+    def _create_historical_template(
+        self, config: WidgetConfig, data: WidgetData
+    ) -> str:
         """Create historical analysis widget template"""
         return f"""
         <div class="cfbd-widget cfbd-historical">
@@ -878,12 +912,15 @@ class CFBDWidgetRenderer:
         </div>
         """
 
+
 # Global widget renderer instance
 widget_renderer = CFBDWidgetRenderer()
+
 
 def get_widget_renderer() -> CFBDWidgetRenderer:
     """Get the global widget renderer instance"""
     return widget_renderer
+
 
 # Widget utility functions
 def create_widget_config(widget_type: Union[str, WidgetType], **kwargs) -> WidgetConfig:
@@ -893,9 +930,12 @@ def create_widget_config(widget_type: Union[str, WidgetType], **kwargs) -> Widge
 
     return WidgetConfig(widget_type=widget_type, **kwargs)
 
-def render_widget_from_api(widget_type: Union[str, WidgetType],
-                          data_source_func: callable,
-                          config_overrides: Dict[str, Any] = None) -> Dict[str, Any]:
+
+def render_widget_from_api(
+    widget_type: Union[str, WidgetType],
+    data_source_func: callable,
+    config_overrides: Dict[str, Any] = None,
+) -> Dict[str, Any]:
     """
     Convenience function to render widget directly from API data source
 
@@ -923,7 +963,7 @@ def render_widget_from_api(widget_type: Union[str, WidgetType],
             metadata=metadata,
             last_updated=datetime.now(),
             source="api_call",
-            data_version="1.0"
+            data_version="1.0",
         )
 
     except Exception as e:
@@ -933,7 +973,7 @@ def render_widget_from_api(widget_type: Union[str, WidgetType],
             metadata={"error": str(e)},
             last_updated=datetime.now(),
             source="error",
-            data_version="1.0"
+            data_version="1.0",
         )
 
     # Render widget

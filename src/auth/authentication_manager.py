@@ -13,17 +13,18 @@ Key Features:
 - Comprehensive error handling and validation
 """
 
-import os
 import logging
-from typing import Optional, Dict, Any
+import os
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
 
 class AuthenticationPattern(Enum):
     """Supported authentication patterns"""
+
     ACCESS_TOKEN = "access_token"  # CFBD v5.13.2+ preferred
     BEARER_HEADER = "bearer_header"  # GraphQL and manual requests
     LEGACY_API_KEY = "legacy_api_key"  # Deprecated - migrate to access_token
@@ -32,6 +33,7 @@ class AuthenticationPattern(Enum):
 @dataclass
 class AuthenticationConfig:
     """Configuration for CFBD authentication"""
+
     api_key: str
     pattern: AuthenticationPattern
     host: Optional[str] = None
@@ -50,12 +52,18 @@ class AuthenticationConfig:
         key = key.strip()
 
         # Remove "Bearer " prefix for patterns that expect raw key
-        if self.pattern != AuthenticationPattern.BEARER_HEADER and key.startswith("Bearer "):
+        if self.pattern != AuthenticationPattern.BEARER_HEADER and key.startswith(
+            "Bearer "
+        ):
             key = key.replace("Bearer ", "").strip()
-            logger.info("🔑 Stripped 'Bearer ' prefix from API key for non-header pattern")
+            logger.info(
+                "🔑 Stripped 'Bearer ' prefix from API key for non-header pattern"
+            )
 
         # Add "Bearer " prefix for header patterns if missing
-        if self.pattern == AuthenticationPattern.BEARER_HEADER and not key.startswith("Bearer "):
+        if self.pattern == AuthenticationPattern.BEARER_HEADER and not key.startswith(
+            "Bearer "
+        ):
             key = f"Bearer {key}"
             logger.info("🔑 Added 'Bearer ' prefix to API key for header pattern")
 
@@ -89,7 +97,9 @@ class AuthenticationManager:
 
         self._config = self._load_configuration()
         self._initialized = True
-        logger.info(f"🔐 AuthenticationManager initialized with {self._config.pattern.value} pattern")
+        logger.info(
+            f"🔐 AuthenticationManager initialized with {self._config.pattern.value} pattern"
+        )
 
     def _load_configuration(self) -> AuthenticationConfig:
         """Load authentication configuration from environment variables"""
@@ -123,7 +133,7 @@ class AuthenticationManager:
             pattern=pattern,
             host=host,
             tier_level=tier_level,
-            user_agent=user_agent
+            user_agent=user_agent,
         )
 
     def configure_cfbd_client(self, client, client_type: str = "rest") -> None:
@@ -144,7 +154,9 @@ class AuthenticationManager:
             else:
                 raise ValueError(f"Unsupported client type: {client_type}")
 
-            logger.info(f"✅ Configured {client_type} client with {self._config.pattern.value} pattern")
+            logger.info(
+                f"✅ Configured {client_type} client with {self._config.pattern.value} pattern"
+            )
 
         except Exception as e:
             logger.error(f"❌ Failed to configure {client_type} client: {e}")
@@ -153,51 +165,51 @@ class AuthenticationManager:
     def _configure_rest_client(self, client) -> None:
         """Configure REST API client with the working api_key + api_key_prefix pattern"""
         # Handle both configuration objects and client instances
-        if hasattr(client, 'api_key'):  # It's a configuration object
+        if hasattr(client, "api_key"):  # It's a configuration object
             # This is the working pattern based on scripts/check_key.py
             raw_key = self.get_api_key("raw")  # Get key without Bearer prefix
             client.api_key["Authorization"] = raw_key
             client.api_key_prefix["Authorization"] = "Bearer"
 
             # Set host if specified
-            if self._config.host and hasattr(client, 'host'):
+            if self._config.host and hasattr(client, "host"):
                 client.host = self._config.host
 
-        elif hasattr(client, 'configuration'):  # It's a client instance
+        elif hasattr(client, "configuration"):  # It's a client instance
             # This is the working pattern based on scripts/check_key.py
             raw_key = self.get_api_key("raw")  # Get key without Bearer prefix
             client.configuration.api_key["Authorization"] = raw_key
             client.configuration.api_key_prefix["Authorization"] = "Bearer"
 
             # Set host if specified
-            if self._config.host and hasattr(client.configuration, 'host'):
+            if self._config.host and hasattr(client.configuration, "host"):
                 client.configuration.host = self._config.host
 
-        elif hasattr(client, 'api'):  # Fallback for older CFBD versions
+        elif hasattr(client, "api"):  # Fallback for older CFBD versions
             raw_key = self.get_api_key("raw")
             client.api.configuration.api_key["Authorization"] = raw_key
             client.api.configuration.api_key_prefix["Authorization"] = "Bearer"
 
             # Set host if specified
-            if self._config.host and hasattr(client.api.configuration, 'host'):
+            if self._config.host and hasattr(client.api.configuration, "host"):
                 client.api.configuration.host = self._config.host
         else:
             raise ValueError(f"Unsupported client type: {type(client)}")
 
     def _configure_graphql_client(self, client) -> None:
         """Configure GraphQL client with Bearer token header"""
-        if hasattr(client, 'headers'):
-            client.headers['Authorization'] = self._config.api_key
-        elif hasattr(client, '_headers'):
-            client._headers['Authorization'] = self._config.api_key
+        if hasattr(client, "headers"):
+            client.headers["Authorization"] = self._config.api_key
+        elif hasattr(client, "_headers"):
+            client._headers["Authorization"] = self._config.api_key
         else:
             # For manual request clients
-            if hasattr(client, 'set_default_header'):
-                client.set_default_header('Authorization', self._config.api_key)
+            if hasattr(client, "set_default_header"):
+                client.set_default_header("Authorization", self._config.api_key)
 
     def _configure_legacy_client(self, client) -> None:
         """Configure legacy client using api_key + api_key_prefix pattern"""
-        if hasattr(client, 'configuration'):
+        if hasattr(client, "configuration"):
             # Legacy approach - maintain for backward compatibility
             raw_key = self._config.api_key
             if raw_key.startswith("Bearer "):
@@ -207,14 +219,14 @@ class AuthenticationManager:
             client.configuration.api_key_prefix["Authorization"] = "Bearer"
 
         # Set host if specified
-        if self._config.host and hasattr(client.configuration, 'host'):
+        if self._config.host and hasattr(client.configuration, "host"):
             client.configuration.host = self._config.host
 
     def get_bearer_headers(self) -> Dict[str, str]:
         """Get Bearer token headers for manual requests"""
         return {
             "Authorization": self._config.api_key,
-            "User-Agent": self._config.user_agent or "Script-Ohio-2.0/1.0"
+            "User-Agent": self._config.user_agent or "Script-Ohio-2.0/1.0",
         }
 
     def get_api_key(self, format_type: str = "raw") -> str:
@@ -268,7 +280,7 @@ class AuthenticationManager:
                 "message": "API key is valid and working",
                 "tier_level": self._config.tier_level,
                 "api_key_length": len(self._config.api_key),
-                "test_data_count": len(games) if games else 0
+                "test_data_count": len(games) if games else 0,
             }
 
         except Exception as e:
@@ -276,7 +288,7 @@ class AuthenticationManager:
                 "status": "error",
                 "message": f"API key validation failed: {str(e)}",
                 "tier_level": self._config.tier_level,
-                "api_key_length": len(self._config.api_key)
+                "api_key_length": len(self._config.api_key),
             }
 
     def get_configuration_info(self) -> Dict[str, Any]:
@@ -288,7 +300,7 @@ class AuthenticationManager:
             "api_key_preview": f"{self._config.api_key[:8]}...{self._config.api_key[-8:]}",
             "has_bearer_prefix": self._config.api_key.startswith("Bearer "),
             "host": self._config.host,
-            "user_agent": self._config.user_agent
+            "user_agent": self._config.user_agent,
         }
 
     def reset_configuration(self) -> None:

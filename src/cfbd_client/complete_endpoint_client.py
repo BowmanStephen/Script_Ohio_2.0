@@ -8,18 +8,21 @@ including missing high-priority endpoints identified in the gap analysis.
 
 import json
 import logging
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
-from typing import Dict, List, Any, Optional, Union, Tuple
-from dataclasses import dataclass, asdict
+from typing import Any, Dict, List, Optional, Tuple, Union
+
 import pandas as pd
 
 from .enhanced_unified_client import EnhancedUnifiedCFBDClient
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class DraftPick:
     """NFL Draft pick information"""
+
     team: str
     player_name: str
     position: str
@@ -31,9 +34,11 @@ class DraftPick:
     weight: Optional[int]
     college: Optional[str]
 
+
 @dataclass
 class TransferPortalEntry:
     """Transfer portal entry information"""
+
     player_name: str
     position: str
     previous_school: str
@@ -43,9 +48,11 @@ class TransferPortalEntry:
     transfer_date: Optional[str]
     eligibility: Optional[str]
 
+
 @dataclass
 class PlayerUsageStats:
     """Player usage statistics"""
+
     player_name: str
     position: str
     team: str
@@ -58,9 +65,11 @@ class PlayerUsageStats:
     down_usage: Dict[str, int]
     distance_usage: Dict[str, int]
 
+
 @dataclass
 class AdvancedTeamMetrics:
     """Advanced team performance metrics"""
+
     team: str
     season: int
     week: Optional[int]
@@ -76,9 +85,11 @@ class AdvancedTeamMetrics:
     penalty_yards_per_game: float
     turnovers_per_game: float
 
+
 @dataclass
 class WeatherConditions:
     """Weather conditions for games"""
+
     game_id: int
     temperature: Optional[float]
     humidity: Optional[float]
@@ -87,9 +98,11 @@ class WeatherConditions:
     weather_description: Optional[str]
     roof_covered: bool
 
+
 @dataclass
 class BroadcastInfo:
     """Television broadcast information"""
+
     game_id: int
     network: str
     channel: Optional[str]
@@ -99,9 +112,11 @@ class BroadcastInfo:
     announcers: List[str]
     region: Optional[str]
 
+
 @dataclass
 class InjuryReport:
     """Player injury report"""
+
     game_id: int
     team: str
     player_name: str
@@ -112,9 +127,11 @@ class InjuryReport:
     impact_level: str
     depth_chart_impact: str
 
+
 @dataclass
 class PollingData:
     """College football polling data"""
+
     poll_name: str
     week: int
     season: int
@@ -123,9 +140,11 @@ class PollingData:
     ranking_changes: List[Dict[str, Any]]
     poll_date: datetime
 
+
 @dataclass
 class VenueDetails:
     """Detailed venue information"""
+
     venue_id: int
     name: str
     city: str
@@ -139,9 +158,11 @@ class VenueDetails:
     longitude: Optional[float]
     elevation: Optional[float]
 
+
 @dataclass
 class GameOfficials:
     """Game officiating crew information"""
+
     game_id: int
     referee: str
     umpires: List[str]
@@ -151,6 +172,7 @@ class GameOfficials:
     field_judge: List[str]
     instant_replay: bool
     conference: Optional[str]
+
 
 class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
     """
@@ -163,14 +185,21 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
     def __init__(self, config=None):
         """Initialize complete CFBD client"""
         super().__init__(config)
-        logger.info("🎯 Complete CFBD Client initialized - aiming for 100% endpoint coverage")
+        logger.info(
+            "🎯 Complete CFBD Client initialized - aiming for 100% endpoint coverage"
+        )
 
     # ===============================================================
     # HIGH PRIORITY MISSING ENDPOINTS (15% Gap)
     # ===============================================================
 
-    def get_draft_data(self, year: int, team: Optional[str] = None,
-                        conference: Optional[str] = None, limit: int = 100) -> List[Dict[str, Any]]:
+    def get_draft_data(
+        self,
+        year: int,
+        team: Optional[str] = None,
+        conference: Optional[str] = None,
+        limit: int = 100,
+    ) -> List[Dict[str, Any]]:
         """
         Get NFL draft data for specified year and team
 
@@ -188,33 +217,39 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
             # For now, we'll simulate or use alternative methods
 
             # Try direct API call if available
-            if hasattr(self.api_client, 'DraftApi'):
+            if hasattr(self.api_client, "DraftApi"):
                 draft_api = self.api_client.DraftApi(self.api_client)
                 params = {}
                 if year:
-                    params['year'] = year
+                    params["year"] = year
                 if team:
-                    params['team'] = team
+                    params["team"] = team
                 if conference:
-                    params['conference'] = conference
+                    params["conference"] = conference
                 if limit:
-                    params['limit'] = limit
+                    params["limit"] = limit
 
                 data = draft_api.get_draft(**params)
-                return [item.to_dict() if hasattr(item, 'to_dict') else item for item in data]
+                return [
+                    item.to_dict() if hasattr(item, "to_dict") else item
+                    for item in data
+                ]
 
             # Fallback to HTTP request if API not available
             import requests
+
             url = "https://api.collegefootballdata.com/draft"
             params = {
-                'year': year,
-                'team': team,
-                'conference': conference,
-                'limit': limit
+                "year": year,
+                "team": team,
+                "conference": conference,
+                "limit": limit,
             }
             params = {k: v for k, v in params.items() if v is not None}
 
-            response = requests.get(url, headers=self._get_headers(), params=params, timeout=30)
+            response = requests.get(
+                url, headers=self._get_headers(), params=params, timeout=30
+            )
             response.raise_for_status_code()
 
             return response.json()
@@ -223,8 +258,9 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
             logger.error(f"Error getting draft data: {e}")
             return []
 
-    def get_transfer_portal_data(self, year: int, team: Optional[str] = None,
-                                 limit: int = 100) -> List[Dict[str, Any]]:
+    def get_transfer_portal_data(
+        self, year: int, team: Optional[str] = None, limit: int = 100
+    ) -> List[Dict[str, Any]]:
         """
         Get transfer portal data for specified year and team
 
@@ -238,23 +274,29 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
         """
         try:
             # Try direct API call if available
-            if hasattr(self.api_client, 'TransferPortalApi'):
+            if hasattr(self.api_client, "TransferPortalApi"):
                 portal_api = self.api_client.TransferPortalApi(self.api_client)
-                params = {'year': year, 'limit': limit}
+                params = {"year": year, "limit": limit}
                 if team:
-                    params['team'] = team
+                    params["team"] = team
 
                 data = portal_api.get_transfer_portal(**params)
-                return [item.to_dict() if hasattr(item, 'to_dict') else item for item in data]
+                return [
+                    item.to_dict() if hasattr(item, "to_dict") else item
+                    for item in data
+                ]
 
             # Fallback implementation
             import requests
-            url = "https://api.collegefootballdata.com/transfer/portal"
-            params = {'year': year, 'limit': limit}
-            if team:
-                params['team'] = team
 
-            response = requests.get(url, headers=self._get_headers(), params=params, timeout=30)
+            url = "https://api.collegefootballdata.com/transfer/portal"
+            params = {"year": year, "limit": limit}
+            if team:
+                params["team"] = team
+
+            response = requests.get(
+                url, headers=self._get_headers(), params=params, timeout=30
+            )
             response.raise_for_status_code()
 
             return response.json()
@@ -263,9 +305,14 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
             logger.error(f"Error getting transfer portal data: {e}")
             return []
 
-    def get_player_usage_stats(self, year: int, team: Optional[str] = None,
-                               position: Optional[str] = None, conference: Optional[str] = None,
-                               week: Optional[int] = None) -> List[Dict[str, Any]]:
+    def get_player_usage_stats(
+        self,
+        year: int,
+        team: Optional[str] = None,
+        position: Optional[str] = None,
+        conference: Optional[str] = None,
+        week: Optional[int] = None,
+    ) -> List[Dict[str, Any]]:
         """
         Get player usage statistics
 
@@ -281,35 +328,41 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
         """
         try:
             # Try direct API call
-            if hasattr(self.api_client, 'StatsApi'):
+            if hasattr(self.api_client, "StatsApi"):
                 stats_api = self.api_client.StatsApi(self.api_client)
-                params = {'year': year}
+                params = {"year": year}
                 if team:
-                    params['team'] = team
+                    params["team"] = team
                 if position:
-                    params['position'] = position
+                    params["position"] = position
                 if conference:
-                    params['conference'] = conference
+                    params["conference"] = conference
                 if week:
-                    params['week'] = week
+                    params["week"] = week
 
                 data = stats_api.get_player_usage(**params)
-                return [item.to_dict() if hasattr(item, 'to_dict') else item for item in data]
+                return [
+                    item.to_dict() if hasattr(item, "to_dict") else item
+                    for item in data
+                ]
 
             # Fallback implementation
             import requests
-            url = "https://api.collegefootballdata.com/stats/player/usage"
-            params = {'year': year}
-            if team:
-                params['team'] = team
-            if position:
-                params['position'] = position
-            if conference:
-                params['conference'] = conference
-            if week:
-                params['week'] = week
 
-            response = requests.get(url, headers=self._get_headers(), params=params, timeout=30)
+            url = "https://api.collegefootballdata.com/stats/player/usage"
+            params = {"year": year}
+            if team:
+                params["team"] = team
+            if position:
+                params["position"] = position
+            if conference:
+                params["conference"] = conference
+            if week:
+                params["week"] = week
+
+            response = requests.get(
+                url, headers=self._get_headers(), params=params, timeout=30
+            )
             response.raise_for_status_code()
 
             return response.json()
@@ -318,8 +371,13 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
             logger.error(f"Error getting player usage stats: {e}")
             return []
 
-    def get_advanced_team_metrics(self, year: int, team: Optional[str] = None,
-                                 conference: Optional[str] = None, week: Optional[int] = None) -> List[Dict[str, Any]]:
+    def get_advanced_team_metrics(
+        self,
+        year: int,
+        team: Optional[str] = None,
+        conference: Optional[str] = None,
+        week: Optional[int] = None,
+    ) -> List[Dict[str, Any]]:
         """
         Get advanced team performance metrics
 
@@ -334,31 +392,37 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
         """
         try:
             # Try direct API call
-            if hasattr(self.api_client, 'StatsApi'):
+            if hasattr(self.api_client, "StatsApi"):
                 stats_api = self.api_client.StatsApi(self.api_client)
-                params = {'year': year}
+                params = {"year": year}
                 if team:
-                    params['team'] = team
+                    params["team"] = team
                 if conference:
-                    params['conference'] = conference
+                    params["conference"] = conference
                 if week:
-                    params['week'] = week
+                    params["week"] = week
 
                 data = stats_api.get_advanced_team_stats(**params)
-                return [item.to_dict() if hasattr(item, 'to_dict') else item for item in data]
+                return [
+                    item.to_dict() if hasattr(item, "to_dict") else item
+                    for item in data
+                ]
 
             # Fallback implementation
             import requests
-            url = "https://api.collegefootballdata.com/stats/advanced/team"
-            params = {'year': year}
-            if team:
-                params['team'] = team
-            if conference:
-                params['conference'] = conference
-            if week:
-                params['week'] = week
 
-            response = requests.get(url, headers=self._get_headers(), params=params, timeout=30)
+            url = "https://api.collegefootballdata.com/stats/advanced/team"
+            params = {"year": year}
+            if team:
+                params["team"] = team
+            if conference:
+                params["conference"] = conference
+            if week:
+                params["week"] = week
+
+            response = requests.get(
+                url, headers=self._get_headers(), params=params, timeout=30
+            )
             response.raise_for_status_code()
 
             return response.json()
@@ -367,8 +431,9 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
             logger.error(f"Error getting advanced team metrics: {e}")
             return []
 
-    def get_weather_conditions(self, year: int, week: Optional[int] = None,
-                            team: Optional[str] = None) -> List[Dict[str, Any]]:
+    def get_weather_conditions(
+        self, year: int, week: Optional[int] = None, team: Optional[str] = None
+    ) -> List[Dict[str, Any]]:
         """
         Get weather conditions for games
 
@@ -386,10 +451,10 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
             weather_data = []
 
             for game in games:
-                if game.get('id'):
-                    weather = self._extract_weather_data(game.get('weather'))
+                if game.get("id"):
+                    weather = self._extract_weather_data(game.get("weather"))
                     if weather:
-                        weather['game_id'] = game.get('id')
+                        weather["game_id"] = game.get("id")
                         weather_data.append(weather)
 
             return weather_data
@@ -398,8 +463,9 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
             logger.error(f"Error getting weather conditions: {e}")
             return []
 
-    def get_broadcast_info(self, year: int, week: Optional[int] = None,
-                          team: Optional[str] = None) -> List[Dict[str, Any]]:
+    def get_broadcast_info(
+        self, year: int, week: Optional[int] = None, team: Optional[str] = None
+    ) -> List[Dict[str, Any]]:
         """
         Get television broadcast information
 
@@ -417,10 +483,10 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
             broadcast_data = []
 
             for game in games:
-                if game.get('id'):
-                    broadcast = self._extract_broadcast_data(game.get('media'))
+                if game.get("id"):
+                    broadcast = self._extract_broadcast_data(game.get("media"))
                     if broadcast:
-                        broadcast['game_id'] = game.get('id')
+                        broadcast["game_id"] = game.get("id")
                         broadcast_data.append(broadcast)
 
             return broadcast_data
@@ -429,8 +495,9 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
             logger.error(f"Error getting broadcast info: {e}")
             return []
 
-    def get_injury_reports(self, year: int, week: Optional[int] = None,
-                           team: Optional[str] = None) -> List[Dict[str, Any]]:
+    def get_injury_reports(
+        self, year: int, week: Optional[int] = None, team: Optional[str] = None
+    ) -> List[Dict[str, Any]]:
         """
         Get player injury reports
 
@@ -454,8 +521,9 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
             logger.error(f"Error getting injury reports: {e}")
             return []
 
-    def get_polling_data(self, year: int, week: Optional[int] = None,
-                         poll_type: Optional[str] = None) -> List[Dict[str, Any]]:
+    def get_polling_data(
+        self, year: int, week: Optional[int] = None, poll_type: Optional[str] = None
+    ) -> List[Dict[str, Any]]:
         """
         Get college football polling data
 
@@ -469,27 +537,33 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
         """
         try:
             # Try direct API call
-            if hasattr(self.api_client, 'RankingsApi'):
+            if hasattr(self.api_client, "RankingsApi"):
                 rankings_api = self.api_client.RankingsApi(self.api_client)
-                params = {'year': year, 'seasonType': 'regular'}
+                params = {"year": year, "seasonType": "regular"}
                 if week:
-                    params['week'] = week
+                    params["week"] = week
                 if poll_type:
-                    params['poll'] = poll_type
+                    params["poll"] = poll_type
 
                 data = rankings_api.get_rankings(**params)
-                return [item.to_dict() if hasattr(item, 'to_dict') else item for item in data]
+                return [
+                    item.to_dict() if hasattr(item, "to_dict") else item
+                    for item in data
+                ]
 
             # Fallback implementation
             import requests
-            url = "https://api.collegefootballdata.com/rankings"
-            params = {'year': year, 'seasonType': 'regular'}
-            if week:
-                params['week'] = week
-            if poll_type:
-                params['poll'] = poll_type
 
-            response = requests.get(url, headers=self._get_headers(), params=params, timeout=30)
+            url = "https://api.collegefootballdata.com/rankings"
+            params = {"year": year, "seasonType": "regular"}
+            if week:
+                params["week"] = week
+            if poll_type:
+                params["poll"] = poll_type
+
+            response = requests.get(
+                url, headers=self._get_headers(), params=params, timeout=30
+            )
             response.raise_for_status_code()
 
             return response.json()
@@ -518,20 +592,26 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
                 team_rankings = []
 
                 for poll in polls:
-                    for ranking in poll.get('rankings', []):
-                        if ranking.get('school') == team:
-                            team_rankings.append({
-                                'week': ranking.get('week'),
-                                'rank': ranking.get('rank'),
-                                'poll': poll.get('poll'),
-                                'points': ranking.get('points')
-                            })
+                    for ranking in poll.get("rankings", []):
+                        if ranking.get("school") == team:
+                            team_rankings.append(
+                                {
+                                    "week": ranking.get("week"),
+                                    "rank": ranking.get("rank"),
+                                    "poll": poll.get("poll"),
+                                    "points": ranking.get("points"),
+                                }
+                            )
 
                 ranking_data[str(year)] = {
-                    'rankings': team_rankings,
-                    'poll_count': len(polls),
-                    'best_rank': min(r['rank'] for r in team_rankings) if team_rankings else None,
-                    'worst_rank': max(r['rank'] for r in team_rankings) if team_rankings else None
+                    "rankings": team_rankings,
+                    "poll_count": len(polls),
+                    "best_rank": (
+                        min(r["rank"] for r in team_rankings) if team_rankings else None
+                    ),
+                    "worst_rank": (
+                        max(r["rank"] for r in team_rankings) if team_rankings else None
+                    ),
                 }
 
             return ranking_data
@@ -552,13 +632,14 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
         """
         try:
             # Try direct API call
-            if hasattr(self.api_client, 'VenuesApi'):
+            if hasattr(self.api_client, "VenuesApi"):
                 venues_api = self.api_client.VenuesApi(self.api_client)
                 data = venues_api.get_venue(venue_id)
                 return data.to_dict() if data else None
 
             # Fallback implementation
             import requests
+
             url = f"https://api.collegefootballdata.com/venues/{venue_id}"
             response = requests.get(url, headers=self._get_headers(), timeout=30)
             response.raise_for_status_code()
@@ -569,8 +650,9 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
             logger.error(f"Error getting venue details for {venue_id}: {e}")
             return None
 
-    def get_game_officials(self, year: int, week: Optional[int] = None,
-                          team: Optional[str] = None) -> List[Dict[str, Any]]:
+    def get_game_officials(
+        self, year: int, week: Optional[int] = None, team: Optional[str] = None
+    ) -> List[Dict[str, Any]]:
         """
         Get game officiating crew information
 
@@ -588,10 +670,10 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
             officials_data = []
 
             for game in games:
-                if game.get('id'):
-                    officials = self._extract_officials_data(game.get('officials'))
+                if game.get("id"):
+                    officials = self._extract_officials_data(game.get("officials"))
                     if officials:
-                        officials['game_id'] = game.get('id')
+                        officials["game_id"] = game.get("id")
                         officials_data.append(officials)
 
             return officials_data
@@ -622,25 +704,30 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
             # Organize by position and depth
             depth_chart = {}
             for player in roster:
-                position = player.get('position', 'Unknown')
+                position = player.get("position", "Unknown")
                 if position not in depth_chart:
                     depth_chart[position] = []
 
-                depth_chart[position].append({
-                    'player_name': player.get('name', 'Unknown'),
-                    'number': player.get('number'),
-                    'year': player.get('year'),
-                    'height': player.get('height'),
-                    'weight': player.get('weight'),
-                    'status': player.get('status', 'Active'),
-                    'experience': player.get('experience', 'Unknown')
-                })
+                depth_chart[position].append(
+                    {
+                        "player_name": player.get("name", "Unknown"),
+                        "number": player.get("number"),
+                        "year": player.get("year"),
+                        "height": player.get("height"),
+                        "weight": player.get("weight"),
+                        "status": player.get("status", "Active"),
+                        "experience": player.get("experience", "Unknown"),
+                    }
+                )
 
             # Sort by player number within each position
             for position in depth_chart:
-                depth_chart[position].sort(key=lambda x: x.get('number', 999))
+                depth_chart[position].sort(key=lambda x: x.get("number", 999))
 
-            return [{'position': pos, 'players': players} for pos, players in depth_chart.items()]
+            return [
+                {"position": pos, "players": players}
+                for pos, players in depth_chart.items()
+            ]
 
         except Exception as e:
             logger.error(f"Error getting depth chart for {team}: {e}")
@@ -656,32 +743,34 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
             return {}
 
         return {
-            'temperature': weather_info.get('temperature'),
-            'humidity': weather_info.get('humidity'),
-            'wind_speed': weather_info.get('windSpeed'),
-            'precipitation': weather_info.get('precipitation'),
-            'weather_description': weather_info.get('description'),
-            'roof_covered': weather_info.get('roofCovered', False)
+            "temperature": weather_info.get("temperature"),
+            "humidity": weather_info.get("humidity"),
+            "wind_speed": weather_info.get("windSpeed"),
+            "precipitation": weather_info.get("precipitation"),
+            "weather_description": weather_info.get("description"),
+            "roof_covered": weather_info.get("roofCovered", False),
         }
 
-    def _extract_broadcast_data(self, media_info: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def _extract_broadcast_data(
+        self, media_info: List[Dict[str, Any]]
+    ) -> Dict[str, Any]:
         """Extract broadcast information from game media data"""
         if not media_info:
             return {}
 
         # Find TV broadcast information
-        tv_data = [m for m in media_info if 'tv' in str(m.get('type', '')).lower()]
+        tv_data = [m for m in media_info if "tv" in str(m.get("type", "")).lower()]
         if not tv_data:
             return {}
 
         broadcast = tv_data[0] if tv_data else {}
 
         return {
-            'network': broadcast.get('network', 'Unknown'),
-            'channel': broadcast.get('channel'),
-            'start_time': broadcast.get('startTime'),
-            'local_broadcast': broadcast.get('localBroadcast', False),
-            'streaming_available': broadcast.get('streamingAvailable', False)
+            "network": broadcast.get("network", "Unknown"),
+            "channel": broadcast.get("channel"),
+            "start_time": broadcast.get("startTime"),
+            "local_broadcast": broadcast.get("localBroadcast", False),
+            "streaming_available": broadcast.get("streamingAvailable", False),
         }
 
     def _extract_officials_data(self, officials_info: Dict[str, Any]) -> Dict[str, Any]:
@@ -690,13 +779,13 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
             return {}
 
         return {
-            'referee': officials_info.get('referee'),
-            'umpires': officials_info.get('umpires', []),
-            'linesman': officials_info.get('linesman', []),
-            'side_judge': officials_info.get('sideJudge', []),
-            'back_judge': officials_info.get('backJudge', []),
-            'field_judge': officials_info.get('fieldJudge', []),
-            'instant_replay': officials_info.get('instantReplay', False)
+            "referee": officials_info.get("referee"),
+            "umpires": officials_info.get("umpires", []),
+            "linesman": officials_info.get("linesman", []),
+            "side_judge": officials_info.get("sideJudge", []),
+            "back_judge": officials_info.get("backJudge", []),
+            "field_judge": officials_info.get("fieldJudge", []),
+            "instant_replay": officials_info.get("instantReplay", False),
         }
 
     # ===============================================================
@@ -716,64 +805,81 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
         logger.info(f"📅 Getting complete {year} season data...")
 
         season_data = {
-            'season': year,
-            'games': self.get_games(year=year),
-            'teams': self.get_teams(),
-            'conferences': self.get_conferences(),
-            'venues': [],
-            'draft': self.get_draft_data(year=year),
-            'transfer_portal': self.get_transfer_portal_data(year=year),
-            'advanced_metrics': [],
-            'player_usage': [],
-            'weather_data': [],
-            'broadcast_data': [],
-            'polling_data': [],
-            'injury_reports': [],
-            'officials_data': [],
-            'depth_charts': {}
+            "season": year,
+            "games": self.get_games(year=year),
+            "teams": self.get_teams(),
+            "conferences": self.get_conferences(),
+            "venues": [],
+            "draft": self.get_draft_data(year=year),
+            "transfer_portal": self.get_transfer_portal_data(year=year),
+            "advanced_metrics": [],
+            "player_usage": [],
+            "weather_data": [],
+            "broadcast_data": [],
+            "polling_data": [],
+            "injury_reports": [],
+            "officials_data": [],
+            "depth_charts": {},
         }
 
         # Get all venues
-        teams = season_data['teams']
+        teams = season_data["teams"]
         if teams:
             # Extract unique venue IDs from games
             venue_ids = set()
-            for game in season_data['games']:
-                if game.get('venue_id'):
-                    venue_ids.add(game['venue_id'])
+            for game in season_data["games"]:
+                if game.get("venue_id"):
+                    venue_ids.add(game["venue_id"])
 
-            season_data['venues'] = [
-                self.get_venue_details(venue_id)
-                for venue_id in venue_ids
+            season_data["venues"] = [
+                self.get_venue_details(venue_id) for venue_id in venue_ids
             ]
 
         # Get advanced metrics for all teams
         if teams:
             all_team_metrics = []
             for team in teams[:20]:  # Limit to prevent timeout
-                team_metrics = self.get_advanced_team_metrics(year=year, team=team.get('school'))
+                team_metrics = self.get_advanced_team_metrics(
+                    year=year, team=team.get("school")
+                )
                 if team_metrics:
                     all_team_metrics.extend(team_metrics)
                     time.sleep(0.1)  # Rate limiting
 
-            season_data['advanced_metrics'] = all_team_metrics
+            season_data["advanced_metrics"] = all_team_metrics
 
         # Get player usage for major teams
-        major_teams = [team for team in teams if team.get('conference') in
-                       ['SEC', 'Big Ten', 'Big 12', 'ACC', 'Pac-12', 'American', 'C-USA', 'MAC', 'MWC']]
+        major_teams = [
+            team
+            for team in teams
+            if team.get("conference")
+            in [
+                "SEC",
+                "Big Ten",
+                "Big 12",
+                "ACC",
+                "Pac-12",
+                "American",
+                "C-USA",
+                "MAC",
+                "MWC",
+            ]
+        ]
         if major_teams:
             all_usage_stats = []
             for team in major_teams[:15]:  # Limit to prevent timeout
-                usage_stats = self.get_player_usage_stats(year=year, team=team.get('school'))
+                usage_stats = self.get_player_usage_stats(
+                    year=year, team=team.get("school")
+                )
                 if usage_stats:
                     all_usage_stats.extend(usage_stats)
                     time.sleep(0.1)
 
-            season_data['player_usage'] = all_usage_stats
+            season_data["player_usage"] = all_usage_stats
 
         # Get depth charts for major teams
-        season_data['depth_charts'] = {
-            team['school']: self.get_depth_chart(team=team['school'], year=year)
+        season_data["depth_charts"] = {
+            team["school"]: self.get_depth_chart(team=team["school"], year=year)
             for team in major_teams[:10]
         }
 
@@ -795,39 +901,43 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
             pandas DataFrame with formatted data
         """
         try:
-            if data_type == 'games':
+            if data_type == "games":
                 df = pd.DataFrame(data)
                 return df
-            elif data_type == 'teams':
+            elif data_type == "teams":
                 df = pd.DataFrame(data)
                 return df
-            elif data_type == 'advanced_metrics':
+            elif data_type == "advanced_metrics":
                 df = pd.DataFrame(data)
                 return df
-            elif data_type == 'draft':
+            elif data_type == "draft":
                 df = pd.DataFrame(data)
                 return df
-            elif data_type == 'transfer_portal':
+            elif data_type == "transfer_portal":
                 df = pd.DataFrame(data)
                 return df
-            elif data_type == 'player_usage':
+            elif data_type == "player_usage":
                 df = pd.DataFrame(data)
                 return df
-            elif data_type == 'polling_data':
+            elif data_type == "polling_data":
                 # Flatten polling data
                 all_rankings = []
                 for poll in data:
-                    poll_name = poll.get('poll', 'Unknown')
-                    week = poll.get('week')
-                    for ranking in poll.get('rankings', []):
-                        ranking['poll'] = poll_name
-                        ranking['week'] = week
-                        ranking['season'] = poll.get('season')
+                    poll_name = poll.get("poll", "Unknown")
+                    week = poll.get("week")
+                    for ranking in poll.get("rankings", []):
+                        ranking["poll"] = poll_name
+                        ranking["week"] = week
+                        ranking["season"] = poll.get("season")
                         all_rankings.append(ranking)
                 return pd.DataFrame(all_rankings)
             else:
                 # Generic DataFrame creation
-                return pd.DataFrame(data) if isinstance(data, list) else pd.DataFrame([data])
+                return (
+                    pd.DataFrame(data)
+                    if isinstance(data, list)
+                    else pd.DataFrame([data])
+                )
 
         except Exception as e:
             logger.error(f"Error exporting {data_type} to DataFrame: {e}")
@@ -844,12 +954,14 @@ class CompleteCFBDClient(EnhancedUnifiedCFBDClient):
         """
         try:
             import json
+
             indent = 2 if pretty else None
-            with open(filename, 'w') as f:
+            with open(filename, "w") as f:
                 json.dump(data, f, indent=indent, default=str)
             logger.info(f"💾 Saved data to {filename}")
         except Exception as e:
             logger.error(f"Error saving data to {filename}: {e}")
+
 
 # Example usage and demonstration
 def demo_complete_client():
@@ -875,13 +987,13 @@ def demo_complete_client():
 
     # Test 3: Player usage stats
     print("   Testing Player Usage Stats...")
-    usage_data = client.get_player_usage_stats(year=2025, team='Alabama')
+    usage_data = client.get_player_usage_stats(year=2025, team="Alabama")
     if usage_data:
         print(f"   ✅ Retrieved {len(usage_data)} player usage records")
 
     # Test 4: Advanced team metrics
     print("   Testing Advanced Team Metrics...")
-    advanced_data = client.get_advanced_team_metrics(year=2025, team='Alabama')
+    advanced_data = client.get_advanced_team_metrics(year=2025, team="Alabama")
     if advanced_data:
         print(f"   ✅ Retrieved {len(advanced_data)} advanced metric records")
 
@@ -895,6 +1007,7 @@ def demo_complete_client():
     print(f" Transfer Portal: {len(season_data.get('transfer_portal', []))}")
 
     print(f"\n✅ Complete CFBD Client demonstration completed!")
+
 
 if __name__ == "__main__":
     demo_complete_client()

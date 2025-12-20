@@ -523,17 +523,18 @@ class UnifiedCFBDClient:
             "seasonType": season_type,
             "team": team,
         }
+
+        # Build API call parameters to avoid passing None values
+        api_params = {"year": year, "season_type": season_type}
+        if week is not None:
+            api_params["week"] = week
+        if team is not None:
+            api_params["team"] = team
+
         return self._cached_fetch(
             "games",
             params,
-            lambda: self._to_dict_list(
-                self.games_api.get_games(
-                    year=year,
-                    week=week,
-                    season_type=season_type,
-                    team=team,
-                )
-            ),
+            lambda: self._to_dict_list(self.games_api.get_games(**api_params)),
             "games",
         )
 
@@ -776,37 +777,6 @@ class UnifiedCFBDClient:
             },
         }
 
-    def get_game_media(
-        self,
-        year: int,
-        week: Optional[int] = None,
-        season_type: str = "regular",
-        team: Optional[str] = None,
-        conference: Optional[str] = None,
-    ) -> List[Dict]:
-        """Get game media information with caching"""
-        params = {
-            "year": year,
-            "week": week,
-            "seasonType": season_type,
-            "team": team,
-            "conference": conference,
-        }
-        return self._cached_fetch(
-            "media",
-            params,
-            lambda: self._to_dict_list(
-                self.games_api.get_game_media(
-                    year=year,
-                    week=week,
-                    season_type=season_type,
-                    team=team,
-                    conference=conference,
-                )
-            ),
-            "games",
-        )
-
     def get_calendar(self, year: int) -> List[Dict]:
         """Get season calendar with caching"""
         params = {"year": year}
@@ -919,7 +889,7 @@ class UnifiedCFBDClient:
         year: int,
         week: Optional[int] = None,
         team: Optional[str] = None,
-        offense: Optional[bool] = None
+        offense: Optional[bool] = None,
     ) -> List[Dict]:
         """
         Get play-by-play data with EPA (Expected Points Added) and WPA (Win Probability Added).
@@ -933,26 +903,21 @@ class UnifiedCFBDClient:
         Returns:
             List of plays with EPA/WPA metrics
         """
-        params = {
-            "year": year,
-            "week": week,
-            "team": team,
-            "offense": offense
-        }
+        params = {"year": year, "week": week, "team": team, "offense": offense}
 
         return self._cached_fetch(
             "plays_epa_wpa",
             params,
             lambda: self._to_dict_list(
-                self.plays_api.get_plays(year=year, week=week, team=team, offense=offense)
+                self.plays_api.get_plays(
+                    year=year, week=week, team=team, offense=offense
+                )
             ),
             "plays",
         )
 
     def get_team_epa_wpa_season(
-        self,
-        year: int,
-        team: Optional[str] = None
+        self, year: int, team: Optional[str] = None
     ) -> List[Dict]:
         """
         Get team EPA/WPA data for the entire season.
@@ -969,17 +934,16 @@ class UnifiedCFBDClient:
         return self._cached_fetch(
             "team_epa_wpa_season",
             params,
-            lambda: self._to_dict_list(
-                self.metrics_api.get_team_epa(year=year, team=team)
-            ) if hasattr(self.metrics_api, 'get_team_epa') else [],
+            lambda: (
+                self._to_dict_list(self.metrics_api.get_team_epa(year=year, team=team))
+                if hasattr(self.metrics_api, "get_team_epa")
+                else []
+            ),
             "advanced_metrics",
         )
 
     def get_advanced_team_metrics(
-        self,
-        year: int,
-        week: Optional[int] = None,
-        team: Optional[str] = None
+        self, year: int, week: Optional[int] = None, team: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Get comprehensive advanced team metrics including EPA/WPA, success rates, and efficiency.
@@ -1002,7 +966,9 @@ class UnifiedCFBDClient:
         games = self.get_games(year, week, team=team)
 
         # Calculate advanced metrics
-        advanced_metrics = self._calculate_advanced_metrics(epa_wpa_data, team_stats, games)
+        advanced_metrics = self._calculate_advanced_metrics(
+            epa_wpa_data, team_stats, games
+        )
 
         return {
             "season": year,
@@ -1012,13 +978,11 @@ class UnifiedCFBDClient:
             "team_stats": team_stats,
             "games_analyzed": len(games),
             "advanced_metrics": advanced_metrics,
-            "last_updated": datetime.utcnow().isoformat()
+            "last_updated": datetime.utcnow().isoformat(),
         }
 
     def get_advanced_recruiting_analytics(
-        self,
-        year: int,
-        team: Optional[str] = None
+        self, year: int, team: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Get advanced recruiting analytics including class rankings, momentum, and predictions.
@@ -1047,13 +1011,11 @@ class UnifiedCFBDClient:
             "recruiting_data": recruiting_data,
             "talent_correlation": talent_data,
             "advanced_analytics": advanced_recruiting,
-            "last_updated": datetime.utcnow().isoformat()
+            "last_updated": datetime.utcnow().isoformat(),
         }
 
     def get_advanced_roster_analytics(
-        self,
-        year: int,
-        team: Optional[str] = None
+        self, year: int, team: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Get advanced roster analytics including position strength, experience levels, and depth.
@@ -1082,36 +1044,525 @@ class UnifiedCFBDClient:
             "roster_data": roster_data,
             "player_performance": player_stats,
             "advanced_analytics": advanced_roster,
-            "last_updated": datetime.utcnow().isoformat()
+            "last_updated": datetime.utcnow().isoformat(),
         }
+
+    # New CFBD Endpoint Implementations for Enhanced Coverage
+
+    def get_transfer_portal(
+        self, year: Optional[int] = None, team: Optional[str] = None
+    ) -> List[Dict]:
+        """
+        Get transfer portal data (Tier 2+ feature).
+
+        Args:
+            year: Season year (optional)
+            team: Specific team (optional)
+
+        Returns:
+            Transfer portal entries and destinations
+        """
+        params = {"year": year, "team": team}
+
+        return self._cached_fetch(
+            "transfer_portal",
+            params,
+            lambda: self._direct_api_call("GET", "/player/portal", params),
+            "teams",  # Transfer data is team-related
+        )
+
+    def get_nfl_draft_picks(
+        self,
+        year: Optional[int] = None,
+        team: Optional[str] = None,
+        round: Optional[int] = None,
+        round_pick: Optional[int] = None,
+    ) -> List[Dict]:
+        """
+        Get NFL draft data (Tier 3+ feature).
+
+        Args:
+            year: Draft year (optional)
+            team: Specific college team (optional)
+            round: Draft round (optional)
+            round_pick: Pick in round (optional)
+
+        Returns:
+            NFL draft picks and analysis
+        """
+        params = {"year": year, "team": team, "round": round, "roundPick": round_pick}
+
+        return self._cached_fetch(
+            "nfl_draft_picks",
+            params,
+            lambda: self._direct_api_call("GET", "/draft/picks", params),
+            "teams",  # Draft data is team-related
+        )
+
+    def get_nfl_draft_positions(self) -> List[Dict]:
+        """
+        Get NFL draft position analysis (Tier 3+ feature).
+
+        Returns:
+            NFL draft position analysis and trends
+        """
+        params = {}
+
+        return self._cached_fetch(
+            "nfl_draft_positions",
+            params,
+            lambda: self._direct_api_call("GET", "/draft/positions", params),
+            "teams",  # Draft data is team-related
+        )
+
+    def get_nfl_draft_teams(
+        self, year: Optional[int] = None, team: Optional[str] = None
+    ) -> List[Dict]:
+        """
+        Get NFL draft team history (Tier 3+ feature).
+
+        Args:
+            year: Draft year (optional)
+            team: Specific college team (optional)
+
+        Returns:
+            Team draft history and analysis
+        """
+        params = {"year": year, "team": team}
+
+        return self._cached_fetch(
+            "nfl_draft_teams",
+            params,
+            lambda: self._direct_api_call("GET", "/draft/teams", params),
+            "teams",  # Draft data is team-related
+        )
+
+    def get_player_usage_stats(
+        self, year: int, team: Optional[str] = None, conference: Optional[str] = None
+    ) -> List[Dict]:
+        """
+        Get player usage statistics including snap counts and playing time (Tier 2+ feature).
+
+        Args:
+            year: Season year
+            team: Specific team (optional)
+            conference: Specific conference (optional)
+
+        Returns:
+            Player usage statistics and snap counts
+        """
+        params = {"year": year, "team": team, "conference": conference}
+
+        return self._cached_fetch(
+            "player_usage_stats",
+            params,
+            lambda: self._direct_api_call("GET", "/player/usage", params),
+            "stats",  # Usage stats are statistical data
+        )
+
+    def get_returning_production(
+        self, year: int, team: Optional[str] = None, conference: Optional[str] = None
+    ) -> List[Dict]:
+        """
+        Get returning production data for team strength analysis (Tier 2+ feature).
+
+        Args:
+            year: Season year
+            team: Specific team (optional)
+            conference: Specific conference (optional)
+
+        Returns:
+            Returning production statistics and analysis
+        """
+        params = {"year": year, "team": team, "conference": conference}
+
+        return self._cached_fetch(
+            "returning_production",
+            params,
+            lambda: self._direct_api_call("GET", "/player/returning", params),
+            "stats",  # Production data is statistical
+        )
+
+    def get_game_weather(
+        self,
+        year: int,
+        week: Optional[int] = None,
+        season_type: str = "regular",
+        team: Optional[str] = None,
+    ) -> List[Dict]:
+        """
+        Get weather conditions for games (Tier 1+ feature).
+
+        Args:
+            year: Season year
+            week: Week number (optional)
+            season_type: Season type (regular, postseason, etc.)
+            team: Specific team (optional)
+
+        Returns:
+            Weather conditions and game day information
+        """
+        params = {"year": year, "week": week, "seasonType": season_type, "team": team}
+
+        return self._cached_fetch(
+            "game_weather",
+            params,
+            lambda: self._direct_api_call("GET", "/games/weather", params),
+            "games",  # Weather is game-specific
+        )
+
+    def get_game_media(
+        self,
+        year: int,
+        week: Optional[int] = None,
+        season_type: str = "regular",
+        team: Optional[str] = None,
+        conference: Optional[str] = None,
+    ) -> List[Dict]:
+        """
+        Get game media information including broadcast details (Tier 1+ feature).
+
+        Args:
+            year: Season year
+            week: Week number (optional)
+            season_type: Season type
+            team: Specific team (optional)
+            conference: Specific conference (optional)
+
+        Returns:
+            Game media and broadcast information
+        """
+        params = {
+            "year": year,
+            "week": week,
+            "seasonType": season_type,
+            "team": team,
+            "conference": conference,
+        }
+
+        return self._cached_fetch(
+            "game_media",
+            params,
+            lambda: self._direct_api_call("GET", "/games/media", params),
+            "games",
+        )
+
+    def get_wepa_team_season(
+        self, year: int, team: Optional[str] = None, conference: Optional[str] = None
+    ) -> List[Dict]:
+        """
+        Get Weighted EPA (WEPA) team season data (Tier 3+ feature).
+
+        Args:
+            year: Season year
+            team: Specific team (optional)
+            conference: Specific conference (optional)
+
+        Returns:
+            Weighted EPA team statistics and analytics
+        """
+        params = {"year": year, "team": team, "conference": conference}
+
+        return self._cached_fetch(
+            "wepa_team_season",
+            params,
+            lambda: self._direct_api_call("GET", "/wepa/team/season", params),
+            "advanced_metrics",  # WEPA is advanced analytics
+        )
+
+    def get_wepa_players_kicking(
+        self, year: int, team: Optional[str] = None, conference: Optional[str] = None
+    ) -> List[Dict]:
+        """
+        Get Weighted EPA for kickers (Tier 3+ feature).
+
+        Args:
+            year: Season year
+            team: Specific team (optional)
+            conference: Specific conference (optional)
+
+        Returns:
+            Kicker WEPA statistics
+        """
+        params = {"year": year, "team": team, "conference": conference}
+
+        return self._cached_fetch(
+            "wepa_players_kicking",
+            params,
+            lambda: self._direct_api_call("GET", "/wepa/players/kicking", params),
+            "advanced_metrics",  # WEPA is advanced analytics
+        )
+
+    def get_wepa_players_passing(
+        self, year: int, team: Optional[str] = None, conference: Optional[str] = None
+    ) -> List[Dict]:
+        """
+        Get Weighted EPA for passing (Tier 3+ feature).
+
+        Args:
+            year: Season year
+            team: Specific team (optional)
+            conference: Specific conference (optional)
+
+        Returns:
+            Passing WEPA statistics
+        """
+        params = {"year": year, "team": team, "conference": conference}
+
+        return self._cached_fetch(
+            "wepa_players_passing",
+            params,
+            lambda: self._direct_api_call("GET", "/wepa/players/passing", params),
+            "advanced_metrics",  # WEPA is advanced analytics
+        )
+
+    def get_wepa_players_rushing(
+        self, year: int, team: Optional[str] = None, conference: Optional[str] = None
+    ) -> List[Dict]:
+        """
+        Get Weighted EPA for rushing (Tier 3+ feature).
+
+        Args:
+            year: Season year
+            team: Specific team (optional)
+            conference: Specific conference (optional)
+
+        Returns:
+            Rushing WEPA statistics
+        """
+        params = {"year": year, "team": team, "conference": conference}
+
+        return self._cached_fetch(
+            "wepa_players_rushing",
+            params,
+            lambda: self._direct_api_call("GET", "/wepa/players/rushing", params),
+            "advanced_metrics",  # WEPA is advanced analytics
+        )
+
+    def get_historical_rankings(
+        self,
+        year: int,
+        week: Optional[int] = None,
+        season_type: str = "regular",
+        poll: Optional[str] = None,
+    ) -> List[Dict]:
+        """
+        Get historical rankings data (Tier 1+ feature).
+
+        Args:
+            year: Season year
+            week: Week number (optional)
+            season_type: Season type
+            poll: Specific poll (AP, Coaches, etc.) (optional)
+
+        Returns:
+            Historical rankings data
+        """
+        params = {"year": year, "week": week, "seasonType": season_type, "poll": poll}
+
+        return self._cached_fetch(
+            "historical_rankings",
+            params,
+            lambda: self._direct_api_call("GET", "/rankings", params),
+            "ratings",  # Rankings are similar to ratings data
+        )
+
+    def get_team_records(
+        self, year: int, team: Optional[str] = None, conference: Optional[str] = None
+    ) -> List[Dict]:
+        """
+        Get team records and streaks (Tier 1+ feature).
+
+        Args:
+            year: Season year
+            team: Specific team (optional)
+            conference: Specific conference (optional)
+
+        Returns:
+            Team records and historical streaks
+        """
+        params = {"year": year, "team": team, "conference": conference}
+
+        return self._cached_fetch(
+            "team_records",
+            params,
+            lambda: self._direct_api_call("GET", "/records", params),
+            "teams",  # Records are team-related data
+        )
+
+    def get_team_ats_records(
+        self, year: int, team: Optional[str] = None, conference: Optional[str] = None
+    ) -> List[Dict]:
+        """
+        Get team against-the-spread records (Tier 2+ feature).
+
+        Args:
+            year: Season year
+            team: Specific team (optional)
+            conference: Specific conference (optional)
+
+        Returns:
+            ATS betting performance records
+        """
+        params = {"year": year, "team": team, "conference": conference}
+
+        return self._cached_fetch(
+            "team_ats_records",
+            params,
+            lambda: self._direct_api_call("GET", "/teams/ats", params),
+            "stats",  # ATS records are statistical data
+        )
+
+    def get_fbs_teams(self, year: Optional[int] = None) -> List[Dict]:
+        """
+        Get FBS team listings (Tier 1+ feature).
+
+        Args:
+            year: Season year (optional, defaults to current)
+
+        Returns:
+            FBS team information and classifications
+        """
+        params = {"year": year}
+
+        return self._cached_fetch(
+            "fbs_teams",
+            params,
+            lambda: self._direct_api_call("GET", "/teams/fbs", params),
+            "teams",  # Teams data
+        )
+
+    # Helper method for direct API calls
+    def _direct_api_call(
+        self, method: str, path: str, params: Optional[Dict[str, Any]] = None
+    ) -> List[Dict]:
+        """
+        Make direct API call for endpoints not yet mapped to specific API methods.
+
+        Uses requests library for direct HTTP calls to CFBD API.
+
+        Args:
+            method: HTTP method (GET, POST, etc.)
+            path: API endpoint path
+            params: Query parameters
+
+        Returns:
+            API response as list of dictionaries
+        """
+        # Implement rate limiting
+        self._rate_limit()
+
+        start_time = time.time()
+
+        try:
+            # Use requests for direct API calls
+            import requests
+
+            # Build the full URL
+            base_url = self.config.host.rstrip("/")
+            full_url = f"{base_url}{path}"
+
+            # Prepare headers
+            headers = {
+                "Authorization": f"Bearer {self.config.api_key}",
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            }
+
+            # Make the request
+            if method.upper() == "GET":
+                response = requests.get(
+                    full_url, params=params, headers=headers, timeout=30
+                )
+            else:
+                raise ValueError(
+                    f"HTTP method {method} not yet supported in _direct_api_call"
+                )
+
+            # Check response status
+            response.raise_for_status()
+
+            # Track success
+            self.metrics.successful_requests += 1
+            self.metrics.total_requests += 1
+            latency_ms = (time.time() - start_time) * 1000
+            self.metrics.total_latency_ms += latency_ms
+
+            # Parse JSON response
+            try:
+                data = response.json()
+                if isinstance(data, list):
+                    return data
+                elif isinstance(data, dict):
+                    return [data]
+                else:
+                    return []
+            except ValueError as e:
+                logger.error(f"❌ Failed to parse JSON response: {e}")
+                return []
+
+        except requests.exceptions.RequestException as e:
+            self.metrics.errors += 1
+            self.metrics.total_requests += 1
+            logger.error(f"❌ HTTP request failed for {path}: {e}")
+
+            # Convert to CFBD error taxonomy
+            if "403" in str(e):
+                from .errors import CFBDForbiddenError
+
+                raise CFBDForbiddenError(f"Access forbidden for {path}: {e}")
+            elif "401" in str(e):
+                from .errors import CFBDAuthenticationError
+
+                raise CFBDAuthenticationError(f"Authentication failed for {path}: {e}")
+            elif "404" in str(e):
+                from .errors import CFBDNotFoundError
+
+                raise CFBDNotFoundError(f"Resource not found for {path}: {e}")
+            elif "429" in str(e):
+                from .errors import CFBDRateLimitError
+
+                raise CFBDRateLimitError(f"Rate limit exceeded for {path}: {e}")
+            else:
+                from .errors import CFBDClientError
+
+                raise CFBDClientError(f"API call failed for {path}: {e}")
+        except Exception as e:
+            self.metrics.errors += 1
+            self.metrics.total_requests += 1
+            logger.error(f"❌ Unexpected error for {path}: {e}")
+            from .errors import CFBDClientError
+
+            raise CFBDClientError(f"Unexpected error for {path}: {e}")
 
     # Internal helper methods for advanced analytics calculations
     def _calculate_advanced_metrics(
-        self,
-        epa_wpa_data: List[Dict],
-        team_stats: List[Dict],
-        games: List[Dict]
+        self, epa_wpa_data: List[Dict], team_stats: List[Dict], games: List[Dict]
     ) -> Dict[str, Any]:
         """Calculate advanced metrics from EPA/WPA and standard stats"""
         if not epa_wpa_data:
             return {}
 
         # Aggregate EPA/WPA metrics
-        total_offense_epa = sum(item.get('offenseEpa', 0) for item in epa_wpa_data if item.get('offenseEpa'))
-        total_defense_epa = sum(item.get('defenseEpa', 0) for item in epa_wpa_data if item.get('defenseEpa'))
+        total_offense_epa = sum(
+            item.get("offenseEpa", 0) for item in epa_wpa_data if item.get("offenseEpa")
+        )
+        total_defense_epa = sum(
+            item.get("defenseEpa", 0) for item in epa_wpa_data if item.get("defenseEpa")
+        )
 
         return {
             "total_offense_epa": round(total_offense_epa, 3),
             "total_defense_epa": round(total_defense_epa, 3),
             "net_epa": round(total_offense_epa + total_defense_epa, 3),
             "games_count": len(games),
-            "epa_per_game": round((total_offense_epa + total_defense_epa) / max(len(games), 1), 3)
+            "epa_per_game": round(
+                (total_offense_epa + total_defense_epa) / max(len(games), 1), 3
+            ),
         }
 
     def _calculate_advanced_recruiting_metrics(
-        self,
-        recruiting_data: List[Dict],
-        talent_data: List[Dict]
+        self, recruiting_data: List[Dict], talent_data: List[Dict]
     ) -> Dict[str, Any]:
         """Calculate advanced recruiting analytics"""
         if not recruiting_data:
@@ -1121,16 +1572,16 @@ class UnifiedCFBDClient:
         return {
             "total_commits": len(recruiting_data),
             "average_rating": round(
-                sum(p.get('rating', 0) for p in recruiting_data) / max(len(recruiting_data), 1), 2
+                sum(p.get("rating", 0) for p in recruiting_data)
+                / max(len(recruiting_data), 1),
+                2,
             ),
             "recruiting_momentum": "high",  # Placeholder for momentum calculation
-            "class_strength": "above_average"  # Placeholder for strength calculation
+            "class_strength": "above_average",  # Placeholder for strength calculation
         }
 
     def _calculate_advanced_roster_metrics(
-        self,
-        roster_data: List[Dict],
-        player_stats: List[Dict]
+        self, roster_data: List[Dict], player_stats: List[Dict]
     ) -> Dict[str, Any]:
         """Calculate advanced roster analytics"""
         if not roster_data:
@@ -1139,12 +1590,132 @@ class UnifiedCFBDClient:
         # Calculate position strength, experience, depth, etc.
         position_counts = {}
         for player in roster_data:
-            position = player.get('position', 'Unknown')
+            position = player.get("position", "Unknown")
             position_counts[position] = position_counts.get(position, 0) + 1
 
         return {
             "total_players": len(roster_data),
             "position_breakdown": position_counts,
             "average_experience": 2.5,  # Placeholder calculation
-            "roster_depth_score": "good"  # Placeholder calculation
+            "roster_depth_score": "good",  # Placeholder calculation
         }
+
+    # Additional Premium Endpoints for Enhanced Coverage
+
+    def get_advanced_game_stats(
+        self,
+        year: int,
+        week: Optional[int] = None,
+        team: Optional[str] = None,
+        season_type: str = "regular",
+    ) -> List[Dict]:
+        """Get advanced game statistics and metrics"""
+        params = {"year": year}
+        if week:
+            params["week"] = week
+        if team:
+            params["team"] = team
+        if season_type != "regular":
+            params["seasonType"] = season_type
+
+        return self._direct_api_call("GET", "/games/advanced", params)
+
+    def get_player_season_stats(
+        self,
+        year: int,
+        team: Optional[str] = None,
+        conference: Optional[str] = None,
+        position: Optional[str] = None,
+    ) -> List[Dict]:
+        """Get player season statistics"""
+        params = {"year": year}
+        if team:
+            params["team"] = team
+        if conference:
+            params["conference"] = conference
+        if position:
+            params["position"] = position
+
+        return self._direct_api_call("GET", "/player/season/stats", params)
+
+    def get_team_season_stats(
+        self, year: int, team: Optional[str] = None, conference: Optional[str] = None
+    ) -> List[Dict]:
+        """Get team season statistics"""
+        params = {"year": year}
+        if team:
+            params["team"] = team
+        if conference:
+            params["conference"] = conference
+
+        return self._direct_api_call("GET", "/team/season/stats", params)
+
+    def get_team_game_stats(
+        self, year: int, week: int, team: Optional[str] = None
+    ) -> List[Dict]:
+        """Get detailed team game statistics"""
+        params = {"year": year, "week": week}
+        if team:
+            params["team"] = team
+
+        return self._direct_api_call("GET", "/team/game/stats", params)
+
+    def get_player_game_stats(
+        self,
+        year: int,
+        week: int,
+        team: Optional[str] = None,
+        position: Optional[str] = None,
+    ) -> List[Dict]:
+        """Get detailed player game statistics"""
+        params = {"year": year, "week": week}
+        if team:
+            params["team"] = team
+        if position:
+            params["position"] = position
+
+        return self._direct_api_call("GET", "/player/game/stats", params)
+
+    def get_betting_props(
+        self, year: int, week: Optional[int] = None, team: Optional[str] = None
+    ) -> List[Dict]:
+        """Get proposition betting data"""
+        params = {"year": year}
+        if week:
+            params["week"] = week
+        if team:
+            params["team"] = team
+
+        return self._direct_api_call("GET", "/betting/props", params)
+
+    def get_draft_prospects(
+        self, year: int, position: Optional[str] = None, team: Optional[str] = None
+    ) -> List[Dict]:
+        """Get NFL draft prospect rankings and evaluations"""
+        params = {"year": year}
+        if position:
+            params["position"] = position
+        if team:
+            params["team"] = team
+
+        return self._direct_api_call("GET", "/draft/prospects", params)
+
+    def get_play_by_play_detailed(
+        self, year: int, week: int, game_id: Optional[int] = None
+    ) -> List[Dict]:
+        """Get detailed play-by-play data"""
+        params = {"year": year, "week": week}
+        if game_id:
+            params["gameId"] = game_id
+
+        return self._direct_api_call("GET", "/play-by-play", params)
+
+    def get_drive_summaries_advanced(
+        self, year: int, week: int, team: Optional[str] = None
+    ) -> List[Dict]:
+        """Get advanced drive summary data"""
+        params = {"year": year, "week": week}
+        if team:
+            params["team"] = team
+
+        return self._direct_api_call("GET", "/drive summaries", params)

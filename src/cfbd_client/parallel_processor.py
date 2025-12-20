@@ -4,22 +4,24 @@ Provides high-performance parallel API calls with intelligent rate limiting and 
 """
 
 import asyncio
-import time
+import json
 import logging
+import threading
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
-import json
-import threading
-from dataclasses import dataclass
 
 from .enhanced_unified_client import EnhancedUnifiedCFBDClient
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class ParallelTask:
     """Represents a parallel processing task"""
+
     task_id: str
     function: Callable
     args: tuple
@@ -28,9 +30,11 @@ class ParallelTask:
     created_at: datetime
     dependencies: List[str]  # Task IDs this task depends on
 
+
 @dataclass
 class TaskResult:
     """Represents the result of a parallel task"""
+
     task_id: str
     success: bool
     result: Any
@@ -38,9 +42,11 @@ class TaskResult:
     execution_time: float
     completed_at: datetime
 
+
 @dataclass
 class PerformanceMetrics:
     """Performance metrics for parallel processing"""
+
     total_tasks: int
     completed_tasks: int
     failed_tasks: int
@@ -48,6 +54,7 @@ class PerformanceMetrics:
     total_time_saved: float  # Time saved compared to sequential execution
     peak_workers_used: int
     cache_hit_rate: float
+
 
 class ParallelCFBDProcessor:
     """
@@ -93,10 +100,19 @@ class ParallelCFBDProcessor:
         self.cache_hits = 0
         self.cache_misses = 0
 
-        logger.info(f"🚀 Parallel CFBD Processor initialized with {max_workers} workers")
+        logger.info(
+            f"🚀 Parallel CFBD Processor initialized with {max_workers} workers"
+        )
 
-    def add_task(self, task_id: str, function: Callable, *args, priority: int = 5,
-                 dependencies: List[str] = None, **kwargs) -> str:
+    def add_task(
+        self,
+        task_id: str,
+        function: Callable,
+        *args,
+        priority: int = 5,
+        dependencies: List[str] = None,
+        **kwargs,
+    ) -> str:
         """
         Add a task to the processing queue
 
@@ -118,7 +134,7 @@ class ParallelCFBDProcessor:
             kwargs=kwargs,
             priority=priority,
             created_at=datetime.now(timezone.utc),
-            dependencies=dependencies or []
+            dependencies=dependencies or [],
         )
 
         self.pending_tasks.append(task)
@@ -127,7 +143,9 @@ class ParallelCFBDProcessor:
         logger.debug(f"📝 Added task {task_id} with priority {priority}")
         return task_id
 
-    def add_batch_tasks(self, tasks: List[Tuple[str, Callable, tuple, dict]], priority: int = 5):
+    def add_batch_tasks(
+        self, tasks: List[Tuple[str, Callable, tuple, dict]], priority: int = 5
+    ):
         """
         Add multiple tasks as a batch
 
@@ -143,10 +161,13 @@ class ParallelCFBDProcessor:
     def _get_cache_key(self, function: Callable, args: tuple, kwargs: dict) -> str:
         """Generate cache key for function call"""
         import hashlib
+
         key_data = f"{function.__name__}_{str(args)}_{str(sorted(kwargs.items()))}"
         return hashlib.md5(key_data.encode()).hexdigest()
 
-    def _check_cache(self, function: Callable, args: tuple, kwargs: dict) -> Optional[Any]:
+    def _check_cache(
+        self, function: Callable, args: tuple, kwargs: dict
+    ) -> Optional[Any]:
         """Check if result is cached"""
         if not self.cache_enabled:
             return None
@@ -190,7 +211,7 @@ class ParallelCFBDProcessor:
                     result=cached_result,
                     error=None,
                     execution_time=time.time() - start_time,
-                    completed_at=datetime.now(timezone.utc)
+                    completed_at=datetime.now(timezone.utc),
                 )
 
             # Acquire semaphore for rate limiting
@@ -218,7 +239,7 @@ class ParallelCFBDProcessor:
                     result=result,
                     error=None,
                     execution_time=execution_time,
-                    completed_at=datetime.now(timezone.utc)
+                    completed_at=datetime.now(timezone.utc),
                 )
 
         except Exception as e:
@@ -232,7 +253,7 @@ class ParallelCFBDProcessor:
                 result=None,
                 error=error_msg,
                 execution_time=execution_time,
-                completed_at=datetime.now(timezone.utc)
+                completed_at=datetime.now(timezone.utc),
             )
 
     def _check_dependencies(self, task: ParallelTask) -> bool:
@@ -255,11 +276,15 @@ class ParallelCFBDProcessor:
             logger.info("📋 No pending tasks to process")
             return {}
 
-        logger.info(f"🚀 Processing {len(self.pending_tasks)} tasks with {self.max_workers} workers")
+        logger.info(
+            f"🚀 Processing {len(self.pending_tasks)} tasks with {self.max_workers} workers"
+        )
         start_time = time.time()
 
         # Filter tasks with satisfied dependencies
-        ready_tasks = [task for task in self.pending_tasks if self._check_dependencies(task)]
+        ready_tasks = [
+            task for task in self.pending_tasks if self._check_dependencies(task)
+        ]
 
         if not ready_tasks:
             logger.warning("⚠️ No tasks with satisfied dependencies")
@@ -286,7 +311,9 @@ class ParallelCFBDProcessor:
                     completed_count += 1
 
                     if result.success:
-                        logger.debug(f"✅ Completed task {task.task_id} in {result.execution_time:.2f}s")
+                        logger.debug(
+                            f"✅ Completed task {task.task_id} in {result.execution_time:.2f}s"
+                        )
                     else:
                         logger.error(f"❌ Failed task {task.task_id}: {result.error}")
 
@@ -298,18 +325,22 @@ class ParallelCFBDProcessor:
                         result=None,
                         error=str(e),
                         execution_time=0,
-                        completed_at=datetime.now(timezone.utc)
+                        completed_at=datetime.now(timezone.utc),
                     )
                     results[task.task_id] = error_result
                     self.completed_tasks[task.task_id] = error_result
 
         # Remove completed tasks from pending
-        self.pending_tasks = [task for task in self.pending_tasks if task.task_id not in results]
+        self.pending_tasks = [
+            task for task in self.pending_tasks if task.task_id not in results
+        ]
 
         execution_time = time.time() - start_time
         self.parallel_execution_time += execution_time
 
-        logger.info(f"🎉 Completed {completed_count}/{len(ready_tasks)} tasks in {execution_time:.2f}s")
+        logger.info(
+            f"🎉 Completed {completed_count}/{len(ready_tasks)} tasks in {execution_time:.2f}s"
+        )
 
         return results
 
@@ -336,7 +367,9 @@ class ParallelCFBDProcessor:
         logger.info(f"⏱️ Sequential baseline completed in {sequential_time:.2f}s")
         return sequential_time
 
-    def parallel_get_games_batch(self, year: int, weeks: List[int]) -> Dict[str, List[Dict]]:
+    def parallel_get_games_batch(
+        self, year: int, weeks: List[int]
+    ) -> Dict[str, List[Dict]]:
         """
         Parallel batch processing for games data
 
@@ -358,7 +391,7 @@ class ParallelCFBDProcessor:
                 function=self.client.get_games,
                 year=year,
                 week=week,
-                priority=1  # High priority for games data
+                priority=1,  # High priority for games data
             )
             tasks.append(task_id)
 
@@ -369,12 +402,14 @@ class ParallelCFBDProcessor:
         games_by_week = {}
         for task_id in tasks:
             if task_id in results and results[task_id].success:
-                week = int(task_id.split('_')[-1])
+                week = int(task_id.split("_")[-1])
                 games_by_week[f"week_{week}"] = results[task_id].result
 
         return games_by_week
 
-    def parallel_get_team_stats_batch(self, teams: List[str], year: int) -> Dict[str, Any]:
+    def parallel_get_team_stats_batch(
+        self, teams: List[str], year: int
+    ) -> Dict[str, Any]:
         """
         Parallel batch processing for team statistics
 
@@ -396,7 +431,7 @@ class ParallelCFBDProcessor:
                 function=self.client.get_advanced_team_stats,
                 year=year,
                 team=team,
-                priority=2  # Medium priority
+                priority=2,  # Medium priority
             )
             tasks.append(task_id)
 
@@ -407,7 +442,7 @@ class ParallelCFBDProcessor:
         team_stats = {}
         for task_id in tasks:
             if task_id in results and results[task_id].success:
-                team_name = task_id.replace('team_stats_', '').replace('_', ' ')
+                team_name = task_id.replace("team_stats_", "").replace("_", " ")
                 team_stats[team_name] = results[task_id].result
 
         return team_stats
@@ -437,7 +472,7 @@ class ParallelCFBDProcessor:
                 task_id=task_id,
                 function=box_score_client.get_enhanced_box_score,
                 game_id=game_id,
-                priority=3  # Lower priority
+                priority=3,  # Lower priority
             )
             tasks.append(task_id)
 
@@ -448,7 +483,7 @@ class ParallelCFBDProcessor:
         box_scores = {}
         for task_id in tasks:
             if task_id in results and results[task_id].success:
-                game_id = int(task_id.split('_')[-1])
+                game_id = int(task_id.split("_")[-1])
                 box_scores[game_id] = results[task_id].result
 
         return box_scores
@@ -460,7 +495,12 @@ class ParallelCFBDProcessor:
         failed_tasks = total_tasks - completed_tasks
 
         if completed_tasks > 0:
-            avg_execution_time = sum(r.execution_time for r in self.completed_tasks.values() if r.success) / completed_tasks
+            avg_execution_time = (
+                sum(
+                    r.execution_time for r in self.completed_tasks.values() if r.success
+                )
+                / completed_tasks
+            )
         else:
             avg_execution_time = 0.0
 
@@ -474,7 +514,11 @@ class ParallelCFBDProcessor:
 
         # Cache metrics
         total_cache_requests = self.cache_hits + self.cache_misses
-        cache_hit_rate = (self.cache_hits / total_cache_requests * 100) if total_cache_requests > 0 else 0.0
+        cache_hit_rate = (
+            (self.cache_hits / total_cache_requests * 100)
+            if total_cache_requests > 0
+            else 0.0
+        )
 
         return PerformanceMetrics(
             total_tasks=total_tasks,
@@ -483,7 +527,7 @@ class ParallelCFBDProcessor:
             average_execution_time=avg_execution_time,
             total_time_saved=time_saved,
             peak_workers_used=self.max_workers,
-            cache_hit_rate=cache_hit_rate
+            cache_hit_rate=cache_hit_rate,
         )
 
     def optimize_performance(self):
@@ -492,20 +536,28 @@ class ParallelCFBDProcessor:
 
         logger.info("🔧 Performance Optimization Analysis:")
         logger.info(f"   Total tasks: {metrics.total_tasks}")
-        logger.info(f"   Success rate: {(metrics.completed_tasks/max(metrics.total_tasks, 1)*100):.1f}%")
+        logger.info(
+            f"   Success rate: {(metrics.completed_tasks/max(metrics.total_tasks, 1)*100):.1f}%"
+        )
         logger.info(f"   Average execution time: {metrics.average_execution_time:.2f}s")
         logger.info(f"   Time saved: {metrics.total_time_saved:.2f}s")
         logger.info(f"   Cache hit rate: {metrics.cache_hit_rate:.1f}%")
 
         # Recommendations
         if metrics.cache_hit_rate < 30:
-            logger.info("💡 Recommendation: Consider increasing cache TTL for better hit rates")
+            logger.info(
+                "💡 Recommendation: Consider increasing cache TTL for better hit rates"
+            )
 
         if metrics.average_execution_time > 2.0:
-            logger.info("💡 Recommendation: Some tasks are slow - consider batching or optimization")
+            logger.info(
+                "💡 Recommendation: Some tasks are slow - consider batching or optimization"
+            )
 
         if metrics.total_time_saved > 0:
-            speedup = (self.sequential_baseline_time / max(self.parallel_execution_time, 0.1))
+            speedup = self.sequential_baseline_time / max(
+                self.parallel_execution_time, 0.1
+            )
             logger.info(f"🚀 Performance improvement: {speedup:.1f}x speedup achieved")
 
     def clear_cache(self):
@@ -518,17 +570,25 @@ class ParallelCFBDProcessor:
     def get_task_summary(self) -> Dict[str, Any]:
         """Get summary of all tasks"""
         return {
-            'pending_tasks': len(self.pending_tasks),
-            'completed_tasks': len(self.completed_tasks),
-            'successful_tasks': len([r for r in self.completed_tasks.values() if r.success]),
-            'failed_tasks': len([r for r in self.completed_tasks.values() if not r.success]),
-            'cache_stats': {
-                'hits': self.cache_hits,
-                'misses': self.cache_misses,
-                'hit_rate': (self.cache_hits / max(self.cache_hits + self.cache_misses, 1)) * 100
+            "pending_tasks": len(self.pending_tasks),
+            "completed_tasks": len(self.completed_tasks),
+            "successful_tasks": len(
+                [r for r in self.completed_tasks.values() if r.success]
+            ),
+            "failed_tasks": len(
+                [r for r in self.completed_tasks.values() if not r.success]
+            ),
+            "cache_stats": {
+                "hits": self.cache_hits,
+                "misses": self.cache_misses,
+                "hit_rate": (
+                    self.cache_hits / max(self.cache_hits + self.cache_misses, 1)
+                )
+                * 100,
             },
-            'uptime': (datetime.now(timezone.utc) - self.start_time).total_seconds()
+            "uptime": (datetime.now(timezone.utc) - self.start_time).total_seconds(),
         }
+
 
 # Example usage and demonstration
 def demo_parallel_processor():
@@ -548,23 +608,29 @@ def demo_parallel_processor():
     end_time = time.time()
     total_games = sum(len(games) for games in games_data.values())
 
-    print(f"   ✅ Fetched {total_games} games from {len(games_data)} weeks in {end_time - start_time:.2f}s")
+    print(
+        f"   ✅ Fetched {total_games} games from {len(games_data)} weeks in {end_time - start_time:.2f}s"
+    )
 
     # Example 2: Parallel team statistics
     print("\n📊 Example 2: Parallel team statistics")
-    teams = ['Alabama', 'Georgia', 'Ohio State', 'Michigan', 'Texas', 'Oklahoma']
+    teams = ["Alabama", "Georgia", "Ohio State", "Michigan", "Texas", "Oklahoma"]
     start_time = time.time()
 
     team_stats = processor.parallel_get_team_stats_batch(teams, year=2025)
 
     end_time = time.time()
-    print(f"   ✅ Fetched stats for {len(team_stats)} teams in {end_time - start_time:.2f}s")
+    print(
+        f"   ✅ Fetched stats for {len(team_stats)} teams in {end_time - start_time:.2f}s"
+    )
 
     # Example 3: Performance metrics
     print("\n📈 Performance Metrics:")
     metrics = processor.get_performance_metrics()
     print(f"   Total tasks: {metrics.total_tasks}")
-    print(f"   Success rate: {(metrics.completed_tasks/max(metrics.total_tasks, 1)*100):.1f}%")
+    print(
+        f"   Success rate: {(metrics.completed_tasks/max(metrics.total_tasks, 1)*100):.1f}%"
+    )
     print(f"   Average time: {metrics.average_execution_time:.2f}s")
     print(f"   Cache hit rate: {metrics.cache_hit_rate:.1f}%")
 
@@ -575,6 +641,7 @@ def demo_parallel_processor():
 
     # Show optimization recommendations
     processor.optimize_performance()
+
 
 if __name__ == "__main__":
     demo_parallel_processor()

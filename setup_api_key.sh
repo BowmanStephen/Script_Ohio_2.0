@@ -75,10 +75,13 @@ EOF
     echo "   ✅ Created new .env file with CFBD_API_KEY"
 fi
 
-# 3. Create/update Claude project settings
-echo "3. Setting up Claude project settings..."
-CLAUude_DIR="/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/.claude"
-CLAUDE_SETTINGS_FILE="$CLAUude_DIR/settings.json"
+# 3. Create/update Claude project settings (LOCAL-ONLY, gitignored)
+echo "3. Setting up Claude project settings (local-only, gitignored)..."
+CLAUDE_DIR="/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/.claude"
+CLAUDE_SETTINGS_FILE="$CLAUDE_DIR/settings.json"
+
+# Ensure .claude directory exists
+mkdir -p "$CLAUDE_DIR"
 
 if [ -f "$CLAUDE_SETTINGS_FILE" ]; then
     # Update existing settings.json
@@ -111,6 +114,8 @@ EOF
     echo "   ✅ Created new Claude settings with CFBD_API_KEY"
 fi
 
+echo "   ⚠️  SECURITY: .claude/settings.json is gitignored - DO NOT commit this file!"
+
 # 4. Set PYTHONPATH if not already set
 echo "4. Ensuring PYTHONPATH is set..."
 PROJECT_PATH="/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0"
@@ -127,8 +132,13 @@ echo "=================="
 echo ""
 echo "Your CFBD API key has been set up in:"
 echo "  ✅ ~/.zshrc (shell environment)"
-echo "  ✅ ./.env (project environment)"
-echo "  ✅ ./.claude/settings.json (Claude project settings)"
+echo "  ✅ ./.env (project environment, gitignored)"
+echo "  ✅ ./.claude/settings.json (Claude project settings, gitignored)"
+echo ""
+echo "⚠️  SECURITY REMINDER:"
+echo "   - .env and .claude/settings.json are gitignored for security"
+echo "   - NEVER commit these files to version control"
+echo "   - These files contain your real API key and are local-only"
 echo ""
 echo "Next steps:"
 echo "  1. Reload your shell: source ~/.zshrc"

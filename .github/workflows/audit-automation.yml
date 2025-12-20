@@ -264,7 +264,7 @@ jobs:
   security-scan:
     name: 🔐 Security Scan
     runs-on: ubuntu-latest
-    if: github.event == 'schedule' || github.event == 'workflow_dispatch'
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
 
     steps:
       - name: 📥 Checkout code
@@ -333,7 +333,7 @@ jobs:
   cleanup:
     name: 🧹 Cleanup Old Reports
     runs-on: ubuntu-latest
-    if: github.event == 'schedule'
+    if: github.event_name == 'schedule'
 
     steps:
       - name: 📥 Checkout code

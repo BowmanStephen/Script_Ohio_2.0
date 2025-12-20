@@ -10,7 +10,7 @@ A simple, open format for guiding coding agents, used by over 20k open-source pr
 - **Install dependencies**: `pip install -r requirements.txt`
 - **Install dev dependencies**: `pip install -r requirements-dev.txt` (if available)
 - **Bootstrap dev environment**: `scripts/bootstrap_dev_env.sh` (installs TypeScript CLI, Kiota, dotnet 9, pnpm/corepack)
-- **Set environment variables**: `export CFBD_API_KEY="3nSBeJV4ODZlJLxQZ/H0vWG3DRAfTSPU2PporK/5K+BJininva/bPx5G4iNjeOsb"` (required for CFBD API access)
+- **Set environment variables**: `export CFBD_API_KEY="your-api-key-here"` (required for CFBD API access - get your key at CollegeFootballData.com)
 
 ## Code style
 
@@ -71,6 +71,49 @@ A simple, open format for guiding coding agents, used by over 20k open-source pr
   - Reports: `reports/` (analysis outputs, performance comparisons)
   - Metadata: `data/metadata/` (data headers, column definitions)
   - See `docs/DATA_ORGANIZATION.md` for complete structure
+
+## Claude Code Plan-then-Execute Integration
+
+Script Ohio 2.0 integrates Claude Code's Plan-then-Execute (P-t-E) architecture
+for autonomous project development. This enables orchestrator-driven subagent
+delegation with context isolation, parallel execution, and sandboxed security.
+
+### Key Components
+
+- **PlanThenExecuteOrchestrator** (`agents/claude_code_orchestrator.py`): Main orchestrator separating planning from execution
+- **SubagentRegistry** (`agents/claude_code_subagent_registry.py`): Loads subagent definitions from `.claude/agents/*.md`
+- **ContextIsolationManager** (`agents/core/context_isolation.py`): Fresh context windows per subagent
+- **SandboxManager** (`agents/core/sandbox_manager.py`): OS-level isolation (Bubblewrap/Seatbelt)
+- **HandoffManager** (`agents/core/handoff_manager.py`): Sequential handoff coordination
+
+### Usage
+
+```python
+from agents.claude_code_orchestrator import PlanThenExecuteOrchestrator
+
+orchestrator = PlanThenExecuteOrchestrator()
+
+# Planning phase
+plan = orchestrator.plan_phase("Add feature X")
+
+# Execution phase
+result = orchestrator.execute_phase(plan)
+```
+
+### CLI Commands
+
+```bash
+# List subagents
+python3 scripts/claude_code_agents.py list
+
+# Invoke subagent
+python3 scripts/claude_code_agents.py invoke --name "Senior Engineer" --task "Implement feature"
+
+# Create subagent
+python3 scripts/claude_code_agents.py create --name "My Agent" --template default
+```
+
+See `docs/CLAUDE_CODE_INTEGRATION.md` for complete documentation.
 
 ## Agent system quick reference
 

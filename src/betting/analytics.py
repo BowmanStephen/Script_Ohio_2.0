@@ -483,9 +483,9 @@ class ValueBetDetector:
             confidence_level=cover_prob,
             bet_type="SPREAD",
             recommendation=f"{'VALUE' if is_value_bet else 'NO VALUE'}: {team} cover {spread} ({edge_percentage:.1%} edge)",
-            risk_reward_ratio=abs(payout)
-            if expected_value > 0
-            else -abs(expected_value),
+            risk_reward_ratio=(
+                abs(payout) if expected_value > 0 else -abs(expected_value)
+            ),
         )
 
     def _analyze_total_value(
@@ -528,9 +528,9 @@ class ValueBetDetector:
             confidence_level=over_prob,
             bet_type="OVER_UNDER",
             recommendation=f"{'VALUE' if is_value_bet else 'NO VALUE'}: Over {total_line} ({edge_percentage:.1%} edge)",
-            risk_reward_ratio=abs(payout)
-            if expected_value > 0
-            else -abs(expected_value),
+            risk_reward_ratio=(
+                abs(payout) if expected_value > 0 else -abs(expected_value)
+            ),
         )
 
     def _american_to_implied_probability(self, american_odds: float) -> float:
@@ -872,9 +872,11 @@ class BettingAnalyticsEngine:
             ),
             "best_edge_percentage": best_edge.edge_percentage,
             "max_kelly_fraction": max_kelly.kelly_fraction if max_kelly else 0,
-            "predicted_winner": prediction.home_team
-            if prediction.home_win_probability > 0.5
-            else prediction.away_team,
+            "predicted_winner": (
+                prediction.home_team
+                if prediction.home_win_probability > 0.5
+                else prediction.away_team
+            ),
             "confidence_level": prediction.prediction_confidence,
             "market_analysis": prediction.market_analysis,
         }
@@ -1025,14 +1027,16 @@ class BettingAnalyticsEngine:
                     for analysis in recent_analyses
                     if analysis["analysis"]["summary"]["value_bets_found"] > 0
                 ),
-                "average_recent_edge": np.mean(
-                    [
-                        analysis["analysis"]["summary"]["best_edge_percentage"]
-                        for analysis in recent_analyses
-                    ]
-                )
-                if recent_analyses
-                else 0,
+                "average_recent_edge": (
+                    np.mean(
+                        [
+                            analysis["analysis"]["summary"]["best_edge_percentage"]
+                            for analysis in recent_analyses
+                        ]
+                    )
+                    if recent_analyses
+                    else 0
+                ),
             },
             "recommendations": self._generate_performance_recommendations(),
         }

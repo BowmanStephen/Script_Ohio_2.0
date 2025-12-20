@@ -5,18 +5,21 @@ Provides comprehensive historical team matchup analysis and predictive insights
 
 import json
 import logging
-from datetime import datetime, timezone, timedelta
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta, timezone
+from typing import Any, Dict, List, Optional, Tuple
+
 import pandas as pd
 
 from .enhanced_unified_client import EnhancedUnifiedCFBDClient
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class HistoricalMatchup:
     """Represents a historical game between two teams"""
+
     date: str
     season: int
     week: Optional[int]
@@ -30,9 +33,11 @@ class HistoricalMatchup:
     venue: str
     attendance: Optional[int]
 
+
 @dataclass
 class MatchupStatistics:
     """Statistical summary of team matchups"""
+
     total_games: int
     team1_wins: int
     team2_wins: int
@@ -49,9 +54,11 @@ class MatchupStatistics:
     biggest_win: Dict[str, Any]
     biggest_loss: Dict[str, Any]
 
+
 @dataclass
 class MatchupPrediction:
     """Predictive analysis for upcoming matchup"""
+
     team1: str
     team2: str
     predicted_winner: str
@@ -62,6 +69,7 @@ class MatchupPrediction:
     key_trends: List[str]
     similar_matchups: List[Dict[str, Any]]
 
+
 class TeamMatchupAnalyzer:
     """
     Analyzes historical team matchups and provides predictive insights
@@ -70,9 +78,13 @@ class TeamMatchupAnalyzer:
     def __init__(self, config=None):
         """Initialize matchup analyzer"""
         self.client = EnhancedUnifiedCFBDClient(config)
-        self.matchup_cache: Dict[str, Tuple[List[HistoricalMatchup], MatchupStatistics]] = {}
+        self.matchup_cache: Dict[
+            str, Tuple[List[HistoricalMatchup], MatchupStatistics]
+        ] = {}
 
-    def get_historical_matchups(self, team1: str, team2: str, limit_years: int = 20) -> List[HistoricalMatchup]:
+    def get_historical_matchups(
+        self, team1: str, team2: str, limit_years: int = 20
+    ) -> List[HistoricalMatchup]:
         """
         Get historical matchups between two teams
 
@@ -86,7 +98,9 @@ class TeamMatchupAnalyzer:
         """
         cache_key = f"{team1.lower()}_{team2.lower()}_{limit_years}"
         if cache_key in self.matchup_cache:
-            logger.debug(f"📦 Retrieved historical matchups from cache for {team1} vs {team2}")
+            logger.debug(
+                f"📦 Retrieved historical matchups from cache for {team1} vs {team2}"
+            )
             return self.matchup_cache[cache_key][0]
 
         try:
@@ -96,7 +110,9 @@ class TeamMatchupAnalyzer:
             matchups_data = self.client.get_team_matchup(team1, team2)
 
             if not matchups_data:
-                logger.warning(f"No historical matchups found between {team1} and {team2}")
+                logger.warning(
+                    f"No historical matchups found between {team1} and {team2}"
+                )
                 return []
 
             # Process matchup data
@@ -106,23 +122,26 @@ class TeamMatchupAnalyzer:
             historical_matchups = []
             for game in matchups_data:
                 try:
-                    season = game.get('season', 0)
+                    season = game.get("season", 0)
                     if season < cutoff_year:
                         continue  # Skip games outside our time window
 
                     matchup = HistoricalMatchup(
-                        date=game.get('start_date', ''),
+                        date=game.get("start_date", ""),
                         season=season,
-                        week=game.get('week'),
-                        home_team=game.get('home_team', ''),
-                        away_team=game.get('away_team', ''),
-                        neutral_site=game.get('neutral_site', False),
-                        home_score=game.get('home_points', 0) or 0,
-                        away_score=game.get('away_points', 0) or 0,
+                        week=game.get("week"),
+                        home_team=game.get("home_team", ""),
+                        away_team=game.get("away_team", ""),
+                        neutral_site=game.get("neutral_site", False),
+                        home_score=game.get("home_points", 0) or 0,
+                        away_score=game.get("away_points", 0) or 0,
                         winner=self._determine_winner(game),
-                        margin=abs((game.get('home_points', 0) or 0) - (game.get('away_points', 0) or 0)),
-                        venue=game.get('venue', ''),
-                        attendance=game.get('attendance')
+                        margin=abs(
+                            (game.get("home_points", 0) or 0)
+                            - (game.get("away_points", 0) or 0)
+                        ),
+                        venue=game.get("venue", ""),
+                        attendance=game.get("attendance"),
                     )
 
                     historical_matchups.append(matchup)
@@ -141,7 +160,9 @@ class TeamMatchupAnalyzer:
             logger.error(f"❌ Error getting historical matchups: {e}")
             return []
 
-    def analyze_matchup_statistics(self, team1: str, team2: str, limit_years: int = 20) -> MatchupStatistics:
+    def analyze_matchup_statistics(
+        self, team1: str, team2: str, limit_years: int = 20
+    ) -> MatchupStatistics:
         """
         Analyze comprehensive statistics for team matchups
 
@@ -162,12 +183,21 @@ class TeamMatchupAnalyzer:
 
         if not matchups:
             return MatchupStatistics(
-                total_games=0, team1_wins=0, team2_wins=0, ties=0,
-                team1_win_pct=0.0, team2_win_pct=0.0,
-                avg_points_team1=0.0, avg_points_team2=0.0,
-                avg_margin=0.0, home_advantage_wins=0,
-                neutral_site_games=0, recent_trend=[],
-                longest_streak={}, biggest_win={}, biggest_loss={}
+                total_games=0,
+                team1_wins=0,
+                team2_wins=0,
+                ties=0,
+                team1_win_pct=0.0,
+                team2_win_pct=0.0,
+                avg_points_team1=0.0,
+                avg_points_team2=0.0,
+                avg_margin=0.0,
+                home_advantage_wins=0,
+                neutral_site_games=0,
+                recent_trend=[],
+                longest_streak={},
+                biggest_win={},
+                biggest_loss={},
             )
 
         # Calculate basic statistics
@@ -208,9 +238,13 @@ class TeamMatchupAnalyzer:
         recent_trend = []
         for game in recent_games:
             if game.winner == team1:
-                recent_trend.append(f"{team1} {game.home_score if game.home_team == team1 else game.away_score}-{game.away_score if game.home_team == team1 else game.home_score} {team2}")
+                recent_trend.append(
+                    f"{team1} {game.home_score if game.home_team == team1 else game.away_score}-{game.away_score if game.home_team == team1 else game.home_score} {team2}"
+                )
             else:
-                recent_trend.append(f"{team2} {game.away_score if game.home_team == team1 else game.home_score}-{game.home_score if game.home_team == team1 else game.away_score} {team1}")
+                recent_trend.append(
+                    f"{team2} {game.away_score if game.home_team == team1 else game.home_score}-{game.home_score if game.home_team == team1 else game.away_score} {team1}"
+                )
 
         # Find longest winning streak
         longest_streak = self._find_longest_streak(matchups, team1, team2)
@@ -234,7 +268,7 @@ class TeamMatchupAnalyzer:
             recent_trend=recent_trend,
             longest_streak=longest_streak,
             biggest_win=biggest_win,
-            biggest_loss=biggest_loss
+            biggest_loss=biggest_loss,
         )
 
         # Cache the results
@@ -242,7 +276,9 @@ class TeamMatchupAnalyzer:
 
         return stats
 
-    def predict_matchup_outcome(self, team1: str, team2: str, current_form: Optional[Dict[str, float]] = None) -> MatchupPrediction:
+    def predict_matchup_outcome(
+        self, team1: str, team2: str, current_form: Optional[Dict[str, float]] = None
+    ) -> MatchupPrediction:
         """
         Predict outcome of upcoming matchup based on historical data
 
@@ -268,7 +304,7 @@ class TeamMatchupAnalyzer:
                 prediction_factors={},
                 historical_advantage="None",
                 key_trends=["No historical matchups available"],
-                similar_matchups=[]
+                similar_matchups=[],
             )
 
         # Base prediction on historical win percentages
@@ -303,21 +339,33 @@ class TeamMatchupAnalyzer:
 
         # Identify prediction factors
         prediction_factors = {
-            'historical_win_pct': f"{stats.team1_win_pct:.1f}% vs {stats.team2_win_pct:.1f}%",
-            'avg_points_diff': f"{abs(stats.avg_points_team1 - stats.avg_points_team2):.1f} points",
-            'home_advantage': f"{stats.home_advantage_wins} home wins" if stats.home_advantage_wins > 0 else "No home advantage data",
-            'recent_form': "Considered" if current_form else "Not available"
+            "historical_win_pct": f"{stats.team1_win_pct:.1f}% vs {stats.team2_win_pct:.1f}%",
+            "avg_points_diff": f"{abs(stats.avg_points_team1 - stats.avg_points_team2):.1f} points",
+            "home_advantage": (
+                f"{stats.home_advantage_wins} home wins"
+                if stats.home_advantage_wins > 0
+                else "No home advantage data"
+            ),
+            "recent_form": "Considered" if current_form else "Not available",
         }
 
         # Determine historical advantage
         if stats.team1_win_pct > 60:
-            historical_advantage = f"{team1} dominates historically ({stats.team1_win_pct:.1f}%)"
+            historical_advantage = (
+                f"{team1} dominates historically ({stats.team1_win_pct:.1f}%)"
+            )
         elif stats.team2_win_pct > 60:
-            historical_advantage = f"{team2} dominates historically ({stats.team2_win_pct:.1f}%)"
+            historical_advantage = (
+                f"{team2} dominates historically ({stats.team2_win_pct:.1f}%)"
+            )
         elif stats.team1_win_pct > 50:
-            historical_advantage = f"{team1} has slight historical edge ({stats.team1_win_pct:.1f}%)"
+            historical_advantage = (
+                f"{team1} has slight historical edge ({stats.team1_win_pct:.1f}%)"
+            )
         elif stats.team2_win_pct > 50:
-            historical_advantage = f"{team2} has slight historical edge ({stats.team2_win_pct:.1f}%)"
+            historical_advantage = (
+                f"{team2} has slight historical edge ({stats.team2_win_pct:.1f}%)"
+            )
         else:
             historical_advantage = "Evenly matched historically"
 
@@ -325,11 +373,13 @@ class TeamMatchupAnalyzer:
         key_trends = [
             f"{stats.total_games} total meetings since {datetime.now().year - 20}",
             f"Average margin: {stats.avg_margin:.1f} points",
-            f"Home team wins: {stats.home_advantage_wins}/{stats.total_games - stats.neutral_site_games}"
+            f"Home team wins: {stats.home_advantage_wins}/{stats.total_games - stats.neutral_site_games}",
         ]
 
         if stats.longest_streak:
-            key_trends.append(f"Longest streak: {stats.longest_streak['team']} ({stats.longest_streak['length']} games)")
+            key_trends.append(
+                f"Longest streak: {stats.longest_streak['team']} ({stats.longest_streak['length']} games)"
+            )
 
         # Find similar historical matchups
         similar_matchups = self._find_similar_matchups(team1, team2, stats)
@@ -343,88 +393,102 @@ class TeamMatchupAnalyzer:
             prediction_factors=prediction_factors,
             historical_advantage=historical_advantage,
             key_trends=key_trends,
-            similar_matchups=similar_matchups
+            similar_matchups=similar_matchups,
         )
 
     def _determine_winner(self, game: Dict[str, Any]) -> str:
         """Determine winner from game data"""
-        home_score = game.get('home_points', 0) or 0
-        away_score = game.get('away_points', 0) or 0
-        home_team = game.get('home_team', '')
+        home_score = game.get("home_points", 0) or 0
+        away_score = game.get("away_points", 0) or 0
+        home_team = game.get("home_team", "")
 
         if home_score > away_score:
             return home_team
         elif away_score > home_score:
-            return game.get('away_team', '')
+            return game.get("away_team", "")
         else:
             return "Tie"
 
-    def _find_longest_streak(self, matchups: List[HistoricalMatchup], team1: str, team2: str) -> Dict[str, Any]:
+    def _find_longest_streak(
+        self, matchups: List[HistoricalMatchup], team1: str, team2: str
+    ) -> Dict[str, Any]:
         """Find longest winning streak in the series"""
         if not matchups:
             return {}
 
-        longest_streak = {'team': '', 'length': 0, 'start_year': 0, 'end_year': 0}
-        current_streak = {'team': '', 'length': 0, 'start_year': 0}
+        longest_streak = {"team": "", "length": 0, "start_year": 0, "end_year": 0}
+        current_streak = {"team": "", "length": 0, "start_year": 0}
 
         for matchup in matchups:
             winner = matchup.winner
 
-            if winner == current_streak['team']:
-                current_streak['length'] += 1
+            if winner == current_streak["team"]:
+                current_streak["length"] += 1
             else:
                 # Streak ended, check if it was the longest
-                if current_streak['length'] > longest_streak['length']:
+                if current_streak["length"] > longest_streak["length"]:
                     longest_streak = current_streak.copy()
 
                 # Start new streak
-                current_streak = {'team': winner, 'length': 1, 'start_year': matchup.season}
+                current_streak = {
+                    "team": winner,
+                    "length": 1,
+                    "start_year": matchup.season,
+                }
 
-            if current_streak['length'] == 1:
-                current_streak['start_year'] = matchup.season
+            if current_streak["length"] == 1:
+                current_streak["start_year"] = matchup.season
 
         # Check final streak
-        if current_streak['length'] > longest_streak['length']:
+        if current_streak["length"] > longest_streak["length"]:
             longest_streak = current_streak.copy()
 
-        if longest_streak['team']:
-            longest_streak['end_year'] = longest_streak['start_year'] + longest_streak['length'] - 1
+        if longest_streak["team"]:
+            longest_streak["end_year"] = (
+                longest_streak["start_year"] + longest_streak["length"] - 1
+            )
 
         return longest_streak
 
-    def _find_biggest_win(self, matchups: List[HistoricalMatchup], team1: str, team2: str) -> Dict[str, Any]:
+    def _find_biggest_win(
+        self, matchups: List[HistoricalMatchup], team1: str, team2: str
+    ) -> Dict[str, Any]:
         """Find biggest win for team1"""
-        biggest_win = {'margin': 0, 'date': '', 'score': '', 'opponent': team2}
+        biggest_win = {"margin": 0, "date": "", "score": "", "opponent": team2}
 
         for matchup in matchups:
-            if matchup.winner == team1 and matchup.margin > biggest_win['margin']:
+            if matchup.winner == team1 and matchup.margin > biggest_win["margin"]:
                 biggest_win = {
-                    'margin': matchup.margin,
-                    'date': matchup.date,
-                    'score': f"{matchup.home_score}-{matchup.away_score}",
-                    'opponent': team2,
-                    'season': matchup.season
+                    "margin": matchup.margin,
+                    "date": matchup.date,
+                    "score": f"{matchup.home_score}-{matchup.away_score}",
+                    "opponent": team2,
+                    "season": matchup.season,
                 }
 
         return biggest_win
 
-    def _find_biggest_loss(self, matchups: List[HistoricalMatchup], team1: str, team2: str) -> Dict[str, Any]:
+    def _find_biggest_loss(
+        self, matchups: List[HistoricalMatchup], team1: str, team2: str
+    ) -> Dict[str, Any]:
         """Find biggest loss for team1"""
-        biggest_loss = {'margin': 0, 'date': '', 'score': '', 'opponent': team2}
+        biggest_loss = {"margin": 0, "date": "", "score": "", "opponent": team2}
 
         for matchup in matchups:
-            if matchup.winner == team2 and matchup.margin > biggest_loss['margin']:
+            if matchup.winner == team2 and matchup.margin > biggest_loss["margin"]:
                 biggest_loss = {
-                    'margin': matchup.margin,
-                    'date': matchup.date,
-                    'score': f"{matchup.home_score}-{matchup.away_score}",
-                    'opponent': team2,
-                    'season': matchup.season
+                    "margin": matchup.margin,
+                    "date": matchup.date,
+                    "score": f"{matchup.home_score}-{matchup.away_score}",
+                    "opponent": team2,
+                    "season": matchup.season,
                 }
 
         return biggest_loss
 
-    def _find_similar_matchups(self, team1: str, team2: str, stats: MatchupStatistics) -> List[Dict[str, Any]]:
+    def _find_similar_matchups(
+        self, team1: str, team2: str, stats: MatchupStatistics
+    ) -> List[Dict[str, Any]]:
         """Find similar historical matchups based on scoring patterns"""
         similar = []
 
@@ -435,22 +499,40 @@ class TeamMatchupAnalyzer:
         # This would search through actual historical data
         # For now, provide placeholder similar matchups
         if stats.total_games > 0:
-            similar.append({
-                'description': f"Close games (margin < 10)",
-                'count': len([m for m in self.get_historical_matchups(team1, team2) if m.margin < 10]),
-                'record': "Varies by team"
-            })
-            similar.append({
-                'description': f"High-scoring games (>60 total points)",
-                'count': len([m for m in self.get_historical_matchups(team1, team2) if (m.home_score + m.away_score) > 60]),
-                'record': "Varies by team"
-            })
+            similar.append(
+                {
+                    "description": f"Close games (margin < 10)",
+                    "count": len(
+                        [
+                            m
+                            for m in self.get_historical_matchups(team1, team2)
+                            if m.margin < 10
+                        ]
+                    ),
+                    "record": "Varies by team",
+                }
+            )
+            similar.append(
+                {
+                    "description": f"High-scoring games (>60 total points)",
+                    "count": len(
+                        [
+                            m
+                            for m in self.get_historical_matchups(team1, team2)
+                            if (m.home_score + m.away_score) > 60
+                        ]
+                    ),
+                    "record": "Varies by team",
+                }
+            )
 
         return similar
 
     def get_rivalry_analysis(self, team1: str, team2: str) -> Dict[str, Any]:
         """Comprehensive rivalry analysis"""
-        stats = self.analyze_matchup_statistics(team1, team2, limit_years=30)  # 30-year window for rivalries
+        stats = self.analyze_matchup_statistics(
+            team1, team2, limit_years=30
+        )  # 30-year window for rivalries
 
         rivalry_score = 0
         rivalry_factors = []
@@ -481,33 +563,44 @@ class TeamMatchupAnalyzer:
             rivalry_factors.append("Moderately close games")
 
         # Recent streaks
-        if stats.longest_streak and stats.longest_streak['length'] >= 5:
+        if stats.longest_streak and stats.longest_streak["length"] >= 5:
             rivalry_score += 15
             rivalry_factors.append("Significant winning streaks")
 
         # Big games/championships
         # This would check for conference championships, bowl games, etc.
 
-        rivalry_level = "Intense Rivalry" if rivalry_score >= 70 else \
-                      "Strong Rivalry" if rivalry_score >= 50 else \
-                      "Historical Matchup" if rivalry_score >= 30 else \
-                      "Occasional Matchup"
+        rivalry_level = (
+            "Intense Rivalry"
+            if rivalry_score >= 70
+            else (
+                "Strong Rivalry"
+                if rivalry_score >= 50
+                else (
+                    "Historical Matchup"
+                    if rivalry_score >= 30
+                    else "Occasional Matchup"
+                )
+            )
+        )
 
         return {
-            'rivalry_score': rivalry_score,
-            'rivalry_level': rivalry_level,
-            'rivalry_factors': rivalry_factors,
-            'total_meetings': stats.total_games,
-            'competitive_balance': f"{abs(stats.team1_win_pct - stats.team2_win_pct):.1f}% win rate difference",
-            'avg_margin': stats.avg_margin,
-            'notable_games': {
-                'biggest_win': stats.biggest_win,
-                'biggest_loss': stats.biggest_loss,
-                'longest_streak': stats.longest_streak
-            }
+            "rivalry_score": rivalry_score,
+            "rivalry_level": rivalry_level,
+            "rivalry_factors": rivalry_factors,
+            "total_meetings": stats.total_games,
+            "competitive_balance": f"{abs(stats.team1_win_pct - stats.team2_win_pct):.1f}% win rate difference",
+            "avg_margin": stats.avg_margin,
+            "notable_games": {
+                "biggest_win": stats.biggest_win,
+                "biggest_loss": stats.biggest_loss,
+                "longest_streak": stats.longest_streak,
+            },
         }
 
-    def export_matchup_analysis_to_dataframe(self, matchup_pairs: List[Tuple[str, str]]) -> pd.DataFrame:
+    def export_matchup_analysis_to_dataframe(
+        self, matchup_pairs: List[Tuple[str, str]]
+    ) -> pd.DataFrame:
         """Export multiple matchup analyses to DataFrame"""
         data = []
 
@@ -517,16 +610,16 @@ class TeamMatchupAnalyzer:
                 rivalry = self.get_rivalry_analysis(team1, team2)
 
                 row = {
-                    'team1': team1,
-                    'team2': team2,
-                    'total_games': stats.total_games,
-                    'team1_win_pct': stats.team1_win_pct,
-                    'team2_win_pct': stats.team2_win_pct,
-                    'avg_points_team1': stats.avg_points_team1,
-                    'avg_points_team2': stats.avg_points_team2,
-                    'avg_margin': stats.avg_margin,
-                    'rivalry_score': rivalry['rivalry_score'],
-                    'rivalry_level': rivalry['rivalry_level']
+                    "team1": team1,
+                    "team2": team2,
+                    "total_games": stats.total_games,
+                    "team1_win_pct": stats.team1_win_pct,
+                    "team2_win_pct": stats.team2_win_pct,
+                    "avg_points_team1": stats.avg_points_team1,
+                    "avg_points_team2": stats.avg_points_team2,
+                    "avg_margin": stats.avg_margin,
+                    "rivalry_score": rivalry["rivalry_score"],
+                    "rivalry_level": rivalry["rivalry_level"],
                 }
                 data.append(row)
 
@@ -538,6 +631,7 @@ class TeamMatchupAnalyzer:
                 continue
 
         return pd.DataFrame(data)
+
 
 # Example usage
 def demo_matchup_analyzer():
@@ -552,7 +646,7 @@ def demo_matchup_analyzer():
         ("Alabama", "Georgia"),
         ("Ohio State", "Michigan"),
         ("USC", "UCLA"),
-        ("Texas", "Oklahoma")
+        ("Texas", "Oklahoma"),
     ]
 
     for team1, team2 in matchups:
@@ -569,7 +663,9 @@ def demo_matchup_analyzer():
 
             # Get rivalry analysis
             rivalry = analyzer.get_rivalry_analysis(team1, team2)
-            print(f"   Rivalry Level: {rivalry['rivalry_level']} ({rivalry['rivalry_score']}/100)")
+            print(
+                f"   Rivalry Level: {rivalry['rivalry_level']} ({rivalry['rivalry_score']}/100)"
+            )
 
             # Get prediction
             prediction = analyzer.predict_matchup_outcome(team1, team2)
@@ -578,6 +674,7 @@ def demo_matchup_analyzer():
 
         except Exception as e:
             print(f"   ❌ Error: {e}")
+
 
 if __name__ == "__main__":
     demo_matchup_analyzer()

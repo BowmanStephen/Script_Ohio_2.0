@@ -10,6 +10,7 @@ from .unified_client import UnifiedCFBDClient
 
 logger = logging.getLogger(__name__)
 
+
 class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
     """
     Enhanced CFBD client with additional endpoints for comprehensive 2025 coverage.
@@ -35,7 +36,7 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
         year: int,
         week: Optional[int] = None,
         season_type: str = "regular",
-        team: Optional[str] = None
+        team: Optional[str] = None,
     ) -> List[Dict]:
         """
         Get pregame win probability predictions.
@@ -54,11 +55,7 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
             import cfbd
             from cfbd import GamesApi
 
-            params = {
-                "year": year,
-                "seasonType": season_type,
-                "team": team
-            }
+            params = {"year": year, "seasonType": season_type, "team": team}
             if week:
                 params["week"] = week
 
@@ -66,7 +63,10 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
             data = games_api.get_win_probabilities(**params)
 
             if data:
-                return [item.to_dict() if hasattr(item, 'to_dict') else item for item in data]
+                return [
+                    item.to_dict() if hasattr(item, "to_dict") else item
+                    for item in data
+                ]
             return []
 
         except Exception as e:
@@ -79,7 +79,7 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
         week: Optional[int] = None,
         season_type: str = "regular",
         team: Optional[str] = None,
-        game_id: Optional[int] = None
+        game_id: Optional[int] = None,
     ) -> List[Dict]:
         """
         Get game media content and highlights.
@@ -98,11 +98,7 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
             import cfbd
             from cfbd import GamesApi
 
-            params = {
-                "year": year,
-                "seasonType": season_type,
-                "team": team
-            }
+            params = {"year": year, "seasonType": season_type, "team": team}
             if week:
                 params["week"] = week
             if game_id:
@@ -112,18 +108,17 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
             data = games_api.get_game_media(**params)
 
             if data:
-                return [item.to_dict() if hasattr(item, 'to_dict') else item for item in data]
+                return [
+                    item.to_dict() if hasattr(item, "to_dict") else item
+                    for item in data
+                ]
             return []
 
         except Exception as e:
             logger.warning(f"Game media not available: {e}")
             return []
 
-    def get_roster(
-        self,
-        team: str,
-        year: int
-    ) -> List[Dict]:
+    def get_roster(self, team: str, year: int) -> List[Dict]:
         """
         Get team roster and depth chart information.
 
@@ -136,7 +131,7 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
         """
         try:
             # Check if base client has this method
-            if hasattr(super(), 'get_roster'):
+            if hasattr(super(), "get_roster"):
                 return super().get_roster(team=team, year=year)
 
             # Direct API implementation
@@ -147,7 +142,10 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
             data = teams_api.get_roster(team=team, year=year)
 
             if data:
-                return [item.to_dict() if hasattr(item, 'to_dict') else item for item in data]
+                return [
+                    item.to_dict() if hasattr(item, "to_dict") else item
+                    for item in data
+                ]
             return []
 
         except Exception as e:
@@ -155,10 +153,7 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
             return []
 
     def get_advanced_team_stats(
-        self,
-        year: int,
-        team: Optional[str] = None,
-        conference: Optional[str] = None
+        self, year: int, team: Optional[str] = None, conference: Optional[str] = None
     ) -> List[Dict]:
         """
         Get advanced team statistics including EPA, success rates, etc.
@@ -173,7 +168,7 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
         """
         try:
             # Check if base client has this method
-            if hasattr(super(), 'get_advanced_stats'):
+            if hasattr(super(), "get_advanced_stats"):
                 return super().get_advanced_stats(year=year, team=team)
 
             # Direct API implementation
@@ -181,10 +176,15 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
             from cfbd import StatsApi
 
             stats_api = StatsApi(self.api_client)
-            data = stats_api.get_advanced_team_stats(year=year, team=team, conference=conference)
+            data = stats_api.get_advanced_team_stats(
+                year=year, team=team, conference=conference
+            )
 
             if data:
-                return [item.to_dict() if hasattr(item, 'to_dict') else item for item in data]
+                return [
+                    item.to_dict() if hasattr(item, "to_dict") else item
+                    for item in data
+                ]
             return []
 
         except Exception as e:
@@ -197,7 +197,7 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
         team: Optional[str] = None,
         conference: Optional[str] = None,
         category: Optional[str] = None,
-        position: Optional[str] = None
+        position: Optional[str] = None,
     ) -> List[Dict]:
         """
         Get player season statistics.
@@ -214,7 +214,7 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
         """
         try:
             # Check if base client has this method
-            if hasattr(super(), 'get_player_stats'):
+            if hasattr(super(), "get_player_stats"):
                 return super().get_player_stats(year=year, team=team, category=category)
 
             # Direct API implementation
@@ -227,22 +227,21 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
                 team=team,
                 conference=conference,
                 category=category,
-                position=position
+                position=position,
             )
 
             if data:
-                return [item.to_dict() if hasattr(item, 'to_dict') else item for item in data]
+                return [
+                    item.to_dict() if hasattr(item, "to_dict") else item
+                    for item in data
+                ]
             return []
 
         except Exception as e:
             logger.warning(f"Player season stats not available for {year}: {e}")
             return []
 
-    def get_recruiting(
-        self,
-        year: int,
-        team: Optional[str] = None
-    ) -> List[Dict]:
+    def get_recruiting(self, year: int, team: Optional[str] = None) -> List[Dict]:
         """
         Get recruiting class rankings and commitments.
 
@@ -261,27 +260,26 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
             recruiting_api = RecruitingApi(self.api_client)
 
             # Try different endpoint methods
-            if hasattr(recruiting_api, 'get_team_recruiting_rankings'):
+            if hasattr(recruiting_api, "get_team_recruiting_rankings"):
                 data = recruiting_api.get_team_recruiting_rankings(year=year, team=team)
-            elif hasattr(recruiting_api, 'get_recruiting'):
+            elif hasattr(recruiting_api, "get_recruiting"):
                 data = recruiting_api.get_recruiting(year=year, team=team)
             else:
                 logger.warning("Recruiting API methods not found")
                 return []
 
             if data:
-                return [item.to_dict() if hasattr(item, 'to_dict') else item for item in data]
+                return [
+                    item.to_dict() if hasattr(item, "to_dict") else item
+                    for item in data
+                ]
             return []
 
         except Exception as e:
             logger.warning(f"Recruiting data not available for {year}: {e}")
             return []
 
-    def get_team_matchup(
-        self,
-        team1: str,
-        team2: str
-    ) -> List[Dict]:
+    def get_team_matchup(self, team1: str, team2: str) -> List[Dict]:
         """
         Get historical matchup records between two teams.
 
@@ -301,17 +299,19 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
             data = teams_api.get_team_matchup(team1=team1, team2=team2)
 
             if data:
-                return [item.to_dict() if hasattr(item, 'to_dict') else item for item in data]
+                return [
+                    item.to_dict() if hasattr(item, "to_dict") else item
+                    for item in data
+                ]
             return []
 
         except Exception as e:
-            logger.warning(f"Team matchup data not available for {team1} vs {team2}: {e}")
+            logger.warning(
+                f"Team matchup data not available for {team1} vs {team2}: {e}"
+            )
             return []
 
-    def get_game_box_score(
-        self,
-        game_id: int
-    ) -> Optional[Dict]:
+    def get_game_box_score(self, game_id: int) -> Optional[Dict]:
         """
         Get detailed game box score.
 
@@ -330,18 +330,14 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
             data = games_api.get_game_box_score(game_id=game_id)
 
             if data:
-                return data.to_dict() if hasattr(data, 'to_dict') else data
+                return data.to_dict() if hasattr(data, "to_dict") else data
             return None
 
         except Exception as e:
             logger.warning(f"Box score not available for game {game_id}: {e}")
             return None
 
-    def get_team_talent(
-        self,
-        year: int,
-        team: Optional[str] = None
-    ) -> List[Dict]:
+    def get_team_talent(self, year: int, team: Optional[str] = None) -> List[Dict]:
         """
         Get team talent recruiting rankings.
 
@@ -354,7 +350,7 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
         """
         try:
             # Check if base client has this method
-            if hasattr(super(), 'get_talent'):
+            if hasattr(super(), "get_talent"):
                 return super().get_talent(year=year, team=team)
 
             # Direct API implementation
@@ -365,18 +361,17 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
             data = teams_api.get_team_talent(year=year, team=team)
 
             if data:
-                return [item.to_dict() if hasattr(item, 'to_dict') else item for item in data]
+                return [
+                    item.to_dict() if hasattr(item, "to_dict") else item
+                    for item in data
+                ]
             return []
 
         except Exception as e:
             logger.warning(f"Team talent data not available for {year}: {e}")
             return []
 
-    def get_elo(
-        self,
-        year: int,
-        week: Optional[int] = None
-    ) -> List[Dict]:
+    def get_elo(self, year: int, week: Optional[int] = None) -> List[Dict]:
         """
         Get Elo power ratings.
 
@@ -389,7 +384,7 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
         """
         try:
             # Check if base client has this method
-            if hasattr(super(), 'get_ratings'):
+            if hasattr(super(), "get_ratings"):
                 return super().get_ratings(year=year, week=week)
 
             # Direct API implementation
@@ -400,7 +395,10 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
             data = ratings_api.get_elo(year=year, week=week)
 
             if data:
-                return [item.to_dict() if hasattr(item, 'to_dict') else item for item in data]
+                return [
+                    item.to_dict() if hasattr(item, "to_dict") else item
+                    for item in data
+                ]
             return []
 
         except Exception as e:
@@ -413,7 +411,7 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
         self,
         week: Optional[int] = None,
         include_win_probs: bool = True,
-        include_media: bool = False
+        include_media: bool = False,
     ) -> Dict[str, Any]:
         """
         Get comprehensive 2025 game data with optional enhancements.
@@ -434,7 +432,7 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
                 "games": games,
                 "season": 2025,
                 "week": week,
-                "total_games": len(games)
+                "total_games": len(games),
             }
 
             # Add win probabilities if requested
@@ -453,7 +451,9 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
             logger.error(f"Error getting 2025 game data: {e}")
             return {"error": str(e), "games": []}
 
-    def get_2025_team_rosters(self, teams: Optional[List[str]] = None) -> Dict[str, List[Dict]]:
+    def get_2025_team_rosters(
+        self, teams: Optional[List[str]] = None
+    ) -> Dict[str, List[Dict]]:
         """
         Get 2025 roster data for specified teams or all FBS teams.
 
@@ -469,7 +469,11 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
             if not teams:
                 # Get all FBS teams
                 all_teams = self.get_teams(conference=None)  # Get all teams
-                teams = [team.get('school', team.get('team', '')) for team in all_teams if team.get('school')]
+                teams = [
+                    team.get("school", team.get("team", ""))
+                    for team in all_teams
+                    if team.get("school")
+                ]
                 teams = [team for team in teams if team]  # Filter out empty names
 
             for team in teams:
@@ -494,7 +498,7 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
             result = {
                 "season": 2025,
                 "timestamp": self._get_current_timestamp(),
-                "data_sources": []
+                "data_sources": [],
             }
 
             # Basic team stats
@@ -538,11 +542,16 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
     def _get_current_timestamp(self) -> str:
         """Get current timestamp for data tracking"""
         from datetime import datetime, timezone
+
         return datetime.now(timezone.utc).isoformat()
 
     def get_performance_metrics(self) -> Dict[str, Any]:
         """Get enhanced performance metrics"""
-        base_metrics = super().get_performance_metrics() if hasattr(super(), 'get_performance_metrics') else {}
+        base_metrics = (
+            super().get_performance_metrics()
+            if hasattr(super(), "get_performance_metrics")
+            else {}
+        )
 
         enhanced_metrics = {
             **base_metrics,
@@ -556,10 +565,10 @@ class EnhancedUnifiedCFBDClient(UnifiedCFBDClient):
                 "team_matchup",
                 "game_box_score",
                 "team_talent",
-                "elo"
+                "elo",
             ],
             "client_type": "EnhancedUnifiedCFBDClient",
-            "season_2025_coverage": "Enhanced with additional endpoints"
+            "season_2025_coverage": "Enhanced with additional endpoints",
         }
 
         return enhanced_metrics

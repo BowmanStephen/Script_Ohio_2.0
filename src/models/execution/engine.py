@@ -837,12 +837,16 @@ class ModelExecutionEngine(BaseAgent):
                             target_feature=str(model_def["target_feature"]),
                             features_required=features_required,
                             performance_metrics={
-                                "mae": 17.31
-                                if model_def["model_type"] == "regression"
-                                else None,
-                                "accuracy": 0.431
-                                if model_def["model_type"] == "classification"
-                                else None,
+                                "mae": (
+                                    17.31
+                                    if model_def["model_type"] == "regression"
+                                    else None
+                                ),
+                                "accuracy": (
+                                    0.431
+                                    if model_def["model_type"] == "classification"
+                                    else None
+                                ),
                                 "validation_date": "2025-11-07",
                             },
                             training_date="2025-11-01",
@@ -963,9 +967,11 @@ class ModelExecutionEngine(BaseAgent):
                     "predicted_margin": float(prediction_value),
                     "predicted_winner": predicted_winner,
                     "spread": parameters.get("spread", 0.0),
-                    "against_spread": "Home"
-                    if prediction_value > parameters.get("spread", 0)
-                    else "Away",
+                    "against_spread": (
+                        "Home"
+                        if prediction_value > parameters.get("spread", 0)
+                        else "Away"
+                    ),
                 }
             else:
                 # Win probability prediction
@@ -1503,31 +1509,33 @@ class ModelExecutionEngine(BaseAgent):
             "model_name": model_name,
             "model_type": model_metadata.model_type,
             "total_predictions": len(model_predictions),
-            "average_execution_time": np.mean(
-                [p["execution_time"] for p in model_predictions]
-            )
-            if model_predictions
-            else 0,
+            "average_execution_time": (
+                np.mean([p["execution_time"] for p in model_predictions])
+                if model_predictions
+                else 0
+            ),
             "performance_metrics": model_metadata.performance_metrics,
             "feature_count": len(model_metadata.features_required),
-            "last_prediction": model_predictions[-1]["timestamp"]
-            if model_predictions
-            else None,
+            "last_prediction": (
+                model_predictions[-1]["timestamp"] if model_predictions else None
+            ),
             "feature_analysis": feature_analysis,
             "model_health": {
-                "status": "healthy"
-                if len(model_predictions) > 0
-                else "no_recent_predictions",
+                "status": (
+                    "healthy" if len(model_predictions) > 0 else "no_recent_predictions"
+                ),
                 "recent_predictions": len(model_predictions),
-                "average_confidence": np.mean(
-                    [
-                        p["prediction"].get("confidence", 0)
-                        for p in model_predictions
-                        if p["prediction"].get("confidence")
-                    ]
-                )
-                if model_predictions
-                else 0,
+                "average_confidence": (
+                    np.mean(
+                        [
+                            p["prediction"].get("confidence", 0)
+                            for p in model_predictions
+                            if p["prediction"].get("confidence")
+                        ]
+                    )
+                    if model_predictions
+                    else 0
+                ),
             },
         }
 
@@ -1755,9 +1763,11 @@ class ModelExecutionEngine(BaseAgent):
                     "interface_available": interface_available,
                     "features_count": len(metadata.features_required),
                     "performance_metrics": metadata.performance_metrics,
-                    "features_required": metadata.features_required[:10]
-                    if len(metadata.features_required) > 10
-                    else metadata.features_required,
+                    "features_required": (
+                        metadata.features_required[:10]
+                        if len(metadata.features_required) > 10
+                        else metadata.features_required
+                    ),
                     "features_truncated": len(metadata.features_required) > 10,
                 }
 
@@ -1785,18 +1795,22 @@ class ModelExecutionEngine(BaseAgent):
                 "models": models_info,
                 "summary": {
                     "health_percentage": round(
-                        (working_models / total_models * 100)
-                        if total_models > 0
-                        else 0,
+                        (
+                            (working_models / total_models * 100)
+                            if total_models > 0
+                            else 0
+                        ),
                         1,
                     ),
                     "model_types": list(
                         set(m["model_type"] for m in models_info.values())
                     ),
                     "average_features": round(
-                        np.mean([m["features_count"] for m in models_info.values()])
-                        if models_info
-                        else 0,
+                        (
+                            np.mean([m["features_count"] for m in models_info.values()])
+                            if models_info
+                            else 0
+                        ),
                         1,
                     ),
                     "total_file_size_mb": round(
@@ -1849,13 +1863,15 @@ class ModelExecutionEngine(BaseAgent):
                 "file_info": {
                     "file_path": metadata.file_path,
                     "file_exists": file_path.exists(),
-                    "file_size_mb": round(file_path.stat().st_size / (1024 * 1024), 2)
-                    if file_path.exists()
-                    else 0,
+                    "file_size_mb": (
+                        round(file_path.stat().st_size / (1024 * 1024), 2)
+                        if file_path.exists()
+                        else 0
+                    ),
                     "file_extension": file_path.suffix.lower().lstrip("."),
-                    "last_modified": file_path.stat().st_mtime
-                    if file_path.exists()
-                    else None,
+                    "last_modified": (
+                        file_path.stat().st_mtime if file_path.exists() else None
+                    ),
                 },
                 "features": {
                     "features_required": metadata.features_required,
@@ -1873,28 +1889,34 @@ class ModelExecutionEngine(BaseAgent):
                             if p["model_name"] == model_name
                         ]
                     ),
-                    "average_execution_time": np.mean(
-                        [
-                            p["execution_time"]
+                    "average_execution_time": (
+                        np.mean(
+                            [
+                                p["execution_time"]
+                                for p in self.prediction_history
+                                if p["model_name"] == model_name
+                            ]
+                        )
+                        if any(
+                            p["model_name"] == model_name
                             for p in self.prediction_history
-                            if p["model_name"] == model_name
-                        ]
-                    )
-                    if any(
-                        p["model_name"] == model_name for p in self.prediction_history
-                    )
-                    else 0,
-                    "last_used": max(
-                        [
-                            p["timestamp"]
+                        )
+                        else 0
+                    ),
+                    "last_used": (
+                        max(
+                            [
+                                p["timestamp"]
+                                for p in self.prediction_history
+                                if p["model_name"] == model_name
+                            ]
+                        )
+                        if any(
+                            p["model_name"] == model_name
                             for p in self.prediction_history
-                            if p["model_name"] == model_name
-                        ]
-                    )
-                    if any(
-                        p["model_name"] == model_name for p in self.prediction_history
-                    )
-                    else None,
+                        )
+                        else None
+                    ),
                 },
                 "health_status": {
                     "loadable": self._test_model_loadability(model_name),
@@ -2040,22 +2062,22 @@ class ModelExecutionEngine(BaseAgent):
                 "total_requests": len(prediction_requests),
                 "successful_predictions": successful_predictions,
                 "failed_predictions": failed_predictions,
-                "success_rate": round(
-                    successful_predictions / len(prediction_requests) * 100, 2
-                )
-                if prediction_requests
-                else 0,
+                "success_rate": (
+                    round(successful_predictions / len(prediction_requests) * 100, 2)
+                    if prediction_requests
+                    else 0
+                ),
                 "total_execution_time": round(total_execution_time, 3),
-                "average_time_per_prediction": round(
-                    total_execution_time / len(prediction_requests), 3
-                )
-                if prediction_requests
-                else 0,
-                "predictions_per_second": round(
-                    len(prediction_requests) / total_execution_time, 2
-                )
-                if total_execution_time > 0
-                else 0,
+                "average_time_per_prediction": (
+                    round(total_execution_time / len(prediction_requests), 3)
+                    if prediction_requests
+                    else 0
+                ),
+                "predictions_per_second": (
+                    round(len(prediction_requests) / total_execution_time, 2)
+                    if total_execution_time > 0
+                    else 0
+                ),
             }
 
             # Model usage breakdown
@@ -2293,9 +2315,11 @@ class ModelExecutionEngine(BaseAgent):
                     "warning_models": warning_models,
                     "critical_models": critical_models,
                     "health_percentage": round(
-                        (healthy_models / total_models * 100)
-                        if total_models > 0
-                        else 0,
+                        (
+                            (healthy_models / total_models * 100)
+                            if total_models > 0
+                            else 0
+                        ),
                         1,
                     ),
                 },
@@ -2455,17 +2479,24 @@ class ModelExecutionEngine(BaseAgent):
                     "summary": {
                         "total_opportunities": len(opportunities),
                         "value_bets_count": len(value_bets),
-                        "best_edge": max(
-                            [v["edge_percentage"] for v in all_opportunities.values()]
-                        )
-                        if all_opportunities
-                        else 0,
-                        "best_edge_type": max(
-                            all_opportunities.keys(),
-                            key=lambda k: all_opportunities[k]["edge_percentage"],
-                        )
-                        if all_opportunities
-                        else None,
+                        "best_edge": (
+                            max(
+                                [
+                                    v["edge_percentage"]
+                                    for v in all_opportunities.values()
+                                ]
+                            )
+                            if all_opportunities
+                            else 0
+                        ),
+                        "best_edge_type": (
+                            max(
+                                all_opportunities.keys(),
+                                key=lambda k: all_opportunities[k]["edge_percentage"],
+                            )
+                            if all_opportunities
+                            else None
+                        ),
                     },
                 },
             }

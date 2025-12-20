@@ -111,6 +111,13 @@ starter_pack/*backup_*
 # === MCP Configuration (contains secrets) ===
 .kilocode/
 
+# === Claude IDE Configuration (contains secrets) ===
+.claude/
+
+# === Backup Directories (may contain old keys) ===
+*_backup_*/
+scripts_backup_*/
+
 # === Temporary Generated Artifacts ===
 *.pkl
 *.joblib

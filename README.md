@@ -29,8 +29,8 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 # Install dependencies
 pip install -r requirements.txt
 
-# Set API key
-export CFBD_API_KEY="3nSBeJV4ODZlJLxQZ/H0vWG3DRAfTSPU2PporK/5K+BJininva/bPx5G4iNjeOsb"
+# Set API key (replace with your own key from CollegeFootballData.com)
+export CFBD_API_KEY="your-api-key-here"
 ```
 
 ### Basic Usage

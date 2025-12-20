@@ -7,18 +7,21 @@ import asyncio
 import json
 import logging
 import time
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Callable, Dict, List, Optional, Set
+
 import websockets
-from dataclasses import dataclass
 
 from .enhanced_unified_client import EnhancedUnifiedCFBDClient
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class LiveGameData:
     """Data structure for live game information"""
+
     game_id: int
     home_team: str
     away_team: str
@@ -34,9 +37,11 @@ class LiveGameData:
     down: Optional[int] = None
     distance: Optional[str] = None
 
+
 @dataclass
 class PlayUpdate:
     """Data structure for play-by-play updates"""
+
     game_id: int
     play_id: str
     play_type: str
@@ -48,9 +53,11 @@ class PlayUpdate:
     play_result: str
     timestamp: datetime
 
+
 @dataclass
 class ScoreUpdate:
     """Data structure for scoring updates"""
+
     game_id: int
     scoring_team: str
     points: int
@@ -58,6 +65,7 @@ class ScoreUpdate:
     new_home_score: int
     new_away_score: int
     timestamp: datetime
+
 
 class CFBDWebSocketClient:
     """
@@ -86,18 +94,18 @@ class CFBDWebSocketClient:
         self.live_games: Dict[int, LiveGameData] = {}
         self.subscribed_games: Set[int] = set()
         self.event_handlers: Dict[str, List[Callable]] = {
-            'game_update': [],
-            'play_update': [],
-            'score_update': [],
-            'connection_status': []
+            "game_update": [],
+            "play_update": [],
+            "score_update": [],
+            "connection_status": [],
         }
 
         # Performance metrics
         self.metrics = {
-            'messages_received': 0,
-            'last_message_time': None,
-            'connection_time': None,
-            'reconnect_count': 0
+            "messages_received": 0,
+            "last_message_time": None,
+            "connection_time": None,
+            "reconnect_count": 0,
         }
 
         logger.info("🔌 CFBD WebSocket Client initialized")
@@ -144,24 +152,27 @@ class CFBDWebSocketClient:
 
             # Simulate successful connection
             self.is_connected = True
-            self.metrics['connection_time'] = datetime.now(timezone.utc)
+            self.metrics["connection_time"] = datetime.now(timezone.utc)
             self.reconnect_attempts = 0
 
-            self._emit_event('connection_status', {
-                'status': 'connected',
-                'timestamp': datetime.now(timezone.utc)
-            })
+            self._emit_event(
+                "connection_status",
+                {"status": "connected", "timestamp": datetime.now(timezone.utc)},
+            )
 
             logger.info("✅ WebSocket connected successfully")
 
         except Exception as e:
             logger.error(f"❌ WebSocket connection failed: {e}")
             self.is_connected = False
-            self._emit_event('connection_status', {
-                'status': 'disconnected',
-                'error': str(e),
-                'timestamp': datetime.now(timezone.utc)
-            })
+            self._emit_event(
+                "connection_status",
+                {
+                    "status": "disconnected",
+                    "error": str(e),
+                    "timestamp": datetime.now(timezone.utc),
+                },
+            )
 
     async def disconnect(self):
         """Disconnect from WebSocket"""
@@ -169,23 +180,27 @@ class CFBDWebSocketClient:
             await self.websocket.close()
 
         self.is_connected = False
-        self._emit_event('connection_status', {
-            'status': 'disconnected',
-            'timestamp': datetime.now(timezone.utc)
-        })
+        self._emit_event(
+            "connection_status",
+            {"status": "disconnected", "timestamp": datetime.now(timezone.utc)},
+        )
 
         logger.info("🔌 WebSocket disconnected")
 
     async def reconnect(self):
         """Attempt to reconnect to WebSocket"""
         if self.reconnect_attempts >= self.max_reconnect_attempts:
-            logger.error(f"❌ Max reconnection attempts ({self.max_reconnect_attempts}) reached")
+            logger.error(
+                f"❌ Max reconnection attempts ({self.max_reconnect_attempts}) reached"
+            )
             return False
 
         self.reconnect_attempts += 1
-        self.metrics['reconnect_count'] += 1
+        self.metrics["reconnect_count"] += 1
 
-        logger.info(f"🔄 Reconnection attempt {self.reconnect_attempts}/{self.max_reconnect_attempts}")
+        logger.info(
+            f"🔄 Reconnection attempt {self.reconnect_attempts}/{self.max_reconnect_attempts}"
+        )
 
         await asyncio.sleep(self.reconnect_delay)
         await self.connect()
@@ -198,7 +213,9 @@ class CFBDWebSocketClient:
             # Get current week games
             if week is None:
                 # Get current week games that might be in progress
-                games = self.client.get_games(year=2025, week=15)  # Assuming championship week
+                games = self.client.get_games(
+                    year=2025, week=15
+                )  # Assuming championship week
             else:
                 games = self.client.get_games(year=year, week=week)
 
@@ -206,22 +223,22 @@ class CFBDWebSocketClient:
             live_games = [game for game in games if self._is_potentially_live(game)]
 
             for game in live_games:
-                game_id = game.get('id')
+                game_id = game.get("id")
                 if game_id:
                     self.subscribed_games.add(game_id)
 
                     # Create initial live game data
                     live_game = LiveGameData(
                         game_id=game_id,
-                        home_team=game.get('home_team', ''),
-                        away_team=game.get('away_team', ''),
-                        home_score=game.get('home_points', 0) or 0,
-                        away_score=game.get('away_points', 0) or 0,
+                        home_team=game.get("home_team", ""),
+                        away_team=game.get("away_team", ""),
+                        home_score=game.get("home_points", 0) or 0,
+                        away_score=game.get("away_points", 0) or 0,
                         quarter=None,
                         time_remaining=None,
                         possession=None,
-                        game_status=game.get('game_status', 'scheduled'),
-                        last_updated=datetime.now(timezone.utc)
+                        game_status=game.get("game_status", "scheduled"),
+                        last_updated=datetime.now(timezone.utc),
                     )
 
                     self.live_games[game_id] = live_game
@@ -237,12 +254,13 @@ class CFBDWebSocketClient:
     def _is_potentially_live(self, game: Dict[str, Any]) -> bool:
         """Check if a game might be live based on its status"""
         # This is a simplified check - in production, you'd use actual game timing data
-        status = game.get('game_status', '').lower()
-        start_time = game.get('start_time', '')
+        status = game.get("game_status", "").lower()
+        start_time = game.get("start_time", "")
 
         # Consider games with recent start times or specific status as potentially live
-        return any(keyword in status for keyword in ['in_progress', 'live', 'halftime']) or \
-               (start_time and 'today' in str(start_time).lower())
+        return any(
+            keyword in status for keyword in ["in_progress", "live", "halftime"]
+        ) or (start_time and "today" in str(start_time).lower())
 
     async def _poll_for_updates(self):
         """Poll for game updates (simulating WebSocket data)"""
@@ -272,10 +290,10 @@ class CFBDWebSocketClient:
 
         # Simulate score changes occasionally
         if random.random() < 0.1:  # 10% chance of score update
-            scoring_team = random.choice(['home', 'away'])
+            scoring_team = random.choice(["home", "away"])
             points = random.choice([2, 3, 6, 7, 8])
 
-            if scoring_team == 'home':
+            if scoring_team == "home":
                 game.home_score += points
                 new_home_score = game.home_score
                 new_away_score = game.away_score
@@ -287,42 +305,50 @@ class CFBDWebSocketClient:
             # Create score update
             score_update = ScoreUpdate(
                 game_id=game_id,
-                scoring_team=game.home_team if scoring_team == 'home' else game.away_team,
+                scoring_team=(
+                    game.home_team if scoring_team == "home" else game.away_team
+                ),
                 points=points,
-                scoring_type='simulation',  # Would be actual scoring type
+                scoring_type="simulation",  # Would be actual scoring type
                 new_home_score=new_home_score,
                 new_away_score=new_away_score,
-                timestamp=datetime.now(timezone.utc)
+                timestamp=datetime.now(timezone.utc),
             )
 
-            self._emit_event('score_update', score_update)
+            self._emit_event("score_update", score_update)
 
             # Update game status
-            game.game_status = 'in_progress'
+            game.game_status = "in_progress"
             game.last_updated = datetime.now(timezone.utc)
 
             # Emit game update
-            self._emit_event('game_update', game)
+            self._emit_event("game_update", game)
 
-            logger.info(f"🏈 SCORE UPDATE: {game.home_team} {game.home_score} - {game.away_score} {game.away_team}")
+            logger.info(
+                f"🏈 SCORE UPDATE: {game.home_team} {game.home_score} - {game.away_score} {game.away_team}"
+            )
 
         # Simulate play updates occasionally
         if random.random() < 0.2:  # 20% chance of play update
             play_update = PlayUpdate(
                 game_id=game_id,
                 play_id=f"play_{int(time.time())}",
-                play_type=random.choice(['run', 'pass', 'kick']),
+                play_type=random.choice(["run", "pass", "kick"]),
                 description="Simulated play action",
                 team=random.choice([game.home_team, game.away_team]),
                 clock_time=f"Q{random.randint(1, 4)} - {random.randint(1, 15)}:{random.randint(0, 59):02d}",
                 quarter=random.randint(1, 4),
                 yards_gained=random.randint(-5, 25),
-                play_result=random.choice(['first_down', 'touchdown', 'turnover', 'punt']),
-                timestamp=datetime.now(timezone.utc)
+                play_result=random.choice(
+                    ["first_down", "touchdown", "turnover", "punt"]
+                ),
+                timestamp=datetime.now(timezone.utc),
             )
 
-            self._emit_event('play_update', play_update)
-            logger.info(f"📝 PLAY UPDATE: {play_update.team} - {play_update.description}")
+            self._emit_event("play_update", play_update)
+            logger.info(
+                f"📝 PLAY UPDATE: {play_update.team} - {play_update.description}"
+            )
 
     def get_live_games(self) -> Dict[int, LiveGameData]:
         """Get current live game data"""
@@ -350,7 +376,7 @@ class CFBDWebSocketClient:
                 time_remaining=None,
                 possession=None,
                 game_status="scheduled",
-                last_updated=datetime.now(timezone.utc)
+                last_updated=datetime.now(timezone.utc),
             )
         except Exception as e:
             logger.error(f"❌ Failed to setup game {game_id}: {e}")
@@ -359,30 +385,42 @@ class CFBDWebSocketClient:
         """Get WebSocket client metrics"""
         return {
             **self.metrics,
-            'is_connected': self.is_connected,
-            'subscribed_games_count': len(self.subscribed_games),
-            'live_games_count': len(self.live_games),
-            'event_handlers': {k: len(v) for k, v in self.event_handlers.items()}
+            "is_connected": self.is_connected,
+            "subscribed_games_count": len(self.subscribed_games),
+            "live_games_count": len(self.live_games),
+            "event_handlers": {k: len(v) for k, v in self.event_handlers.items()},
         }
+
 
 # Example usage and event handlers
 
+
 def handle_game_update(game_data: LiveGameData):
     """Handle game update events"""
-    print(f"🏈 GAME UPDATE: {game_data.home_team} {game_data.home_score} - {game_data.away_score} {game_data.away_team} ({game_data.game_status})")
+    print(
+        f"🏈 GAME UPDATE: {game_data.home_team} {game_data.home_score} - {game_data.away_score} {game_data.away_team} ({game_data.game_status})"
+    )
+
 
 def handle_score_update(score_data: ScoreUpdate):
     """Handle scoring update events"""
-    print(f"🎯 SCORE: {score_data.scoring_team} +{score_data.points} points! "
-          f"Score: {score_data.new_home_score} - {score_data.new_away_score}")
+    print(
+        f"🎯 SCORE: {score_data.scoring_team} +{score_data.points} points! "
+        f"Score: {score_data.new_home_score} - {score_data.new_away_score}"
+    )
+
 
 def handle_play_update(play_data: PlayUpdate):
     """Handle play update events"""
-    print(f"📝 PLAY: {play_data.team} - {play_data.description} ({play_data.yards_gained} yards)")
+    print(
+        f"📝 PLAY: {play_data.team} - {play_data.description} ({play_data.yards_gained} yards)"
+    )
+
 
 def handle_connection_status(status_data: Dict[str, Any]):
     """Handle connection status events"""
     print(f"🔌 Connection: {status_data['status']} at {status_data['timestamp']}")
+
 
 async def demo_websocket_client():
     """Demonstration of WebSocket client usage"""
@@ -392,10 +430,10 @@ async def demo_websocket_client():
     client = CFBDWebSocketClient()
 
     # Add event handlers
-    client.add_event_handler('game_update', handle_game_update)
-    client.add_event_handler('score_update', handle_score_update)
-    client.add_event_handler('play_update', handle_play_update)
-    client.add_event_handler('connection_status', handle_connection_status)
+    client.add_event_handler("game_update", handle_game_update)
+    client.add_event_handler("score_update", handle_score_update)
+    client.add_event_handler("play_update", handle_play_update)
+    client.add_event_handler("connection_status", handle_connection_status)
 
     # Connect
     await client.connect()
@@ -417,6 +455,7 @@ async def demo_websocket_client():
 
         # Disconnect
         await client.disconnect()
+
 
 if __name__ == "__main__":
     asyncio.run(demo_websocket_client())

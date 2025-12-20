@@ -6,23 +6,23 @@ ensuring consistent authentication patterns across REST, GraphQL, and legacy cli
 """
 
 from .authentication_manager import (
-    AuthenticationManager,
     AuthenticationConfig,
+    AuthenticationManager,
     AuthenticationPattern,
-    get_auth_manager,
+    auth_manager,
     configure_cfbd_client,
+    get_auth_manager,
     get_bearer_headers,
     validate_api_key,
-    auth_manager
 )
 
 __all__ = [
-    'AuthenticationManager',
-    'AuthenticationConfig',
-    'AuthenticationPattern',
-    'get_auth_manager',
-    'configure_cfbd_client',
-    'get_bearer_headers',
-    'validate_api_key',
-    'auth_manager'
+    "AuthenticationManager",
+    "AuthenticationConfig",
+    "AuthenticationPattern",
+    "get_auth_manager",
+    "configure_cfbd_client",
+    "get_bearer_headers",
+    "validate_api_key",
+    "auth_manager",
 ]

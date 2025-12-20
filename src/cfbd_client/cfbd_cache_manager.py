@@ -135,7 +135,9 @@ class CFBDCacheManager:
         return f"{label}:{serialized}"
 
     def _resolve_ttl(self, label: str) -> int:
-        return self._config.ttl_overrides.get(label, self._config.default_ttl_seconds)
+        return (
+            self._config.ttl_overrides.get(label, self._config.default_ttl_seconds) or 0
+        )
 
     def invalidate(self, label: Optional[str] = None) -> None:
         if label is None:
@@ -160,7 +162,7 @@ class CFBDCacheManager:
         key = self._build_key(endpoint, params)
         now = self._clock()
         ttl = self._resolve_ttl(cache_type)
-        expires_at = now + ttl if ttl > 0 else None
+        expires_at = now + ttl if ttl and ttl > 0 else None
         self._backend.write(key, CacheEntry(value=data, expires_at=expires_at))
         self._stats["writes"] += 1
 
@@ -192,7 +194,7 @@ class CFBDCacheManager:
 
         value = fetcher()
         ttl = self._resolve_ttl(label)
-        expires_at = now + ttl if ttl > 0 else None
+        expires_at = now + ttl if ttl and ttl > 0 else None
         self._backend.write(key, CacheEntry(value=value, expires_at=expires_at))
         self._stats["misses"] += 1
         self._stats["writes"] += 1

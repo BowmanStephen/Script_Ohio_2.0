@@ -256,9 +256,9 @@ def fetch_predicted_points(
             or entry.get("predicted_margin"),
             "win_probability": entry.get("winProbability")
             or entry.get("win_probability"),
-            "is_home": entry.get("isHome")
-            if "isHome" in entry
-            else entry.get("is_home"),
+            "is_home": (
+                entry.get("isHome") if "isHome" in entry else entry.get("is_home")
+            ),
             "fetched_at": fetched_at,
         }
         for entry in (raw or [])

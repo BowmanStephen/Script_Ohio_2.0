@@ -3,20 +3,21 @@ Enhanced Caching System for CFBD Data
 Provides intelligent multi-level caching with Redis support and 80%+ hit rates
 """
 
+import hashlib
 import json
 import logging
-import time
-import hashlib
 import pickle
-from datetime import datetime, timezone, timedelta
-from typing import Any, Dict, List, Optional, Union, Tuple
-from dataclasses import dataclass, asdict
 import threading
+import time
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 # Try to import Redis, but make it optional
 try:
     import redis
+
     REDIS_AVAILABLE = True
 except ImportError:
     REDIS_AVAILABLE = False
@@ -25,9 +26,11 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class CacheConfig:
     """Configuration for caching system"""
+
     enable_redis: bool = True
     enable_file_cache: bool = True
     enable_memory_cache: bool = True
@@ -39,9 +42,11 @@ class CacheConfig:
     default_ttl: int = 3600  # 1 hour
     memory_max_size: int = 1000  # Max items in memory cache
 
+
 @dataclass
 class CacheEntry:
     """Represents a cached data entry"""
+
     key: str
     value: Any
     created_at: datetime
@@ -51,9 +56,11 @@ class CacheEntry:
     size_bytes: int = 0
     cache_level: str = "memory"  # memory, file, redis
 
+
 @dataclass
 class CacheMetrics:
     """Cache performance metrics"""
+
     total_requests: int = 0
     cache_hits: int = 0
     cache_misses: int = 0
@@ -64,6 +71,7 @@ class CacheMetrics:
     total_size_mb: float = 0.0
     hit_rate: float = 0.0
     average_response_time_ms: float = 0.0
+
 
 class EnhancedCFBDCache:
     """
@@ -103,19 +111,21 @@ class EnhancedCFBDCache:
 
         # TTL configurations for different data types
         self.ttl_config = {
-            'games': 3600,          # 1 hour
-            'teams': 86400,         # 24 hours
-            'ratings': 1800,        # 30 minutes
-            'stats': 7200,          # 2 hours
-            'advanced_stats': 7200,  # 2 hours
-            'player_stats': 3600,   # 1 hour
-            'box_scores': 86400,    # 24 hours
-            'recruiting': 604800,   # 1 week
-            'default': self.config.default_ttl
+            "games": 3600,  # 1 hour
+            "teams": 86400,  # 24 hours
+            "ratings": 1800,  # 30 minutes
+            "stats": 7200,  # 2 hours
+            "advanced_stats": 7200,  # 2 hours
+            "player_stats": 3600,  # 1 hour
+            "box_scores": 86400,  # 24 hours
+            "recruiting": 604800,  # 1 week
+            "default": self.config.default_ttl,
         }
 
         logger.info("🗄️ Enhanced CFBD Cache initialized")
-        logger.info(f"   Memory cache: {'✅' if self.config.enable_memory_cache else '❌'}")
+        logger.info(
+            f"   Memory cache: {'✅' if self.config.enable_memory_cache else '❌'}"
+        )
         logger.info(f"   File cache: {'✅' if self.config.enable_file_cache else '❌'}")
         logger.info(f"   Redis cache: {'✅' if self.redis_client else '❌'}")
 
@@ -130,12 +140,14 @@ class EnhancedCFBDCache:
                 decode_responses=False,  # Keep binary data
                 socket_connect_timeout=5,
                 socket_timeout=5,
-                retry_on_timeout=True
+                retry_on_timeout=True,
             )
 
             # Test connection
             self.redis_client.ping()
-            logger.info(f"✅ Redis connected: {self.config.redis_host}:{self.config.redis_port}")
+            logger.info(
+                f"✅ Redis connected: {self.config.redis_host}:{self.config.redis_port}"
+            )
 
         except Exception as e:
             logger.warning(f"⚠️ Redis connection failed: {e}")
@@ -149,7 +161,7 @@ class EnhancedCFBDCache:
 
     def _get_data_type_ttl(self, data_type: str) -> int:
         """Get TTL for specific data type"""
-        return self.ttl_config.get(data_type, self.ttl_config['default'])
+        return self.ttl_config.get(data_type, self.ttl_config["default"])
 
     def get(self, key: str, data_type: str = "default") -> Optional[Any]:
         """
@@ -200,7 +212,7 @@ class EnhancedCFBDCache:
                 try:
                     file_path = self.file_cache_dir / f"{key}.cache"
                     if file_path.exists():
-                        with open(file_path, 'rb') as f:
+                        with open(file_path, "rb") as f:
                             entry_data = pickle.load(f)
                             entry = CacheEntry(**entry_data)
 
@@ -219,7 +231,13 @@ class EnhancedCFBDCache:
         self._record_access_time(time.time() - start_time)
         return None
 
-    def set(self, key: str, value: Any, data_type: str = "default", ttl: Optional[int] = None) -> bool:
+    def set(
+        self,
+        key: str,
+        value: Any,
+        data_type: str = "default",
+        ttl: Optional[int] = None,
+    ) -> bool:
         """
         Store data in cache (all levels)
 
@@ -259,16 +277,16 @@ class EnhancedCFBDCache:
                         value=value,  # Will be pickled separately
                         created_at=datetime.now(timezone.utc),
                         expires_at=expires_at,
-                        cache_level="file"
+                        cache_level="file",
                     )
 
                     # Store entry metadata
-                    with open(file_path, 'wb') as f:
+                    with open(file_path, "wb") as f:
                         pickle.dump(asdict(entry), f)
 
                     # Store actual data in separate file to avoid issues
-                    data_file_path = file_path.with_suffix('.data')
-                    with open(data_file_path, 'wb') as f:
+                    data_file_path = file_path.with_suffix(".data")
+                    with open(data_file_path, "wb") as f:
                         pickle.dump(value, f)
 
                 except Exception as e:
@@ -276,7 +294,14 @@ class EnhancedCFBDCache:
 
         return True
 
-    def _store_in_memory(self, key: str, value: Any, data_type: str, ttl: Optional[int] = None, expires_at: Optional[datetime] = None):
+    def _store_in_memory(
+        self,
+        key: str,
+        value: Any,
+        data_type: str,
+        ttl: Optional[int] = None,
+        expires_at: Optional[datetime] = None,
+    ):
         """Store data in memory cache with size management"""
         if ttl is None:
             ttl = self._get_data_type_ttl(data_type)
@@ -295,7 +320,7 @@ class EnhancedCFBDCache:
             created_at=datetime.now(timezone.utc),
             expires_at=expires_at,
             size_bytes=size_bytes,
-            cache_level="memory"
+            cache_level="memory",
         )
 
         # Check memory limit
@@ -312,7 +337,7 @@ class EnhancedCFBDCache:
         # Sort by last accessed time (oldest first)
         sorted_items = sorted(
             self.memory_cache.items(),
-            key=lambda x: x[1].last_accessed or x[1].created_at
+            key=lambda x: x[1].last_accessed or x[1].created_at,
         )
 
         # Remove oldest 10% of items
@@ -353,7 +378,7 @@ class EnhancedCFBDCache:
                     file_path.unlink()
                     deleted = True
 
-                data_file_path = file_path.with_suffix('.data')
+                data_file_path = file_path.with_suffix(".data")
                 if data_file_path.exists():
                     data_file_path.unlink()
                     deleted = True
@@ -413,7 +438,9 @@ class EnhancedCFBDCache:
             except Exception as e:
                 logger.error(f"Error warming cache key {cache_key}: {e}")
 
-        logger.info(f"🔥 Cache warming completed: {warmed_count}/{len(data_fetchers)} items")
+        logger.info(
+            f"🔥 Cache warming completed: {warmed_count}/{len(data_fetchers)} items"
+        )
 
     def optimize_cache_hit_rate(self):
         """Analyze cache patterns and optimize for better hit rates"""
@@ -433,7 +460,9 @@ class EnhancedCFBDCache:
             logger.warning("   - Reviewing cache key patterns")
 
         if metrics.memory_hits / max(metrics.cache_hits, 1) < 0.3:
-            logger.info("💡 Memory cache usage low - consider reducing memory cache size")
+            logger.info(
+                "💡 Memory cache usage low - consider reducing memory cache size"
+            )
 
         if self.redis_client and metrics.redis_hits / max(metrics.cache_hits, 1) < 0.2:
             logger.info("💡 Redis cache underutilized - check connectivity")
@@ -450,7 +479,9 @@ class EnhancedCFBDCache:
 
         # Calculate average response time
         if self.access_times:
-            self.metrics.average_response_time_ms = (sum(self.access_times) / len(self.access_times)) * 1000
+            self.metrics.average_response_time_ms = (
+                sum(self.access_times) / len(self.access_times)
+            ) * 1000
 
         return self.metrics
 
@@ -466,30 +497,34 @@ class EnhancedCFBDCache:
         metrics = self.get_metrics()
 
         return {
-            'cache_config': {
-                'enable_redis': self.config.enable_redis,
-                'enable_file_cache': self.config.enable_file_cache,
-                'enable_memory_cache': self.config.enable_memory_cache,
-                'memory_max_size': self.config.memory_max_size
+            "cache_config": {
+                "enable_redis": self.config.enable_redis,
+                "enable_file_cache": self.config.enable_file_cache,
+                "enable_memory_cache": self.config.enable_memory_cache,
+                "memory_max_size": self.config.memory_max_size,
             },
-            'performance_metrics': asdict(metrics),
-            'cache_levels': {
-                'memory_cache_size': len(self.memory_cache),
-                'redis_connected': self.redis_client is not None,
-                'file_cache_dir': str(self.file_cache_dir)
+            "performance_metrics": asdict(metrics),
+            "cache_levels": {
+                "memory_cache_size": len(self.memory_cache),
+                "redis_connected": self.redis_client is not None,
+                "file_cache_dir": str(self.file_cache_dir),
             },
-            'hit_rate_breakdown': {
-                'memory_hits': metrics.memory_hits,
-                'file_hits': metrics.file_hits,
-                'redis_hits': metrics.redis_hits,
-                'total_hits': metrics.cache_hits
+            "hit_rate_breakdown": {
+                "memory_hits": metrics.memory_hits,
+                "file_hits": metrics.file_hits,
+                "redis_hits": metrics.redis_hits,
+                "total_hits": metrics.cache_hits,
             },
-            'ttl_configuration': self.ttl_config,
-            'uptime_seconds': (datetime.now(timezone.utc) - self.start_time).total_seconds()
+            "ttl_configuration": self.ttl_config,
+            "uptime_seconds": (
+                datetime.now(timezone.utc) - self.start_time
+            ).total_seconds(),
         }
+
 
 # Global cache instance
 _cache_instance = None
+
 
 def get_cache_instance(config: Optional[CacheConfig] = None) -> EnhancedCFBDCache:
     """Get singleton cache instance"""
@@ -497,6 +532,7 @@ def get_cache_instance(config: Optional[CacheConfig] = None) -> EnhancedCFBDCach
     if _cache_instance is None:
         _cache_instance = EnhancedCFBDCache(config)
     return _cache_instance
+
 
 # Example usage
 def demo_enhanced_caching():
@@ -511,9 +547,9 @@ def demo_enhanced_caching():
 
     # Test different data types
     test_data = {
-        'games': [{'id': 1, 'home': 'Alabama', 'away': 'Georgia'}],
-        'teams': [{'name': 'Alabama', 'conference': 'SEC'}],
-        'ratings': [{'team': 'Alabama', 'elo': 85.5}]
+        "games": [{"id": 1, "home": "Alabama", "away": "Georgia"}],
+        "teams": [{"name": "Alabama", "conference": "SEC"}],
+        "ratings": [{"team": "Alabama", "elo": 85.5}],
     }
 
     for data_type, data in test_data.items():
@@ -549,6 +585,7 @@ def demo_enhanced_caching():
     print(f"   Total requests: {stats['performance_metrics']['total_requests']}")
     print(f"   Cache hits: {stats['performance_metrics']['cache_hits']}")
     print(f"   Hit rate breakdown: {json.dumps(stats['hit_rate_breakdown'], indent=2)}")
+
 
 if __name__ == "__main__":
     demo_enhanced_caching()

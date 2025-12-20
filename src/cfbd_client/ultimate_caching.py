@@ -4,43 +4,49 @@ Advanced predictive caching with intelligent pre-loading and adaptive management
 """
 
 import asyncio
+import hashlib
 import json
 import logging
-import time
-from typing import Dict, List, Any, Optional, Tuple, Union
-from dataclasses import dataclass, asdict
-from datetime import datetime, timedelta
-from collections import defaultdict
-import threading
-from pathlib import Path
 import pickle
-import hashlib
+import threading
+import time
+from collections import defaultdict
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
 from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple, Union
+
 import numpy as np
-from dataclasses import dataclass
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 class CacheLevel(Enum):
     """Cache hierarchy levels"""
-    MEMORY = "memory"      # L1: Fastest access
-    REDIS = "redis"        # L2: Fast persistent
-    FILE = "file"          # L3: Large dataset storage
+
+    MEMORY = "memory"  # L1: Fastest access
+    REDIS = "redis"  # L2: Fast persistent
+    FILE = "file"  # L3: Large dataset storage
     PREDICTIVE = "predictive"  # L4: Pre-loaded based on patterns
+
 
 class DataVolatility(Enum):
     """Data volatility patterns for TTL optimization"""
-    STATIC = "static"          # Historical data, rarely changes
-    LOW_VOLATILITY = "low"     # Team info, venues, conferences
+
+    STATIC = "static"  # Historical data, rarely changes
+    LOW_VOLATILITY = "low"  # Team info, venues, conferences
     MEDIUM_VOLATILITY = "medium"  # Weekly stats, seasonal data
-    HIGH_VOLATILITY = "high"   # Live scores, play-by-play
-    REAL_TIME = "real_time"    # Live game data, second-level updates
+    HIGH_VOLATILITY = "high"  # Live scores, play-by-play
+    REAL_TIME = "real_time"  # Live game data, second-level updates
+
 
 @dataclass
 class CacheConfig:
     """Cache configuration settings"""
+
     max_memory_size_mb: int = 512
     max_redis_size_mb: int = 2048
     max_file_size_mb: int = 10240
@@ -52,25 +58,27 @@ class CacheConfig:
     def __post_init__(self):
         if self.default_ttl_minutes is None:
             self.default_ttl_minutes = {
-                "games": 60,           # Game data changes during games
-                "teams": 1440,         # Team info changes rarely
-                "stats": 30,           # Stats can update frequently
-                "players": 60,         # Player info moderately static
+                "games": 60,  # Game data changes during games
+                "teams": 1440,  # Team info changes rarely
+                "stats": 30,  # Stats can update frequently
+                "players": 60,  # Player info moderately static
                 "conferences": 10080,  # Conference info very static
-                "venues": 10080,       # Venue info very static
-                "rankings": 120,       # Rankings update weekly
-                "predictions": 15,     # Predictions can update frequently
-                "weather": 5,          # Weather highly volatile
-                "media": 30,           # Media info moderately static
-                "draft": 10080,        # Draft data very static
-                "transfers": 60,       # Transfer data moderately volatile
+                "venues": 10080,  # Venue info very static
+                "rankings": 120,  # Rankings update weekly
+                "predictions": 15,  # Predictions can update frequently
+                "weather": 5,  # Weather highly volatile
+                "media": 30,  # Media info moderately static
+                "draft": 10080,  # Draft data very static
+                "transfers": 60,  # Transfer data moderately volatile
                 "historical": 525600,  # Historical data never changes (year)
-                "live_data": 1         # Live data very short cache
+                "live_data": 1,  # Live data very short cache
             }
+
 
 @dataclass
 class UsagePattern:
     """User access pattern analysis for predictive caching"""
+
     endpoint: str
     frequency_per_hour: float
     seasonal_multiplier: float  # Higher during season
@@ -97,14 +105,23 @@ class UsagePattern:
         seasonal_multiplier = 2.0 if current_month in [8, 9, 10, 11, 12, 1] else 0.3
 
         # Game day spike
-        game_day_multiplier = self.game_day_multiplier if dow in [0, 1, 4, 5, 6] else 1.0
+        game_day_multiplier = (
+            self.game_day_multiplier if dow in [0, 1, 4, 5, 6] else 1.0
+        )
 
-        return (base_score * dow_multiplier * hod_multiplier *
-                seasonal_multiplier * game_day_multiplier)
+        return (
+            base_score
+            * dow_multiplier
+            * hod_multiplier
+            * seasonal_multiplier
+            * game_day_multiplier
+        )
+
 
 @dataclass
 class PredictiveCacheEntry:
     """Enhanced cache entry with predictive metadata"""
+
     key: str
     data: Any
     created_at: datetime
@@ -119,6 +136,7 @@ class PredictiveCacheEntry:
     preload_priority: int  # 1=highest, 10=lowest
     dependencies: List[str]  # Related cache keys
     access_pattern: Optional[UsagePattern] = None
+
 
 class UltimateCFBDCache:
     """
@@ -152,7 +170,7 @@ class UltimateCFBDCache:
             "hits": defaultdict(int),
             "misses": defaultdict(int),
             "preload_hits": defaultdict(int),
-            "adaptive_ttl_adjustments": defaultdict(int)
+            "adaptive_ttl_adjustments": defaultdict(int),
         }
 
         # Background tasks
@@ -166,13 +184,19 @@ class UltimateCFBDCache:
     def _start_background_tasks(self):
         """Start background predictive tasks"""
         if self.config.predictive_preload_enabled:
-            self.preload_task = threading.Thread(target=self._background_preloader, daemon=True)
+            self.preload_task = threading.Thread(
+                target=self._background_preloader, daemon=True
+            )
             self.preload_task.start()
 
-        self.cleanup_task = threading.Thread(target=self._background_cleanup, daemon=True)
+        self.cleanup_task = threading.Thread(
+            target=self._background_cleanup, daemon=True
+        )
         self.cleanup_task.start()
 
-    def get(self, key: str, data_type: str = "default", parameters: Dict[str, Any] = None) -> Optional[Any]:
+    def get(
+        self, key: str, data_type: str = "default", parameters: Dict[str, Any] = None
+    ) -> Optional[Any]:
         """
         Get data from cache with intelligent fallback
 
@@ -233,8 +257,14 @@ class UltimateCFBDCache:
 
         return None
 
-    def set(self, key: str, data: Any, data_type: str = "default",
-            ttl_minutes: Optional[int] = None, parameters: Dict[str, Any] = None) -> bool:
+    def set(
+        self,
+        key: str,
+        data: Any,
+        data_type: str = "default",
+        ttl_minutes: Optional[int] = None,
+        parameters: Dict[str, Any] = None,
+    ) -> bool:
         """
         Store data in cache with intelligent TTL and distribution
 
@@ -279,7 +309,7 @@ class UltimateCFBDCache:
                 compressed=compressed,
                 demand_score=self._calculate_demand_score(key, data_type, current_time),
                 preload_priority=self._calculate_preload_priority(key, data_type),
-                dependencies=self._identify_dependencies(key, data)
+                dependencies=self._identify_dependencies(key, data),
             )
 
             # Store in appropriate cache levels
@@ -287,14 +317,18 @@ class UltimateCFBDCache:
             self._store_in_redis(entry)
             self._store_in_file(entry)
 
-            logger.debug(f"Cached data: {key} (TTL: {ttl_minutes}min, Size: {entry.size_bytes}B)")
+            logger.debug(
+                f"Cached data: {key} (TTL: {ttl_minutes}min, Size: {entry.size_bytes}B)"
+            )
             return True
 
         except Exception as e:
             logger.error(f"Cache set error for {key}: {e}")
             return False
 
-    def _calculate_adaptive_ttl(self, key: str, data_type: str, parameters: Dict[str, Any]) -> int:
+    def _calculate_adaptive_ttl(
+        self, key: str, data_type: str, parameters: Dict[str, Any]
+    ) -> int:
         """
         Calculate adaptive TTL based on usage patterns and data characteristics
         """
@@ -307,7 +341,9 @@ class UltimateCFBDCache:
         usage_pattern = self.usage_patterns.get(key)
         if usage_pattern:
             # High frequency data = shorter TTL (freshness)
-            frequency_multiplier = min(2.0, 10.0 / (usage_pattern.frequency_per_hour + 1))
+            frequency_multiplier = min(
+                2.0, 10.0 / (usage_pattern.frequency_per_hour + 1)
+            )
 
             # Seasonal adjustment
             current_month = datetime.now().month
@@ -350,12 +386,17 @@ class UltimateCFBDCache:
             "predictions": DataVolatility.HIGH_VOLATILITY,
             "weather": DataVolatility.HIGH_VOLATILITY,
             "transfers": DataVolatility.HIGH_VOLATILITY,
-            "live_data": DataVolatility.REAL_TIME
+            "live_data": DataVolatility.REAL_TIME,
         }
         return volatility_map.get(data_type, DataVolatility.MEDIUM_VOLATILITY)
 
-    def _record_access(self, key: str, data_type: str, parameters: Dict[str, Any],
-                      current_time: datetime):
+    def _record_access(
+        self,
+        key: str,
+        data_type: str,
+        parameters: Dict[str, Any],
+        current_time: datetime,
+    ):
         """Record access pattern for predictive analytics"""
         self.access_history.append((key, current_time, parameters or {}))
 
@@ -375,7 +416,7 @@ class UltimateCFBDCache:
                 game_day_multiplier=1.0,
                 avg_request_size_bytes=0,
                 typical_parameters={},
-                last_access=current_time
+                last_access=current_time,
             )
 
         pattern = self.usage_patterns[key]
@@ -409,7 +450,9 @@ class UltimateCFBDCache:
                 recommendations = self._generate_preload_recommendations(current_time)
 
                 # Execute preload for top priorities
-                for priority, (key, data_type, params) in enumerate(recommendations[:20]):
+                for priority, (key, data_type, params) in enumerate(
+                    recommendations[:20]
+                ):
                     if not self._is_cached(key):
                         # This would trigger API calls to warm cache
                         logger.debug(f"Preloading cache entry: {key}")
@@ -422,7 +465,9 @@ class UltimateCFBDCache:
                 logger.error(f"Background preloader error: {e}")
                 time.sleep(60)
 
-    def _generate_preload_recommendations(self, current_time: datetime) -> List[Tuple[str, str, Dict[str, Any]]]:
+    def _generate_preload_recommendations(
+        self, current_time: datetime
+    ) -> List[Tuple[str, str, Dict[str, Any]]]:
         """Generate list of cache entries to preload based on predicted demand"""
         recommendations = []
 
@@ -431,19 +476,33 @@ class UltimateCFBDCache:
 
             # Only preload high-demand entries
             if demand_score > 5.0:  # Threshold for preloading
-                data_type = pattern.endpoint.split('/')[0] if '/' in pattern.endpoint else 'default'
+                data_type = (
+                    pattern.endpoint.split("/")[0]
+                    if "/" in pattern.endpoint
+                    else "default"
+                )
                 recommendations.append((key, data_type, pattern.typical_parameters))
 
         # Sort by demand score (descending)
-        recommendations.sort(key=lambda x: self.usage_patterns[x[0]].calculate_demand_score(current_time), reverse=True)
+        recommendations.sort(
+            key=lambda x: self.usage_patterns[x[0]].calculate_demand_score(
+                current_time
+            ),
+            reverse=True,
+        )
 
         return recommendations
 
-    def _trigger_predictive_load(self, key: str, data_type: str, parameters: Dict[str, Any]):
+    def _trigger_predictive_load(
+        self, key: str, data_type: str, parameters: Dict[str, Any]
+    ):
         """Trigger predictive load for frequently missed keys"""
         # Check if this is a frequent miss pattern
-        recent_misses = [1 for k, t, p in self.access_history[-100:]
-                        if k == key and (datetime.now() - t).seconds < 3600]
+        recent_misses = [
+            1
+            for k, t, p in self.access_history[-100:]
+            if k == key and (datetime.now() - t).seconds < 3600
+        ]
 
         if len(recent_misses) >= 3:  # 3+ misses in last hour
             # Schedule immediate preload
@@ -464,7 +523,9 @@ class UltimateCFBDCache:
         level_hit_rates = {}
         for level in ["memory", "redis", "file"]:
             hits = self.cache_stats["hits"].get(level, 0)
-            level_hit_rates[f"{level}_hit_rate"] = hits / total_requests if total_requests > 0 else 0
+            level_hit_rates[f"{level}_hit_rate"] = (
+                hits / total_requests if total_requests > 0 else 0
+            )
 
         return {
             "overall_hit_rate": overall_hit_rate,
@@ -473,12 +534,12 @@ class UltimateCFBDCache:
             "cache_size": {
                 "memory_entries": len(self.memory_cache),
                 "usage_patterns": len(self.usage_patterns),
-                "access_history": len(self.access_history)
+                "access_history": len(self.access_history),
             },
             "preload_effectiveness": {
                 k: v / total_requests if total_requests > 0 else 0
                 for k, v in self.cache_stats["preload_hits"].items()
-            }
+            },
         }
 
     def optimize_for_100_percent_hit_rate(self) -> Dict[str, Any]:
@@ -492,49 +553,59 @@ class UltimateCFBDCache:
             "current_hit_rate": hit_rate,
             "target_hit_rate": 1.0,
             "gap": 1.0 - hit_rate,
-            "recommendations": []
+            "recommendations": [],
         }
 
         if hit_rate < 0.95:  # Below 95%
             # Aggressive preloading
-            optimizations["recommendations"].append({
-                "action": "enable_aggressive_preloading",
-                "description": "Enable aggressive preloading for top 100 most accessed keys",
-                "expected_improvement": "+3-5%"
-            })
+            optimizations["recommendations"].append(
+                {
+                    "action": "enable_aggressive_preloading",
+                    "description": "Enable aggressive preloading for top 100 most accessed keys",
+                    "expected_improvement": "+3-5%",
+                }
+            )
 
             # Extended TTL
-            optimizations["recommendations"].append({
-                "action": "extend_static_data_ttl",
-                "description": "Extend TTL for static data to maximum (1 year)",
-                "expected_improvement": "+1-2%"
-            })
+            optimizations["recommendations"].append(
+                {
+                    "action": "extend_static_data_ttl",
+                    "description": "Extend TTL for static data to maximum (1 year)",
+                    "expected_improvement": "+1-2%",
+                }
+            )
 
             # Pattern learning
-            optimizations["recommendations"].append({
-                "action": "enhance_pattern_learning",
-                "description": "Increase pattern learning sensitivity and prediction accuracy",
-                "expected_improvement": "+2-3%"
-            })
+            optimizations["recommendations"].append(
+                {
+                    "action": "enhance_pattern_learning",
+                    "description": "Increase pattern learning sensitivity and prediction accuracy",
+                    "expected_improvement": "+2-3%",
+                }
+            )
 
         if hit_rate < 0.98:  # Below 98%
             # Full dependency caching
-            optimizations["recommendations"].append({
-                "action": "enable_dependency_caching",
-                "description": "Cache all related data for frequent queries",
-                "expected_improvement": "+1-2%"
-            })
+            optimizations["recommendations"].append(
+                {
+                    "action": "enable_dependency_caching",
+                    "description": "Cache all related data for frequent queries",
+                    "expected_improvement": "+1-2%",
+                }
+            )
 
             # Predictive API calls
-            optimizations["recommendations"].append({
-                "action": "enable_predictive_api_calls",
-                "description": "Make API calls proactively based on usage patterns",
-                "expected_improvement": "+1-2%"
-            })
+            optimizations["recommendations"].append(
+                {
+                    "action": "enable_predictive_api_calls",
+                    "description": "Make API calls proactively based on usage patterns",
+                    "expected_improvement": "+1-2%",
+                }
+            )
 
         return optimizations
 
-  def _background_cleanup(self):
+    def _background_cleanup(self):
         """Background task to clean up expired cache entries"""
         while True:
             try:
@@ -542,7 +613,8 @@ class UltimateCFBDCache:
 
                 # Clean memory cache
                 expired_keys = [
-                    key for key, entry in self.memory_cache.items()
+                    key
+                    for key, entry in self.memory_cache.items()
                     if not self._is_entry_valid(entry, current_time)
                 ]
                 for key in expired_keys:
@@ -563,12 +635,15 @@ class UltimateCFBDCache:
         """Check if key is cached"""
         return key in self.memory_cache
 
+
 # Global cache instance
 ultimate_cache = UltimateCFBDCache()
+
 
 def get_ultimate_cache() -> UltimateCFBDCache:
     """Get the global ultimate cache instance"""
     return ultimate_cache
+
 
 # Cache utility functions
 def cache_ultimate_key(endpoint: str, **params) -> str:
@@ -577,8 +652,10 @@ def cache_ultimate_key(endpoint: str, **params) -> str:
     param_hash = hashlib.md5(param_str.encode()).hexdigest()[:8]
     return f"cfbd_ultimate_{endpoint}_{param_hash}"
 
+
 def cache_with_ultimate_aware(data_type: str = "default", ttl_minutes: int = None):
     """Ultimate decorator for caching CFBD API calls"""
+
     def decorator(func):
         def wrapper(*args, **kwargs):
             # Generate cache key
@@ -599,5 +676,7 @@ def cache_with_ultimate_aware(data_type: str = "default", ttl_minutes: int = Non
             cache.set(key, result, data_type, ttl_minutes, kwargs)
 
             return result
+
         return wrapper
+
     return decorator
