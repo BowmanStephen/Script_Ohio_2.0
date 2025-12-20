@@ -1,0 +1,70 @@
+{
+  "timestamp": "2025-12-18T20:19:05.352793",
+  "project_root": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0",
+  "validations": {
+    "syntax": {
+      "total_files": 339,
+      "valid_files": 339,
+      "errors": 0,
+      "error_details": []
+    },
+    "critical_files": {
+      "total_critical": 7,
+      "existing": 7,
+      "missing": 0,
+      "missing_files": [],
+      "existing_files": [
+        "CLAUDE.md",
+        "requirements.txt",
+        "Makefile",
+        "agents/core/agent_framework.py",
+        "agents/meta_agent.py",
+        "src/cfbd_client/unified_client.py",
+        "model_pack/updated_training_data.csv"
+      ]
+    },
+    "data_integrity": {
+      "training_data": [
+        {
+          "file": "model_pack/updated_training_data.csv",
+          "status": "valid",
+          "rows": 5250,
+          "columns": 107
+        }
+      ],
+      "model_files": {
+        "expected": 3,
+        "found": 3,
+        "files": [
+          "model_pack/ridge_model_2025.joblib",
+          "model_pack/xgb_home_win_model_2025.pkl",
+          "model_pack/fastai_home_win_model_2025.pkl"
+        ]
+      }
+    },
+    "git_status": {
+      "modified_files": 275,
+      "has_changes": true
+    },
+    "dependencies": {
+      "requirements_file": "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/requirements.txt",
+      "total_requirements": 25,
+      "sample_requirements": [
+        "requests>=2.31.0",
+        "pandas>=2.0.0",
+        "python-dotenv>=1.0.0",
+        "cfbd>=5.3.1",
+        "tenacity>=8.2.3"
+      ]
+    }
+  },
+  "errors": [],
+  "warnings": [],
+  "summary": {
+    "total_validations": 5,
+    "passed": 5,
+    "failed": 0,
+    "success_rate": 100.0,
+    "can_proceed": true
+  }
+}

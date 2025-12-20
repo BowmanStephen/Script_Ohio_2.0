@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-12-17T14:40:39.553190",
+  "config": {
+    "host": "https://api.collegefootballdata.com",
+    "max_requests_per_second": 5,
+    "rate_limit_delay": 0.2
+  },
+  "basic_endpoints": false,
+  "premium_endpoints": {
+    "ppa_teams": "not_available",
+    "wepa": "not_available",
+    "live_scoreboard": "error",
+    "weather": "error",
+    "win_probability": "error"
+  },
+  "graphql_access": false
+}

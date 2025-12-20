@@ -1,0 +1,102 @@
+[tool.black]
+line-length = 88
+target-version = ["py313"]
+include = "\\.pyi?$"
+
+[tool.coverage.run]
+branch = true
+source = ["agents", "src", "scripts"]
+omit = [
+    "*/tests/*",
+    "starter_pack/*",
+    "model_pack/*",
+]
+
+[tool.coverage.report]
+skip_empty = true
+show_missing = true
+precision = 2
+
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+src = ["agents", "src", "scripts"]
+exclude = [
+    "starter_pack",
+    "starter_pack copy",
+    "model_pack",
+    "project_management",
+    "node_modules",
+    "web_app/node_modules",
+    "web_app/dist",
+]
+
+[tool.ruff.lint]
+extend-select = ["B", "I", "PL", "RUF", "UP", "E9", "F63", "F7", "F82"]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/*.py" = ["S"]
+"tests/**" = ["S"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.ty.environment]
+python-version = "3.13"
+extra-paths = ["."]
+root = [".", "agents", "scripts", "model_pack", "tests"]
+
+[tool.ty.src]
+include = ["agents", "scripts", "model_pack", "tests"]
+exclude = [
+    "starter_pack",
+    "starter_pack\\ copy",
+    "project_management",
+    "web_app/**",
+    "src/**",  # React frontend, not Python
+    "data/**",
+    "predictions/**",
+    "reports/**",
+    "analysis/**",
+    "logs/**",
+    "notebook_outputs/**",
+    ".venv/**",
+    "**/__pycache__",
+    "**/node_modules"
+]
+
+[tool.ty.rules]
+# Enable strict type checking rules (ty doesn't have a single "strict" mode)
+# Enable common rules that match mypy's strict behavior
+# Note: unresolved-import is enabled by default, we'll set it to warn for now
+# since ty is stricter about module resolution than mypy
+unresolved-import = "warn"
+division-by-zero = "error"
+index-out-of-bounds = "error"
+redundant-cast = "warn"
+unused-ignore-comment = "warn"
+# Add more rules as needed based on ty's rule set
+
+# Per-module overrides for excluded directories
+[[tool.ty.overrides]]
+include = ["starter_pack/**", "project_management/**"]
+
+[tool.ty.overrides.rules]
+unresolved-import = "ignore"
+
+[[tool.ty.overrides]]
+include = ["agents/**"]
+
+[tool.ty.overrides.rules]
+# Relax rules for complex agent framework
+unresolved-import = "ignore"
+possibly-unresolved-reference = "warn"
+
+[[tool.ty.overrides]]
+include = ["tests/**", "**/test_*.py"]
+
+[tool.ty.overrides.rules]
+# Relax rules for test files
+unresolved-import = "ignore"
+
+
