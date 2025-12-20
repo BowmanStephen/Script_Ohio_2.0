@@ -47,7 +47,9 @@ class TrainingDatasetBuilder:
         if self.run_migration:
             migrator = StarterPackDataMigrator()
             if not migrator.run_migration():
-                raise RuntimeError("Starter pack migration failed. See console logs above.")
+                raise RuntimeError(
+                    "Starter pack migration failed. See console logs above."
+                )
             path_to_use = Path(migrator.output_file)
         elif path_to_use is None:
             raise ValueError("Provide --migrated-file when skipping migration.")
@@ -64,7 +66,9 @@ class TrainingDatasetBuilder:
 
         if self.train_models:
             trainer = FastAIModelTrainer()
-            train_result = trainer.train(epochs=self.epochs, learning_rate=self.learning_rate)
+            train_result = trainer.train(
+                epochs=self.epochs, learning_rate=self.learning_rate
+            )
             summary["model_training"] = train_result
         else:
             summary["model_training"] = None
@@ -77,18 +81,43 @@ class TrainingDatasetBuilder:
 
         frame = pd.read_csv(migrated_file, low_memory=False)
         filtered = frame[frame["week"] <= self.max_week].copy()
-        target = migrated_file.with_name(f"{migrated_file.stem}_week_{self.max_week}.csv")
+        target = migrated_file.with_name(
+            f"{migrated_file.stem}_week_{self.max_week}.csv"
+        )
         filtered.to_csv(target, index=False)
         return target
 
 
 def _parse_args(argv: Optional[Iterable[str]] = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Rebuild/extend the model training dataset.")
-    parser.add_argument("--max-week", type=int, default=None, help="Only include weeks up to this number.")
-    parser.add_argument("--skip-migration", action="store_true", help="Skip starter-pack migration step.")
-    parser.add_argument("--migrated-file", default=None, help="Existing migrated CSV to use when skipping migration.")
-    parser.add_argument("--skip-extend", action="store_true", help="Skip appending to updated_training_data.csv.")
-    parser.add_argument("--train-models", action="store_true", help="Retrain the FastAI neural model after extending data.")
+    parser = argparse.ArgumentParser(
+        description="Rebuild/extend the model training dataset."
+    )
+    parser.add_argument(
+        "--max-week",
+        type=int,
+        default=None,
+        help="Only include weeks up to this number.",
+    )
+    parser.add_argument(
+        "--skip-migration",
+        action="store_true",
+        help="Skip starter-pack migration step.",
+    )
+    parser.add_argument(
+        "--migrated-file",
+        default=None,
+        help="Existing migrated CSV to use when skipping migration.",
+    )
+    parser.add_argument(
+        "--skip-extend",
+        action="store_true",
+        help="Skip appending to updated_training_data.csv.",
+    )
+    parser.add_argument(
+        "--train-models",
+        action="store_true",
+        help="Retrain the FastAI neural model after extending data.",
+    )
     parser.add_argument("--epochs", type=int, default=300)
     parser.add_argument("--learning-rate", type=float, default=1e-3)
     return parser.parse_args(argv)

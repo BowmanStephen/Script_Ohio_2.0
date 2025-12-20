@@ -52,19 +52,22 @@ if not API_KEY:
         "Get your API key from https://collegefootballdata.com/"
     )
 CURRENT_SEASON = 2025
-CURRENT_WEEK = 16  # Through Week 16 (updated: Nov 14, 2025) - can fetch all available weeks
+CURRENT_WEEK = (
+    16  # Through Week 16 (updated: Nov 14, 2025) - can fetch all available weeks
+)
 OUTPUT_DIR = "/Users/stephen_bowman/Documents/GitHub/Script_Ohio_2.0/model_pack"
 
 # Set up logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
+    format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler(f'{OUTPUT_DIR}/data_acquisition.log'),
-        logging.StreamHandler(sys.stdout)
-    ]
+        logging.FileHandler(f"{OUTPUT_DIR}/data_acquisition.log"),
+        logging.StreamHandler(sys.stdout),
+    ],
 )
 logger = logging.getLogger(__name__)
+
 
 class DataAcquisitionAgent:
     """
@@ -75,17 +78,17 @@ class DataAcquisitionAgent:
         """Initialize the agent with API client and configuration."""
         # Use custom CFBDClient which properly handles Bearer token authentication
         self.client = CFBDClient(api_key=API_KEY)
-        
+
         self.data_cache = {}
         self.quality_report = {
-            'total_games': 0,
-            'successful_game_fetches': 0,
-            'successful_play_fetches': 0,
-            'failed_games': [],
-            'failed_plays': [],
-            'data_gaps': [],
-            'processing_time': None,
-            'start_time': None
+            "total_games": 0,
+            "successful_game_fetches": 0,
+            "successful_play_fetches": 0,
+            "failed_games": [],
+            "failed_plays": [],
+            "data_gaps": [],
+            "processing_time": None,
+            "start_time": None,
         }
         self._historical_elo_cache: Optional[Dict[str, float]] = None
         self._historical_talent_cache: Optional[Dict[str, float]] = None
@@ -102,7 +105,9 @@ class DataAcquisitionAgent:
             logger.info("Testing API connectivity...")
             # Try to fetch current season info
             games = self.client.get_games(year=CURRENT_SEASON, week=1)
-            logger.info(f"API connectivity test successful. Found {len(games)} games in Week 1.")
+            logger.info(
+                f"API connectivity test successful. Found {len(games)} games in Week 1."
+            )
             return True
         except CFBDClientError as e:
             logger.error(f"API connectivity test failed: {str(e)}")
@@ -119,7 +124,7 @@ class DataAcquisitionAgent:
             DataFrame containing game information
         """
         logger.info(f"Fetching 2025 games data for Weeks 1-{CURRENT_WEEK}...")
-        self.quality_report['start_time'] = datetime.now()
+        self.quality_report["start_time"] = datetime.now()
 
         all_games = []
 
@@ -139,41 +144,47 @@ class DataAcquisitionAgent:
 
             except CFBDClientError as e:
                 logger.error(f"API error fetching Week {week} games: {str(e)}")
-                self.quality_report['failed_games'].append({'week': week, 'error': str(e)})
+                self.quality_report["failed_games"].append(
+                    {"week": week, "error": str(e)}
+                )
                 time.sleep(1.0)  # Wait on error
             except Exception as e:
                 logger.error(f"Error fetching Week {week} games: {str(e)}")
-                self.quality_report['failed_games'].append({'week': week, 'error': str(e)})
+                self.quality_report["failed_games"].append(
+                    {"week": week, "error": str(e)}
+                )
 
         logger.info(f"Total games fetched: {len(all_games)}")
-        self.quality_report['total_games'] = len(all_games)
+        self.quality_report["total_games"] = len(all_games)
 
         # Convert to DataFrame
         if all_games:
             # Custom client returns JSON data (already dictionaries)
             games_df = pd.DataFrame(all_games)
-            
+
             # Rename columns from camelCase to snake_case
-            games_df = games_df.rename(columns={
-                'homeTeam': 'home_team',
-                'awayTeam': 'away_team', 
-                'homeConference': 'home_conference',
-                'awayConference': 'away_conference',
-                'seasonType': 'season_type',
-                'startDate': 'start_date',
-                'neutralSite': 'neutral_site',
-                'conferenceGame': 'conference_game',
-                'homePoints': 'home_points',
-                'awayPoints': 'away_points',
-                'homePregameElo': 'home_pregame_elo',
-                'awayPregameElo': 'away_pregame_elo'
-            })
-            
+            games_df = games_df.rename(
+                columns={
+                    "homeTeam": "home_team",
+                    "awayTeam": "away_team",
+                    "homeConference": "home_conference",
+                    "awayConference": "away_conference",
+                    "seasonType": "season_type",
+                    "startDate": "start_date",
+                    "neutralSite": "neutral_site",
+                    "conferenceGame": "conference_game",
+                    "homePoints": "home_points",
+                    "awayPoints": "away_points",
+                    "homePregameElo": "home_pregame_elo",
+                    "awayPregameElo": "away_pregame_elo",
+                }
+            )
+
             # DEBUG: Check if columns are populated
             if not games_df.empty:
                 logger.info(f"Columns after rename: {list(games_df.columns)}")
                 logger.info(f"First row sample: {games_df.iloc[0].to_dict()}")
-            
+
             games_df = self._process_games_dataframe(games_df)
             return games_df
         else:
@@ -185,20 +196,40 @@ class DataAcquisitionAgent:
         # For 2025, we'll need to determine FBS teams dynamically
         # This is a simplified check - in production, you'd want to maintain FBS team lists
         fbs_conferences = [
-            'ACC', 'Big 12', 'Big Ten', 'SEC', 'Pac-12',
-            'American Athletic', 'Conference USA', 'Mid-American', 'Mountain West', 'Sun Belt',
-            'FBS Independents'
+            "ACC",
+            "Big 12",
+            "Big Ten",
+            "SEC",
+            "Pac-12",
+            "American Athletic",
+            "Conference USA",
+            "Mid-American",
+            "Mountain West",
+            "Sun Belt",
+            "FBS Independents",
         ]
 
         # Handle conference as dict key (custom client returns dicts)
-        home_conf = game.get('homeConference') if isinstance(game, dict) else getattr(game, 'homeConference', None)
-        away_conf = game.get('awayConference') if isinstance(game, dict) else getattr(game, 'awayConference', None)
+        home_conf = (
+            game.get("homeConference")
+            if isinstance(game, dict)
+            else getattr(game, "homeConference", None)
+        )
+        away_conf = (
+            game.get("awayConference")
+            if isinstance(game, dict)
+            else getattr(game, "awayConference", None)
+        )
 
-        return (home_conf in fbs_conferences or away_conf in fbs_conferences)
+        return home_conf in fbs_conferences or away_conf in fbs_conferences
 
-    def _process_games_dataframe(self, df: pd.DataFrame, elo_dict: Dict[str, float] = None, 
-                                  talent_dict: Dict[str, float] = None, 
-                                  spreads_dict: Dict[int, float] = None) -> pd.DataFrame:
+    def _process_games_dataframe(
+        self,
+        df: pd.DataFrame,
+        elo_dict: Dict[str, float] = None,
+        talent_dict: Dict[str, float] = None,
+        spreads_dict: Dict[int, float] = None,
+    ) -> pd.DataFrame:
         """Process raw games data to match training_data.csv structure."""
         logger.info("Processing games dataframe structure...")
 
@@ -208,11 +239,11 @@ class DataAcquisitionAgent:
             # Fallback to 2024 if 2025 not available
             if not elo_dict:
                 elo_dict = self.fetch_elo_ratings(CURRENT_SEASON - 1)
-        
+
         if talent_dict is None:
             talent_df = self.fetch_team_talent_ratings()
             if not talent_df.empty:
-                talent_dict = dict(zip(talent_df['team'], talent_df['talent']))
+                talent_dict = dict(zip(talent_df["team"], talent_df["talent"]))
             else:
                 talent_dict = {}
                 logger.warning("No talent data available - will use fallback values")
@@ -222,7 +253,7 @@ class DataAcquisitionAgent:
 
         # Fetch spreads if not provided and we have games
         if spreads_dict is None and len(df) > 0:
-            weeks = df['week'].unique() if 'week' in df.columns else []
+            weeks = df["week"].unique() if "week" in df.columns else []
             spreads_dict = {}
             for week in weeks:
                 week_spreads = self.fetch_betting_lines(CURRENT_SEASON, week)
@@ -235,52 +266,68 @@ class DataAcquisitionAgent:
 
         for _, game in df.iterrows():
             try:
-                game_id = game.get('id', '')
-                home_team = game.get('home_team', '')
-                away_team = game.get('away_team', '')
-                
+                game_id = game.get("id", "")
+                home_team = game.get("home_team", "")
+                away_team = game.get("away_team", "")
+
                 # Get Elo ratings (use API data or fallback to 1500 with warning)
                 home_elo = elo_dict.get(home_team, None)
                 away_elo = elo_dict.get(away_team, None)
-                
+
                 if home_elo is None:
                     fallback_home = historical_elo.get(home_team)
                     if fallback_home is not None:
-                        logger.info(f"Elo not found via API for {home_team}; using historical median {fallback_home:.1f}")
+                        logger.info(
+                            f"Elo not found via API for {home_team}; using historical median {fallback_home:.1f}"
+                        )
                         home_elo = fallback_home
                     else:
-                        logger.warning(f"Elo not found for {home_team}, using fallback 1500.0")
+                        logger.warning(
+                            f"Elo not found for {home_team}, using fallback 1500.0"
+                        )
                         home_elo = 1500.0
                 if away_elo is None:
                     fallback_away = historical_elo.get(away_team)
                     if fallback_away is not None:
-                        logger.info(f"Elo not found via API for {away_team}; using historical median {fallback_away:.1f}")
+                        logger.info(
+                            f"Elo not found via API for {away_team}; using historical median {fallback_away:.1f}"
+                        )
                         away_elo = fallback_away
                     else:
-                        logger.warning(f"Elo not found for {away_team}, using fallback 1500.0")
+                        logger.warning(
+                            f"Elo not found for {away_team}, using fallback 1500.0"
+                        )
                         away_elo = 1500.0
-                
+
                 # Get talent ratings (use API data or fallback to 500 with warning)
                 home_talent = talent_dict.get(home_team, None)
                 away_talent = talent_dict.get(away_team, None)
-                
+
                 if home_talent is None:
                     fallback_home_talent = historical_talent.get(home_team)
                     if fallback_home_talent is not None:
-                        logger.info(f"Talent not found via API for {home_team}; using historical median {fallback_home_talent:.1f}")
+                        logger.info(
+                            f"Talent not found via API for {home_team}; using historical median {fallback_home_talent:.1f}"
+                        )
                         home_talent = fallback_home_talent
                     else:
-                        logger.warning(f"Talent not found for {home_team}, using fallback 500.0")
+                        logger.warning(
+                            f"Talent not found for {home_team}, using fallback 500.0"
+                        )
                         home_talent = 500.0
                 if away_talent is None:
                     fallback_away_talent = historical_talent.get(away_team)
                     if fallback_away_talent is not None:
-                        logger.info(f"Talent not found via API for {away_team}; using historical median {fallback_away_talent:.1f}")
+                        logger.info(
+                            f"Talent not found via API for {away_team}; using historical median {fallback_away_talent:.1f}"
+                        )
                         away_talent = fallback_away_talent
                     else:
-                        logger.warning(f"Talent not found for {away_team}, using fallback 500.0")
+                        logger.warning(
+                            f"Talent not found for {away_team}, using fallback 500.0"
+                        )
                         away_talent = 500.0
-                
+
                 # Get spread from betting lines (fallback to historical baseline if missing)
                 spread = None
                 if spreads_dict and game_id:
@@ -298,7 +345,7 @@ class DataAcquisitionAgent:
                         logger.info(
                             "Spread not available for game %s; using historical home spread %.1f",
                             game_id,
-                            fallback_spread
+                            fallback_spread,
                         )
                         spread = fallback_spread
                     else:
@@ -306,35 +353,47 @@ class DataAcquisitionAgent:
                             "Spread missing for %s vs %s (game %s) - defaulting to 0.0",
                             home_team,
                             away_team,
-                            game_id
+                            game_id,
                         )
                         spread = 0.0
-                
+
                 processed_game = {
-                    'id': game_id,
-                    'start_date': game.get('start_date', ''),
-                    'season': CURRENT_SEASON,
-                    'season_type': 'regular',  # Adjust if postseason data is included
-                    'week': game.get('week', 0),
-                    'neutral_site': game.get('neutral_site', False),
-                    'home_team': home_team,
-                    'home_conference': getattr(game.get('home_conference'), 'name', '') if game.get('home_conference') else '',
-                    'away_team': away_team,
-                    'away_conference': getattr(game.get('away_conference'), 'name', '') if game.get('away_conference') else '',
-                    'home_points': game.get('home_points', 0),
-                    'away_points': game.get('away_points', 0),
-                    'margin': abs(game.get('home_points', 0) - game.get('away_points', 0)),
+                    "id": game_id,
+                    "start_date": game.get("start_date", ""),
+                    "season": CURRENT_SEASON,
+                    "season_type": "regular",  # Adjust if postseason data is included
+                    "week": game.get("week", 0),
+                    "neutral_site": game.get("neutral_site", False),
+                    "home_team": home_team,
+                    "home_conference": (
+                        getattr(game.get("home_conference"), "name", "")
+                        if game.get("home_conference")
+                        else ""
+                    ),
+                    "away_team": away_team,
+                    "away_conference": (
+                        getattr(game.get("away_conference"), "name", "")
+                        if game.get("away_conference")
+                        else ""
+                    ),
+                    "home_points": game.get("home_points", 0),
+                    "away_points": game.get("away_points", 0),
+                    "margin": abs(
+                        game.get("home_points", 0) - game.get("away_points", 0)
+                    ),
                     # Real values from CFBD API (with fallbacks only when necessary)
-                    'home_elo': home_elo,
-                    'away_elo': away_elo,
-                    'home_talent': home_talent,
-                    'away_talent': away_talent,
-                    'spread': spread
+                    "home_elo": home_elo,
+                    "away_elo": away_elo,
+                    "home_talent": home_talent,
+                    "away_talent": away_talent,
+                    "spread": spread,
                 }
                 processed_data.append(processed_game)
 
             except Exception as e:
-                logger.warning(f"Error processing game {game.get('id', 'unknown')}: {str(e)}")
+                logger.warning(
+                    f"Error processing game {game.get('id', 'unknown')}: {str(e)}"
+                )
                 continue
 
         processed_df = pd.DataFrame(processed_data)
@@ -355,79 +414,84 @@ class DataAcquisitionAgent:
 
         all_plays = []
         completed_games = games_df[
-            (games_df['home_points'] > 0) | (games_df['away_points'] > 0)
+            (games_df["home_points"] > 0) | (games_df["away_points"] > 0)
         ]
 
-        logger.info(f"Found {len(completed_games)} completed games for play-by-play data")
+        logger.info(
+            f"Found {len(completed_games)} completed games for play-by-play data"
+        )
 
         for idx, game in completed_games.iterrows():
             try:
-                logger.info(f"Fetching plays for game {game['id']} ({game['home_team']} vs {game['away_team']})")
+                logger.info(
+                    f"Fetching plays for game {game['id']} ({game['home_team']} vs {game['away_team']})"
+                )
                 self._rate_limit()
                 # API v5.13.2 requires year and week
                 plays = self.plays_api.get_plays(
-                    year=game['season'], 
-                    week=game['week'], 
-                    team=game['home_team']
+                    year=game["season"], week=game["week"], team=game["home_team"]
                 )
 
                 if plays:
                     for play in plays:
                         play_dict = self._object_to_dict(play)
                         play_data = {
-                            'game_id': game['id'],
-                            'play_id': play_dict.get('id', ''),
-                            'period': play_dict.get('period', 0),
-                            'clock': play_dict.get('clock', ''),
-                            'yard_line': play_dict.get('yard_line', ''),
-                            'down': play_dict.get('down'),
-                            'distance': play_dict.get('distance'),
-                            'play_type': play_dict.get('play_type') or play_dict.get('play_type_abbreviation', ''),
-                            'play_type_id': play_dict.get('play_type_id'),
-                            'scoring': play_dict.get('scoring', False),
-                            'points': play_dict.get('points') or play_dict.get('play_points'),
-                            'home_score': play_dict.get('home_score', 0),
-                            'away_score': play_dict.get('away_score', 0),
-                            'success': play_dict.get('success'),
-                            'ppa': play_dict.get('ppa'),
-                            'yards_gained': play_dict.get('yards_gained'),
-                            'line_yards': play_dict.get('line_yards'),
-                            'rush': play_dict.get('rush'),
-                            'pass': play_dict.get('pass'),
-                            'sack': play_dict.get('sack'),
-                            'offense': play_dict.get('offense') or play_dict.get('offense_team', ''),
-                            'defense': play_dict.get('defense') or play_dict.get('defense_team', ''),
-                            'offense_conference': play_dict.get('offense_conference'),
-                            'defense_conference': play_dict.get('defense_conference'),
-                            'text': play_dict.get('text', ''),
-                            'home_team': game['home_team'],
-                            'away_team': game['away_team']
+                            "game_id": game["id"],
+                            "play_id": play_dict.get("id", ""),
+                            "period": play_dict.get("period", 0),
+                            "clock": play_dict.get("clock", ""),
+                            "yard_line": play_dict.get("yard_line", ""),
+                            "down": play_dict.get("down"),
+                            "distance": play_dict.get("distance"),
+                            "play_type": play_dict.get("play_type")
+                            or play_dict.get("play_type_abbreviation", ""),
+                            "play_type_id": play_dict.get("play_type_id"),
+                            "scoring": play_dict.get("scoring", False),
+                            "points": play_dict.get("points")
+                            or play_dict.get("play_points"),
+                            "home_score": play_dict.get("home_score", 0),
+                            "away_score": play_dict.get("away_score", 0),
+                            "success": play_dict.get("success"),
+                            "ppa": play_dict.get("ppa"),
+                            "yards_gained": play_dict.get("yards_gained"),
+                            "line_yards": play_dict.get("line_yards"),
+                            "rush": play_dict.get("rush"),
+                            "pass": play_dict.get("pass"),
+                            "sack": play_dict.get("sack"),
+                            "offense": play_dict.get("offense")
+                            or play_dict.get("offense_team", ""),
+                            "defense": play_dict.get("defense")
+                            or play_dict.get("defense_team", ""),
+                            "offense_conference": play_dict.get("offense_conference"),
+                            "defense_conference": play_dict.get("defense_conference"),
+                            "text": play_dict.get("text", ""),
+                            "home_team": game["home_team"],
+                            "away_team": game["away_team"],
                         }
                         all_plays.append(play_data)
 
-                    self.quality_report['successful_play_fetches'] += 1
+                    self.quality_report["successful_play_fetches"] += 1
                     logger.info(f"Fetched {len(plays)} plays for game {game['id']}")
                 else:
                     logger.warning(f"No play data found for game {game['id']}")
-                    self.quality_report['failed_plays'].append({
-                        'game_id': game['id'],
-                        'error': 'No play data available'
-                    })
+                    self.quality_report["failed_plays"].append(
+                        {"game_id": game["id"], "error": "No play data available"}
+                    )
 
             except ApiException as e:
-                logger.error(f"API error fetching plays for game {game['id']}: {e.status} - {e.reason}")
-                self.quality_report['failed_plays'].append({
-                    'game_id': game['id'],
-                    'error': f"API {e.status}: {e.reason}"
-                })
+                logger.error(
+                    f"API error fetching plays for game {game['id']}: {e.status} - {e.reason}"
+                )
+                self.quality_report["failed_plays"].append(
+                    {"game_id": game["id"], "error": f"API {e.status}: {e.reason}"}
+                )
                 if e.status == 429:
                     time.sleep(1.0)  # Wait longer on rate limit
             except Exception as e:
                 logger.error(f"Error fetching plays for game {game['id']}: {str(e)}")
-                self.quality_report['failed_plays'].append({
-                    'game_id': game['id'],
-                    'error': str(e)
-                })
+                self.quality_report["failed_plays"].append(
+                    {"game_id": game["id"], "error": str(e)}
+                )
 
         logger.info(f"Total plays fetched: {len(all_plays)}")
         return pd.DataFrame(all_plays) if all_plays else pd.DataFrame()
@@ -448,15 +512,19 @@ class DataAcquisitionAgent:
             if talent_data:
                 processed_talent = []
                 for record in talent_data:
-                    team_name = record.get('team') or record.get('school') or record.get('name')
+                    team_name = (
+                        record.get("team") or record.get("school") or record.get("name")
+                    )
                     if not team_name:
                         continue
-                    processed_talent.append({
-                        'team': team_name,
-                        'talent': record.get('talent', 0.0),
-                        'season': CURRENT_SEASON,
-                        'rank': record.get('rank', 0)
-                    })
+                    processed_talent.append(
+                        {
+                            "team": team_name,
+                            "talent": record.get("talent", 0.0),
+                            "season": CURRENT_SEASON,
+                            "rank": record.get("rank", 0),
+                        }
+                    )
 
                 if processed_talent:
                     self._talent_fetched = True
@@ -495,21 +563,23 @@ class DataAcquisitionAgent:
             return self._historical_elo_cache
 
         try:
-            logger.info("Loading historical Elo baselines from updated_training_data.csv")
+            logger.info(
+                "Loading historical Elo baselines from updated_training_data.csv"
+            )
             hist_df = pd.read_csv(
                 training_path,
-                usecols=['home_team', 'away_team', 'home_elo', 'away_elo'],
-                low_memory=False
+                usecols=["home_team", "away_team", "home_elo", "away_elo"],
+                low_memory=False,
             )
 
             frames = []
-            if {'home_team', 'home_elo'}.issubset(hist_df.columns):
-                home = hist_df[['home_team', 'home_elo']].dropna()
-                home.columns = ['team', 'elo']
+            if {"home_team", "home_elo"}.issubset(hist_df.columns):
+                home = hist_df[["home_team", "home_elo"]].dropna()
+                home.columns = ["team", "elo"]
                 frames.append(home)
-            if {'away_team', 'away_elo'}.issubset(hist_df.columns):
-                away = hist_df[['away_team', 'away_elo']].dropna()
-                away.columns = ['team', 'elo']
+            if {"away_team", "away_elo"}.issubset(hist_df.columns):
+                away = hist_df[["away_team", "away_elo"]].dropna()
+                away.columns = ["team", "elo"]
                 frames.append(away)
 
             if not frames:
@@ -517,8 +587,12 @@ class DataAcquisitionAgent:
                 return self._historical_elo_cache
 
             combined = pd.concat(frames, ignore_index=True)
-            self._historical_elo_cache = combined.groupby('team')['elo'].median().to_dict()
-            logger.info(f"Historical Elo baselines loaded for {len(self._historical_elo_cache)} teams")
+            self._historical_elo_cache = (
+                combined.groupby("team")["elo"].median().to_dict()
+            )
+            logger.info(
+                f"Historical Elo baselines loaded for {len(self._historical_elo_cache)} teams"
+            )
         except Exception as exc:
             logger.error(f"Failed to load historical Elo baseline: {exc}")
             self._historical_elo_cache = {}
@@ -527,21 +601,21 @@ class DataAcquisitionAgent:
 
     def _resolve_game_identifier(self, game_row: pd.Series) -> str:
         """Create a stable identifier for a game even if the API ID is missing."""
-        game_id = game_row.get('id')
-        if pd.notna(game_id) and game_id not in ('', None):
+        game_id = game_row.get("id")
+        if pd.notna(game_id) and game_id not in ("", None):
             return game_id
-        season = game_row.get('season', CURRENT_SEASON)
-        week = game_row.get('week', 0)
-        home = game_row.get('home_team', '')
-        away = game_row.get('away_team', '')
+        season = game_row.get("season", CURRENT_SEASON)
+        week = game_row.get("week", 0)
+        home = game_row.get("home_team", "")
+        away = game_row.get("away_team", "")
         return f"{season}_{week}_{home}_{away}"
 
     def _extract_spread_from_row(self, game_row: pd.Series) -> Optional[float]:
         """Attempt to extract spread information embedded within the game object."""
         candidates = [
-            game_row.get('spread'),
-            game_row.get('formatted_spread'),
-            game_row.get('lines')
+            game_row.get("spread"),
+            game_row.get("formatted_spread"),
+            game_row.get("lines"),
         ]
 
         for candidate in candidates:
@@ -563,7 +637,7 @@ class DataAcquisitionAgent:
             try:
                 return float(cleaned)
             except ValueError:
-                match = re.search(r'-?\d+\.?\d*', cleaned)
+                match = re.search(r"-?\d+\.?\d*", cleaned)
                 if match:
                     try:
                         return float(match.group())
@@ -572,7 +646,7 @@ class DataAcquisitionAgent:
                 return None
 
         if isinstance(value, dict):
-            for key in ('spread', 'formatted_spread', 'value'):
+            for key in ("spread", "formatted_spread", "value"):
                 nested = self._parse_spread_value(value.get(key))
                 if nested is not None:
                     return nested
@@ -611,21 +685,23 @@ class DataAcquisitionAgent:
             return self._historical_talent_cache
 
         try:
-            logger.info("Loading historical talent baselines from updated_training_data.csv")
+            logger.info(
+                "Loading historical talent baselines from updated_training_data.csv"
+            )
             hist_df = pd.read_csv(
                 training_path,
-                usecols=['home_team', 'away_team', 'home_talent', 'away_talent'],
-                low_memory=False
+                usecols=["home_team", "away_team", "home_talent", "away_talent"],
+                low_memory=False,
             )
 
             frames = []
-            if {'home_team', 'home_talent'}.issubset(hist_df.columns):
-                home = hist_df[['home_team', 'home_talent']].dropna()
-                home.columns = ['team', 'talent']
+            if {"home_team", "home_talent"}.issubset(hist_df.columns):
+                home = hist_df[["home_team", "home_talent"]].dropna()
+                home.columns = ["team", "talent"]
                 frames.append(home)
-            if {'away_team', 'away_talent'}.issubset(hist_df.columns):
-                away = hist_df[['away_team', 'away_talent']].dropna()
-                away.columns = ['team', 'talent']
+            if {"away_team", "away_talent"}.issubset(hist_df.columns):
+                away = hist_df[["away_team", "away_talent"]].dropna()
+                away.columns = ["team", "talent"]
                 frames.append(away)
 
             if not frames:
@@ -633,8 +709,12 @@ class DataAcquisitionAgent:
                 return self._historical_talent_cache
 
             combined = pd.concat(frames, ignore_index=True)
-            self._historical_talent_cache = combined.groupby('team')['talent'].median().to_dict()
-            logger.info(f"Historical talent baselines loaded for {len(self._historical_talent_cache)} teams")
+            self._historical_talent_cache = (
+                combined.groupby("team")["talent"].median().to_dict()
+            )
+            logger.info(
+                f"Historical talent baselines loaded for {len(self._historical_talent_cache)} teams"
+            )
         except Exception as exc:
             logger.error(f"Failed to load historical talent baseline: {exc}")
             self._historical_talent_cache = {}
@@ -655,19 +735,23 @@ class DataAcquisitionAgent:
             return self._historical_spread_cache
 
         try:
-            logger.info("Loading historical spread baselines from updated_training_data.csv")
+            logger.info(
+                "Loading historical spread baselines from updated_training_data.csv"
+            )
             hist_df = pd.read_csv(
-                training_path,
-                usecols=['home_team', 'spread'],
-                low_memory=False
+                training_path, usecols=["home_team", "spread"], low_memory=False
             ).dropna()
 
             if hist_df.empty:
                 self._historical_spread_cache = {}
                 return self._historical_spread_cache
 
-            self._historical_spread_cache = hist_df.groupby('home_team')['spread'].median().to_dict()
-            logger.info(f"Historical spread baselines loaded for {len(self._historical_spread_cache)} teams")
+            self._historical_spread_cache = (
+                hist_df.groupby("home_team")["spread"].median().to_dict()
+            )
+            logger.info(
+                f"Historical spread baselines loaded for {len(self._historical_spread_cache)} teams"
+            )
         except Exception as exc:
             logger.error(f"Failed to load historical spread baseline: {exc}")
             self._historical_spread_cache = {}
@@ -685,36 +769,36 @@ class DataAcquisitionAgent:
             Dictionary mapping team names to Elo ratings
         """
         logger.info(f"Fetching Elo ratings for {year}...")
-        
+
         elo_dict = {}
-        
+
         try:
             # Fetch most recent Elo ratings (use previous year if current year not available)
             self._rate_limit()
             elo_data = self.client.get_sp_ratings(year=year)
-            
+
             if elo_data:
                 # Process Elo/SP+ data - get rating for each team
                 for entry in elo_data:
-                    team = entry.get('team') or entry.get('school')
-                    rating = entry.get('rating')
-                    
+                    team = entry.get("team") or entry.get("school")
+                    rating = entry.get("rating")
+
                     if team and rating:
                         elo_dict[team] = float(rating)
-                
+
                 logger.info(f"Fetched ratings for {len(elo_dict)} teams")
-            
+
             # Fallback: Try previous year if current year has no data
             if not elo_dict and year == CURRENT_SEASON:
                 logger.info(f"No rating data for {year}, trying {year-1}...")
-                return self.fetch_elo_ratings(year=year-1)
-                
+                return self.fetch_elo_ratings(year=year - 1)
+
         except CFBDClientError as e:
             logger.warning(f"API error fetching ratings: {str(e)}")
             time.sleep(1.0)
         except Exception as e:
             logger.warning(f"Error fetching ratings: {str(e)}")
-        
+
         return elo_dict
 
     def fetch_betting_lines(self, year: int, week: int) -> Dict[int, float]:
@@ -729,9 +813,9 @@ class DataAcquisitionAgent:
             Dictionary mapping game IDs to spreads
         """
         logger.info(f"Fetching betting lines for {year} Week {week}...")
-        
+
         spreads_dict = {}
-        
+
         try:
             self._rate_limit()
             lines = self.client.get_lines(year=year, week=week)
@@ -740,19 +824,28 @@ class DataAcquisitionAgent:
                 return spreads_dict
 
             for line in lines:
-                game_id = line.get('gameId') or line.get('id')
-                spread_value = self._parse_spread_value(line.get('spread') or line.get('formattedSpread'))
+                game_id = line.get("gameId") or line.get("id")
+                spread_value = self._parse_spread_value(
+                    line.get("spread") or line.get("formattedSpread")
+                )
 
-                line_entries = line.get('lines') or []
+                line_entries = line.get("lines") or []
                 if not spread_value and isinstance(line_entries, list):
                     consensus = next(
-                        (entry for entry in line_entries if str(entry.get('provider', '')).lower() == 'consensus'),
-                        None
+                        (
+                            entry
+                            for entry in line_entries
+                            if str(entry.get("provider", "")).lower() == "consensus"
+                        ),
+                        None,
                     )
-                    target_entry = consensus or (line_entries[0] if line_entries else None)
+                    target_entry = consensus or (
+                        line_entries[0] if line_entries else None
+                    )
                     if target_entry:
                         spread_value = self._parse_spread_value(
-                            target_entry.get('spread') or target_entry.get('formattedSpread')
+                            target_entry.get("spread")
+                            or target_entry.get("formattedSpread")
                         )
 
                 if spread_value is None or game_id is None:
@@ -761,23 +854,31 @@ class DataAcquisitionAgent:
                 try:
                     spreads_dict[int(game_id)] = float(spread_value)
                 except (TypeError, ValueError):
-                    logger.debug("Could not coerce spread %s for game %s", spread_value, game_id)
+                    logger.debug(
+                        "Could not coerce spread %s for game %s", spread_value, game_id
+                    )
 
-            logger.info("Fetched betting lines for %d games (Week %s)", len(spreads_dict), week)
+            logger.info(
+                "Fetched betting lines for %d games (Week %s)", len(spreads_dict), week
+            )
 
         except CFBDClientError as e:
             logger.warning(f"API error fetching betting lines: {str(e)}")
             time.sleep(1.0)
         except Exception as e:
             logger.warning(f"Error fetching betting lines: {str(e)}")
-        
+
         return spreads_dict
 
-    def calculate_advanced_metrics(self, games_df: pd.DataFrame, plays_df: pd.DataFrame) -> pd.DataFrame:
+    def calculate_advanced_metrics(
+        self, games_df: pd.DataFrame, plays_df: pd.DataFrame
+    ) -> pd.DataFrame:
         """
         Populate opponent-adjusted advanced metrics using real CFBD data.
         """
-        logger.info("Calculating advanced metrics from CFBD Stats + play-by-play data...")
+        logger.info(
+            "Calculating advanced metrics from CFBD Stats + play-by-play data..."
+        )
 
         builder = AdvancedMetricsBuilder(
             api_client=self.api_client,
@@ -801,13 +902,17 @@ class DataAcquisitionAgent:
                     games_df.at[idx, column] = value
             populated_games += 1
 
-        logger.info("Advanced metrics populated for %d games before fallback", populated_games)
+        logger.info(
+            "Advanced metrics populated for %d games before fallback", populated_games
+        )
 
         historical_data_path = f"{OUTPUT_DIR}/updated_training_data.csv"
         if os.path.exists(historical_data_path):
             try:
                 historical_df = pd.read_csv(historical_data_path, low_memory=False)
-                historical_pre_2025 = historical_df[historical_df['season'] < CURRENT_SEASON].copy()
+                historical_pre_2025 = historical_df[
+                    historical_df["season"] < CURRENT_SEASON
+                ].copy()
 
                 for col in ADVANCED_METRIC_COLUMNS:
                     if col in historical_pre_2025.columns:
@@ -819,7 +924,7 @@ class DataAcquisitionAgent:
                                 "Historical fallback used for %d rows of %s (mean=%.4f)",
                                 missing_count,
                                 col,
-                                hist_mean if not np.isnan(hist_mean) else 0.0
+                                hist_mean if not np.isnan(hist_mean) else 0.0,
                             )
                     else:
                         games_df[col].fillna(0.0, inplace=True)
@@ -828,14 +933,21 @@ class DataAcquisitionAgent:
                 for col in ADVANCED_METRIC_COLUMNS:
                     games_df[col].fillna(0.0, inplace=True)
         else:
-            logger.warning("Historical data file not found - using 0.0 as fallback for missing metrics")
+            logger.warning(
+                "Historical data file not found - using 0.0 as fallback for missing metrics"
+            )
             for col in ADVANCED_METRIC_COLUMNS:
                 games_df[col].fillna(0.0, inplace=True)
 
-        logger.info("Advanced metrics pipeline complete (%d columns)", len(ADVANCED_METRIC_COLUMNS))
+        logger.info(
+            "Advanced metrics pipeline complete (%d columns)",
+            len(ADVANCED_METRIC_COLUMNS),
+        )
         return games_df
 
-    def merge_talent_data(self, games_df: pd.DataFrame, talent_df: pd.DataFrame) -> pd.DataFrame:
+    def merge_talent_data(
+        self, games_df: pd.DataFrame, talent_df: pd.DataFrame
+    ) -> pd.DataFrame:
         """
         Merge talent ratings into games data.
 
@@ -853,22 +965,26 @@ class DataAcquisitionAgent:
         logger.info("Merging talent ratings into games data...")
 
         # Create talent lookup dictionary
-        talent_dict = dict(zip(talent_df['team'], talent_df['talent']))
+        talent_dict = dict(zip(talent_df["team"], talent_df["talent"]))
 
         # Map talent to home and away teams
-        games_df['home_talent'] = games_df['home_team'].map(talent_dict)
-        games_df['away_talent'] = games_df['away_team'].map(talent_dict)
-        
+        games_df["home_talent"] = games_df["home_team"].map(talent_dict)
+        games_df["away_talent"] = games_df["away_team"].map(talent_dict)
+
         # Fetch missing talent from API instead of using 500.0 fallback
-        missing_home = games_df[games_df['home_talent'].isna()]['home_team'].unique()
-        missing_away = games_df[games_df['away_talent'].isna()]['away_team'].unique()
-        missing_teams = {team for team in (set(missing_home) | set(missing_away)) if isinstance(team, str) and team}
-        
+        missing_home = games_df[games_df["home_talent"].isna()]["home_team"].unique()
+        missing_away = games_df[games_df["away_talent"].isna()]["away_team"].unique()
+        missing_teams = {
+            team
+            for team in (set(missing_home) | set(missing_away))
+            if isinstance(team, str) and team
+        }
+
         if missing_teams:
             logger.warning(
                 "Talent missing for %d teams, attempting targeted API fetch (%s)",
                 len(missing_teams),
-                ", ".join(sorted(missing_teams))[:200]
+                ", ".join(sorted(missing_teams))[:200],
             )
             fetched_teams = {}
             for season in (CURRENT_SEASON, CURRENT_SEASON - 1):
@@ -880,44 +996,58 @@ class DataAcquisitionAgent:
                         self._rate_limit()
                         if talent_data and len(talent_data) > 0:
                             record = self._object_to_dict(talent_data[0])
-                            team_talent = record.get('talent')
+                            team_talent = record.get("talent")
                             if team_talent is not None:
                                 talent_dict[team] = float(team_talent)
                                 fetched_teams[team] = season
-                                logger.info("Fetched %s talent for %s from %s", team_talent, team, season)
+                                logger.info(
+                                    "Fetched %s talent for %s from %s",
+                                    team_talent,
+                                    team,
+                                    season,
+                                )
                     except Exception as exc:
-                        logger.debug("Could not fetch talent for %s (%s): %s", team, season, exc)
+                        logger.debug(
+                            "Could not fetch talent for %s (%s): %s", team, season, exc
+                        )
                 missing_teams -= set(fetched_teams.keys())
                 if not missing_teams:
                     break
-            
+
             # Update with fetched talent
-            games_df['home_talent'] = games_df['home_team'].map(talent_dict)
-            games_df['away_talent'] = games_df['away_team'].map(talent_dict)
-            
+            games_df["home_talent"] = games_df["home_team"].map(talent_dict)
+            games_df["away_talent"] = games_df["away_team"].map(talent_dict)
+
             # Only use 500.0 as absolute last resort (with warning)
             # Use historical baseline before absolute fallback
-            still_missing_mask = games_df['home_talent'].isna()
+            still_missing_mask = games_df["home_talent"].isna()
             if still_missing_mask.any():
                 historical_talent = self._get_historical_talent_baseline()
-                games_df.loc[still_missing_mask, 'home_talent'] = games_df.loc[
-                    still_missing_mask, 'home_team'
+                games_df.loc[still_missing_mask, "home_talent"] = games_df.loc[
+                    still_missing_mask, "home_team"
                 ].map(historical_talent)
 
-            still_missing_mask = games_df['away_talent'].isna()
+            still_missing_mask = games_df["away_talent"].isna()
             if still_missing_mask.any():
                 historical_talent = self._get_historical_talent_baseline()
-                games_df.loc[still_missing_mask, 'away_talent'] = games_df.loc[
-                    still_missing_mask, 'away_team'
+                games_df.loc[still_missing_mask, "away_talent"] = games_df.loc[
+                    still_missing_mask, "away_team"
                 ].map(historical_talent)
 
-            still_missing = games_df[games_df['home_talent'].isna() | games_df['away_talent'].isna()]
+            still_missing = games_df[
+                games_df["home_talent"].isna() | games_df["away_talent"].isna()
+            ]
             if len(still_missing) > 0:
-                missing_names = sorted(set(still_missing['home_team'].dropna().tolist() + still_missing['away_team'].dropna().tolist()))
+                missing_names = sorted(
+                    set(
+                        still_missing["home_team"].dropna().tolist()
+                        + still_missing["away_team"].dropna().tolist()
+                    )
+                )
                 logger.warning(
                     "Unable to find talent ratings for %d games (%s). Leaving as NaN so downstream checks can handle explicitly.",
                     len(still_missing),
-                    ", ".join(missing_names)[:200]
+                    ", ".join(missing_names)[:200],
                 )
 
         logger.info("Talent data merged successfully")
@@ -931,7 +1061,7 @@ class DataAcquisitionAgent:
             Formatted report string
         """
         end_time = datetime.now()
-        processing_time = end_time - self.quality_report['start_time']
+        processing_time = end_time - self.quality_report["start_time"]
 
         report = f"""
 2025 COLLEGE FOOTBALL DATA ACQUISITION REPORT
@@ -949,14 +1079,14 @@ DATA SUMMARY:
 ERROR SUMMARY:
 """
 
-        if self.quality_report['failed_games']:
+        if self.quality_report["failed_games"]:
             report += "Failed Game Fetches:\n"
-            for failed in self.quality_report['failed_games']:
+            for failed in self.quality_report["failed_games"]:
                 report += f"  - Week {failed['week']}: {failed['error']}\n"
 
-        if self.quality_report['failed_plays']:
+        if self.quality_report["failed_plays"]:
             report += "Failed Play Fetches:\n"
-            for failed in self.quality_report['failed_plays']:
+            for failed in self.quality_report["failed_plays"]:
                 report += f"  - Game {failed['game_id']}: {failed['error']}\n"
 
         report += f"""
@@ -969,16 +1099,21 @@ DATA COVERAGE:
 RECOMMENDATIONS:
 """
 
-        if len(self.quality_report['failed_games']) > 0:
+        if len(self.quality_report["failed_games"]) > 0:
             report += "- Investigate failed game fetches for data gaps\n"
-        if len(self.quality_report['failed_plays']) > 0:
+        if len(self.quality_report["failed_plays"]) > 0:
             report += "- Review play-by-play data availability for recent games\n"
-        if self.quality_report['successful_play_fetches'] < self.quality_report['total_games']:
+        if (
+            self.quality_report["successful_play_fetches"]
+            < self.quality_report["total_games"]
+        ):
             report += "- Some games may not have complete play-by-play data\n"
 
         return report
 
-    def save_datasets(self, games_df: pd.DataFrame, plays_df: pd.DataFrame, talent_df: pd.DataFrame):
+    def save_datasets(
+        self, games_df: pd.DataFrame, plays_df: pd.DataFrame, talent_df: pd.DataFrame
+    ):
         """
         Save all datasets to files.
 
@@ -999,18 +1134,22 @@ RECOMMENDATIONS:
             if not plays_df.empty:
                 plays_file = f"{OUTPUT_DIR}/2025_plays.csv"
                 plays_df.to_csv(plays_file, index=False)
-                logger.info(f"Saved play-by-play data: {plays_file} ({len(plays_df)} plays)")
+                logger.info(
+                    f"Saved play-by-play data: {plays_file} ({len(plays_df)} plays)"
+                )
 
             # Save talent data
             if not talent_df.empty:
                 talent_file = f"{OUTPUT_DIR}/2025_talent.csv"
                 talent_df.to_csv(talent_file, index=False)
-                logger.info(f"Saved talent data: {talent_file} ({len(talent_df)} teams)")
+                logger.info(
+                    f"Saved talent data: {talent_file} ({len(talent_df)} teams)"
+                )
 
             # Generate and save quality report
             report = self.generate_quality_report()
             report_file = f"{OUTPUT_DIR}/2025_data_quality_report.txt"
-            with open(report_file, 'w') as f:
+            with open(report_file, "w") as f:
                 f.write(report)
             logger.info(f"Saved quality report: {report_file}")
 
@@ -1036,7 +1175,7 @@ RECOMMENDATIONS:
             if games_df.empty:
                 raise Exception("No games data fetched")
 
-            self.quality_report['successful_game_fetches'] = len(games_df)
+            self.quality_report["successful_game_fetches"] = len(games_df)
 
             # Fetch play-by-play data
             plays_df = self.fetch_play_by_play_data(games_df)

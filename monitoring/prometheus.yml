@@ -1,0 +1,116 @@
+# Prometheus configuration for Script Ohio 2.0 Agent System
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them
+rule_files:
+  - "alert_rules.yml"
+
+# Scrape configurations
+scrape_configs:
+  # Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Script Ohio 2.0 Agents
+  - job_name: 'script-ohio-agents'
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    metrics_path: /metrics
+    static_configs:
+      # Meta Agent
+      - targets: ['meta-agent:8090']
+        labels:
+          agent_type: 'meta'
+          tier: 'governance'
+
+      # Orchestrator Agents
+      - targets:
+          - 'orchestration-agent:8091'
+          - 'analytics-orchestrator:8092'
+          - 'project-management-agent:8093'
+          - 'documentation-agent:8094'
+        labels:
+          agent_type: 'orchestrator'
+          tier: 'coordination'
+
+      # Specialist Agents
+      - targets:
+          - 'cfbd-integration-agent:8010'
+          - 'model-execution-engine:8011'
+          - 'insight-generator-agent:8012'
+          - 'weekly-matchup-analysis:8013'
+          - 'weekly-prediction-generation:8014'
+          - 'performance-monitor-agent:8015'
+          - 'validation-agent:8016'
+          - 'learning-navigator-agent:8017'
+          - 'ai-assistant-agent:8018'
+          - 'weekly-validation-agent:8019'
+        labels:
+          agent_type: 'specialist'
+          tier: 'domain'
+
+  # Health check endpoints (scraping health status)
+  - job_name: 'agent-health'
+    scrape_interval: 30s
+    scrape_timeout: 5s
+    metrics_path: /health
+    static_configs:
+      - targets:
+          - 'meta-agent:8000'
+          - 'orchestration-agent:8001'
+          - 'analytics-orchestrator:8002'
+          - 'project-management-agent:8003'
+          - 'documentation-agent:8004'
+          - 'cfbd-integration-agent:8010'
+          - 'model-execution-engine:8011'
+          - 'insight-generator-agent:8012'
+          - 'weekly-matchup-analysis:8013'
+          - 'weekly-prediction-generation:8014'
+          - 'performance-monitor-agent:8015'
+          - 'validation-agent:8016'
+          - 'learning-navigator-agent:8017'
+          - 'ai-assistant-agent:8018'
+          - 'weekly-validation-agent:8019'
+    metrics_path: /health
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 'meta-agent:8000'  # Use health endpoint exporter
+
+  # Redis metrics
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:6379']
+    metrics_path: /metrics
+
+  # PostgreSQL metrics (requires exporter)
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres-exporter:9187']
+
+  # Docker container metrics
+  - job_name: 'docker'
+    static_configs:
+      - targets: ['docker-exporter:9323']
+
+  # Node metrics (system resources)
+  - job_name: 'node'
+    static_configs:
+      - targets: ['node-exporter:9100']

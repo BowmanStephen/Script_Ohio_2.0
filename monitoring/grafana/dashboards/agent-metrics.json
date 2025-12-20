@@ -1,0 +1,362 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "Script Ohio 2.0 Agent Metrics",
+    "tags": ["script-ohio", "agents", "monitoring"],
+    "style": "dark",
+    "timezone": "browser",
+    "refresh": "5s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "Agent Health Status",
+        "type": "stat",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "targets": [
+          {
+            "expr": "agent_health_status",
+            "legendFormat": "{{agent_id}} - {{agent_type}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "text": "Unhealthy",
+                    "color": "red"
+                  },
+                  "1": {
+                    "text": "Healthy",
+                    "color": "green"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "green",
+                  "value": 1
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "reduceOptions": {
+            "values": false,
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": ""
+          },
+          "orientation": "horizontal",
+          "textMode": "auto",
+          "colorMode": "background"
+        }
+      },
+      {
+        "id": 2,
+        "title": "Active Agents by Type",
+        "type": "piechart",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        },
+        "targets": [
+          {
+            "expr": "sum by (agent_type) (agent_health_status)",
+            "legendFormat": "{{agent_type}}",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "reduceOptions": {
+            "values": false,
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": ""
+          },
+          "pieType": "pie",
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          },
+          "legend": {
+            "displayMode": "list",
+            "placement": "right"
+          }
+        }
+      },
+      {
+        "id": 3,
+        "title": "Request Rate",
+        "type": "graph",
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 8
+        },
+        "targets": [
+          {
+            "expr": "rate(agent_requests_total[5m])",
+            "legendFormat": "{{agent_id}} - {{method}}",
+            "refId": "A"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Requests/sec"
+          }
+        ],
+        "xAxes": [
+          {
+            "label": "Time"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Request Duration",
+        "type": "graph",
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 8
+        },
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(agent_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "95th percentile - {{agent_id}}",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.50, rate(agent_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "50th percentile - {{agent_id}}",
+            "refId": "B"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Duration (seconds)"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Memory Usage",
+        "type": "graph",
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 17
+        },
+        "targets": [
+          {
+            "expr": "agent_memory_usage_bytes / 1024 / 1024",
+            "legendFormat": "{{agent_id}} (MB)",
+            "refId": "A"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Memory (MB)"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "CPU Usage",
+        "type": "graph",
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 17
+        },
+        "targets": [
+          {
+            "expr": "agent_cpu_usage_percent",
+            "legendFormat": "{{agent_id}}",
+            "refId": "A"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "CPU (%)",
+            "max": 100,
+            "min": 0
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Message Throughput",
+        "type": "graph",
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 26
+        },
+        "targets": [
+          {
+            "expr": "rate(agent_messages_total[5m])",
+            "legendFormat": "{{agent_id}} - {{direction}} {{message_type}}",
+            "refId": "A"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Messages/sec"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Error Rate",
+        "type": "graph",
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 26
+        },
+        "targets": [
+          {
+            "expr": "rate(agent_errors_total[5m])",
+            "legendFormat": "{{agent_id}} - {{error_type}}",
+            "refId": "A"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Errors/sec"
+          }
+        ],
+        "alert": {
+          "conditions": [
+            {
+              "evaluator": {
+                "params": [
+                  0
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "A",
+                  "5m",
+                  "now"
+                ]
+              },
+              "reducer": {
+                "params": [],
+                "type": "last"
+              },
+              "type": "query"
+            }
+          ]
+        }
+      },
+      {
+        "id": 9,
+        "title": "Active Connections",
+        "type": "graph",
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 35
+        },
+        "targets": [
+          {
+            "expr": "agent_active_connections",
+            "legendFormat": "{{agent_id}}",
+            "refId": "A"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Connections"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Task Execution Time",
+        "type": "graph",
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 35
+        },
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(agent_task_duration_seconds_bucket[5m]))",
+            "legendFormat": "95th percentile - {{agent_id}} - {{task_type}}",
+            "refId": "A"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Duration (seconds)"
+          }
+        ]
+      }
+    ],
+    "templating": {
+      "list": [
+        {
+          "name": "agent_id",
+          "type": "query",
+          "datasource": "Prometheus",
+          "query": "label_values(agent_health_status, agent_id)",
+          "multi": true,
+          "includeAll": true,
+          "allValue": ".*"
+        },
+        {
+          "name": "agent_type",
+          "type": "query",
+          "datasource": "Prometheus",
+          "query": "label_values(agent_health_status, agent_type)",
+          "multi": true,
+          "includeAll": true,
+          "allValue": ".*"
+        }
+      ]
+    },
+    "timepicker": {},
+    "annotations": {
+      "list": []
+    }
+  }
+}

@@ -13,19 +13,26 @@ import logging
 from datetime import datetime
 
 # Set up logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
+
 
 class DataMigration2025:
     """Handle migration of complete 2025 data from starter pack to model pack"""
 
     def __init__(self):
         self.project_root = Path(__file__).parent
-        self.starter_pack_path = self.project_root.parent / 'starter_pack/data/games.csv'
-        self.training_data_path = self.project_root / 'updated_training_data.csv'
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        self.backup_path = self.project_root / f'updated_training_data_backup_{timestamp}.csv'
-        self.output_path = self.project_root / 'updated_training_data.csv'
+        self.starter_pack_path = (
+            self.project_root.parent / "starter_pack/data/games.csv"
+        )
+        self.training_data_path = self.project_root / "updated_training_data.csv"
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        self.backup_path = (
+            self.project_root / f"updated_training_data_backup_{timestamp}.csv"
+        )
+        self.output_path = self.project_root / "updated_training_data.csv"
 
     def create_backup(self):
         """Create backup of existing training data"""
@@ -49,10 +56,12 @@ class DataMigration2025:
 
         # Load starter pack data
         df_starter = pd.read_csv(self.starter_pack_path, low_memory=False)
-        df_2025_starter = df_starter[df_starter['season'] == 2025].copy()
+        df_2025_starter = df_starter[df_starter["season"] == 2025].copy()
 
         logger.info(f"✅ Loaded {len(df_2025_starter):,} 2025 games from starter pack")
-        logger.info(f"✅ Week range: {df_2025_starter['week'].min()} - {df_2025_starter['week'].max()}")
+        logger.info(
+            f"✅ Week range: {df_2025_starter['week'].min()} - {df_2025_starter['week'].max()}"
+        )
 
         return df_2025_starter
 
@@ -68,8 +77,8 @@ class DataMigration2025:
         logger.info(f"✅ Loaded {len(df_training):,} total games from training data")
 
         # Separate 2025 and historical data
-        df_2025_existing = df_training[df_training['season'] == 2025].copy()
-        df_historical = df_training[df_training['season'] < 2025].copy()
+        df_2025_existing = df_training[df_training["season"] == 2025].copy()
+        df_historical = df_training[df_training["season"] < 2025].copy()
 
         logger.info(f"✅ Historical games (pre-2025): {len(df_historical):,}")
         logger.info(f"✅ Existing 2025 games: {len(df_2025_existing):,}")
@@ -78,10 +87,15 @@ class DataMigration2025:
 
     def create_game_identifier(self, df):
         """Create unique game identifier for matching"""
-        df['game_key'] = df['season'].astype(str) + '_' + \
-                         df['week'].astype(str) + '_' + \
-                         df['home_team'].str.replace(' ', '_') + '_' + \
-                         df['away_team'].str.replace(' ', '_')
+        df["game_key"] = (
+            df["season"].astype(str)
+            + "_"
+            + df["week"].astype(str)
+            + "_"
+            + df["home_team"].str.replace(" ", "_")
+            + "_"
+            + df["away_team"].str.replace(" ", "_")
+        )
         return df
 
     def find_new_games(self, starter_2025, existing_2025):
@@ -93,14 +107,14 @@ class DataMigration2025:
         existing_2025 = self.create_game_identifier(existing_2025)
 
         # Find new games
-        existing_keys = set(existing_2025['game_key'])
-        new_games_mask = ~starter_2025['game_key'].isin(existing_keys)
+        existing_keys = set(existing_2025["game_key"])
+        new_games_mask = ~starter_2025["game_key"].isin(existing_keys)
         new_games = starter_2025[new_games_mask].copy()
 
         logger.info(f"✅ Found {len(new_games):,} new games to add")
 
         # Show week breakdown of new games
-        week_counts = new_games['week'].value_counts().sort_index()
+        week_counts = new_games["week"].value_counts().sort_index()
         logger.info("New games by week:")
         for week, count in week_counts.items():
             logger.info(f"   Week {week}: +{count} games")
@@ -128,14 +142,14 @@ class DataMigration2025:
 
         # Basic column mapping
         column_mapping = {
-            'id': 'id',
-            'season': 'season',
-            'week': 'week',
-            'start_date': 'start_date',
-            'home_team': 'home_team',
-            'away_team': 'away_team',
-            'neutral_site': 'neutral_site',
-            'conference_game': 'conference_game'
+            "id": "id",
+            "season": "season",
+            "week": "week",
+            "start_date": "start_date",
+            "home_team": "home_team",
+            "away_team": "away_team",
+            "neutral_site": "neutral_site",
+            "conference_game": "conference_game",
         }
 
         # Create mapped DataFrame
@@ -168,41 +182,55 @@ class DataMigration2025:
         team_stats = {}
 
         # Calculate team averages from existing 2025 data
-        for team in set(existing_2025['home_team'].unique()) | set(existing_2025['away_team'].unique()):
-            home_games = existing_2025[existing_2025['home_team'] == team]
-            away_games = existing_2025[existing_2025['away_team'] == team]
+        for team in set(existing_2025["home_team"].unique()) | set(
+            existing_2025["away_team"].unique()
+        ):
+            home_games = existing_2025[existing_2025["home_team"] == team]
+            away_games = existing_2025[existing_2025["away_team"] == team]
 
             if len(home_games) > 0 or len(away_games) > 0:
                 team_stats[team] = {
-                    'home_elo': home_games['home_elo'].mean() if len(home_games) > 0 else 1500,
-                    'away_elo': away_games['away_elo'].mean() if len(away_games) > 0 else 1500,
-                    'home_talent': home_games['home_talent'].mean() if len(home_games) > 0 else 0,
-                    'away_talent': away_games['away_talent'].mean() if len(away_games) > 0 else 0,
+                    "home_elo": (
+                        home_games["home_elo"].mean() if len(home_games) > 0 else 1500
+                    ),
+                    "away_elo": (
+                        away_games["away_elo"].mean() if len(away_games) > 0 else 1500
+                    ),
+                    "home_talent": (
+                        home_games["home_talent"].mean() if len(home_games) > 0 else 0
+                    ),
+                    "away_talent": (
+                        away_games["away_talent"].mean() if len(away_games) > 0 else 0
+                    ),
                 }
 
         # Apply estimations to new games
         for idx, game in mapped_games.iterrows():
-            home_team = game['home_team']
-            away_team = game['away_team']
+            home_team = game["home_team"]
+            away_team = game["away_team"]
 
             # Use team averages or defaults
             if home_team in team_stats:
-                mapped_games.loc[idx, 'home_elo'] = team_stats[home_team]['home_elo']
-                mapped_games.loc[idx, 'home_talent'] = team_stats[home_team]['home_talent']
+                mapped_games.loc[idx, "home_elo"] = team_stats[home_team]["home_elo"]
+                mapped_games.loc[idx, "home_talent"] = team_stats[home_team][
+                    "home_talent"
+                ]
 
             if away_team in team_stats:
-                mapped_games.loc[idx, 'away_elo'] = team_stats[away_team]['away_elo']
-                mapped_games.loc[idx, 'away_talent'] = team_stats[away_team]['away_talent']
+                mapped_games.loc[idx, "away_elo"] = team_stats[away_team]["away_elo"]
+                mapped_games.loc[idx, "away_talent"] = team_stats[away_team][
+                    "away_talent"
+                ]
 
         # Fill remaining missing values with reasonable defaults
         default_values = {
-            'season_type': 'regular',
-            'home_conference': 'Unknown',
-            'away_conference': 'Unknown',
-            'home_elo': 1500,
-            'away_elo': 1500,
-            'home_talent': 0,
-            'away_talent': 0,
+            "season_type": "regular",
+            "home_conference": "Unknown",
+            "away_conference": "Unknown",
+            "home_elo": 1500,
+            "away_elo": 1500,
+            "home_talent": 0,
+            "away_talent": 0,
         }
 
         for col, default_val in default_values.items():
@@ -217,7 +245,9 @@ class DataMigration2025:
         logger.info("Merging datasets...")
 
         # Combine all datasets
-        final_df = pd.concat([df_historical, df_2025_existing, new_games_processed], ignore_index=True)
+        final_df = pd.concat(
+            [df_historical, df_2025_existing, new_games_processed], ignore_index=True
+        )
 
         logger.info(f"✅ Final dataset size: {len(final_df):,} games")
         logger.info(f"✅ Historical (pre-2025): {len(df_historical):,}")
@@ -225,11 +255,11 @@ class DataMigration2025:
         logger.info(f"✅ New 2025: {len(new_games_processed):,}")
 
         # Verify data integrity
-        final_2025 = final_df[final_df['season'] == 2025]
+        final_2025 = final_df[final_df["season"] == 2025]
         logger.info(f"✅ Total 2025 games in final dataset: {len(final_2025):,}")
 
         # Week distribution for 2025
-        week_counts = final_2025['week'].value_counts().sort_index()
+        week_counts = final_2025["week"].value_counts().sort_index()
         logger.info("2025 Week distribution:")
         for week, count in week_counts.items():
             logger.info(f"   Week {week}: {count} games")
@@ -255,24 +285,31 @@ class DataMigration2025:
 
         # Key validation checks
         validation_results = {
-            'total_games': len(final_df),
-            'historical_games': len(final_df[final_df['season'] < 2025]),
-            'total_2025_games': len(final_df[final_df['season'] == 2025]),
-            'week_12_games': len(final_df[(final_df['season'] == 2025) & (final_df['week'] == 12)]),
-            'columns': len(final_df.columns),
-            'missing_values': final_df.isnull().sum().sum(),
+            "total_games": len(final_df),
+            "historical_games": len(final_df[final_df["season"] < 2025]),
+            "total_2025_games": len(final_df[final_df["season"] == 2025]),
+            "week_12_games": len(
+                final_df[(final_df["season"] == 2025) & (final_df["week"] == 12)]
+            ),
+            "columns": len(final_df.columns),
+            "missing_values": final_df.isnull().sum().sum(),
         }
 
         # Check for Ohio State vs UCLA specifically
         osu_ucla = final_df[
-            (final_df['season'] == 2025) & (final_df['week'] == 12) &
-            ((final_df['home_team'].str.contains('Ohio State', case=False, na=False)) &
-             (final_df['away_team'].str.contains('UCLA', case=False, na=False))) |
-            ((final_df['away_team'].str.contains('Ohio State', case=False, na=False)) &
-             (final_df['home_team'].str.contains('UCLA', case=False, na=False)))
+            (final_df["season"] == 2025)
+            & (final_df["week"] == 12)
+            & (
+                (final_df["home_team"].str.contains("Ohio State", case=False, na=False))
+                & (final_df["away_team"].str.contains("UCLA", case=False, na=False))
+            )
+            | (
+                (final_df["away_team"].str.contains("Ohio State", case=False, na=False))
+                & (final_df["home_team"].str.contains("UCLA", case=False, na=False))
+            )
         ]
 
-        validation_results['osu_ucla_games'] = len(osu_ucla)
+        validation_results["osu_ucla_games"] = len(osu_ucla)
 
         logger.info("📊 Migration Validation Results:")
         for key, value in validation_results.items():
@@ -280,9 +317,9 @@ class DataMigration2025:
 
         # Success criteria
         success = (
-            validation_results['total_2025_games'] >= 1500 and  # Near complete 2025 data
-            validation_results['week_12_games'] >= 100 and      # Week 12 games present
-            validation_results['osu_ucla_games'] >= 1          # Ohio State vs UCLA present
+            validation_results["total_2025_games"] >= 1500  # Near complete 2025 data
+            and validation_results["week_12_games"] >= 100  # Week 12 games present
+            and validation_results["osu_ucla_games"] >= 1  # Ohio State vs UCLA present
         )
 
         if success:
@@ -319,10 +356,14 @@ class DataMigration2025:
 
             # Step 4: Process new games
             mapped_games = self.map_basic_features(new_games, df_2025_existing)
-            processed_games = self.estimate_missing_features(mapped_games, df_2025_existing)
+            processed_games = self.estimate_missing_features(
+                mapped_games, df_2025_existing
+            )
 
             # Step 5: Merge datasets
-            final_df = self.merge_datasets(df_historical, df_2025_existing, processed_games)
+            final_df = self.merge_datasets(
+                df_historical, df_2025_existing, processed_games
+            )
 
             # Step 6: Save updated data
             self.save_updated_data(final_df)
@@ -340,8 +381,10 @@ class DataMigration2025:
         except Exception as e:
             logger.error(f"❌ Migration failed with error: {str(e)}")
             import traceback
+
             traceback.print_exc()
             return False
+
 
 def main():
     """Main execution function"""
@@ -356,6 +399,7 @@ def main():
         return 1
 
     return 0
+
 
 if __name__ == "__main__":
     exit(main())

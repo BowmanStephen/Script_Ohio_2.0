@@ -164,7 +164,7 @@ pytest tests/test_model_pack_agents.py::TestDataAcquisitionAgent::test_rate_limi
 
 4. **Set Environment Variables**
    ```bash
-   export CFBD_API_KEY="3nSBeJV4ODZlJLxQZ/H0vWG3DRAfTSPU2PporK/5K+BJininva/bPx5G4iNjeOsb"
+   export CFBD_API_KEY="your-api-key-here"
    ```
 
 ### Code Style
@@ -230,7 +230,7 @@ if str(project_root) not in sys.path:
 ```bash
 export CFBD_API_KEY="your-api-key"
 # Or add to .env file
-echo "CFBD_API_KEY=3nSBeJV4ODZlJLxQZ/H0vWG3DRAfTSPU2PporK/5K+BJininva/bPx5G4iNjeOsb" >> .env
+echo "CFBD_API_KEY=your-api-key-here" >> .env
 ```
 
 #### 3. FastAI Model Loading Issues
