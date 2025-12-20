@@ -400,17 +400,19 @@ class SuperOrchestrator(BaseAgent):
             "agent_cache_size": len(self._agent_cache),
             "response_cache_size": len(self._response_cache),
             "cache_hit_rate": (
-                self._performance_metrics["cache_hits"]
-                / max(
-                    1,
+                (
                     self._performance_metrics["cache_hits"]
-                    + self._performance_metrics["cache_misses"],
+                    / max(
+                        1,
+                        self._performance_metrics["cache_hits"]
+                        + self._performance_metrics["cache_misses"],
+                    )
                 )
-            )
-            if self._performance_metrics["cache_hits"]
-            + self._performance_metrics["cache_misses"]
-            > 0
-            else 0,
+                if self._performance_metrics["cache_hits"]
+                + self._performance_metrics["cache_misses"]
+                > 0
+                else 0
+            ),
         }
 
     def _clear_cache(self) -> Dict[str, Any]:

@@ -9,33 +9,45 @@ Tests all optimization components:
 - Performance monitoring and validation
 """
 
-import pytest
 import json
+import shutil
+import tempfile
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
-import tempfile
-import shutil
+
+import pytest
 
 # Import optimization components
-from agents.optimization.context_compression_rules import ContextCompressionEngine, ContextState
+from agents.optimization.context_compression_rules import (
+    ContextCompressionEngine,
+    ContextState,
+)
 from agents.optimization.memory_manager import HierarchicalMemoryManager, MemoryLevel
-from agents.optimization.workflow_automator import WorkflowAutomator, WorkflowStatus, TaskPriority
+from agents.optimization.workflow_automator import (
+    TaskPriority,
+    WorkflowAutomator,
+    WorkflowStatus,
+)
 from agents.orchestration_agent import OrchestrationAgent, OrchestrationMode
+
 
 # Mock the TOON format for testing
 class MockTOONFormat:
     @staticmethod
     def encode(data):
-        return json.dumps(data, separators=(',', ':'))
+        return json.dumps(data, separators=(",", ":"))
 
     @staticmethod
     def decode(data):
         return json.loads(data)
 
+
 # Monkey patch for testing
 import sys
-sys.modules['src.toon_format'] = MockTOONFormat()
+
+sys.modules["src.toon_format"] = MockTOONFormat()
+
 
 class TestContextCompressionEngine:
     """Test suite for Context Compression Engine"""
@@ -53,16 +65,13 @@ class TestContextCompressionEngine:
                     "preserve_on_clear": ["meta_agent_state", "current_task_context"],
                     "max_context_tokens": 8000,
                     "compression_threshold": 6000,
-                    "archive_path": f"{self.temp_dir}/contexts/"
+                    "archive_path": f"{self.temp_dir}/contexts/",
                 },
-                "toon_format": {
-                    "enabled": True,
-                    "compression_ratio_target": 0.65
-                }
+                "toon_format": {"enabled": True, "compression_ratio_target": 0.65},
             }
         }
 
-        with open(self.config_path, 'w') as f:
+        with open(self.config_path, "w") as f:
             json.dump(test_config, f)
 
         self.engine = ContextCompressionEngine(str(self.config_path))
@@ -87,10 +96,7 @@ class TestContextCompressionEngine:
 
     def test_context_compression(self):
         """Test context compression"""
-        test_data = {
-            "large_context": "x" * 1000,
-            "nested": {"data": list(range(100))}
-        }
+        test_data = {"large_context": "x" * 1000, "nested": {"data": list(range(100))}}
 
         compressed = self.engine.compress_context("test_agent", test_data)
 
@@ -124,7 +130,9 @@ class TestContextCompressionEngine:
 
     def test_relevant_context_loading(self):
         """Test dynamic context loading"""
-        context = self.engine.load_relevant_context("test_agent", "analysis_task", max_tokens=1000)
+        context = self.engine.load_relevant_context(
+            "test_agent", "analysis_task", max_tokens=1000
+        )
 
         assert isinstance(context, dict)
         # Should return empty dict since no context sources are configured in test
@@ -136,6 +144,7 @@ class TestContextCompressionEngine:
         assert "contexts_compressed" in metrics
         assert "tokens_saved" in metrics
         assert "compression_ratio" in metrics
+
 
 class TestHierarchicalMemoryManager:
     """Test suite for Hierarchical Memory Manager"""
@@ -150,30 +159,30 @@ class TestHierarchicalMemoryManager:
             "level_1_meta_agent": {
                 "max_size_mb": 10,
                 "retention_days": 1,
-                "storage_path": f"{self.temp_dir}/meta/"
+                "storage_path": f"{self.temp_dir}/meta/",
             },
             "level_2_orchestrators": {
                 "max_size_mb": 5,
                 "retention_hours": 1,
-                "storage_path": f"{self.temp_dir}/orchestrators/"
+                "storage_path": f"{self.temp_dir}/orchestrators/",
             },
             "level_3_agents": {
                 "max_size_mb": 2,
                 "retention_minutes": 10,
-                "storage_path": f"{self.temp_dir}/agents/"
+                "storage_path": f"{self.temp_dir}/agents/",
             },
             "level_4_cache": {
                 "max_size_mb": 5,
                 "ttl_minutes": {
                     "cfbd_api_responses": 1,
                     "model_predictions": 2,
-                    "toon_outputs": 1
+                    "toon_outputs": 1,
                 },
-                "storage_path": f"{self.temp_dir}/cache/"
-            }
+                "storage_path": f"{self.temp_dir}/cache/",
+            },
         }
 
-        with open(self.config_path, 'w') as f:
+        with open(self.config_path, "w") as f:
             json.dump(test_config, f)
 
         self.manager = HierarchicalMemoryManager(str(self.config_path))
@@ -218,10 +227,7 @@ class TestHierarchicalMemoryManager:
 
         # Store with short expiration
         success = self.manager.store(
-            "expire_key",
-            test_data,
-            MemoryLevel.CACHE,
-            expires_in=timedelta(seconds=1)
+            "expire_key", test_data, MemoryLevel.CACHE, expires_in=timedelta(seconds=1)
         )
         assert success is True
 
@@ -242,7 +248,9 @@ class TestHierarchicalMemoryManager:
         tags = ["test", "memory", "search"]
 
         # Store with tags
-        success = self.manager.store("tagged_key", test_data, MemoryLevel.AGENT, tags=tags)
+        success = self.manager.store(
+            "tagged_key", test_data, MemoryLevel.AGENT, tags=tags
+        )
         assert success is True
 
         # Search by tags
@@ -261,7 +269,7 @@ class TestHierarchicalMemoryManager:
                 f"expire_test_{i}",
                 {"data": f"value_{i}"},
                 MemoryLevel.CACHE,
-                expires_in=timedelta(seconds=1)
+                expires_in=timedelta(seconds=1),
             )
 
         # Wait for expiration
@@ -275,7 +283,9 @@ class TestHierarchicalMemoryManager:
         """Test memory statistics"""
         # Store some test data
         for i in range(5):
-            self.manager.store(f"stat_test_{i}", {"data": f"value_{i}"}, MemoryLevel.AGENT)
+            self.manager.store(
+                f"stat_test_{i}", {"data": f"value_{i}"}, MemoryLevel.AGENT
+            )
 
         # Get statistics
         stats = self.manager.get_stats()
@@ -283,6 +293,7 @@ class TestHierarchicalMemoryManager:
         assert stats.total_entries >= 5
         assert stats.total_size_mb >= 0
         assert stats.hit_rate >= 0.0
+
 
 class TestWorkflowAutomator:
     """Test suite for Workflow Automator"""
@@ -297,14 +308,14 @@ class TestWorkflowAutomator:
             "weekly_analysis": {
                 "enabled": True,
                 "timeout_minutes": 10,
-                "max_retry_attempts": 2
+                "max_retry_attempts": 2,
             },
             "error_handling": {
                 "graceful_degradation": ["ml_predictions", "simple_predictions"]
-            }
+            },
         }
 
-        with open(self.config_path, 'w') as f:
+        with open(self.config_path, "w") as f:
             json.dump(test_config, f)
 
         self.automator = WorkflowAutomator(str(self.config_path))
@@ -366,6 +377,7 @@ class TestWorkflowAutomator:
         assert "tasks_completed" in metrics
         assert "tasks_failed" in metrics
 
+
 class TestOrchestrationAgent:
     """Test suite for Orchestration Agent"""
 
@@ -377,28 +389,28 @@ class TestOrchestrationAgent:
         # Create test configuration
         test_config = {
             "agent_coordination": {
-                "lifecycle_management": {
-                    "enabled": True,
-                    "health_monitoring": True
-                },
+                "lifecycle_management": {"enabled": True, "health_monitoring": True},
                 "load_balancing": {
                     "cpu_threshold_percent": 70,
-                    "memory_threshold_percent": 80
-                }
+                    "memory_threshold_percent": 80,
+                },
             },
             "performance_optimization": {
-                "cfbd_integration": {
-                    "rate_limit_requests_per_second": 6
-                }
-            }
+                "cfbd_integration": {"rate_limit_requests_per_second": 6}
+            },
         }
 
-        with open(self.config_path, 'w') as f:
+        with open(self.config_path, "w") as f:
             json.dump(test_config, f)
 
         # Mock the orchestration agent config path
         import agents.orchestration_agent
-        agents.orchestration_agent.Path = lambda x: self.config_path if str(x).endswith("claude_code_optimization.json") else Path(x)
+
+        agents.orchestration_agent.Path = lambda x: (
+            self.config_path
+            if str(x).endswith("claude_code_optimization.json")
+            else Path(x)
+        )
 
         self.agent = OrchestrationAgent(mode=OrchestrationMode.STANDARD)
 
@@ -438,23 +450,22 @@ class TestOrchestrationAgent:
 
     def test_context_management(self):
         """Test context management capability"""
-        result = self.agent._manage_context_windows({
-            "operation": "compress",
-            "agent_ids": ["test_agent"]
-        }, {})
+        result = self.agent._manage_context_windows(
+            {"operation": "compress", "agent_ids": ["test_agent"]}, {}
+        )
 
         assert result["success"] is True
         assert "agent_results" in result
 
     def test_claude_code_coordination(self):
         """Test Claude Code coordination capability"""
-        result = self.agent._coordinate_claude_code({
-            "request_type": "status_inquiry",
-            "request_data": {}
-        }, {})
+        result = self.agent._coordinate_claude_code(
+            {"request_type": "status_inquiry", "request_data": {}}, {}
+        )
 
         assert result["success"] is True
         assert "system_status" in result
+
 
 class TestIntegration:
     """Integration tests for the complete optimization system"""
@@ -480,13 +491,13 @@ class TestIntegration:
                 "phase_based_clearing": {
                     "enabled": True,
                     "preserve_on_clear": ["meta_agent_state", "current_task_context"],
-                    "max_context_tokens": 8000
+                    "max_context_tokens": 8000,
                 },
-                "toon_format": {"enabled": True, "compression_ratio_target": 0.65}
+                "toon_format": {"enabled": True, "compression_ratio_target": 0.65},
             }
         }
 
-        with open(config_path, 'w') as f:
+        with open(config_path, "w") as f:
             json.dump(test_config, f)
 
         self.context_engine = ContextCompressionEngine(str(config_path))
@@ -495,11 +506,17 @@ class TestIntegration:
         """Set up memory manager for integration tests"""
         config_path = Path(self.temp_dir) / "integration_memory_config.json"
         test_config = {
-            "level_1_meta_agent": {"max_size_mb": 10, "storage_path": f"{self.temp_dir}/meta/"},
-            "level_4_cache": {"max_size_mb": 10, "storage_path": f"{self.temp_dir}/cache/"}
+            "level_1_meta_agent": {
+                "max_size_mb": 10,
+                "storage_path": f"{self.temp_dir}/meta/",
+            },
+            "level_4_cache": {
+                "max_size_mb": 10,
+                "storage_path": f"{self.temp_dir}/cache/",
+            },
         }
 
-        with open(config_path, 'w') as f:
+        with open(config_path, "w") as f:
             json.dump(test_config, f)
 
         self.memory_manager = HierarchicalMemoryManager(str(config_path))
@@ -509,7 +526,7 @@ class TestIntegration:
         config_path = Path(self.temp_dir) / "integration_workflow_config.json"
         test_config = {"weekly_analysis": {"enabled": True, "timeout_minutes": 5}}
 
-        with open(config_path, 'w') as f:
+        with open(config_path, "w") as f:
             json.dump(test_config, f)
 
         self.workflow_automator = WorkflowAutomator(str(config_path))
@@ -518,13 +535,13 @@ class TestIntegration:
         """Test integration between context compression and memory management"""
         # Compress some context
         test_context = {"integration_test": "data", "numbers": list(range(50))}
-        compressed = self.context_engine.compress_context("integration_agent", test_context)
+        compressed = self.context_engine.compress_context(
+            "integration_agent", test_context
+        )
 
         # Store compressed context in memory
         success = self.memory_manager.store(
-            "compressed_context",
-            compressed,
-            MemoryLevel.AGENT
+            "compressed_context", compressed, MemoryLevel.AGENT
         )
         assert success is True
 
@@ -547,9 +564,9 @@ class TestIntegration:
             {
                 "execution_id": execution.execution_id,
                 "status": execution.status.value,
-                "results": execution.task_results
+                "results": execution.task_results,
             },
-            MemoryLevel.ORCHESTRATOR
+            MemoryLevel.ORCHESTRATOR,
         )
         assert success is True
 
@@ -562,7 +579,9 @@ class TestIntegration:
         """Test complete end-to-end workflow with all optimizations"""
         # 1. Start with context compression
         initial_context = {"workflow_data": "test", "phase": "integration"}
-        compressed = self.context_engine.compress_context("test_workflow", initial_context)
+        compressed = self.context_engine.compress_context(
+            "test_workflow", initial_context
+        )
 
         # 2. Update phase for optimization
         self.context_engine.update_phase("integration_test")
@@ -578,7 +597,7 @@ class TestIntegration:
             self.memory_manager.store(
                 "workflow_results",
                 {"status": execution.status.value, "metrics": execution.metrics},
-                MemoryLevel.ORCHESTRATOR
+                MemoryLevel.ORCHESTRATOR,
             )
 
             # 6. Verify complete integration
@@ -597,7 +616,7 @@ class TestIntegration:
 
         # Verify metrics structure
         assert "contexts_compressed" in context_metrics
-        assert hasattr(memory_stats, 'total_entries')  # MemoryStats is a dataclass
+        assert hasattr(memory_stats, "total_entries")  # MemoryStats is a dataclass
         assert "workflows_executed" in workflow_metrics
 
         # Create integrated metrics report
@@ -607,18 +626,17 @@ class TestIntegration:
             "memory_management": {
                 "total_entries": memory_stats.total_entries,
                 "total_size_mb": memory_stats.total_size_mb,
-                "hit_rate": memory_stats.hit_rate
+                "hit_rate": memory_stats.hit_rate,
             },
-            "workflow_automation": workflow_metrics
+            "workflow_automation": workflow_metrics,
         }
 
         # Store integrated metrics
         success = self.memory_manager.store(
-            "integrated_metrics",
-            integrated_metrics,
-            MemoryLevel.META_AGENT
+            "integrated_metrics", integrated_metrics, MemoryLevel.META_AGENT
         )
         assert success is True
+
 
 # Test configuration and utilities
 class TestConfiguration:
@@ -626,7 +644,9 @@ class TestConfiguration:
 
     def test_config_loading(self):
         """Test configuration loading with missing files"""
-        from agents.optimization.context_compression_rules import ContextCompressionEngine
+        from agents.optimization.context_compression_rules import (
+            ContextCompressionEngine,
+        )
 
         # Should load with defaults when config file is missing
         engine = ContextCompressionEngine("non_existent_config.json")
@@ -638,7 +658,7 @@ class TestConfiguration:
         from agents.optimization.memory_manager import HierarchicalMemoryManager
 
         # Should handle invalid JSON gracefully
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             f.write("invalid json content")
             f.flush()
 
@@ -648,7 +668,9 @@ class TestConfiguration:
                 assert manager.config is not None
             finally:
                 import os
+
                 os.unlink(f.name)
+
 
 # Performance benchmarks
 class TestPerformanceBenchmarks:
@@ -662,7 +684,7 @@ class TestPerformanceBenchmarks:
         large_data = {
             "large_context": "x" * 10000,
             "nested_data": {"items": list(range(1000))},
-            "arrays": [[i] * 100 for i in range(100)]
+            "arrays": [[i] * 100 for i in range(100)],
         }
 
         start_time = time.time()
@@ -695,6 +717,7 @@ class TestPerformanceBenchmarks:
         assert total_time < 10.0  # 100 operations should complete within 10 seconds
         assert total_time / 100 < 0.1  # Average operation should be under 100ms
 
+
 # Utility functions for testing
 def create_test_agent_registry():
     """Create test agent registry for integration tests"""
@@ -704,16 +727,17 @@ def create_test_agent_registry():
             "agent_name": "Test Agent 1",
             "status": "active",
             "health_score": 0.9,
-            "capabilities": ["test_capability"]
+            "capabilities": ["test_capability"],
         },
         "test_agent_2": {
             "agent_id": "test_agent_2",
             "agent_name": "Test Agent 2",
             "status": "active",
             "health_score": 0.8,
-            "capabilities": ["another_capability"]
-        }
+            "capabilities": ["another_capability"],
+        },
     }
+
 
 def create_sample_workflow_data():
     """Create sample workflow data for testing"""
@@ -721,9 +745,10 @@ def create_sample_workflow_data():
         "workflow_id": "test_workflow",
         "tasks": [
             {"task_id": "task_1", "name": "Test Task 1"},
-            {"task_id": "task_2", "name": "Test Task 2"}
-        ]
+            {"task_id": "task_2", "name": "Test Task 2"},
+        ],
     }
+
 
 if __name__ == "__main__":
     # Run all tests
