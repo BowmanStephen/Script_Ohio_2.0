@@ -399,42 +399,45 @@ class WeeklyAnalysisAutonomator(BaseAgent):
         week = params.get("week", self._get_current_week())
 
         try:
-            # Run existing validation script
-            import subprocess
-            import sys
-
-            cmd = [
-                sys.executable,
-                "scripts/validate_weekly_data.py",
-                "--season", str(season),
-                "--week", str(week),
-                "--verbose"
-            ]
-
+            # Use agent framework instead of subprocess
             try:
-                result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+                from agents.data.data_validation_agent import DataValidationAgent
 
+                # Create data validation agent instance
+                validation_agent = DataValidationAgent("weekly_validation_" + str(int(time.time())))
+
+                # Execute validation using agent framework
+                agent_params = {
+                    "season": season,
+                    "week": week,
+                    "verbose": True,
+                    "validation_type": "weekly_data"
+                }
+
+                agent_result = validation_agent._execute_action("validate_data", agent_params, {})
+
+                # Convert agent result to expected format
                 validation_results = {
-                    "success": result.returncode == 0,
-                    "status": "success" if result.returncode == 0 else "failed",
+                    "success": agent_result.get("status") == "success",
+                    "status": agent_result.get("status", "unknown"),
                     "data": {
-                        "return_code": result.returncode,
-                        "stdout": result.stdout,
-                        "stderr": result.stderr,
+                        "return_code": 0 if agent_result.get("status") == "success" else 1,
+                        "stdout": str(agent_result.get("data", {})),
+                        "stderr": agent_result.get("error", ""),
                         "season": season,
                         "week": week,
                         "validation_type": "weekly_data"
                     },
-                    "error": None if result.returncode == 0 else result.stderr,
+                    "error": None if agent_result.get("status") == "success" else agent_result.get("error", ""),
                     "execution_time": time.time()
                 }
 
                 if validation_results["success"]:
                     # Parse validation output for structured results
-                    validation_summary = self._parse_validation_output(result.stdout)
+                    validation_summary = self._parse_validation_output(str(agent_result.get("data", {})))
                     validation_results["data"].update(validation_summary)
 
-            except subprocess.TimeoutExpired:
+            except Exception as e:
                 validation_results = {
                     "success": False,
                     "status": "timeout",
@@ -474,45 +477,40 @@ class WeeklyAnalysisAutonomator(BaseAgent):
 
         try:
             if self.config.get("enhanced_features", True):
-                # Use existing feature generation script
-                import subprocess
-                import sys
-
-                cmd = [
-                    sys.executable,
-                    "scripts/build_training_data_from_cfbd.py",
-                    "--season", str(season),
-                    "--week", str(week),
-                    "--enhanced"
-                ]
-
+                # Use agent framework instead of subprocess
                 try:
-                    result = subprocess.run(cmd, capture_output=True, text=True, timeout=1800)
+                    from agents.cfbd_integration_agent import CFBDIntegrationAgent
 
+                    # Create CFBD integration agent instance
+                    cfbd_agent = CFBDIntegrationAgent("feature_generation_" + str(int(time.time())))
+
+                    # Execute feature generation using agent framework
+                    agent_params = {
+                        "season": season,
+                        "week": week,
+                        "enhanced": True,
+                        "build_training_data": True
+                    }
+
+                    agent_result = cfbd_agent._execute_action("build_training_data", agent_params, {})
+
+                    # Convert agent result to expected format
                     feature_results = {
-                        "success": result.returncode == 0,
-                        "status": "success" if result.returncode == 0 else "failed",
+                        "success": agent_result.get("status") == "success",
+                        "status": agent_result.get("status", "unknown"),
                         "data": {
-                            "return_code": result.returncode,
-                            "stdout": result.stdout,
-                            "stderr": result.stderr,
+                            "return_code": 0 if agent_result.get("status") == "success" else 1,
+                            "stdout": str(agent_result.get("data", {})),
+                            "stderr": agent_result.get("error", ""),
                             "features_generated": "enhanced" if self.config.get("enhanced_features") else "basic",
                             "season": season,
                             "week": week,
                             "feature_type": "enhanced_features"
                         },
-                        "error": None if result.returncode == 0 else result.stderr,
+                        "error": None if agent_result.get("status") == "success" else agent_result.get("error", ""),
                         "execution_time": time.time()
                     }
 
-                except subprocess.TimeoutExpired:
-                    feature_results = {
-                        "success": False,
-                        "status": "timeout",
-                        "data": None,
-                        "error": "Feature generation timed out after 1800 seconds",
-                        "execution_time": time.time()
-                    }
                 except Exception as e:
                     feature_results = {
                         "success": False,
@@ -555,44 +553,39 @@ class WeeklyAnalysisAutonomator(BaseAgent):
         week = params.get("week", self._get_current_week())
 
         try:
-            # Use existing prediction script
-            import subprocess
-            import sys
-
-            cmd = [
-                sys.executable,
-                "scripts/run_weekly_analysis.py",
-                "--week", str(week),
-                "--season", str(season),
-                "--predictions-only"
-            ]
-
+            # Use agent framework instead of subprocess
             try:
-                result = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+                from agents.analytics.model_execution_agent import ModelExecutionAgent
 
+                # Create model execution agent instance
+                model_agent = ModelExecutionAgent("predictions_" + str(int(time.time())))
+
+                # Execute predictions using agent framework
+                agent_params = {
+                    "season": season,
+                    "week": week,
+                    "prediction_type": "weekly_analysis",
+                    "predictions_only": True
+                }
+
+                agent_result = model_agent._execute_action("execute_predictions", agent_params, {})
+
+                # Convert agent result to expected format
                 prediction_results = {
-                    "success": result.returncode == 0,
-                    "status": "success" if result.returncode == 0 else "failed",
+                    "success": agent_result.get("status") == "success",
+                    "status": agent_result.get("status", "unknown"),
                     "data": {
-                        "return_code": result.returncode,
-                        "stdout": result.stdout,
-                        "stderr": result.stderr,
+                        "return_code": 0 if agent_result.get("status") == "success" else 1,
+                        "stdout": str(agent_result.get("data", {})),
+                        "stderr": agent_result.get("error", ""),
                         "season": season,
                         "week": week,
                         "prediction_type": "weekly_analysis"
                     },
-                    "error": None if result.returncode == 0 else result.stderr,
+                    "error": None if agent_result.get("status") == "success" else agent_result.get("error", ""),
                     "execution_time": time.time()
                 }
 
-            except subprocess.TimeoutExpired:
-                prediction_results = {
-                    "success": False,
-                    "status": "timeout",
-                    "data": None,
-                    "error": "Prediction generation timed out after 600 seconds",
-                    "execution_time": time.time()
-                }
             except Exception as e:
                 prediction_results = {
                     "success": False,
